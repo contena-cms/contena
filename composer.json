@@ -52,7 +52,7 @@
             "bamarni/composer-bin-plugin": true,
             "composer/package-versions-deprecated": true,
             "cweagans/composer-patches": true,
-            "php-http/discovery": false,
+            "php-http/discovery": true,
             "phpstan/extension-installer": true,
             "symfony/runtime": true
         }
@@ -105,7 +105,9 @@
         "monolog/monolog": "^3.3.1",
         "nikic/php-parser": "^5.8.0",
         "nyholm/psr7": "^1.5",
+        "opensearch-project/opensearch-php": "^2.6.0",
         "pentatrion/vite-bundle": "^8.1",
+        "php-http/discovery": "^1.20",
         "phpseclib/phpseclib": "^3.0",
         "psr/cache": "^3.0.0",
         "psr/clock": "^1.0.0",
@@ -121,6 +123,7 @@
         "setasign/fpdi": "^2.3.7",
         "setasign/tfpdf": "^1.33",
         "contena/conflicts": "0.6.1",
+        "shyim/opensearch-php-dsl": "^1.1.4",
         "symfony/asset": "~7.4.0",
         "symfony/cache": "~7.4.12",
         "symfony/cache-contracts": "~3.6.0",
