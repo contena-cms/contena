@@ -224,11 +224,8 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "../conflicts",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "https://github.com/contena-cms/conflicts.git"
         },
         {
             "type": "path",
