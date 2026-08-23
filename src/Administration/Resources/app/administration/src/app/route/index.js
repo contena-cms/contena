@@ -6,7 +6,7 @@ export default [
         coreRoute: true,
         root: true,
         component: 'ct-desktop',
-        redirect: '/sw/dashboard/index',
+        redirect: '/ct/dashboard/index',
     },
     {
         path: '/error',
