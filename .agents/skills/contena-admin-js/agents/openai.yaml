@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena Admin JS"
+  short_description: "Apply Contena Administration JS/TS/Vue rules."
+  default_prompt: "Implement this Contena Administration change."

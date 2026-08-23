@@ -1,0 +1,908 @@
+import ViewAdapter from 'src/core/adapter/view.adapter';
+import { createI18n } from 'vue-i18n';
+import type { FallbackLocale, I18n } from 'vue-i18n';
+import type {
+    NavigationGuardNext,
+    Router,
+    RouteLocationNormalized,
+    RouteLocationNormalizedLoaded,
+    RouteLocationRaw,
+} from 'vue-router';
+import { createApp, defineAsyncComponent, h, resolveComponent } from 'vue';
+import type { Component as VueComponent, App } from 'vue';
+import type { ComponentPublicInstance } from '@vue/runtime-core';
+import VuePlugins from 'src/app/plugin';
+import setupContenaDevtools from 'src/app/adapter/view/ct-vue-devtools';
+import type ApplicationBootstrapper from 'src/core/application';
+import type { ComponentConfig } from 'src/core/factory/async-component.factory';
+
+import MtAvatar from '@contena/meteor-component-library/dist/esm/MtAvatar';
+import MtBanner from '@contena/meteor-component-library/dist/esm/MtBanner';
+import MtLoader from '@contena/meteor-component-library/dist/esm/MtLoader';
+import MtProgressBar from '@contena/meteor-component-library/dist/esm/MtProgressBar';
+import MtButton from '@contena/meteor-component-library/dist/esm/MtButton';
+import MtCheckbox from '@contena/meteor-component-library/dist/esm/MtCheckbox';
+import MtRadioGroupRoot from '@contena/meteor-component-library/dist/esm/MtRadioGroupRoot';
+import MtRadioGroupList from '@contena/meteor-component-library/dist/esm/MtRadioGroupList';
+import MtRadioGroupItem from '@contena/meteor-component-library/dist/esm/MtRadioGroupItem';
+import MtEmailField from '@contena/meteor-component-library/dist/esm/MtEmailField';
+import MtEmptyState from '@contena/meteor-component-library/dist/esm/MtEmptyState';
+import MtNumberField from '@contena/meteor-component-library/dist/esm/MtNumberField';
+import MtPasswordField from '@contena/meteor-component-library/dist/esm/MtPasswordField';
+import MtSelect from '@contena/meteor-component-library/dist/esm/MtSelect';
+import MtEntitySelect from '@contena/meteor-component-library/dist/esm/MtEntitySelect';
+import MtSlider from '@contena/meteor-component-library/dist/esm/MtSlider';
+import MtSwitch from '@contena/meteor-component-library/dist/esm/MtSwitch';
+import MtTextField from '@contena/meteor-component-library/dist/esm/MtTextField';
+import MtTextarea from '@contena/meteor-component-library/dist/esm/MtTextarea';
+import MtIcon from '@contena/meteor-component-library/dist/esm/MtIcon';
+import MtPagination from '@contena/meteor-component-library/dist/esm/MtPagination';
+import MtSkeletonBar from '@contena/meteor-component-library/dist/esm/MtSkeletonBar';
+import MtToast from '@contena/meteor-component-library/dist/esm/MtToast';
+import MtFloatingUi from '@contena/meteor-component-library/dist/esm/MtFloatingUi';
+import MtTextEditorToolbarButton from '@contena/meteor-component-library/dist/esm/MtTextEditorToolbarButton';
+import MtModal from '@contena/meteor-component-library/dist/esm/MtModal';
+import MtModalRoot from '@contena/meteor-component-library/dist/esm/MtModalRoot';
+import MtModalClose from '@contena/meteor-component-library/dist/esm/MtModalClose';
+import MtModalTrigger from '@contena/meteor-component-library/dist/esm/MtModalTrigger';
+import MtModalAction from '@contena/meteor-component-library/dist/esm/MtModalAction';
+import MtUrlField from '@contena/meteor-component-library/dist/esm/MtUrlField';
+import MtSearch from '@contena/meteor-component-library/dist/esm/MtSearch';
+import MtLink from '@contena/meteor-component-library/dist/esm/MtLink';
+import MtUnitField from '@contena/meteor-component-library/dist/esm/MtUnitField';
+import MtSnackbar from '@contena/meteor-component-library/dist/esm/MtSnackbar';
+import MtTooltip from '@contena/meteor-component-library/dist/esm/MtTooltip';
+import MtBadge from '@contena/meteor-component-library/dist/esm/MtBadge';
+import MtPromoBadge from '@contena/meteor-component-library/dist/esm/MtPromoBadge';
+import MtActionMenu from '@contena/meteor-component-library/dist/esm/MtActionMenu';
+import MtActionMenuItem from '@contena/meteor-component-library/dist/esm/MtActionMenuItem';
+import MtActionMenuGroup from '@contena/meteor-component-library/dist/esm/MtActionMenuGroup';
+import MtCollapsible from '@contena/meteor-component-library/dist/esm/MtCollapsible';
+import MtCollapsibleTrigger from '@contena/meteor-component-library/dist/esm/MtCollapsibleTrigger';
+import MtCollapsibleContent from '@contena/meteor-component-library/dist/esm/MtCollapsibleContent';
+import MtThemeProvider from '@contena/meteor-component-library/dist/esm/MtThemeProvider';
+import { MtDropdownMenuRoot, MtDropdownMenuTrigger, MtDropdownMenuPortal } from '@contena/meteor-component-library';
+
+import getBlockDataScope from '../../component/structure/ct-block-override/ct-block/get-block-data-scope';
+import useSystem from '../../composables/use-system';
+import useSession from '../../composables/use-session';
+
+const { Component, Mixin } = Contena;
+
+type RouteGuardName = 'beforeRouteEnter' | 'beforeRouteLeave' | 'beforeRouteUpdate';
+type RouteGuard = (
+    this: unknown,
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalizedLoaded,
+    next: NavigationGuardNext,
+) => unknown;
+type RouteEnterCallback =
+    Exclude<Parameters<NavigationGuardNext>[0], undefined> extends (vm: infer VM) => void ? (vm: VM) => void : never;
+type RouteGuardResult = false | RouteLocationRaw | Error | RouteEnterCallback | undefined;
+
+const routeGuardNames: RouteGuardName[] = [
+    'beforeRouteEnter',
+    'beforeRouteLeave',
+    'beforeRouteUpdate',
+];
+
+/**
+ * @private
+ */
+export default class VueAdapter extends ViewAdapter {
+    private resolvedComponentConfigs: Map<string, Promise<ComponentConfig | boolean>>;
+
+    private routeGuardComponents: WeakSet<ComponentConfig>;
+
+    private vueComponents: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [componentName: string]: VueComponent<any, any, any, any>;
+    };
+
+    private i18n?: I18n;
+
+    public app: App<Element>;
+
+    constructor(Application: ApplicationBootstrapper) {
+        super(Application);
+
+        this.i18n = undefined;
+        this.resolvedComponentConfigs = new Map();
+        this.routeGuardComponents = new WeakSet();
+        this.vueComponents = {};
+
+        this.app = createApp({
+            name: 'ContenaAdministration',
+            render: () => h(resolveComponent('ct-admin')),
+            mounted: () => window.removePageLoadingIndicator(),
+        });
+    }
+
+    /**
+     * Creates the main instance for the view layer.
+     * Is used on startup process of the main application.
+     */
+    init(renderElement: string, router: Router, providers: { [key: string]: unknown }): App<Element> {
+        return this.initVue(renderElement, router, providers);
+    }
+
+    initVue(renderElement: string, router: Router, providers: { [key: string]: unknown }): App<Element> {
+        this.initPlugins();
+        this.initDirectives();
+
+        const i18n = this.initLocales();
+
+        // add router to View
+        this.router = router;
+        // add i18n to View
+        this.i18n = i18n;
+
+        if (!this.app) {
+            throw new Error('Vue app is not initialized yet');
+        }
+
+        function fixI18NParametersOrder(args: Parameters<typeof i18n.global.t>): Parameters<typeof i18n.global.t> {
+            if (args.length === 3 && typeof args[1] === 'number' && typeof args[2] === 'object') {
+                console.warn(
+                    'the order of the parameters for $t has changed in the latest version.',
+                    'Please, check Vue I18n documentation for more details:',
+                    'https://vue-i18n.intlify.dev/guide/migration/breaking10#tc-key-key-resourcekeys-choice-number-named-record-string-unknown-translateresult',
+                );
+                // Keep the legacy parameter order supported by the Administration translation API.
+                return [
+                    args[0],
+                    args[1],
+                    args[2],
+                ];
+            }
+            return args;
+        }
+
+        this.app.config.compilerOptions.whitespace = 'preserve';
+        this.app.config.performance = process.env.NODE_ENV !== 'mediaion';
+        this.app.config.globalProperties.$t = function (...args: Parameters<typeof i18n.global.t>) {
+            return i18n.global.t(...fixI18NParametersOrder(args));
+        } as typeof i18n.global.t;
+        this.app.config.warnHandler = (msg: string, instance: unknown, trace: string) => {
+            const warnArgs = [
+                `[Vue warn]: ${msg}`,
+                trace,
+                instance,
+            ];
+
+            console.warn(...warnArgs);
+
+            if (msg.includes('Template compilation error')) {
+                console.error(
+                    ...[
+                        `[Vue error]: ${msg}`,
+                        trace,
+                        instance,
+                    ],
+                );
+                throw new Error(msg);
+            }
+        };
+
+        // This is a hack for providing the data scope to the components.
+        Object.defineProperty(this.app.config.globalProperties, '$dataScope', {
+            get: getBlockDataScope,
+            enumerable: true,
+        });
+        /**
+         * This is a hack for providing the services to the components.
+         * We shouldn't use this anymore because it is not supported well
+         * in Vue3 (because the services are lazy loaded).
+         *
+         * So we should convert from provide/inject to Contena.Service
+         */
+        Object.keys(providers).forEach((provideKey) => {
+            Object.defineProperty(this.app._context.provides, provideKey, {
+                get: () => providers[provideKey],
+                enumerable: true,
+                configurable: true,
+                set() {},
+            });
+        });
+
+        this.root = this.app;
+
+        this.app.use(router);
+        this.app.use(i18n);
+
+        // This is a hack for providing the i18n scope to the components.
+        Object.defineProperty(this.app.config.globalProperties, '$i18n', {
+            get: () => {
+                return i18n.global;
+            },
+            enumerable: true,
+        });
+
+        // Add global properties to root view instance
+        this.app.$t = i18n.global.t;
+
+        this.initTitle(this.app);
+
+        this.app.mount(renderElement);
+
+        if (process.env.NODE_ENV === 'development') {
+            setupContenaDevtools(this.root);
+        }
+
+        return this.root;
+    }
+
+    /**
+     * Initialize of all dependencies.
+     */
+    async initDependencies() {
+        const initContainer = this.Application.getContainer('init');
+
+        // make specific components synchronous
+        const syncComponents = [
+            'ct-admin',
+            'ct-admin-menu',
+            'ct-button-process',
+            'ct-card-section',
+            'ct-card-view',
+            'ct-container',
+            'ct-desktop',
+            'ct-entity-listing',
+            'ct-entity-multi-select',
+            'ct-entity-single-select',
+            'ct-error-boundary',
+            'ct-ignore-class',
+            'ct-loader',
+            'ct-modal',
+            'ct-notification-center',
+            'ct-notifications',
+            'ct-page',
+            'ct-router-link',
+            'ct-search-bar',
+            'ct-select-result',
+            'ct-skeleton',
+            'ct-skeleton-bar',
+            'ct-version',
+            'ct-upload-listener',
+            'ct-media-list-selection-item-v2',
+            'ct-media-list-selection-v2',
+            'ct-system-config',
+        ];
+
+        syncComponents.forEach((componentName) => {
+            Component.markComponentAsSync(componentName);
+        });
+
+        // initialize all components
+        await this.initComponents();
+
+        // initialize all module locales
+        this.initModuleLocales();
+
+        // initialize all module routes
+        const allRoutes = this.applicationFactory.module.getModuleRoutes();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        initContainer.router.addModuleRoutes(allRoutes);
+
+        // create routes for core and plugins
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        initContainer.router.createRouterInstance();
+    }
+
+    /**
+     * Registers an async component with a hidden loading component.
+     *
+     * @private
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private registerAsyncComponent(componentName: string, importMethod: () => Promise<any>) {
+        this.app.component(
+            componentName,
+            defineAsyncComponent({
+                loader: importMethod,
+                // Delay before showing the loading component. Default: 200ms.
+                delay: 0,
+                loadingComponent: {
+                    name: 'async-loading-component',
+                    inheritAttrs: false,
+                    render() {
+                        return h('div', {
+                            style: { display: 'none' },
+                        });
+                    },
+                },
+            }),
+        );
+    }
+
+    /**
+     * Initializes all core components as Vue components.
+     */
+    async initComponents() {
+        const componentRegistry = this.componentFactory.getComponentRegistry();
+
+        const initializedComponents = [...componentRegistry.keys()].map((name) => {
+            return this.createComponent(name);
+        });
+
+        await Promise.all(initializedComponents);
+
+        /**
+         * Initialize all meteor components
+         */
+        const meteorComponents = {
+            MtAvatar,
+            MtBanner,
+            MtLoader,
+            MtProgressBar,
+            MtButton,
+            MtCheckbox,
+            MtRadioGroupRoot,
+            MtRadioGroupList,
+            MtRadioGroupItem,
+            MtEmailField,
+            MtEmptyState,
+            MtNumberField,
+            MtPasswordField,
+            MtSelect,
+            MtEntitySelect,
+            MtSlider,
+            MtSwitch,
+            MtTextField,
+            MtTextarea,
+            MtIcon,
+            MtPagination,
+            MtSkeletonBar,
+            MtToast,
+            MtFloatingUi,
+            MtTextEditorToolbarButton,
+            MtModal,
+            MtModalRoot,
+            MtModalClose,
+            MtModalTrigger,
+            MtModalAction,
+            MtUrlField,
+            MtSearch,
+            MtLink,
+            MtUnitField,
+            MtSnackbar,
+            MtTooltip,
+            MtBadge,
+            MtPromoBadge,
+            MtActionMenu,
+            MtActionMenuItem,
+            MtActionMenuGroup,
+            MtCollapsible,
+            MtCollapsibleTrigger,
+            MtCollapsibleContent,
+            MtThemeProvider,
+            MtDropdownMenuRoot,
+            MtDropdownMenuTrigger,
+            MtDropdownMenuPortal,
+        } as const;
+
+        const lazyMeteorComponents = {
+            MtDataTable: () => import('@contena/meteor-component-library/dist/esm/MtDataTable'),
+            MtColorpicker: () => import('@contena/meteor-component-library/dist/esm/MtColorpicker'),
+            MtPopover: () => import('@contena/meteor-component-library/dist/esm/MtPopover'),
+            MtPopoverItem: () => import('@contena/meteor-component-library/dist/esm/MtPopoverItem'),
+        };
+
+        Object.entries(meteorComponents).forEach(
+            ([
+                componentName,
+                component,
+            ]) => {
+                const componentNameAsKebabCase = Contena.Utils.string.kebabCase(componentName);
+                this.app.component(componentNameAsKebabCase, component as VueComponent);
+            },
+        );
+
+        Object.entries(lazyMeteorComponents).forEach(
+            ([
+                componentName,
+                importMethod,
+            ]) => {
+                const componentNameAsKebabCase = Contena.Utils.string.kebabCase(componentName);
+                this.registerAsyncComponent(componentNameAsKebabCase, importMethod);
+            },
+        );
+
+        return this.vueComponents;
+    }
+
+    /**
+     * Initializes all core components as Vue components.
+     */
+    initModuleLocales() {
+        // Extend default snippets with module specific snippets
+        const moduleSnippets = this.applicationFactory.module.getModuleSnippets();
+
+        Object.entries(moduleSnippets).forEach(
+            ([
+                key,
+                moduleSnippet,
+            ]) => {
+                this.applicationFactory.locale.extend(key, moduleSnippet);
+            },
+        );
+
+        return this.applicationFactory.locale;
+    }
+
+    /**
+     * Returns the component as a Vue component.
+     * Includes the full rendered template with all overrides.
+     */
+    createComponent(componentName: string): Promise<App<Element>> {
+        return new Promise((resolve) => {
+            // load sync components directly
+            if (Component.isSyncComponent && Component.isSyncComponent(componentName)) {
+                const resolvedComponent = this.componentResolver(componentName);
+
+                if (resolvedComponent === undefined) {
+                    return;
+                }
+
+                void resolvedComponent.then((component) => {
+                    let vueComponent;
+
+                    if (typeof component !== 'boolean') {
+                        this.app?.component(componentName, component);
+                        vueComponent = this.app?.component(componentName);
+                    }
+
+                    // @ts-expect-error - resolved config does not match completely a standard vue component
+                    this.vueComponents[componentName] = vueComponent;
+                    resolve(vueComponent as unknown as App<Element>);
+                });
+
+                return;
+            }
+
+            this.registerAsyncComponent(componentName, () => this.componentResolver(componentName));
+
+            const vueComponent = this.app?.component(componentName);
+
+            // @ts-expect-error - resolved config does not match completely a standard vue component
+            this.vueComponents[componentName] = vueComponent;
+
+            resolve(vueComponent as unknown as App<Element>);
+        });
+    }
+
+    componentResolver(componentName: string): Promise<ComponentConfig | boolean> {
+        if (!this.resolvedComponentConfigs.has(componentName)) {
+            this.resolvedComponentConfigs.set(
+                componentName,
+                new Promise((resolve) => {
+                    void Component.build(componentName).then((componentConfig) => {
+                        if (typeof componentConfig === 'boolean') {
+                            resolve(false);
+                        } else {
+                            this.resolveMixins(componentConfig);
+                        }
+
+                        resolve(componentConfig);
+                    });
+                }),
+            );
+        }
+
+        return this.resolvedComponentConfigs.get(componentName) as Promise<ComponentConfig | boolean>;
+    }
+
+    /**
+     * Builds and creates a Vue component using the provided component configuration.
+     */
+    buildAndCreateComponent(componentConfig: ComponentConfig) {
+        if (!componentConfig.name) {
+            throw new Error('Component name is missing');
+        }
+
+        const componentName = componentConfig.name;
+        this.resolveMixins(componentConfig);
+
+        this.app?.component(componentName, componentConfig);
+        const vueComponent = this.app?.component(componentName);
+
+        // @ts-expect-error - resolved config does not match completely a standard vue component
+        this.vueComponents[componentName] = vueComponent;
+
+        return vueComponent;
+    }
+
+    /**
+     * Returns a final Vue component by its name.
+     */
+    getComponent(componentName: string) {
+        if (!this.vueComponents[componentName]) {
+            return null;
+        }
+
+        return this.vueComponents[componentName] as App<Element>;
+    }
+
+    /**
+     * Returns a final Vue component by its name without defineAsyncComponent
+     * which cannot be used in the router.
+     */
+    getComponentForRoute(componentName: string): () => Promise<boolean | ComponentConfig> {
+        return async () => {
+            const componentConfig = await this.componentResolver(componentName);
+
+            if (typeof componentConfig !== 'boolean') {
+                this.normalizeRouteGuards(componentConfig);
+            }
+
+            return componentConfig;
+        };
+    }
+
+    /**
+     * Returns the complete set of available Vue components.
+     */
+    // @ts-expect-error - resolved config for each component does not match completely a standard vue component
+    getComponents() {
+        return this.vueComponents;
+    }
+
+    /**
+     * Returns the adapter wrapper
+     */
+    getWrapper() {
+        return this.app;
+    }
+
+    /**
+     * Returns the name of the adapter
+     */
+    getName(): string {
+        return 'Vue.js';
+    }
+
+    /**
+     * Returns the Vue.set function
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setReactive(this: void, target: any, propertyName: string, value: unknown) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        target[propertyName] = value;
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+        return target[propertyName];
+    }
+
+    /**
+     * Returns the Vue.delete function
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    deleteReactive(target: any, propertyName: string) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        delete target[propertyName];
+    }
+
+    /**
+     * Private methods
+     */
+
+    /**
+     * Initialises all plugins for VueJS
+     *
+     * @private
+     */
+    initPlugins() {
+        VuePlugins.forEach((plugin) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            if (plugin?.install?.installed) {
+                return;
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            this.app?.use(plugin);
+        });
+
+        return true;
+    }
+
+    /**
+     * Initializes all custom directives.
+     *
+     * @private
+     */
+    initDirectives() {
+        const registry = this.Application.getContainer('factory').directive.getDirectiveRegistry();
+
+        registry.forEach((directive, name) => {
+            this.app?.directive(name, directive);
+        });
+
+        return true;
+    }
+
+    /**
+     * Initialises the standard locales.
+     */
+    initLocales() {
+        /**
+         * Snippet registration should be done with
+         * reactivity in mind. So that updates later
+         * from the locale factory are reflected in the i18n instance.
+         */
+        const registry = this.localeFactory.getLocaleRegistry();
+        const messages = {};
+        const fallbackLocale = Contena.Context.app.fallbackLocale as FallbackLocale;
+        const { registerAdminLocale } = useSystem();
+
+        registry.forEach((localeMessages, key) => {
+            registerAdminLocale(key);
+            // @ts-expect-error - key is safe because we iterate through the registry
+            messages[key] = localeMessages;
+        });
+
+        const lastKnownLocale = this.localeFactory.getLastKnownLocale();
+        void useSession().setAdminLocale(lastKnownLocale);
+
+        const options = {
+            legacy: false,
+            locale: lastKnownLocale,
+            fallbackLocale,
+            fallbackWarn: false,
+            silentFallbackWarn: true,
+            sync: true,
+            messages,
+            allowComposition: true,
+        } as const;
+
+        const i18n = createI18n(options);
+
+        Contena.Vue.watch(
+            useSession().currentLocale,
+            (currentLocale: string | null) => {
+                i18n.global.locale.value = currentLocale ?? '';
+            },
+            { immediate: true },
+        );
+
+        this.setLocaleFromUser();
+
+        // watch for changes of the user to update the locale
+        Contena.Vue.watch(
+            useSession().currentUser,
+            (newValue, oldValue) => {
+                const currentUserLocaleId = newValue?.localeId;
+                const oldUserLocaleId = oldValue?.localeId;
+
+                if (currentUserLocaleId && currentUserLocaleId !== oldUserLocaleId) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+                    Contena.Service('localeHelper').setLocaleWithId(currentUserLocaleId);
+                }
+            },
+            { deep: true },
+        );
+
+        return i18n;
+    }
+
+    setLocaleFromUser() {
+        const currentUser = useSession().currentUser.value;
+
+        if (currentUser) {
+            const userLocaleId = currentUser.localeId;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+            Contena.Service('localeHelper').setLocaleWithId(userLocaleId);
+        }
+    }
+
+    /**
+     * Extends Vue prototype to access $createTitle function
+     *
+     * @private
+     */
+    initTitle(app: App<Element>) {
+        app.config.globalProperties.$createTitle = function createTitle(
+            this: ComponentPublicInstance,
+            identifier: string | null = null,
+            ...additionalParams
+        ): string {
+            if (!this.$root) {
+                return '';
+            }
+
+            const baseTitle = this.$root.$t('global.ct-admin-menu.textContenaAdmin');
+
+            if (!this.$route.meta || !this.$route.meta.$module) {
+                return '';
+            }
+
+            // @ts-expect-error - $module is not typed correctly
+            const moduleTitle = this.$route.meta.$module?.title as string;
+            const pageTitle = this.$root.$t(moduleTitle);
+
+            const params = [
+                baseTitle,
+                pageTitle,
+                identifier,
+                ...additionalParams,
+            ].filter((item) => {
+                return item !== null && item.trim() !== '';
+            });
+
+            return params.reverse().join(' | ');
+        };
+    }
+
+    /**
+     * Recursively resolves mixins referenced by name
+     *
+     * @private
+     */
+    resolveMixins(componentConfig: ComponentConfig) {
+        // If the mixin is a string, use our mixin registry
+        if (componentConfig.mixins?.length) {
+            componentConfig.mixins = componentConfig.mixins.map((mixin) => {
+                if (typeof mixin === 'string') {
+                    // @ts-expect-error
+                    return Mixin.getByName(mixin);
+                }
+
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                return mixin;
+            });
+        }
+
+        if (componentConfig.extends) {
+            // @ts-expect-error - extends can be a string or a component config
+            this.resolveMixins(componentConfig.extends);
+        }
+    }
+
+    // Normalize route guards by collecting inherited and mixin guards and
+    // composing them into one deduplicated guard per hook for route components.
+    private normalizeRouteGuards(componentConfig: ComponentConfig) {
+        if (this.routeGuardComponents.has(componentConfig)) {
+            return;
+        }
+
+        this.routeGuardComponents.add(componentConfig);
+
+        routeGuardNames.forEach((guardName) => {
+            const guards = this.collectRouteGuards(componentConfig, guardName);
+
+            if (!guards.length) {
+                return;
+            }
+
+            this.setRouteGuard(componentConfig, guardName, this.composeRouteGuards(guards, guardName));
+        });
+    }
+
+    private collectRouteGuards(
+        componentConfig: ComponentConfig,
+        guardName: RouteGuardName,
+        visitedConfigs = new Set<ComponentConfig>(),
+        seenGuards = new Set<RouteGuard>(),
+    ): RouteGuard[] {
+        if (visitedConfigs.has(componentConfig)) {
+            return [];
+        }
+
+        visitedConfigs.add(componentConfig);
+
+        const guards: RouteGuard[] = [];
+
+        if (componentConfig.extends && typeof componentConfig.extends !== 'string') {
+            guards.push(...this.collectRouteGuards(componentConfig.extends, guardName, visitedConfigs, seenGuards));
+        }
+
+        componentConfig.mixins?.forEach((mixin) => {
+            if (typeof mixin === 'string') {
+                return;
+            }
+
+            guards.push(...this.collectRouteGuards(mixin as ComponentConfig, guardName, visitedConfigs, seenGuards));
+        });
+
+        const currentGuard = this.getRouteGuard(componentConfig, guardName);
+
+        if (currentGuard && !seenGuards.has(currentGuard)) {
+            seenGuards.add(currentGuard);
+            guards.push(currentGuard);
+        }
+
+        return guards;
+    }
+
+    private composeRouteGuards(guards: RouteGuard[], guardName: RouteGuardName): RouteGuard {
+        return async function composedRouteGuard(this: unknown, to, from, next) {
+            const enterCallbacks: RouteEnterCallback[] = [];
+
+            const runGuard = async (index: number): Promise<void> => {
+                if (index >= guards.length) {
+                    if (guardName === 'beforeRouteEnter' && enterCallbacks.length) {
+                        next((vm) => {
+                            enterCallbacks.forEach((callback) => {
+                                callback(vm);
+                            });
+                        });
+
+                        return;
+                    }
+
+                    next();
+                    return;
+                }
+
+                const guard = guards[index];
+                const forwardRouteResult = next as (result: Exclude<RouteGuardResult, undefined>) => void;
+
+                const continueNavigation = async (result?: RouteGuardResult) => {
+                    if (guardName === 'beforeRouteEnter' && typeof result === 'function') {
+                        enterCallbacks.push(result);
+                        await runGuard(index + 1);
+                        return;
+                    }
+
+                    if (typeof result === 'undefined') {
+                        await runGuard(index + 1);
+                        return;
+                    }
+
+                    // Only beforeRouteEnter callbacks and undefined are handled above;
+                    // all other defined results are forwarded to Vue Router unchanged.
+                    forwardRouteResult(result);
+                };
+
+                if (guard.length >= 3) {
+                    await new Promise<RouteGuardResult | undefined>((resolve, reject) => {
+                        const resolveRouteGuard: NavigationGuardNext = (result?) => {
+                            resolve(result as RouteGuardResult | undefined);
+                        };
+
+                        void Promise.resolve(guard.call(this, to, from, resolveRouteGuard)).catch(reject);
+                    })
+                        .then((result) => continueNavigation(result))
+                        .catch((error) => {
+                            throw error instanceof Error ? error : new Error(String(error));
+                        });
+
+                    return;
+                }
+
+                await continueNavigation((await guard.call(this, to, from, next)) as RouteGuardResult);
+            };
+
+            try {
+                await runGuard(0);
+            } catch (error) {
+                next(error as Error);
+            }
+        };
+    }
+
+    private getRouteGuard(componentConfig: ComponentConfig, guardName: RouteGuardName): RouteGuard | undefined {
+        switch (guardName) {
+            case 'beforeRouteEnter':
+                return componentConfig.beforeRouteEnter as RouteGuard | undefined;
+            case 'beforeRouteLeave':
+                return componentConfig.beforeRouteLeave as RouteGuard | undefined;
+            case 'beforeRouteUpdate':
+                return componentConfig.beforeRouteUpdate as RouteGuard | undefined;
+            default:
+                return undefined;
+        }
+    }
+
+    private setRouteGuard(componentConfig: ComponentConfig, guardName: RouteGuardName, guard: RouteGuard) {
+        switch (guardName) {
+            case 'beforeRouteEnter':
+                componentConfig.beforeRouteEnter = guard;
+                return;
+            case 'beforeRouteLeave':
+                componentConfig.beforeRouteLeave = guard;
+                return;
+            case 'beforeRouteUpdate':
+                componentConfig.beforeRouteUpdate = guard;
+        }
+    }
+}

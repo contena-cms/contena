@@ -1,0 +1,8 @@
+@import "~scss/variables";
+
+.ct-settings-custom-field-set-create {
+    .ct-card-view__content {
+        max-width: $content-width;
+        margin: 0 auto;
+    }
+}

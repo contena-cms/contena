@@ -1,0 +1,51 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": [],
+  "components": {
+    "schemas": {
+      "MemberAddressRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "readOnly": true
+          },
+          "memberId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "region": {
+            "$ref": "#/components/schemas/Region"
+          }
+        },
+        "required": [
+          "memberId",
+          "createdAt",
+          "updatedAt",
+          "country"
+        ]
+      }
+    }
+  }
+}

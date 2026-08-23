@@ -1,0 +1,12 @@
+.ct-settings-country-detail {
+    &__content-container {
+        width: 100%;
+        max-width: 996px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    &__tab-content {
+        margin-top: var(--scale-size-24);
+    }
+}

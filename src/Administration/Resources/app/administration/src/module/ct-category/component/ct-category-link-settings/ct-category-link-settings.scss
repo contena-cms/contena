@@ -1,0 +1,9 @@
+// ToDo: Remove when https://github.com/contena/meteor/issues/896 is fixed
+.ct-category-link-settings {
+    .ct-category-link-settings__external-link {
+        label.mt-field-label {
+            margin-top: -3px !important;
+            margin-bottom: 5px !important;
+        }
+    }
+}

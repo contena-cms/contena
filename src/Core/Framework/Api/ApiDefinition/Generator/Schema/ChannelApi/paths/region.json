@@ -1,0 +1,10 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/region/{countryId}": {
+            "post": {"tags": ["System & Context", "Endpoints supporting Criteria "], "summary": "Fetch regions of a country", "operationId": "readRegion", "parameters": [{"name": "countryId", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[0-9a-f]{32}$"}}], "requestBody": {"required": false, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Criteria"}}}}, "responses": {"200": {"$ref": "#/components/responses/RegionListResponse"}, "400": {"$ref": "#/components/responses/400", "description": "The `Criteria` sent with the request is invalid, e.g. an unknown filter field, sorting field or association."}, "401": {"$ref": "#/components/responses/401", "description": "The `ct-access-key` header is missing."}}, "security": [{"ApiKey": []}]},
+            "get": {"tags": ["System & Context", "Endpoints supporting Criteria "], "summary": "Fetch regions of a country", "operationId": "readRegionGet", "parameters": [{"name": "countryId", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[0-9a-f]{32}$"}}, {"x-parameter-group": "criteria"}], "responses": {"200": {"$ref": "#/components/responses/RegionListResponse"}, "400": {"$ref": "#/components/responses/400", "description": "The `Criteria` sent with the request is invalid, e.g. an unknown filter field, sorting field or association."}, "401": {"$ref": "#/components/responses/401", "description": "The `ct-access-key` header is missing."}}, "security": [{"ApiKey": []}]}
+        }
+    }
+}

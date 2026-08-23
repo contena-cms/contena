@@ -1,0 +1,47 @@
+@import "~scss/variables";
+
+.ct-extension-my-extensions-listing {
+    .ct-extension-my-extensions-listing__listing-grid {
+        margin-bottom: 32px;
+
+        .ct-extension-my-extensions-listing__empty-state {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .ct-extension-my-extensions-listing__app-url-warning {
+            max-width: 960px;
+            margin-bottom: 32px;
+
+            .mt-button {
+                margin-top: 8px;
+            }
+        }
+
+        .ct-extension-my-extensions-listing__runtime-extension-warning {
+            max-width: 960px;
+            margin-bottom: 32px;
+        }
+    }
+
+    &-empty-state {
+        text-align: center;
+    }
+
+    &__container {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+
+    .ct-pagination {
+        background-color: transparent;
+        border: none;
+        margin: 42px auto 0;
+        max-width: 960px;
+        padding: 0;
+
+        .ct-pagination__per-page {
+            margin-right: 0;
+        }
+    }
+}

@@ -1,0 +1,3 @@
+administrative_code,parent_code,short_code,name,level,active,source,data_version
+110000,,BJ,Beijing,1,1,gb2260,2026
+110101,110000,110101,Dongcheng,2,1,gb2260,2026

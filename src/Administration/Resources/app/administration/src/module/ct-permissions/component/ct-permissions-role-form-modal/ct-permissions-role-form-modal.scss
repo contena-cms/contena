@@ -1,0 +1,12 @@
+.ct-permissions-role-form-modal {
+    &__form {
+        display: grid;
+        gap: var(--scale-size-20);
+        min-width: min(32rem, 70vw);
+    }
+
+    &__footer-actions {
+        display: flex;
+        gap: var(--scale-size-12);
+    }
+}

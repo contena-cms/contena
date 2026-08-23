@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Basic information</title>
+        <title lang="zh-CN">基本信息</title>
+
+        <input-field>
+            <name>siteName</name>
+            <label>Site name</label>
+            <label lang="zh-CN">站点名称</label>
+            <placeholder>Enter a site name...</placeholder>
+            <placeholder lang="zh-CN">请输入站点名称...</placeholder>
+        </input-field>
+
+        <input-field>
+            <name>email</name>
+            <label>Site owner's email address</label>
+            <label lang="zh-CN">站点所有者邮箱</label>
+            <placeholder>Enter email address...</placeholder>
+            <placeholder lang="zh-CN">请输入邮箱地址...</placeholder>
+        </input-field>
+
+        <input-field>
+            <name>metaAuthor</name>
+            <label>Meta author</label>
+            <label lang="zh-CN">Meta 作者</label>
+            <placeholder>Enter author's name...</placeholder>
+            <placeholder lang="zh-CN">请输入作者名称...</placeholder>
+            <helpText>Enter the name that will appear as the author of the website in search results or on social
+                media. This name will be used by default for all pages on the website.
+            </helpText>
+            <helpText lang="zh-CN">输入网站在搜索结果或社交媒体中显示的作者名称。此名称将作为网站所有页面的默认作者。</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>familyFriendly</name>
+            <label>Family friendly site</label>
+            <label lang="zh-CN">适合家庭访问</label>
+            <helpText>Sets the "isFamilyFriendly" value for search engines</helpText>
+            <helpText lang="zh-CN">为搜索引擎设置“isFamilyFriendly”值</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Frontend pages</title>
+        <title lang="zh-CN">前端页面</title>
+
+        <component name="mt-entity-select">
+            <name>tosPage</name>
+            <entity>landing_page</entity>
+            <label>Terms of service page</label>
+            <label lang="zh-CN">服务条款页面</label>
+            <placeholder>Assign landing page...</placeholder>
+            <placeholder lang="zh-CN">请选择落地页...</placeholder>
+        </component>
+
+        <component name="mt-entity-select">
+            <name>privacyPage</name>
+            <entity>landing_page</entity>
+            <label>Privacy page</label>
+            <label lang="zh-CN">隐私政策页面</label>
+            <placeholder>Assign landing page...</placeholder>
+            <placeholder lang="zh-CN">请选择落地页...</placeholder>
+        </component>
+
+        <component name="mt-entity-select">
+            <name>imprintPage</name>
+            <entity>landing_page</entity>
+            <label>Legal notice page</label>
+            <label lang="zh-CN">法律声明页面</label>
+            <placeholder>Assign landing page...</placeholder>
+            <placeholder lang="zh-CN">请选择落地页...</placeholder>
+        </component>
+
+        <component name="mt-entity-select">
+            <name>http404Page</name>
+            <entity>landing_page</entity>
+            <label>404 page</label>
+            <label lang="zh-CN">404 页面</label>
+            <placeholder>Assign landing page...</placeholder>
+            <placeholder lang="zh-CN">请选择落地页...</placeholder>
+        </component>
+
+        <component name="mt-entity-select">
+            <name>maintenancePage</name>
+            <entity>landing_page</entity>
+            <label>Maintenance page</label>
+            <label lang="zh-CN">维护页面</label>
+            <placeholder>Assign landing page...</placeholder>
+            <placeholder lang="zh-CN">请选择落地页...</placeholder>
+        </component>
+    </card>
+
+    <card>
+        <title>Privacy and consent</title>
+        <title lang="zh-CN">隐私与同意管理</title>
+
+        <input-field type="bool">
+            <name>useDefaultCookieConsent</name>
+            <label>Use default cookie notification</label>
+            <label lang="zh-CN">使用默认 Cookie 提示</label>
+            <helpText>Deactivate the default cookie notification only if you are using an alternative third-party solution.</helpText>
+            <helpText lang="zh-CN">仅在使用其他第三方解决方案时停用默认 Cookie 提示。</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>acceptAllCookies</name>
+            <label>Show "Accept all cookies" button</label>
+            <label lang="zh-CN">显示“接受所有 Cookie”按钮</label>
+            <helpText>Shows a button which allows members to accept all cookies in the frontend</helpText>
+            <helpText lang="zh-CN">显示允许会员接受前端全部 Cookie 的按钮</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Rules for robots.txt</title>
+        <title lang="zh-CN">robots.txt 规则</title>
+
+        <input-field type="bool">
+            <name>robotsDisableDefaults</name>
+            <label>Disable default robots.txt rules</label>
+            <label lang="zh-CN">停用默认 robots.txt 规则</label>
+            <helpText>If set, Contena's built-in robots.txt rules will not be included. Custom rules remain active.</helpText>
+            <helpText lang="zh-CN">启用后不再包含 Contena 内置 robots.txt 规则，自定义规则仍然有效。</helpText>
+        </input-field>
+
+        <input-field type="textarea">
+            <name>robotsRules</name>
+            <label>Domain-specific robots.txt rules</label>
+            <label lang="zh-CN">域名专用 robots.txt 规则</label>
+            <helpText>Define robots.txt rules. User-agent blocks apply globally and Allow or Disallow rules apply to this domain path.</helpText>
+            <helpText lang="zh-CN">定义 robots.txt 规则。User-agent 块全局生效，Allow 或 Disallow 规则应用于当前域名路径。</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>CAPTCHA</title>
+        <title lang="zh-CN">验证码</title>
+
+        <component name="ct-settings-captcha-select-v2">
+            <name>activeCaptchasV2</name>
+            <label>Active CAPTCHAS</label>
+            <label lang="zh-CN">启用的验证码</label>
+            <placeholder>None</placeholder>
+            <placeholder lang="zh-CN">无</placeholder>
+        </component>
+    </card>
+
+    <card>
+        <title>Meta</title>
+
+        <input-field type="text">
+            <name>metaRobots</name>
+            <label>Robots meta tag</label>
+            <label lang="zh-CN">Robots Meta 标签</label>
+            <helpText>This option defines the default content of the robots meta tag. Individual pages can override it.</helpText>
+            <helpText lang="zh-CN">此选项定义 robots meta 标签的默认内容，单个页面可以覆盖它。</helpText>
+            <defaultValue>index,follow</defaultValue>
+            <placeholder>index,follow</placeholder>
+            <placeholder lang="zh-CN">index,follow</placeholder>
+        </input-field>
+    </card>
+</config>

@@ -1,0 +1,46 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Snippet\Files;
+
+class RemoteSnippetFile extends AbstractSnippetFile
+{
+    public function __construct(
+        private readonly string $name,
+        private readonly string $path,
+        private readonly string $iso,
+        private readonly string $author,
+        private readonly bool $isBase,
+        private readonly string $technicalName,
+    ) {
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function getIso(): string
+    {
+        return $this->iso;
+    }
+
+    public function getAuthor(): string
+    {
+        return $this->author;
+    }
+
+    public function isBase(): bool
+    {
+        return $this->isBase;
+    }
+
+    public function getTechnicalName(): string
+    {
+        return $this->technicalName;
+    }
+}

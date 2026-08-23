@@ -1,0 +1,177 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Channel;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\ContentSystem\Adapter\RenderingSpecificationResolver;
+use Contena\Core\Framework\ContentSystem\Cache\CacheFinalizer;
+use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
+use Contena\Core\Framework\ContentSystem\Channel\ContentRoute;
+use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
+use Contena\Core\Framework\ContentSystem\ContentPipeline;
+use Contena\Core\Framework\ContentSystem\ContentSection;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
+use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
+use Contena\Core\Framework\ContentSystem\Output\Format\AbstractResponseFactory;
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Framework\ContentSystem\PlaceholderValues;
+use Contena\Core\Framework\ContentSystem\RenderableLayout;
+use Contena\Core\Framework\ContentSystem\RenderingMode;
+use Contena\Core\Framework\ContentSystem\RenderingSpecification;
+use Contena\Core\Framework\ContentSystem\ResolvedContentLayout;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\PlatformRequest;
+use Contena\Core\Test\Generator;
+use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @internal
+ */
+#[CoversClass(ContentRoute::class)]
+class ContentRouteTest extends TestCase
+{
+    private RenderingSpecificationResolver&Stub $specificationResolver;
+
+    private CacheTagCollector&Stub $cacheTagCollector;
+
+    private AbstractResponseFactory&Stub $responseFactory;
+
+    private ContentPipeline&Stub $contentPipeline;
+
+    protected function setUp(): void
+    {
+        $this->specificationResolver = static::createStub(RenderingSpecificationResolver::class);
+        $this->cacheTagCollector = static::createStub(CacheTagCollector::class);
+        $this->responseFactory = static::createStub(AbstractResponseFactory::class);
+        $this->contentPipeline = static::createStub(ContentPipeline::class);
+    }
+
+    #[TestDox('returns content page from pipeline and collects layout and specification cache tags')]
+    public function testLoadReturnsContentPageAndCollectsCacheTags(): void
+    {
+        $request = new Request();
+        $contentPage = new ContentPage('layout-1', [ContentElementBuilder::create('root')->build()], 'Test', null);
+
+        $collectedTags = [];
+        $this->cacheTagCollector->method('addTag')
+            ->willReturnCallback(function (string ...$tags) use (&$collectedTags): void {
+                array_push($collectedTags, ...$tags);
+            });
+
+        $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request, ['blog-abc']));
+        $this->responseFactory->method('getRenderingMode')->willReturn(RenderingMode::FULL);
+        $this->contentPipeline->method('load')->willReturn($contentPage);
+        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($contentPage));
+
+        $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
+
+        $result = $route->load('/blog/abc', $request, Generator::generateChannelContext());
+
+        static::assertInstanceOf(ContentRouteResponse::class, $result);
+        static::assertSame($contentPage, $result->getContentPage());
+        static::assertContains('content-layout-layout-1', $collectedTags);
+        static::assertContains('blog-abc', $collectedTags);
+    }
+
+    #[TestDox('marks the request uncacheable when the pipeline disables the cache context')]
+    public function testLoadDisablesHttpCacheWhenPipelineDisablesCacheContext(): void
+    {
+        $request = new Request();
+        $contentPage = new ContentPage('layout-1', [ContentElementBuilder::create('root')->build()], 'Test', null);
+
+        $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request));
+        $this->responseFactory->method('getRenderingMode')->willReturn(RenderingMode::FULL);
+        $this->contentPipeline->method('load')->willReturnCallback(
+            function (RenderableLayout $layout, RenderingSpecification $specification, RenderingCacheContext $cacheContext) use ($contentPage): ContentPage {
+                $cacheContext->disable();
+
+                return $contentPage;
+            }
+        );
+        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($contentPage));
+
+        $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
+
+        $route->load('/blog/abc', $request, Generator::generateChannelContext());
+
+        static::assertFalse($request->attributes->get(PlatformRequest::ATTRIBUTE_HTTP_CACHE));
+    }
+
+    #[TestDox('throws layout not found when the resolved layout does not exist')]
+    public function testLoadThrowsLayoutNotFoundWhenLayoutDoesNotExist(): void
+    {
+        $request = new Request();
+
+        $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request));
+
+        $route = $this->createRoute($this->createLayoutRepository());
+
+        $this->expectExceptionObject(ContentSystemException::layoutNotFound('layout-1'));
+
+        $route->load('/blog/abc', $request, Generator::generateChannelContext());
+    }
+
+    #[TestDox('throws DecorationPatternException from getDecorated')]
+    public function testGetDecoratedThrowsDecorationPatternException(): void
+    {
+        $this->expectExceptionObject(new DecorationPatternException(ContentRoute::class));
+
+        $this->createRoute($this->createLayoutRepository())->getDecorated();
+    }
+
+    /**
+     * @param StaticEntityRepository<ContentLayoutCollection> $repository
+     */
+    private function createRoute(StaticEntityRepository $repository): ContentRoute
+    {
+        return new ContentRoute(
+            $this->specificationResolver,
+            ContentSection::MAIN,
+            $this->cacheTagCollector,
+            $repository,
+            $this->responseFactory,
+            $this->contentPipeline,
+            new CacheFinalizer($this->cacheTagCollector),
+        );
+    }
+
+    /**
+     * @param list<string> $cacheTags
+     */
+    private function createResolved(Request $request, array $cacheTags = []): ResolvedContentLayout
+    {
+        return ResolvedContentLayout::create(
+            'layout-1',
+            new RenderingSpecification([], PlaceholderValues::from([]), $request, null, $cacheTags),
+        );
+    }
+
+    /**
+     * @return StaticEntityRepository<ContentLayoutCollection>
+     */
+    private function createLayoutRepository(ContentLayoutEntity ...$entities): StaticEntityRepository
+    {
+        /** @var StaticEntityRepository<ContentLayoutCollection> $repository */
+        $repository = new StaticEntityRepository([$entities]);
+
+        return $repository;
+    }
+
+    private function createLayoutEntity(string $id = 'layout-1', string $name = 'Test'): ContentLayoutEntity
+    {
+        $entity = new ContentLayoutEntity();
+        $entity->setId($id);
+        $entity->setName($name);
+        $entity->setVersion('1.0');
+        $entity->setLayout([ContentElementBuilder::create('root')->build()]);
+
+        return $entity;
+    }
+}

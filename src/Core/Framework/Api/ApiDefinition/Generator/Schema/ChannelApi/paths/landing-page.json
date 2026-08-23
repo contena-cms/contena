@@ -1,0 +1,100 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/landing-page/{landingPageId}": {
+            "post": {
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Fetch a landing page",
+                "description": "Loads a landing page by its identifier.\n\n**Available Associations:**\n- `seoUrls` - SEO-friendly URLs for the landing page across different channels",
+                "operationId": "readLandingPage",
+                "parameters": [
+                    {
+                        "name": "landingPageId",
+                        "in": "path",
+                        "description": "Identifier of the landing page.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The loaded landing page",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LandingPage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            },
+            "get": {
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Fetch a landing page",
+                "description": "Loads a landing page by its identifier.\n\n**Available Associations:**\n- `seoUrls` - SEO-friendly URLs for the landing page across different channels",
+                "operationId": "readLandingPageGet",
+                "parameters": [
+                    {
+                        "name": "landingPageId",
+                        "in": "path",
+                        "description": "Identifier of the landing page.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The loaded landing page",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LandingPage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            }
+        }
+    }
+}

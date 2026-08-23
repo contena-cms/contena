@@ -1,0 +1,19 @@
+# Frontend ContentSystem
+
+Header and footer content layout assignments for the Frontend. These are Frontend-only sections — the Core content system (`Core/Framework/ContentSystem/`) has no knowledge of them.
+
+## Structure
+
+- **HeaderContentLayout/** — Header assignment entity + domain-aware specification source
+- **FooterContentLayout/** — Footer assignment entity + domain-aware specification source
+- **Extension/** — Entity extensions adding header/footer associations to `ContentLayout`, `Channel`, and `ChannelDomain`
+- **Validation/** — [Validation/README.md](Validation/README.md) — DAL `PreWriteValidationEvent` gate for header/footer assignment writes (`HeaderFooterAssignmentWriteValidator`): a tree-blind type-match of the bound layout's immutable `root_source` against the section id
+- [docs/header-footer.md](docs/header-footer.md) — The Channel API header and footer endpoints, the assignment record, and domain-aware resolution
+
+## Resolution
+
+Domain-aware three-tier fallback via `Core/Framework/ContentSystem/Adapter/FactoryHelper/DomainAwareLayoutResolver`: domain+channel → channel → global.
+
+## DI Config
+
+`Frontend/DependencyInjection/content-system.php` — Registers entity definitions, extensions, specification sources (`content_system.specification_source` tag), section resolvers (`header`, `footer`), and the Validation service (`HeaderFooterAssignmentWriteValidator` with `kernel.event_subscriber`).

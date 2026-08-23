@@ -1,0 +1,17 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <text name="test_text_field">
+                    <label>Test text field</label>
+                    <placeholder>Enter a text...</placeholder>
+                </text>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

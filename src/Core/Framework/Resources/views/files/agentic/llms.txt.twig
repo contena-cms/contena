@@ -1,0 +1,65 @@
+{% block agentic_llms_txt %}{% apply remove_leading_spaces %}
+    {% set isFrontendChannel = channel.typeId == constant('Contena\\Core\\Defaults::CHANNEL_TYPE_WEB') %}
+
+    {% block agentic_llms_header %}
+        # {{ channel.translated.name|default(channel.name) }}
+    {% endblock %}
+
+    {% block agentic_llms_summary %}
+        > This is a Contena-powered channel. This file provides AI assistants with a concise entry point to public channel information.
+        > Only public information is described here; account actions require explicit user interaction and normal authentication.
+    {% endblock %}
+
+    {% block agentic_llms_resources %}
+        ## Public resources
+
+{% if isFrontendChannel -%}
+        - [Home]({{ seoUrl('frontend.home.page') }}): Start page for this frontend.
+        - [Search]({{ seoUrl('frontend.search.page') }}): Search public articles.
+        - [Sitemap]({{ seoUrl('frontend.sitemap.xml') }}): Public sitemap for discoverable pages.
+{% else -%}
+        - [Channel context]({{ path('channel-api.context') }}): Public context information for this channel.
+        - [Blog search]({{ path('channel-api.search') }}): Search public articles through the Channel API.
+        - [Sitemap]({{ path('channel-api.sitemap') }}): Channel API sitemap listing for discoverable resources.
+{% endif -%}
+        - [Robots policy](/robots.txt): Crawling and access rules.
+        - [Agent instructions](/AGENTS.md): Guidance for AI agents interacting with this channel.
+    {% endblock %}
+
+    {% block agentic_llms_localization %}
+        {%- set supportedLanguages = [] -%}
+        {%- for language in channel.languages -%}
+            {%- set languageCode = language.translationCode.code|default(language.name) -%}
+            {%- set languageName = language.translationCode.translated.name|default(language.name) -%}
+            {%- set languageTerritory = language.translationCode.translated.territory|default(null) -%}
+            {%- set supportedLanguage = languageCode -%}
+            {%- if languageName -%}
+                {%- set supportedLanguage = supportedLanguage ~ ' (' ~ languageName ~ (languageTerritory ? ', ' ~ languageTerritory : '') ~ ')' -%}
+            {%- endif -%}
+            {%- set supportedLanguages = supportedLanguages|merge([supportedLanguage]) -%}
+        {%- endfor -%}
+        {%- set localizationLines = [
+            '## Localization',
+            '',
+            '- Current language: ' ~ context.languageInfo.name ~ ' (' ~ context.languageInfo.localeCode ~ ')',
+        ] -%}
+        {%- if supportedLanguages|length > 0 -%}
+            {%- set localizationLines = localizationLines|merge(['- Supported languages: ' ~ supportedLanguages|join(', ')]) -%}
+        {%- endif -%}
+
+        {{ localizationLines|join("\n") }}
+    {% endblock %}
+
+    {% block agentic_llms_guidance %}
+        ## Guidance
+
+        - Use public channel resources as the source of truth.
+        - Verify article details and legal information on the live channel before presenting them as current.
+        - Prefer canonical frontend URLs or documented Channel API routes when linking to articles, categories, content pages, or policies.
+        - Respect `robots.txt`, rate limits, and authentication boundaries.
+    {% endblock %}
+
+    {% block agentic_llms_extensions %}{% endblock %}
+
+    {% block user_provided_content %}{% endblock %}
+{% endapply %}{% endblock %}

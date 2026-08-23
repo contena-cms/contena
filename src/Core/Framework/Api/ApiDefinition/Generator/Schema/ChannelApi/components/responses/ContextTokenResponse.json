@@ -1,0 +1,33 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "responses": {
+            "ContextTokenResponse": {
+                "description": "Returns the context token. Use that as your `ct-context-token` header for subsequent requests. Redirect if getRedirectUrl is set.",
+                "headers": {
+                    "ct-context-token": {
+                        "description": "Contains ct-context-token value",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "redirectUrl": {
+                                    "description": "Defines the URL to which a browser should be redirected.",
+                                    "type": ["string", "null"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

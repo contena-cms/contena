@@ -1,0 +1,25 @@
+{
+  "ct-frontend-content-layout": {
+    "general": {
+      "tabTitle": "Header & footer"
+    },
+    "header": {
+      "title": "Header content",
+      "description": "Assign the default header layout for this Channel and optional overrides for individual domains."
+    },
+    "footer": {
+      "title": "Footer content",
+      "description": "Assign the default footer layout for this Channel and optional overrides for individual domains."
+    },
+    "assignment": {
+      "channelDefault": "Channel default",
+      "domainOverride": "Domain override",
+      "placeholder": "Select a content layout...",
+      "create": "Create layout",
+      "open": "Open layout",
+      "loadError": "The content layout assignments could not be loaded.",
+      "saveSuccess": "The content layout assignment was saved.",
+      "saveError": "The content layout assignment could not be saved."
+    }
+  }
+}

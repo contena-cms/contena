@@ -1,0 +1,52 @@
+{
+    "ct-settings-mailer": {
+        "general": {
+            "title": "邮件服务器",
+            "description": "配置全局邮件服务器"
+        },
+        "configuration": {
+            "agent": "邮件发送方式",
+            "agentPlaceholder": "请选择...",
+            "environmentAgent": "使用环境配置",
+            "localAgent": "本地邮件代理",
+            "smtpAgent": "SMTP 服务器",
+            "smtpOauthAgent": "使用 OAuth 2 的 SMTP 服务器",
+            "sendmailOptions": "Sendmail 发送方式",
+            "synchronous": "同步发送",
+            "asynchronous": "异步发送",
+            "disableDelivery": "停止发送邮件"
+        },
+        "smtp": {
+            "host": "主机",
+            "hostPlaceholder": "请输入主机名...",
+            "port": "端口",
+            "portPlaceholder": "请输入端口号...",
+            "username": "用户名",
+            "usernamePlaceholder": "请输入用户名...",
+            "password": "密码",
+            "passwordPlaceholder": "请输入密码...",
+            "oauthUrl": "OAuth URL",
+            "oauthUrlPlaceholder": "请输入 OAuth URL...",
+            "oauthScope": "OAuth Scope",
+            "oauthScopePlaceholder": "请输入 OAuth Scope...",
+            "clientId": "Client ID",
+            "clientIdPlaceholder": "请输入 Client ID...",
+            "clientSecret": "Client Secret",
+            "clientSecretPlaceholder": "请输入 Client Secret...",
+            "encryption": "加密方式",
+            "encryptionPlaceholder": "请选择加密方式...",
+            "senderAddress": "发件人地址",
+            "senderAddressPlaceholder": "请输入有效的邮箱地址...",
+            "deliveryAddress": "投递地址",
+            "deliveryAddressPlaceholder": "请输入用于测试的邮箱地址...",
+            "required": "此字段为必填项。",
+            "invalidPort": "请输入 1 到 65535 之间的有效端口。",
+            "invalidConfiguration": "SMTP 配置无效，请检查主机和端口。"
+        },
+        "encryption": {
+            "none": "不加密",
+            "ssl": "SSL",
+            "tls": "TLS"
+        }
+    }
+}

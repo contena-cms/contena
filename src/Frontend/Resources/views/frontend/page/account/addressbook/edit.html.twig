@@ -1,0 +1,14 @@
+{% sw_extends '@Frontend/frontend/page/account/_page.html.twig' %}
+{% block page_account_main_content %}
+    <h1>{{ 'account.addressEditMetaTitle'|trans|sw_sanitize }}</h1>
+    <form method="post" action="{{ path('frontend.account.address.edit.save', {addressId: page.address.id}) }}" data-form-handler="true">
+        {% sw_include '@Frontend/frontend/component/address/address-personal.html.twig' with {data: page.address, prefix: 'address'} %}
+        {% sw_include '@Frontend/frontend/component/address/address-form.html.twig' with {
+            data: page.address,
+            prefix: 'address',
+            scopeElementSelector: '.account-address-form',
+        } %}
+        <input type="hidden" name="redirectTo" value="{{ redirectTo }}">
+        <div class="d-flex justify-content-between mt-4"><a href="{{ path('frontend.account.address.page') }}" class="btn btn-outline-secondary">{{ 'general.back'|trans|sw_sanitize }}</a><button class="btn btn-primary" type="submit">{{ 'account.addressSaveChange'|trans|sw_sanitize }}</button></div>
+    </form>
+{% endblock %}

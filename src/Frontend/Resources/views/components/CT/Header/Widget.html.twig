@@ -1,0 +1,21 @@
+{# Abstract header widget #}
+{% props
+    icon = null,
+%}
+
+{% set attributeDefaults = {
+    class: 'ct-header-widget',
+} %}
+
+<button {{ attributes.defaults(attributeDefaults) }}>
+	<twig:CT:Icon
+		class="ct-header-widget__icon"
+		:name="icon"
+		color="body"
+	/>
+	{% if block('content') %}
+		<span class="ct-header-widget__label" style="min-width: 50px;">
+			{% block content %}{% endblock %}
+		</span>
+	{% endif %}
+</button>

@@ -1,0 +1,18 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+            </related-entities>
+            <fields>
+                <bool name="bool_field">
+                    <label>Test bool field</label>
+                    <label lang="de-DE">Test bool field</label>
+                    <help-text>Help text</help-text>
+                    <help-text lang="de-DE">Help text</help-text>
+                </bool>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

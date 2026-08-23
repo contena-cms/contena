@@ -1,0 +1,13 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% set defaultAttributes = {
+    class: 'ct-active-filters container',
+    'data-component': 'CT:Filter:ActiveFilters',
+} %}
+
+<div {{ attributes.defaults(defaultAttributes) }}>
+    <button class="ct-active-filters__btn-reset-all btn btn-outline-danger is--hidden" type="button">
+        {{ 'listing.filterPanelResetAll'|trans|sw_sanitize }}
+    </button>
+</div>

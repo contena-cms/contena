@@ -1,0 +1,73 @@
+{
+    "ct-settings-rule": {
+        "general": {
+            "mainMenuItemGeneral": "Rules",
+            "descriptionTextModule": "Manage reusable conditions for automation flows."
+        },
+        "list": {
+            "title": "Rules",
+            "create": "Create rule",
+            "search": "Search rules...",
+            "name": "Name",
+            "description": "Description",
+            "priority": "Priority",
+            "conditions": "Conditions",
+            "createdAt": "Created at",
+            "actions": "Actions",
+            "emptyTitle": "No rules yet",
+            "emptyDescription": "Create a rule to reuse it as a condition in flows."
+        },
+        "detail": {
+            "createTitle": "Create rule",
+            "editTitle": "Edit rule",
+            "generalCard": "General",
+            "conditionCard": "Conditions",
+            "name": "Name",
+            "description": "Description",
+            "priority": "Priority",
+            "saveSuccess": "The rule was saved.",
+            "saveError": "The rule could not be saved."
+        },
+        "condition": {
+            "matchMode": "Match mode",
+            "matchAll": "Match all conditions",
+            "matchAny": "Match any condition",
+            "add": "Add condition",
+            "addGroup": "Add sub-condition",
+            "remove": "Remove condition",
+            "removeGroup": "Remove sub-condition",
+            "removeAll": "Delete conditions",
+            "and": "And",
+            "or": "Or",
+            "type": "Condition type",
+            "dateRange": "Date range",
+            "timeRange": "Time range",
+            "dayOfWeek": "Day of week",
+            "language": "Language",
+            "userDaysSinceFirstLogin": "Days since user's first login",
+            "userDaysSinceLastLogin": "Days since user's last login",
+            "operator": "Comparison",
+            "operatorEquals": "Equals",
+            "operatorNotEquals": "Does not equal",
+            "operatorGreaterThan": "Greater than",
+            "operatorGreaterThanEquals": "Greater than or equal",
+            "operatorLessThan": "Less than",
+            "operatorLessThanEquals": "Less than or equal",
+            "daysPassed": "Days",
+            "fromDate": "From",
+            "toDate": "To",
+            "fromTime": "From time",
+            "toTime": "To time",
+            "weekday": "Day",
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday",
+            "languageLabel": "Language",
+            "empty": "Add at least one condition."
+        }
+    }
+}

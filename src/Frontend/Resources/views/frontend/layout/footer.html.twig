@@ -1,0 +1,11 @@
+{% block base_footer %}
+    <footer class="footer-main">
+        {% block base_footer_inner %}
+            {% if contentPage %}
+                <twig:CT:Content:Page :page="contentPage" />
+            {% else %}
+                {% sw_include '@Frontend/frontend/layout/footer/footer.html.twig' %}
+            {% endif %}
+        {% endblock %}
+    </footer>
+{% endblock %}

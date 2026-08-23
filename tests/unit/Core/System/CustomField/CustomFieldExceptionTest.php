@@ -1,0 +1,26 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\CustomField;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\System\CustomField\CustomFieldException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[CoversClass(CustomFieldException::class)]
+class CustomFieldExceptionTest extends TestCase
+{
+    public function testCustomFieldNameInvalid(): void
+    {
+        $name = 'test-name';
+        $exception = CustomFieldException::customFieldNameInvalid($name);
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame(CustomFieldException::CUSTOM_FIELD_NAME_INVALID, $exception->getErrorCode());
+        static::assertSame('Invalid field name: Only letters, numbers, or underscores are allowed, and it must start with a letter or underscore.', $exception->getMessage());
+        static::assertSame(['field' => 'name', 'value' => $name], $exception->getParameters());
+    }
+}

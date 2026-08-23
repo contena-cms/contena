@@ -1,0 +1,70 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Api;
+
+use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Mutation\MutationResult;
+
+/**
+ * The wire response shared by all draft and persisted mutation routes.
+ *
+ * Output-only: serialized to JSON and discarded — never cached, stored in a DAL SerializedField, or passed to
+ * StructNormalizer::denormalize(). jsonSerialize() casts the map-typed fields (resolutions/droppedProperties)
+ * to {} when empty; the element tree's own maps stay [] (the shape every other read path emits). Safe only on
+ * this path; a future requirement that caches or reconstructs this object must revisit it.
+ *
+ * @final
+ */
+class MutationResponse implements \JsonSerializable
+{
+    /**
+     * @param list<array<string, mixed>> $layout serialized element tree
+     * @param array<string, list<array<string, mixed>>> $resolutions per-element resolutions
+     * @param array<string, mixed> $diagnostics normalized diagnostics report
+     * @param list<string> $affectedElementIds
+     * @param list<array<string, mixed>> $orphaned serialized detached subtrees
+     * @param list<string> $droppedWiring
+     * @param array<string, mixed> $droppedProperties dropped property values
+     */
+    private function __construct(
+        public array $layout,
+        public array $resolutions,
+        public array $diagnostics,
+        public array $affectedElementIds,
+        public array $orphaned,
+        public array $droppedWiring,
+        public array $droppedProperties,
+    ) {
+    }
+
+    public static function fromResult(MutationResult $result, ContentElementFieldSerializer $elementSerializer): self
+    {
+        $normalizer = new LayoutDiagnosticsResultNormalizer();
+
+        return new self(
+            array_map($elementSerializer->serializeContentElement(...), $result->layout),
+            $normalizer->normalizeResolutions($result->resolutions),
+            $normalizer->normalizeReport($result->diagnostics),
+            $result->affectedElementIds,
+            array_map($elementSerializer->serializeContentElement(...), $result->orphaned),
+            $result->droppedWiring,
+            $result->droppedProperties,
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'layout' => $this->layout,
+            'resolutions' => (object) $this->resolutions,
+            'diagnostics' => $this->diagnostics,
+            'affectedElementIds' => $this->affectedElementIds,
+            'orphaned' => $this->orphaned,
+            'droppedWiring' => $this->droppedWiring,
+            'droppedProperties' => (object) $this->droppedProperties,
+        ];
+    }
+}

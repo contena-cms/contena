@@ -1,0 +1,140 @@
+parameters:
+    messenger.default_transport_name: 'v65'
+    env(MESSENGER_TRANSPORT_DSN): 'doctrine://default?auto_setup=false'
+    env(MESSENGER_TRANSPORT_LOW_PRIORITY_DSN): 'doctrine://default?auto_setup=false&queue_name=low_priority'
+    env(MESSENGER_TRANSPORT_FAILURE_DSN): 'doctrine://default?queue_name=failed&auto_setup=false'
+    env(MAILER_DSN): 'null://null'
+    env(LOCK_DSN): 'flock'
+    '.container.dumper.inline_class_loader': false
+    '.container.dumper.inline_factories': true
+
+framework:
+    esi: true
+    trusted_hosts: ~
+    fragments: ~
+    assets: ~
+    http_cache:
+        enabled: true
+    session:
+        name: 'session-'
+        handler_id: ~
+        cookie_secure: 'auto'
+        cookie_samesite: lax
+        storage_factory_id: Contena\Core\Framework\Store\Session\FrontendSessionStorageFactory
+    serializer: { enabled: true }
+    secret: "%env(APP_SECRET)%"
+    profiler:
+        enabled: false
+    property_info:
+        with_constructor_extractor: true
+    validation:
+        enable_attributes: true
+        email_validation_mode: html5
+    default_locale:  en_GB
+    http_method_override: true
+    mailer:
+        message_bus: false
+        dsn: '%env(MAILER_DSN)%'
+    lock: '%env(LOCK_DSN)%'
+    php_errors:
+        log: true
+    cache:
+        prefix_seed: "%kernel.cache.hash%"
+        app: cache.adapter.filesystem
+        pools:
+            cache.object:
+                default_lifetime: 172800
+                adapter: cache.app
+                tags: cache.tags
+            cache.http:
+                default_lifetime: 172800
+                adapter: cache.app
+                tags: cache.tags
+            cache.tags:
+                adapter: cache.app
+            cache.rate_limiter:
+                adapter: cache.app
+            cache.double_submit:
+                adapter: cache.app
+    messenger:
+        failure_transport: failed
+        serializer:
+            default_serializer: messenger.transport.symfony_serializer
+            symfony_serializer:
+                format: json
+                context: { }
+
+        transports:
+            failed: "%env(MESSENGER_TRANSPORT_FAILURE_DSN)%"
+            async:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                serializer: messenger.transport.symfony_serializer
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 0
+            low_priority:
+                dsn: "%env(MESSENGER_TRANSPORT_LOW_PRIORITY_DSN)%"
+                serializer: messenger.transport.symfony_serializer
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 0
+        buses:
+            messenger.bus.default:
+                middleware:
+                    - Contena\Core\Framework\Adapter\Messenger\Middleware\QueuedTimeMiddleware
+
+        routing:
+            'Contena\Core\Framework\MessageQueue\AsyncMessageInterface': async
+            'Contena\Core\Framework\MessageQueue\LowPriorityMessageInterface': low_priority
+            'Symfony\Component\Mailer\Messenger\SendEmailMessage': async
+
+    exceptions:
+        # Symfony exceptions
+        Symfony\Component\HttpKernel\Exception\NotFoundHttpException:
+            log_level: notice
+        Symfony\Component\Routing\Exception\MissingMandatoryParametersException:
+            log_level: notice
+        Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException:
+            log_level: notice
+        Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException:
+            log_level: notice
+        Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException:
+            log_level: notice
+        Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException:
+            log_level: notice
+        Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\FieldAccessorBuilderNotFoundException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\QueryLimitExceededException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidLimitQueryException:
+            log_level: notice
+        Contena\Core\Framework\Api\Exception\MissingPrivilegeException:
+            log_level: notice
+        Contena\Core\Framework\Validation\Exception\ConstraintViolationException:
+            log_level: notice
+        Contena\Core\Framework\Validation\WriteConstraintViolationException:
+            log_level: notice
+        Contena\Core\Framework\Uuid\Exception\InvalidUuidException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Write\WriteException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidPriceFieldTypeException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException:
+            log_level: notice
+        Contena\Core\Framework\Api\Exception\ResourceNotFoundException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidFilterQueryException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Exception\EntityRepositoryNotFoundException:
+            log_level: notice
+        Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\ParentAssociationCanNotBeFetched:
+            log_level: notice

@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Adapter\Twig\Node;
+
+use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
+use Twig\Attribute\YieldReady;
+use Twig\Compiler;
+use Twig\Node\IncludeNode;
+
+/**
+ * @internal
+ */
+#[YieldReady]
+class SwInclude extends IncludeNode
+{
+    protected function addGetTemplate(Compiler $compiler): void
+    {
+        $compiler
+            ->write("((function () use (\$context, \$blocks) {\n")
+            ->indent()
+                ->write('$finder = $this->env->getExtension(\'' . NodeExtension::class . '\')->getFinder();')->raw("\n\n")
+                ->write('$includeTemplate = $finder->find(')
+                        ->subcompile($this->getNode('expr'))
+                ->raw(");\n\n")
+                ->write('return $this->load(')
+                    ->raw('$includeTemplate ?? null, ')
+                    ->repr($this->getTemplateLine())
+                ->raw(");\n")
+            ->outdent()
+            ->write('})())');
+    }
+}

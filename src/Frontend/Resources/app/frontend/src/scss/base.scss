@@ -1,0 +1,84 @@
+/*
+Basic styles
+==================================================
+Contains the imports to all basic styles.
+
+The file organization follows the 7-1 pattern architecture
+https://sass-guidelin.es/#the-7-1-pattern
+*/
+
+/*
+ * Variables, Mixins, Functions
+ * ---------------------------- */
+@import 'abstract/functions/feature';
+@import 'variables';
+@import 'abstract/mixins/truncate-multiline';
+
+/*
+ * Vendors
+ * ------- */
+@import 'vendor/bootstrap';
+@import 'vendor/tiny-slider';
+@import 'vendor/datepicker';
+
+/*
+ * Base stuff
+ * ---------- */
+@import 'base/base';
+@import 'base/reboot';
+
+/*
+ * Components
+ * ---------- */
+@import 'component/alert';
+@import 'component/card';
+@import 'component/category-navigation';
+@import 'component/backdrop';
+@import 'component/base-slider';
+@import 'component/image-slider';
+@import 'component/gallery-slider';
+@import 'component/magnifier';
+@import 'component/zoom-modal';
+@import 'component/offcanvas';
+@import 'component/loader';
+@import 'component/modal';
+@import 'component/icon';
+@import 'component/pagination';
+@import 'component/forms';
+@import 'component/sorting';
+@import 'component/filter-panel';
+@import 'component/filter-multi-select';
+@import 'component/filter-property-select';
+@import 'component/filter-boolean';
+@import 'component/filter-range';
+@import 'component/notification-dot';
+@import 'component/basic-captcha';
+@import 'component/visibility';
+@import 'component/ar-overlay';
+@import 'component/ar-splash-screen';
+@import 'component/ar-qr-modal';
+
+/*
+ * Layout-related sections
+ * ----------------------- */
+@import 'layout/container';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/navigation-offcanvas';
+@import 'layout/account-menu';
+@import 'layout/search-suggest';
+@import 'layout/cookie-permission';
+@import 'layout/cookie-configuration';
+@import 'layout/scroll-up';
+@import 'layout/recaptcha';
+
+/*
+ * Page-specific styles
+ * -------------------- */
+@import 'page/account/account';
+@import 'page/account/address';
+@import 'page/account/overview';
+@import 'page/account/profile';
+@import 'page/account/register';
+
+@import 'page/search/search';

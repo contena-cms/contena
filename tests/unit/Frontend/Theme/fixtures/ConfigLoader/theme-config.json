@@ -1,0 +1,43 @@
+{
+  "themeConfig": {
+    "blocks": {
+      "themeColors": {
+        "label": {
+          "en-GB": "Theme colours",
+          "de-DE": "Theme-Farben"
+        }
+      }
+    },
+    "fields": {
+      "contena-color-brand-primary": {
+        "label": {
+          "en-GB": "Primary colour",
+          "de-DE": "Primärfarbe"
+        },
+        "type": "color",
+        "value": "#008490",
+        "editable": true,
+        "block": "themeColors",
+        "order": 100
+      }
+    }
+  },
+  "technicalName": "Frontend",
+  "name": "Contena default theme",
+  "previewMedia": null,
+  "author": "Contena",
+  "isTheme": true,
+  "styleFiles": [
+    {
+      "filepath": "src/Frontend/Resources/app/frontend/src/scss/base.scss",
+      "resolveMapping": {},
+      "extensions": []
+    }
+  ],
+  "scriptFiles": [],
+  "frontendEntryFilepath": "src/Frontend/Resources/app/frontend/src/main.js",
+  "assetPaths": [],
+  "viewInheritance": [],
+  "iconSets": [],
+  "extensions": []
+}

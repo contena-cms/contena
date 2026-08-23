@@ -1,0 +1,10 @@
+.ct-media-folder-info {
+    .ct-media-sidebar__quickaction--disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .ct-media-quickinfo-metadata-name.has--error {
+        margin-bottom: 14px;
+    }
+}

@@ -1,0 +1,9 @@
+{
+  "ct-profile": {
+    "general": { "mainMenuItemGeneral": "个人资料", "description": "管理个人资料。", "headlineProfile": "个人资料" },
+    "index": { "titleInfoCard": "基本信息", "titleImageCard": "头像", "titlePasswordCard": "密码", "labelNameField": "姓名", "labelPhoneNumberField": "手机号", "labelUsernameField": "用户名", "labelEmailField": "邮箱地址", "labelTimezoneField": "时区", "labelOldPassword": "原密码", "placeholderOldPassword": "输入原密码...", "labelNewPassword": "新密码", "placeholderNewPassword": "输入新密码...", "labelNewPasswordConfirm": "确认密码", "placeholderNewPasswordConfirm": "再次输入新密码...", "notificationPasswordErrorMessage": "两次输入的密码不一致。", "notificationNewPasswordIsSameAsOldErrorMessage": "新密码不能与原密码相同。", "notificationInvalidEmailErrorMessage": "请输入有效的邮箱地址。", "notificationSaveSuccessMessage": "个人资料已保存。", "notificationSaveErrorMessage": "无法保存个人资料。", "labelUploadAvatar": "上传头像", "labelUseAsAvatar": "设为头像" },
+    "tabGeneral": { "title": "基本信息" },
+    "tabSearchPreferences": { "title": "搜索偏好", "cardSearchBehavior": { "title": "搜索行为", "subtitle": "设置后台搜索行为", "labelMinSearchTermLength": "最短搜索词长度" }, "cardSearchContent": { "title": "可搜索内容", "subtitle": "设置各模块和记录的可搜索字段", "buttonSelect": "全选", "buttonDeselect": "取消全选", "buttonReset": "恢复默认" }, "modules": { "media": { "alt": "替代文本", "tagsName": "标签", "title": "标题", "fileName": "名称", "mediaFolderName": "文件夹", "path": "路径" }, "flow": { "name": "名称", "description": "描述" }, "rule": { "name": "名称", "description": "描述" } } }
+  },
+  "ct-privileges": { "additional_permissions": { "user": { "update_profile": "更新个人资料" } } }
+}

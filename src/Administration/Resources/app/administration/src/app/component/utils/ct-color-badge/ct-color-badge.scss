@@ -1,0 +1,35 @@
+$ct-color-badge-color-fallback: var(--color-icon-secondary-default);
+$ct-color-badge-color-warning: var(--color-icon-attention-default);
+$ct-color-badge-color-error: var(--color-icon-critical-default);
+$ct-color-badge-color-success: var(--color-icon-positive-default);
+$ct-color-badge-color-info: var(--color-icon-brand-default);
+
+.ct-color-badge {
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+    margin: 0 0 1px 10px;
+    border-radius: 2px;
+    background-color: $ct-color-badge-color-fallback;
+
+    &.is--rounded {
+        border-radius: 100%;
+    }
+
+    &.is--warning {
+        background-color: $ct-color-badge-color-warning;
+    }
+
+    &.is--error,
+    &.is--danger {
+        background-color: $ct-color-badge-color-error;
+    }
+
+    &.is--success {
+        background-color: $ct-color-badge-color-success;
+    }
+
+    &.is--info {
+        background-color: $ct-color-badge-color-info;
+    }
+}

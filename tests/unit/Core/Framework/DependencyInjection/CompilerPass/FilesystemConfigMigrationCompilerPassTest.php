@@ -1,0 +1,79 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\FilesystemConfigMigrationCompilerPass;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+/**
+ * @internal
+ */
+#[CoversClass(FilesystemConfigMigrationCompilerPass::class)]
+class FilesystemConfigMigrationCompilerPassTest extends TestCase
+{
+    private ContainerBuilder $builder;
+
+    protected function setUp(): void
+    {
+        $this->builder = new ContainerBuilder();
+        $this->builder->addCompilerPass(new FilesystemConfigMigrationCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 0);
+        $this->builder->setParameter('contena.filesystem.public', []);
+        $this->builder->setParameter('contena.filesystem.public.type', 'local');
+        $this->builder->setParameter('contena.filesystem.public.config', []);
+        $this->builder->setParameter('contena.cdn.url', 'http://test.de');
+    }
+
+    public function testConfigMigration(): void
+    {
+        $this->builder->compile();
+
+        static::assertSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.theme'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.asset'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.sitemap'));
+
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.theme.type'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.asset.type'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.sitemap.type'));
+
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.theme.config'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.asset.config'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.sitemap.config'));
+
+        // We cannot inherit them, because they use the main application URL instead of the configured one.
+        static::assertSame('', $this->builder->getParameter('contena.filesystem.theme.url'));
+        static::assertSame('', $this->builder->getParameter('contena.filesystem.asset.url'));
+        static::assertSame('', $this->builder->getParameter('contena.filesystem.sitemap.url'));
+
+        static::assertTrue($this->builder->hasParameter('contena.filesystem.theme.visibility'));
+    }
+
+    public function testSetCustomConfigForTheme(): void
+    {
+        $this->builder->setParameter('contena.filesystem.theme', ['foo' => 'foo']);
+        $this->builder->setParameter('contena.filesystem.theme.type', 'amazon-s3');
+        $this->builder->setParameter('contena.filesystem.theme.config', ['test' => 'test']);
+        $this->builder->setParameter('contena.filesystem.theme.url', 'http://cdn.de');
+
+        $this->builder->compile();
+
+        static::assertNotSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.theme'));
+        static::assertNotSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.theme.type'));
+        static::assertNotSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.theme.config'));
+
+        static::assertSame('amazon-s3', $this->builder->getParameter('contena.filesystem.theme.type'));
+        static::assertSame('http://cdn.de', $this->builder->getParameter('contena.filesystem.theme.url'));
+        static::assertSame(['test' => 'test'], $this->builder->getParameter('contena.filesystem.theme.config'));
+        static::assertTrue($this->builder->hasParameter('contena.filesystem.theme.visibility'));
+
+        static::assertSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.asset'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.asset.type'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.asset.config'));
+
+        static::assertSame($this->builder->getParameter('contena.filesystem.public'), $this->builder->getParameter('contena.filesystem.sitemap'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.type'), $this->builder->getParameter('contena.filesystem.sitemap.type'));
+        static::assertSame($this->builder->getParameter('contena.filesystem.public.config'), $this->builder->getParameter('contena.filesystem.sitemap.config'));
+    }
+}

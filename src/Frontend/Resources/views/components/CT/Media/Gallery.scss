@@ -1,0 +1,134 @@
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+.ct-media-gallery {
+    --ct-media-thumbnail-border-color: var(--bs-gray-300);
+    --ct-media-thumbnail-hover-border-color: var(--bs-primary);
+
+    /* Fallback value for fixed height mode */
+    --ct-media-gallery-max-height: 450px;
+
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-gap: var(--spacer-sm);
+}
+
+.ct-media-gallery--thumbnail-nav-bottom {
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr auto;
+
+    .ct-media-gallery__thumbnail-nav {
+        order: 2;
+    }
+}
+
+.ct-media-gallery__previews-wrapper {
+    min-height: 0;
+    position: relative;
+}
+
+.ct-media-gallery--display-mode-fixed-height {
+    .ct-media-gallery__previews {
+        max-height: var(--ct-media-gallery-max-height);
+    }
+
+    .ct-media-gallery__preview-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ct-media-gallery__preview {
+        max-height: 100%;
+    }
+}
+
+.ct-media-gallery--single-media {
+    grid-template-columns: auto;
+}
+
+.ct-media-gallery__previews {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    min-width: 0;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.ct-media-gallery__preview-item {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+.ct-media-gallery__nav-button {
+    --bs-btn-border-color: var(--bs-gray-300);
+
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &.is--backward {
+        left: 0;
+    }
+
+    &.is--forward {
+        right: 0;
+    }
+}
+
+/* Higher specificity than `.btn-icon` so desktop hide wins over icon-button display */
+.ct-media-gallery__nav-button.ct-button {
+    display: none;
+}
+
+.ct-media-gallery__preview-item-badge {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    background-color: rgba(0, 0, 0, 50%);
+    color: var(--bs-white);
+    font-weight: 600;
+    border-radius: 1rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.ct-media-gallery__preview {
+    display: block;
+
+    &:has(canvas) {
+        cursor: all-scroll;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .ct-media-gallery__thumbnail-nav {
+        display: none;
+    }
+
+    .ct-media-gallery {
+        grid-template-columns: 100%;
+    }
+
+    .ct-media-gallery__nav-button.ct-button {
+        display: inline-flex;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .ct-media-gallery__preview-item-badge {
+        @include visually-hidden;
+    }
+}

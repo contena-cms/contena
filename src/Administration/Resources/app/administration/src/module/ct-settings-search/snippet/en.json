@@ -1,0 +1,133 @@
+{
+    "ct-settings-search": {
+        "general": {
+            "mainMenuItemGeneral": "Search"
+        },
+        "page": {
+            "generalTab": "General",
+            "liveSearchTab": "Live search"
+        },
+        "textLeaveConfirm": "You have unsaved changes. Do you really want to leave this page?",
+        "generalTab": {
+            "labelSearchBehaviour": "Search behaviour",
+            "textTitleSearchBehaviour": "Choose how strictly entered search terms need to match.",
+            "labelSearchAndCondition": "Exact search (AND)",
+            "textSearchAndConditionExplain": "Show only results that match all entered search terms.",
+            "labelSearchOrCondition": "Broad search (OR)",
+            "textSearchOrConditionExplain": "Show results that match any of the entered search terms.",
+            "labelMinimalSearchTerm": "Minimal search term length",
+            "labelExcludedSearchTerms": "Excluded search terms",
+            "textEmptyStateExcludedSearchTerms": "No search terms excluded yet",
+            "textEmptyStateExcludedSearchTermsDescription": "Exclude terms to stop them from being matched in Channel search results.",
+            "buttonAddExcludedSearch": "Exclude search term",
+            "textPlaceholderTermsFilter": "Search excluded search terms...",
+            "buttonAddExcludedSearchTerms": "Exclude search term",
+            "labelExcludedSearchTermsNoResults": "No results found.",
+            "labelExcludedSearchTermsNoResultsDescription": "Try adjusting your search.",
+            "labelSearchableContent": "Searchable content",
+            "textDescriptionSearchableContent": "Control which Blog content is searchable in Channels and how strongly each field contributes to ranking.",
+            "buttonResetDefault": "Reset to default",
+            "buttonAddContent": "Add searchable content",
+            "labelGeneralTab": "General",
+            "labelCustomFieldsTab": "Custom fields",
+            "textEmptyStateSearchableContent": "No searchable content added yet.",
+            "textEmptyStateSearchableContentDescription": "Add content fields to control what can be found in Channel search.",
+            "textColumnSearchTerm": "Excluded search terms",
+            "labelSearchIndex": "Search index",
+            "buttonRebuildSearchIndex": "Rebuild search index",
+            "textWarningOpenTab": "Keep this window open.",
+            "textRebuildSearchIndexDescription": "Building the search index takes some time. Keep this window open until it finishes.",
+            "textRebuildingSearchIndex": "Rebuilding search index",
+            "textLastedBuild": "Latest build:",
+            "textSearchNotIndexedYet": "Search not indexed yet.",
+            "list": {
+                "columnSearchable": "Searchable",
+                "columnRankingPoints": "Ranking score",
+                "columnContent": "Content",
+                "columnSplitKeywords": "Split search terms",
+                "textResetRanking": "Reset ranking"
+            },
+            "configFields": {
+                "name": "Article title",
+                "description": "Article description",
+                "descriptionTeaser": "Article teaser",
+                "keywords": "Article keywords",
+                "customSearchKeywords": "Custom search terms",
+                "categoriesName": "Category name",
+                "categoriesCustomFields": "Category custom fields",
+                "tagsName": "Article tag",
+                "metaTitle": "Article meta title",
+                "metaDescription": "Article meta description"
+            },
+            "linkExample": "Show example",
+            "titleExampleModal": "Search ranking example",
+            "modal": {
+                "textExplain": "The examples show how matches in an article title, description, and tags contribute to the final ranking score.",
+                "textTitle": "Title",
+                "textSuperBlog": "Super article",
+                "textFancyBlog": "Fancy article",
+                "textSuperContent": "Super content",
+                "textFancyContent": "Fancy content",
+                "textDescription": "Description",
+                "textTag": "Tag",
+                "textJeans": "Guide",
+                "textTotal": "Total",
+                "textBlogRankedFirstScore": "The first article matches the title, description, and tag, for a total score of 170.",
+                "textBlogRankedSecondScore": "The second article matches the title and tag, for a total score of 120.",
+                "textBlogRankedThirdScore": "The third article matches only the tag, for a total score of 20."
+            }
+        },
+        "notification": {
+            "saveSuccess": "Configuration saved.",
+            "excludedTermRequired": "Excluded search terms must not be empty.",
+            "excludedTermAlreadyExists": "Excluded search term already exists.",
+            "updateExcludedTermSuccess": "Excluded search term updated.",
+            "createExcludedTermSuccess": "Excluded search term created.",
+            "deleteExcludedTermSuccess": "Excluded search term deleted.",
+            "resetToDefaultExcludedTermSuccess": "Excluded search terms reset to default.",
+            "resetToDefaultExcludedTermError": "Excluded search terms could not be reset.",
+            "saveError": "Configuration could not be saved.",
+            "loadError": "Configuration could not be loaded.",
+            "index": {
+                "started": "Building Blog indexes.",
+                "success": "Blog indexes built."
+            },
+            "notSupportedLanguageError": "The selected language is not available in the selected Channel."
+        },
+        "liveSearchTab": {
+            "titleCard": "Channel live search",
+            "linkRebuildSearchIndex": "Rebuild search index",
+            "textDescription": "Test your custom search settings below.",
+            "textPlaceholderChannel": "Select a Channel...",
+            "textPlaceholderSorting": "Select sorting...",
+            "labelName": "Search result",
+            "labelScore": "Ranking score",
+            "textNoResult": "No results found.",
+            "textNoResultDescription": "Please try again with another search term.",
+            "relevance": "Relevance",
+            "explainTitle": "Why this ranking?",
+            "totalScore": "Total score",
+            "weight": "weight",
+            "partialContext": "{fragment} in {word}",
+            "partialContextWhole": "in {word}",
+            "scoreHelpText": "The combined relevance score for this result. Field scores are weighted so they can be compared directly.",
+            "uniformScoresHint": "All results share the same score, so their order here is not meaningful.",
+            "matchedTerms": "Matched",
+            "unmatchedTerms": "Not matched",
+            "matchType": {
+                "exact": "exact",
+                "fuzzy": "fuzzy",
+                "prefix": "prefix",
+                "ngram": "partial",
+                "phrase": "phrase"
+            },
+            "matchTypeTooltip": {
+                "exact": "The whole search word matches a word in this field exactly.",
+                "fuzzy": "Matched with typo tolerance.",
+                "prefix": "A word in this field starts with the search word.",
+                "ngram": "Matched a shared letter fragment rather than the whole word.",
+                "phrase": "The full search phrase appears in this field in order."
+            }
+        }
+    }
+}

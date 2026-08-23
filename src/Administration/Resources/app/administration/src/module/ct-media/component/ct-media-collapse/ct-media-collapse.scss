@@ -1,0 +1,24 @@
+.ct-media-sidebar .ct-collapse {
+    .ct-media-collapse__header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        cursor: pointer;
+        padding: 16px 25px 0;
+        color: var(--color-text-primary-default);
+    }
+
+    .ct-media-collapse__title {
+        font-size: var(--font-size-s);
+        font-weight: normal;
+    }
+
+    .ct-media-collapse__button.is--hidden {
+        display: none;
+    }
+
+    .ct-collapse__content {
+        padding: 0 25px 25px;
+    }
+
+    border-bottom: 1px solid var(--color-border-secondary-default);
+}

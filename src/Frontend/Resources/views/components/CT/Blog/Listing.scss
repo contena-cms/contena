@@ -1,0 +1,9 @@
+.ct-blog-listing__grid {
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+}
+
+.ct-blog-listing__grid.is--layout-transition {
+    opacity: 0;
+    transform: translateY(10px);
+}

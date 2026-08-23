@@ -1,0 +1,21 @@
+{
+  "name": "BootstrapOnlyTheme",
+  "author": "contena AG",
+  "views": [
+    "@MockFrontend",
+    "@Plugins",
+    "@BootstrapOnlyTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "@FrontendBootstrap",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [
+    "@MockFrontend",
+    "app/frontend/dist/frontend/js/bootstrap-only-theme.js"
+  ],
+  "asset": [
+    "app/frontend/src/assets"
+  ]
+}

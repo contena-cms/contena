@@ -1,0 +1,47 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogListingCriteria": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Criteria"
+                    },
+                    {
+                        "type": "object",
+                        "description": "Additional search parameters for blog listings",
+                        "properties": {
+                            "order": {
+                                "description": "Specifies the sorting by `availableSortings`. If not set, the channel's default sorting is used.",
+                                "type": "string"
+                            },
+                            "limit": {
+                                "description": "Number of items per result page. If not set, the limit is read from the channel configuration.",
+                                "type": "integer",
+                                "minimum": 0
+                            },
+                            "p": {
+                                "description": "Search result page",
+                                "type": "integer",
+                                "default": 1
+                            },
+                            "reduce-aggregations": {
+                                "description": "Applies post-filters to aggregations. This parameter is a flag; its value has no effect.",
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

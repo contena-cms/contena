@@ -1,0 +1,26 @@
+{
+  "ct-settings-frontend": {
+    "general": {
+      "mainMenuItemGeneral": "前端",
+      "textHeadline": "前端",
+      "description": "前端设置",
+      "helpText": "更多信息请参阅<a target=\"_blank\" href=\"https://docs.contena.cn/zh/contena-6-zh\">文档</a>。",
+      "messageSaveSuccess": "前端设置已保存。"
+    },
+    "configuration": {
+      "cardTitle": "前端配置",
+      "iconCache": "启用图标缓存",
+      "iconCacheToolTip": "控制图标是否仅在每个前端页面中输出一次，后续使用只引用图标 ID。",
+      "theme": {
+        "cardTitle": "主题配置",
+        "async": "在后台编译主题",
+        "asyncTooltip": "控制主题变更后通过消息队列异步编译，而不是立即编译。"
+      },
+      "speculationRules": {
+        "title": "推测规则 API",
+        "description": "为前端启用中等积极程度的预渲染，此功能可能影响分析数据。"
+      }
+    },
+    "helpText": "更多信息请参阅<a target=\"_blank\" href=\"https://docs.contena.cn/zh/contena-6-zh\">文档</a>。"
+  }
+}

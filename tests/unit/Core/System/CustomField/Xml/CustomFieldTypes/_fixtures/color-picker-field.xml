@@ -1,0 +1,16 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <color-picker name="test_color_picker_field">
+                    <label>Test color-picker field</label>
+                </color-picker>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

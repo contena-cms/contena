@@ -1,0 +1,42 @@
+{% block component_address_personal_fields %}
+    {% block component_address_personal_fields_title %}
+        {% if config('core.loginRegistration.showTitleField') %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalTitleLabel'|trans|sw_sanitize,
+                id: idPrefix ~ prefix ~ 'personalTitle',
+                name: prefix ? prefix ~ '[title]' : 'title',
+                value: data.get('title'),
+                autocomplete: 'section-personal honorific-prefix',
+                violationPath: prefix ? "/#{prefix}/title" : '/title',
+            } %}
+        {% endif %}
+    {% endblock %}
+
+    {% block component_address_personal_fields_name %}
+        <div class="row g-2">
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalFirstNameLabel'|trans|sw_sanitize,
+                id: idPrefix ~ prefix ~ '-personalFirstName',
+                name: prefix ? prefix ~ '[firstName]' : 'firstName',
+                value: data.get('firstName'), autocomplete: 'section-personal given-name',
+                violationPath: prefix ? "/#{prefix}/firstName" : '/firstName', validationRules: 'required', additionalClass: 'col-sm-6',
+            } %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalLastNameLabel'|trans|sw_sanitize,
+                id: idPrefix ~ prefix ~ '-personalLastName',
+                name: prefix ? prefix ~ '[lastName]' : 'lastName',
+                value: data.get('lastName'), autocomplete: 'section-personal family-name',
+                violationPath: prefix ? "/#{prefix}/lastName" : '/lastName', validationRules: 'required', additionalClass: 'col-sm-6',
+            } %}
+        </div>
+    {% endblock %}
+
+    {% block component_address_personal_fields_birthday %}
+        {% if showBirthdayField %}
+            {% sw_include '@Frontend/frontend/component/form/form-select-birthday.html.twig' with {
+                label: 'account.personalBirthdayLabel'|trans|sw_sanitize,
+                validationRules: config('core.loginRegistration.birthdayFieldRequired') ? 'required' : '', additionalClass: 'col-sm-6',
+            } %}
+        {% endif %}
+    {% endblock %}
+{% endblock %}

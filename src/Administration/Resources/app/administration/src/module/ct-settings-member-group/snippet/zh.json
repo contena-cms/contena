@@ -1,0 +1,36 @@
+{
+    "ct-settings-member-group": {
+        "general": {
+            "mainMenuItemGeneral": "会员组",
+            "description": "管理会员组和注册设置"
+        },
+        "list": {
+            "title": "会员组",
+            "buttonAdd": "添加会员组",
+            "columnName": "名称",
+            "columnRegistration": "注册",
+            "emptyState": "暂无会员组",
+            "deleteError": "会员组仍分配给渠道或会员，无法删除。"
+        },
+        "detail": {
+            "titleNew": "新建会员组",
+            "titleEdit": "编辑会员组",
+            "labelName": "名称",
+            "placeholderName": "输入会员组名称",
+            "titleRegistration": "注册",
+            "labelRegistrationActive": "允许公开注册",
+            "labelRegistrationTitle": "注册标题",
+            "labelRegistrationIntroduction": "注册介绍",
+            "labelRegistrationSeoMetaDescription": "SEO 元描述",
+            "labelChannels": "可用渠道",
+            "saveSuccess": "会员组已保存。",
+            "saveError": "会员组无法保存。",
+            "loadError": "会员组无法加载。"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "member_groups": { "label": "会员组" }
+        }
+    }
+}

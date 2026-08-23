@@ -1,0 +1,12 @@
+{
+    "name": "a-vendor/store-dependent-plugin",
+    "description": "Plugin install command test fixture",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "require": {
+        "store.contena.cn/store-dependency-plugin": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "StoreDependentPlugin\\StoreDependentPlugin"
+    }
+}

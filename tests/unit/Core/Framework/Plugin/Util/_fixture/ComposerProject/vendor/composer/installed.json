@@ -1,0 +1,52 @@
+{
+  "packages": [
+    {
+      "name": "ct/test",
+      "type": "contena-platform-plugin",
+      "description": "Test description",
+      "version": "v1.0.1",
+      "license": "MIT",
+      "authors": [
+        {
+          "name": "contena AG",
+          "role": "Manufacturer"
+        }
+      ],
+      "require": {
+        "contena/platform": "6.4.*@dev"
+      },
+      "install-path": "../ct/composer-installed-plugin",
+      "extra": {
+        "contena-plugin-class": "Ct\\Test",
+        "label": {
+          "en-GB": "Test plugin",
+          "de-DE": "Test plugin"
+        }
+      }
+    },
+    {
+      "name": "ct/test2",
+      "type": "contena-platform-plugin",
+      "description": "Test description",
+      "version": "v2.0.1",
+      "license": "MIT",
+      "authors": [
+        {
+          "name": "contena AG",
+          "role": "Manufacturer"
+        }
+      ],
+      "require": {
+        "contena/platform": "6.4.*@dev"
+      },
+      "install-path": "../ct/composer-installed-plugin",
+      "extra": {
+        "contena-plugin-class": "Ct\\Test2",
+        "label": {
+          "en-GB": "Test plugin",
+          "de-DE": "Test plugin"
+        }
+      }
+    }
+  ]
+}

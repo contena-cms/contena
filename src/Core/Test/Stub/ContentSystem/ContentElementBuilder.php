@@ -1,0 +1,159 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Test\Stub\ContentSystem;
+
+use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoaderConfig;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextConsumer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextProvider;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionConfig;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Slot\SlotContent;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyle;
+use Contena\Core\Framework\Uuid\Uuid;
+
+/**
+ * @final
+ */
+class ContentElementBuilder
+{
+    private string $id;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $properties = [];
+
+    /**
+     * @var array<string, DataRequirement>
+     */
+    private array $dataRequirements = [];
+
+    /**
+     * @var array<string, ContextProvider>
+     */
+    private array $providers = [];
+
+    /**
+     * @var array<string, ContextConsumer>
+     */
+    private array $consumers = [];
+
+    /**
+     * @var array<string, list<ContentElement>>
+     */
+    private array $slots = [];
+
+    private ElementStyle $style;
+
+    /**
+     * @var array<string, string>
+     */
+    private array $attributedSpecifications = [];
+
+    private function __construct(
+        private readonly string $component,
+        ?string $id = null
+    ) {
+        $this->id = $id ?? Uuid::randomHex();
+        $this->style = new ElementStyle();
+    }
+
+    public static function create(string $component, ?string $id = null): self
+    {
+        return new self($component, $id);
+    }
+
+    public function withProperty(string $key, mixed $value): self
+    {
+        $this->properties[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public function withProperties(array $properties): self
+    {
+        $this->properties = array_merge($this->properties, $properties);
+
+        return $this;
+    }
+
+    public function withDataRequirement(string $key, string $source, AbstractContentDataLoaderConfig $config): self
+    {
+        $this->dataRequirements[$key] = new DataRequirement($key, $source, $config);
+
+        return $this;
+    }
+
+    public function withProvider(string $key, DistributionConfig $distribution, ContextType $type = ContextType::Single): self
+    {
+        $this->providers[$key] = new ContextProvider($type, $distribution);
+
+        return $this;
+    }
+
+    public function withConsumer(
+        string $key,
+        ContextType $type,
+        bool $required = false,
+        bool $redistribute = false,
+        ?string $consumerAlias = null,
+        ?string $propertyAlias = null,
+    ): self {
+        $this->consumers[$key] = new ContextConsumer($type, $required, $redistribute, $consumerAlias, $propertyAlias);
+
+        return $this;
+    }
+
+    /**
+     * @param list<ContentElement> $children
+     */
+    public function withSlot(string $name, array $children): self
+    {
+        $this->slots[$name] = $children;
+
+        return $this;
+    }
+
+    public function withStyle(ElementStyle $style): self
+    {
+        $this->style = $style;
+
+        return $this;
+    }
+
+    public function withAttributedSpecification(string $referencePropertyKey, string $bindingSpecificationId): self
+    {
+        $this->attributedSpecifications[$referencePropertyKey] = $bindingSpecificationId;
+
+        return $this;
+    }
+
+    public function build(): ContentElement
+    {
+        $slots = [];
+        foreach ($this->slots as $name => $children) {
+            $slot = new SlotContent();
+            foreach ($children as $child) {
+                $slot->add($child);
+            }
+            $slots[$name] = $slot;
+        }
+
+        return new ContentElement(
+            id: $this->id,
+            component: $this->component,
+            dataRequirements: $this->dataRequirements,
+            properties: $this->properties,
+            slots: $slots,
+            contextDefinitions: new ContextDefinitions($this->providers, $this->consumers),
+            style: $this->style,
+            attributedSpecifications: $this->attributedSpecifications
+        );
+    }
+}

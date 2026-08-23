@@ -1,0 +1,56 @@
+{
+    "ct-dashboard": {
+        "general": { "mainMenuItemGeneral": "Dashboard", "descriptionTextModule": "Business data overview" },
+        "overview": { "title": "Data overview", "loading": "Updating data", "updatedAt": "Data updated at {time}" },
+        "filters": { "today": "Today", "days": "{days} days", "all": "All" },
+        "actions": { "refresh": "Refresh data", "viewAll": "View all" },
+        "metrics": {
+            "sectionLabel": "Key business data",
+            "paymentAmount": "Payment amount ({currency})",
+            "successfulOrders": "Paid orders",
+            "memberTotal": "Total members",
+            "refundAmount": "Refund amount",
+            "refundOrders": "Refund orders",
+            "pendingOrders": "Pending orders"
+        },
+        "comparison": {
+            "value": "{value}% vs previous period",
+            "new": "No data in previous period",
+            "noChange": "Unchanged from previous period"
+        },
+        "trend": {
+            "paymentTitle": "Payment order trend",
+            "rangeDescription": "Last {days} days",
+            "pendingOrders": "Pending orders",
+            "paidOrders": "Paid orders"
+        },
+        "business": {
+            "title": "Business summary",
+            "refundAmount": "Refund amount",
+            "refundOrders": "Refund orders",
+            "newMembers": "New members",
+            "memberTotal": "Total members",
+            "periodAverage": "Period amount",
+            "periodCount": "Period orders",
+            "memberTotalNote": "Current total",
+            "pendingNote": "Awaiting payment",
+            "newMembersCount": "{count} new in period"
+        },
+        "recentOrders": {
+            "title": "Recent payment orders",
+            "order": "Order",
+            "amount": "Amount",
+            "status": "Status",
+            "createdAt": "Created",
+            "unknownStatus": "Unknown status"
+        },
+        "states": {
+            "loadError": "The data could not be loaded. Refresh to try again.",
+            "noData": "No data available",
+            "noOrders": "No payment orders available",
+            "memberNoAccess": "This account cannot view member data",
+            "noAccessTitle": "No data available",
+            "noAccessDescription": "This account cannot view payment or member data."
+        }
+    }
+}

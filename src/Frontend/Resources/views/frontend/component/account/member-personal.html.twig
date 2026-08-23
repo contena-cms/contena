@@ -1,0 +1,50 @@
+{% block component_account_member_personal_fields %}
+    {% block component_account_member_personal_fields_title %}
+        {% if config('core.loginRegistration.showTitleField') %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalTitleLabel'|trans|sw_sanitize,
+                id: idPrefix ~ 'member-personalTitle',
+                name: 'title',
+                value: data.get('title'),
+                autocomplete: 'section-personal honorific-prefix',
+                violationPath: '/title',
+            } %}
+        {% endif %}
+    {% endblock %}
+
+    {% block component_account_member_personal_fields_identity %}
+        <div class="row g-2">
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalNameLabel'|trans|sw_sanitize,
+                placeholder: 'account.personalNamePlaceholder'|trans|striptags,
+                id: idPrefix ~ 'member-personalName',
+                name: 'name',
+                value: data.get('name'),
+                autocomplete: 'section-personal name',
+                violationPath: '/name',
+                validationRules: 'required',
+                additionalClass: 'col-sm-6',
+            } %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
+                label: 'account.personalPhoneLabel'|trans|sw_sanitize,
+                placeholder: 'account.personalPhonePlaceholder'|trans|striptags,
+                id: idPrefix ~ 'member-personalPhoneNumber',
+                name: 'phoneNumber',
+                value: data.get('phoneNumber'),
+                autocomplete: 'section-personal tel',
+                violationPath: '/phoneNumber',
+                additionalClass: 'col-sm-6',
+            } %}
+        </div>
+    {% endblock %}
+
+    {% block component_account_member_personal_fields_birthday %}
+        {% if showBirthdayField %}
+            {% sw_include '@Frontend/frontend/component/form/form-select-birthday.html.twig' with {
+                label: 'account.personalBirthdayLabel'|trans|sw_sanitize,
+                validationRules: config('core.loginRegistration.birthdayFieldRequired') ? 'required' : '',
+                additionalClass: 'col-sm-6',
+            } %}
+        {% endif %}
+    {% endblock %}
+{% endblock %}

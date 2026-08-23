@@ -1,0 +1,18 @@
+.ct-permissions-role-permissions-modal {
+    &__tabs {
+        margin-bottom: 0;
+    }
+
+    &__content {
+        display: grid;
+        gap: var(--scale-size-24);
+        margin-top: var(--scale-size-24);
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    &__footer-actions {
+        display: flex;
+        gap: var(--scale-size-12);
+    }
+}

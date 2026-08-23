@@ -1,0 +1,23 @@
+{
+    "name": "ct/test-ships-vendor-directory",
+    "description": "Test plugin",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "require": {
+        "contena/core": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "CtTestShipsVendorDirectory\\CtTestShipsVendorDirectory",
+        "label": {
+            "de-DE": "Deutscher Pluginname",
+            "de-CH": "Schweizerdeutsch Pluginname",
+            "en-GB": "English plugin name"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+           "CtTestShipsVendorDirectory\\": "src"
+        }
+    }
+}

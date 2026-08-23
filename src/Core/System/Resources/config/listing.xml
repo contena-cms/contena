@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Blog listings</title>
+        <title lang="de-DE">Blog-Listen</title>
+
+        <input-field type="bool">
+            <name>buildBreadcrumbByReferrerCategory</name>
+            <label>Build breadcrumb based on referrer category</label>
+            <label lang="de-DE">Breadcrumb anhand der Referrer-Kategorie aufbauen</label>
+            <helpText>Build the blog breadcrumb based on the linking category if available.</helpText>
+            <helpText lang="de-DE">Blog-Breadcrumb basierend auf der verlinkenden Kategorie aufbauen, falls verfügbar.</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>disableEmptyFilterOptions</name>
+            <label>Disable filter options without results</label>
+            <label lang="de-DE">Filteroptionen ohne Ergebnisse deaktivieren</label>
+            <helpText>Filter options are deactivated and cannot be clicked if they provide no results.</helpText>
+            <helpText lang="de-DE">Filteroptionen sind deaktiviert und können nicht angeklickt werden, wenn sie keine Ergebnisse liefern.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>blogsPerPage</name>
+            <label>Number of blog posts per page</label>
+            <label lang="de-DE">Anzahl der Blog-Beiträge pro Seite</label>
+            <helpText>The number of blog posts displayed on a search page or in a blog list per page in the frontend.</helpText>
+            <helpText lang="de-DE">Die Anzahl der Blog-Beiträge, die auf einer Suchseite oder in einer Blog-Liste je Seite im Frontend angezeigt werden.</helpText>
+            <defaultValue>12</defaultValue>
+            <min>1</min>
+        </input-field>
+    </card>
+</config>

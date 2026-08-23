@@ -1,0 +1,41 @@
+{
+  "name": "CtTheme",
+  "author": "contena AG",
+  "views": [
+     "@Frontend",
+     "@Plugins",
+     "@CtTheme"
+  ],
+  "style": [
+    {
+      "app/frontend/src/scss/overrides.scss": {}
+    },
+    "@Frontend",
+    {
+      "app/frontend/src/scss/base.scss": {
+        "resolve": {
+          "vendor": "app/frontend/vendor"
+        }
+      }
+    }
+  ],
+  "script": [
+    "@Frontend",
+    "app/frontend/dist/js/main.js"
+  ],
+  "asset": [
+    "app/frontend/dist/assets"
+  ],
+  "previewMedia": "app/frontend/dist/assets/preview.jpg",
+  "config": {
+    "fields": {
+      "ct-image": {
+        "type": "media",
+        "value": "app/frontend/dist/assets/test.jpg"
+      }
+    }
+  },
+  "iconSets": {
+    "custom-icons": "app/frontend/src/assets/icon-pack/custom-icons"
+  }
+}

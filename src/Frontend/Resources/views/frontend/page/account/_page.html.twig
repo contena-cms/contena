@@ -1,0 +1,19 @@
+{% sw_extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block content %}
+    <div class="container account-content py-4">
+        <div class="row g-4">
+            {% block page_account_sidebar %}
+                <aside class="col-lg-3">
+                    {% sw_include '@Frontend/frontend/page/account/sidebar.html.twig' %}
+                </aside>
+            {% endblock %}
+
+            {% block page_account_main %}
+                <div class="col-lg-9">
+                    {% block page_account_main_content %}{% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

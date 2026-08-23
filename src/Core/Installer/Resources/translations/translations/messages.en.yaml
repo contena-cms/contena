@@ -1,0 +1,139 @@
+contena.installer:
+    header_title: Setup
+    menuitem:
+        start: Start
+        configure_php: PHP binary
+        download: Download
+        requirements: System requirements
+        license: GTC
+        database-configuration: Database configuration
+        database-import: Installation
+        configuration: System configuration
+        translation: Language Download
+        finish: Finish
+    license_incorrect: 'The licence key you have entered does not appear to be valid.'
+    license_does_not_match: 'The licence key you have entered does not match any commercial Contena version.'
+    license_domain_error: 'The licence key you have entered is not valid for the domain: '
+    version_text: 'Version:'
+    back: Back
+    forward: Next
+    start: Start
+    start_installation: 'Start installation'
+    select_language_zh-CN: Chinese (Simplified)
+    select_language_en-GB: English (United Kingdom)
+    select_country_chn: China
+    select_country_usa: 'United States of America'
+    select_country_gbr: 'United Kingdom'
+    select_country_jpn: Japan
+    select_country_deu: Germany
+    language-selection_select_language: 'Installation wizard language'
+    welcome:
+        title: 'Welcome to Contena 6'
+        header: 'Your Contena installation'
+        message: >
+            We’re delighted you’re joining our global Contena community! This installer will guide you through each
+            step required to install Contena 6 smoothly.
+    requirements_header: 'System requirements'
+    requirements_header_files: 'Files and directories'
+    requirements_header_system: System
+    requirements_files_info: 'The following files and directories must be present and have write permissions.'
+    requirements_table_files_col_check: File/directory
+    requirements_table_files_col_status: Status
+    requirements_error: 'Not all of the requirements for successful installation have been met.'
+    requirements_error_title: 'Your system is not yet ready for Contena 6'
+    requirements_success: 'All of the requirements for successful installation have been met.'
+    requirements_success_title: 'Your system is ready for Contena 6'
+    requirements_php_info: 'Your server must meet the following system requirements in order to run Contena.'
+    requirements_php_max_compatible_version: 'This Contena version supports PHP up to version %s. There is no guarantee that everything will work with newer PHP versions.'
+    requirements_system_col_check: Requirement
+    requirements_system_col_required: Required
+    requirements_system_col_found: 'Your system'
+    requirements_system_col_status: Status
+    requirements_show_all: '(show all)'
+    requirements_hide_all: '(hide all)'
+    requirements_status_error: Error
+    requirements_status_warning: Warning
+    requirements_status_ready: Ready
+    license_agreement_header: 'General Terms and Conditions of Business ("GTC")'
+    license_agreement_info: 'These are our General Terms and Conditions of Business. You will have to read and accept the GTC in order to successfully install Contena 6. The Community Edition is completely free of charge and has been released under the MIT License.'
+    license_agreement_error: 'Please accept our GTC.'
+    license_agreement_checkbox: 'I agree to the General Terms and Conditions of Business (GTC)'
+    database-configuration_header: 'Configure database'
+    database-configuration_field_host: 'Server:'
+    database-configuration_advanced_settings: 'Advanced settings'
+    database-configuration_field_port: 'Port:'
+    database-configuration_field_user: 'User:'
+    database-configuration_field_password: 'Password:'
+    database-configuration_field_database: 'Database name:'
+    database-configuration_field_new_database: 'New database:'
+    database-configuration_info: 'In order to install Contena on your system, you will need the access credentials to your database. If you are not sure what to put here, contact your administrator/hosting service.'
+    database-configuration-create_new_database: 'Create new database'
+    database-configuration_non_empty_database: 'The selected database already contains data. Please select an empty database or create a new one from scratch.'
+    database-configuration_error_required_fields: 'Please fill in all the blanks.'
+    database-configuration_field_ssl_ca_path: 'SSL certificate authority path'
+    database-configuration_field_ssl_cert_path: 'SSL certificate path'
+    database-configuration_field_ssl_cert_key_path: 'SSL certificate key path'
+    database-configuration_field_ssl_dont_verify_cert: 'Don''t verify server certificate'
+    database-configuration_fetch_error: 'An error occurred while fetching the database information'
+    database-configuration_access_denied: 'Access denied, credentials are incorrect'
+    database-configuration_host_not_found: 'Could not connect to database server'
+    database-configuration_invalid_requirements: 'Contena 6 requires at least MySQL 8.0.22 or MariaDB 10.11'
+    database-configuration_refresh_databases: 'Refresh Databases'
+    database-import_header: Installation
+    database-import_skip_import: Skip
+    database-import_progress: 'Progress: '
+    database-import-hint: '<strong>Note:</strong> If there are any Contena tables found in the configured database, they will be removed by the installation/update!'
+    database-import_info_text: 'Installing Contena 6 using the selected database. This process may take several minutes, depending on your overall system.'
+    database_import_success: 'Contena 6 has been installed!'
+    database_import_install_label: 'Database installation:'
+    database_import_install_step_text: Step
+    database_import_install_from_text: of
+    migration_counter_text_migrations: 'Updating database'
+    migration_counter_text_snippets: 'Updating text snippets'
+    migration_update_success: 'Database has been imported!'
+    edition_header: 'Have you already purchased a Contena licence?'
+    edition_info: 'Contena is available in different versions. There is the free <a href="https://en.contena.cn/pricing/" target="_blank">Community Edition</a>, and there are the <a href="https://en.contena.cn/pricing/" target="_blank">Professional or Enterprise Edition</a>, that are available for a one time fee.'
+    edition_ce: 'No, I would like to use the free <a href="https://en.contena.cn/pricing/" target="_blank">Community Edition</a>.'
+    edition_cm: 'Yes, I have already purchased a Contena licence (<a href="https://en.contena.cn/pricing/" target="_blank">Professional or Enterprise</a>).'
+    edition_license: 'Please enter your licence key here. You can find it in your Contena Account under "Licences" → "Product licences" → "Details / Download":'
+    edition_license_error: 'A valid licence is required in order to install any of the Contena versions that come with a fee.'
+    configuration_header: Configuration
+    configuration_system_text: 'Almost done. Configure the basic system information to complete the Contena installation.'
+    configuration_system_name: 'System name'
+    configuration_system_email: 'System email address:'
+    configuration_system_language: 'Default system language:'
+    configuration_system_country: 'Default country:'
+    configuration_admin_username: 'Admin login name:'
+    configuration_admin_mail: 'Admin email:'
+    configuration_admin_name: 'Admin name:'
+    configuration_defaults_warning: 'Choose the default system language carefully. It defines the initial Administration language.'
+    configuration_email_help_text: 'This email address will be used for outgoing system emails.'
+    configuration_admin_language_en: English
+    configuration_admin_password: 'Admin password:'
+    finish_header: 'Installation completed'
+    finish_info: 'You have successfully installed Contena!'
+    finish_info_heading: Hooray!
+    finish_first_steps: '"First steps" guide'
+    finish_backend: 'Open Administration'
+    configuration_admin_system_headline: 'System data'
+    configuration_admin_language_headline: 'Languages'
+    configuration_admin_language_select_all: 'Select all'
+    configuration_admin_language_clear_all: 'Clear all'
+    configuration_admin_user_headline: 'Admin user data'
+    configuration_admin_language_text: 'Select the languages available in the Administration. You can manage them later in system settings.'
+    configuration_admin_language_search_placeholder: 'Search language...'
+    translations_header: 'Languages Download'
+    translations_import_install_label: 'Downloading and installing additional languages.'
+    translations_install_duration_info: 'This could take a few minutes.'
+    finish_title: 'Contena setup is complete.'
+    finish_subtitle: 'Open the Administration to start configuring your system.'
+    finish_continue: 'Open Administration'
+    translations_install_error_message: 'Something went wrong during the translation installation.'
+    translations_install_retry_link: 'Click here to retry'
+    help:
+        title: Need help?
+        support_channel: Choose the support channel that suits you
+        forum: Forum
+        phone_number_call: 008007467626
+        phone_number_formatted: 00 800 746 7626 0 (free of charge)
+        email: Email

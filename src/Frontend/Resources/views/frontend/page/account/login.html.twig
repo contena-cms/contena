@@ -1,0 +1,13 @@
+{% extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                {% sw_include '@Frontend/frontend/component/account/login.html.twig' with {
+                    cardTitle: 'account.loginHeader'|trans|sw_sanitize
+                } %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

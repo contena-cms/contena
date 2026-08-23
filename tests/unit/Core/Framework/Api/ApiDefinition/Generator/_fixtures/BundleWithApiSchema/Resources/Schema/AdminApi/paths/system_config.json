@@ -1,0 +1,21 @@
+{
+    "openapi": "3.1.0",
+    "info": [],
+    "paths": {
+        "/api/_info/config": {
+            "get": {
+                "tags": [
+                    "System"
+                ],
+                "summary": "Read platform configuration information",
+                "description": "Returns non-sensitive platform configuration information.",
+                "operationId": "readSystemConfigInfo",
+                "responses": {
+                    "200": {
+                        "description": "Platform configuration information"
+                    }
+                }
+            }
+        }
+    }
+}

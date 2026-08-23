@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Sitemap</title>
+        <title lang="zh-CN">站点地图</title>
+
+        <input-field type="int">
+            <name>sitemapRefreshTime</name>
+            <label>Refresh interval</label>
+            <label lang="zh-CN">刷新间隔</label>
+            <placeholder>Enter refresh interval (seconds)...</placeholder>
+            <placeholder lang="zh-CN">请输入刷新间隔（秒）...</placeholder>
+            <helpText>Enter the interval in seconds. This is active only in live mode.</helpText>
+            <helpText lang="zh-CN">请输入以秒为单位的刷新间隔。仅实时模式使用此设置。</helpText>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>sitemapRefreshStrategy</name>
+            <options>
+                <option>
+                    <id>1</id>
+                    <name>Manually</name>
+                    <name lang="zh-CN">手动</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Scheduled</name>
+                    <name lang="zh-CN">定时任务</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Live</name>
+                    <name lang="zh-CN">实时</name>
+                </option>
+            </options>
+            <label>Refresh strategy</label>
+            <label lang="zh-CN">刷新策略</label>
+            <helpText>
+                Manually: refresh with php bin/console sitemap:generate.
+
+                Scheduled: refresh through scheduled tasks every 24 hours.
+
+                Live: refresh at the interval defined above when the sitemap is requested.
+            </helpText>
+            <helpText lang="zh-CN">
+                手动：通过 php bin/console sitemap:generate 命令刷新。
+
+                定时任务：每 24 小时通过定时任务刷新。
+
+                实时：请求站点地图时，按上方定义的间隔刷新。
+            </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>excludeLinkedBlogs</name>
+            <label>Exclude link-only blog posts from the sitemap</label>
+            <label lang="zh-CN">从站点地图中排除仅链接可见的文章</label>
+            <helpText>Blog posts that are only available through a direct link are excluded from the sitemap.</helpText>
+            <helpText lang="zh-CN">仅可通过直接链接访问的文章不会出现在站点地图中。</helpText>
+        </input-field>
+    </card>
+</config>

@@ -1,0 +1,130 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Installer;
+
+use Composer\InstalledVersions;
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\Framework\Util\VersionParser;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\Kernel as HttpKernel;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+
+/**
+ * @internal
+ */
+class InstallerKernel extends HttpKernel
+{
+    use MicroKernelTrait;
+
+    private readonly string $contenaVersion;
+
+    private readonly ?string $contenaVersionRevision;
+
+    public function __construct(
+        string $environment,
+        bool $debug
+    ) {
+        parent::__construct($environment, $debug);
+
+        $version = VersionParser::parseContenaVersion($this->resolveComposerVersion());
+        $this->contenaVersion = $version['version'];
+        $this->contenaVersionRevision = $version['revision'];
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @see \Contena\Tests\DevOps\Core\Installer\InstallerKernelTest
+     */
+    public function boot(): void
+    {
+        parent::boot();
+        $this->ensureComposerHomeVarIsSet();
+    }
+
+    /**
+     * @return \Generator<BundleInterface>
+     */
+    public function registerBundles(): \Generator
+    {
+        yield new FrameworkBundle();
+        yield new TwigBundle();
+        yield new Installer();
+    }
+
+    public function getProjectDir(): string
+    {
+        $r = new \ReflectionObject($this);
+
+        $file = $r->getFileName();
+        if (!$file || !\is_file($file)) {
+            throw new \LogicException(\sprintf('Cannot auto-detect project dir for kernel of class "%s".', $r->name));
+        }
+
+        $dir = $rootDir = \dirname($file);
+        while (!\is_dir($dir . '/vendor')) {
+            if ($dir === \dirname($dir)) {
+                return $rootDir;
+            }
+            $dir = \dirname($dir);
+        }
+
+        return $dir;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getKernelParameters(): array
+    {
+        $parameters = parent::getKernelParameters();
+
+        return array_merge(
+            $parameters,
+            [
+                'kernel.contena_version' => $this->contenaVersion,
+                'kernel.contena_version_revision' => $this->contenaVersionRevision,
+                'kernel.secret' => 'noSecr3t',
+            ]
+        );
+    }
+
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    {
+        // use hard coded default config for loaded bundles
+        $loader->load(__DIR__ . '/../Framework/Resources/config/packages/installer.yaml');
+    }
+
+    protected function configureRoutes(RoutingConfigurator $routes): void
+    {
+        $routes->import(__DIR__ . '/Resources/config/routes.php');
+    }
+
+    protected function resolveComposerVersion(): string
+    {
+        if (InstalledVersions::isInstalled('contena/platform')) {
+            return InstalledVersions::getVersion('contena/platform')
+                . '@' . InstalledVersions::getReference('contena/platform');
+        }
+
+        return InstalledVersions::getVersion('contena/core')
+            . '@' . InstalledVersions::getReference('contena/core');
+    }
+
+    /**
+     * We check the requirements via composer, and composer will fail if the composer home is not set
+     */
+    private function ensureComposerHomeVarIsSet(): void
+    {
+        if (!EnvironmentHelper::getVariable('COMPOSER_HOME')) {
+            // The same location is also used in EnvConfigWriter and SystemSetupCommand
+            $fallbackComposerHome = $this->getProjectDir() . '/var/cache/composer';
+            $_ENV['COMPOSER_HOME'] = $_SERVER['COMPOSER_HOME'] = $fallbackComposerHome;
+        }
+    }
+}

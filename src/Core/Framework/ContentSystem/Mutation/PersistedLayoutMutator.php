@@ -1,0 +1,128 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Mutation;
+
+use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutAnalysis;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
+use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
+use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Symfony\Component\Lock\LockFactory;
+
+/**
+ * Applies one structural mutation to a stored content_layout and commits it; the persisted counterpart
+ * to {@see MutationPipeline}.
+ *
+ * @internal
+ *
+ * @final
+ */
+class PersistedLayoutMutator
+{
+    /**
+     * @param EntityRepository<ContentLayoutCollection> $contentLayoutRepository
+     */
+    public function __construct(
+        private readonly LockFactory $lockFactory,
+        private readonly EntityRepository $contentLayoutRepository,
+        private readonly ContentElementFieldSerializer $elementSerializer,
+        private readonly RootSourceRegistry $rootSourceRegistry,
+        private readonly LayoutDiagnostics $diagnostics,
+    ) {
+    }
+
+    public function mutate(string $layoutId, ?string $expectedVersion, LayoutMutation $mutation, Context $context): MutationResult
+    {
+        // Serialize concurrent writers for this layout id so the load → versionMatches → update span is atomic:
+        // a second writer blocks here, then re-reads the now-bumped updatedAt and fails versionMatches with a 409
+        // instead of silently clobbering the first edit (the lost-update window the optimistic token alone leaves open).
+        $lock = $this->lockFactory->createLock('content-layout-mutate-' . $layoutId, 5.0);
+        $lock->acquire(true);
+
+        try {
+            $layout = $this->contentLayoutRepository->search(new Criteria([$layoutId]), $context)->getEntities()->first();
+
+            if (!$layout instanceof ContentLayoutEntity) {
+                throw ContentSystemException::contentLayoutNotFound($layoutId);
+            }
+
+            if (!$this->versionMatches($expectedVersion, $layout->getUpdatedAt())) {
+                throw ContentSystemException::layoutVersionConflict($layoutId);
+            }
+
+            $mutated = $mutation->apply($layout->getLayout());
+            $affected = $mutation->affected();
+
+            $this->contentLayoutRepository->update([[
+                'id' => $layoutId,
+                'layout' => array_map($this->elementSerializer->serializeContentElement(...), $mutated),
+            ]], $context);
+
+            $analysis = $this->diagnose($layout->getRootSource(), $mutated, $context);
+
+            // This MutationResult assembly is intentionally duplicated in MutationPipeline::run() (see the note
+            // there): sharing it would couple Mutation/ to a Diagnostics/LayoutAnalysis-shaped helper or require
+            // a banned static helper.
+            return new MutationResult(
+                $mutated,
+                array_intersect_key($analysis->resolutions, array_flip($affected)),
+                $analysis->report,
+                $affected,
+                $mutation->orphaned(),
+                $mutation->droppedWiring(),
+                $mutation->droppedProperties(),
+            );
+        } finally {
+            $lock->release();
+        }
+    }
+
+    private function versionMatches(?string $expectedVersion, ?\DateTimeInterface $updatedAt): bool
+    {
+        if ($expectedVersion === null) {
+            return $updatedAt === null;
+        }
+
+        if ($updatedAt === null) {
+            return false;
+        }
+
+        try {
+            $expected = new \DateTimeImmutable($expectedVersion);
+        } catch (\Exception) {
+            throw ContentSystemException::invalidVersionToken($expectedVersion);
+        }
+
+        // Compare at the storage precision: content_layout.updated_at is DATETIME(3) (millisecond) and the Admin
+        // API serializes updatedAt at millisecond precision too, so comparing seconds + milliseconds (not
+        // microseconds) keeps the token robust to sub-millisecond noise from either side. getTimestamp() is
+        // timezone-independent, so the comparison holds across timezone representations of the same instant.
+        return $expected->getTimestamp() === $updatedAt->getTimestamp()
+            && $expected->format('v') === $updatedAt->format('v');
+    }
+
+    /**
+     * Re-resolves the mutated tree against the layout's single root source (the loaded entity carries it), so the
+     * echoed report matches what the content_layout write gate enforced on commit. resolve() returns a list (never
+     * null — [] for none/header/footer), so the binding-scope checks always run; the intrinsic-only path no longer
+     * applies to a stored layout.
+     *
+     * resolve() is never handed an unregistered id here even when the stored source was de-registered: mutate()
+     * commits the tree via update() first, and that write runs ContentLayoutWriteValidator, which re-checks
+     * membership of the committed root source and rejects a de-registered source as a clean unknownRootSource 400
+     * before any commit. A membership gate in this method would instead fire after the commit (this diagnose()
+     * runs after update() has already committed), so the preceding write gate is the correct and only check needed.
+     *
+     * @param list<ContentElement> $tree
+     */
+    private function diagnose(string $rootSource, array $tree, Context $context): LayoutAnalysis
+    {
+        return $this->diagnostics->analyze($tree, $this->rootSourceRegistry->resolve($rootSource, $context));
+    }
+}

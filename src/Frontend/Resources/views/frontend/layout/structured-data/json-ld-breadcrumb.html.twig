@@ -1,0 +1,29 @@
+{% block layout_structured_data_breadcrumb %}
+    {% if breadcrumbItems is defined and breadcrumbItems|length > 0 %}
+        {% set itemListElement = [] %}
+        {% for breadcrumbCategory in breadcrumbItems %}
+            {% set listItem = {
+                '@type': 'ListItem',
+                position: loop.index,
+                name: breadcrumbCategory.name
+            } %}
+            {% if breadcrumbCategory.type !== 'folder' %}
+                {% set listItem = listItem|merge({item: seoUrl('frontend.navigation.page', { navigationId: breadcrumbCategory.categoryId })}) %}
+            {% endif %}
+            {% set itemListElement = itemListElement|merge([listItem]) %}
+        {% endfor %}
+
+        {% set breadcrumbData = {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: itemListElement
+        } %}
+
+        {% block layout_structured_data_breadcrumb_script %}
+            <script type="application/ld+json">
+            {# ludtwig-ignore twig-json-encode-escape-js #}
+            {{ breadcrumbData|json_encode(jsonLdFlags)|raw }}
+            </script>
+        {% endblock %}
+    {% endif %}
+{% endblock %}

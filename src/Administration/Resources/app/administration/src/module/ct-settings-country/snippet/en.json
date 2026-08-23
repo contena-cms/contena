@@ -1,0 +1,45 @@
+{
+  "ct-settings-country": {
+    "page": {
+      "generalTab": "Settings"
+    },
+    "general": {
+      "mainMenuItemGeneral": "Countries",
+      "placeholderSearchBar": "Search countries..."
+    },
+    "list": {
+      "textHeadline": "Countries",
+      "textDeleteConfirm": "Are you sure you want to delete the country \"{name}\"?",
+      "columnName": "Name",
+      "columnPosition": "Position",
+      "columnIso": "ISO2",
+      "columnIso3": "ISO3",
+      "columnActive": "Active",
+      "buttonAddCountry": "Add country",
+      "messageDeleteSuccess": "Country \"{name}\" has been deleted."
+    },
+    "detail": {
+      "textHeadline": "New country",
+      "titleCard": "General",
+      "titleOptions": "Options",
+      "messageSaveSuccess": "Country \"{name}\" has been saved.",
+      "messageSaveError": "Country \"{name}\" could not be saved.",
+      "labelName": "Name",
+      "labelPosition": "Position",
+      "labelIso": "ISO2",
+      "labelIso3": "ISO3",
+      "labelActive": "Active",
+      "placeholderName": "Enter name...",
+      "placeholderPosition": "1",
+      "placeholderIso": "Enter alpha-2 ISO code...",
+      "placeholderIso3": "Enter alpha-3 ISO code..."
+    }
+  },
+  "ct-privileges": {
+    "permissions": {
+      "country": {
+        "label": "Countries"
+      }
+    }
+  }
+}

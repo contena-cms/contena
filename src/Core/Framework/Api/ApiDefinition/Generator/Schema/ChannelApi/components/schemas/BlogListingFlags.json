@@ -1,0 +1,37 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogListingFlags": {
+                "type": "object",
+                "description": "Additional flags for blog listings",
+                "properties": {
+                    "no-aggregations": {
+                        "description": "Resets all aggregations in the criteria. This parameter is a flag; its value has no effect.",
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "only-aggregations": {
+                        "description": "Skips blog entities and returns only aggregations. Sorting and associations are ignored. This parameter is a flag; its value has no effect.",
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

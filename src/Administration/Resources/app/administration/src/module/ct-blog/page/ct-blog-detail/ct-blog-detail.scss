@@ -1,0 +1,26 @@
+@import "~scss/variables";
+
+.ct-page.ct-blog-detail {
+    .ct-blog-detail__save-action {
+        margin-right: 0;
+    }
+
+    .ct-blog-category-form__search-keyword-field {
+        .ct-select-selection-list__input {
+            min-width: calc(var(--scale-size-224) + var(--scale-size-26));
+        }
+    }
+
+    .ct-blog-detail-page__tabs {
+        .ct-tabs-item {
+            position: relative;
+            border: 0;
+        }
+    }
+
+    .ct-blog-detail__button-context-menu {
+        .mt-icon {
+            padding: var(--scale-size-4) var(--scale-size-4);
+        }
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "responses": {
+            "BlogListResponse": {
+                "description": "Entity search result containing blogs",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "required": [
+                                        "elements"
+                                    ],
+                                    "properties": {
+                                        "elements": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Blog"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/EntitySearchResult"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

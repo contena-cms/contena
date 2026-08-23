@@ -1,0 +1,193 @@
+{
+  "name": "Contena default theme",
+  "author": "Contena",
+  "description": {
+    "en-GB": "Default theme of Contena",
+    "zh-CN": "Contena 默认主题"
+  },
+  "style": [
+    {
+      "app/frontend/src/scss/base.scss": {
+        "resolve": {
+          "vendor": "app/frontend/vendor"
+        }
+      },
+      "app/frontend/src/scss/skin/contena/_base.scss": {
+        "resolve": {
+          "vendor": "app/frontend/vendor"
+        }
+      }
+    },
+    "@Plugins"
+  ],
+  "asset": ["app/frontend/dist/assets"],
+  "views": ["@Frontend"],
+  "config": {
+    "fields": {
+      "ct-color-brand-primary": {
+        "type": "color",
+        "value": "#2563eb",
+        "editable": true,
+        "block": "themeColors",
+        "order": 100
+      },
+      "ct-color-brand-secondary": {
+        "type": "color",
+        "value": "#474a57",
+        "editable": true,
+        "block": "themeColors",
+        "order": 200
+      },
+      "ct-border-color": {
+        "type": "color",
+        "value": "#798490",
+        "editable": true,
+        "block": "themeColors",
+        "order": 300
+      },
+      "ct-background-color": {
+        "type": "color",
+        "value": "#fff",
+        "editable": true,
+        "block": "themeColors",
+        "order": 400
+      },
+      "ct-color-success": {
+        "type": "color",
+        "value": "#007e4e",
+        "editable": true,
+        "block": "statusColors",
+        "order": 100
+      },
+      "ct-color-info": {
+        "type": "color",
+        "value": "#005b99",
+        "editable": true,
+        "block": "statusColors",
+        "order": 200
+      },
+      "ct-color-warning": {
+        "type": "color",
+        "value": "#974200",
+        "editable": true,
+        "block": "statusColors",
+        "order": 300
+      },
+      "ct-color-danger": {
+        "type": "color",
+        "value": "#c20017",
+        "editable": true,
+        "block": "statusColors",
+        "order": 400
+      },
+      "ct-font-family-base": {
+        "type": "fontFamily",
+        "value": "'Inter', sans-serif",
+        "editable": true,
+        "block": "typography",
+        "order": 100
+      },
+      "ct-text-color": {
+        "type": "color",
+        "value": "#2b3136",
+        "editable": true,
+        "block": "typography",
+        "order": 200
+      },
+      "ct-font-family-headline": {
+        "type": "fontFamily",
+        "value": "'Inter', sans-serif",
+        "editable": true,
+        "block": "typography",
+        "order": 300
+      },
+      "ct-headline-color": {
+        "type": "color",
+        "value": "#2b3136",
+        "editable": true,
+        "block": "typography",
+        "order": 400
+      },
+      "ct-logo-desktop": {
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/contena-logo-v4.svg",
+        "editable": true,
+        "block": "media",
+        "order": 100,
+        "fullWidth": true
+      },
+      "ct-logo-tablet": {
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/contena-logo-v4.svg",
+        "editable": true,
+        "block": "media",
+        "order": 200,
+        "fullWidth": true
+      },
+      "ct-logo-mobile": {
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/contena-logo-v4.svg",
+        "editable": true,
+        "block": "media",
+        "order": 300,
+        "fullWidth": true
+      },
+      "ct-logo-share": {
+        "type": "media",
+        "value": "",
+        "editable": true,
+        "block": "media",
+        "order": 400
+      },
+      "ct-logo-favicon": {
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/favicon-v4.png",
+        "editable": true,
+        "block": "media",
+        "order": 500
+      },
+      "ct-breakpoint-xs": {
+        "type": "number",
+        "value": 0,
+        "editable": false,
+        "order": 100,
+        "block": "layout"
+      },
+      "ct-breakpoint-sm": {
+        "type": "number",
+        "value": 576,
+        "editable": false,
+        "order": 200,
+        "block": "layout"
+      },
+      "ct-breakpoint-md": {
+        "type": "number",
+        "value": 768,
+        "editable": false,
+        "order": 300,
+        "block": "layout"
+      },
+      "ct-breakpoint-lg": {
+        "type": "number",
+        "value": 992,
+        "editable": false,
+        "order": 400,
+        "block": "layout"
+      },
+      "ct-breakpoint-xl": {
+        "type": "number",
+        "value": 1200,
+        "editable": false,
+        "order": 500,
+        "block": "layout"
+      },
+      "ct-breakpoint-xxl": {
+        "type": "number",
+        "value": 1400,
+        "editable": false,
+        "order": 600,
+        "block": "layout"
+      }
+    }
+  }
+}

@@ -1,0 +1,351 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Media\File;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Media\File\FileFetcher;
+use Contena\Core\Content\Media\File\FileService;
+use Contena\Core\Content\Media\File\FileUrlValidatorInterface;
+use Contena\Core\Content\Media\MediaException;
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @internal
+ */
+#[CoversClass(FileFetcher::class)]
+class FileFetcherTest extends TestCase
+{
+    private const string IMAGE_URL_WITHOUT_EXTENSION = __DIR__ . '/_fixtures/image1x1';
+    private const string IMAGE_URL_WITH_EXTENSION = __DIR__ . '/_fixtures/image1x1.png';
+    private const string BINARY_FILE_URL_WITHOUT_EXTENSION = __DIR__ . '/_fixtures/binary';
+    private const string EMPTY_FILE_URL = __DIR__ . '/_fixtures/empty';
+    private const int IMAGE_FILE_SIZE = 95;
+    private const string IMAGE_EXTENSION = 'png';
+    private const string IMAGE_MIME_TYPE = 'image/png';
+    private const string MIME_TYPE_FOR_UNDETECTED_FORMATS = 'application/octet-stream';
+    private const string EXTENSION_FOR_UNDETECTED_FORMATS = 'bin';
+    private const string TEMP_DIR = __DIR__ . '/_temp';
+    private const string TEMP_FILE = __DIR__ . '/_temp/expected';
+
+    protected function setUp(): void
+    {
+        $this->createTemporyDirectory();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->deleteTemporyData();
+    }
+
+    public function testFetchRequestData(): void
+    {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileService = new FileService();
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileService);
+
+        $content = fopen(self::IMAGE_URL_WITHOUT_EXTENSION, 'r');
+        static::assertIsResource($content);
+
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->query->set('extension', self::IMAGE_EXTENSION);
+        $request->headers = new HeaderBag();
+        $request->headers->set('content-length', (string) self::IMAGE_FILE_SIZE);
+
+        $media = $fileFetcher->fetchRequestData($request, self::TEMP_FILE);
+
+        static::assertSame(self::IMAGE_MIME_TYPE, $media->getMimeType());
+        static::assertSame(self::IMAGE_EXTENSION, $media->getFileExtension());
+    }
+
+    #[DataProvider('fetchRequestExceptionsDataProvider')]
+    public function testFetchRequestDataWillThrowException(
+        int $contentLength,
+        string $extension,
+        \Exception $expectedException
+    ): void {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileService = new FileService();
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileService);
+
+        $content = fopen(self::IMAGE_URL_WITH_EXTENSION, 'r');
+        static::assertIsResource($content);
+
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->query->set('extension', $extension);
+        $request->headers = new HeaderBag();
+        $request->headers->set('content-length', (string) $contentLength);
+
+        $this->expectExceptionObject($expectedException);
+        $fileFetcher->fetchRequestData($request, self::TEMP_FILE);
+    }
+
+    public static function fetchRequestExceptionsDataProvider(): \Generator
+    {
+        yield 'invalidContentLength exception' => [
+            'contentLength' => 42,
+            'extension' => self::IMAGE_EXTENSION,
+            'expectedException' => MediaException::invalidContentLength(),
+        ];
+        yield 'resource without an extension' => [
+            'contentLength' => self::IMAGE_FILE_SIZE,
+            'extension' => '',
+            'expectedException' => MediaException::missingFileExtension(),
+        ];
+    }
+
+    public function testFetchRequestDataThrowsOnEmptyFile(): void
+    {
+        $fileFetcher = new FileFetcher(static::createStub(FileUrlValidatorInterface::class), new FileService());
+
+        $content = fopen(self::EMPTY_FILE_URL, 'r');
+        static::assertIsResource($content);
+
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->query->set('extension', self::IMAGE_EXTENSION);
+        $request->headers = new HeaderBag();
+        $request->headers->set('content-length', '0');
+
+        $this->expectExceptionObject(MediaException::emptyFile());
+        $fileFetcher->fetchRequestData($request, self::TEMP_FILE);
+    }
+
+    public function testFetchFromURLThrowsOnEmptyFile(): void
+    {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileValidatorMock->method('isValid')->willReturn(true);
+
+        $fileServiceMock = static::createStub(FileService::class);
+        $fileServiceMock->method('isUrl')->willReturn(true);
+
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileServiceMock);
+
+        $this->expectExceptionObject(MediaException::emptyFile());
+
+        try {
+            $fileFetcher->fetchFromURL(self::EMPTY_FILE_URL, self::TEMP_FILE, self::IMAGE_EXTENSION);
+        } finally {
+            if (\is_file(self::TEMP_FILE)) {
+                unlink(self::TEMP_FILE);
+            }
+        }
+    }
+
+    #[DataProvider('fetchFileFromUrlDataProvider')]
+    public function testFetchFileFromURL(
+        string $file,
+        string $providedExtension,
+        string $expectedMimeType,
+        string $expectedExtension
+    ): void {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileValidatorMock->method('isValid')->willReturn(true);
+
+        $fileServiceMock = static::createStub(FileService::class);
+        $fileServiceMock->method('isUrl')->willReturn(true);
+
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileServiceMock);
+
+        $request = new Request();
+        $request->query->set('extension', $providedExtension);
+        $request->request->set('url', $file);
+
+        $media = $fileFetcher->fetchFileFromURL($request, self::TEMP_FILE);
+
+        static::assertSame($expectedMimeType, $media->getMimeType());
+        static::assertSame($expectedExtension, $media->getFileExtension());
+    }
+
+    public static function fetchFileFromUrlDataProvider(): \Generator
+    {
+        yield 'image resource without an extension' => [
+            'file' => self::IMAGE_URL_WITHOUT_EXTENSION,
+            'providedExtension' => self::IMAGE_EXTENSION,
+            'expectedMimeType' => self::IMAGE_MIME_TYPE,
+            'expectedExtension' => self::IMAGE_EXTENSION,
+        ];
+        yield 'image resource with extension' => [
+            'file' => self::IMAGE_URL_WITH_EXTENSION,
+            'providedExtension' => '',
+            'expectedMimeType' => self::IMAGE_MIME_TYPE,
+            'expectedExtension' => self::IMAGE_EXTENSION,
+        ];
+        yield 'binary file without extension' => [
+            'file' => self::BINARY_FILE_URL_WITHOUT_EXTENSION,
+            'providedExtension' => '',
+            'expectedMimeType' => self::MIME_TYPE_FOR_UNDETECTED_FORMATS,
+            'expectedExtension' => self::EXTENSION_FOR_UNDETECTED_FORMATS,
+        ];
+    }
+
+    #[DataProvider('fetchFileFromUrlExceptionsDataProvider')]
+    public function testFetchFileFromURLWillThrowException(
+        bool $enableUploadFeature,
+        bool $isUrl,
+        bool $isValid,
+        string $urlParameter,
+        \Exception $expectedException
+    ): void {
+        $fileServiceMock = static::createStub(FileService::class);
+        $fileServiceMock->method('isUrl')->willReturn($isUrl);
+
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileValidatorMock->method('isValid')->willReturn($isValid);
+
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileServiceMock, $enableUploadFeature);
+
+        $request = new Request();
+        $request->query->set('extension', self::IMAGE_EXTENSION);
+        $request->request->set('url', $urlParameter);
+
+        $this->expectExceptionObject($expectedException);
+        $fileFetcher->fetchFileFromURL($request, self::TEMP_FILE);
+    }
+
+    public static function fetchFileFromUrlExceptionsDataProvider(): \Generator
+    {
+        yield 'disableUrlUploadFeature exception' => [
+            'enableUploadFeature' => false,
+            'isUrl' => true,
+            'isValid' => true,
+            'urlParameter' => self::IMAGE_URL_WITH_EXTENSION,
+            'expectedException' => MediaException::disableUrlUploadFeature(),
+        ];
+        yield 'invalidUrl exception' => [
+            'enableUploadFeature' => true,
+            'isUrl' => false,
+            'isValid' => true,
+            'urlParameter' => self::IMAGE_URL_WITH_EXTENSION,
+            'expectedException' => MediaException::invalidUrl(self::IMAGE_URL_WITH_EXTENSION),
+        ];
+        yield 'illegalUrl exception' => [
+            'enableUploadFeature' => true,
+            'isUrl' => true,
+            'isValid' => false,
+            'urlParameter' => self::IMAGE_URL_WITH_EXTENSION,
+            'expectedException' => MediaException::illegalUrl(self::IMAGE_URL_WITH_EXTENSION),
+        ];
+        yield 'missingUrlParameter exception' => [
+            'enableUploadFeature' => true,
+            'isUrl' => true,
+            'isValid' => false,
+            'urlParameter' => '',
+            'expectedException' => MediaException::missingUrlParameter(),
+        ];
+    }
+
+    public function testFetchRequestDataThrowsWhenDestinationStreamCannotBeOpened(): void
+    {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileService = new FileService();
+        $fileFetcher = new FileFetcher($fileValidatorMock, $fileService);
+
+        $content = fopen(self::IMAGE_URL_WITH_EXTENSION, 'r');
+        static::assertIsResource($content);
+
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->query->set('extension', self::IMAGE_EXTENSION);
+        $request->headers = new HeaderBag();
+        $request->headers->set('content-length', (string) self::IMAGE_FILE_SIZE);
+
+        $this->expectExceptionObject(MediaException::cannotOpenSourceStreamToWrite(''));
+
+        $fileFetcher->fetchRequestData($request, '');
+    }
+
+    public function testFetchBlobCreatesTemporaryFileAndCleanUpDeletesIt(): void
+    {
+        $fileFetcher = new FileFetcher(static::createStub(FileUrlValidatorInterface::class), new FileService());
+
+        $media = $fileFetcher->fetchBlob('myBlob', self::IMAGE_EXTENSION, self::IMAGE_MIME_TYPE);
+
+        try {
+            static::assertFileExists($media->getFileName());
+            static::assertSame('myBlob', (string) file_get_contents($media->getFileName()));
+            static::assertSame(self::IMAGE_EXTENSION, $media->getFileExtension());
+            static::assertSame(self::IMAGE_MIME_TYPE, $media->getMimeType());
+        } finally {
+            if (\is_file($media->getFileName())) {
+                $fileFetcher->cleanUpTempFile($media);
+            }
+        }
+
+        static::assertFileDoesNotExist($media->getFileName());
+    }
+
+    public function testFetchFileFromURLWithLimitInRange(): void
+    {
+        $fileFetcher = $this->createFileFetcherForReadableSource(self::IMAGE_FILE_SIZE + 1);
+
+        $media = $fileFetcher->fetchFromURL(self::IMAGE_URL_WITH_EXTENSION, self::TEMP_FILE, self::IMAGE_EXTENSION);
+
+        static::assertSame(self::IMAGE_FILE_SIZE, $media->getFileSize());
+        static::assertSame(self::IMAGE_MIME_TYPE, $media->getMimeType());
+        static::assertSame(self::IMAGE_EXTENSION, $media->getFileExtension());
+    }
+
+    public function testFetchFileFromURLThrowsWhenSourceExceedsLimit(): void
+    {
+        $fileFetcher = $this->createFileFetcherForReadableSource(1);
+
+        $this->expectExceptionObject(MediaException::fileSizeLimitExceeded());
+
+        try {
+            $fileFetcher->fetchFromURL(self::IMAGE_URL_WITH_EXTENSION, self::TEMP_FILE, self::IMAGE_EXTENSION);
+        } finally {
+            if (\is_file(self::TEMP_FILE)) {
+                unlink(self::TEMP_FILE);
+            }
+        }
+    }
+
+    public function testUrlUploadLimitDoesNotAffectRequestUpload(): void
+    {
+        $fileFetcher = new FileFetcher(static::createStub(FileUrlValidatorInterface::class), new FileService(), true, true, 10);
+
+        $content = fopen(self::IMAGE_URL_WITHOUT_EXTENSION, 'r');
+        static::assertIsResource($content);
+
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->query->set('extension', self::IMAGE_EXTENSION);
+        $request->headers = new HeaderBag();
+        $request->headers->set('content-length', (string) self::IMAGE_FILE_SIZE);
+
+        $media = $fileFetcher->fetchRequestData($request, self::TEMP_FILE);
+
+        static::assertSame(self::IMAGE_FILE_SIZE, $media->getFileSize());
+        static::assertFileExists(self::TEMP_FILE);
+    }
+
+    private function createFileFetcherForReadableSource(int $maxFileSize): FileFetcher
+    {
+        $fileValidatorMock = static::createStub(FileUrlValidatorInterface::class);
+        $fileValidatorMock->method('isValid')->willReturn(true);
+
+        $fileServiceMock = static::createStub(FileService::class);
+        $fileServiceMock->method('isUrl')->willReturn(true);
+
+        return new FileFetcher($fileValidatorMock, $fileServiceMock, true, true, $maxFileSize);
+    }
+
+    private function createTemporyDirectory(): void
+    {
+        if (!is_dir(self::TEMP_DIR)) {
+            mkdir(self::TEMP_DIR);
+            static::assertDirectoryExists(self::TEMP_DIR);
+        }
+    }
+
+    private function deleteTemporyData(): void
+    {
+        if (\is_file(self::TEMP_FILE)) {
+            unlink(self::TEMP_FILE);
+        }
+
+        if (\is_dir(self::TEMP_DIR)) {
+            static::assertTrue(rmdir(self::TEMP_DIR));
+        }
+    }
+}

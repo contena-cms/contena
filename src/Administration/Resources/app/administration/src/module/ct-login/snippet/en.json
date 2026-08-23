@@ -1,0 +1,53 @@
+{
+    "ct-login": {
+        "general": {
+            "moduleTitle": "Login"
+        },
+        "index": {
+            "backToLogin": "Back to login",
+            "brandName": "Contena"
+        },
+        "credentials": {
+            "description": "Sign in to your Contena Console account.",
+            "labelUsername": "Username",
+            "labelPassword": "Password",
+            "labelKeepLoggedIn": "Keep me logged in",
+            "buttonLogin": "Log in",
+            "forgotPassword": "Forgot password?",
+            "warningTooManyAttempts": "Too many login attempts. Please try again later.",
+            "warningTooManyAttemptsCountdown": "Too many login attempts. Try again in {time}.",
+            "errorInvalidCredentials": "Incorrect username or password",
+            "errorUnexpected": "Something went wrong. Please try again."
+        },
+        "recovery": {
+            "title": "Forgot password?",
+            "description": "Enter the email address linked to your account to receive a password reset link.",
+            "labelEmail": "Email address",
+            "buttonSubmit": "Send password reset link",
+            "errorLinkExpired": "This password recovery link is expired or invalid. Please request a new link.",
+            "errorUnexpected": "The password reset email could not be requested. Please try again.",
+            "warningTooManyAttempts": "Too many attempts. Please try again later."
+        },
+        "requestSent": {
+            "title": "Email sent",
+            "description": "If {email} is linked to an account, you'll receive a password reset email shortly.",
+            "descriptionGeneric": "If the email address is linked to an account, you'll receive a password reset email shortly.",
+            "rateLimited": "Please wait {seconds} seconds before requesting another email."
+        },
+        "reset": {
+            "title": "Set new password",
+            "description": "Choose a new password for your account.",
+            "labelNewPassword": "Enter new password",
+            "labelRepeatPassword": "Repeat new password",
+            "buttonSubmit": "Set new password",
+            "errorLinkExpired": "This password recovery link is expired or invalid. Please request a new link.",
+            "errorUnexpected": "The password could not be updated. Please try again."
+        },
+        "accessDenied": {
+            "title": "No access to this system",
+            "description": "Your login was successful, but you don't have access to this Contena system.",
+            "buttonDifferentAccount": "Log in with different account",
+            "loggedInAs": "Logged in as:"
+        }
+    }
+}

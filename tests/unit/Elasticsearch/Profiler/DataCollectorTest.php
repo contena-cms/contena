@@ -1,0 +1,235 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Elasticsearch\Profiler;
+
+use OpenSearch\Namespaces\CatNamespace;
+use OpenSearch\Namespaces\ClusterNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\PlatformRequest;
+use Contena\Elasticsearch\Profiler\ClientProfiler;
+use Contena\Elasticsearch\Profiler\DataCollector;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[CoversClass(DataCollector::class)]
+class DataCollectorTest extends TestCase
+{
+    public function testCollect(): void
+    {
+        $client = static::createStub(ClientProfiler::class);
+        $client
+            ->method('getCalledRequests')
+            ->willReturn([
+                ['time' => 0.1],
+                ['time' => 0.2],
+                ['time' => 0.3],
+            ]);
+
+        $adminClient = static::createStub(ClientProfiler::class);
+        $adminClient
+            ->method('getCalledRequests')
+            ->willReturn([
+                ['time' => 0.4],
+                ['time' => 0.5],
+            ]);
+
+        $clusterMock = static::createStub(ClusterNamespace::class);
+        $clusterMock
+            ->method('health')
+            ->willReturn(['status' => 'green']);
+
+        $catMock = static::createStub(CatNamespace::class);
+        $catMock
+            ->method('indices')
+            ->willReturn(['indices' => ['index1' => ['status' => 'green'], 'index2' => ['status' => 'green']]]);
+
+        $client
+            ->method('cluster')
+            ->willReturn($clusterMock);
+
+        $client
+            ->method('cat')
+            ->willReturn($catMock);
+
+        $adminClient
+            ->method('cluster')
+            ->willReturn($clusterMock);
+
+        $adminClient
+            ->method('cat')
+            ->willReturn($catMock);
+
+        $collector = new DataCollector(
+            true,
+            true,
+            $client,
+            $adminClient
+        );
+
+        static::assertSame('elasticsearch', $collector->getName());
+
+        $collector->collect(
+            new Request(),
+            new Response()
+        );
+
+        static::assertSame(1500.0, $collector->getTime());
+        static::assertSame(5, $collector->getRequestAmount());
+        static::assertCount(5, $collector->getRequests());
+        static::assertSame(['status' => 'green'], $collector->getClusterInfo());
+        static::assertSame(['indices' => ['index1' => ['status' => 'green'], 'index2' => ['status' => 'green']]], $collector->getIndices());
+    }
+
+    public function testReset(): void
+    {
+        $client = static::createStub(ClientProfiler::class);
+        $client
+            ->method('getCalledRequests')
+            ->willReturn([
+                ['time' => 0.1],
+                ['time' => 0.2],
+                ['time' => 0.3],
+            ]);
+
+        $collector = new DataCollector(
+            true,
+            true,
+            $client,
+            $client
+        );
+
+        $collector->collect(
+            new Request(),
+            new Response()
+        );
+
+        static::assertSame(1200.0, $collector->getTime());
+
+        $collector->reset();
+        static::assertCount(0, $collector->getRequests());
+        static::assertSame(0.0, $collector->getTime());
+    }
+
+    public function testDisabled(): void
+    {
+        $client = $this->createMock(ClientProfiler::class);
+        $client
+            ->expects($this->never())
+            ->method('cluster');
+
+        $collector = new DataCollector(
+            false,
+            false,
+            $client,
+            $client
+        );
+
+        $collector->collect(
+            new Request(),
+            new Response()
+        );
+
+        static::assertSame(0.0, $collector->getTime());
+    }
+
+    public function testCollectAdminSource(): void
+    {
+        $client = static::createStub(ClientProfiler::class);
+        $client
+            ->method('getCalledRequests')
+            ->willReturn([]);
+
+        $adminClient = static::createStub(ClientProfiler::class);
+        $adminClient
+            ->method('getCalledRequests')
+            ->willReturn([
+                ['time' => 0.4],
+                ['time' => 0.5],
+            ]);
+
+        $clusterMock = static::createStub(ClusterNamespace::class);
+        $clusterMock
+            ->method('health')
+            ->willReturn(['status' => 'green']);
+
+        $catMock = static::createStub(CatNamespace::class);
+        $catMock
+            ->method('indices')
+            ->willReturn(['indices' => ['index1' => ['status' => 'green'], 'index2' => ['status' => 'green']]]);
+
+        $client
+            ->method('cluster')
+            ->willReturn($clusterMock);
+
+        $client
+            ->method('cat')
+            ->willReturn($catMock);
+
+        $adminClient
+            ->method('cluster')
+            ->willReturn($clusterMock);
+
+        $adminClient
+            ->method('cat')
+            ->willReturn($catMock);
+
+        $request = new Request();
+        $context = new Context(new AdminApiSource('admin'));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, $context);
+
+        $collector = new DataCollector(
+            true,
+            true,
+            $client,
+            $adminClient
+        );
+
+        $collector->collect(
+            $request,
+            new Response()
+        );
+
+        static::assertSame(900.0, $collector->getTime());
+        static::assertSame(2, $collector->getRequestAmount());
+        static::assertCount(2, $collector->getRequests());
+
+        $client = static::createStub(ClientProfiler::class);
+        $client
+            ->method('getCalledRequests')
+            ->willReturn([
+                ['time' => 0.1],
+                ['time' => 0.2],
+                ['time' => 0.3],
+            ]);
+
+        $client
+            ->method('cluster')
+            ->willReturn($clusterMock);
+
+        $client
+            ->method('cat')
+            ->willReturn($catMock);
+
+        $collector = new DataCollector(
+            true,
+            true,
+            $client,
+            $adminClient
+        );
+
+        $collector->collect(
+            $request,
+            new Response()
+        );
+
+        static::assertSame(1500.0, $collector->getTime());
+        static::assertSame(5, $collector->getRequestAmount());
+        static::assertCount(5, $collector->getRequests());
+    }
+}

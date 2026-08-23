@@ -1,0 +1,40 @@
+.ct-confirm-field {
+    position: relative;
+
+    &.has--error {
+        .ct-confirm-field__button-list {
+            padding-bottom: 19px;
+        }
+    }
+
+    .mt-field input {
+        padding: 8px 16px;
+    }
+
+    .ct-confirm-field__button-list {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translate(0, -50%);
+    }
+
+    &.ct-confirm-field--compact {
+        .mt-field {
+            margin-bottom: 0;
+        }
+
+        .mt-field input {
+            padding: 2px 16px;
+        }
+
+        .ct-confirm-field__button-list {
+            right: 4px;
+        }
+    }
+
+    &.ct-confirm-field--editing {
+        .mt-field input {
+            padding-right: 64px;
+        }
+    }
+}

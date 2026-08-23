@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Routing;
+
+use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
+use Contena\Core\PlatformRequest;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+
+class RouteParamsCleanupListener
+{
+    private const array CLEANUP_PARAMETERS = [
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE,
+        PlatformRequest::ATTRIBUTE_ACL,
+        PlatformRequest::ATTRIBUTE_OPENAPI,
+        TemplateScopeDetector::SCOPES_ATTRIBUTE,
+    ];
+
+    public function __invoke(RequestEvent $event): void
+    {
+        $routeParams = $event->getRequest()->attributes->get('_route_params', []);
+
+        if ($routeParams) {
+            foreach (self::CLEANUP_PARAMETERS as $param) {
+                if (isset($routeParams[$param])) {
+                    unset($routeParams[$param]);
+                }
+            }
+        }
+
+        $event->getRequest()->attributes->set('_route_params', $routeParams);
+    }
+}

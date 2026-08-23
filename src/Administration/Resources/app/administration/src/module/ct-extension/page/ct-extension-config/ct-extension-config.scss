@@ -1,0 +1,40 @@
+@import "~scss/variables";
+
+.ct-extension-config {
+    & .ct-meteor-page__smart-bar .ct-meteor-page__smart-bar-module-info .ct-meteor-page__smart-bar-header {
+        display: block;
+    }
+
+    /* stylelint-disable-next-line max-line-length */
+    & .ct-meteor-page__smart-bar .ct-meteor-page__smart-bar-module-info .ct-meteor-page__smart-bar-header .ct-meteor-page__smart-bar-title {
+        line-height: 36px;
+        font-size: var(--font-size-l);
+    }
+
+    .ct-meteor-page__smart-bar-content {
+        margin-bottom: 24px;
+
+        .ct-meteor-page__smart-bar-meta {
+            font-size: var(--font-size-2xs);
+            color: var(--color-text-secondary-default);
+            line-height: 12px;
+        }
+    }
+
+    &__extension-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: $border-radius-lg;
+        border: 1px solid var(--color-border-secondary-default);
+    }
+
+    &__producer-link {
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+    }
+
+    &__content {
+        width: min(960px, 100%);
+        margin: 0 auto;
+    }
+}

@@ -1,0 +1,30 @@
+.ct-settings-snippet-list {
+    &__grid {
+        height: 100%;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    &__reset-items {
+        display: grid;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    &__delete-modal-grid {
+        margin: 15px -30px -20px;
+    }
+}
+
+.ct-modal__footer {
+    .ct-settings-snippet-list__delete-modal-delete-all-checkbox {
+        display: flex;
+        justify-content: flex-end;
+        width: fit-content;
+        white-space: nowrap;
+    }
+}

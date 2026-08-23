@@ -1,0 +1,4 @@
+contena:
+    telemetry:
+        metrics:
+            enabled: true

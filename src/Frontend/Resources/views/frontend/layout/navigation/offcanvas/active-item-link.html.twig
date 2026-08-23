@@ -1,0 +1,11 @@
+{% block layout_navigation_offcanvas_navigation_category_headline %}
+    <a
+        class="nav-item nav-link navigation-offcanvas-headline"
+        href="{{ item.seoUrl }}"
+        {% if item.shouldOpenInNewTab %}target="_blank"{% endif %}
+    >
+        {% block layout_navigation_offcanvas_navigation_category_headline_text %}
+            <span>{{ item.translated.name }}</span>
+        {% endblock %}
+    </a>
+{% endblock %}

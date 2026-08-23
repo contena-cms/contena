@@ -1,0 +1,88 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Cookie\Struct;
+
+use Contena\Core\Content\Cookie\CookieException;
+use Contena\Core\Framework\Struct\Struct;
+
+/**
+ * A group can be also be a standalone cookie.
+ * If a group is a cookie itself (the "cookie" property is set), it is not allowed to have "entries", and vice versa.
+ * It would lead to unexpected UI behavior otherwise.
+ *
+ * TechnicalName should be a snippet key, @see \Contena\Core\Content\Cookie\Service\CookieProvider::SNIPPET_NAME_COOKIE_GROUP_REQUIRED for an example.
+ * TechnicalName is also used as name and will be translated. Description can be provided as snippet keys or directly translated text.
+ */
+class CookieGroup extends Struct
+{
+    public bool $isRequired = false;
+
+    public ?string $description;
+
+    public ?string $value;
+
+    public ?int $expiration;
+
+    public string $name;
+
+    protected ?string $cookie;
+
+    protected ?CookieEntryCollection $entries;
+
+    public function __construct(
+        private readonly string $technicalName,
+    ) {
+        $this->name = $technicalName;
+    }
+
+    public function getApiAlias(): string
+    {
+        return 'cookie_group';
+    }
+
+    /**
+     * The technical name is a private property and therefore not picked up by the
+     * default Struct serialization. It is exposed explicitly because clients need a
+     * translation-independent group identifier, e.g. for cookie consent logging.
+     *
+     * @return array<array-key, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+        $data['technicalName'] = $this->technicalName;
+
+        return $data;
+    }
+
+    public function getTechnicalName(): string
+    {
+        return $this->technicalName;
+    }
+
+    public function getCookie(): ?string
+    {
+        return $this->cookie ?? null;
+    }
+
+    public function setCookie(?string $cookie): void
+    {
+        if (isset($this->entries)) {
+            throw CookieException::notAllowedPropertyAssignment('cookie', 'entries');
+        }
+        $this->cookie = $cookie;
+    }
+
+    public function getEntries(): ?CookieEntryCollection
+    {
+        return $this->entries ?? null;
+    }
+
+    public function setEntries(?CookieEntryCollection $entries): void
+    {
+        if (isset($this->cookie)) {
+            throw CookieException::notAllowedPropertyAssignment('entries', 'cookie');
+        }
+        $this->entries = $entries;
+    }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% block administration_title %}
+        <title>
+            Contena Administration
+        </title>
+    {% endblock %}
+
+    {% block administration_meta %}
+        <meta name="robots" content="noindex, nofollow" />
+    {% endblock %}
+
+    {% block administration_favicons %}
+        <link rel="apple-touch-icon" href="{{ asset('administration/static/img/favicon/apple-touch-icon-v4.png', '@Administration') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('administration/static/img/favicon/favicon-v4-16x16.png', '@Administration') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('administration/static/img/favicon/favicon-v4-32x32.png', '@Administration') }}" id="dynamic-favicon">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('administration/static/img/favicon/android-chrome-v4-192x192.png', '@Administration') }}">
+        <link rel="icon" type="image/png" sizes="256x256" href="{{ asset('administration/static/img/favicon/android-chrome-v4-256x256.png', '@Administration') }}">
+        <meta name="msapplication-TileImage" content="{{ asset('administration/static/img/favicon/mstile-v4-150x150.png', '@Administration') }}">
+        <meta name="msapplication-TileColor" content="#2563EB">
+        <meta name="theme-color" content="#2563EB">
+        <meta name="referrer" content="always">
+    {% endblock %}
+
+    {% block administration_head_scripts %}{% endblock %}
+
+    {{ vite_entry_link_tags('app') }}
+</head>
+<body>
+
+{% block administration_content %}{% endblock %}
+
+</body>
+</html>

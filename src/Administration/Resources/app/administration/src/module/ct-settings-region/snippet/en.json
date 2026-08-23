@@ -1,0 +1,60 @@
+{
+    "ct-settings-region": {
+        "general": {
+            "mainMenuItemGeneral": "Regions",
+            "description": "Manage hierarchical administrative regions for each country."
+        },
+        "list": {
+            "cardTitle": "Administrative regions",
+            "countryLabel": "Country",
+            "countryPlaceholder": "Select a country...",
+            "searchPlaceholder": "Search regions...",
+            "addChildRegion": "Add child region",
+            "treeTitle": "Region tree",
+            "detailTitle": "Region details",
+            "selectRegionTitle": "Select a region",
+            "selectRegionDescription": "Select a region in the tree or use the actions above to create one.",
+            "selectCountryTitle": "Select a country",
+            "selectCountryDescription": "Choose a country to view and manage its administrative regions.",
+            "emptyTitle": "No regions available",
+            "emptyDescription": "Add the first administrative region for this country."
+        },
+        "tree": {
+            "general": {
+                "treeHeadline": "Region tree",
+                "treeHeadSelected": "{count} selected"
+            },
+            "modal": {
+                "textDeleteConfirm": "Are you sure you want to delete the region \"{name}\"?",
+                "textDeleteMultipleConfirm": "Are you sure you want to delete the {count} selected regions?",
+                "textDeleteChildrenConfirm": "All child regions will be deleted too."
+            }
+        },
+        "detail": {
+            "titleNew": "New region",
+            "titleEdit": "Edit region",
+            "labelName": "Name",
+            "labelShortName": "Short name",
+            "labelCode": "Administrative code",
+            "labelType": "Type",
+            "placeholderType": "Select a type...",
+            "labelPosition": "Position",
+            "labelActive": "Active",
+            "customFieldsTitle": "Custom fields"
+        },
+        "notification": {
+            "loadError": "The regions could not be loaded.",
+            "saveSuccess": "The region has been saved.",
+            "saveError": "The region could not be saved. Please check all required fields.",
+            "deleteSuccess": "The selected regions have been deleted.",
+            "deleteError": "The selected regions could not be deleted."
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "region": {
+                "label": "Regions"
+            }
+        }
+    }
+}

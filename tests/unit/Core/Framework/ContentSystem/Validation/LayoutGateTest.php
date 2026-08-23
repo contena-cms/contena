@@ -1,0 +1,48 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Validation;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutAnalysis;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
+use Contena\Core\Framework\ContentSystem\Validation\LayoutGate;
+
+/**
+ * @internal
+ */
+#[CoversClass(LayoutGate::class)]
+class LayoutGateTest extends TestCase
+{
+    #[TestDox('analyses well-formedness with no bound source (null root context)')]
+    public function testWellFormednessUsesNullRootContext(): void
+    {
+        $report = new DiagnosticsReport([]);
+
+        $diagnostics = static::createMock(LayoutDiagnostics::class);
+        $diagnostics->expects($this->once())->method('analyze')
+            ->with([], null)
+            ->willReturn(new LayoutAnalysis($report, []));
+
+        $gate = new LayoutGate($diagnostics);
+
+        static::assertSame($report, $gate->wellFormedness([]));
+    }
+
+    #[TestDox('analyses resolvability against the bound source root context')]
+    public function testResolvabilityUsesProvidedRootContext(): void
+    {
+        $report = new DiagnosticsReport([]);
+
+        $diagnostics = static::createMock(LayoutDiagnostics::class);
+        $diagnostics->expects($this->once())->method('analyze')
+            ->with([], [])
+            ->willReturn(new LayoutAnalysis($report, []));
+
+        $gate = new LayoutGate($diagnostics);
+
+        static::assertSame($report, $gate->resolvability([], []));
+    }
+}

@@ -1,0 +1,16 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <media-selection name="test_media_selection_field">
+                    <label>Test media-selection field</label>
+                </media-selection>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

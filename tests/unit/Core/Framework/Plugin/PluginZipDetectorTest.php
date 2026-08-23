@@ -1,0 +1,74 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Plugin;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Plugin\PluginException;
+use Contena\Core\Framework\Plugin\PluginZipDetector;
+use Contena\Core\Framework\Plugin\Util\ZipUtils;
+
+/**
+ * @internal
+ */
+#[CoversClass(PluginZipDetector::class)]
+class PluginZipDetectorTest extends TestCase
+{
+    private PluginZipDetector $zipDetector;
+
+    private string $fixturePath;
+
+    protected function setUp(): void
+    {
+        $this->zipDetector = new PluginZipDetector();
+        $this->fixturePath = __DIR__ . '/_fixtures/archives/';
+    }
+
+    public function testIsPlugin(): void
+    {
+        $archive = ZipUtils::openZip($this->fixturePath . 'CtFashionTheme.zip');
+
+        $isPlugin = $this->zipDetector->isPlugin($archive);
+
+        static::assertTrue($isPlugin);
+    }
+
+    public function testIsNoPlugin(): void
+    {
+        $archive = ZipUtils::openZip($this->fixturePath . 'NoPlugin.zip');
+
+        $isPlugin = $this->zipDetector->isPlugin($archive);
+
+        static::assertFalse($isPlugin);
+    }
+
+    public function testThrowsExceptionWithNoZip(): void
+    {
+        $this->expectException(PluginException::class);
+        ZipUtils::openZip($this->fixturePath . 'NoZip.zip');
+    }
+
+    public function testDetectThrowsExceptionWhenNoPluginInZip(): void
+    {
+        $this->expectException(PluginException::class);
+        $this->zipDetector->detect($this->fixturePath . 'NoPlugin.zip');
+    }
+
+    #[DataProvider('archiveProvider')]
+    public function testDetect(string $archiveName, string $expectedType): void
+    {
+        static::assertSame(
+            $expectedType,
+            $this->zipDetector->detect($this->fixturePath . $archiveName),
+        );
+    }
+
+    /**
+     * @return iterable<array{0: string, 1:string}>
+     */
+    public static function archiveProvider(): iterable
+    {
+        yield 'archive ct fashion theme zip plugin' => ['CtFashionTheme.zip', 'plugin'];
+    }
+}

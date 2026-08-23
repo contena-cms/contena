@@ -1,0 +1,64 @@
+{
+    "ct-category": {
+        "view": {
+            "layout": "布局"
+        },
+        "base": {
+            "entry-point-card": {
+                "buttonConfigureHome": "配置首页"
+            },
+            "entry-point-modal": {
+                "modalTitle": "配置首页",
+                "channelSelection": "渠道",
+                "showInMainNavigation": "在主导航中显示",
+                "mainNavigationName": "显示名称",
+                "mainNavigationNameHelpText": "此名称用于主导航中的首页。留空时使用渠道名称。",
+                "mainNavigationNamePlaceholder": "输入首页的替代名称...",
+                "layoutHeadline": "布局",
+                "layoutType": "分类内容布局",
+                "layoutSelection": "内容布局",
+                "layoutSelectionPlaceholder": "分配布局...",
+                "defaultLayout": "默认布局",
+                "selectedLayout": "已选择布局",
+                "noLayoutAssigned": "未分配布局",
+                "openLayout": "打开布局",
+                "createLayout": "新建布局",
+                "seoHeadline": "SEO 设置",
+                "metaTitle": "Meta 标题",
+                "metaTitlePlaceholder": "输入 Meta 标题...",
+                "metaDescription": "Meta 描述",
+                "metaDescriptionPlaceholder": "输入 Meta 描述...",
+                "seoKeywords": "SEO 关键词",
+                "seoKeywordsPlaceholder": "输入一个或多个关键词...",
+                "loadError": "无法加载首页布局。",
+                "saveError": "无法保存首页设置。"
+            }
+        },
+        "layout": {
+            "cardTitle": "内容布局",
+            "description": "创建和管理分配给此分类的可视化布局。",
+            "emptyState": "尚未分配内容布局。",
+            "buttonCreate": "创建布局",
+            "buttonOpen": "打开布局",
+            "allChannels": "所有渠道",
+            "loadError": "无法加载已分配的内容布局。"
+        }
+    },
+    "ct-landing-page": {
+        "general": {
+            "buttonLoadMore": "加载更多"
+        },
+        "view": {
+            "layout": "布局"
+        },
+        "layout": {
+            "cardTitle": "内容布局",
+            "description": "创建和管理分配给此落地页的可视化布局。",
+            "emptyState": "尚未分配内容布局。",
+            "buttonCreate": "创建布局",
+            "buttonOpen": "打开布局",
+            "allChannels": "所有渠道",
+            "loadError": "无法加载已分配的内容布局。"
+        }
+    }
+}

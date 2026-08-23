@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena Knowledge Capture"
+  short_description: "Route durable Contena knowledge to the right home."
+  default_prompt: "Save this Contena knowledge for later."

@@ -1,0 +1,10 @@
+.ct-member-address-form {
+    display: grid;
+    gap: 24px;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px 24px;
+    }
+}

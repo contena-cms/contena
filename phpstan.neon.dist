@@ -1,0 +1,149 @@
+includes:
+    - phpstan-baseline.php
+    # computes the analysed paths with node_modules subtrees pruned, see the file header
+    - phpstan-paths.php
+    - src/Core/DevOps/StaticAnalyze/PHPStan/common.neon
+    - src/Core/DevOps/StaticAnalyze/PHPStan/core-rules.neon
+
+parameters:
+    tmpDir: var/cache/phpstan
+    bootstrapFiles:
+        - src/Core/DevOps/StaticAnalyze/phpstan-bootstrap.php # run `php src/Core/DevOps/StaticAnalyze/phpstan-bootstrap.php` to create the container
+    symfony:
+        constantHassers: false
+        containerXmlPath: 'var/cache/static_phpstan_dev/Contena_Core_DevOps_StaticAnalyze_StaticAnalyzeKernelPhpstan_devDebugContainer.xml'
+    scanDirectories:
+        - var/cache/static_phpstan_dev/Symfony/Config
+    scanFiles:
+        - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
+
+    excludePaths:
+        # vendor patches over autoload files
+        - src/Core/Framework/Adapter/Doctrine/Patch/AbstractAsset.php
+
+        # node_modules
+        - src/**/node_modules/*
+        - tests/**/node_modules/*
+
+        # PHPStan rule test files
+        - tests/devops/Core/DevOps/StaticAnalyse/PHPStan/Rules/data/*
+
+    ignoreErrors:
+        # The symfony extension checks against the "normal" container, not the test container
+        # Therefore some services in the tests are not found and the extension can not infer that all private services are public during test execution
+        -
+            message: '#Service ".*" is not registered in the container\.#'
+            paths:
+                - tests/unit
+                - tests/integration
+                - tests/devops
+                - src/Core/Framework/Test/TestCaseBase/*.php
+        -
+            message: '#Service ".*" is private#'
+            paths:
+                - tests/unit/**/*Test.php
+                - tests/devops/**/*Test.php
+                - tests/integration/**/*Test.php
+        - # ignore errors caused by static::markTestSkipped
+            message: '#Unreachable statement - code above always terminates.#'
+            paths:
+                - tests/**/*Test.php
+
+        # To fix this error, the \Contena\Core\Framework\Struct\Collection::createNew method has to be implemented
+        # in every implementation of `Collection` and needs to return `new self` instead of `new static`. See https://github.com/phpstan/phpstan/issues/2773
+        -
+            message: '#Unsafe usage of new static\(\)#'
+            paths:
+                - src/Core/Framework/Struct/Collection.php
+                - src/Core/Framework/DataAbstractionLayer/CompiledFieldCollection.php
+
+        # allowed extension of internal classes with @final annotation only for specific classes
+        -
+            message: '#.*extends @final class Contena\\Core\\Framework\\DataAbstractionLayer\\EntityRepository.#'
+            paths:
+                - src/Core/Test/Stub/DataAbstractionLayer/StaticEntityRepository.php
+        -
+            message: '#.*extends @final class Contena\\Core\\System\\Channel\\Entity\\ChannelRepository.#'
+            paths:
+                - src/Core/Test/Stub/DataAbstractionLayer/StaticChannelRepository.php
+
+        # Route scopes for controllers
+        -
+           message: '#.* has no route scope defined.*#'
+           paths:
+            - **/*Test.php
+            - src/Core/Installer
+
+        -
+           message: '#No global Command directories allowed, put your commands in the right domain directory#'
+           path: src/Administration/
+
+        # dynamic hydrator performance
+        -
+            message: '#Access to an undefined property Contena\\Core\\Framework\\DataAbstractionLayer\\Entity#'
+            path: src/*/*Hydrator.php
+        -
+            message: '#Access to protected property *#'
+            path: src/*/*Hydrator.php
+
+        # Internal deprecations of Contena are handled in other places
+        - '#deprecated.*(class|interface) Contena\\#'
+
+        - # tests are allowed to add dummy classes in the same file
+            message: '#Multiple class\/interface\/trait is not allowed in single file#'
+            paths:
+                - tests/**
+
+        # implementation of symfony flashbag interface which does not define iterable types
+        - identifier: missingType.iterableValue
+          path: src/Core/Framework/Adapter/Session/StatefulFlashBag.php
+
+        # DefaultsTest explicitly tests that the default values are not changed
+        - identifier: staticMethod.alreadyNarrowedType
+          path: tests/devops/Core/DefaultsTest.php
+
+        - # Can not be fixed currently. See https://github.com/phpstan/phpstan/discussions/9159
+            message: '#Method Contena\\Core\\Framework\\DataAbstractionLayer\\Field\\Field::getFlag\(\) should return \(TFlag of Contena\\Core\\Framework\\DataAbstractionLayer\\Field\\Flag\\Flag\)\|null but returns Contena\\Core\\Framework\\DataAbstractionLayer\\Field\\Flag\\Flag\|null#'
+            path: src/Core/Framework/DataAbstractionLayer/Field/Field.php
+            count: 1
+
+        - # test plugin implementations in fixtures, the files can't be excluded as that would lead to errors when they are used
+            message: '#.*#'
+            paths:
+                - tests/integration/**/_fixtures/**
+
+        - # Needs a proper class-string annotation in `\Contena\Core\Framework\DataAbstractionLayer\EntityDefinition::getCollectionClass` and all child classes
+            message: '#PHPDoc tag @var with type .*Contena\\Core\\Framework\\DataAbstractionLayer\\EntityCollection.* is not subtype of native type string#'
+            paths:
+                - src/Core/Framework/DataAbstractionLayer/Dbal/EntityReader.php
+                - src/Core/Framework/DataAbstractionLayer/EntityRepository.php
+                - src/Core/System/Channel/Entity/ChannelRepository.php
+
+        - # It is not possible to specify the type of the EntityResult, as the Aggregators are used for multiple entities at the same time
+            message: '#Method Contena\\.*::hydrateEntityAggregation\(\) return type with generic class Contena\\Core\\Framework\\DataAbstractionLayer\\Search\\AggregationResult\\Metric\\EntityResult does not specify its types: TEntityCollection#'
+            paths:
+                - src/Core/Framework/DataAbstractionLayer/Dbal/EntityAggregator.php
+
+        - # PHPdocs are inherited from https://github.com/JetBrains/phpstorm-stubs/tree/master/redis and should be updated there
+            identifier: missingType.iterableValue
+            path: src/Core/Test/Stub/Redis
+
+        - # It is checked before if the entity supports custom fields, but it is not possible for PHPStan to recognize this
+            message: '#Call to an undefined method TElement of Contena\\Core\\Framework\\DataAbstractionLayer\\Entity::.*CustomFields.*\(\)#'
+            count: 4
+            path: src/Core/Framework/DataAbstractionLayer/EntityCollection.php
+
+        - # With the active `reportWrongPhpDocTypeInVarTag` phpstan parameter we should resolve this issue per area
+            message: '#PHPDoc tag @var with type .* is not subtype of type .*#'
+            paths:
+                - tests/**
+
+        - # XML config format will be migrated step by step, so we ignore errors for now, see https://github.com/contena/contena/issues/13072
+            message: '#deprecated class Symfony\\Component\\DependencyInjection\\Loader\\XmlFileLoader#'
+
+        # Many tests are checking DAL write errors with `WriteException` containing `WriteConstraintViolationException`.
+        # As `WriteException` can also contain other exceptions, it is hard to teach PHPStan without touching each test, that in those tests only `WriteConstraintViolationException` are present.
+        # A Generic type for `WriteException` is not applicable, as it can contain different exceptions types at the same time.
+        -
+            message: "#Offset 'source' might not exist on array{status: string, code: #"
+            path: tests

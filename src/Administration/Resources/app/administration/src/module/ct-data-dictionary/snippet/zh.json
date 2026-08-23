@@ -1,0 +1,67 @@
+{
+    "ct-data-dictionary": {
+        "general": {
+            "mainMenuItemGeneral": "数据字典",
+            "description": "管理可复用的数据字典及其值。"
+        },
+        "list": {
+            "placeholderSearchBar": "搜索数据字典...",
+            "cardTitle": "数据字典",
+            "create": "新建字典",
+            "emptyTitle": "暂无数据字典",
+            "emptyDescription": "新建字典后，可在其他页面和插件中复用其字典值。",
+            "columns": {
+                "label": "名称",
+                "technicalName": "技术名称",
+                "description": "描述",
+                "active": "启用"
+            },
+            "grid": {
+                "label": "名称",
+                "technicalName": "技术名称",
+                "description": "描述",
+                "active": "启用"
+            }
+        },
+        "detail": {
+            "newTitle": "新建数据字典",
+            "settingsTitle": "字典设置",
+            "settingsSubtitle": "配置字典的名称、技术名称、描述和启用状态。",
+            "infoTitle": "字典信息",
+            "technicalName": "技术名称",
+            "label": "名称",
+            "description": "描述",
+            "active": "启用",
+            "inactive": "停用",
+            "statusLabel": "状态",
+            "rootNode": "根节点",
+            "itemCountLabel": "字典值",
+            "itemsTitle": "字典值",
+            "itemsSubtitle": "当前字典作为根节点，使用节点菜单添加子值，拖拽可调整层级和顺序。",
+            "structureTitle": "字典值结构",
+            "treeHeadline": "名称与编码",
+            "itemCount": "{count} 个节点",
+            "addItem": "添加字典值",
+            "addChildItem": "新增子节点",
+            "itemCode": "编码",
+            "itemLabel": "名称",
+            "itemDescription": "描述",
+            "itemPosition": "排序",
+            "itemActive": "启用",
+            "itemParent": "父节点",
+            "rootLevel": "根节点",
+            "editorTitle": "节点设置",
+            "selectItemTitle": "选择一个字典值",
+            "selectItemDescription": "从左侧结构树选择节点后，可在此编辑节点信息。",
+            "untitledItem": "未命名节点",
+            "codePending": "待填写编码",
+            "systemLocked": "系统锁定",
+            "emptyItemsTitle": "暂无字典值",
+            "emptyItemsDescription": "从字典根节点的操作菜单添加第一个字典值。"
+        },
+        "notification": {
+            "saveSuccess": "数据字典已保存。",
+            "saveError": "数据字典保存失败，请检查必填项。"
+        }
+    }
+}

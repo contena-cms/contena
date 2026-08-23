@@ -1,0 +1,12 @@
+{% extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block base_esi_header %}
+    {% set headerParameters = headerParameters|merge({ isNewContentStructure: true }) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-main content-page">
+        <twig:CT:Content:Page :page="contentPage" />
+    </div>
+{% endblock %}

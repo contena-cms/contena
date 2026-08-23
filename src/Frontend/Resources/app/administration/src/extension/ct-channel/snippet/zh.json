@@ -1,0 +1,25 @@
+{
+  "ct-frontend-content-layout": {
+    "general": {
+      "tabTitle": "页眉与页脚"
+    },
+    "header": {
+      "title": "页眉内容",
+      "description": "为此渠道分配默认页眉布局，并可为各域名单独覆盖。"
+    },
+    "footer": {
+      "title": "页脚内容",
+      "description": "为此渠道分配默认页脚布局，并可为各域名单独覆盖。"
+    },
+    "assignment": {
+      "channelDefault": "渠道默认",
+      "domainOverride": "域名覆盖",
+      "placeholder": "选择内容布局...",
+      "create": "创建布局",
+      "open": "打开布局",
+      "loadError": "无法加载内容布局分配。",
+      "saveSuccess": "内容布局分配已保存。",
+      "saveError": "无法保存内容布局分配。"
+    }
+  }
+}

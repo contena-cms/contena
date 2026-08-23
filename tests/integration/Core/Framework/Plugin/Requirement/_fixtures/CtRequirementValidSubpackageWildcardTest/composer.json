@@ -1,0 +1,25 @@
+{
+    "name": "ct/requirement-valid-subpackage-wildcard-test",
+    "description": "Test requirement validator",
+    "version": "v1.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "contena AG",
+            "role": "Manufacturer"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "contena/core": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "CtRequirementValidSubpackageWildcardTest\\CtRequirementValidSubpackageWildcardTest",
+        "copyright": "(c) by contena AG",
+        "label": {
+            "de-DE": "Test für Requirement Validator",
+            "en-GB": "Test for requirement validator"
+        }
+    }
+}

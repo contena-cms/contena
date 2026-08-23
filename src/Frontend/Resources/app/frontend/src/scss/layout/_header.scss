@@ -1,0 +1,80 @@
+/*
+Header
+==================================================
+Contains custom styles for the header at the top of the page.
+The header contains the site logo, the search form and page actions.
+*/
+
+.header-row {
+    padding: $spacer-sm 0;
+}
+
+.header-logo-picture {
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.header-logo-main-link {
+    display: inline-block;
+}
+
+.header-search-form {
+    position: relative;
+
+    .header-close-btn {
+        display: none;
+    }
+
+    &:has(.search-suggest) {
+        .header-search-btn {
+            display: none;
+        }
+
+        .header-close-btn {
+            display: block;
+        }
+    }
+}
+
+.header-search-btn {
+    &.is-loading-indicator-before .loader {
+        margin: 0;
+    }
+
+    .loader {
+        ~ .header-search-icon,
+        ~ .header-close-btn {
+            display: none;
+        }
+    }
+}
+
+.header-actions-btn {
+    position: relative;
+}
+
+@include media-breakpoint-up(sm) {
+    .header-row {
+        padding-bottom: $spacer;
+    }
+
+    .header-search-col {
+        .collapse:not(.show) {
+            display: block;
+        }
+    }
+
+    .header-search {
+        max-width: 400px;
+    }
+}
+
+.frontend-staging-info {
+    .icon {
+        color: $white;
+
+        svg {
+            top: 0;
+        }
+    }
+}

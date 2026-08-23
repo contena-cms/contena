@@ -1,0 +1,52 @@
+{
+    "ct-settings-mailer": {
+        "general": {
+            "title": "Mail server",
+            "description": "Configure the global mail server"
+        },
+        "configuration": {
+            "agent": "Preferred email agent",
+            "agentPlaceholder": "Select an email agent...",
+            "environmentAgent": "Use environment's configuration",
+            "localAgent": "Local email agent",
+            "smtpAgent": "SMTP server",
+            "smtpOauthAgent": "SMTP server with OAuth 2",
+            "sendmailOptions": "Sendmail dispatch method",
+            "synchronous": "Synchronous mail dispatch",
+            "asynchronous": "Asynchronous mail dispatch",
+            "disableDelivery": "Disable email delivery"
+        },
+        "smtp": {
+            "host": "Host",
+            "hostPlaceholder": "Enter a host name...",
+            "port": "Port",
+            "portPlaceholder": "Enter a port number...",
+            "username": "Username",
+            "usernamePlaceholder": "Enter your username...",
+            "password": "Password",
+            "passwordPlaceholder": "Enter a password...",
+            "oauthUrl": "OAuth URL",
+            "oauthUrlPlaceholder": "Enter the OAuth URL...",
+            "oauthScope": "OAuth Scope",
+            "oauthScopePlaceholder": "Enter the OAuth scope...",
+            "clientId": "Client ID",
+            "clientIdPlaceholder": "Enter the client ID...",
+            "clientSecret": "Client Secret",
+            "clientSecretPlaceholder": "Enter the client secret...",
+            "encryption": "Encryption",
+            "encryptionPlaceholder": "Select an encryption method...",
+            "senderAddress": "Sender address",
+            "senderAddressPlaceholder": "Enter an email address you have access to...",
+            "deliveryAddress": "Delivery address",
+            "deliveryAddressPlaceholder": "Enter an email address for testing purposes...",
+            "required": "This field is required.",
+            "invalidPort": "Enter a valid port between 1 and 65535.",
+            "invalidConfiguration": "The SMTP configuration is invalid. Check the host and port."
+        },
+        "encryption": {
+            "none": "No encryption",
+            "ssl": "SSL",
+            "tls": "TLS"
+        }
+    }
+}

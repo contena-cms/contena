@@ -1,0 +1,21 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }}\Core\Content\Example\Channel;
+
+use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\System\Channel\ChannelApiResponse;
+
+/**
+ * @property EntitySearchResult $object
+ */
+class ExampleRouteResponse extends ChannelApiResponse
+{
+    public function getExamples(): BlogCollection
+    {
+        /** @var BlogCollection $collection */
+        $collection = $this->object->getEntities();
+
+        return $collection;
+    }
+}

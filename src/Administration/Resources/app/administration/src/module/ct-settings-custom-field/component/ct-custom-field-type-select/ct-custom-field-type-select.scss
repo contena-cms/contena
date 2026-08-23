@@ -1,0 +1,19 @@
+.ct-custom-field-type-base {
+    .ct-custom-field-type-select__delete-option-button {
+        background: none;
+        color: var(--color-text-critical-default);
+        margin-left: 20px;
+    }
+
+    .ct-custom-field-type-select__option-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 10px;
+    }
+
+    .ct-custom-field-type-select__button-add {
+        color: var(--color-text-brand-default);
+        border-color: var(--color-border-brand-default);
+    }
+}

@@ -1,0 +1,51 @@
+.ct-channel-detail-content-layouts {
+    display: grid;
+    gap: 24px;
+    padding: 32px;
+
+    &__card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    &__card-header p {
+        margin: 0;
+    }
+
+    &__assignments {
+        display: grid;
+        gap: 16px;
+    }
+
+    &__assignment {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) minmax(280px, 2fr) 40px;
+        align-items: center;
+        gap: 16px;
+    }
+
+    &__target {
+        display: grid;
+        gap: 4px;
+    }
+
+    &__target span {
+        color: var(--color-text-secondary-default);
+        font-size: var(--font-size-xs);
+    }
+
+    @media screen and (max-width: 960px) {
+        padding: 24px;
+
+        &__assignment {
+            grid-template-columns: 1fr 40px;
+        }
+
+        &__target {
+            grid-column: 1 / -1;
+        }
+    }
+}

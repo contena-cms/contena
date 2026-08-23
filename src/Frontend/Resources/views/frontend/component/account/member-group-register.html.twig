@@ -1,0 +1,5 @@
+{% sw_extends '@Frontend/frontend/component/account/register.html.twig' %}
+{% block component_account_register_header %}
+    <h2 class="card-title">{{ page.group.translated.registrationTitle }}</h2>
+    <div class="mb-3">{{ page.group.translated.registrationIntroduction|sw_sanitize }}</div>
+{% endblock %}

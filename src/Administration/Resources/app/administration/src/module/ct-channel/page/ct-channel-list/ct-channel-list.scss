@@ -1,0 +1,10 @@
+.ct-channel-list__type,
+.ct-channel-list__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ct-channel-list__actions {
+    justify-content: flex-end;
+}

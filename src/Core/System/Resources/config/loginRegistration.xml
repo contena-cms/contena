@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Log-in / sign-up</title>
+        <title lang="de-DE">Anmeldung / Registrierung</title>
+
+        <input-field type="int">
+            <name>passwordMinLength</name>
+            <label>Minimum password length on member sign-up</label>
+            <label lang="de-DE">Passwort-Mindestlänge für Mitglieder-Registrierung</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>memberIpAddressesNotAnonymously</name>
+            <label>Save member IP addresses as plain text</label>
+            <label lang="de-DE">Mitglieder-IP-Adressen als Klartext speichern</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showTitleField</name>
+            <label>Show title</label>
+            <label lang="de-DE">Titel anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>requireEmailConfirmation</name>
+            <label>Email address must be entered twice</label>
+            <label lang="de-DE">E-Mail-Adresse muss zweimal eingegeben werden</label>
+            <helpText>Email address has to be filled in twice to avoid errors.</helpText>
+            <helpText lang="de-DE">Die E-Mail-Adresse wird zweimal abgefragt, um Fehler bei der Eingabe zu vermeiden.</helpText>
+            <hint>global.accessibility.optionWarning</hint>
+        </input-field>
+
+        <input-field type="bool">
+            <name>doubleOptInRegistration</name>
+            <label>Double opt-in on sign-up</label>
+            <label lang="de-DE">Double-Opt-In für Registrierungen</label>
+            <helpText>Double opt-in for new members.</helpText>
+            <helpText lang="de-DE">Aktiviert Double-Opt-In bei der Registrierung neuer Mitglieder.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>doubleOptInResendInterval</name>
+            <label>Resend double opt-in email after (hours)</label>
+            <label lang="de-DE">Double-Opt-In-E-Mail erneut senden nach (Stunden)</label>
+            <helpText>If a member attempts to log in without completing double opt-in, the confirmation email is resent automatically if it was sent more than this many hours ago. Set to 0 to disable auto-resend.</helpText>
+            <helpText lang="de-DE">Falls ein Mitglied versucht sich anzumelden, ohne das Double-Opt-In abzuschließen, wird die Bestätigungs-E-Mail erneut gesendet, wenn sie vor mehr als dieser Anzahl an Stunden gesendet wurde. Auf 0 setzen, um das automatische Erneut-Senden zu deaktivieren.</helpText>
+            <defaultValue>24</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>confirmationUrl</name>
+            <label>Confirmation URL for double opt-in on sign-up</label>
+            <label lang="de-DE">Bestätigungs-URL für Double-Opt-In-Registrierung</label>
+            <placeholder><![CDATA[/registration/confirm?em=%%HASHEDEMAIL%%&hash=%%SUBSCRIBEHASH%%]]></placeholder>
+            <helpText><![CDATA[Available placeholders: <br/>%%HASHEDEMAIL%%<br/>%%SUBSCRIBEHASH%%]]></helpText>
+            <helpText lang="de-DE"><![CDATA[Verfügbare Platzhalter: <br/>%%HASHEDEMAIL%%<br/>%%SUBSCRIBEHASH%%]]></helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>requirePasswordConfirmation</name>
+            <label>Password must be entered twice</label>
+            <label lang="de-DE">Passwort muss zweimal eingegeben werden</label>
+            <helpText>Password has to be filled in twice to avoid input errors.</helpText>
+            <helpText lang="de-DE">Passwort wird zweimal abgefragt, um Fehler bei der Eingabe zu vermeiden.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showPhoneNumberField</name>
+            <label>Show phone number</label>
+            <label lang="de-DE">Telefonnummer anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>phoneNumberFieldRequired</name>
+            <label>Phone number field required</label>
+            <label lang="de-DE">Telefonnummer ist Pflichtfeld</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showBirthdayField</name>
+            <label>Show birthday field</label>
+            <label lang="de-DE">Geburtstag anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>birthdayFieldRequired</name>
+            <label>Birthday field required</label>
+            <label lang="de-DE">Geburtstag ist Pflichtfeld</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showAdditionalAddressField1</name>
+            <label>Show additional address field 1</label>
+            <label lang="de-DE">Adresszusatzzeile 1 anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>additionalAddressField1Required</name>
+            <label>Additional address 1 field required</label>
+            <label lang="de-DE">Adresszusatzzeile 1 ist Pflichtfeld</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showAdditionalAddressField2</name>
+            <label>Show additional address field 2</label>
+            <label lang="de-DE">Adresszusatzzeile 2 anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>additionalAddressField2Required</name>
+            <label>Additional address 2 field required</label>
+            <label lang="de-DE">Adresszusatzzeile 2 ist Pflichtfeld</label>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>addressInputFieldArrangement</name>
+            <label>Arrangement of address fields City, ZIP and Region</label>
+            <label lang="de-DE">Anordnung der Adressfelder Stadt, PLZ und Region</label>
+            <options>
+                <option>
+                    <id>city-zip-region</id>
+                    <name>City - ZIP - Region</name>
+                    <name lang="de-DE">Stadt - PLZ - Region</name>
+                </option>
+                <option>
+                    <id>zip-city-region</id>
+                    <name>ZIP - City - Region</name>
+                    <name lang="de-DE">PLZ - Stadt - Region</name>
+                </option>
+                <option>
+                    <id>city-region-zip</id>
+                    <name>City - Region - ZIP</name>
+                    <name lang="de-DE">Stadt - Region - PLZ</name>
+                </option>
+            </options>
+            <defaultValue>city-zip-region</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>allowMemberDeletion</name>
+            <label>Allow member deletion</label>
+            <label lang="de-DE">Löschen von Mitgliedern zulassen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>requireDataProtectionCheckbox</name>
+            <label>The privacy policy must be acknowledged via a checkbox</label>
+            <label lang="de-DE">Datenschutzbestimmungen müssen über eine Checkbox bestätigt werden</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>pwdRecoverUrl</name>
+            <label>Password recovery URL</label>
+            <label lang="de-DE">Passwort-Wiederherstellungs-URL</label>
+            <placeholder><![CDATA[/account/recover/password?hash=%%RECOVERHASH%%]]></placeholder>
+            <helpText><![CDATA[Available placeholders: <br/>%%RECOVERHASH%%]]></helpText>
+            <helpText lang="de-DE"><![CDATA[Verfügbare Platzhalter: <br/>%%RECOVERHASH%%]]></helpText>
+        </input-field>
+
+        <input-field type="text">
+            <name>doubleOptInDomain</name>
+            <label>Double opt-in domain</label>
+            <label lang="de-DE">Double-Opt-In-Domain</label>
+            <placeholder><![CDATA[https://localhost]]></placeholder>
+            <helpText>Leave empty to use this Channel's domain.</helpText>
+            <helpText lang="de-DE">Leer lassen, um die Domain des Kanals zu verwenden.</helpText>
+        </input-field>
+    </card>
+</config>

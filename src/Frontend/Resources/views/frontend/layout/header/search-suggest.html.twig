@@ -1,0 +1,84 @@
+{# @var blog \Contena\Core\Content\Blog\BlogEntity #}
+
+{% block layout_search_suggest %}
+    <div class="search-suggest js-search-result">
+        {% block layout_search_suggest_container %}
+            <ul class="search-suggest-container"
+                id="search-suggest-listbox"
+                aria-label="{{ 'header.searchDropdownTitle'|trans|striptags }}">
+                {% block layout_search_suggest_results %}
+                    {% for blog in page.searchResult.entities %}
+                        {% block layout_search_suggest_result_blog %}
+                            <li class="search-suggest-blog js-result">
+                                {% block layout_search_suggest_result_link %}
+                                    <a href="{{ seoUrl('frontend.blog.detail.page', { blogId: blog.id }) }}"
+                                       title="{{ blog.translated.name }}"
+                                       class="search-suggest-blog-link">
+                                        <div class="row align-items-center g-0">
+                                            {% block layout_search_suggest_result_image %}
+                                                <div class="col-auto search-suggest-blog-image-container">
+                                                    {% if blog.cover and blog.cover.media %}
+                                                        <twig:CT:Media
+                                                            :media="blog.cover.media"
+                                                            class="search-suggest-blog-image"
+                                                            sizes="100px"
+                                                        />
+                                                    {% else %}
+                                                        <twig:CT:Icon name="placeholder" size="lg" />
+                                                    {% endif %}
+                                                </div>
+                                            {% endblock %}
+
+                                            {% block layout_search_suggest_result_name %}
+                                                <div class="col search-suggest-blog-name">
+                                                    {{ blog.translated.name }}
+                                                </div>
+                                            {% endblock %}
+                                        </div>
+                                    </a>
+                                {% endblock %}
+                            </li>
+                        {% endblock %}
+                    {% endfor %}
+                {% endblock %}
+
+                {% block layout_search_suggest_result_total %}
+                    {% if page.searchResult.total == 0 %}
+                        {% block layout_search_suggest_no_result %}
+                            <li class="search-suggest-no-result" id="search-suggest-result-info">
+                                {{ 'header.searchNoResult'|trans|sw_sanitize }}
+                            </li>
+                        {% endblock %}
+                    {% else %}
+                        {% block layout_search_suggest_result_total_result %}
+                            <li class="js-result search-suggest-total">
+                                <div class="row align-items-center g-0">
+                                    {% block layout_search_suggest_result_total_link %}
+                                        <div class="col">
+                                            <a href="{{ path('frontend.search.page') }}?search={{ page.searchTerm }}"
+                                               title="{{ 'header.searchAllResults'|trans|striptags }}"
+                                               aria-label="{{ 'header.searchAllResults'|trans|striptags }}"
+                                               class="search-suggest-total-link">
+                                                <twig:CT:Icon name="arrow-head-right" size="sm" />
+                                                {{ 'header.searchAllResults'|trans|sw_sanitize }}
+                                            </a>
+                                        </div>
+                                    {% endblock %}
+
+                                    {% block layout_search_suggest_result_total_count %}
+                                        {# ludtwig-ignore html-duplicate-id #}
+                                        <div class="col-auto search-suggest-total-count" id="search-suggest-result-info">
+                                            {{ 'header.searchResults'|trans({
+                                                '%count%': page.searchResult.total,
+                                            })|sw_sanitize }}
+                                        </div>
+                                    {% endblock %}
+                                </div>
+                            </li>
+                        {% endblock %}
+                    {% endif %}
+                {% endblock %}
+            </ul>
+        {% endblock %}
+    </div>
+{% endblock %}

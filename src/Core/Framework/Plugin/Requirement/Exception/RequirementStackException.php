@@ -1,0 +1,65 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Plugin\Requirement\Exception;
+
+use Contena\Core\Framework\ContenaHttpException;
+use Symfony\Component\HttpFoundation\Response;
+
+class RequirementStackException extends ContenaHttpException
+{
+    /**
+     * @var list<RequirementException>
+     */
+    private readonly array $requirements;
+
+    public function __construct(
+        string $method,
+        RequirementException ...$requirements
+    ) {
+        $this->requirements = array_values($requirements);
+
+        parent::__construct(
+            'Could not {{ method }} plugin, got {{ failureCount }} failure(s). {{ errors }}',
+            [
+                'method' => $method,
+                'failureCount' => \count($requirements),
+                'errors' => $this->getInnerExceptionsDetails(),
+            ]
+        );
+    }
+
+    public function getErrorCode(): string
+    {
+        return 'FRAMEWORK__PLUGIN_REQUIREMENTS_FAILED';
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_FAILED_DEPENDENCY;
+    }
+
+    /**
+     * @return list<RequirementException>
+     */
+    public function getRequirements(): array
+    {
+        return $this->requirements;
+    }
+
+    public function getErrors(bool $withTrace = false): \Generator
+    {
+        foreach ($this->requirements as $exception) {
+            yield from $exception->getErrors($withTrace);
+        }
+    }
+
+    private function getInnerExceptionsDetails(): string
+    {
+        $details = [];
+        foreach ($this->requirements as $innerException) {
+            $details[] = "\n" . $innerException->getMessage();
+        }
+
+        return implode('', $details);
+    }
+}

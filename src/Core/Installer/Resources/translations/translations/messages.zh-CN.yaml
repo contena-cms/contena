@@ -1,0 +1,108 @@
+contena.installer:
+    header_title: 安装向导
+    menuitem:
+        start: 开始
+        configure_php: PHP 环境
+        download: 下载
+        requirements: 系统要求
+        license: 使用条款
+        database-configuration: 数据库配置
+        database-import: 安装
+        configuration: 系统配置
+        translation: 语言安装
+        finish: 完成
+    version_text: 版本：
+    back: 上一步
+    forward: 下一步
+    start: 开始
+    start_installation: 开始安装
+    select_language_zh-CN: 简体中文
+    select_language_en-GB: 英语（英国）
+    select_country_chn: 中国
+    select_country_usa: 美国
+    select_country_gbr: 英国
+    select_country_jpn: 日本
+    select_country_deu: 德国
+    language-selection_select_language: 安装向导语言
+    welcome:
+        title: 欢迎使用 Contena
+        header: 安装 Contena
+        message: 本向导将帮助你完成 Contena 的安装与基础配置。
+    requirements_header: 系统要求
+    requirements_header_files: 文件和目录
+    requirements_header_system: 系统
+    requirements_files_info: 以下文件和目录必须存在并具有写入权限。
+    requirements_table_files_col_check: 文件或目录
+    requirements_table_files_col_status: 状态
+    requirements_error: 当前环境尚未满足全部安装要求。
+    requirements_error_title: 系统尚未准备就绪
+    requirements_success: 已满足全部安装要求。
+    requirements_success_title: 系统已准备就绪
+    requirements_php_info: 服务器必须满足以下要求才能运行 Contena。
+    requirements_system_col_check: 要求
+    requirements_system_col_required: 要求版本
+    requirements_system_col_found: 当前环境
+    requirements_system_col_status: 状态
+    requirements_show_all: 显示全部
+    requirements_hide_all: 收起
+    requirements_status_error: 错误
+    requirements_status_warning: 警告
+    requirements_status_ready: 就绪
+    database-configuration_header: 配置数据库
+    database-configuration_field_host: 服务器：
+    database-configuration_advanced_settings: 高级设置
+    database-configuration_field_port: 端口：
+    database-configuration_field_user: 用户名：
+    database-configuration_field_password: 密码：
+    database-configuration_field_database: 数据库名称：
+    database-configuration_field_new_database: 新数据库：
+    database-configuration_info: 请输入数据库连接信息。如不确定，请联系系统管理员。
+    database-configuration-create_new_database: 创建数据库
+    database-configuration_non_empty_database: 所选数据库已包含数据，请选择空数据库或新建数据库。
+    database-configuration_error_required_fields: 请填写所有必填项。
+    database-configuration_field_ssl_ca_path: SSL CA 证书路径
+    database-configuration_field_ssl_cert_path: SSL 证书路径
+    database-configuration_field_ssl_cert_key_path: SSL 证书密钥路径
+    database-configuration_field_ssl_dont_verify_cert: 不验证服务器证书
+    database-configuration_fetch_error: 获取数据库信息时发生错误
+    database-configuration_access_denied: 访问被拒绝，请检查连接凭据
+    database-configuration_host_not_found: 无法连接数据库服务器
+    database-configuration_invalid_requirements: Contena 需要 MySQL 8.0.22+ 或 MariaDB 10.11+
+    database-configuration_refresh_databases: 刷新数据库
+    database-import_header: 安装
+    database-import_skip_import: 跳过
+    database-import_progress: 进度：
+    database-import_info_text: 正在安装 Contena，此过程可能需要几分钟。
+    database_import_success: Contena 安装成功！
+    database_import_install_label: 数据库安装：
+    database_import_install_step_text: 第
+    database_import_install_from_text: 步，共
+    migration_counter_text_migrations: 正在更新数据库
+    migration_counter_text_snippets: 正在更新界面文本
+    migration_update_success: 数据库导入成功！
+    configuration_header: 系统配置
+    configuration_system_text: 安装即将完成，请设置基础系统信息。
+    configuration_system_name: 系统名称
+    configuration_system_email: 系统邮箱：
+    configuration_system_language: 默认系统语言：
+    configuration_system_country: 默认国家：
+    configuration_admin_username: 管理员用户名：
+    configuration_admin_mail: 管理员邮箱：
+    configuration_admin_name: 姓名：
+    configuration_admin_password: 管理员密码：
+    finish_header: 安装完成
+    finish_info: Contena 已安装成功！
+    finish_info_heading: 安装成功
+    finish_backend: 打开管理后台
+    configuration_admin_system_headline: 系统信息
+    configuration_admin_language_headline: 可用语言
+    configuration_admin_language_select_all: 全选
+    configuration_admin_language_clear_all: 清空
+    configuration_admin_user_headline: 管理员信息
+    configuration_admin_language_text: 选择管理后台可使用的语言，安装后可在系统设置中继续管理。
+    configuration_admin_language_search_placeholder: 搜索语言……
+    configuration_defaults_warning: 请谨慎选择默认系统语言，它将作为管理后台的初始语言。
+    configuration_email_help_text: 该邮箱用于发送系统邮件。
+    finish_title: Contena 安装完成
+    finish_subtitle: 打开管理后台，开始配置你的系统。
+    finish_continue: 打开管理后台

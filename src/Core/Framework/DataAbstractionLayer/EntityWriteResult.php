@@ -1,0 +1,83 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DataAbstractionLayer;
+
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
+
+/**
+ * Contains the result of the entity write process
+ *
+ * @template IDStructure of string|array<string, string> = string
+ */
+class EntityWriteResult
+{
+    final public const string OPERATION_INSERT = 'insert';
+    final public const string OPERATION_UPDATE = 'update';
+    final public const string OPERATION_DELETE = 'delete';
+
+    /**
+     * @param IDStructure $primaryKey
+     * @param array<string, mixed> $payload
+     */
+    public function __construct(
+        private readonly array|string $primaryKey,
+        private readonly array $payload,
+        private readonly string $entityName,
+        private string $operation,
+        private readonly ?EntityExistence $existence = null,
+        private readonly ?ChangeSet $changeSet = null
+    ) {
+        $this->operation = mb_strtolower($operation);
+
+        if (!\in_array($this->operation, [self::OPERATION_DELETE, self::OPERATION_INSERT, self::OPERATION_UPDATE], true)) {
+            throw DataAbstractionLayerException::invalidWriteInput(\sprintf('Unexpected write result operation %s', $operation));
+        }
+    }
+
+    /**
+     * @return IDStructure
+     */
+    public function getPrimaryKey(): array|string
+    {
+        return $this->primaryKey;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getPayload(): array
+    {
+        return $this->payload;
+    }
+
+    public function getProperty(string $property): mixed
+    {
+        return $this->payload[$property] ?? null;
+    }
+
+    public function getExistence(): ?EntityExistence
+    {
+        return $this->existence;
+    }
+
+    public function getEntityName(): string
+    {
+        return $this->entityName;
+    }
+
+    public function getOperation(): string
+    {
+        return $this->operation;
+    }
+
+    public function getChangeSet(): ?ChangeSet
+    {
+        return $this->changeSet;
+    }
+
+    public function hasPayload(string $property): bool
+    {
+        return \array_key_exists($property, $this->getPayload());
+    }
+}

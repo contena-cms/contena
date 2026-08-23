@@ -1,0 +1,22 @@
+.ct-settings-search-search-behaviour {
+    &__title {
+        margin: 0 0 var(--scale-size-16);
+        font-size: var(--font-size-xs);
+        line-height: var(--font-line-height-xs);
+    }
+
+    &__condition {
+        margin-bottom: var(--scale-size-24);
+    }
+
+    &__option p {
+        margin: var(--scale-size-2) 0 var(--scale-size-8) var(--scale-size-24);
+        color: var(--color-text-secondary-default);
+        font-size: var(--font-size-xs);
+        line-height: var(--font-line-height-xs);
+    }
+
+    &__minimum-length {
+        width: min(100%, var(--scale-size-320));
+    }
+}

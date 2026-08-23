@@ -1,0 +1,59 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    name = 'option',
+    displayName = '',
+    options = [],
+    displayType = 'checkbox'
+%}
+
+{% set defaultAttributes = {
+    class: 'ct-multi-select-filter ct-filter',
+    'data-component': 'CT:Filter:Type:MultiSelectFilter',
+} %}
+
+<div {{ attributes.defaults(defaultAttributes) }}>
+    <input
+        type="search"
+        class="ct-multi-select-filter__search form-control"
+        name="{{ 'listing.filterSearchPlaceholder'|trans({ '%displayName%': displayName })|sw_sanitize }}"
+        placeholder="{{ 'listing.filterSearchPlaceholder'|trans({ '%displayName%': displayName })|sw_sanitize }}"
+        aria-label="{{ 'listing.filterSearchPlaceholder'|trans({ '%displayName%': displayName })|sw_sanitize }}"
+    >
+
+    <ul class="ct-multi-select-filter__list p-0 m-0">
+        {% for filterOption in options %}
+            {% set optionId = filterOption.id ? filterOption.id : 'filter-option-' ~ name ~ '-' ~ random() %}
+            {% set optionName = filterOption.translated.name %}
+            {% set optionColor = filterOption.colorHexCode %}
+            {% set optionMedia = filterOption.media.url %}
+
+            {% set style = null %}
+            {% if displayType == 'color' and optionColor %}
+                {% set style = 'background: ' ~ optionColor %}
+            {% elseif displayType == 'media' and optionMedia %}
+                {% set style = 'background-image: url(' ~ optionMedia ~ ')' %}
+            {% endif %}
+
+            <li class="ct-multi-select-filter__list-item">
+                <input class="ct-multi-select-filter__list-item-checkbox form-check-input display-type--{{ displayType }}"
+                    {% if style %}style="{{ style }}"{% endif %}
+                    type="checkbox"
+                    data-display-type="{{ displayType }}"
+                    {% if optionColor %}data-color="{{ optionColor }}"{% endif %}
+                    {% if optionMedia %}data-media="{{ optionMedia }}"{% endif %}
+                    name="{{ name }}"
+                    value="{{ optionId }}"
+                    id="{{ optionId }}">
+
+                {% if displayType == 'color' or displayType == 'media' %}
+                    <span class="ct-multi-select-filter__list-item-checkmark" aria-hidden="true">
+                        <twig:CT:Icon name="checkmark" size="xs" />
+                    </span>
+                {% endif %}
+                <label class="ct-multi-select-filter__list-item-label form-check-label" for="{{ optionId }}">{{ optionName }}</label>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

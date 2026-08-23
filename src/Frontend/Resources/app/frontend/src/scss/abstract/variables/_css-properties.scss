@@ -1,0 +1,33 @@
+/*
+CSS Custom Properties
+==================================================
+Exposes custom SCSS variables of the Storefront as CSS custom properties.
+
+@ct-package framework
+*/
+:root {
+    --search-suggest-zindex: #{$search-suggest-zindex};
+    --offcanvas-zindex: #{$offcanvas-zindex};
+    --cookie-msg-zindex: #{$cookie-msg-zindex};
+    --scroll-up-zindex: #{$scroll-up-zindex};
+    --menu-flyout-zindex: #{$menu-flyout-zindex};
+    --zoom-modal-action-zindex: #{$zoom-modal-action-zindex};
+    --magnifier-overlay-zindex: #{$magnifier-overlay-zindex};
+
+    --icon-base-size: #{$icon-base-size};
+    --icon-base-color: #{$icon-base-color};
+    --element-backdrop-bg: #{$element-backdrop-bg};
+
+    --spacer-xs: #{$spacer-xs};
+    --spacer-sm: #{$spacer-sm};
+    --spacer-md: #{$spacer-md};
+    --spacer-lg: #{$spacer-lg};
+    --spacer-xl: #{$spacer-xl};
+
+    --disabled-btn-bg: #{$disabled-btn-bg};
+    --disabled-btn-border-color: #{$disabled-btn-border-color};
+
+    --cms-block-text-hero-hr-color: #{$cms-block-text-hero-hr-color};
+    --cms-element-text-quotes-color: #{$cms-element-text-quotes-color};
+    --font-weight-semibold: #{$font-weight-semibold};
+}

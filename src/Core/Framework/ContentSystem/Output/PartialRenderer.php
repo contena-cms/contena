@@ -1,0 +1,77 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Output;
+
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDependencyAnalyzer;
+
+/**
+ * Handles partial rendering by pruning and extracting target elements.
+ *
+ * @internal
+ *
+ * @final
+ */
+class PartialRenderer
+{
+    public function __construct(
+        private readonly ElementTreePruner $treePruner,
+        private readonly ContextDependencyAnalyzer $dependencyAnalyzer,
+        private readonly SubTreeExtractor $subTreeExtractor
+    ) {
+    }
+
+    /**
+     * Prunes element trees to target element while preserving context-dependent ancestors.
+     *
+     * Pre-hydration pruning keeps context dependencies to ensure data flows correctly
+     * during hydration. Post-hydration extraction removes these ancestors.
+     *
+     * @param list<ContentElement> $elements
+     *
+     * @return list<ContentElement> Pruned elements containing target
+     */
+    public function pruneToTarget(array $elements, string $targetElementId): array
+    {
+        $prunedElements = [];
+
+        // Try each root element - target may be in any root
+        foreach ($elements as $element) {
+            try {
+                $prunedElement = $this->treePruner->pruneToPathAndDescendants(
+                    $element,
+                    $targetElementId,
+                    $this->dependencyAnalyzer
+                );
+                $prunedElements[] = $prunedElement;
+            } catch (ContentSystemException) {
+                // Element not found in this root, try next
+            }
+        }
+
+        return $prunedElements;
+    }
+
+    /**
+     * Extracts target element from pruned trees.
+     *
+     * Post-hydration extraction removes context-dependent ancestors that were kept
+     * during pruning, returning only the target element and its descendants.
+     *
+     * @param array<ContentElement> $elements
+     *
+     * @throws ContentSystemException If target element not found in any element
+     */
+    public function extractTarget(array $elements, string $targetElementId): ContentElement
+    {
+        foreach ($elements as $element) {
+            $targetElement = $this->subTreeExtractor->extract($element, $targetElementId);
+            if ($targetElement !== null) {
+                return $targetElement;
+            }
+        }
+
+        throw ContentSystemException::elementNotFound($targetElementId);
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "ct-settings-custom-field": {
+    "general": { "description": "管理自定义字段。", "mainMenuItemGeneral": "自定义字段", "placeholderSearchBar": "搜索自定义字段...", "tooltipTechnicalName": "技术名称必须唯一，保存后不可修改。", "tooltipType": "字段类型保存后不可修改。" },
+    "error": { "CUSTOM_FIELD_NAME_INVALID": "字段名称无效：只能包含字母、数字或下划线，且必须以字母或下划线开头。" },
+    "set": { "list": { "textHeadline": "自定义字段", "textDeleteConfirm": "确定要删除字段集“{name}”吗？", "buttonAdd": "新建字段集", "columnName": "名称", "messageDeleteSuccess": "字段集“{name}”已删除。", "messageEmpty": "暂无自定义字段。", "helpTextGlobalSet": "全局字段集不可编辑。" }, "detail": { "labelTechnicalName": "技术名称", "labelPosition": "排序", "textHeadline": "自定义字段集", "titleCardInformation": "基本信息", "labelName": "字段集名称", "placeholderName": "输入名称...", "labelCheckboxTranslated": "管理全部后台语言的名称", "messageSaveSuccess": "字段集“{name}”已保存。", "messageCustomFieldsEmpty": "暂无自定义字段。", "addCustomField": "新建自定义字段", "labelEntities": "应用于", "placeholderEntities": "选择模块...", "messageNameNotUnique": "该技术名称已存在。", "entityTypeRequired": "请选择实体类型。", "emptyStateDescription": "请先保存字段集，再添加自定义字段。" } },
+    "customField": {
+      "detail": { "titleNewCustomField": "新建自定义字段", "titleEditCustomField": "编辑自定义字段", "buttonEditApply": "应用修改", "labelCustomFieldType": "类型", "placeholderCustomFieldType": "请选择...", "labelTechnicalName": "技术名称", "labelLabel": "名称", "buttonAddOption": "添加选项", "labelOption": "选项 {count}：", "labelPlaceholder": "占位文本", "labelMax": "最大值", "labelMin": "最小值", "labelStep": "步长", "labelFloat": "小数字段", "labelInt": "整数字段", "labelNumberType": "数字类型", "labelDatetime": "日期时间字段", "labelDate": "日期", "labelTime": "时间", "labelDateType": "类型", "labelHelpText": "帮助文本", "labelTimeForm": "24 小时制", "labelCustomFieldPosition": "排序", "labelMultiSelect": "多选", "helpTextMultiSelect": "自定义字段创建后不能修改是否允许多选。", "labelEntityTypeSelect": "实体类型", "helpTextEntitySelect": "自定义字段创建后不能修改实体类型。", "tooltipCustomFieldPosition": "控制此字段在详情页中的显示顺序。", "labelAllowCustomerWrite": "允许通过 Channel API 修改", "tooltipAllowCustomerWrite": "启用后 Channel API 可以修改此字段。", "labelStoreApiAware": "在 Channel API 中可见", "tooltipStoreApiAware": "启用后 Channel API 可以获取此字段；关闭后仅供内部使用。", "labelAllowSearchable": "加入搜索", "tooltipAllowSearchable": "启用后此字段会被索引并可用于搜索。无需搜索时建议关闭，以减少索引空间并提升性能。", "bannerSearchableEnabled": "搜索状态变化后建议重建索引，以确保搜索结果准确。" },
+      "list": { "labelCustomFieldLabel": "名称", "labelCustomFieldType": "类型", "labelCustomFieldPosition": "排序", "contextMenuCustomFieldResetDelete": "恢复", "titleDeleteAction": "删除自定义字段 | 删除自定义字段", "textDeleteActionConfirmation": "确定要删除此自定义字段吗？ | 确定要删除这 {count} 个自定义字段吗？" },
+      "entity": { "country": "国家", "region": "行政区划", "media": "媒体", "tag": "标签", "user": "用户" }
+    },
+    "types": { "select": "选择字段", "entity": "实体选择", "text": "文本字段", "number": "数字字段", "media": "媒体字段", "date": "日期时间字段", "checkbox": "复选框", "switch": "开关", "textEditor": "富文本编辑器", "colorpicker": "颜色选择器" }
+  },
+  "ct-privileges": { "permissions": { "custom_field": { "label": "自定义字段" } } }
+}

@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Attributes\TestRule;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+
+/**
+ * @internal
+ */
+class MessageHandlerFinalRule
+{
+    #[TestRule]
+    public function isMessageHandlerFinal(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::appliesAttribute(AsMessageHandler::class))
+            ->should()
+            ->beFinal()
+            ->because('MessageHandlers must be final, so they cannot be extended/overwritten.');
+    }
+}

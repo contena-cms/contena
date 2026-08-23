@@ -1,0 +1,72 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogListingResult": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EntitySearchResult"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "currentFilters": {
+                                "type": "object",
+                                "description": "Contains the state of the filters used to build the listing.",
+                                "properties": {
+                                    "navigationId": {
+                                        "type": "string"
+                                    },
+                                    "search": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "availableSortings": {
+                                "type": "array",
+                                "description": "Contains the available sortings for the blog listing.",
+                                "items": {
+                                    "$ref": "#/components/schemas/BlogSorting"
+                                }
+                            },
+                            "sorting": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "elements": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Blog"
+                                }
+                            },
+                            "entity": {
+                                "type": "string",
+                                "enum": [
+                                    "blog"
+                                ]
+                            },
+                            "apiAlias": {
+                                "type": "string",
+                                "const": "blog_listing"
+                            }
+                        },
+                        "required": [
+                            "elements",
+                            "availableSortings",
+                            "currentFilters",
+                            "apiAlias"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

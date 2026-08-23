@@ -1,0 +1,47 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Administration\Snippet;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Administration\Snippet\SnippetException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[CoversClass(SnippetException::class)]
+class SnippetExceptionTest extends TestCase
+{
+    public function testDefaultLanguageNotGiven(): void
+    {
+        $exception = SnippetException::defaultLanguageNotGiven('languageId');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame(SnippetException::SNIPPET_DEFAULT_LANGUAGE_NOT_GIVEN_EXCEPTION, $exception->getErrorCode());
+        static::assertSame('The following snippet file must always be provided when providing snippets: languageId', $exception->getMessage());
+        static::assertSame(['defaultLanguage' => 'languageId'], $exception->getParameters());
+    }
+
+    public function testInvalidSnippetFile(): void
+    {
+        $previous = new \JsonException('Syntax error');
+        $exception = SnippetException::invalidSnippetFile('/some/path/administration.json', $previous);
+
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+        static::assertSame(SnippetException::SNIPPET_INVALID_FILE_EXCEPTION, $exception->getErrorCode());
+        static::assertSame('The administration snippet file "/some/path/administration.json" is invalid: Syntax error', $exception->getMessage());
+        static::assertSame(['filePath' => '/some/path/administration.json', 'message' => 'Syntax error'], $exception->getParameters());
+        static::assertSame($previous, $exception->getPrevious());
+    }
+
+    public function testExtendOrOverwriteCore(): void
+    {
+        $exception = SnippetException::extendOrOverwriteCore(['id1', 'id2', 'id3']);
+
+        static::assertSame(Response::HTTP_CONFLICT, $exception->getStatusCode());
+        static::assertSame(SnippetException::SNIPPET_EXTEND_OR_OVERWRITE_CORE_EXCEPTION, $exception->getErrorCode());
+        static::assertSame('The following keys extend or overwrite the core snippets which is not allowed: id1, id2, id3', $exception->getMessage());
+        static::assertSame(['keys' => 'id1, id2, id3'], $exception->getParameters());
+    }
+}

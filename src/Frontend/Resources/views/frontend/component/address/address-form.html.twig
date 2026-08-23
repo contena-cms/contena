@@ -1,0 +1,77 @@
+{% block component_address_form %}
+    {# ludtwig-ignore twig-block-name-snake-case #}
+    {% block component_address_form_addressId %}
+        {% if data.get('id') %}
+            <input type="hidden"
+                   name="{{ prefix }}[id]"
+                   value="{{ data.get('id') }}">
+        {% endif %}
+    {% endblock %}
+
+    {% block component_address_form_address_fields %}
+        {% set options = {
+            scopeElementSelector,
+            prefix,
+        } %}
+        {% set arrangement = config('core.loginRegistration.addressInputFieldArrangement') ?: 'city-zip-region' %}
+        {% set initialRegionPath = (data.region.path ?? '') ~ (data.region.id ?? data.get('regionId') ?? '') ~ '|' %}
+
+        <div data-region-select="true"
+             data-region-select-options="{{ options|json_encode }}"
+             data-initial-region-path="{{ initialRegionPath }}">
+            <div class="row g-2 country-and-region-form-elements">
+                {% block component_address_form_country_field %}
+                    {% sw_include '@Frontend/frontend/component/address/field/address-country-field.html.twig' with {
+                        additionalClass: 'col-md-12'
+                    } %}
+                {% endblock %}
+            </div>
+
+            <div class="row g-2">
+                {% block component_address_form_street %}
+                    {% sw_include '@Frontend/frontend/component/address/field/address-street-field.html.twig' with {
+                        additionalClass: 'col-md-12'
+                    } %}
+                {% endblock %}
+
+                {% block component_address_form_additional_field1 %}
+                    {% if config('core.loginRegistration.showAdditionalAddressField1') %}
+                        {% sw_include '@Frontend/frontend/component/address/field/address-additional-line-field.html.twig' with {
+                            index: 1
+                        } %}
+                    {% endif %}
+                {% endblock %}
+
+                {% block component_address_form_additional_field2 %}
+                    {% if config('core.loginRegistration.showAdditionalAddressField2') %}
+                        {% sw_include '@Frontend/frontend/component/address/field/address-additional-line-field.html.twig' with {
+                            index: 2
+                        } %}
+                    {% endif %}
+                {% endblock %}
+            </div>
+
+            <div class="row g-2">
+                {% block component_address_form_city_region_zipcode %}
+                    {% for field in arrangement|split('-') %}
+                        {% if field === 'city' %}
+                            {% sw_include '@Frontend/frontend/component/address/field/address-city-field.html.twig' with { additionalClass: 'col-md' } %}
+                        {% elseif field === 'region' %}
+                            {% sw_include '@Frontend/frontend/component/address/field/address-region-field.html.twig' %}
+                        {% elseif field === 'zip' %}
+                            {% sw_include '@Frontend/frontend/component/address/field/address-zipcode-field.html.twig' with { additionalClass: 'col-md' } %}
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+            </div>
+
+            <div class="row g-2">
+                {% block component_address_form_phone_number %}
+                    {% if config('core.loginRegistration.showPhoneNumberField') %}
+                        {% sw_include '@Frontend/frontend/component/address/field/address-phone-number-field.html.twig' %}
+                    {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

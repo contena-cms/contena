@@ -1,0 +1,509 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Media\File;
+
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
+use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
+use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
+use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
+use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
+use Contena\Core\Content\Media\File\FileContentValidationStrategy;
+use Contena\Core\Content\Media\File\FileSaver;
+use Contena\Core\Content\Media\File\MediaFile;
+use Contena\Core\Content\Media\File\SvgContentValidator;
+use Contena\Core\Content\Media\Infrastructure\Path\SqlMediaLocationBuilder;
+use Contena\Core\Content\Media\MediaCollection;
+use Contena\Core\Content\Media\MediaDefinition;
+use Contena\Core\Content\Media\MediaEntity;
+use Contena\Core\Content\Media\MediaException;
+use Contena\Core\Content\Media\Message\GenerateThumbnailsMessage;
+use Contena\Core\Content\Media\Metadata\MetadataLoader;
+use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
+use Contena\Core\Content\Media\TypeDetector\TypeDetector;
+use Contena\Core\Content\Media\Upload\MediaFileCleanupService;
+use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
+use Contena\Core\Content\Media\Upload\MediaFileExtensionValidator;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
+use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * @internal
+ */
+#[CoversClass(FileSaver::class)]
+class FileSaverTest extends TestCase
+{
+    /**
+     * @var StaticEntityRepository<MediaCollection>
+     */
+    private StaticEntityRepository $mediaRepository;
+
+    private CollectingMessageBus $messageBus;
+
+    private FileSaver $fileSaver;
+
+    private Stub&SqlMediaLocationBuilder $locationBuilder;
+
+    private Stub&AbstractMediaPathStrategy $mediaPathStrategy;
+
+    private FilesystemOperator&Stub $filesystemPublic;
+
+    protected function setUp(): void
+    {
+        $this->mediaRepository = new StaticEntityRepository([], new MediaDefinition());
+
+        $this->filesystemPublic = static::createStub(FilesystemOperator::class);
+        $this->messageBus = new CollectingMessageBus();
+        $this->locationBuilder = static::createStub(SqlMediaLocationBuilder::class);
+        $this->mediaPathStrategy = static::createStub(AbstractMediaPathStrategy::class);
+
+        $this->fileSaver = $this->createFileSaver();
+    }
+
+    #[DataProvider('duplicateFileNameProvider')]
+    public function testDuplicatedMediaFileNameInFileSystem(bool $isPrivate): void
+    {
+        $mediaA = new MediaEntity();
+        $mediaA->setId(Uuid::randomHex());
+        $mediaA->setMimeType('image/png');
+        $mediaA->setFileName('foo');
+        $mediaA->setFileExtension('png');
+        $mediaA->setPrivate(true);
+
+        $mediaB = clone $mediaA;
+        $mediaB->setId(Uuid::randomHex());
+        $mediaB->setPrivate(false);
+
+        if ($isPrivate) {
+            $mediaCollection = new MediaCollection([$mediaA]);
+        } else {
+            $mediaCollection = new MediaCollection([$mediaB]);
+        }
+
+        $mediaId = Uuid::randomHex();
+        $currentMedia = new MediaEntity();
+        $currentMedia->setId($mediaId);
+        $currentMedia->setPrivate($isPrivate);
+
+        $mediaCollection->set($mediaId, $currentMedia);
+        $this->mediaRepository->addSearch($mediaCollection, $mediaCollection);
+
+        $mediaFile = new MediaFile('foo', 'image/png', 'png', 0);
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $this->expectExceptionObject(MediaException::duplicatedMediaFileName('foo', 'png'));
+
+        $this->fileSaver->persistFileToMedia($mediaFile, 'foo', $mediaId, $context);
+    }
+
+    public static function duplicateFileNameProvider(): \Generator
+    {
+        yield 'new private file exists as private in database / different filesystems' => [
+            true,
+        ];
+
+        yield 'new public file exists as public in database / different filesystems' => [
+            false,
+        ];
+    }
+
+    #[DataProvider('uniqueFileNameProvider')]
+    public function testFileNameUniqueInFileSystem(
+        bool $isPrivate
+    ): void {
+        $mediaA = new MediaEntity();
+        $mediaA->setId(Uuid::randomHex());
+        $mediaA->setMimeType('image/png');
+        $mediaA->setFileName('foo');
+        $mediaA->setFileExtension('png');
+        $mediaA->setPrivate(true);
+
+        $mediaB = clone $mediaA;
+        $mediaB->setId(Uuid::randomHex());
+        $mediaB->setPrivate(false);
+
+        if (!$isPrivate) {
+            $mediaCollection = new MediaCollection([$mediaA]);
+        } else {
+            $mediaCollection = new MediaCollection([$mediaB]);
+        }
+
+        $mediaId = Uuid::randomHex();
+        $currentMedia = new MediaEntity();
+        $currentMedia->setId($mediaId);
+        $currentMedia->setPrivate($isPrivate);
+        $currentMedia->setPath('');
+        $mediaCollection->set($mediaId, $currentMedia);
+        $this->mediaRepository->addSearch($mediaCollection, $mediaCollection, $mediaCollection);
+
+        $file = tmpfile();
+        static::assertIsResource($file);
+        $tempMeta = stream_get_meta_data($file);
+        $mediaFile = new MediaFile($tempMeta['uri'] ?? '', 'image/png', 'png', 0);
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $message = new GenerateThumbnailsMessage();
+        $message->setMediaIds([$mediaId]);
+        $message->setContext($context);
+
+        $this->fileSaver->persistFileToMedia($mediaFile, 'foo', $mediaId, $context);
+
+        static::assertCount(1, $this->mediaRepository->updates);
+        $update = $this->mediaRepository->updates[0];
+
+        static::assertCount(1, $update);
+        static::assertSame($mediaId, $update[0]['id']);
+        static::assertSame('foo', $update[0]['fileName']);
+
+        static::assertArrayHasKey(0, $this->messageBus->getMessages());
+        static::assertEquals($message, $this->messageBus->getMessages()[0]->getMessage());
+    }
+
+    public static function uniqueFileNameProvider(): \Generator
+    {
+        yield 'new public file exists as private in database' => [
+            false,
+        ];
+
+        yield 'new private file exists as public in database' => [
+            true,
+        ];
+    }
+
+    public function testFileNameUniqueWithRemoteThumbnailsEnable(): void
+    {
+        $fileSaver = new FileSaver(
+            $this->mediaRepository,
+            static::createStub(FilesystemOperator::class),
+            static::createStub(FilesystemOperator::class),
+            new FileContentValidationStrategy([$this->createSvgContentValidator()]),
+            static::createStub(MetadataLoader::class),
+            static::createStub(TypeDetector::class),
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(SqlMediaLocationBuilder::class),
+            static::createStub(AbstractMediaPathStrategy::class),
+            static::createStub(MediaFileCleanupService::class),
+            static::createStub(MediaFileExtensionValidator::class),
+            new NativeClock(),
+            true,
+        );
+
+        $media = new MediaEntity();
+        $media->setId(Uuid::randomHex());
+        $media->setMimeType('image/png');
+        $media->setFileName('foo');
+        $media->setFileExtension('png');
+        $media->setPrivate(true);
+
+        $mediaCollection = new MediaCollection([$media]);
+
+        $mediaId = Uuid::randomHex();
+        $currentMedia = new MediaEntity();
+        $currentMedia->setId($mediaId);
+        $currentMedia->setPrivate(false);
+        $currentMedia->setPath('');
+        $mediaCollection->set($mediaId, $currentMedia);
+        $this->mediaRepository->addSearch($mediaCollection, $mediaCollection, $mediaCollection);
+
+        $file = tmpfile();
+        static::assertIsResource($file);
+        $tempMeta = stream_get_meta_data($file);
+        $mediaFile = new MediaFile($tempMeta['uri'] ?? '', 'image/png', 'png', 0);
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $message = new GenerateThumbnailsMessage();
+        $message->setMediaIds([$mediaId]);
+        $message->setContext($context);
+
+        $fileSaver->persistFileToMedia($mediaFile, 'foo', $mediaId, $context);
+
+        static::assertCount(1, $this->mediaRepository->updates);
+        $update = $this->mediaRepository->updates[0];
+
+        static::assertCount(1, $update);
+        static::assertSame($mediaId, $update[0]['id']);
+        static::assertSame('foo', $update[0]['fileName']);
+
+        static::assertEmpty($this->messageBus->getMessages());
+    }
+
+    public function testRenameMediaWithMissingFile(): void
+    {
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $media = new MediaEntity();
+        $media->setId(Uuid::randomHex());
+        $media->setPrivate(false);
+
+        $mediaCollection = new MediaCollection([$media]);
+        $this->mediaRepository->addSearch($mediaCollection);
+
+        $this->expectExceptionObject(MediaException::missingFile($media->getId()));
+        $this->fileSaver->renameMedia($media->getId(), 'foo.png', $context);
+    }
+
+    public function testRenameMediaWithMissingMedia(): void
+    {
+        $mediaId = Uuid::randomHex();
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $mediaCollection = new MediaCollection();
+
+        $this->mediaRepository->addSearch($mediaCollection);
+
+        $this->expectExceptionObject(MediaException::mediaNotFound($mediaId));
+        $this->fileSaver->renameMedia($mediaId, 'foo.png', $context);
+    }
+
+    public function testRenameMedia(): void
+    {
+        $mediaId = Uuid::randomHex();
+        $thumbnail1Id = Uuid::randomHex();
+        $thumbnail2Id = Uuid::randomHex();
+
+        $mediaLocation = new MediaLocationStruct(
+            Uuid::randomHex(),
+            'png',
+            'foo',
+            new \DateTimeImmutable()
+        );
+
+        $this->locationBuilder->method('media')->willReturn([
+            $mediaId => $mediaLocation,
+        ]);
+
+        $this->locationBuilder->method('thumbnails')->willReturn([
+            $thumbnail1Id => new ThumbnailLocationStruct(
+                Uuid::randomHex(),
+                100,
+                100,
+                $mediaLocation
+            ),
+            $thumbnail2Id => new ThumbnailLocationStruct(
+                Uuid::randomHex(),
+                100,
+                100,
+                $mediaLocation
+            ),
+        ]);
+
+        $this->mediaPathStrategy->method('generate')->willReturn(
+            [
+                $mediaId => 'foobar.png',
+            ],
+            [
+                $thumbnail1Id => 'foobar_100x100.png',
+                $thumbnail2Id => 'foobar_100x100.png',
+            ]
+        );
+
+        $matcher = $this->exactly(2);
+        $filesystemPublic = $this->createMock(FilesystemOperator::class);
+        $filesystemPublic->expects($matcher)
+            ->method('move')
+            ->willReturnCallback(static function (string $from, string $to) use ($matcher): void {
+                if ($matcher->numberOfInvocations() === 1) {
+                    static::assertSame('foo.png', $from);
+                    static::assertSame('foobar.png', $to);
+
+                    return;
+                }
+
+                static::assertSame('foo_100x100.png', $from);
+                static::assertSame('foobar_100x100.png', $to);
+            });
+
+        $thumbnail1 = new MediaThumbnailEntity();
+        $thumbnail1->setId($thumbnail1Id);
+        $thumbnail1->setPath('foo_100x100.png');
+
+        $thumbnail2 = new MediaThumbnailEntity();
+        $thumbnail2->setId(Uuid::randomHex());
+        $thumbnail2->setPath('foo_100x100.png');
+
+        $thumbnails = new MediaThumbnailCollection();
+        $thumbnails->add($thumbnail1);
+        $thumbnails->add($thumbnail2);
+
+        $media = new MediaEntity();
+        $media->setId($mediaId);
+        $media->setMimeType('image/png');
+        $media->setFileName('foo');
+        $media->setFileExtension('png');
+        $media->setPath('foo.png');
+        $media->setPrivate(false);
+        $media->setThumbnails($thumbnails);
+
+        $mediaCollection = new MediaCollection([$media]);
+        $this->mediaRepository->addSearch($mediaCollection, new MediaCollection());
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $path = $this->createFileSaver($filesystemPublic)->renameMedia($mediaId, 'foobar', $context);
+        static::assertSame('foobar.png', $path);
+
+        static::assertCount(1, $this->mediaRepository->updates);
+        $update = $this->mediaRepository->updates[0];
+
+        static::assertCount(1, $update);
+        static::assertSame($mediaId, $update[0]['id']);
+        static::assertSame('foobar', $update[0]['fileName']);
+    }
+
+    public function testRenameMediaWithInvalidThumbnail(): void
+    {
+        $mediaId = Uuid::randomHex();
+        $thumbnailId = Uuid::randomHex();
+
+        $this->locationBuilder->method('media')->willReturn([
+            $mediaId => new MediaLocationStruct(
+                Uuid::randomHex(),
+                'png',
+                'foo',
+                new \DateTimeImmutable()
+            ),
+        ]);
+
+        $this->mediaPathStrategy->method('generate')->willReturn(
+            [
+                $mediaId => 'foo.png',
+            ],
+            [
+                $thumbnailId => null,
+            ]
+        );
+
+        $thumbnail = new MediaThumbnailEntity();
+        $thumbnail->setId($thumbnailId);
+
+        $thumbnails = new MediaThumbnailCollection();
+        $thumbnails->add($thumbnail);
+
+        $media = new MediaEntity();
+        $media->setId($mediaId);
+        $media->setMimeType('image/png');
+        $media->setFileName('foo');
+        $media->setFileExtension('png');
+        $media->setPrivate(false);
+        $media->setThumbnails($thumbnails);
+
+        $mediaCollection = new MediaCollection([$media]);
+        $this->mediaRepository->addSearch($mediaCollection, new MediaCollection([]));
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $this->expectExceptionObject(MediaException::couldNotRenameFile($mediaId, 'foo'));
+
+        $this->fileSaver->renameMedia($mediaId, 'foobar', $context);
+    }
+
+    public function testRenameMediaWithInvalidThumbnailAndRemoteThumbnailsEnable(): void
+    {
+        $locationBuilder = static::createStub(SqlMediaLocationBuilder::class);
+        $mediaPathStrategy = static::createStub(AbstractMediaPathStrategy::class);
+        $fileSaver = new FileSaver(
+            $this->mediaRepository,
+            static::createStub(FilesystemOperator::class),
+            static::createStub(FilesystemOperator::class),
+            new FileContentValidationStrategy([$this->createSvgContentValidator()]),
+            static::createStub(MetadataLoader::class),
+            static::createStub(TypeDetector::class),
+            static::createStub(EventDispatcherInterface::class),
+            $locationBuilder,
+            $mediaPathStrategy,
+            static::createStub(MediaFileCleanupService::class),
+            static::createStub(MediaFileExtensionValidator::class),
+            new NativeClock(),
+            true,
+        );
+
+        $mediaId = Uuid::randomHex();
+        $thumbnailId = Uuid::randomHex();
+
+        $locationBuilder->method('media')->willReturn([
+            $mediaId => new MediaLocationStruct(
+                Uuid::randomHex(),
+                'png',
+                'foo',
+                new \DateTimeImmutable()
+            ),
+        ]);
+
+        $mediaPathStrategy->method('generate')->willReturn(
+            [
+                $mediaId => 'foo.png',
+            ],
+            [
+                $thumbnailId => null,
+            ]
+        );
+
+        $thumbnail = new MediaThumbnailEntity();
+        $thumbnail->setId($thumbnailId);
+
+        $thumbnails = new MediaThumbnailCollection();
+        $thumbnails->add($thumbnail);
+
+        $media = new MediaEntity();
+        $media->setId($mediaId);
+        $media->setMimeType('image/png');
+        $media->setFileName('foo');
+        $media->setFileExtension('png');
+        $media->setPrivate(false);
+        $media->setThumbnails($thumbnails);
+
+        $mediaCollection = new MediaCollection([$media]);
+        $this->mediaRepository->addSearch($mediaCollection, new MediaCollection());
+
+        $context = Context::createDefaultContext(new AdminApiSource(Uuid::randomHex()));
+
+        $path = $fileSaver->renameMedia($mediaId, 'foobar', $context);
+        static::assertSame('foo.png', $path);
+
+        static::assertCount(1, $this->mediaRepository->updates);
+        $update = $this->mediaRepository->updates[0];
+
+        static::assertCount(1, $update);
+        static::assertSame($mediaId, $update[0]['id']);
+        static::assertSame('foobar', $update[0]['fileName']);
+    }
+
+    private function createFileSaver(?FilesystemOperator $filesystemPublic = null, bool $remoteThumbnailsEnabled = false): FileSaver
+    {
+        $filesystemPublic ??= $this->filesystemPublic;
+        $filesystemPrivate = static::createStub(FilesystemOperator::class);
+        $eventDispatcher = static::createStub(EventDispatcherInterface::class);
+
+        return new FileSaver(
+            $this->mediaRepository,
+            $filesystemPublic,
+            $filesystemPrivate,
+            new FileContentValidationStrategy([$this->createSvgContentValidator()]),
+            static::createStub(MetadataLoader::class),
+            static::createStub(TypeDetector::class),
+            $eventDispatcher,
+            $this->locationBuilder,
+            $this->mediaPathStrategy,
+            new MediaFileCleanupService($filesystemPublic, $filesystemPrivate, static::createStub(ThumbnailService::class), $this->messageBus, $remoteThumbnailsEnabled),
+            new MediaFileExtensionValidator(new MediaFileExtensionListProvider($eventDispatcher, ['png'], ['png'])),
+            new NativeClock()
+        );
+    }
+
+    private function createSvgContentValidator(): SvgContentValidator
+    {
+        return SvgValidatorTestDefaults::createValidator();
+    }
+}

@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Adapter\Twig\Extension;
+
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
+/**
+ * @internal
+ */
+class RawUrlFunctionExtension extends AbstractExtension
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly RequestStack $stack
+    ) {
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('rawUrl', $this->rawUrl(...)),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    public function rawUrl(string $name, array $parameters = [], ?string $domain = null): string
+    {
+        $request = $this->stack->getMainRequest();
+        if (!$request) {
+            $url = $this->router->generate($name, $parameters);
+
+            return $this->addDomain($url, $domain);
+        }
+
+        $attribute = $request->attributes->get('ct-channel-base-url');
+        $request->attributes->set('ct-channel-base-url', '');
+
+        $url = $this->router->generate($name, $parameters);
+
+        $request->attributes->set('ct-channel-base-url', $attribute);
+
+        return $this->addDomain($url, $domain);
+    }
+
+    private function addDomain(string $url, ?string $domain): string
+    {
+        if (!$domain) {
+            return $url;
+        }
+
+        return rtrim($domain, '/') . '/' . ltrim($url, '/');
+    }
+}

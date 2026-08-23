@@ -1,0 +1,45 @@
+{
+    "title": "CT/Icon",
+    "parameters": {
+        "server": {
+            "id": "CT:Icon"
+        },
+        "template": "<twig:CT:Icon name=\"checkmark-circle\" size=\"fluid\" color=\"primary\" rotation=\"0\" />"
+    },
+    "argTypes": {
+        "name": { "control": "text" },
+        "pack": {
+          "control": "select",
+          "options": ["default", "solid"]
+        },
+        "namespace": { "control": "text" },
+        "size": { 
+            "control": "select",
+            "options": ["fluid", "lg", "sm", "xs", "1x", "2x", "3x"]
+        },
+        "color": {
+            "control": "select",
+            "options": ["primary", "secondary", "success", "info", "warning", "danger", "light", "dark"]
+        },
+        "rotation": {
+            "control": "select",
+            "options": [0, 90, 180, 270]
+        },
+        "flip": {
+            "control": "select",
+            "options": ["horizontal", "vertical", "both"]
+        }
+      },
+    "stories": [
+        {
+            "name": "Icon",
+            "args": {
+                "name": "checkmark-circle",
+                "pack": "default",
+                "namespace": "Frontend",
+                "size": "lg",
+                "color": "primary"
+            }
+        }
+    ]
+}

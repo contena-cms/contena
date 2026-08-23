@@ -1,0 +1,43 @@
+.ct-channel-modal-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.ct-channel-modal-grid__item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 16px;
+    color: var(--color-text-primary-default);
+    text-align: left;
+    background: var(--color-background-primary-default);
+    border: 1px solid var(--color-border-primary-default);
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--color-border-brand-default);
+    }
+}
+
+.ct-channel-modal-grid__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-icon-brand-default);
+    background: var(--color-background-brand-default);
+    border-radius: 4px;
+}
+
+.ct-channel-modal-grid__content {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+
+    span {
+        color: var(--color-text-secondary-default);
+    }
+}

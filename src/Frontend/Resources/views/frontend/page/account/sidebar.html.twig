@@ -1,0 +1,63 @@
+{% block page_account_sidebar_inner %}
+    <div class="{% if not headerWidget %}account-aside{% else %}header-account-menu{% endif %}">
+        <div class="card account-menu-inner">
+            {% block page_account_sidebar_header %}
+                {% if not headerWidget and context.member %}
+                    <div class="card-header account-aside-header">
+                        {{ 'account.greetings'|trans|sw_sanitize }}
+                        {{ context.member.name }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+            {% block page_account_sidebar_menu %}
+                {% if context.member %}
+                    <nav class="list-group list-group-flush account-aside-list-group"{% if headerWidget == null %} aria-label="{{ 'account.myAccount'|trans|striptags }}"{% endif %}>
+                        {% block page_account_sidebar_menu_inner %}
+                            {% block page_account_sidebar_link_home %}
+                                <a href="{{ path('frontend.account.home.page') }}"
+                                   title="{{ 'account.overviewLink'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.home.page') %} is-active{% endif %}"
+                                   {% if activeRoute is same as('frontend.account.home.page') %} aria-current="page"{% endif %}>
+                                    {{ 'account.overviewLink'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+
+                            {% block page_account_sidebar_link_profile %}
+                                <a href="{{ path('frontend.account.profile.page') }}"
+                                   title="{{ 'account.profileLink'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.profile.page') %} is-active{% endif %}"
+                                   {% if activeRoute is same as('frontend.account.profile.page') %} aria-current="page"{% endif %}>
+                                    {{ 'account.profileLink'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+
+                            {% block page_account_sidebar_link_address %}
+                                <a href="{{ path('frontend.account.address.page') }}"
+                                   title="{{ 'account.addressLink'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute starts with('frontend.account.address') %} is-active{% endif %}"
+                                   {% if activeRoute starts with('frontend.account.address.page') %} aria-current="page"{% endif %}>
+                                    {{ 'account.addressLink'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+                        {% endblock %}
+                    </nav>
+                {% endif %}
+            {% endblock %}
+
+            {% block page_account_sidebar_footer %}
+                {% if context.member %}
+                    <div class="card-footer account-aside-footer">
+                        {% block page_account_sidebar_logout %}
+                            <a href="{{ path('frontend.account.logout.page') }}"
+                               class="btn btn-link account-aside-btn">
+                                {% sw_icon 'log-out' -%}
+                                {{- 'account.logout'|trans|sw_sanitize }}
+                            </a>
+                        {% endblock %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

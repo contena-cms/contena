@@ -1,0 +1,99 @@
+{
+    "ct-extension": {
+        "my-extensions": {
+            "listing": {
+                "initialSearchType": "Plugins",
+                "placeholderSearchBar": "Find plugins...",
+                "emptyTitle": "No plugins available",
+                "noActivePlugins": "No active plugins",
+                "controls": {
+                    "labelActiveStateSwitch": "Hide inactive plugins",
+                    "filterOptions": {
+                        "last-updated": "Last updated",
+                        "name-asc": "Name ascending",
+                        "name-desc": "Name descending"
+                    }
+                },
+                "version": "Version",
+                "update": "Update"
+            },
+            "fileUpload": {
+                "buttonFileUpload": "Upload plugin",
+                "messageUploadSuccess": "Plugin uploaded.",
+                "descriptionWarningModal": "Only upload Contena Plugins from a source you trust. Plugins execute code inside this platform and may access administrative data.",
+                "textHideWarning": "Do not show again"
+            }
+        },
+        "errors": {
+            "messageGenericFailure": "That didn't work.",
+            "messageUploadFailureNotAZipFile": "Uploaded file is not a ZIP file.",
+            "messageUploadFailureUnzipFailed": "Unable to extract ZIP file.",
+            "messageUploadFailureNoPluginFoundInZipFile": "No plugin found in ZIP file.",
+            "messagePluginBaseClassNotFound": "The plugin base class could not be loaded. Check the plugin's Composer autoload configuration.",
+            "messagePluginRequirementMismatch": "The plugin has technical requirements that are not compatible with this Contena version. Please contact the plugin provider."
+        },
+        "mainMenu": {
+            "plugins": "Plugins",
+            "myPlugins": "My plugins",
+            "purchased": "My plugins",
+            "store": "Extension store"
+        },
+        "store": {
+            "landingLabel": "Now available",
+            "landingTitle": "Explore and manage extensions easily -",
+            "landingDescription": "Install the Extension Store to discover helpful plugins and manage them without leaving your administration.",
+            "install": "Install extension store",
+            "activating": "Activating the extension store...",
+            "takeMinutes": "This may take a few minutes.",
+            "activationErrorTitle": "Error during activation",
+            "activationErrorDescription": "Please try again. If that doesn't work, ask your administrator for help.",
+            "retry": "Retry",
+            "activationSuccessTitle": "Activated successfully",
+            "activationSuccessDescription": "You can now explore the Extension Store."
+        },
+        "component": {
+            "ct-extension-card-base": {
+                "inactiveLabel": "(inactive)",
+                "installedLabel": "Installed:",
+                "installExtensionLabel": "Install",
+                "contextMenu": {
+                    "uninstallLabel": "Uninstall",
+                    "updateLabel": "Update to {version}",
+                    "openExtension": "Open plugin"
+                }
+            },
+            "ct-extension-my-extensions-listing": {
+                "alertExtensionManagement": {
+                    "title": "Runtime plugin management disabled",
+                    "description": "Runtime plugin management is disabled in this installation. Plugin lifecycle actions are unavailable in the Administration."
+                }
+            },
+            "ct-extension-removal-modal": {
+                "titleRemove": "Remove \"{extensionName}\"",
+                "description": "Removing the plugin deletes its files from this installation.",
+                "alertRemove": "Are you sure you want to remove the plugin?"
+            },
+            "ct-extension-uninstall-modal": {
+                "title": "Uninstall \"{extensionName}\"",
+                "description": "After uninstalling the plugin, its functionality is no longer available.",
+                "alert": "Are you sure you want to uninstall the plugin?",
+                "buttonLabel": "Uninstall",
+                "labelRemovePluginData": "Remove all plugin data permanently",
+                "helpTextRemovePluginData": "Warning: All data owned by the plugin will be removed permanently. This process is irreversible."
+            },
+            "ct-extension-config": {
+                "messageSaveSuccess": "Configuration saved.",
+                "imageDescription": "\"{extensionName}\" icon",
+                "labelBy": "by"
+            }
+        }
+    },
+    "ct-privileges": {
+        "additional_permissions": {
+            "system": {
+                "plugin_maintain": "Plugin management",
+                "extension_store": "Extension store"
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "name": "ct/base-plugin",
+    "description": "Plugin install command test fixture",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "extra": {
+        "contena-plugin-class": "BasePlugin\\BasePlugin"
+    }
+}

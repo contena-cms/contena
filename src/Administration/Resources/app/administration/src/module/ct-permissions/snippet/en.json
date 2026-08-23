@@ -1,0 +1,197 @@
+{
+    "global": {
+        "entities": {
+            "acl_role": "Role"
+        }
+    },
+    "ct-permissions": {
+        "general": {
+            "label": "Permissions"
+        },
+        "roles": {
+            "general": {
+                "labelCreateNewRole": "Create role",
+                "placeholderSearchBar": "Search roles..."
+            },
+            "role-grid": {
+                "labelName": "Name",
+                "labelCode": "Code",
+                "labelDescription": "Description",
+                "labelCreatedAt": "Created",
+                "labelCreatedBy": "Created by",
+                "labelAssignedUsers": "Assigned users",
+                "assignPermissions": "Assign permissions",
+                "unknownUser": "Unknown user",
+                "messageEmptyTitle": "No roles yet",
+                "messageEmptySubline": "Create roles to start managing user rights.",
+                "titleModalDelete": "Delete role",
+                "textModalDelete": "Do you really want to delete the role \"{name}\"?",
+                "notification": {
+                    "deleteSuccess": {
+                        "message": "Role \"{name}\" deleted."
+                    },
+                    "deleteError": {
+                        "message": "The role \"{name}\" could not be deleted."
+                    }
+                }
+            },
+            "detail": {
+                "role": "Role",
+                "basicInformation": "Basic information",
+                "labelName": "Name",
+                "labelCode": "Code",
+                "labelDescription": "Description",
+                "permissions": "Permissions"
+            },
+            "modal": {
+                "createTitle": "Create role",
+                "editTitle": "Edit role",
+                "permissionsTitle": "Assign permissions for \"{name}\"",
+                "saveError": "Role \"{name}\" could not be saved.",
+                "permissionsSaveError": "Permissions for role \"{name}\" could not be saved."
+            },
+            "grid": {
+                "title": "Permissions",
+                "disabledCheckboxMessage": "To disable this option, you must first disable other active options.",
+                "tooltipParentRole": "All {role} rights for {parent}",
+                "tooltipParentAll": "All rights for {parent} ({roles})",
+                "tooltipEntityAll": "All rights for {entity} ({roles})"
+            },
+            "catalog": {
+                "searchPlaceholder": "Search functions and permission keys...",
+                "navigationLabel": "Permission groups",
+                "groupDescription": "Select individual actions directly. Required permissions are added automatically and marked with a link.",
+                "accessLevel": "Access level",
+                "function": "Function",
+                "quickActions": "Quick actions",
+                "showSelectedOnly": "Selected only",
+                "clearGroup": "Clear group",
+                "readOnly": "Read only",
+                "selectAll": "Select all",
+                "clear": "Clear",
+                "emptyHeadline": "No permissions found",
+                "emptyDescription": "Try another function name or technical permission key.",
+                "grantLimitNotice": "Security limit: non-admins can only grant permissions they currently have. The server validates this again on save.",
+                "changeSummary": "Permission changes",
+                "dependenciesAdded": "Added, including automatic dependencies: {permissions}",
+                "permissionsRemoved": "Removed: {permissions}",
+                "permissionsNotGranted": "Not granted because you do not have these permissions or their dependencies: {permissions}",
+                "requires": "{permission} requires {dependencies}",
+                "requiredBy": "Required by: {permissions}",
+                "crossResourceDependency": "{permission} also requires: {dependencies}",
+                "cannotGrant": "You do not have this permission or its dependencies and cannot grant it",
+                "selectedButUnavailable": "This role already has the permission. You may remove it, but cannot grant it again",
+                "removeDependencyQuestion": "{permission} is used by {dependents}. Remove those permissions as well?",
+                "removeDependentPermissions": "Remove together",
+                "keepPermission": "Keep permission",
+                "groups": {
+                    "other": "Other functions"
+                },
+                "levels": {
+                    "none": "No access",
+                    "manage": "Manage",
+                    "custom": "Custom"
+                }
+            },
+            "additional-permissions": {
+                "title": "Additional permissions"
+            },
+            "detailed-additional-permissions": {
+                "title": "API route permissions"
+            },
+            "detailed-grid": {
+                "coveredByGeneralMessage": "Already granted via the General tab."
+            },
+            "view": {
+                "additional": {
+                    "alertText": "Manage standalone access to system configuration, logs, cache, profiles, plugin entries, and unmapped API routes here. Related settings and menus follow these permissions."
+                },
+                "detailed": {
+                    "alertText": "Advanced permissions are low-level entity CRUD privileges that are not mapped to an Administration function. They are rarely needed."
+                }
+            },
+            "tabs": {
+                "general": "Access",
+                "permissions": "Permissions",
+                "additional": "Additional permissions",
+                "detailed": "Advanced"
+            },
+            "mcpHint": {
+                "text": "This role is assigned to {count} MCP-enabled integration(s). ",
+                "linkText": "Show MCP tool requirements"
+            },
+            "mcpModal": {
+                "title": "MCP Tool Requirements",
+                "description": "The following tools are allowlisted on integrations that use this role.",
+                "legendLabel": "Legend:",
+                "legendGranted": "granted",
+                "legendGrantedHint": "This privilege is already granted on the role.",
+                "legendMissing": "missing",
+                "legendMissingHint": "This privilege is not yet granted on the role.",
+                "legendDynamic": "dynamic",
+                "legendDynamicHint": "This privilege depends on the entity parameter passed at runtime.",
+                "noToolsHeadline": "No tools found",
+                "noToolsDescription": "No tools are currently allowlisted on the integrations using this role.",
+                "dynamicPrivilegeHint": "This privilege depends on the entity parameter passed at runtime.",
+                "viewByPermission": "By Permission",
+                "viewByTool": "By Tool",
+                "grantAllMissing": "Grant all missing",
+                "grant": "Grant",
+                "saveReminder": "Permissions pre-selected. Click Save on the role to apply."
+            }
+        }
+    },
+    "ct-privileges": {
+        "roles": {
+            "all": "All",
+            "viewer": "View",
+            "editor": "Edit",
+            "creator": "Create",
+            "deleter": "Delete"
+        },
+        "permissionType": {
+            "read": "Read",
+            "update": "Update",
+            "create": "Create",
+            "delete": "Delete"
+        },
+        "permissions": {
+            "parents": {
+                "content": "Content",
+                "other": "Other",
+                "resources": "Resources",
+                "workflows": "Workflows",
+                "settings": "Settings"
+            },
+            "users_and_permissions": {
+                "label": "Users & permissions"
+            },
+            "routes": {
+                "label": "Routes"
+            }
+        },
+        "additional_permissions": {
+            "system": {
+                "label": "Settings"
+            },
+            "user": {
+                "label": "User"
+            },
+            "routes": {
+                "label": "Routes",
+                "api_action_access-key_integration": "Create API keys",
+                "api_acl_privileges_get": "Read all ACL privileges",
+                "api_acl_privileges_route_get": "Read ACL route privileges",
+                "api_action_cache_info": "Read cache info",
+                "api_action_cache_index": "Trigger indexer",
+                "api_action_cache_delete": "Delete cache",
+                "api_action_cache_cleanup": "Clean up cache",
+                "api_action_container-cache_delete": "Delete container cache",
+                "api_info_me": "Read own api user info",
+                "api_info_ping": "Refresh auth token",
+                "system:clear:cache": "Clear cache",
+                "api_feature_flag_toggle": "Toggle feature flags"
+            }
+        }
+    }
+}

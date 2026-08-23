@@ -1,0 +1,16 @@
+{% extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block title %}{{ page.metaInformation.metaTitle|default('Contena') }}{% endblock %}
+
+{% block content %}
+    <div class="container-main content-page">
+        {% if page.category %}
+            <header class="content-page-header">
+                <h1>{{ page.category.translated.name }}</h1>
+                {% if page.category.translated.description %}
+                    <div class="content-page-description">{{ page.category.translated.description|sw_sanitize }}</div>
+                {% endif %}
+            </header>
+        {% endif %}
+    </div>
+{% endblock %}

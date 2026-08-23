@@ -1,0 +1,119 @@
+{
+    "ct-users": {
+        "general": {
+            "mainMenuItemGeneral": "Users",
+            "placeholderSearchBar": "Find users...",
+            "labelUserList": "Users",
+            "labelCreateNewUser": "Create new user",
+            "cardLabel": "Users"
+        },
+        "filter": {
+            "title": "Filter",
+            "status": "Status",
+            "statusLabel": {
+                "active": "active",
+                "inactive": "deactivated"
+            },
+            "allStatuses": "All statuses",
+            "active": "Active",
+            "inactive": "Inactive",
+            "roles": "Roles",
+            "rolesPlaceholder": "Select roles...",
+            "reset": "Reset filters"
+        },
+        "user-grid": {
+            "labelUserCode": "User code",
+            "labelUsername": "User name",
+            "labelName": "Name",
+            "labelPhoneNumber": "Phone number",
+            "labelGender": "Gender",
+            "labelGenderPlaceholder": "Choose gender...",
+            "labelRoles": "Roles",
+            "labelEmail": "Email address",
+            "status": "Status",
+            "titleModalDelete": "Delete user",
+            "textModalDelete": "Do you really want to delete the user \"{name}\"?",
+            "notification": {
+                "deleteSuccess": {
+                    "message": "User \"{name}\" deleted."
+                },
+                "deleteError": {
+                    "message": "The user \"{name}\" could not be deleted."
+                },
+                "deleteUserLoggedInError": {
+                    "message": "Users cannot delete themselves."
+                }
+            }
+        },
+        "user-detail": {
+            "labelCard": "Information",
+            "labelUserCode": "User code",
+            "labelIntegrationsCard": "Integrations",
+            "labelRolesPermissionsCard": "Roles & permissions",
+            "labelName": "Name",
+            "labelPhoneNumber": "Phone number",
+            "labelGender": "Gender",
+            "labelGenderPlaceholder": "Choose gender...",
+            "labelEmail": "Email address",
+            "errorEmailUsed": "This email address is already in use.",
+            "errorUsernameUsed": "This username is already in use.",
+            "labelUsername": "User name",
+            "labelPassword": "Password",
+            "labelProfilePicture": "Profile picture",
+            "labelUserInterface": "User interface",
+            "labelLanguage": "User interface language",
+            "labelLanguagePlaceholder": "Choose language...",
+            "labelChangePassword": "Change password",
+            "labelState": "Status",
+            "labelAdministrator": "Administrator",
+            "labelTimezone": "Timezone",
+            "labelPositions": "Positions",
+            "placeholderPositions": "Select positions...",
+            "labelRoles": "Roles",
+            "labelTags": "Tags",
+            "placeholderTags": "Select tags...",
+            "labelNewPassword": "New password",
+            "labelNewUser": "New user",
+            "placeholderNewPassword": "Enter new password...",
+            "placeholderNewPasswordConfirm": "Confirm new password...",
+            "labelButtonChangePassword": "Change",
+            "writeAccess": "Write",
+            "readAccess": "Read",
+            "contextMenuEdit": "Edit integration",
+            "textChangePassword": "Pressing the \"change\" button will immediately save the new password!",
+            "addAccessKey": "Create access key",
+            "noAccessKeysTitle": "No access keys available",
+            "noAccessKeysSubline": "Create access keys here",
+            "labelAccessKey": "Access key",
+            "labelPermissions": "Permissions",
+            "disabledRoleSelectWarning": "Roles are only available for users that don't have administrator rights.",
+            "modal": {
+                "detailModalTitle": "Create integration",
+                "confirmDelete": "Are you sure you want to delete this integration?",
+                "buttonApply": "Save integration",
+                "buttonApplyEdit": "Save changes",
+                "buttonCreateNewApiKeys": "Create new API key",
+                "hintCreateNewApiKeys": "For generating new API access keys, updating all associated scripts and applications is recommended.",
+                "labelFieldLabel": "Name",
+                "idFieldLabel": "Access key ID",
+                "secretFieldLabel": "Secure access key",
+                "secretHelpText": "Please copy your access key now. For safety reasons it will be no longer visible after saving.",
+                "messageSaveSuccess": "Integration saved.",
+                "messageSaveError": "Integration could not be saved.",
+                "messageCreateNewError": "Integration could not be saved."
+            },
+            "mcpAllowlistTitle": "MCP tool allowlist",
+            "mcpAllowlistSaveError": "The MCP allowlist could not be saved.",
+            "notification": {
+                "saveError": {
+                    "message": "The user \"{name}\" could not be saved."
+                },
+                "saveSuccess": {
+                    "message": "User \"{name}\" saved."
+                },
+                "invalidEmailErrorMessage": "Please enter a valid email address.",
+                "duplicateEmailErrorMessage": "This email address has been registered already."
+            }
+        }
+    }
+}

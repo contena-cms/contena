@@ -1,0 +1,109 @@
+{
+    "ct-member": {
+        "general": {
+            "mainMenuItemGeneral": "Members",
+            "mainMenuItemList": "Members",
+            "descriptionTextModule": "Manage members, profiles, addresses and access"
+        },
+        "list": {
+            "textHeadline": "Members",
+            "buttonAddMember": "Add member",
+            "emptyState": "No members yet",
+            "columnMemberNumber": "Member number",
+            "columnName": "Name",
+            "columnEmail": "Email",
+            "columnGroup": "Member group",
+            "columnChannel": "Channel",
+            "columnActive": "Active",
+            "loadError": "Members could not be loaded.",
+            "deleteError": "The member could not be deleted."
+        },
+        "detail": {
+            "textHeadline": "New member",
+            "tabGeneral": "General",
+            "tabAddresses": "Addresses",
+            "labelCreatedByAdmin": "Created by administrator",
+            "messageMemberNotFound": "The member could not be found.",
+            "messageSaveSuccess": "Member {name} has been saved.",
+            "messageSaveError": "The member could not be saved. Please check the highlighted fields.",
+            "messagePasswordMismatch": "The passwords do not match."
+        },
+        "baseForm": {
+            "labelTitle": "Title",
+            "placeholderTitle": "Enter a title",
+            "labelName": "Name",
+            "placeholderName": "Enter a name",
+            "labelEmail": "Email address",
+            "placeholderEmail": "Enter an email address",
+            "labelPassword": "Password",
+            "placeholderPassword": "Enter a password",
+            "labelNewPassword": "New password",
+            "labelPasswordConfirmation": "Confirm password",
+            "labelMemberGroup": "Member group",
+            "placeholderMemberGroup": "Select a member group",
+            "labelChannel": "Channel",
+            "placeholderChannel": "Select a channel",
+            "labelLanguage": "Language",
+            "placeholderLanguage": "Select a language",
+            "labelMemberNumber": "Member number",
+            "placeholderMemberNumber": "Enter a member number",
+            "labelBirthday": "Birthday",
+            "labelPhoneNumber": "Phone number",
+            "placeholderPhoneNumber": "Enter a phone number",
+            "labelTags": "Tags",
+            "placeholderTags": "Add tags",
+            "labelActive": "Active"
+        },
+        "detailBase": {
+            "labelAccountCard": "Account",
+            "labelProfileCard": "Profile",
+            "labelMemberSince": "Member since",
+            "labelLastLogin": "Last login",
+            "labelChannel": "Channel",
+            "labelGroup": "Member group"
+        },
+        "detailAddresses": {
+            "title": "Addresses",
+            "buttonAddAddress": "Add address",
+            "emptyState": "No addresses yet",
+            "columnName": "Name",
+            "columnStreet": "Street",
+            "columnZipCode": "Postal code",
+            "columnCity": "City",
+            "columnCountry": "Country",
+            "columnRegion": "Region",
+            "textDeleteAddressConfirm": "Do you really want to delete this address?",
+            "saveError": "The address could not be saved.",
+            "deleteError": "The address could not be deleted."
+        },
+        "addressForm": {
+            "labelTitle": "Title",
+            "labelFirstName": "First name",
+            "labelLastName": "Last name",
+            "labelStreet": "Street",
+            "labelAdditionalAddressLine1": "Additional address line 1",
+            "labelAdditionalAddressLine2": "Additional address line 2",
+            "labelZipCode": "Postal code",
+            "labelCity": "City",
+            "labelCountry": "Country",
+            "labelProvince": "Province / state",
+            "labelCityRegion": "City / prefecture",
+            "labelDistrict": "District / county",
+            "labelPhoneNumber": "Phone number"
+        },
+        "memberGroupRegistration": {
+            "alert": "This member requested the member group {name}.",
+            "memberInactiveMessage": "Accepting this request does not activate the member.",
+            "accept": "Accept",
+            "decline": "Decline",
+            "acceptMessage": "The member group request has been accepted.",
+            "declineMessage": "The member group request has been declined.",
+            "errorMessage": "The member group request could not be updated."
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "member": { "label": "Members" }
+        }
+    }
+}

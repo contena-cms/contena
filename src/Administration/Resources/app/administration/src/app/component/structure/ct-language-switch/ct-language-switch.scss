@@ -1,0 +1,17 @@
+.ct-language-switch {
+    display: inline-block;
+    width: 244px;
+    vertical-align: middle;
+    text-align: left;
+    margin-right: 8px;
+
+    .ct-select {
+        &.ct-language-switch__select {
+            margin-bottom: 0;
+        }
+
+        .ct-block-field__block {
+            height: var(--scale-size-32);
+        }
+    }
+}

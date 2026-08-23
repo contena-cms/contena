@@ -1,0 +1,42 @@
+.ct-navigation-tree-items {
+    --bs-nav-link-color: var(--bs-body-color);
+    --bs-nav-link-hover-color: var(--bs-primary);
+}
+
+// Root list only: declaring these on every nested list would re-shadow an override
+// set on an ancestor.
+.ct-navigation-tree-items.is--root {
+    --ct-navigation-tree-items-indent: var(--spacer-md);
+    --ct-navigation-tree-items-stripe-width: var(--bs-border-width);
+    --ct-navigation-tree-items-stripe-color: var(--bs-border-color);
+}
+
+.ct-navigation-tree-items__link,
+.ct-navigation-tree-items__folder {
+    border-top: var(--ct-navigation-tree-items-stripe-width) solid var(--ct-navigation-tree-items-stripe-color);
+    padding-left: calc(var(--bs-nav-link-padding-x) + (var(--ct-navigation-tree-items-level, 1) - 1) * var(--ct-navigation-tree-items-indent));
+}
+
+.ct-navigation-tree-items.is--root > .ct-navigation-tree-items__item:first-child > .ct-navigation-tree-items__link,
+.ct-navigation-tree-items.is--root > .ct-navigation-tree-items__item:first-child > .ct-navigation-tree-items__folder {
+    border-top: 0;
+}
+
+.ct-navigation-tree-items__link.active {
+    color: var(--bs-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+// Weight but no colour, so the current page stays the only primary-coloured item.
+.ct-navigation-tree-items__link.is--in-path {
+    font-weight: var(--font-weight-semibold);
+}
+
+.ct-navigation-tree-items__folder {
+    color: var(--bs-secondary-color);
+}
+
+// Bootstrap's `.nav-link:hover` also matches the folder span.
+.ct-navigation-tree-items__folder:hover {
+    color: var(--bs-secondary-color);
+}

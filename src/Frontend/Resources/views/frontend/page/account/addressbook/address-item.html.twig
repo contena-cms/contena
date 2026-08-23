@@ -1,0 +1,57 @@
+{% block address_item %}
+<li class="col-12 col-lg-6 d-flex">
+    <div class="p-3 border address-manager-select-address flex-fill">
+        <div class="row h-100">
+            <div class="d-flex justify-content-between">
+                {% block address_item_address %}
+                    {% sw_include '@Frontend/frontend/component/address/address.html.twig' with {
+                        address: address
+                    } %}
+                {% endblock %}
+
+                {% block address_item_dropdown %}
+                    {% set addressItemDropdownId = 'address-item-dropdown-' ~ random() %}
+
+                    <div class="dropdown">
+                        {% block address_item_dropdown_button %}
+                            <button
+                                type="button"
+                                id="{{ addressItemDropdownId }}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                aria-label="{{ 'account.addressOptionsBtn'|trans|sw_sanitize }}"
+                                class="bg-transparent border-0"
+                            >
+                                {% sw_icon 'more-vertical' style {size: 's'} %}
+                            </button>
+                        {% endblock %}
+
+                        <ul class="dropdown-menu" aria-labelledby="{{ addressItemDropdownId }}">
+                            {% block address_item_dropdown_items %}
+                                <li>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ path('frontend.account.address.edit.page', {addressId: address.id}) }}"
+                                    >
+                                        {{ 'global.default.edit'|trans|sw_sanitize }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <form
+                                        action="{{ path('frontend.account.address.delete', {addressId: address.id}) }}"
+                                        method="post"
+                                    >
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            {{ 'account.addressesContentItemActionDelete'|trans|sw_sanitize }}
+                                        </button>
+                                    </form>
+                                </li>
+                            {% endblock %}
+                        </ul>
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</li>
+{% endblock %}

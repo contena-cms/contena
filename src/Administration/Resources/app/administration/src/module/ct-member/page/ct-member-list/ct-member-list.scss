@@ -1,0 +1,12 @@
+.ct-member-list {
+    &__filters,
+    &__actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    &__filters {
+        min-width: min(520px, 60vw);
+    }
+}

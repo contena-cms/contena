@@ -1,0 +1,15 @@
+diff --git a/src/Administration/Resources/app/administration/src/module/ct-product/component/ct-product-detail-base/ct-product-detail-base.html.twig b/src/Administration/Resources/app/administration/src/module/ct-product/component/ct-product-detail-base/ct-product-detail-base.html.twig
+index aaaaaaa..bbbbbbb 100644
+--- a/src/Administration/Resources/app/administration/src/module/ct-product/component/ct-product-detail-base/ct-product-detail-base.html.twig
++++ b/src/Administration/Resources/app/administration/src/module/ct-product/component/ct-product-detail-base/ct-product-detail-base.html.twig
+@@ -120,6 +120,12 @@
+         </ct-card>
++
++        <div class="ct-product-detail-base__quick-actions">
++            <button type="button" class="ct-button ct-button--primary" @click="onSave">
++                Save changes now
++            </button>
++            <span class="ct-product-detail-base__hint">Click Save changes now to persist the product.</span>
++        </div>
+     </ct-card-view>
+ </ct-page>

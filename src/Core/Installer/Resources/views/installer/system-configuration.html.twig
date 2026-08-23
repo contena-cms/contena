@@ -1,0 +1,256 @@
+{% extends '@Installer/installer/base.html.twig' %}
+
+{% block base_content %}
+    <div class="card__title">
+        <h2>{{ "contena.installer.configuration_header"|trans }}</h2>
+    </div>
+
+    <form id="system-configuration" action="{{ url('installer.configuration') }}" method="post">
+        <div class="card__body">
+            {% if error %}
+                <div class="alert alert-error">
+                    <pre>{{ error }}</pre>
+                </div>
+            {% endif %}
+
+            <p>{{ "contena.installer.configuration_system_text"|trans }}</p>
+
+            <!-- System data section -->
+            <div class="section-header">
+                <h3 class="section-title">{{ "contena.installer.configuration_admin_system_headline"|trans }}</h3>
+            </div>
+
+            <p>
+                <label for="config_system_name">{{ "contena.installer.configuration_system_name"|trans }}</label>
+                <input type="text"
+                       value="{{ parameters.config_system_name ?? '' }}"
+                       name="config_system_name"
+                       id="config_system_name"
+                       required="required"
+                       autofocus/>
+            </p>
+
+            <p>
+                <label for="config_system_email">
+                    {{ "contena.installer.configuration_system_email"|trans }}
+                    <a class="help-badge"
+                       href="#"
+                       data-tooltip="{{ "contena.installer.configuration_email_help_text"|trans }}">
+                        <i class="icon-help"></i>
+                    </a>
+                </label>
+                <input type="email"
+                       value="{{ parameters.config_system_email ?? '' }}"
+                       name="config_system_email"
+                       id="config_system_email"
+                       required="required"/>
+            </p>
+
+            <div class="form-group form-group--50">
+                <div class="input-group">
+                    <label for="config_system_language">{{ "contena.installer.configuration_system_language"|trans }}</label>
+                    <div class="select-wrapper">
+                        <select name="config_system_language" id="config_system_language" onchange="syncDefaultLanguage()">
+                            {% for language in languageIsos %}
+                                <option value="{{ language.id }}" {% if parameters.config_system_language == language.id %}selected{% endif %}>
+                                    {{ ("contena.installer.select_language_" ~ language.id) |trans }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="config_system_country">{{ "contena.installer.configuration_system_country"|trans }}</label>
+                    <div class="select-wrapper">
+                        <select name="config_system_country" id="config_system_country">
+                            {% for country in countryIsos %}
+                                <option value="{{ country.iso3 }}" {% if country.default %}selected{% endif %}>
+                                    {{ country.translated }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <span class="icon-warning"></span>
+                {{ "contena.installer.configuration_defaults_warning"|trans }}
+            </div>
+
+            <!-- Languages section -->
+            <div class="section-header">
+                <h3 class="section-title">{{ "contena.installer.configuration_admin_language_headline"|trans }}</h3>
+            </div>
+
+            <div class="languages-block">
+                <p class="available-languages__text">
+                    {{ "contena.installer.configuration_admin_language_text"|trans }}
+                </p>
+
+                <!-- Search row -->
+                <div class="languages-search-row">
+                    <div class="languages-search">
+                        <div class="search-input-wrapper">
+                            <input id="language-search"
+                                   class="form-control languages-search__control"
+                                   placeholder="{{ "contena.installer.configuration_admin_language_search_placeholder"|trans }}">
+                            <i class="icon-search search-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="languages-actions">
+                        <a href="#" onclick="selectAllLanguages(event)">{{ "contena.installer.configuration_admin_language_select_all"|trans }}</a>
+                        <a href="#" onclick="clearAllLanguages(event)">{{ "contena.installer.configuration_admin_language_clear_all"|trans }}</a>
+                    </div>
+                </div>
+
+                <div class="languages-box">
+                    <div class="languages-list auto-columns">
+                        {% for locale, language in allAvailableLanguages %}
+                            <div class="custom-checkbox language-item"
+                                 data-language-name="{{ language.label|lower }}">
+                                <input type="checkbox"
+                                       class="language-toggle"
+                                       id="lang_{{ locale|lower|replace({'-': '_'}) }}"
+                                       name="selected_languages[]"
+                                       value="{{ locale }}"
+                                       {% if locale in ['zh-CN', 'en-GB'] %}checked disabled data-default-locales{% elseif locale in selectedLanguages %}checked{% endif %}
+                                       onclick="event.target.classList.add('toggled')" />
+                                <label for="lang_{{ locale|lower|replace({'-': '_'}) }}">
+                                    {{ language.label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin user data section -->
+            <div class="section-header">
+                <h3 class="section-title">{{ "contena.installer.configuration_admin_user_headline"|trans|default('Admin user data') }}</h3>
+            </div>
+
+            <p>
+                <label for="config_admin_email">{{ "contena.installer.configuration_admin_mail"|trans }}</label>
+                <input type="email"
+                       value="{{ parameters.config_admin_email ?? '' }}"
+                       name="config_admin_email"
+                       id="config_admin_email"
+                       required="required"/>
+            </p>
+
+            <p>
+                <label for="config_admin_name">{{ "contena.installer.configuration_admin_name"|trans }}</label>
+                <input type="text"
+                       value="{{ parameters.config_admin_name ?? '' }}"
+                       name="config_admin_name"
+                       id="config_admin_name"
+                       required="required"/>
+            </p>
+
+            <div class="form-group form-group--50">
+                <p>
+                    <label for="config_admin_username">{{ "contena.installer.configuration_admin_username"|trans }}</label>
+                    <input type="text"
+                           value="{{ parameters.config_admin_username ?? 'supperadmin' }}"
+                           name="config_admin_username"
+                           id="config_admin_username"
+                           required="required"/>
+                </p>
+
+                <p>
+                    <label for="config_admin_password">{{ "contena.installer.configuration_admin_password"|trans }}</label>
+                    <input type="password"
+                           value="{{ parameters.config_admin_password ?? '' }}"
+                           name="config_admin_password"
+                           id="config_admin_password"
+                           required="required"/>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="card__footer flex-container">
+            <a href="{{ url('installer.database-import') }}" class="btn btn-default flex-item">{{ "contena.installer.back"|trans }}</a>
+            <button type="submit"
+                    class="btn btn-primary flex-item flex-right"
+                    onclick="document.getElementById('system-configuration').classList.add('is--submitted'); setLastActivity();">
+            {{ "contena.installer.forward"|trans }}
+            </button>
+        </div>
+    </form>
+
+    <script>
+        let previousDefaultLanguage = null;
+
+        syncDefaultLanguage();
+        // Language search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('language-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const languageItems = document.querySelectorAll('.language-item');
+
+                    languageItems.forEach(function(item) {
+                        const languageName = item.getAttribute('data-language-name');
+                        if (languageName.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+
+        function selectAllLanguages(event) {
+            event.preventDefault();
+            document.querySelectorAll('.language-toggle').forEach((toggle) => {
+                const row = toggle.closest('.language-item');
+                if (row && row.style.display !== 'none' && !toggle.disabled) {
+                    toggle.checked = true;
+                    toggle.classList.add('toggled');
+                }
+            });
+        }
+
+        function clearAllLanguages(event) {
+            event.preventDefault();
+            document.querySelectorAll('.language-toggle').forEach((toggle) => {
+                const row = toggle.closest('.language-item');
+                if (row && row.style.display !== 'none' && !toggle.disabled) {
+                    toggle.checked = false;
+                    toggle.classList.remove('toggled');
+                }
+            });
+        }
+
+        function setLastActivity() {
+            localStorage.setItem('lastActivity', `${Date.now()}`);
+        }
+
+        function syncDefaultLanguage() {
+            const selectedLanguage = document.getElementById('config_system_language').value;
+            const current = document.querySelector(`input[name="selected_languages[]"][value="${selectedLanguage}"]`);
+
+            // Uncheck previous language if different
+            if (previousDefaultLanguage && previousDefaultLanguage !== selectedLanguage) {
+                const previousLanguage = document.querySelector(`input[name="selected_languages[]"][value="${previousDefaultLanguage}"]`);
+                if (previousLanguage && !previousLanguage.hasAttribute('data-default-locales')) {
+                    previousLanguage.checked = false;
+                    previousLanguage.disabled = false;
+                }
+            }
+
+            if (current && !current.disabled) {
+                current.checked = true;
+                current.disabled = true;
+            }
+
+            previousDefaultLanguage = selectedLanguage;
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/context": {
+            "get": {
+                "tags": [
+                    "System & Context"
+                ],
+                "summary": "Fetch the current context",
+                "description": "Fetches the current channel, member group, country, language and authenticated member context.",
+                "operationId": "readContext",
+                "responses": {
+                    "200": {
+                        "description": "Returns the current context.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChannelContext"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "System & Context"
+                ],
+                "summary": "Modify the current context",
+                "description": "Used for switching the language or country of the current context.",
+                "operationId": "updateContext",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "languageId": {
+                                        "description": "Language",
+                                        "type": "string",
+                                        "pattern": "^[0-9a-f]{32}$"
+                                    },
+                                    "countryId": {
+                                        "description": "Country",
+                                        "type": "string",
+                                        "pattern": "^[0-9a-f]{32}$"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ContextTokenResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "One of the submitted ids is not a string, or does not reference an entity that is available in the current channel."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ]
+            }
+        }
+    }
+}

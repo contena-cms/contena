@@ -1,0 +1,24 @@
+{
+    "name": "ct/ct_test_validate_conflicts_specific_message",
+    "description": "Test conflict handling",
+    "version": "v1.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "contena AG",
+            "role": "Manufacturer"
+        }
+    ],
+    "conflict": {
+        "contena/core": "> 6.3.0.0"
+    },
+    "extra": {
+        "contena-plugin-class": "CtTestValidateConflictsSpecificMessage\\CtTestValidateConflictsSpecificMessage",
+        "copyright": "(c) by contena AG",
+        "label": {
+            "de-DE": "Test für Konflikte-Handling",
+            "en-GB": "Test for conflict handling"
+        }
+    }
+}

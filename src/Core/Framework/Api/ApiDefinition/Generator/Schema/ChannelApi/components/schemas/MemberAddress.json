@@ -1,0 +1,102 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": [],
+  "components": {
+    "schemas": {
+      "MemberAddress": {
+        "description": "Added since version: 6.0.0.0",
+        "required": [
+          "id",
+          "memberId",
+          "countryId",
+          "firstName",
+          "lastName",
+          "city",
+          "street"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "memberId": {
+            "description": "Unique identity of member.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "countryId": {
+            "description": "Unique identity of country.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "regionId": {
+            "description": "Unique identity of country's state.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "firstName": {
+            "description": "First name of the member.",
+            "type": "string"
+          },
+          "lastName": {
+            "description": "Last name of the member.",
+            "type": "string"
+          },
+          "zipcode": {
+            "description": "Postal or zip code of member's address.",
+            "type": "string"
+          },
+          "city": {
+            "description": "Name of member's city.",
+            "type": "string"
+          },
+          "street": {
+            "description": "Name of member's street.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Titles given to member like Dr. , Prof., etc",
+            "type": "string"
+          },
+          "phoneNumber": {
+            "description": "Member's phone number.",
+            "type": "string"
+          },
+          "additionalAddressLine1": {
+            "description": "Additional member's address information.",
+            "type": "string"
+          },
+          "additionalAddressLine2": {
+            "description": "Additional member's address information.",
+            "type": "string"
+          },
+          "hash": {
+            "description": "Runtime field, cannot be used as part of the criteria.",
+            "type": "string"
+          },
+          "customFields": {
+            "type": "object"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "region": {
+            "$ref": "#/components/schemas/Region"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

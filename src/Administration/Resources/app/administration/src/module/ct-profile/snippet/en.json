@@ -1,0 +1,75 @@
+{
+  "ct-profile": {
+    "general": {
+      "mainMenuItemGeneral": "Profiles",
+      "description": "Manage your profile here.",
+      "headlineProfile": "Your profile"
+    },
+    "index": {
+      "titleInfoCard": "Profile information",
+      "titleImageCard": "Profile image",
+      "titlePasswordCard": "Password",
+      "labelNameField": "Name",
+      "labelPhoneNumberField": "Phone number",
+      "labelUsernameField": "Username",
+      "labelEmailField": "Email address",
+      "labelTimezoneField": "Timezone",
+      "labelOldPassword": "Old password",
+      "placeholderOldPassword": "Enter old password...",
+      "labelNewPassword": "New password",
+      "placeholderNewPassword": "Enter new password...",
+      "labelNewPasswordConfirm": "Confirm password",
+      "placeholderNewPasswordConfirm": "Re-enter new password...",
+      "notificationPasswordErrorMessage": "The submitted passwords do not match.",
+      "notificationNewPasswordIsSameAsOldErrorMessage": "The new password is identical with your old one. Please choose a new password.",
+      "notificationInvalidEmailErrorMessage": "Please enter a valid email address.",
+      "notificationSaveSuccessMessage": "Profile information have been saved.",
+      "notificationSaveErrorMessage": "Profile information could not be saved.",
+      "labelUploadAvatar": "Upload avatar",
+      "labelUseAsAvatar": "Use as avatar"
+    },
+    "tabGeneral": {
+      "title": "General"
+    },
+    "tabSearchPreferences": {
+      "title": "Search preferences",
+      "cardSearchBehavior": {
+        "title": "Search behavior",
+        "subtitle": "Predefine your Administration's search behaviour",
+        "labelMinSearchTermLength": "Minimal search term length"
+      },
+      "cardSearchContent": {
+        "title": "Searchable content",
+        "subtitle": "Set the searchable content for each module and entry",
+        "buttonSelect": "Select all",
+        "buttonDeselect": "Deselect all",
+        "buttonReset": "Reset to default"
+      },
+        "modules": {
+          "media": {
+            "alt": "Alt text",
+            "tagsName": "Tags",
+            "title": "Title",
+            "fileName": "Name",
+            "mediaFolderName": "Folder",
+            "path": "Path"
+          },
+          "flow": {
+            "name": "Name",
+            "description": "Description"
+          },
+          "rule": {
+            "name": "Name",
+            "description": "Description"
+          }
+        }
+    }
+  },
+  "ct-privileges": {
+    "additional_permissions": {
+      "user": {
+        "update_profile": "Update own profile"
+      }
+    }
+  }
+}

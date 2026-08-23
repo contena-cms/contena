@@ -1,0 +1,23 @@
+{
+    "name": "ct/test2",
+    "description": "Test 2 description",
+    "version": "v2.0.1",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "contena AG",
+            "role": "Manufacturer"
+        }
+    ],
+    "require": {
+        "contena/platform": "6.4.*@dev"
+    },
+    "extra": {
+        "contena-plugin-class": "Ct\\Test2",
+        "label": {
+            "en-GB": "Test plugin",
+            "de-DE": "Test plugin"
+        }
+    }
+}

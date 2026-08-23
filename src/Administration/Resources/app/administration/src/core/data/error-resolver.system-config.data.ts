@@ -1,0 +1,120 @@
+import ContenaError from 'src/core/data/ContenaError';
+
+interface ApiError {
+    code: string;
+    title: string;
+    detail: string;
+    meta: {
+        parameters: Record<string, string>;
+    };
+    status: string;
+    source?: {
+        pointer?: string;
+    };
+}
+
+/**
+ *
+ * @private
+ */
+export default class ErrorResolverSystemConfig {
+    public static ENTITY_NAME = 'SYSTEM_CONFIG';
+
+    private readonly merge;
+
+    constructor() {
+        this.merge = Contena.Utils.object.merge;
+    }
+
+    public handleWriteErrors(errors?: ApiError[]) {
+        if (!errors) {
+            throw new Error('[error-resolver] handleWriteError was called without errors');
+        }
+
+        const writeErrors = this.reduceErrorsByWriteIndex(errors);
+
+        if (writeErrors.systemError.length > 0) {
+            this.addSystemErrors(writeErrors.systemError);
+        }
+
+        this.handleErrors(writeErrors.apiError);
+    }
+
+    public cleanWriteErrors() {
+        void Contena.Store.get('error').resetApiErrors();
+    }
+
+    private reduceErrorsByWriteIndex(errors: ApiError[]) {
+        const writeErrors: {
+            systemError: ContenaError[];
+            apiError: {
+                [key: string]: ContenaError;
+            };
+        } = {
+            systemError: [],
+            apiError: {},
+        };
+
+        errors.forEach((current) => {
+            if (!current.source || !current.source.pointer) {
+                const systemError = new ContenaError({
+                    code: current.code,
+                    meta: current.meta,
+                    detail: current.detail,
+                    status: current.status,
+                });
+                writeErrors.systemError.push(systemError);
+
+                return;
+            }
+
+            const segments = current.source.pointer.split('/');
+
+            // remove first empty element in list
+            if (segments[0] === '') {
+                segments.shift();
+            }
+
+            const denormalized = {};
+            const lastIndex = segments.length - 1;
+
+            segments.reduce((pointer: { [key: string]: Partial<ContenaError> }, segment, index) => {
+                // skip translations
+                if (segment === 'translations' || segments[index - 1] === 'translations') {
+                    return pointer;
+                }
+
+                if (index === lastIndex) {
+                    pointer[segment] = new ContenaError(current);
+                } else {
+                    pointer[segment] = {};
+                }
+
+                return pointer[segment];
+            }, denormalized);
+
+            writeErrors.apiError = this.merge(writeErrors.apiError, denormalized);
+        });
+
+        return writeErrors;
+    }
+
+    private addSystemErrors(errors: ContenaError[]) {
+        errors.forEach((error) => {
+            void Contena.Store.get('error').addSystemError({ error });
+        });
+    }
+
+    private handleErrors(errors: { [key: string]: ContenaError }) {
+        Object.keys(errors).forEach((key: string) => {
+            void Contena.Store.get('error').addApiError({
+                expression: this.getErrorPath(key),
+                error: errors[key],
+            });
+        });
+    }
+
+    private getErrorPath(key: string) {
+        return `${ErrorResolverSystemConfig.ENTITY_NAME}.${key}`;
+    }
+}

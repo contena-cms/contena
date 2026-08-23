@@ -1,0 +1,27 @@
+{% sw_extends '@Frontend/frontend/page/account/_page.html.twig' %}
+{% block page_account_main_content %}
+    <h1>{{ 'account.profileTitle'|trans|sw_sanitize }}</h1><p>{{ 'account.profileText'|trans|sw_sanitize }}</p>
+    <section class="card mb-4"><div class="card-body"><h2 class="h5">{{ 'account.profilePersonalTitle'|trans|sw_sanitize }}</h2>
+        <form method="post" action="{{ path('frontend.account.profile.save') }}" data-form-handler="true">
+            {% sw_include '@Frontend/frontend/component/account/member-personal.html.twig' with {data: context.member, showBirthdayField: config('core.loginRegistration.showBirthdayField')} %}
+            <button class="btn btn-primary mt-3" type="submit">{{ 'account.profileSaveChanges'|trans|sw_sanitize }}</button>
+        </form>
+    </div></section>
+    <section class="card mb-4"><div class="card-body"><h2 class="h5">{{ 'account.profileMailTitle'|trans|sw_sanitize }}</h2>
+        <form method="post" action="{{ path('frontend.account.profile.email.save') }}" data-form-handler="true"><div class="row g-2">
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'email', label: 'account.personalMailLabel'|trans|sw_sanitize, id: 'profileEmail', name: 'email[email]', value: context.member.email, violationPath: '/email', validationRules: 'required,email', additionalClass: 'col-md-6'} %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'email', label: 'account.personalMailConfirmationLabel'|trans|sw_sanitize, id: 'profileEmailConfirmation', name: 'email[emailConfirmation]', violationPath: '/emailConfirmation', validationRules: 'required,confirmation,email', additionalClass: 'col-md-6'} %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'password', label: 'account.profileConfirmPassword'|trans|sw_sanitize, id: 'profileEmailPassword', name: 'email[password]', validationRules: 'required', additionalClass: 'col-md-6'} %}
+        </div><button class="btn btn-primary mt-3" type="submit">{{ 'account.profileSaveChanges'|trans|sw_sanitize }}</button></form>
+    </div></section>
+    <section class="card mb-4"><div class="card-body"><h2 class="h5">{{ 'account.profilePasswordTitle'|trans|sw_sanitize }}</h2>
+        <form method="post" action="{{ path('frontend.account.profile.password.save') }}" data-form-handler="true"><div class="row g-2">
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'password', label: 'account.profilePasswordCurrent'|trans|sw_sanitize, id: 'currentPassword', name: 'password[password]', validationRules: 'required', additionalClass: 'col-md-6'} %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'password', label: 'account.profilePasswordCreateNew'|trans|sw_sanitize, id: 'newPassword', name: 'password[newPassword]', validationRules: 'required,minLength', minlength: config('core.loginRegistration.passwordMinLength'), additionalClass: 'col-md-6'} %}
+            {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {type: 'password', label: 'account.personalPasswordConfirmationLabel'|trans|sw_sanitize, id: 'newPasswordConfirm', name: 'password[newPasswordConfirm]', validationRules: 'required,confirmation', additionalClass: 'col-md-6'} %}
+        </div><button class="btn btn-primary mt-3" type="submit">{{ 'account.profileSaveChanges'|trans|sw_sanitize }}</button></form>
+    </div></section>
+    <section class="card border-danger"><div class="card-body"><h2 class="h5">{{ 'account.profileDeleteModalTitle'|trans|sw_sanitize }}</h2><p>{{ 'account.profileDeleteAlert'|trans|sw_sanitize }}</p>
+        <form method="post" action="{{ path('frontend.account.profile.delete') }}"><button class="btn btn-outline-danger" type="submit">{{ 'account.profileDeleteButton'|trans|sw_sanitize }}</button></form>
+    </div></section>
+{% endblock %}

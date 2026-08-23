@@ -1,0 +1,98 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    totalCount = 0,
+    currentSorting = null,
+    filterAggregations = [],
+    availableSortings = [],
+    filterOrder = [],
+    showLayoutSwitch = true,
+    visibleFilterCount = 3,
+    slots = [],
+    displayType = 'dropdown',
+%}
+
+{% set filterPanelOptions = {
+    visibleFilterCount: visibleFilterCount,
+} %}
+
+{% set panelCVA = cva({
+    base: 'ct-filter-panel container',
+    variants: {
+        displayType: {
+            dropdown: 'is--dropdown',
+            collapse: 'is--collapse',
+        },
+    },
+}) %}
+
+{% set defaultAttributes = {
+    class: panelCVA.apply({ displayType }),
+    'data-component': 'CT:Filter:Panel',
+    'data-component-options': filterPanelOptions|json_encode,
+} %}
+
+{% set filters = {} %}
+
+<div {{ attributes.defaults(defaultAttributes) }}>
+
+    {# Filter template for outer block scope. #}
+    {% set filterTemplate %}
+        {% block filters %}
+            {# Rendering filters in order #}
+            {% for filter in filterOrder %}
+                {{ filters[filter] }}
+            {% endfor %}
+        {% endblock %}
+    {% endset %}
+
+    <twig:CT:Content:Offcanvas id="filter-offcanvas" title="{{ 'listing.filterTitle'|trans|sw_sanitize }}">
+        <div class="ct-filter-panel__filter">
+
+            <twig:Slot name="additional-filters-start"></twig:Slot>
+
+            {{ filterTemplate }}
+
+            <twig:Slot name="additional-filters-end"></twig:Slot>
+
+            {# Expand or collapse hidden filters #}
+            {% if filterAggregations|length > visibleFilterCount %}
+                <twig:CT:Button
+                    variant="filter"
+                    class="ct-filter-panel__expand d-none d-md-block"
+                >
+                    <span class="ct-filter-panel__expand-text">{{ 'listing.filterButtonMore'|trans|sw_sanitize }}</span>
+                    <span class="ct-filter-panel__collapse-text">{{ 'listing.filterButtonLess'|trans|sw_sanitize }}</span>
+                    <twig:CT:Icon name="sliders-horizontal" size="xs" />
+                </twig:CT:Button>
+            {% endif %}
+        </div>
+    </twig:CT:Content:Offcanvas>
+
+    {# Offcanvas filter button for mobile #}
+    <twig:CT:Button
+        variant="filter"
+        class="d-block d-md-none"
+        aria-controls="filter-offcanvas"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#filter-offcanvas">
+        {{ 'listing.filterTitle'|trans|sw_sanitize }} <twig:CT:Icon name="sliders-horizontal" size="xs" />
+    </twig:CT:Button>
+
+    {% block actions %}
+        <div class="ct-filter-panel__actions">
+            <span class="ct-filter-panel__counter text-light-emphasis text-nowrap d-none d-lg-inline-block">
+                {{ 'listing.resultCount'|trans({ '%count%': totalCount })|sw_sanitize }}
+            </span>
+
+            {% if availableSortings and availableSortings.elements and availableSortings.elements|length > 0 %}
+                <twig:CT:Filter:Sorting :currentSorting="currentSorting" :sortings="availableSortings.elements" />
+            {% endif %}
+
+            {% if showLayoutSwitch %}
+                <twig:CT:Filter:LayoutSwitch />
+            {% endif %}
+        </div>
+    {% endblock %}
+</div>

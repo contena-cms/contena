@@ -1,0 +1,29 @@
+.ct-settings-search-excluded-search-terms {
+    &__header-bar,
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-12);
+    }
+
+    &__header-bar {
+        justify-content: space-between;
+        margin-bottom: var(--scale-size-20);
+    }
+
+    &__header-bar .mt-search {
+        width: min(100%, var(--scale-size-320));
+    }
+
+    @media (max-width: 767px) {
+        &__header-bar,
+        &__actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        &__header-bar .mt-search {
+            width: 100%;
+        }
+    }
+}

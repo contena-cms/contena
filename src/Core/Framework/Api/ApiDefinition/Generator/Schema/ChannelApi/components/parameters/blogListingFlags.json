@@ -1,0 +1,48 @@
+{
+    "components": {
+        "parameters": {
+            "noAggregations": {
+                "name": "no-aggregations",
+                "in": "query",
+                "description": "Resets all aggregations in the criteria. This parameter is a flag; its value has no effect.",
+                "required": false,
+                "schema": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "onlyAggregations": {
+                "name": "only-aggregations",
+                "in": "query",
+                "description": "Skips blog entities and returns only aggregations. Sorting and associations are ignored. This parameter is a flag; its value has no effect.",
+                "required": false,
+                "schema": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            }
+        },
+        "x-parameter-groups": {
+            "blogListingFlags": [
+                {
+                    "$ref": "#/components/parameters/noAggregations"
+                },
+                {
+                    "$ref": "#/components/parameters/onlyAggregations"
+                }
+            ]
+        }
+    }
+}

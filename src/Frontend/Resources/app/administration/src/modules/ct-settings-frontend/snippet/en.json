@@ -1,0 +1,26 @@
+{
+  "ct-settings-frontend": {
+    "general": {
+      "mainMenuItemGeneral": "Frontend",
+      "textHeadline": "Frontend",
+      "description": "Settings for the frontend",
+      "helpText": "For more information, see the <a target=\"_blank\" href=\"https://docs.contena.cn/en/contena-6-en\">documentation</a>.",
+      "messageSaveSuccess": "Frontend settings saved."
+    },
+    "configuration": {
+      "cardTitle": "Frontend configuration",
+      "iconCache": "Activate icon cache",
+      "iconCacheToolTip": "Controls whether icons are delivered only once per frontend page and additional usages reference the icon ID.",
+      "theme": {
+        "cardTitle": "Theme configuration",
+        "async": "Compile theme in the background",
+        "asyncTooltip": "Controls whether theme compilation is handled through the message queue instead of directly when changes are saved."
+      },
+      "speculationRules": {
+        "title": "Speculation Rules API",
+        "description": "Activate pre-rendering with moderate eagerness for the frontend. This can influence analytics data."
+      }
+    },
+    "helpText": "For more information, see the <a target=\"_blank\" href=\"https://docs.contena.cn/en/contena-6-en\">documentation</a>."
+  }
+}

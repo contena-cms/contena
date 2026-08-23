@@ -1,0 +1,15 @@
+{% sw_extends '@Frontend/frontend/utilities/offcanvas.html.twig' %}
+
+{% block utilities_offcanvas_content %}
+    {% block layout_navigation_offcanvas_navigation_actions %}
+        <nav class="nav navigation-offcanvas-actions">
+            {% block layout_navigation_offcanvas_navigation_action_language %}
+                {% sw_include '@Frontend/frontend/layout/header/actions/language-widget.html.twig' with {position: 'offcanvas'} %}
+            {% endblock %}
+        </nav>
+    {% endblock %}
+
+    {% block layout_navigation_offcanvas_navigation_placeholder %}
+        <div class="navigation-offcanvas-container"></div>
+    {% endblock %}
+{% endblock %}

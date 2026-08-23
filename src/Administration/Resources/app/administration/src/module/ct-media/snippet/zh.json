@@ -1,0 +1,121 @@
+{
+    "ct-media": {
+        "general": {
+            "mainMenuItemGeneral": "媒体",
+            "descriptionTextModule": "管理媒体文件。",
+            "placeholderSearchBar": "搜索当前文件夹...",
+            "arReady": "支持 AR",
+            "spatialMedia": "3D 媒体",
+            "notification": { "urlCopied": { "message": "链接已复制到剪贴板。" } }
+        },
+        "sidebar": {
+            "labelHeadlineMultiple": "已选择 {count} 个文件",
+            "labelNoMediaSelected": "未选择媒体文件",
+            "actions": {
+                "copyLink": "复制链接",
+                "delete": "删除",
+                "dissolve": "移出文件夹",
+                "download": "下载",
+                "move": "移动",
+                "replace": "替换",
+                "settings": "设置",
+                "ar": "启用 AR 视图",
+                "arHelpText": "为此媒体文件启用增强现实元数据。",
+                "arPlacement": "AR 放置方式",
+                "arPlacementHelpText": "选择对象放置在地面等水平表面，还是墙面等垂直表面。",
+                "horizontal": "水平",
+                "vertical": "垂直",
+                "setCover": "设为封面",
+                "removeCover": "移除封面"
+            },
+            "sections": {
+                "actions": "操作",
+                "configuration": "配置",
+                "preview": "预览",
+                "metadata": "元数据",
+                "usage": "使用位置",
+                "selectedFiles": "已选文件"
+            },
+            "infoMissingFile": {
+                "titleMissingFile": "文件不存在",
+                "descriptionMissingFile": "无法找到所需文件，请上传新文件或删除占位项。"
+            },
+            "metadata": {
+                "name": "名称",
+                "fileType": "文件类型",
+                "altText": "替代文本",
+                "title": "标题",
+                "mimeType": "MIME 类型",
+                "fileSize": "大小",
+                "createdAt": "上传时间",
+                "width": "宽度",
+                "height": "高度",
+                "totalSize": "总计"
+            },
+            "usage": {
+                "tooltipFoundInUser": "用于用户",
+                "titleMediaNotUsed": "未使用的媒体",
+                "labelMediaNotUsed": "此媒体文件当前未被使用。"
+            }
+        },
+        "index": {
+            "titleLibrary": "媒体库",
+            "titleAllMedia": "所有媒体",
+            "buttonCreateFolder": "新建文件夹",
+            "rootFolderName": "媒体",
+            "labelFolders": "文件夹",
+            "labelMediaFiles": "媒体文件",
+            "labelBreadcrumb": "当前媒体文件夹",
+            "labelFolderSummary": "{folders} 个文件夹 · {files} 个文件",
+            "labelUntitledFolder": "未命名文件夹",
+            "labelToggleFolder": "展开或折叠文件夹",
+            "labelFolderActions": "文件夹操作"
+        },
+        "mediaLibrary": {
+            "labelButtonLoadMore": "加载更多",
+            "labelButtonLoadAll": "加载全部",
+            "titleEmptyState": "暂无媒体文件",
+            "descriptionEmptyState": "在此管理媒体文件。"
+        },
+        "filter": {
+            "labelType": "类型",
+            "labelAll": "类型：全部",
+            "labelImages": "图片",
+            "labelVideos": "视频",
+            "labelAudio": "音频",
+            "labelDocuments": "文档"
+        },
+        "sorting": {
+            "labelSort": "排序：",
+            "labelSortByNameAsc": "名称升序",
+            "labelSortByNameDsc": "名称降序",
+            "labelSortBySizeAsc": "大小升序",
+            "labelSortBySizeDsc": "大小降序",
+            "labelSortByCreatedAsc": "最早创建",
+            "labelSortByCreatedDsc": "最新创建"
+        },
+        "presentation": {
+            "labelPresentation": "显示方式：",
+            "labelPresentationSmall": "小图",
+            "labelPresentationMedium": "中图",
+            "labelPresentationLarge": "大图",
+            "labelPresentationList": "列表",
+            "labelGridView": "网格视图",
+            "labelListView": "列表视图"
+        },
+        "ct-media-modal": {
+            "titleModal": "选择媒体",
+            "labelTabItemLibrary": "媒体库",
+            "labelTabItemUpload": "上传文件",
+            "labelButtonSaveSelection": "添加媒体"
+        },
+        "ct-media-modal-v2": {
+            "titleModal": "选择媒体",
+            "labelTabItemLibrary": "媒体库",
+            "labelTabItemUpload": "上传文件",
+            "labelButtonSaveSelection": "添加媒体"
+        },
+        "ct-media-save-modal": { "titleModal": "保存到媒体库" }
+    },
+    "ct-privileges": { "permissions": { "media": { "label": "媒体" } } }
+}

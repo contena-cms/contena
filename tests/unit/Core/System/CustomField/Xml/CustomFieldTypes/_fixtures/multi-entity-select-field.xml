@@ -1,0 +1,18 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <multi-entity-select name="test_multi_entity_select_field">
+                    <label>Test multi-entity-select field</label>
+                    <placeholder>Choose an entity...</placeholder>
+                    <entity>media</entity>
+                </multi-entity-select>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

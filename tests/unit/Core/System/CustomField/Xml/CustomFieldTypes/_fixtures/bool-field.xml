@@ -1,0 +1,17 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <bool name="test_bool_field">
+                    <label>Test bool field</label>
+                    <include-in-search>true</include-in-search>
+                </bool>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

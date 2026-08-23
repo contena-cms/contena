@@ -1,0 +1,19 @@
+{
+    "name": "contena/minimal-lifecycle-plugin",
+    "description": "Non-distributable fixture for the Contena native plugin lifecycle contract",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "extra": {
+        "contena-plugin-class": "Contena\\Fixtures\\MinimalLifecyclePlugin\\MinimalLifecyclePlugin",
+        "label": {
+            "en-GB": "Contena minimal lifecycle fixture",
+            "zh-CN": "Contena 最小生命周期测试插件"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Contena\\Fixtures\\MinimalLifecyclePlugin\\": "src/"
+        }
+    }
+}

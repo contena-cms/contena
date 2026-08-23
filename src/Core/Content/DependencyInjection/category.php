@@ -1,0 +1,78 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\DependencyInjection;
+
+use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutDefinition;
+use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategorySpecificationSource;
+use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
+use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Category\Channel\CategoryListRoute;
+use Contena\Core\Content\Category\Channel\CategoryRoute;
+use Contena\Core\Content\Category\Channel\ChannelCategoryDefinition;
+use Contena\Core\Content\Category\Channel\NavigationRoute;
+use Contena\Core\Content\Category\Channel\TreeBuildingNavigationRoute;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\NavigationDataLoader;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\NavigationLoaderConfigSerializer;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuDataLoader;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfigSerializer;
+use Contena\Core\Content\Category\DataAbstractionLayer\CategoryBreadcrumbUpdater;
+use Contena\Core\Content\Category\DataAbstractionLayer\CategoryIndexer;
+use Contena\Core\Content\Category\DataAbstractionLayer\CategoryNonExistentExceptionHandler;
+use Contena\Core\Content\Category\Service\CachedDefaultCategoryLevelLoader;
+use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
+use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
+use Contena\Core\Content\Category\Service\DefaultCategoryLevelLoader;
+use Contena\Core\Content\Category\Service\NavigationLoader;
+use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
+use Contena\Core\Content\Category\Subscriber\CategorySubscriber;
+use Contena\Core\Content\Category\Subscriber\CategoryTreeMovedSubscriber;
+use Contena\Core\Content\Category\Tree\CategoryTreePathResolver;
+use Contena\Core\Content\Category\Validation\EntryPointValidator;
+use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
+use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\EntityLayoutContextFactory;
+use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver;
+use Contena\Core\Framework\ContentSystem\Helper\ContentLayoutMetadataDeriver;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(CategoryDefinition::class)->tag('contena.entity.definition')->tag('contena.entity.hookable');
+    $services->set(CategoryTranslationDefinition::class)->tag('contena.entity.definition');
+    $services->set(CategoryTagDefinition::class)->tag('contena.entity.definition');
+    $services->set(ChannelCategoryDefinition::class)->tag('contena.channel.entity.definition');
+    $services->set(NavigationLoader::class)->args([service('event_dispatcher'), service(NavigationRoute::class)]);
+    $services->set(NavigationRoute::class)->public()->args([service(Connection::class), service('channel.category.repository'), service(CacheTagCollector::class), service(CategoryTreePathResolver::class), service(DefaultCategoryLevelLoader::class)]);
+    $services->set(DefaultCategoryLevelLoader::class)->args([service('channel.category.repository')]);
+    $services->set(CachedDefaultCategoryLevelLoader::class)->decorate(DefaultCategoryLevelLoader::class)->args([service('cache.object'), service('event_dispatcher'), service(CachedDefaultCategoryLevelLoader::class . '.inner')])->tag('kernel.event_subscriber');
+    $services->set(CategoryTreePathResolver::class);
+    $services->set(TreeBuildingNavigationRoute::class)->decorate(NavigationRoute::class, null, -2000)->public()->args([service(TreeBuildingNavigationRoute::class . '.inner')]);
+    $services->set(CategoryRoute::class)->public()->args([service('channel.category.repository'), service(CacheTagCollector::class)]);
+    $services->set(CategoryListRoute::class)->public()->args([service('channel.category.repository')]);
+    $services->set(CategoryIndexer::class)->args([service(Connection::class), service(IteratorFactory::class), service('category.repository'), service(ChildCountUpdater::class), service(TreeUpdater::class), service(CategoryBreadcrumbUpdater::class), service('event_dispatcher'), service('messenger.default_bus')])->tag('contena.entity_indexer');
+    $services->set(CategoryBreadcrumbUpdater::class)->args([service(Connection::class)]);
+    $services->set(TreeUpdater::class)->args([service(DefinitionInstanceRegistry::class), service(Connection::class)]);
+    $services->set(CategoryBreadcrumbBuilder::class)->args([service('category.repository'), service('channel.blog.repository'), service(Connection::class), service(EntityRouteResolver::class)]);
+    $services->set(CategoryUrlGenerator::class)->args([service(EntityRouteResolver::class)]);
+    $services->set(EntryPointValidator::class)->args([service(Connection::class)])->tag('kernel.event_subscriber');
+    $services->set(CategorySubscriber::class)->args([service(CategoryUrlGenerator::class)])->tag('kernel.event_subscriber');
+    $services->set(CategoryTreeMovedSubscriber::class)->args([service(EntityIndexerRegistry::class)])->tag('kernel.event_subscriber');
+    $services->set(CategoryNonExistentExceptionHandler::class)->tag('contena.dal.exception_handler');
+    $services->set(CategoryContentLayoutDefinition::class)->args([service(ContentLayoutMetadataDeriver::class)])->tag('contena.entity.definition');
+    $services->alias(NavigationLoaderInterface::class, NavigationLoader::class);
+    $services->set(NavigationDataLoader::class)->args([service(NavigationLoaderInterface::class), service(NavigationAliasResolver::class)])->tag('content_system.data_loader');
+    $services->set(NavigationLoaderConfigSerializer::class)->tag('content_system.config_serializer');
+    $services->set(ServiceMenuDataLoader::class)->args([service(NavigationLoaderInterface::class), service(NavigationAliasResolver::class)])->tag('content_system.data_loader');
+    $services->set(ServiceMenuLoaderConfigSerializer::class)->tag('content_system.config_serializer');
+    $services->set(CategorySpecificationSource::class)->args([service('category_content_layout.repository'), service(CategoryContentLayoutDefinition::class), service(EntityLayoutContextFactory::class)])->tag('content_system.entity_specification_source', ['priority' => 100]);
+};

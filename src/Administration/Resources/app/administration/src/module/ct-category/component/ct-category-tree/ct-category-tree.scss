@@ -1,0 +1,17 @@
+.ct-category-tree {
+    height: 100%;
+
+    .ct-category-tree__inner.ct-tree {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .ct-tree {
+        .ct-tree__content {
+            max-height: unset;
+            min-height: unset;
+            height: calc(100% - 75px);
+        }
+    }
+}

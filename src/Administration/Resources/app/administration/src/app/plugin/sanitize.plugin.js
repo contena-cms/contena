@@ -1,0 +1,23 @@
+const { warn } = Contena.Utils.debug;
+const Sanitizer = Contena.Helper.SanitizerHelper;
+
+let pluginInstalled = false;
+
+/**
+ * @private
+ */
+export default {
+    install(app) {
+        if (pluginInstalled) {
+            warn('Sanitize Plugin', 'This plugin is already installed');
+            return false;
+        }
+
+        app.config.globalProperties.$sanitizer = Sanitizer;
+        app.config.globalProperties.$sanitize = Sanitizer.sanitize;
+
+        pluginInstalled = true;
+
+        return true;
+    },
+};

@@ -1,0 +1,60 @@
+{
+    "ct-settings-region": {
+        "general": {
+            "mainMenuItemGeneral": "行政区划",
+            "description": "按国家管理层级化的省、市、区等行政区划。"
+        },
+        "list": {
+            "cardTitle": "行政区划",
+            "countryLabel": "国家",
+            "countryPlaceholder": "请选择国家...",
+            "searchPlaceholder": "搜索行政区划...",
+            "addChildRegion": "新建下级区划",
+            "treeTitle": "行政区划树",
+            "detailTitle": "行政区划详情",
+            "selectRegionTitle": "请选择行政区划",
+            "selectRegionDescription": "从左侧树中选择行政区划，或使用顶部按钮新建区划。",
+            "selectCountryTitle": "请选择国家",
+            "selectCountryDescription": "选择国家后查看和管理其行政区划。",
+            "emptyTitle": "暂无行政区划",
+            "emptyDescription": "为当前国家新建第一个行政区划。"
+        },
+        "tree": {
+            "general": {
+                "treeHeadline": "行政区划树",
+                "treeHeadSelected": "已选择 {count} 项"
+            },
+            "modal": {
+                "textDeleteConfirm": "确定要删除行政区划“{name}”吗？",
+                "textDeleteMultipleConfirm": "确定要删除选中的 {count} 个行政区划吗？",
+                "textDeleteChildrenConfirm": "其全部下级行政区划也会被删除。"
+            }
+        },
+        "detail": {
+            "titleNew": "新建行政区划",
+            "titleEdit": "编辑行政区划",
+            "labelName": "名称",
+            "labelShortName": "简称",
+            "labelCode": "行政区划代码",
+            "labelType": "类型",
+            "placeholderType": "请选择类型...",
+            "labelPosition": "排序",
+            "labelActive": "启用",
+            "customFieldsTitle": "自定义字段"
+        },
+        "notification": {
+            "loadError": "无法加载行政区划。",
+            "saveSuccess": "行政区划已保存。",
+            "saveError": "无法保存行政区划，请检查必填项。",
+            "deleteSuccess": "所选行政区划已删除。",
+            "deleteError": "无法删除所选行政区划。"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "region": {
+                "label": "行政区划"
+            }
+        }
+    }
+}

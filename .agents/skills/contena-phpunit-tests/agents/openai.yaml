@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena PHPUnit Tests"
+  short_description: "Write Contena PHPUnit tests in the project style."
+  default_prompt: "Write or update PHPUnit tests for this Contena change."

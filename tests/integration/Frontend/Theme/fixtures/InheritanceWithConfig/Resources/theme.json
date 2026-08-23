@@ -1,0 +1,9 @@
+{
+  "name": "InheritanceWithConfig",
+  "author": "contena AG",
+  "views": [
+    "@Frontend",
+    "@InheritanceWithConfig",
+    "@Plugins"
+  ]
+}

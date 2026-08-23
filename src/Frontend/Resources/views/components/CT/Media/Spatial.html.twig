@@ -1,0 +1,107 @@
+{# ludtwig-ignore-file #}
+{# @ct-package framework #}
+{# @internal #}
+{% props
+    media,
+    mediaHeight = 240,
+    lightIntensity = config('core.media.defaultLightIntensity'),
+    previewMode = false,
+    enableAugmentedReality = config('core.media.defaultEnableAugmentedReality'),
+    defaultArPlacement = config('core.media.defaultARPlacement'),
+%}
+
+{% set componentOptions = {
+    modelUrl: media.url,
+} %}
+
+{% set arViewerBaseOptions = {
+    snippets: {
+        arErrors: {
+            desktopNotSupported: {
+                reason: 'spatial.ar.errors.desktopNotSupported.reason'|trans|striptags,
+                solution: 'spatial.ar.errors.desktopNotSupported.solution'|trans|striptags
+            },
+            notSafariOnIOS: {
+                reason: 'spatial.ar.errors.notSafariOnIOS.reason'|trans|striptags,
+                solution: 'spatial.ar.errors.notSafariOnIOS.solution'|trans|striptags
+            },
+            IOSVersionMismatch: {
+                reason: 'spatial.ar.errors.IOSVersionMismatch.reason'|trans|striptags,
+                solution: 'spatial.ar.errors.IOSVersionMismatch.solution'|trans|striptags
+            },
+            unknownIOSError: {
+                reason: 'spatial.ar.errors.unknownIOSError.reason'|trans|striptags,
+                solution: 'spatial.ar.errors.unknownIOSError.solution'|trans|striptags
+            },
+            unknownARError: {
+                reason: 'spatial.ar.errors.unknownARError.reason'|trans|striptags,
+                solution: 'spatial.ar.errors.unknownARError.solution'|trans|striptags
+            }
+        },
+        openArView: 'spatial.ar.openArView'|trans|striptags,
+        launchingArView: 'spatial.ar.launchingArView'|trans|striptags,
+    }
+} %}
+
+{% set spatialCVA = cva({
+    base: 'ct-media-spatial',
+    variants: {
+        previewMode: {
+            true: 'ct-media-spatial--preview-mode',
+            false: 'ct-media-spatial--viewer-mode',
+        }
+    },
+}) %}
+
+{% set defaultAttributes = {
+    class: spatialCVA.apply({ previewMode }),
+} %}
+
+{% if not previewMode %}
+    {% set defaultAttributes = defaultAttributes|merge({
+        'data-component': 'CT:Media:Spatial',
+        'data-component-options': componentOptions|json_encode,
+    }) %}
+{% endif %}
+
+<div {{ attributes.defaults(defaultAttributes) }}>
+    {% if previewMode %}
+        <twig:CT:Icon
+            name="3d-placeholder"
+            size="fluid"
+        />
+        <span class="ct-media-spatial__badge badge bg-secondary">3D</span>
+    {% else %}
+        <canvas class="ct-media-spatial__canvas"></canvas>
+
+        {% if media.config.spatial.arReady ?? enableAugmentedReality %}
+           {% set arViewerOptions = arViewerBaseOptions|merge({
+                spatialArId: media.id,
+                arPlacement: media.config.spatial.arPlacement || defaultArPlacement,
+                modelUrl: media.url,
+            }) %}
+
+            <button
+                data-spatial-ar-viewer="true"
+                data-spatial-ar-viewer-options='{{ arViewerOptions|json_encode }}'
+                class="ct-media-spatial__ar btn btn-light"
+            >
+                <twig:CT:Icon name="augmented" size="sm" />
+                <span id="ar-button-text">{{ 'spatial.ar.openArView'|trans|striptags }}</span>
+            </button>
+        {% endif %}
+
+        <div class="ct-media-spatial__loader spinner-border text-primary" role="status">
+            <span class="visually-hidden">{{ 'global.default.loading'|trans|striptags }}</span>
+        </div>
+
+        {% set qrCodeOptions = {
+            params: {
+                autostartAr: media.id
+            }
+        } %}
+
+        <twig:CT:Media:ArQrModal :qrCodeOptions="qrCodeOptions" />
+        <twig:CT:Media:ArViewModal :qrCodeOptions="qrCodeOptions" />
+    {% endif %}
+</div>

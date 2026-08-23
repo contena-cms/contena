@@ -1,0 +1,18 @@
+{
+  "name": "ct/plugin-skeleton",
+  "description": "Skeleton plugin",
+  "type": "contena-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "ExamplePluginForTesting\\": "src/"
+    }
+  },
+  "extra": {
+    "contena-plugin-class": "ExamplePluginForTesting\\ExamplePluginForTesting",
+    "label": {
+      "de-DE": "Skeleton plugin",
+      "en-GB": "Skeleton plugin"
+    }
+  }
+}

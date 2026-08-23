@@ -1,0 +1,78 @@
+{% if ariaLive is not defined %}
+    {% set ariaLive = type in ['danger', 'warning'] ? 'assertive' : 'polite' %}
+{% endif %}
+
+{% block utilities_alert %}
+    {% set alertAriaJsOptions = {
+        ariaLive: ariaLive,
+    } %}
+    <div
+        {% if announceOnLoad %}
+            data-alert-aria="true"
+            data-alert-aria-options="{{ alertAriaJsOptions|json_encode }}"
+        {% endif %}
+        role="alert"
+        aria-live="{{ ariaLive }}"
+        class="alert {% if type %}alert-{{ type }}{% endif %}{% if dismissible %} alert-dismissible fade show{% endif %}{% if icon != 'error' %} d-flex align-items-center{% endif %}"
+    >
+        {% block utilities_alert_icon %}
+            {% if icon is not same as(false) %}
+                {% set iconCacheSystem = config('core.frontendSettings.iconCache') %}
+                {% if iconCache is same as(false) and iconCacheSystem is same as(true) %}
+                    {{ sw_icon_cache_disable() }}
+                {% endif %}
+                {% if type == 'danger' %}
+                    {% sw_icon 'blocked' %}
+                {% elseif type == 'warning' %}
+                    {% sw_icon 'warning' %}
+                {% elseif type == 'info' %}
+                    {% sw_icon 'info' %}
+                {% elseif type == 'success' %}
+                    {% sw_icon 'checkmark-circle' %}
+                {% else %}
+                    {% sw_icon 'alert' %}
+                {% endif %}
+                {% if iconCache is same as(false) and iconCacheSystem is same as(true) %}
+                    {{ sw_icon_cache_enable() }}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+
+        {% block utilities_alert_content_container %}
+            <div class="alert-content-container">
+                {% block utilities_alert_heading %}
+                    {% if heading %}
+                        <div class="alert-heading h5">{{ heading }}</div>
+                    {% endif %}
+                {% endblock %}
+
+                {% block utilities_alert_content %}
+                    {% if list|length > 1 %}
+                        <ul class="alert-list">
+                            {% for entry in list %}
+                                <li>{{ entry|sw_sanitize }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% elseif list|length == 1 %}
+                        {% for entry in list %}
+                            {{ entry|sw_sanitize }}
+                        {% endfor %}
+                    {% else %}
+                        {{ content|sw_sanitize }}
+                    {% endif %}
+                {% endblock %}
+            </div>
+
+            {% block utilities_alert_dismissible %}
+                {% if dismissible %}
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="{{ 'global.default.close'|trans|striptags }}">
+                        <span aria-hidden="true"></span>
+                    </button>
+                {% endif %}
+            {% endblock %}
+        {% endblock %}
+    </div>
+{% endblock %}

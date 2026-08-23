@@ -1,0 +1,67 @@
+@import "~scss/variables";
+
+$ct-context-menu-color-border: var(--color-border-secondary-default);
+$ct-context-menu-color-text: var(--color-text-primary-default);
+$ct-context-menu-color-active: var(--color-interaction-primary-default);
+$ct-context-menu-z-index: $z-index-context-menu;
+
+.ct-context-menu {
+    position: relative;
+    z-index: $ct-context-menu-z-index;
+
+    &.is--top-align {
+        .ct-context-menu__content {
+            margin-top: calc(-100% - 30px);
+
+            &::before {
+                transform: rotate(-135deg);
+                bottom: -5px;
+                top: unset;
+            }
+        }
+    }
+
+    .ct-context-menu__content {
+        padding: 8px;
+        background: var(--color-elevation-surface-raised);
+        box-shadow: 0 3px 6px 0 var(--color-elevation-shadow-default);
+        border: 1px solid $ct-context-menu-color-border;
+        border-radius: 4px;
+        text-align: left;
+        font-size: var(--font-size-xs);
+        color: $ct-context-menu-color-text;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            right: var(--scale-size-12);
+            height: 8px;
+            width: 8px;
+            transform: rotate(45deg);
+            background: var(--color-elevation-surface-raised);
+            border-top: 1px solid $ct-context-menu-color-border;
+            border-left: 1px solid $ct-context-menu-color-border;
+        }
+
+        .ct-context-menu__group {
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px solid $ct-context-menu-color-border;
+
+            &:first-child {
+                border-top: 0 none;
+                padding-top: 5px;
+                margin-top: 0;
+            }
+        }
+    }
+
+    &.is--left-align {
+        .ct-context-menu__content::before {
+            right: auto;
+            left: var(--scale-size-12);
+        }
+    }
+}

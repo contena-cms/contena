@@ -1,0 +1,21 @@
+.ct-settings-snippet-filter-switch {
+    .ct-settings-snippet-filter-switch__field {
+        padding-left: 20px;
+
+        &.border-top {
+            border-top: 1px solid var(--color-border-secondary-default);
+        }
+
+        &.border-bottom {
+            border-bottom: 1px solid var(--color-border-secondary-default);
+        }
+
+        &.ct-settings-snippet-filter-switch--small {
+            padding-top: 0;
+        }
+
+        &.ct-settings-snippet-filter-switch--large {
+            padding-top: 30px;
+        }
+    }
+}

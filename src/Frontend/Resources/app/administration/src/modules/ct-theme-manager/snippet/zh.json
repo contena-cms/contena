@@ -1,0 +1,8 @@
+{
+    "channel-theme": {
+        "pendingAssignment": {
+            "description": "“{pendingThemeName}”正在后台编译，准备完成后将自动替换“{liveThemeName}”。",
+            "descriptionNoLiveTheme": "“{pendingThemeName}”正在后台编译，准备完成后将自动应用。"
+        }
+    }
+}

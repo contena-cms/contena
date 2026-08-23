@@ -1,0 +1,13 @@
+{% sw_extends '@Frontend/frontend/layout/meta.html.twig' %}
+
+{% block layout_head_json_ld %}
+    {% set jsonLdWebPageType = 'SearchResultsPage' %}
+    {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-webpage.html.twig' %}
+    {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-breadcrumb.html.twig' with {
+        breadcrumbItems: page.breadcrumb
+    } only %}
+
+    {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-item-list.html.twig' with {
+        searchResult: page.listing
+    } only %}
+{% endblock %}

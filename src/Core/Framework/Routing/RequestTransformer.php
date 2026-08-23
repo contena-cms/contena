@@ -1,0 +1,21 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Routing;
+
+use Symfony\Component\HttpFoundation\Request;
+
+class RequestTransformer implements RequestTransformerInterface
+{
+    public function transform(Request $request): Request
+    {
+        return $request;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function extractInheritableAttributes(Request $sourceRequest): array
+    {
+        return [];
+    }
+}

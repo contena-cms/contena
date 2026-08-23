@@ -1,0 +1,58 @@
+@import "~scss/variables";
+@import "~scss/mixins";
+
+$ct-media-folder-content-border-radius-listing: $border-radius-default;
+$ct-media-folder-content-border-radius-list-item: $border-radius-default;
+
+.ct-media-folder-content {
+    .ct-media-folder-content__folder-listing {
+        border: 1px solid var(--color-border-secondary-default);
+        border-radius: $ct-media-folder-content-border-radius-listing;
+        background-color: var(--color-background-primary-default);
+        padding: 8px;
+        list-style: none;
+    }
+
+    .ct-media-folder-content__list-item {
+        border-radius: $ct-media-folder-content-border-radius-list-item;
+        padding-right: 10px;
+        height: 48px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--color-background-brand-default);
+
+            .ct-media-folder-content__folder-button {
+                color: var(--color-text-brand-default);
+            }
+        }
+
+        &.is--selected {
+            background-color: var(--color-background-brand-default);
+        }
+    }
+
+    .ct-media-folder-content__folder-icon {
+        margin-right: 16px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .ct-media-folder-content__button {
+        background: none;
+        border: none;
+        outline: none;
+        padding: 8px;
+        color: var(--color-icon-primary-default);
+    }
+
+    .ct-media-folder-content__folder-button,
+    .ct-media-folder-content__parent-folder {
+        text-align: left;
+
+        @include truncate;
+    }
+}

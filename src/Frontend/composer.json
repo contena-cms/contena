@@ -1,0 +1,32 @@
+{
+    "name": "contena/frontend",
+    "description": "Generic HTML frontend for the Contena platform",
+    "type": "library",
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "Contena\\Frontend\\": ""
+        }
+    },
+    "require": {
+        "php": ">=8.5",
+        "scssphp/scssphp": "v1.12.0",
+        "contena/core": "*",
+        "symfony/asset": "~7.4.0",
+        "symfony/config": "~7.4.0",
+        "symfony/console": "~7.4.0",
+        "symfony/dependency-injection": "~7.4.0",
+        "symfony/event-dispatcher": "~7.4.0",
+        "symfony/filesystem": "~7.4.0",
+        "symfony/finder": "~7.4.0",
+        "symfony/framework-bundle": "~7.4.0",
+        "symfony/http-foundation": "~7.4.0",
+        "symfony/http-kernel": "~7.4.12",
+        "symfony/routing": "~7.4.12",
+        "symfony/serializer": "~7.4.0",
+        "symfony/service-contracts": "~3.6.0",
+        "symfony/twig-bundle": "~7.4.0",
+        "symfony/ux-twig-component": "~2.35.0",
+        "twig/twig": "^3.26.0"
+    }
+}

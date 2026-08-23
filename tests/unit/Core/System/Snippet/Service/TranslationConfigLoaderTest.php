@@ -1,0 +1,209 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\Snippet\Service;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\System\Snippet\DataTransfer\Language\Language;
+use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
+use Contena\Core\System\Snippet\Service\TranslationConfigLoader;
+use Contena\Core\System\Snippet\SnippetException;
+use Symfony\Component\Filesystem\Filesystem;
+
+/**
+ * @internal
+ */
+#[CoversClass(TranslationConfigLoader::class)]
+class TranslationConfigLoaderTest extends TestCase
+{
+    private TestableTranslationConfigLoader $translationConfigLoader;
+
+    protected function setUp(): void
+    {
+        $this->translationConfigLoader = new TestableTranslationConfigLoader(
+            new Filesystem()
+        );
+    }
+
+    public function testLoadTranslationConfig(): void
+    {
+        $config = $this->translationConfigLoader->load();
+
+        static::assertSame(
+            'https://raw.githubusercontent.com/contena/translations/main/translations',
+            $config->repositoryUrl->__toString()
+        );
+
+        $locales = $config->locales;
+        static::assertIsArray($locales);
+        static::assertContains('en-GB', $locales);
+
+        $plugins = $config->plugins;
+        static::assertIsArray($plugins);
+        static::assertContains('CtCommercial', $plugins);
+
+        $languages = $config->languages;
+        $language = $languages->get('en-GB');
+        static::assertInstanceOf(Language::class, $language);
+        static::assertSame('English (UK)', $language->name);
+
+        $publisherMapping = $config->pluginMapping->get('CtPublisher');
+        static::assertInstanceOf(PluginMapping::class, $publisherMapping);
+        static::assertSame('PluginPublisher', $publisherMapping->snippetName);
+
+        $excludedLocales = $config->excludedLocales;
+        static::assertSame(['it-IT'], $excludedLocales);
+    }
+
+    public function testConfigFileSettings(): void
+    {
+        static::assertSame($this->translationConfigLoader->getParentConfigFilename(), 'translation.yaml');
+        static::assertStringEndsWith('/../../Resources', $this->translationConfigLoader->getParentRelativeConfigurationPath());
+    }
+
+    public function testThrowsOnInvalidUrl(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('translation_invalid_url.yaml');
+
+        $this->expectExceptionObject(SnippetException::invalidRepositoryUrl('invalid_url', new \Exception('"repository-url" must contain a schema and a host.')));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnBrokenUrl(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('translation_broken_url.yaml');
+
+        $this->expectExceptionObject(SnippetException::invalidRepositoryUrl('http://', new \Exception('Unable to parse URI: http://')));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnInvalidUrlType(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('translation_non_string_url.yaml');
+
+        $this->expectExceptionObject(SnippetException::invalidRepositoryUrl('4', new \Exception('"repository-url" in the translation config must be a string.')));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnEmptyUrl(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('translation_empty_string_url.yaml');
+
+        $this->expectExceptionObject(SnippetException::invalidRepositoryUrl('', new \Exception('"repository-url" in the translation config must not be empty.')));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnNonExistingConfigurationDirectory(): void
+    {
+        $this->translationConfigLoader->setRelativeConfigurationPath(__DIR__ . '/non-existing-directory');
+        static::expectException(SnippetException::class);
+        static::expectExceptionMessageMatches('#^Translation configuration directory does not exist: .*non-existing-directory"\.$#');
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnNonExistingConfigurationFile(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('non-existing-file');
+        $this->expectExceptionObject(SnippetException::translationConfigurationFileDoesNotExist('non-existing-file'));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testThrowsOnEmptyConfigurationFile(): void
+    {
+        $this->translationConfigLoader->setConfigFileName('translation_empty.yaml');
+        $this->expectExceptionObject(SnippetException::translationConfigurationFileIsEmpty('translation_empty.yaml'));
+        $this->translationConfigLoader->load();
+    }
+
+    public function testGetDecoratedThrowsException(): void
+    {
+        static::expectException(DecorationPatternException::class);
+        $this->translationConfigLoader->getDecorated();
+    }
+
+    public function testOverrideRepositoryUrl(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), ['repository_url' => 'https://example.com/repo']);
+
+        static::assertSame('https://example.com/repo', $loader->load()->repositoryUrl->__toString());
+    }
+
+    public function testOverrideMetadataUrl(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), ['metadata_url' => 'https://example.com/metadata.json']);
+
+        static::assertSame('https://example.com/metadata.json', $loader->load()->metadataUrl->__toString());
+    }
+
+    public function testOverridePluginsReplacesList(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), ['plugins' => ['MyCustomPlugin']]);
+
+        static::assertSame(['MyCustomPlugin'], $loader->load()->plugins);
+    }
+
+    public function testOverrideLanguagesReplacesList(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), [
+            'languages' => [['name' => 'Italiano', 'locale' => 'it-IT']],
+        ]);
+
+        $config = $loader->load();
+
+        static::assertSame(['it-IT'], $config->locales);
+        $language = $config->languages->get('it-IT');
+        static::assertInstanceOf(Language::class, $language);
+        static::assertSame('Italiano', $language->name);
+        static::assertNull($config->languages->get('en-GB'));
+    }
+
+    public function testOverrideExcludedLocalesCanBeCleared(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), ['excluded_locales' => []]);
+
+        static::assertSame([], $loader->load()->excludedLocales);
+    }
+
+    public function testOverridePluginMappingReplacesList(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), [
+            'plugin_mapping' => [['plugin' => 'FooPlugin', 'name' => 'BarSnippet']],
+        ]);
+
+        $config = $loader->load();
+
+        $mapping = $config->pluginMapping->get('FooPlugin');
+        static::assertInstanceOf(PluginMapping::class, $mapping);
+        static::assertSame('BarSnippet', $mapping->snippetName);
+        static::assertNull($config->pluginMapping->get('CtPublisher'));
+    }
+
+    public function testNullOverridesFallBackToConfigFile(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), [
+            'repository_url' => null,
+            'metadata_url' => null,
+            'plugins' => null,
+            'excluded_locales' => null,
+            'plugin_mapping' => null,
+            'languages' => null,
+        ]);
+
+        $config = $loader->load();
+
+        static::assertSame(
+            'https://raw.githubusercontent.com/contena/translations/main/translations',
+            $config->repositoryUrl->__toString()
+        );
+        static::assertSame(['it-IT'], $config->excludedLocales);
+    }
+
+    public function testOverriddenInvalidUrlIsStillValidated(): void
+    {
+        $loader = new TestableTranslationConfigLoader(new Filesystem(), ['repository_url' => 'invalid_url']);
+
+        $this->expectExceptionObject(SnippetException::invalidRepositoryUrl('invalid_url', new \Exception('"repository-url" must contain a schema and a host.')));
+        $loader->load();
+    }
+}

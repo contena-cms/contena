@@ -1,0 +1,10 @@
+{
+    "ct-settings-sitemap": {
+        "general": {
+            "mainMenuItemGeneral": "站点地图",
+            "description": "在这里更改站点地图设置。",
+            "textHeadline": "站点地图",
+            "messageSaveSuccess": "配置已保存。"
+        }
+    }
+}

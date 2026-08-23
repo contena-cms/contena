@@ -1,0 +1,721 @@
+/**
+ * @ct-package fundamentals@discovery
+ */
+import { mount } from '@vue/test-utils';
+import { routeLocationKey, routerKey } from 'vue-router';
+
+const deviceMock = {
+    onResize: jest.fn(),
+    removeResizeListener: jest.fn(),
+};
+
+async function createWrapper(privileges = [], customStubs = {}) {
+    const router = {
+        push: jest.fn(),
+    };
+    const route = {
+        params: {
+            sortBy: 'sortBy',
+        },
+        query: {
+            page: 1,
+            limit: 25,
+        },
+    };
+
+    const languageRepositoryMock = {
+        search: () => {
+            return Promise.resolve([
+                {
+                    name: 'English',
+                },
+                {
+                    name: 'German',
+                },
+                {
+                    name: 'Vietnamese',
+                },
+            ]);
+        },
+        syncDeleted: jest.fn().mockResolvedValue(),
+    };
+
+    return mount(
+        await wrapTestComponent('ct-settings-language-list', {
+            sync: true,
+        }),
+        {
+            global: {
+                renderStubDefaultSlot: true,
+                mocks: {
+                    $device: deviceMock,
+                    $route: route,
+                    $router: router,
+                },
+                provide: {
+                    repositoryFactory: {
+                        create: () => languageRepositoryMock,
+                    },
+                    [routerKey]: router,
+                    [routeLocationKey]: route,
+                    translationService: {
+                        getList: jest.fn().mockResolvedValue({ total: 0, items: [] }),
+                        getMeta: jest.fn().mockResolvedValue({
+                            builtInLocales: [
+                                'de-DE',
+                                'en-GB',
+                            ],
+                        }),
+                        update: jest.fn().mockResolvedValue(),
+                        install: jest.fn().mockResolvedValue(),
+                        deleteTranslation: jest.fn().mockResolvedValue(),
+                    },
+                    acl: {
+                        can: (identifier) => {
+                            if (!identifier) {
+                                return true;
+                            }
+
+                            return privileges.includes(identifier);
+                        },
+                    },
+
+                    detailPageLinkText(allowEdit) {
+                        return allowEdit ? this.$t('global.default.edit') : this.$t('global.default.view');
+                    },
+
+                    searchRankingService: {
+                        isValidTerm: (term) => {
+                            return term && term.trim().length >= 1;
+                        },
+                    },
+
+                    setSwPageSidebarOffset: () => {},
+                    removeSwPageSidebarOffset: () => {},
+                },
+                stubs: {
+                    'ct-page': {
+                        template: `
+                    <div class="ct-page">
+                        <slot name="search-bar"></slot>
+                        <slot name="smart-bar-back"></slot>
+                        <slot name="smart-bar-header"></slot>
+                        <slot name="language-switch"></slot>
+                        <slot name="smart-bar-actions"></slot>
+                        <slot name="side-content"></slot>
+                        <slot name="content"></slot>
+                        <slot name="sidebar"></slot>
+                        <slot></slot>
+                    </div>
+                `,
+                    },
+
+                    'ct-search-bar': true,
+                    'ct-language-switch': true,
+                    'ct-sidebar': await wrapTestComponent('ct-sidebar', { sync: true }),
+                    'ct-sidebar-item': await wrapTestComponent('ct-sidebar-item', { sync: true }),
+                    'ct-sidebar-navigation-item': await wrapTestComponent('ct-sidebar-navigation-item', { sync: true }),
+                    'mt-tooltip': true,
+                    'ct-collapse': true,
+                    'ct-context-menu-item': true,
+                    'ct-entity-listing': {
+                        inject: ['detailPageLinkText'],
+                        methods: {
+                            resetSelection: jest.fn(),
+                        },
+                        props: [
+                            'items',
+                            'dataSource',
+                            'allowEdit',
+                            'allowView',
+                            'detailRoute',
+                            'identifier',
+                        ],
+                        template: `
+                    <div>
+                        <template v-for="item in (dataSource || items)">
+                            <slot name="detail-action" v-bind="{ item }">
+                                <ct-context-menu-item
+                                    v-if="detailRoute"
+                                    :disabled="!allowEdit && !allowView || undefined"
+                                    class="ct-entity-listing__context-menu-edit-action">
+                                    {{ detailPageLinkText(allowEdit) }}
+                                </ct-context-menu-item>
+                            </slot>
+                            <slot name="delete-action" v-bind="{ item }"></slot>
+                        </template>
+                    </div>
+                `,
+                    },
+                    'ct-text-field': true,
+                    'router-link': true,
+                    'ct-card-view': true,
+                    'mt-card': {
+                        template: '<div class="mt-card"><slot name="grid" /><slot /></div>',
+                    },
+                    'ct-card': true,
+                    'ct-label': true,
+                    'ct-settings-language-add-modal': true,
+                    ...customStubs,
+                },
+            },
+        },
+    );
+}
+
+describe('module/ct-settings-language/page/ct-settings-language-list', () => {
+    it('should not render the removed filter UI', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.ct-settings-language-list__filterField').exists()).toBe(false);
+    });
+
+    it('should be able to create a new language', async () => {
+        const wrapper = await createWrapper([
+            'language.creator',
+        ]);
+        await flushPromises();
+
+        const addButton = wrapper.find('.ct-settings-language-list__button-create');
+
+        expect(addButton.attributes().disabled).toBeFalsy();
+    });
+
+    it('should not be able to create a new language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const addButton = wrapper.find('.ct-settings-language-list__button-create');
+
+        expect(addButton.attributes('disabled')).toBeDefined();
+    });
+
+    it('should be able to view a language', async () => {
+        const wrapper = await createWrapper([
+            'language.viewer',
+        ]);
+        await flushPromises();
+
+        const elementItemAction = wrapper.find('.ct-entity-listing__context-menu-edit-action');
+
+        expect(elementItemAction.attributes().disabled).toBeFalsy();
+        expect(elementItemAction.text()).toBe('global.default.view');
+    });
+
+    it('should be able to edit a language', async () => {
+        const wrapper = await createWrapper([
+            'language.editor',
+        ]);
+        await flushPromises();
+
+        const elementItemAction = wrapper.find('.ct-entity-listing__context-menu-edit-action');
+
+        expect(elementItemAction.attributes().disabled).toBeFalsy();
+        expect(elementItemAction.text()).toBe('global.default.edit');
+    });
+
+    it('should not be able to edit a language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const elementItemAction = wrapper.find('.ct-entity-listing__context-menu-edit-action');
+
+        expect(elementItemAction.attributes().disabled).toBeTruthy();
+        expect(elementItemAction.text()).toBe('global.default.view');
+    });
+
+    it('should be able to delete a language', async () => {
+        const wrapper = await createWrapper([
+            'language.deleter',
+        ]);
+        await flushPromises();
+
+        const deleteMenuItem = wrapper.find('.ct-settings-language-list__delete-action');
+
+        expect(deleteMenuItem.attributes().disabled).toBeFalsy();
+    });
+
+    it('should not be able to delete a language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const deleteMenuItem = wrapper.find('.ct-settings-language-list__delete-action');
+
+        expect(deleteMenuItem.attributes().disabled).toBeTruthy();
+    });
+
+    it('should be able to inline edit a language', async () => {
+        const wrapper = await createWrapper([
+            'language.editor',
+        ]);
+        await flushPromises();
+
+        const entityListing = wrapper.find('.ct-settings-language-list-grid');
+
+        expect(entityListing.exists()).toBeTruthy();
+        expect(entityListing.attributes()['allow-inline-edit']).toBeTruthy();
+    });
+
+    it('should not be able to inline edit a language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const entityListing = wrapper.find('.ct-settings-language-list-grid');
+
+        expect(entityListing.exists()).toBeTruthy();
+        expect(entityListing.attributes()['allow-inline-edit']).toBeFalsy();
+    });
+
+    it('should contain a listing criteria with correct properties', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.vm.listingCriteria).toEqual(
+            expect.objectContaining({
+                associations: expect.arrayContaining([
+                    expect.objectContaining({
+                        association: 'translationCode',
+                    }),
+                ]),
+            }),
+        );
+    });
+
+    it('should show a link to the snippets page', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const snippetLink = wrapper.find('.ct-settings-language-list__snippet-link');
+        expect(snippetLink.exists()).toBe(true);
+        expect(snippetLink.text()).toContain('manageSnippets');
+    });
+
+    it('should load the channels association', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.vm.listingCriteria).toEqual(
+            expect.objectContaining({
+                associations: expect.arrayContaining([
+                    expect.objectContaining({
+                        association: 'channels',
+                    }),
+                ]),
+            }),
+        );
+    });
+
+    it('should render the channels and snippet status columns', async () => {
+        const wrapper = await createWrapper();
+
+        const columns = wrapper.vm.getColumns.map((column) => column.property);
+
+        expect(columns).toContain('channels');
+        expect(columns).toContain('snippetStatus');
+    });
+
+    it('should persist grid settings via a stable identifier', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const grid = wrapper.findComponent('.ct-settings-language-list-grid');
+
+        expect(grid.props('identifier')).toBe('ct-settings-language-list');
+    });
+
+    it('should provide a parent column that is hidden by default', async () => {
+        const wrapper = await createWrapper();
+
+        const parentColumn = wrapper.vm.getColumns.find((column) => column.property === 'parent');
+
+        expect(parentColumn).toBeDefined();
+        expect(parentColumn.visible).toBe(false);
+    });
+
+    it('should only display a parent name for inherited languages', async () => {
+        const wrapper = await createWrapper();
+
+        wrapper.vm.parentLanguages = {
+            get: () => ({ name: 'English' }),
+        };
+
+        expect(wrapper.vm.getParentName({ parentId: null })).toBe('');
+        expect(wrapper.vm.getParentName({ parentId: 'parent-id' })).toBe('English');
+    });
+
+    it('should render the update all snippets button when a language is updatable', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = { 'fr-FR': { locale: 'fr-FR', updateAvailable: true } };
+        await flushPromises();
+
+        expect(wrapper.find('.ct-settings-language-list__button-update-snippets').exists()).toBe(true);
+    });
+
+    it('should hide the update-all button when nothing is updatable', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        // no metadata => nothing updatable => button hidden
+        expect(wrapper.find('.ct-settings-language-list__button-update-snippets').exists()).toBe(false);
+
+        wrapper.vm.translationMetadata = { 'fr-FR': { locale: 'fr-FR', updateAvailable: true } };
+        await flushPromises();
+
+        expect(wrapper.find('.ct-settings-language-list__button-update-snippets').exists()).toBe(true);
+    });
+
+    it('should label the assigned channels by count', async () => {
+        const wrapper = await createWrapper();
+
+        // languages without assigned channels render nothing to keep the overview clean
+        expect(wrapper.vm.channelLabel({ channels: [] })).toBe('');
+        expect(wrapper.vm.channelLabel({})).toBe('');
+        expect(
+            wrapper.vm.channelLabel({
+                channels: [
+                    {},
+                    {},
+                    {},
+                ],
+            }),
+        ).toContain('channelCount');
+    });
+
+    it('should only expose the update status derived from the translation metadata', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = {
+            'es-ES': { locale: 'es-ES', lastUpdate: '2026-07-20T00:00:00+00:00', updateAvailable: false },
+            'fr-FR': { locale: 'fr-FR', lastUpdate: '2026-07-20T00:00:00+00:00', updateAvailable: true },
+        };
+
+        // Contena default languages are never checked for snippet updates
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'de-DE' } })).toBeNull();
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'en-GB' } })).toBeNull();
+        // up-to-date and custom locales no longer render a badge
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'es-ES' } })).toBeNull();
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'zh-CN' } })).toBeNull();
+        // only an available update is surfaced
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'fr-FR' } })).toBe('updateAvailable');
+    });
+
+    it('should derive isUpdatingSnippets from the currently updating locales', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.isUpdatingSnippets).toBe(false);
+
+        wrapper.vm.updatingLocales = ['fr-FR'];
+
+        expect(wrapper.vm.isUpdatingSnippets).toBe(true);
+    });
+
+    it('should open the add language modal via the add button', async () => {
+        const wrapper = await createWrapper(['language.creator']);
+        await flushPromises();
+
+        expect(wrapper.findComponent('ct-settings-language-add-modal-stub').exists()).toBe(false);
+
+        await wrapper.find('.ct-settings-language-list__button-create').trigger('click');
+
+        expect(wrapper.vm.showAddLanguageModal).toBe(true);
+        expect(wrapper.findComponent('ct-settings-language-add-modal-stub').exists()).toBe(true);
+    });
+
+    it('should close the modal and redirect to the detail page of the added language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.showAddLanguageModal = true;
+        jest.spyOn(wrapper.vm.languageRepository, 'search').mockResolvedValue({
+            first: () => ({ id: 'new-language-id' }),
+        });
+
+        await wrapper.vm.onLanguageAdded('fr-FR');
+
+        expect(wrapper.vm.showAddLanguageModal).toBe(false);
+        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+            name: 'ct.settings.language.detail',
+            params: { id: 'new-language-id' },
+            query: { languageCreated: 'true' },
+        });
+    });
+
+    it('should reload the list when the added language cannot be resolved', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const searchSpy = jest
+            .spyOn(wrapper.vm.languageRepository, 'search')
+            .mockResolvedValueOnce({ first: () => null })
+            .mockResolvedValueOnce([])
+            .mockResolvedValueOnce([]);
+
+        await wrapper.vm.onLanguageAdded('xx-XX');
+
+        expect(searchSpy).toHaveBeenCalledTimes(3);
+        expect(wrapper.vm.$router.push).not.toHaveBeenCalled();
+    });
+
+    it('should sequentially install every updatable language when updating all snippets', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        // update all re-fetches the current state first, so a stale in-memory list can never re-create a deleted language
+        wrapper.vm.translationService.getList.mockResolvedValueOnce({
+            items: [
+                { locale: 'fr-FR', updateAvailable: true },
+                { locale: 'es-ES', updateAvailable: true },
+                { locale: 'it-IT', updateAvailable: false },
+            ],
+        });
+
+        await wrapper.vm.onUpdateAllSnippets();
+
+        expect(wrapper.vm.translationService.install).toHaveBeenCalledTimes(2);
+        expect(wrapper.vm.translationService.install).toHaveBeenNthCalledWith(1, {
+            locales: ['fr-FR'],
+            activate: true,
+        });
+        expect(wrapper.vm.translationService.install).toHaveBeenNthCalledWith(2, {
+            locales: ['es-ES'],
+            activate: true,
+        });
+        expect(wrapper.vm.translationService.update).not.toHaveBeenCalled();
+    });
+
+    it('does not re-install a language that was removed since the list was last loaded', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        // stale in-memory state still lists de-DE as updatable
+        wrapper.vm.translationMetadata = {
+            'de-DE': { locale: 'de-DE', updateAvailable: true },
+        };
+
+        // the current server state no longer reports de-DE (the language was deleted in the meantime)
+        wrapper.vm.translationService.getList.mockResolvedValueOnce({ items: [] });
+
+        await wrapper.vm.onUpdateAllSnippets();
+
+        expect(wrapper.vm.translationService.install).not.toHaveBeenCalled();
+    });
+
+    it('should load the translation metadata once on creation and not on every list fetch', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.translationService.getList).toHaveBeenCalledTimes(1);
+
+        await wrapper.vm.getList();
+
+        expect(wrapper.vm.translationService.getList).toHaveBeenCalledTimes(1);
+    });
+
+    it('should refetch the translation metadata on refresh', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.translationService.getList).toHaveBeenCalledTimes(1);
+
+        wrapper.vm.onRefresh();
+        await flushPromises();
+
+        expect(wrapper.vm.translationService.getList).toHaveBeenCalledTimes(2);
+    });
+
+    it('should update the snippets of a single language and refetch the metadata', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        await wrapper.vm.onUpdateSnippets({ locale: { code: 'fr-FR' } });
+
+        expect(wrapper.vm.translationService.install).toHaveBeenCalledWith({
+            locales: ['fr-FR'],
+            activate: true,
+        });
+        // created (1) + reload after the update (2)
+        expect(wrapper.vm.translationService.getList).toHaveBeenCalledTimes(2);
+    });
+
+    it('should mark only the updating language as updating', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = {
+            'fr-FR': { locale: 'fr-FR', updateAvailable: true },
+            'es-ES': { locale: 'es-ES', updateAvailable: true },
+        };
+        wrapper.vm.updatingLocales = ['fr-FR'];
+
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'fr-FR' } })).toBe('updating');
+        expect(wrapper.vm.getSnippetStatus({ locale: { code: 'es-ES' } })).toBe('updateAvailable');
+    });
+
+    it('should only offer selected languages that actually have an update available', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = {
+            'fr-FR': { locale: 'fr-FR', updateAvailable: true },
+            'es-ES': { locale: 'es-ES', updateAvailable: true },
+            'it-IT': { locale: 'it-IT', updateAvailable: false },
+        };
+        wrapper.vm.snippetSelection = {
+            a: { locale: { code: 'fr-FR' } },
+            b: { locale: { code: 'es-ES' } },
+            c: { locale: { code: 'it-IT' } },
+            d: { locale: { code: 'de-DE' } },
+        };
+
+        expect(wrapper.vm.selectedUpdatableLocales).toEqual([
+            'fr-FR',
+            'es-ES',
+        ]);
+    });
+
+    it('should sequentially install the snippets for each selected updatable language', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = {
+            'fr-FR': { locale: 'fr-FR', updateAvailable: true },
+            'es-ES': { locale: 'es-ES', updateAvailable: true },
+        };
+        wrapper.vm.snippetSelection = {
+            a: { locale: { code: 'fr-FR' } },
+            b: { locale: { code: 'es-ES' } },
+        };
+
+        await wrapper.vm.onUpdateSelectedSnippets();
+
+        expect(wrapper.vm.translationService.install).toHaveBeenCalledTimes(2);
+        expect(wrapper.vm.translationService.install).toHaveBeenNthCalledWith(1, {
+            locales: ['fr-FR'],
+            activate: true,
+        });
+        expect(wrapper.vm.translationService.install).toHaveBeenNthCalledWith(2, {
+            locales: ['es-ES'],
+            activate: true,
+        });
+
+        // the grid selection is cleared once the bulk update finishes
+        expect(wrapper.vm.snippetSelection).toEqual({});
+        expect(wrapper.vm.selectedUpdatableLocales).toEqual([]);
+    });
+
+    it('lists the single language and deletes it together with its files when the option is checked', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+        jest.spyOn(wrapper.vm, 'invalidateLanguageCaches').mockImplementation(() => {});
+
+        wrapper.vm.translationMetadata = { 'fr-FR': { locale: 'fr-FR', lastUpdate: '2026-01-01T00:00:00+00:00' } };
+
+        wrapper.vm.openDeleteModal([{ id: 'id-fr', name: 'Français', locale: { code: 'fr-FR' } }]);
+
+        // the modal opens with the single language listed and the file option defaults to checked
+        expect(wrapper.vm.showDeleteModal).toBe(true);
+        expect(wrapper.vm.deleteCandidates).toHaveLength(1);
+        expect(wrapper.vm.deleteTranslationFiles).toBe(true);
+        expect(wrapper.vm.deleteCandidateInstalledLocales).toEqual(['fr-FR']);
+
+        await wrapper.vm.confirmDelete();
+
+        expect(wrapper.vm.languageRepository.syncDeleted).toHaveBeenCalledWith(['id-fr'], expect.anything());
+        expect(wrapper.vm.translationService.deleteTranslation).toHaveBeenCalledWith('fr-FR');
+        expect(wrapper.vm.showDeleteModal).toBe(false);
+    });
+
+    it('keeps the files when the delete option is left unchecked', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+        jest.spyOn(wrapper.vm, 'invalidateLanguageCaches').mockImplementation(() => {});
+
+        wrapper.vm.translationMetadata = { 'fr-FR': { locale: 'fr-FR', lastUpdate: '2026-01-01T00:00:00+00:00' } };
+
+        wrapper.vm.openDeleteModal([{ id: 'id-fr', name: 'Français', locale: { code: 'fr-FR' } }]);
+        wrapper.vm.deleteTranslationFiles = false;
+        await wrapper.vm.confirmDelete();
+
+        expect(wrapper.vm.languageRepository.syncDeleted).toHaveBeenCalledWith(['id-fr'], expect.anything());
+        expect(wrapper.vm.translationService.deleteTranslation).not.toHaveBeenCalled();
+    });
+
+    it('offers no file option for a language without a downloaded translation', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.translationMetadata = {};
+        wrapper.vm.openDeleteModal([{ id: 'id-fr', name: 'Français', locale: { code: 'fr-FR' } }]);
+
+        expect(wrapper.vm.deleteCandidateInstalledLocales).toEqual([]);
+    });
+
+    it('lists all selected languages for a bulk delete and only removes files of installed ones', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+        jest.spyOn(wrapper.vm, 'invalidateLanguageCaches').mockImplementation(() => {});
+        jest.spyOn(wrapper.vm, 'isDefault').mockReturnValue(false);
+
+        wrapper.vm.translationMetadata = {
+            'fr-FR': { locale: 'fr-FR', lastUpdate: '2026-01-01T00:00:00+00:00' },
+            'es-ES': { locale: 'es-ES', lastUpdate: null },
+        };
+        wrapper.vm.snippetSelection = {
+            'fr-id': { id: 'fr-id', name: 'Français', locale: { code: 'fr-FR' } },
+            'es-id': { id: 'es-id', name: 'Español', locale: { code: 'es-ES' } },
+        };
+
+        wrapper.vm.openDeleteModal(wrapper.vm.bulkDeleteLanguages);
+
+        expect(wrapper.vm.deleteCandidates).toHaveLength(2);
+        expect(wrapper.vm.deleteCandidateInstalledLocales).toEqual(['fr-FR']);
+
+        wrapper.vm.deleteTranslationFiles = true;
+        await wrapper.vm.confirmDelete();
+
+        expect(wrapper.vm.languageRepository.syncDeleted).toHaveBeenCalledWith(
+            [
+                'fr-id',
+                'es-id',
+            ],
+            expect.anything(),
+        );
+        expect(wrapper.vm.translationService.deleteTranslation).toHaveBeenCalledTimes(1);
+        expect(wrapper.vm.translationService.deleteTranslation).toHaveBeenCalledWith('fr-FR');
+        // the grid selection is cleared once the deletion finished
+        expect(wrapper.vm.snippetSelection).toEqual({});
+    });
+
+    it('excludes the system default language from a bulk delete', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+        wrapper.vm.snippetSelection = {
+            a: { id: 'fr-id', name: 'Français', locale: { code: 'fr-FR' } },
+            def: { id: 'default-id', name: 'English', locale: { code: 'en-GB' } },
+        };
+
+        Contena.Context.api.systemLanguageId = 'default-id';
+
+        expect(wrapper.vm.bulkDeleteLanguages.map((language) => language.id)).toEqual(['fr-id']);
+    });
+
+    it('lists the delete candidates alphabetically by name', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.deleteCandidates = [
+            { id: '1', name: 'Zulu' },
+            { id: '2', name: 'Català' },
+            { id: '3', name: 'Bosanski' },
+        ];
+
+        expect(wrapper.vm.sortedDeleteCandidates.map((language) => language.name)).toEqual([
+            'Bosanski',
+            'Català',
+            'Zulu',
+        ]);
+    });
+});

@@ -1,0 +1,38 @@
+.ct-date-filter {
+    &__from.ct-block-field {
+        margin-bottom: 8px;
+    }
+
+    &__to.ct-block-field {
+        margin-bottom: 8px;
+    }
+
+    &.--has-timeframe {
+        .ct-container {
+            grid-template-columns: 1fr 1fr;
+
+            &.--has-divider {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .ct-range-filter__divider {
+                grid-column: 1 / 3;
+                grid-row: 2;
+            }
+
+            .ct-date-filter__timeframe {
+                margin-bottom: 0;
+                grid-column: 1 / 3;
+            }
+
+            .ct-date-filter__from {
+                grid-column: 1 / 1;
+            }
+
+            .ct-date-filter__to {
+                grid-column: 2 / 2;
+            }
+        }
+    }
+}

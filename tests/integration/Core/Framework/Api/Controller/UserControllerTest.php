@@ -1,0 +1,374 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Test\TestDefaults;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+class UserControllerTest extends TestCase
+{
+    use AdminFunctionalTestBehaviour;
+
+    protected function tearDown(): void
+    {
+        $this->resetBrowser();
+    }
+
+    #[Group('slow')]
+    public function testMe(): void
+    {
+        $url = '/api/_info/me';
+        $client = $this->getBrowser();
+        $client->request('GET', $url);
+
+        static::assertSame(200, $client->getResponse()->getStatusCode());
+
+        $content = json_decode((string) $client->getResponse()->getContent(), true);
+
+        static::assertArrayHasKey('attributes', $content['data']);
+        static::assertSame('user', $content['data']['type']);
+        static::assertSame('admin@example.com', $content['data']['attributes']['email']);
+        static::assertNotNull($content['data']['relationships']['avatarMedia']);
+    }
+
+    public function testCreateUser(): void
+    {
+        $client = $this->getBrowser();
+        $data = [
+            'email' => 'foo@bar.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'foobar',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+        ];
+
+        $client->request('POST', '/api/user', $data);
+
+        $response = $client->getResponse();
+        static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
+        $userCode = static::getContainer()->get(Connection::class)->fetchOne(
+            'SELECT `user_code` FROM `user` WHERE `email` = :email',
+            ['email' => $data['email']]
+        );
+        static::assertIsString($userCode);
+        static::assertMatchesRegularExpression('/^\d{5,}$/', $userCode);
+    }
+
+    public function testCreateUserKeepsReservedUserCode(): void
+    {
+        $client = $this->getBrowser(true, [UserVerifiedScope::IDENTIFIER]);
+        $data = [
+            'userCode' => '12000',
+            'email' => 'reserved-code@bar.com',
+            'name' => 'Reserved Code',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'reserved-code',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+        ];
+
+        $client->request('POST', '/api/user', $data);
+
+        static::assertSame(Response::HTTP_NO_CONTENT, $client->getResponse()->getStatusCode());
+        static::assertSame(
+            $data['userCode'],
+            static::getContainer()->get(Connection::class)->fetchOne(
+                'SELECT `user_code` FROM `user` WHERE `email` = :email',
+                ['email' => $data['email']]
+            )
+        );
+    }
+
+    public function testRemoveRoleAssignment(): void
+    {
+        $ids = new IdsCollection();
+
+        $user = [
+            'id' => $ids->get('user'),
+            'email' => 'foo@bar.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'foobar',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'aclRoles' => [
+                ['id' => $ids->get('role-1'), 'name' => 'role-1'],
+                ['id' => $ids->get('role-2'), 'name' => 'role-2'],
+            ],
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->create([$user], Context::createDefaultContext());
+
+        $client = $this->getBrowser(true, [UserVerifiedScope::IDENTIFIER]);
+        $client->request('DELETE', '/api/user/' . $ids->get('user') . '/acl-roles/' . $ids->get('role-1'));
+
+        $response = $client->getResponse();
+        $content = json_decode((string) $response->getContent(), true);
+        static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode(), print_r($content, true));
+
+        $assigned = static::getContainer()->get(Connection::class)
+            ->fetchAllAssociative(
+                'SELECT LOWER(HEX(acl_role_id)) as id FROM acl_user_role WHERE user_id = :id',
+                ['id' => Uuid::fromHexToBytes($ids->get('user'))]
+            );
+
+        $assigned = array_column($assigned, 'id');
+        static::assertSame(array_values($ids->getList(['role-2'])), $assigned);
+    }
+
+    public function testAddRoleAssignment(): void
+    {
+        $ids = new IdsCollection();
+
+        $user = [
+            'id' => $ids->get('user'),
+            'email' => 'foo@bar.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'foobar',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'aclRoles' => [],
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->create([$user], Context::createDefaultContext());
+
+        $client = $this->getBrowser(true, [UserVerifiedScope::IDENTIFIER]);
+        $client->request(
+            'PATCH',
+            '/api/user/' . $ids->get('user'),
+            [
+                'aclRoles' => [
+                    ['id' => $ids->get('role-1'), 'name' => 'role-1'],
+                    ['id' => $ids->get('role-2'), 'name' => 'role-2'],
+                ],
+            ]
+        );
+
+        $response = $client->getResponse();
+        $content = json_decode((string) $response->getContent(), true);
+        static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode(), print_r($content, true));
+
+        $assigned = static::getContainer()->get(Connection::class)
+            ->fetchAllAssociative(
+                'SELECT LOWER(HEX(acl_role_id)) as id FROM acl_user_role WHERE user_id = :id ORDER BY acl_role_id ASC',
+                ['id' => Uuid::fromHexToBytes($ids->get('user'))]
+            );
+
+        $assigned = array_column($assigned, 'id');
+        $expectedIds = $ids->getList(['role-1', 'role-2']);
+        sort($expectedIds);
+        static::assertSame($expectedIds, $assigned);
+    }
+
+    public function testDeleteUser(): void
+    {
+        $id = Uuid::randomHex();
+
+        $data = [
+            'id' => $id,
+            'email' => 'foo@bar.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'foobar',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->create([$data], Context::createDefaultContext());
+
+        $client = $this->getBrowser();
+        $client->request('DELETE', '/api/user/' . $id);
+        $response = $client->getResponse();
+        $content = json_decode((string) $response->getContent(), true);
+        static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode(), print_r($content, true));
+    }
+
+    public function testSetOwnProfileWithPermission(): void
+    {
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], ['user_change_me']);
+        $this->getBrowser()->request('PATCH', '/api/_info/me', [
+            'name' => 'newName',
+            'phoneNumber' => '13800138000',
+        ]);
+        $responsePatch = $this->getBrowser()->getResponse();
+
+        static::assertSame(Response::HTTP_NO_CONTENT, $responsePatch->getStatusCode(), (string) $responsePatch->getContent());
+
+        $this->getBrowser()->request('GET', '/api/_info/me');
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $attributes = json_decode((string) $response->getContent(), true)['data']['attributes'];
+        static::assertSame('newName', $attributes['name']);
+        static::assertSame('13800138000', $attributes['phoneNumber']);
+    }
+
+    public function testSetOwnProfileNoPermission(): void
+    {
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], []);
+        $this->getBrowser()->request('PATCH', '/api/_info/me');
+        $response = $this->getBrowser()->getResponse();
+
+        $content = (string) $response->getContent();
+
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode(), $content);
+        static::assertSame(MissingPrivilegeException::MISSING_PRIVILEGE_ERROR, json_decode($content, true)['errors'][0]['code'], $content);
+        static::assertSame(['user_change_me'], json_decode(json_decode($content, true)['errors'][0]['detail'], true)['missingPrivileges'], $content);
+    }
+
+    public function testSetOwnProfilePermissionButNotAllowedField(): void
+    {
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], ['user_change_me']);
+        $this->getBrowser()->request('PATCH', '/api/_info/me', ['title' => 'newTitle']);
+        $response = $this->getBrowser()->getResponse();
+
+        $content = (string) $response->getContent();
+
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode(), $content);
+        static::assertSame(MissingPrivilegeException::MISSING_PRIVILEGE_ERROR, json_decode($content, true)['errors'][0]['code'], $content);
+        static::assertSame(['user:update'], json_decode(json_decode($content, true)['errors'][0]['detail'], true)['missingPrivileges'], $content);
+    }
+
+    public function testPreventChangeOfUSerWithoutPermission(): void
+    {
+        $ids = new IdsCollection();
+
+        $user = [
+            'id' => $ids->get('user'),
+            'email' => 'foo@bar.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'foobar',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'aclRoles' => [],
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->create([$user], Context::createDefaultContext());
+
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], ['user_change_me']);
+
+        $this->getBrowser()->request('PATCH', '/api/_info/me', ['name' => 'newName', 'id' => $ids->get('user')]);
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testPreventCreateUserWithAdminFlagAsNonAdmin(): void
+    {
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], ['user:create', 'user:update']);
+        $client = $this->getBrowser();
+
+        $data = [
+            'email' => 'escalated@example.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'escalated',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'admin' => true,
+        ];
+
+        $client->jsonRequest('POST', '/api/user', $data);
+
+        $response = $client->getResponse();
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testPreventUpdateUserWithAdminFlagAsNonAdmin(): void
+    {
+        $ids = new IdsCollection();
+
+        $user = [
+            'id' => $ids->get('user'),
+            'email' => 'target@example.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'target-user',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'admin' => false,
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->create([$user], Context::createDefaultContext());
+
+        $this->authorizeBrowser($this->getBrowser(), [UserVerifiedScope::IDENTIFIER], ['user:create', 'user:update']);
+        $client = $this->getBrowser();
+
+        $client->jsonRequest(
+            'PATCH',
+            '/api/user/' . $ids->get('user'),
+            ['admin' => true]
+        );
+
+        $response = $client->getResponse();
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testCreateUserWithAdminFlagAsAdmin(): void
+    {
+        static::getContainer()->get(Connection::class)
+            ->executeStatement('DELETE FROM user WHERE email = \'admin@example.com\'');
+
+        $this->kernelBrowser = null;
+        $client = $this->getBrowser(true, [UserVerifiedScope::IDENTIFIER]);
+
+        $data = [
+            'email' => 'new-admin@example.com',
+            'name' => 'Firstname Lastname',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'username' => 'new-admin',
+            'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
+            'admin' => true,
+        ];
+
+        $client->jsonRequest('POST', '/api/user', $data);
+
+        $response = $client->getResponse();
+        static::assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
+        $adminFlag = static::getContainer()->get(Connection::class)
+            ->fetchOne(
+                'SELECT admin FROM user WHERE username = :username',
+                ['username' => 'new-admin']
+            );
+
+        static::assertSame(1, (int) $adminFlag);
+    }
+
+    public function testLogoutRevokesRefreshTokens(): void
+    {
+        $client = $this->getBrowser();
+        $connection = static::getContainer()->get(Connection::class);
+
+        $userId = $connection->fetchOne('SELECT LOWER(HEX(id)) FROM user WHERE email = :email', ['email' => 'admin@example.com']);
+        static::assertIsString($userId);
+
+        $tokensBefore = (int) $connection->fetchOne(
+            'SELECT COUNT(*) FROM refresh_token WHERE user_id = UNHEX(:userId)',
+            ['userId' => $userId]
+        );
+        static::assertGreaterThan(0, $tokensBefore, 'Expected at least one refresh token before logout');
+
+        $client->request('POST', '/api/_action/user/logout');
+        static::assertSame(Response::HTTP_NO_CONTENT, $client->getResponse()->getStatusCode());
+
+        $tokensAfter = (int) $connection->fetchOne(
+            'SELECT COUNT(*) FROM refresh_token WHERE user_id = UNHEX(:userId)',
+            ['userId' => $userId]
+        );
+        static::assertSame(0, $tokensAfter, 'Expected all refresh tokens to be revoked after logout');
+    }
+}

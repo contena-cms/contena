@@ -1,0 +1,12 @@
+{
+  "name": "Theme with bundle relative files",
+  "author": "Contena AG",
+  "style": [
+    "@MockFrontend/app/frontend/src/scss/overrides.scss",
+    "@MockFrontend",
+    "app/frontend/src/scss/custom.scss"
+  ],
+  "script": [
+    "@MockFrontend"
+  ]
+}

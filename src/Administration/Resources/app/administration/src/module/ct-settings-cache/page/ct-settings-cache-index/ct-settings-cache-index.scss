@@ -1,0 +1,64 @@
+@import "~scss/variables";
+
+.ct-settings-cache {
+    .ct-card-view__content {
+        max-width: $content-width;
+        margin: 0 auto;
+    }
+
+    .ct-card-section {
+        width: 100%;
+        padding: var(--scale-size-30) 0;
+    }
+
+    &__card {
+        &-toolbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: var(--scale-size-8);
+            padding: var(--scale-size-6) 0;
+            width: 100%;
+            font-size: var(--font-size-xs);
+            line-height: var(--font-line-height-xs);
+
+            &-heading {
+                font-weight: var(--font-weight-semi-bold);
+            }
+        }
+
+        &-section-heading {
+            font-size: var(--font-size-xs);
+            line-height: var(--font-line-height-xs);
+            font-weight: var(--font-weight-semi-bold);
+        }
+
+        .mt-card__content {
+            .ct-card-section:first-child {
+                padding-top: 0;
+            }
+
+            .ct-card-section:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    &__card-indexes {
+        display: flex;
+        flex-direction: column;
+        gap: var(--scale-size-24);
+
+        .mt-select {
+            margin-bottom: 0;
+        }
+    }
+
+    &__indexers-option--updater {
+        padding-left: var(--scale-size-24);
+    }
+
+    &__indexers-select {
+        margin: 0;
+    }
+}

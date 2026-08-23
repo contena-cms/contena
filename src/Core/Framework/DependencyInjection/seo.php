@@ -1,0 +1,271 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DependencyInjection;
+
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\LandingPage\LandingPageDefinition;
+use Contena\Core\Content\Seo\Api\SeoActionController;
+use Contena\Core\Content\Seo\Channel\ChannelApiSeoResolver;
+use Contena\Core\Content\Seo\Channel\SeoUrlRoute as ChannelSeoUrlRoute;
+use Contena\Core\Content\Seo\EmptyPathInfoResolver;
+use Contena\Core\Content\Seo\HreflangLoader;
+use Contena\Core\Content\Seo\HreflangLoaderInterface;
+use Contena\Core\Content\Seo\SeoResolver;
+use Contena\Core\Content\Seo\SeoUrl\Channel\ChannelSeoUrlDefinition;
+use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
+use Contena\Core\Content\Seo\SeoUrlGenerator;
+use Contena\Core\Content\Seo\SeoUrlPersister;
+use Contena\Core\Content\Seo\SeoUrlPlaceholderHandler;
+use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Contena\Core\Content\Seo\SeoUrlRoute\BlogChannelApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\CategoryChannelApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\ChannelApiSeoUrlUpdateListener;
+use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
+use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageChannelApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
+use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateChangeSubscriber;
+use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
+use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateIndexingHandler;
+use Contena\Core\Content\Seo\SeoUrlTwigFactory;
+use Contena\Core\Content\Seo\SeoUrlUpdater;
+use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfoValidator;
+use Contena\Core\Content\Seo\Validation\SeoUrlValidationFactory;
+use Contena\Core\Content\Seo\Validation\SeoUrlWriteValidator;
+use Contena\Core\Framework\Adapter\Twig\Extension\EntitySeoUrlFunctionExtension;
+use Contena\Core\Framework\Adapter\Twig\Extension\MediaExtension;
+use Contena\Core\Framework\Adapter\Twig\Extension\RawUrlFunctionExtension;
+use Contena\Core\Framework\Adapter\Twig\Extension\SeoUrlFunctionExtension;
+use Contena\Core\Framework\Adapter\Twig\Extension\SwSanitizeTwigFilter;
+use Contena\Core\Framework\Adapter\Twig\Extension\TwigFeaturesWithInheritanceExtension;
+use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
+use Contena\Core\Framework\Adapter\Twig\TwigVariableParserFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
+use Contena\Core\Framework\Util\HtmlSanitizer;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Twig\Environment;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(SeoUrlDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(ChannelSeoUrlDefinition::class)
+        ->tag('contena.channel.entity.definition');
+
+    $services->set(SeoUrlTemplateDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(SeoUrlGenerator::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service('router.default'),
+            service('request_stack'),
+            service('contena.seo_url.twig'),
+            service(TwigVariableParserFactory::class),
+            service('logger'),
+        ]);
+
+    $services->set(SeoUrlPersister::class)
+        ->args([
+            service(Connection::class),
+            service('seo_url.repository'),
+            service('event_dispatcher'),
+            service(ClockInterface::class),
+        ]);
+
+    $services->set(SeoUrlRouteRegistry::class)
+        ->lazy()
+        ->args([
+            tagged_iterator('contena.seo_url.route'),
+        ]);
+
+    $services->set(BlogChannelApiUrlRoute::class)
+        ->args([
+            service(BlogDefinition::class),
+        ])
+        ->tag('contena.entity.seo_url.route');
+
+    $services->set(CategoryChannelApiUrlRoute::class)
+        ->args([
+            service(CategoryDefinition::class),
+        ])
+        ->tag('contena.entity.seo_url.route');
+
+    $services->set(LandingPageChannelApiUrlRoute::class)
+        ->args([
+            service(LandingPageDefinition::class),
+        ])
+        ->tag('contena.entity.seo_url.route');
+
+    $services->set(EntityRouteResolver::class)
+        ->args([
+            service(SeoUrlRouteRegistry::class),
+            service(SeoUrlPlaceholderHandlerInterface::class),
+            service('router'),
+            tagged_iterator('contena.entity.seo_url.route'),
+        ]);
+
+    $services->set(EmptyPathInfoResolver::class)
+        ->public()
+        ->decorate(SeoResolver::class, null, -2000)
+        ->args([
+            service(EmptyPathInfoResolver::class . '.inner'),
+        ]);
+
+    $services->set(SeoResolver::class)
+        ->public()
+        ->args([
+            service(Connection::class),
+        ]);
+
+    $services->set(SeoActionController::class)
+        ->public()
+        ->args([
+            service(SeoUrlGenerator::class),
+            service(SeoUrlPersister::class),
+            service(DefinitionInstanceRegistry::class),
+            service(SeoUrlRouteRegistry::class),
+            service(SeoUrlValidationFactory::class),
+            service(DataValidator::class),
+            service('channel.repository'),
+            service(RequestCriteriaBuilder::class),
+            service(DefinitionInstanceRegistry::class),
+            service(EntityRouteResolver::class),
+        ])
+        ->call('setContainer', [
+            service('service_container'),
+        ]);
+
+    $services->set(SeoUrlValidationFactory::class);
+
+    $services->set(ValidSeoPathInfoValidator::class)
+        ->tag('validator.constraint_validator');
+
+    $services->set(SeoUrlWriteValidator::class)
+        ->tag('kernel.event_subscriber');
+
+    $services->set(SeoUrlFunctionExtension::class)
+        ->args([
+            service('twig.extension.routing'),
+            service(SeoUrlPlaceholderHandlerInterface::class),
+        ])
+        ->tag('twig.extension');
+
+    $services->set(EntitySeoUrlFunctionExtension::class)
+        ->args([
+            service(EntityRouteResolver::class),
+        ])
+        ->tag('twig.extension');
+
+    $services->set(TwigFeaturesWithInheritanceExtension::class)
+        ->args([
+            service(TemplateFinder::class),
+        ])
+        ->tag('twig.extension');
+
+    $services->set(SeoUrlPlaceholderHandlerInterface::class, SeoUrlPlaceholderHandler::class)
+        ->public()
+        ->args([
+            service('request_stack'),
+            service('router.default'),
+            service(Connection::class),
+        ]);
+
+    $services->set(MediaExtension::class)
+        ->args([
+            service('media.repository'),
+        ])
+        ->tag('twig.extension');
+
+    $services->set(RawUrlFunctionExtension::class)
+        ->args([
+            service('router'),
+            service('request_stack'),
+        ])
+        ->tag('twig.extension');
+
+    $services->set(SwSanitizeTwigFilter::class)
+        ->args([
+            service(HtmlSanitizer::class),
+        ])
+        ->tag('twig.extension')
+        ->tag('kernel.reset', ['method' => 'reset']);
+
+    $services->set(HreflangLoaderInterface::class, HreflangLoader::class)
+        ->args([
+            service('router.default'),
+            service(Connection::class),
+        ]);
+
+    $services->set(ChannelSeoUrlRoute::class)
+        ->public()
+        ->args([
+            service('channel.seo_url.repository'),
+        ]);
+
+    $services->set(ChannelApiSeoResolver::class)
+        ->args([
+            service('channel.seo_url.repository'),
+            service(DefinitionInstanceRegistry::class),
+            service(ChannelDefinitionInstanceRegistry::class),
+            service(SeoUrlRouteRegistry::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(SeoUrlUpdater::class)
+        ->args([
+            service('language.repository'),
+            service(SeoUrlRouteRegistry::class),
+            service(SeoUrlGenerator::class),
+            service(SeoUrlPersister::class),
+            service(Connection::class),
+            service('channel.repository'),
+            tagged_iterator('contena.entity.seo_url.route'),
+        ]);
+
+    $services->set(ChannelApiSeoUrlUpdateListener::class)
+        ->args([
+            service(SeoUrlUpdater::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(SeoUrlTemplateChangeSubscriber::class)
+        ->args([
+            service(Connection::class),
+            service('messenger.default_bus'),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(SeoUrlTemplateIndexingHandler::class)
+        ->args([
+            service(SeoUrlUpdater::class),
+            service(IteratorFactory::class),
+            service(DefinitionInstanceRegistry::class),
+            service(SeoUrlRouteRegistry::class),
+            service('messenger.default_bus'),
+            tagged_iterator('contena.entity.seo_url.route'),
+        ])
+        ->tag('messenger.message_handler');
+
+    $services->set(SeoUrlTwigFactory::class);
+
+    $services->set('contena.seo_url.twig', Environment::class)
+        ->factory([service(SeoUrlTwigFactory::class), 'createTwigEnvironment'])
+        ->args([
+            service('slugify'),
+            tagged_iterator('contena.seo_url.twig.extension'),
+            param('kernel.cache_dir'),
+        ]);
+};

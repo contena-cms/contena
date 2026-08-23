@@ -1,0 +1,160 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": [],
+  "components": {
+    "schemas": {
+      "Member": {
+        "description": "Added since version: 6.0.0.0",
+        "required": [
+          "apiAlias",
+          "id",
+          "groupId",
+          "channelId",
+          "languageId",
+          "memberNumber",
+          "name",
+          "email"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "groupId": {
+            "description": "Unique identity of member group.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "channelId": {
+            "description": "Unique identity of sales channel.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "languageId": {
+            "description": "Unique identity of language.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "memberNumber": {
+            "description": "Unique  number assigned to identity a member.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Display name of the member.",
+            "type": "string"
+          },
+          "phoneNumber": {
+            "description": "Phone number of the member.",
+            "type": "string"
+          },
+          "email": {
+            "description": "Email ID of the member.",
+            "type": "string"
+          },
+          "title": {
+            "description": "Titles or honorifics like Mr, Mrs, etc.",
+            "type": "string"
+          },
+          "active": {
+            "description": "To keep the status of the member active, the boolean value is set to `true`.",
+            "type": "boolean"
+          },
+          "doubleOptInRegistration": {
+            "description": "Set to `true` to allow user subscriptions to an email marketing list.",
+            "type": "boolean"
+          },
+          "doubleOptInEmailSentDate": {
+            "description": "Date and time when the double opt-in email was sent.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "doubleOptInConfirmDate": {
+            "description": "Date and time when the double opt-in email was confirmed.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "hash": {
+            "description": "Member registration double opt-in hash for confirming the member account.",
+            "type": "string"
+          },
+          "firstLogin": {
+            "description": "To capture date and time of member's first login.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "description": "To capture date and time of member's last login.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "birthday": {
+            "description": "To capture member's birthday details.",
+            "type": "string"
+          },
+          "customFields": {
+            "type": "object"
+          },
+          "tagIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "readOnly": true
+          },
+          "requestedGroupId": {
+            "description": "Unique identity of requested group.",
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "createdById": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "updatedById": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "group": {
+            "$ref": "#/components/schemas/MemberGroup",
+            "description": "Member group determining pricing and permissions"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language",
+            "description": "Preferred language for member communication"
+          },
+          "addresses": {
+            "description": "All addresses saved for the member",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MemberAddress"
+            }
+          },
+          "tags": {
+            "description": "Tags assigned to the member for organization and segmentation",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "apiAlias": {
+            "type": "string",
+            "const": "member"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+Resources/app/frontend/build/artifacts
+Resources/app/frontend/vendor/*
+!Resources/app/frontend/vendor/Inter-3.5
+.tmp

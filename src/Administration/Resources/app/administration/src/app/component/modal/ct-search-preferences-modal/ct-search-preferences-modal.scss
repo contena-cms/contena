@@ -1,0 +1,20 @@
+.ct-search-preferences-modal {
+    &.ct-modal .ct-modal__body {
+        padding: 0;
+    }
+
+    &.ct-modal .ct-modal__footer {
+        justify-content: space-between;
+    }
+
+    &__description {
+        padding: 20px 32px;
+        font-size: var(--font-size-xs);
+    }
+
+    &__description span {
+        cursor: pointer;
+        color: var(--color-text-brand-default);
+        text-decoration: underline;
+    }
+}

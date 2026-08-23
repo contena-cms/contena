@@ -1,0 +1,78 @@
+.ct-settings-tag-list {
+    &__modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--scale-size-8);
+        width: 100%;
+    }
+
+    .ct-card-view__content {
+        display: grid;
+    }
+
+    &__grid {
+        .mt-badge {
+            border-radius: 4px;
+            max-width: 350px;
+            min-width: 0;
+        }
+    }
+
+    &__filter-assignment-select {
+        margin: var(--scale-size-16) var(--scale-size-12);
+    }
+
+    &__content {
+        display: flex;
+        flex-flow: column nowrap;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__confirm-bulk-merge-text {
+        .confirm-bulk-merge-text__label {
+            display: inline-block;
+            margin-right: 4px;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+
+        .confirm-bulk-merge-text__label-into {
+            display: inline-block;
+            margin-left: -4px;
+        }
+
+        .mt-badge {
+            border-radius: 4px;
+            margin-right: 0;
+            max-width: 350px;
+            min-width: 0;
+        }
+    }
+
+    &__confirm-bulk-merge-name-input {
+        margin-top: 20px;
+    }
+
+    &__bulk-merge-progress {
+        text-align: center;
+        padding: 50px 0 30px;
+        color: var(--color-text-brand-default);
+    }
+
+    &__bulk-merge-progress-icon {
+        animation: loading 2s linear infinite;
+    }
+
+    @keyframes loading {
+        from {
+            transform: translate(0%, 0%) rotate(0deg);
+        }
+
+        to {
+            transform: translate(0%, 0%) rotate(360deg);
+        }
+    }
+}

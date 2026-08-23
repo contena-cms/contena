@@ -1,0 +1,7 @@
+{% if contentPage %}
+    <twig:CT:Content:Page :page="contentPage" />
+{% else %}
+    <twig:CT:Header
+        :header="header"
+    />
+{% endif %}

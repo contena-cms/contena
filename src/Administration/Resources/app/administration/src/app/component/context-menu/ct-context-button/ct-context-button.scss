@@ -1,0 +1,62 @@
+@import "~scss/variables";
+
+$ct-context-button-color-text: var(--color-icon-primary-default);
+$ct-context-button-border-radius: var(--border-radius-xs);
+$ct-context-button-color-border: var(--color-border-primary-default);
+$ct-context-button-color-disabled: var(--color-icon-primary-disabled);
+
+.ct-context-button {
+    display: inline-block;
+    position: relative;
+    color: $ct-context-button-color-text;
+
+    &:focus-visible {
+        outline: var(--scale-size-2) solid var(--color-border-brand-default);
+        outline-offset: var(--scale-size-2);
+        border-radius: var(--border-radius-xs);
+
+        .ct-context-button__button {
+            border-color: $ct-context-button-color-border;
+        }
+    }
+
+    &.is--disabled {
+        .ct-context-button__button {
+            color: var(--color-icon-primary-disabled);
+            cursor: initial;
+
+            &:hover,
+            &.is--active {
+                border: none;
+            }
+        }
+    }
+
+    .ct-context-button__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $ct-context-button-color-text;
+        background: 0 none;
+        border: 1px solid transparent;
+        border-radius: $ct-context-button-border-radius;
+        cursor: pointer;
+        height: var(--scale-size-24);
+        line-height: var(--font-line-height-xs);
+        padding: 0 var(--scale-size-8);
+        outline: none;
+
+        &:hover,
+        &.is--active {
+            border-color: $ct-context-button-color-border;
+        }
+    }
+
+    .mt-button {
+        line-height: initial;
+    }
+}
+
+.mt-floating-ui__content.ct-context-button__menu-popover {
+    z-index: $z-index-context-menu;
+}

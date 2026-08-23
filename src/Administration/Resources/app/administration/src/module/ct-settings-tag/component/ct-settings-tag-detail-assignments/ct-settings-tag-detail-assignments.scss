@@ -1,0 +1,148 @@
+.ct-settings-tag-detail-assignments {
+    display: grid;
+
+    &__card {
+        display: flex;
+        flex-flow: column nowrap;
+        height: 100%;
+        width: 100%;
+
+        &.mt-card {
+            border: 1px solid var(--color-border-secondary-default);
+            filter: none;
+
+            .mt-card__toolbar {
+                border: 0;
+                background-color: var(--color-elevation-surface-sunken);
+            }
+
+            .mt-card__content {
+                grid-template-rows: auto 1fr;
+            }
+
+            .mt-card__content,
+            .ct-card-section {
+                position: relative;
+                padding: 0;
+            }
+
+            .ct-settings-tag-detail-assignments__filter-selected {
+                padding: 0 20px;
+                display: flex;
+                align-items: center;
+
+                /* stylelint-disable max-nesting-depth */
+                .mt-switch {
+                    margin: 0;
+                }
+                /* stylelint-enable max-nesting-depth */
+            }
+
+            .ct-settings-tag-detail-assignments__total-selected {
+                padding: 15px 20px;
+                font-size: var(--font-size-xs);
+                text-align: right;
+                color: var(--color-text-secondary-default);
+            }
+        }
+
+        .ct-data-grid.ct-data-grid--plain-appearance {
+            .ct-data-grid__body {
+                /* stylelint-disable max-nesting-depth */
+                .ct-data-grid__cell {
+                    border: 0;
+                }
+
+                .ct-data-grid__row.is--selected,
+                .ct-data-grid__row:hover {
+                    .ct-data-grid__cell {
+                        background: var(--color-background-primary-default);
+                    }
+                }
+                /* stylelint-enable max-nesting-depth */
+            }
+        }
+    }
+
+    &__entities-grid {
+        &.ct-data-grid {
+            .ct-data-grid__cell--selection {
+                width: 50px;
+                min-width: 50px;
+            }
+
+            .ct-highlight-text + .ct-highlight-text {
+                margin-left: 8px;
+                color: var(--color-text-secondary-default);
+            }
+
+            &:not(.is--scroll-x) {
+                /* stylelint-disable max-nesting-depth */
+                .ct-data-grid__cell--name {
+                    .ct-data-grid__cell-content {
+                        padding-left: 0;
+                    }
+                }
+                /* stylelint-enable max-nesting-depth */
+            }
+
+            .ct-data-grid__action-edit-column {
+                display: none;
+            }
+        }
+
+        .ct-pagination {
+            text-align: left;
+        }
+
+        .ct-data-grid__bulk {
+            display: none;
+        }
+
+        .ct-inheritance-switch {
+            margin-right: 8px;
+        }
+    }
+
+    &__associations-grid {
+        &.ct-data-grid.is--compact {
+            .ct-data-grid__cell--name {
+                /* stylelint-disable max-nesting-depth */
+                .ct-data-grid__cell-content {
+                    padding: 0;
+                }
+                /* stylelint-enable max-nesting-depth */
+            }
+        }
+
+        .associations-grid__row {
+            width: 100%;
+            padding: 10px 20px;
+            place-items: flex-start;
+            border: 0;
+            font-weight: normal;
+            background: transparent;
+
+            &:hover:not([disabled]) {
+                color: var(--color-text-brand-default);
+                background: var(--color-background-secondary-default);
+            }
+
+            &.is--selected {
+                background: var(--color-background-secondary-default);
+                color: var(--color-text-brand-default);
+                cursor: auto;
+            }
+
+            .mt-button__content {
+                grid-template-columns: auto 1fr auto;
+                justify-items: start;
+            }
+        }
+
+        .associations-grid__count {
+            font-size: var(--font-size-2xs);
+            color: var(--color-text-secondary-default);
+        }
+    }
+}

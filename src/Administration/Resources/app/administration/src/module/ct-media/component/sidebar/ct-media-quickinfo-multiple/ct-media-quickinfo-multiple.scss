@@ -1,0 +1,16 @@
+.ct-media-quickinfo-multiple {
+    .ct-media-sidebar__quickaction--disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .ct-media-media-item > * {
+        grid-row: 1 / span 2;
+    }
+}
+
+.ct-media-quickinfo-multiple .ct-media-quickinfo-multiple__second-headline {
+    display: block;
+    margin: 0 0 20px;
+    color: var(--color-text-primary-default);
+}

@@ -1,0 +1,21 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogDetailResponse": {
+                "type": "object",
+                "description": "Represents a blog with the information required for its detail page.",
+                "properties": {
+                    "blog": {
+                        "$ref": "#/components/schemas/Blog"
+                    }
+                },
+                "required": [
+                    "blog"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,205 @@
+{
+    "openapi": "3.1.0",
+    "info": [],
+    "paths": {
+        "\/_action\/integration\/{integrationId}\/mcp-allowlist": {
+            "post": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Save the MCP allowlist for an integration",
+                "description": "Saves per-integration access restrictions for MCP tools, resources, and prompts. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "saveIntegrationMcpAllowlist",
+                "parameters": [
+                    {
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "string", "pattern": "^[0-9a-f]{32}$"}
+                    }
+                ],
+                "security": [{"oAuth": ["write"]}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {"$ref": "#\/components\/schemas\/McpAllowlistRequest"}
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {"description": "Allowlist saved."},
+                    "400": {"description": "The allowlist is invalid."},
+                    "401": {"description": "Authentication is required."},
+                    "403": {"description": "The caller lacks permission."},
+                    "404": {"description": "The integration was not found."}
+                }
+            }
+        },
+        "\/_action\/user\/{userId}\/mcp-allowlist": {
+            "post": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Save the MCP allowlist for a user",
+                "description": "Saves per-user access restrictions for MCP tools, resources, and prompts. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "saveUserMcpAllowlist",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "string", "pattern": "^[0-9a-f]{32}$"}
+                    }
+                ],
+                "security": [{"oAuth": ["write"]}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {"$ref": "#\/components\/schemas\/McpAllowlistRequest"}
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {"description": "Allowlist saved."},
+                    "400": {"description": "The allowlist is invalid."},
+                    "401": {"description": "Authentication is required."},
+                    "403": {"description": "The caller lacks permission."},
+                    "404": {"description": "The user was not found."}
+                }
+            }
+        },
+        "\/_action\/mcp\/tools": {
+            "get": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "List registered MCP tools",
+                "description": "Returns the MCP tools registered by the current installation. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "listMcpTools",
+                "security": [{"oAuth": ["read"]}],
+                "responses": {
+                    "200": {
+                        "description": "Registered MCP tools.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {"$ref": "#\/components\/schemas\/McpTool"}
+                                }
+                            }
+                        }
+                    },
+                    "401": {"description": "Authentication is required."},
+                    "403": {"description": "The caller lacks permission."}
+                }
+            }
+        },
+        "\/_action\/mcp\/capabilities": {
+            "get": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "List registered MCP capabilities",
+                "description": "Returns the registered MCP tools, resources, and prompts. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "listMcpCapabilities",
+                "security": [{"oAuth": ["read"]}],
+                "responses": {
+                    "200": {
+                        "description": "Registered MCP tools, resources, and prompts.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["tools", "resources", "prompts"],
+                                    "properties": {
+                                        "tools": {"type": "array", "items": {"$ref": "#\/components\/schemas\/McpTool"}},
+                                        "resources": {"type": "array", "items": {"type": "object"}},
+                                        "prompts": {"type": "array", "items": {"type": "object"}}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {"description": "Authentication is required."},
+                    "403": {"description": "The caller lacks permission."}
+                }
+            }
+        },
+        "\/_mcp": {
+            "get": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Receive MCP server events",
+                "description": "Receives server events through the MCP Streamable HTTP transport. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "receiveMcpEvents",
+                "security": [{"oAuth": ["read"]}],
+                "responses": {"200": {"description": "MCP event stream response."}}
+            },
+            "post": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Send an MCP JSON-RPC message",
+                "description": "Sends a JSON-RPC message through the MCP Streamable HTTP transport. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "sendMcpMessage",
+                "security": [{"oAuth": ["write"]}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application\/json": {"schema": {"type": "object"}}
+                    }
+                },
+                "responses": {"200": {"description": "MCP JSON-RPC response."}}
+            },
+            "delete": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Close an MCP session",
+                "description": "Closes the current MCP session and removes its transient state. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "closeMcpSession",
+                "security": [{"oAuth": ["write"]}],
+                "responses": {"200": {"description": "MCP session closed."}}
+            },
+            "options": {
+                "tags": ["MCP", "Experimental"],
+                "summary": "Inspect MCP transport options",
+                "description": "Returns the HTTP methods supported by the MCP transport. Experimental API, not part of our backwards compatibility promise, thus this API can introduce breaking changes at any time.",
+                "operationId": "inspectMcpOptions",
+                "responses": {"200": {"description": "Supported MCP transport options."}}
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "McpAllowlistRequest": {
+                "type": "object",
+                "required": ["allowlist"],
+                "properties": {
+                    "allowlist": {
+                        "oneOf": [
+                            {"type": "null"},
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "tools": {"$ref": "#\/components\/schemas\/NullableStringList"},
+                                    "resources": {"$ref": "#\/components\/schemas\/NullableStringList"},
+                                    "prompts": {"$ref": "#\/components\/schemas\/NullableStringList"}
+                                },
+                                "additionalProperties": false
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": false
+            },
+            "NullableStringList": {
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "array", "items": {"type": "string"}}
+                ]
+            },
+            "McpTool": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                    "name": {"type": "string", "example": "contena-entity-search"},
+                    "title": {"type": ["string", "null"]},
+                    "description": {"type": ["string", "null"]},
+                    "group": {"type": "string"},
+                    "dependencies": {"type": "array", "items": {"type": "string"}},
+                    "requiredPrivileges": {"type": ["object", "null"]}
+                }
+            }
+        }
+    }
+}

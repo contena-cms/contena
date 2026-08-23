@@ -1,0 +1,31 @@
+.ct-channel-modal-detail {
+    display: grid;
+    gap: 20px;
+}
+
+.ct-channel-modal-detail__header {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+
+    h3 {
+        margin: 0 0 4px;
+    }
+}
+
+.ct-channel-modal-detail__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    color: var(--color-icon-brand-default);
+    background: var(--color-background-brand-default);
+    border-radius: 4px;
+}
+
+.ct-channel-modal-detail__cover {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+}

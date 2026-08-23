@@ -1,0 +1,16 @@
+@import "~scss/variables";
+
+.ct-settings-custom-field-set-list {
+    .ct-card-view__content {
+        max-width: $content-width;
+        margin: 0 auto;
+    }
+
+    .ct-empty-state {
+        position: relative;
+    }
+
+    .ct-settings-custom-field-set-list__help-text-global-set {
+        margin-left: 8px;
+    }
+}

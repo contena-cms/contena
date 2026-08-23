@@ -1,0 +1,36 @@
+{
+    "ct-settings-member-group": {
+        "general": {
+            "mainMenuItemGeneral": "Member groups",
+            "description": "Manage member groups and registration settings"
+        },
+        "list": {
+            "title": "Member groups",
+            "buttonAdd": "Add member group",
+            "columnName": "Name",
+            "columnRegistration": "Registration",
+            "emptyState": "No member groups yet",
+            "deleteError": "The member group is still assigned to a channel or member and cannot be deleted."
+        },
+        "detail": {
+            "titleNew": "New member group",
+            "titleEdit": "Edit member group",
+            "labelName": "Name",
+            "placeholderName": "Enter a member group name",
+            "titleRegistration": "Registration",
+            "labelRegistrationActive": "Allow public registration",
+            "labelRegistrationTitle": "Registration title",
+            "labelRegistrationIntroduction": "Registration introduction",
+            "labelRegistrationSeoMetaDescription": "SEO meta description",
+            "labelChannels": "Available channels",
+            "saveSuccess": "The member group has been saved.",
+            "saveError": "The member group could not be saved.",
+            "loadError": "The member group could not be loaded."
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "member_groups": { "label": "Member groups" }
+        }
+    }
+}

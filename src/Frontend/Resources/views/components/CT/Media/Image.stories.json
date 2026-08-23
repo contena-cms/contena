@@ -1,0 +1,24 @@
+{
+    "title": "CT/Media/Image",
+    "parameters": {
+        "server": {
+            "id": "CT:Media:Image"
+        },
+        "template": "<twig:CT:Media:Image :media=\"media\" />"
+    },
+    "argTypes": {
+        "media": {
+            "table": {
+                "readonly": true
+            }
+        }
+    },
+    "stories": [
+        {
+            "name": "Image",
+            "args": {
+                "media": {}
+            }
+        }
+    ]
+}

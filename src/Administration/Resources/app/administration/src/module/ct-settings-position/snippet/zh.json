@@ -1,0 +1,41 @@
+{
+    "ct-settings-position": {
+        "general": {
+            "mainMenuItemGeneral": "岗位",
+            "description": "管理可分配给用户的多语言岗位。"
+        },
+        "list": {
+            "searchPlaceholder": "搜索岗位...",
+            "columnName": "名称",
+            "columnCode": "岗位编码",
+            "columnPosition": "排序",
+            "columnActive": "启用",
+            "columnCreatedAt": "创建时间",
+            "columnUpdatedAt": "更新时间"
+        },
+        "detail": {
+            "titleNew": "新建岗位",
+            "titleEdit": "编辑岗位",
+            "labelName": "名称",
+            "labelCode": "岗位编码",
+            "labelDescription": "说明",
+            "labelPosition": "排序",
+            "labelActive": "启用",
+            "customFieldsTitle": "自定义字段"
+        },
+        "notification": {
+            "loadError": "无法加载岗位。",
+            "saveSuccess": "岗位已保存。",
+            "saveError": "无法保存岗位，请检查必填项。",
+            "deleteSuccess": "岗位已删除。",
+            "deleteError": "无法删除岗位。"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "position": {
+                "label": "岗位"
+            }
+        }
+    }
+}

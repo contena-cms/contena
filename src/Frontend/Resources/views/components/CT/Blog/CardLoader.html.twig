@@ -1,0 +1,25 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    animationType = 'wave',
+%}
+
+{% set attributeDefaults = {
+    class: 'ct-blog-card-loader position-absolute start-0 bottom-0 d-flex flex-column w-100 pt-3',
+    'aria-hidden': true,
+} %}
+
+<div {{ attributes.defaults(attributeDefaults) }}>
+    <h5 class="ct-blog-card-loader__title placeholder-{{ animationType }}">
+        <span class="placeholder placeholder-lg col-11"></span>
+    </h5>
+    <p class="ct-blog-card-loader__text card-text placeholder-{{ animationType }}">
+        <span class="placeholder placeholder-sm col-4"></span>
+        <span class="placeholder placeholder-sm col-6"></span>
+    </p>
+
+    <a class="ct-blog-card-loader__cta btn btn-light bg-secondary-subtle disabled placeholder col-12"
+       aria-disabled="true">
+    </a>
+</div>

@@ -1,0 +1,110 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    blog,
+    defaultRoute = seoUrl('frontend.blog.detail.page', { blogId: blog.id }),
+    slots = [],
+    layout = 'default',
+    mediaHeight = 'auto',
+    mediaObjectFit = 'contain',
+    mediaSizes = '(max-width: 400px) 96vw, 400px',
+    border = false,
+    rounded = false,
+%}
+
+{% set horizontal = (layout == 'horizontal') %}
+
+{% set cardCVA = cva({
+    base: 'ct-blog-card card h-100',
+    variants: {
+        layout: {
+            default: 'is--layout-default',
+            horizontal: 'is--layout-horizontal',
+        },
+        mediaObjectFit: {
+            cover: 'is--media-cover',
+            contain: 'is--media-contain',
+        },
+        border: {
+            true: ['has--border'],
+            false: null,
+        },
+        rounded: {
+            true: ['is--rounded'],
+            false: null,
+        }
+    }
+}) %}
+
+{% set attributeDefaults = {
+    class: cardCVA.apply({ layout, mediaObjectFit, border, rounded }),
+} %}
+
+<div {{ attributes.defaults(attributeDefaults) }}>
+    <div class="ct-blog-card__inner d-flex h-100">
+        <div {{ attributes.nested('header').defaults({ class: 'ct-blog-card__header position-relative overflow-hidden' }) }}>
+            <twig:Slot name="header-top"></twig:Slot>
+
+            {% block media %}
+                <twig:Slot name="media">
+                    {% if blog.cover and blog.cover.media %}
+                        <twig:CT:Media
+                            :media="blog.cover.media"
+                            :height="mediaHeight"
+                            :sizes="mediaSizes"
+                            class="card-img-top ct-blog-card__media"
+                        />
+                    {% endif %}
+                </twig:Slot>
+            {% endblock %}
+
+            <twig:Slot name="badges"></twig:Slot>
+            <twig:Slot name="header-bottom"></twig:Slot>
+        </div>
+
+        <div class="ct-blog-card__content d-flex flex-fill flex-column">
+            <div {{ attributes.nested('body').defaults({ class: 'ct-blog-card__body card-body' }) }}>
+                <twig:Slot name="body-top"></twig:Slot>
+
+                {% block title %}
+                    <twig:Slot name="title">
+                        <h2 {{ attributes.nested('title').defaults({ class: 'ct-blog-card__title card-title fw-semibold' }) }}>
+                            <a
+                                {{ attributes.nested('title-link').defaults({
+                                    class: 'ct-blog-card__title-link' ~ (blog.cover and blog.cover.media and blog.cover.media.isSpatialObject() ? '' : ' stretched-link'),
+                                    href: defaultRoute,
+                                    style: "--ct-blog-card-media-height: #{mediaHeight}px",
+                                }) }}
+                            >
+                                {{ blog.translated.name }}
+                            </a>
+                        </h2>
+                    </twig:Slot>
+                {% endblock %}
+
+                <p class="ct-blog-card__description fs-6 mb-0">
+                    {{ blog.translated.descriptionTeaser|default(blog.translated.description)|striptags|raw|u.truncate(255, '...') }}
+                </p>
+
+                <twig:Slot name="body-bottom"></twig:Slot>
+            </div>
+
+            <div {{ attributes.nested('footer').defaults({ class: 'ct-blog-card__footer card-footer border-0 pt-0' }) }}>
+                <twig:Slot name="footer-top"></twig:Slot>
+
+                {% block actions %}
+                    <twig:Slot name="actions">
+                        <twig:CT:Blog:CardActions :blog="blog" />
+                    </twig:Slot>
+                {% endblock %}
+
+                <twig:Slot name="footer-bottom"></twig:Slot>
+            </div>
+        </div>
+    </div>
+
+    {% block loading_indicator %}
+        <twig:CT:Blog:CardLoader />
+    {% endblock %}
+</div>

@@ -1,0 +1,40 @@
+{% block agentic_agents_md %}{% apply remove_leading_spaces %}
+    {% block agentic_agents_header %}
+        # Agent instructions for {{ channel.translated.name|default(channel.name) }}
+    {% endblock %}
+
+    {% block agentic_agents_summary %}
+        This file describes how AI agents and assistants should interact with this public Contena channel.
+        These instructions apply to public resources for this channel and do not replace policies published elsewhere.
+    {% endblock %}
+
+    {% block agentic_agents_principles %}
+        ## General principles
+
+        - Act only on behalf of a user and follow the user's explicit intent.
+        - Use public channel content as the source of truth.
+        - Respect `robots.txt`, published access rules, rate limits, and applicable laws.
+        - Do not treat this file as permission to bypass authentication, account, or security controls.
+    {% endblock %}
+
+    {% block agentic_agents_content %}
+        ## Content interactions
+
+        - You may help users discover articles, compare publicly available information, and navigate to relevant pages.
+        - Verify current content on the live channel before presenting it as authoritative.
+        - Do not create accounts, submit forms, or change member data without explicit user confirmation.
+        - Authentication, consent, and legally relevant confirmations must happen through the channel or another approved flow.
+    {% endblock %}
+
+    {% block agentic_agents_data %}
+        ## Data handling
+
+        - Do not request or expose personal data unless it is necessary for the user's requested action.
+        - Do not infer private member information from unavailable sources.
+        - Do not present generated text as an official policy unless it is published by the channel owner.
+    {% endblock %}
+
+    {% block agentic_agents_extensions %}{% endblock %}
+
+    {% block user_provided_content %}{% endblock %}
+{% endapply %}{% endblock %}

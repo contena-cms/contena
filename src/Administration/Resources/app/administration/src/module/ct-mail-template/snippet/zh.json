@@ -1,0 +1,109 @@
+{
+    "ct-mail-template": {
+        "general": {
+            "mainMenuItemGeneral": "邮件模板",
+            "description": "管理可复用的通知邮件",
+            "notificationTestMailErrorMessage": "发送测试邮件时发生错误。",
+            "notificationTestMailSuccessMessage": "测试邮件已发送。",
+            "notificationSyntaxValidationErrorMessage": "模板无效，请检查语法：{errorMsg}",
+            "notificationGeneralSyntaxValidationErrorMessage": "模板无效，请检查语法。"
+        },
+        "list": {
+            "textMailTemplateOverview": "邮件模板",
+            "tabMailTemplates": "模板",
+            "tabHeaderFooter": "页眉和页脚",
+            "buttonAddMailTemplate": "新建邮件模板",
+            "titleMailTemplateList": "模板",
+            "columnMailType": "类型",
+            "columnDescription": "描述",
+            "columnFilename": "文件名",
+            "emptyStateTitle": "暂无邮件模板",
+            "emptyStateSubTitle": "点击新增按钮创建邮件模板。"
+        },
+        "detail": {
+            "basic": {
+                "titleCard": "信息",
+                "labelMailType": "类型",
+                "placeholderDescription": "请输入邮件模板描述..."
+            },
+            "options": {
+                "titleCard": "选项",
+                "labelSenderName": "发件人名称",
+                "labelSubject": "主题",
+                "placeholderSenderName": "Contena...",
+                "placeholderSubject": "请输入邮件主题..."
+            },
+            "mailText": {
+                "titleCard": "邮件正文",
+                "labelContentPlain": "纯文本",
+                "labelContentHtml": "HTML"
+            },
+            "media": {
+                "titleCard": "附件"
+            },
+            "sidebar": {
+                "labelContextMenuAddToMailTemplate": "添加为附件",
+                "placeholderTestMail": "请输入邮箱地址...",
+                "buttonTestMail": "发送",
+                "labelTestMail": "收件人地址",
+                "titleTestMail": "发送测试邮件",
+                "titleShowPreview": "显示预览",
+                "titleShowAvailableVariables": "变量",
+                "copyTooltip": "复制到剪贴板。",
+                "selectTriggerEventLabel": "触发事件",
+                "selectTriggerEventHint": "用于确定可用数据。"
+            },
+            "previewModalTitle": "预览",
+            "previewModalMailHeaderPlainLabel": "邮件页眉（纯文本）",
+            "previewModalMailContentPlainLabel": "邮件内容（纯文本）",
+            "previewModalMailFooterPlainLabel": "邮件页脚（纯文本）",
+            "previewModalMailHeaderHtmlLabel": "邮件页眉（HTML）",
+            "previewModalMailContentHtmlLabel": "邮件内容（HTML）",
+            "previewModalMailFooterHtmlLabel": "邮件页脚（HTML）",
+            "textHeadline": "新建邮件模板",
+            "textHeadlineEdit": "编辑邮件模板"
+        }
+    },
+    "ct-mail-header-footer": {
+        "list": {
+            "textMailHeaderFooterOverview": "邮件页眉和页脚",
+            "buttonAddMailHeaderFooter": "新建页眉和页脚",
+            "columnName": "名称",
+            "columnDescription": "描述",
+            "emptyStateTitle": "暂无邮件页眉和页脚",
+            "emptyStateSubTitle": "点击新增按钮创建邮件页眉和页脚。"
+        },
+        "detail": {
+            "basic": {
+                "titleCard": "信息",
+                "labelName": "名称",
+                "labelDescription": "描述",
+                "placeholderName": "请输入名称...",
+                "placeholderDescription": "请输入描述..."
+            },
+            "header": {
+                "titleCard": "邮件页眉",
+                "labelPlain": "纯文本",
+                "labelHtml": "HTML",
+                "placeholderPlain": "请输入纯文本邮件页眉...",
+                "placeholderHtml": "请输入 HTML 邮件页眉..."
+            },
+            "footer": {
+                "titleCard": "邮件页脚",
+                "labelPlain": "纯文本",
+                "labelHtml": "HTML",
+                "placeholderPlain": "请输入纯文本邮件页脚...",
+                "placeholderHtml": "请输入 HTML 邮件页脚..."
+            },
+            "textHeadline": "新建邮件页眉/页脚",
+            "titleResult": "邮件页眉/页脚"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "mail_templates": {
+                "label": "邮件模板"
+            }
+        }
+    }
+}

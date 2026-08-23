@@ -1,0 +1,14 @@
+.ct-channel-modal {
+    .mt-modal__content-inner {
+        min-height: 150px;
+    }
+
+    .mt-modal__footer {
+        display: flex;
+        gap: 8px;
+    }
+}
+
+.ct-channel-modal__footer-left {
+    margin-right: auto;
+}

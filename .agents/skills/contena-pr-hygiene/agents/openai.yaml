@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena PR Hygiene"
+  short_description: "Prepare Contena PR metadata and review follow-up commits."
+  default_prompt: "Prepare or update this Contena pull request."

@@ -1,0 +1,39 @@
+// <plugin root>/src/Resources/app/administration/src/module/ct-example/index.js
+
+Contena.Module.register('ct-example', {
+    type: 'plugin',
+    name: 'Example',
+    title: 'ct-example.general.mainMenuItemGeneral',
+    description: 'ct-property.general.descriptionTextModule',
+    color: '#ff3d58',
+    icon: 'default-shopping-paper-bag-product',
+
+    routes: {
+        list: {
+            component: 'ct-example-list',
+            path: 'list'
+        },
+        detail: {
+            component: 'ct-example-detail',
+            path: 'detail/:id',
+            meta: {
+                parentPath: 'ct.example.list'
+            }
+        },
+        create: {
+            component: 'ct-example-create',
+            path: 'create',
+            meta: {
+                parentPath: 'ct.example.list'
+            }
+        }
+    },
+
+    navigation: [{
+        label: 'ct-example.general.mainMenuItemGeneral',
+        color: '#ff3d58',
+        path: 'ct.example.list',
+        icon: 'default-shopping-paper-bag-product',
+        position: 100
+    }]
+});

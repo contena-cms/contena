@@ -1,0 +1,159 @@
+{
+    "global": {
+        "entities": {
+            "acl_role": "角色"
+        }
+    },
+    "ct-permissions": {
+        "general": { "label": "权限" },
+        "roles": {
+            "general": {
+                "labelCreateNewRole": "新建角色",
+                "placeholderSearchBar": "搜索角色……"
+            },
+            "role-grid": {
+                "labelName": "名称",
+                "labelCode": "代码",
+                "labelDescription": "描述",
+                "labelCreatedAt": "创建时间",
+                "labelCreatedBy": "创建人",
+                "labelAssignedUsers": "已分配用户",
+                "assignPermissions": "分配权限",
+                "unknownUser": "未知用户",
+                "messageEmptyTitle": "暂无角色",
+                "messageEmptySubline": "创建角色后即可管理用户权限。",
+                "titleModalDelete": "删除角色",
+                "textModalDelete": "确定要删除角色“{name}”吗？",
+                "notification": {
+                    "deleteSuccess": { "message": "角色“{name}”已删除。" },
+                    "deleteError": { "message": "无法删除角色“{name}”。" }
+                }
+            },
+            "detail": {
+                "role": "角色",
+                "basicInformation": "基本信息",
+                "labelName": "名称",
+                "labelCode": "代码",
+                "labelDescription": "描述",
+                "permissions": "权限"
+            },
+            "modal": {
+                "createTitle": "新建角色",
+                "editTitle": "编辑角色",
+                "permissionsTitle": "分配“{name}”的权限",
+                "saveError": "无法保存角色“{name}”。",
+                "permissionsSaveError": "无法保存角色“{name}”的权限。"
+            },
+            "grid": {
+                "title": "权限",
+                "disabledCheckboxMessage": "请先关闭其他已启用的选项，才能关闭此项。",
+                "tooltipParentRole": "{parent}的全部{role}权限",
+                "tooltipParentAll": "{parent}的全部权限（{roles}）",
+                "tooltipEntityAll": "{entity}的全部权限（{roles}）"
+            },
+            "catalog": {
+                "searchPlaceholder": "搜索功能或权限标识……",
+                "navigationLabel": "权限分组",
+                "groupDescription": "直接勾选每项操作；依赖权限会自动补齐并以链条标识。",
+                "accessLevel": "访问级别",
+                "function": "功能",
+                "quickActions": "快捷操作",
+                "showSelectedOnly": "仅看已选",
+                "clearGroup": "清空当前分组",
+                "readOnly": "只读",
+                "selectAll": "全选",
+                "clear": "清空",
+                "emptyHeadline": "未找到权限",
+                "emptyDescription": "请尝试其他功能名称或技术权限标识。",
+                "grantLimitNotice": "安全限制：非管理员只能授予自己当前拥有的权限，保存时服务端会再次校验。",
+                "changeSummary": "本次权限变化",
+                "dependenciesAdded": "已增加（含自动依赖）：{permissions}",
+                "permissionsRemoved": "已移除：{permissions}",
+                "permissionsNotGranted": "未授予，你没有这些权限或其依赖：{permissions}",
+                "requires": "{permission} 依赖 {dependencies}",
+                "requiredBy": "由以下权限依赖：{permissions}",
+                "crossResourceDependency": "{permission} 还需要：{dependencies}",
+                "cannotGrant": "你没有此权限或其依赖，不能授予",
+                "selectedButUnavailable": "当前角色已有此权限；你可以移除，但不能重新授予",
+                "removeDependencyQuestion": "{permission} 正被 {dependents} 使用。是否同时移除这些权限？",
+                "removeDependentPermissions": "同时移除",
+                "keepPermission": "保留",
+                "groups": {
+                    "other": "其他功能"
+                },
+                "levels": { "none": "无权限", "manage": "管理", "custom": "自定义" }
+            },
+            "additional-permissions": { "title": "附加权限" },
+            "detailed-additional-permissions": { "title": "API 路由权限" },
+            "detailed-grid": { "coveredByGeneralMessage": "已通过“常规”选项卡授予。" },
+            "view": {
+                "additional": {
+                    "alertText": "这里集中管理系统配置、日志、缓存、个人资料、插件入口及未映射 API 路由等独立权限。相关设置和菜单会按这些权限显示。"
+                },
+                "detailed": {
+                    "alertText": "高级权限仅用于未映射到后台功能的底层实体增删改查权限。通常无需在这里配置。"
+                }
+            },
+            "tabs": {
+                "general": "功能访问",
+                "permissions": "权限",
+                "additional": "附加权限",
+                "detailed": "高级权限"
+            },
+            "mcpHint": { "text": "此角色已分配给 {count} 个启用 MCP 的集成。", "linkText": "查看 MCP 工具权限要求" },
+            "mcpModal": {
+                "title": "MCP 工具权限要求",
+                "description": "以下工具已加入使用此角色的集成白名单。",
+                "legendLabel": "图例：",
+                "legendGranted": "已授予",
+                "legendGrantedHint": "此权限已授予当前角色。",
+                "legendMissing": "缺少",
+                "legendMissingHint": "此权限尚未授予当前角色。",
+                "legendDynamic": "动态",
+                "legendDynamicHint": "此权限取决于运行时传入的实体参数。",
+                "noToolsHeadline": "未找到工具",
+                "noToolsDescription": "使用此角色的集成当前没有白名单工具。",
+                "dynamicPrivilegeHint": "此权限取决于运行时传入的实体参数。",
+                "viewByPermission": "按权限",
+                "viewByTool": "按工具",
+                "grantAllMissing": "授予全部缺失权限",
+                "grant": "授予",
+                "saveReminder": "权限已预选，请保存角色以应用。"
+            }
+        }
+    },
+    "ct-privileges": {
+        "roles": { "all": "全部", "viewer": "查看", "editor": "编辑", "creator": "新建", "deleter": "删除" },
+        "permissionType": { "read": "读取", "update": "更新", "create": "新建", "delete": "删除" },
+        "permissions": {
+            "parents": {
+                "content": "内容",
+                "other": "其他",
+                "resources": "资源",
+                "workflows": "工作流",
+                "settings": "设置"
+            },
+            "users_and_permissions": { "label": "用户与权限" },
+            "routes": { "label": "路由" }
+        },
+        "additional_permissions": {
+            "system": { "label": "设置" },
+            "user": { "label": "用户" },
+            "routes": {
+                "label": "路由",
+                "api_action_access-key_integration": "创建 API 密钥",
+                "api_acl_privileges_get": "读取全部 ACL 权限",
+                "api_acl_privileges_route_get": "读取 ACL 路由权限",
+                "api_action_cache_info": "读取缓存信息",
+                "api_action_cache_index": "触发索引器",
+                "api_action_cache_delete": "删除缓存",
+                "api_action_cache_cleanup": "清理缓存",
+                "api_action_container-cache_delete": "删除容器缓存",
+                "api_info_me": "读取当前 API 用户信息",
+                "api_info_ping": "刷新身份令牌",
+                "system:clear:cache": "清除缓存",
+                "api_feature_flag_toggle": "切换功能开关"
+            }
+        }
+    }
+}

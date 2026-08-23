@@ -1,0 +1,15 @@
+{
+    "ct.member.detail.base": {
+        "member": [
+            "name",
+            "email",
+            "groupId",
+            "channelId",
+            "languageId",
+            "memberNumber",
+            "password",
+            "passwordNew",
+            "passwordConfirm"
+        ]
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "ct-settings-organization": {
+        "general": {
+            "mainMenuItemGeneral": "Organizations",
+            "description": "Manage the hierarchical organization structure and organization units."
+        },
+        "list": {
+            "searchPlaceholder": "Search organizations...",
+            "treeTitle": "Organization tree",
+            "detailTitle": "Organization details",
+            "selectOrganizationTitle": "Select an organization",
+            "selectOrganizationDescription": "Select an organization in the tree or use Add above to create one.",
+            "emptyTitle": "No organizations available",
+            "emptyDescription": "Add the first organization to start building the structure."
+        },
+        "tree": {
+            "selected": "{count} selected",
+            "addChild": "Add child",
+            "expand": "Expand",
+            "collapse": "Collapse"
+        },
+        "detail": {
+            "titleNew": "New organization",
+            "titleEdit": "Edit organization",
+            "labelName": "Name",
+            "labelShortName": "Short name",
+            "labelCode": "Organization code",
+            "labelOrganizationUnit": "Organization unit",
+            "placeholderOrganizationUnit": "Select an organization unit...",
+            "labelPosition": "Position",
+            "labelActive": "Active",
+            "customFieldsTitle": "Custom fields"
+        },
+        "notification": {
+            "loadError": "The organizations could not be loaded.",
+            "saveSuccess": "The organization has been saved.",
+            "saveError": "The organization could not be saved. Please check all required fields.",
+            "deleteSuccess": "The selected organizations have been deleted.",
+            "deleteError": "The selected organizations could not be deleted."
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "organization": {
+                "label": "Organizations"
+            }
+        }
+    }
+}

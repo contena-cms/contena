@@ -1,0 +1,29 @@
+.ct-blog-detail-layout {
+    &__header,
+    &__assignment {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--scale-size-24);
+    }
+
+    &__header {
+        margin-bottom: var(--scale-size-24);
+    }
+
+    &__assignments {
+        display: grid;
+        gap: var(--scale-size-12);
+    }
+
+    &__assignment {
+        padding: var(--scale-size-16);
+        border: 1px solid var(--color-border-primary-default);
+        border-radius: var(--border-radius-card);
+    }
+
+    &__assignment-copy {
+        display: grid;
+        gap: var(--scale-size-4);
+    }
+}

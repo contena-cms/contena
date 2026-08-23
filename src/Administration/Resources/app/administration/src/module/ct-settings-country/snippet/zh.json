@@ -1,0 +1,9 @@
+{
+  "ct-settings-country": {
+    "page": { "generalTab": "设置" },
+    "general": { "mainMenuItemGeneral": "国家", "placeholderSearchBar": "搜索国家..." },
+    "list": { "textHeadline": "国家", "textDeleteConfirm": "确定要删除国家“{name}”吗？", "columnName": "名称", "columnPosition": "排序", "columnIso": "ISO2", "columnIso3": "ISO3", "columnActive": "启用", "buttonAddCountry": "新建国家", "messageDeleteSuccess": "国家“{name}”已删除。" },
+    "detail": { "textHeadline": "新建国家", "titleCard": "基本信息", "titleOptions": "选项", "messageSaveSuccess": "国家“{name}”已保存。", "messageSaveError": "无法保存国家“{name}”。", "labelName": "名称", "labelPosition": "排序", "labelIso": "ISO2", "labelIso3": "ISO3", "labelActive": "启用", "placeholderName": "输入名称...", "placeholderPosition": "1", "placeholderIso": "输入 ISO 两位代码...", "placeholderIso3": "输入 ISO 三位代码..." }
+  },
+  "ct-privileges": { "permissions": { "country": { "label": "国家" } } }
+}

@@ -1,0 +1,129 @@
+{
+    "ct-blog": {
+        "general": {
+            "mainMenuItemGeneral": "文章",
+            "descriptionTextModule": "管理文章内容。",
+            "placeholderSearchBar": "搜索文章..."
+        },
+        "type": {
+            "post": "文章",
+            "media": "媒体内容"
+        },
+        "list": {
+            "textHeadline": "文章",
+            "buttonAddBlog": "添加文章",
+            "buttonAddMediaBlog": "添加媒体内容",
+            "columnName": "标题",
+            "columnActive": "启用",
+            "columnReleaseDate": "发布日期",
+            "columnCategories": "分类",
+            "columnUpdatedAt": "更新时间",
+            "emptyState": "暂无文章。",
+            "deleteTitle": "删除文章",
+            "deleteText": "确定要删除“{name}”吗？",
+            "deleteSuccess": "文章已删除。",
+            "deleteError": "无法删除文章。"
+        },
+        "detail": {
+            "textHeadline": "新建文章",
+            "tabGeneral": "常规",
+            "tabLayout": "布局",
+            "tabSeo": "SEO",
+            "saveSuccess": "文章已保存。",
+            "saveError": "无法保存文章。",
+            "loadError": "无法加载文章。"
+        },
+        "basicForm": {
+            "cardTitle": "内容",
+            "labelName": "标题",
+            "placeholderName": "输入标题...",
+            "labelDescription": "内容来源",
+            "placeholderDescription": "编写文章内容...",
+            "labelReleaseDate": "发布日期",
+            "labelActive": "启用"
+        },
+        "categoryForm": {
+            "cardTitle": "组织与可见性",
+            "labelCategory": "分类",
+            "labelCategories": "分类",
+            "placeholderCategory": "选择分类...",
+            "placeholderCategories": "选择分类...",
+            "labelTags": "标签",
+            "placeholderTags": "选择标签...",
+            "labelSearchKeyword": "搜索关键词",
+            "labelSearchKeywords": "搜索关键词",
+            "placeholderSearchKeywords": "添加搜索关键词...",
+            "textAddSearchKeyword": "点击添加搜索关键词",
+            "textEnterValidSearchKeyword": "请输入有效的搜索关键词",
+            "helpTextSearchKeyword": "也可以通过这些关键词找到文章。",
+            "labelChannels": "渠道",
+            "placeholderChannels": "选择渠道...",
+            "visibilityTitle": "渠道可见性",
+            "visibilityAll": "全部可见",
+            "visibilitySearch": "在列表中隐藏",
+            "visibilityLink": "仅可通过直接链接访问"
+        },
+        "visibility": {
+            "textHeadline": "各渠道的文章可见性",
+            "placeholderVisibility": "选择渠道...",
+            "columnChannel": "渠道",
+            "columnAll": "可见",
+            "columnSearchOnly": "在列表中隐藏",
+            "columnLinkOnly": "在列表和搜索中隐藏",
+            "visibilityModalDescription": "根据所选可见性，隐藏的文章仍可通过直接链接访问。",
+            "linkAdvancedVisibility": "设置所选渠道的可见性",
+            "labelVisibility": "渠道",
+            "bodyVisibility": "添加应显示此文章的渠道。"
+        },
+        "mediaForm": {
+            "cardTitle": "媒体",
+            "uploadLabel": "上传媒体",
+            "coverLabel": "封面",
+            "coverSubline": "封面",
+            "setCover": "设为封面",
+            "remove": "移除媒体",
+            "errorMediaItemDuplicated": "媒体“{fileName}”已经分配。"
+        },
+        "layout": {
+            "cardTitle": "Experience Studio 布局",
+            "description": "内容布局在 Experience Studio 中按渠道分配。",
+            "columnLayout": "布局",
+            "columnChannel": "渠道",
+            "buttonOpen": "在 Experience Studio 中打开",
+            "buttonCreate": "创建布局",
+            "emptyState": "此文章尚未分配内容布局。",
+            "allChannels": "所有渠道",
+            "loadError": "无法加载已分配的内容布局。"
+        },
+        "seo": {
+            "cardTitle": "搜索引擎信息",
+            "cardTitleSeo": "SEO",
+            "labelMetaTitle": "Meta 标题",
+            "labelMetaDescription": "Meta 描述",
+            "labelKeywords": "关键词",
+            "openGraphTitle": "Open Graph",
+            "labelOgTitle": "Open Graph 标题",
+            "labelOgDescription": "Open Graph 描述",
+            "labelOgImage": "Open Graph 图片"
+        },
+        "seoForm": {
+            "labelMetaTitle": "Meta 标题",
+            "labelMetaDescription": "Meta 描述",
+            "labelKeywords": "SEO 关键词",
+            "placeholderMetaTitle": "输入 Meta 标题...",
+            "placeholderMetaDescription": "输入 Meta 描述...",
+            "placeholderKeywords": "输入一个或多个关键词...",
+            "helpTextMetaTitle": "Meta 标题应保持唯一且简洁。",
+            "helpTextMetaDescription": "为搜索结果预览概括文章。",
+            "helpTextKeywords": "定义可用于查找文章的可选关键词。",
+            "titleOpenGraph": "Open Graph",
+            "labelOpenGraphTitle": "Open Graph 标题",
+            "labelOpenGraphDescription": "Open Graph 描述",
+            "labelOpenGraphImage": "Open Graph 图片",
+            "placeholderOpenGraphTitle": "输入 Open Graph 标题...",
+            "placeholderOpenGraphDescription": "输入 Open Graph 描述...",
+            "helpTextOpenGraphTitle": "文章分享到社交媒体时使用，留空时使用 Meta 标题。",
+            "helpTextOpenGraphDescription": "文章分享到社交媒体时使用，留空时使用 Meta 描述。"
+        }
+    }
+}

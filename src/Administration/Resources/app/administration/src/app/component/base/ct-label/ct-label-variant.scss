@@ -1,0 +1,26 @@
+@mixin ct-label-variant($color-background, $color-text, $color-border, $color-border-normal) {
+    background-color: $color-background;
+    border-color: $color-border-normal;
+    color: $color-text;
+
+    &.ct-label--small::before {
+        background: $color-border;
+    }
+
+    .ct-label__dismiss {
+        color: $color-text;
+
+        .mt-icon {
+            color: $color-text;
+        }
+    }
+
+    &.ct-label--ghost {
+        background: transparent;
+        border-color: $color-border;
+    }
+
+    &.ct-label--dismissable:hover {
+        border-color: $color-border;
+    }
+}

@@ -1,0 +1,70 @@
+[
+  {
+    "name": "media-module",
+    "entity": "media",
+    "routes": {
+      "index": {
+        "path": "index",
+        "component": "ct-index"
+      }
+    },
+    "defaultSearchConfiguration": {
+      "_searchable": true,
+      "name": {
+        "_searchable": true,
+        "_score": 500
+      }
+    }
+  },
+  {
+    "name": "tag-module",
+    "entity": "tag",
+    "routes": {
+      "index": {
+        "path": "index",
+        "component": "ct-index"
+      }
+    },
+    "defaultSearchConfiguration": {
+      "_searchable": true,
+      "name": {
+        "_searchable": true,
+        "_score": 500
+      }
+    }
+  },
+  {
+    "name": "user-module",
+    "entity": "user",
+    "routes": {
+      "index": {
+        "path": "index",
+        "component": "ct-index"
+      }
+    },
+    "defaultSearchConfiguration": {
+      "_searchable": true,
+      "name": {
+        "_searchable": false,
+        "_score": 500
+      }
+    }
+  },
+  {
+    "name": "plugin-module",
+    "entity": "plugin",
+    "routes": {
+      "index": {
+        "path": "index",
+        "component": "ct-index"
+      }
+    },
+    "defaultSearchConfiguration": {
+      "_searchable": false,
+      "name": {
+        "_searchable": true,
+        "_score": 500
+      }
+    }
+  }
+]

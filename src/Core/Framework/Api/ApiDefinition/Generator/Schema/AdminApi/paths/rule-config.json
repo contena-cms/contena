@@ -1,0 +1,55 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Rule configuration",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "\/_info\/rule-config": {
+            "get": {
+                "summary": "Get available rule condition configuration",
+                "operationId": "getRuleConfig",
+                "tags": ["System Info & Health Check"],
+                "responses": {
+                    "200": {
+                        "description": "Rule condition configuration keyed by condition type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "object",
+                                        "properties": {
+                                            "operatorSet": {
+                                                "type": ["object", "null"],
+                                                "properties": {
+                                                    "operators": {
+                                                        "type": "array",
+                                                        "items": { "type": "string" }
+                                                    },
+                                                    "isMatchAny": { "type": "boolean" }
+                                                }
+                                            },
+                                            "fields": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "required": ["name", "type", "config"],
+                                                    "properties": {
+                                                        "name": { "type": "string" },
+                                                        "type": { "type": "string" },
+                                                        "config": { "type": "object" }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{% block agentic_ai_catalog_json -%}
+    {%- set host = {
+        displayName: channel.translated.name|default(channel.name),
+    } -%}
+
+    {%- set entries = [] -%}
+
+    {%- apply trim -%}
+        {%- block agentic_ai_catalog_entries -%}
+            {%- set channelApiMcpServerUrl = channelFileContext.channelApiMcpServerUrl|default(null) -%}
+            {%- set publisher = channelFileContext.publisher|default(null) -%}
+
+            {%- if channelApiMcpServerUrl and publisher -%}
+                {%- set entries = entries|merge([{
+                    identifier: 'urn:air:' ~ publisher ~ ':server:channel-api-mcp',
+                    displayName: 'Contena Channel API MCP Server',
+                    type: 'application/mcp-server-card+json',
+                    url: channelApiMcpServerUrl,
+                    description: 'Authenticated Channel API MCP server for supported Contena operations.',
+                    tags: ['contena', 'channel-api', 'mcp'],
+                    capabilities: ['contena-channel-api-context'],
+                    representativeQueries: [
+                        'inspect the current Contena Channel API context',
+                        'use authenticated Contena Channel API MCP tools',
+                    ],
+                }]) -%}
+            {%- endif -%}
+            {{- {
+                specVersion: '1.0',
+                host: host,
+                entries: entries,
+            }|json_encode(constant('JSON_PRETTY_PRINT') + constant('JSON_UNESCAPED_SLASHES') + constant('JSON_UNESCAPED_UNICODE'))|raw -}}
+        {%- endblock -%}
+    {%- endapply -%}
+{%- endblock %}

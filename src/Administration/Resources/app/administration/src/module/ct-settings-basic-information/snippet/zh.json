@@ -1,0 +1,30 @@
+{
+    "ct-settings-basic-information": {
+        "general": {
+            "mainMenuItemGeneral": "基本信息",
+            "description": "在此修改站点基本信息。",
+            "textHeadline": "基本信息",
+            "messageSaveSuccess": "配置已保存。"
+        },
+        "captcha": {
+            "label": {
+                "honeypot": "蜜罐验证",
+                "basicCaptcha": "基础验证码",
+                "googleReCaptchaV2": "Google reCAPTCHA v2",
+                "googleReCaptchaV2SiteKey": "Google reCAPTCHA v2 站点密钥",
+                "googleReCaptchaV2SecretKey": "Google reCAPTCHA v2 私钥",
+                "googleReCaptchaV2Invisible": "隐形 Google reCAPTCHA v2",
+                "googleReCaptchaV3": "Google reCAPTCHA v3",
+                "googleReCaptchaV3SiteKey": "Google reCAPTCHA v3 站点密钥",
+                "googleReCaptchaV3SecretKey": "Google reCAPTCHA v3 私钥",
+                "googleReCaptchaV3ThresholdScore": "Google reCAPTCHA v3 阈值分数",
+                "googleReCaptchaV2CheckboxDescription": "“我不是机器人”复选框要求访问者确认其并非机器人。系统可能直接通过验证，也可能要求访问者完成进一步的人机验证。",
+                "googleReCaptchaV2InvisibleDescription": "隐形 reCAPTCHA 无需访问者点击复选框，而是在访问者点击现有按钮时或通过 JavaScript API 调用。默认仅可疑流量需要完成验证码。",
+                "googleReCaptchaV3Description": "reCAPTCHA v3 无需访问者交互即可判断操作是否合法，并返回风险分数，以便站点采取追加验证、内容审核或限制自动访问等措施。",
+                "googleReCaptchaV3DescriptionThresholdScore": "reCAPTCHA v3 为每次请求返回 0.0 到 1.0 的分数。站点可根据该分数采取适当措施。"
+            },
+            "basicCaptchaNoticeTitle": "提示",
+            "basicCaptchaNotice": "基础验证码不符合无障碍要求，建议使用无需访问者交互的验证方案。"
+        }
+    }
+}

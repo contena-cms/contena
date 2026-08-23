@@ -1,0 +1,196 @@
+<template>
+    <ct-block name="sw_mail_template_list_grid">
+        <mt-card
+            position-identifier="ct-mail-template-list"
+            :title="$t('ct-mail-template.list.titleMailTemplateList')"
+            :is-loading="isLoading"
+        >
+            <ct-block name="sw_mail_template_list_grid_empty_state">
+                <ct-empty-state
+                    v-if="!isLoading && !showListing"
+                    :title="$t('ct-mail-template.list.emptyStateTitle')"
+                    :subline="$t('ct-mail-template.list.emptyStateSubTitle')"
+                    :absolute="false"
+                >
+                    <template #icon>
+                        <img
+                            :src="
+                                assetFilter(
+                                    '/administration/administration/static/img/empty-states/settings-empty-state.svg',
+                                )
+                            "
+                            alt=""
+                        />
+                    </template>
+                </ct-empty-state>
+            </ct-block>
+
+            <template #grid>
+                <ct-entity-listing
+                    v-if="isLoading || showListing"
+                    id="mailTemplateGrid"
+                    identifier="ct-mail-template-list"
+                    detail-route="ct.mail.template.detail"
+                    :data-source="templates"
+                    :columns="columns"
+                    :repository="repository"
+                    :is-loading="isLoading"
+                    :disable-data-fetching="true"
+                    :show-selection="acl.can('mail_templates.deleter') || undefined"
+                    :full-page="false"
+                    :allow-view="acl.can('mail_templates.viewer')"
+                    :allow-edit="acl.can('mail_templates.editor')"
+                    :allow-delete="acl.can('mail_templates.deleter')"
+                    :skeleton-item-amount="skeletonItemAmount"
+                    @page-change="onPageChange"
+                    @update-records="updateRecords"
+                >
+                    <template #more-actions="{ item }">
+                        <ct-context-menu-item
+                            class="ct-mail-template-list-grid__duplicate-action"
+                            :disabled="!acl.can('mail_templates.creator') || undefined"
+                            @click="onDuplicate(item.id)"
+                        >
+                            {{ $t('global.default.duplicate') }}
+                        </ct-context-menu-item>
+                    </template>
+                </ct-entity-listing>
+            </template>
+        </mt-card>
+    </ct-block>
+</template>
+
+<script setup lang="ts">
+/* global EntityCollection */
+import { computed, inject, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import type AclService from 'src/app/service/acl.service';
+import type RepositoryFactory from 'src/core/data/repository-factory.data';
+
+defineProps({});
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { Criteria } = Contena.Data;
+
+const repositoryFactory = inject<RepositoryFactory>('repositoryFactory');
+const acl = inject<AclService>('acl');
+if (!repositoryFactory || !acl) {
+    throw new Error('Required Administration services are unavailable.');
+}
+
+const repository = repositoryFactory.create('mail_template');
+const templates = ref<EntityCollection<'mail_template'> | null>(null);
+const isLoading = ref(false);
+const page = ref(1);
+const limit = ref(25);
+const assetFilter = Contena.Filter.getByName('asset');
+const skeletonItemAmount = computed(() => (templates.value?.length ? templates.value.length : 3));
+const showListing = computed(() => Boolean(templates.value?.length));
+const columns = computed(() => [
+    {
+        property: 'mailTemplateType.name',
+        dataIndex: 'mailTemplateType.name',
+        label: t('ct-mail-template.list.columnMailType'),
+        routerLink: 'ct.mail.template.detail',
+        primary: true,
+        allowResize: true,
+        width: '220px',
+    },
+    {
+        property: 'description',
+        dataIndex: 'description',
+        label: t('ct-mail-template.list.columnDescription'),
+        allowResize: true,
+    },
+]);
+const criteria = computed(() => {
+    const query = new Criteria(page.value, limit.value);
+    // Criteria is a local mutable query object, not component state.
+    query.addAssociation('mailTemplateType');
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+    query.addSorting(Criteria.sort('mailTemplateType.name', 'ASC'));
+    if (typeof route.query.term === 'string' && route.query.term) {
+        query.setTerm(route.query.term);
+    }
+    query.setTitle('mail-template-list');
+    return query;
+});
+
+async function getList(): Promise<void> {
+    isLoading.value = true;
+    try {
+        templates.value = await repository.search(criteria.value);
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+function onPageChange(event: { page: number; limit: number }): void {
+    page.value = event.page;
+    limit.value = event.limit;
+    void getList();
+}
+
+async function onDuplicate(id: string): Promise<void> {
+    isLoading.value = true;
+
+    try {
+        const duplicate = await repository.clone(id);
+        await router.push({ name: 'ct.mail.template.detail', params: { id: duplicate.id } });
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+function updateRecords(result: EntityCollection<'mail_template'>): void {
+    templates.value = result;
+}
+
+void getList();
+
+swDefinePublic({
+    acl,
+    repository,
+    templates,
+    isLoading,
+    page,
+    limit,
+    columns,
+    criteria,
+    skeletonItemAmount,
+    showListing,
+    assetFilter,
+    getList,
+    onPageChange,
+    onDuplicate,
+    updateRecords,
+});
+
+defineExpose({
+    acl,
+    repository,
+    templates,
+    isLoading,
+    page,
+    limit,
+    columns,
+    criteria,
+    skeletonItemAmount,
+    showListing,
+    assetFilter,
+    getList,
+    onPageChange,
+    onDuplicate,
+    updateRecords,
+});
+</script>
+
+<style lang="scss">
+.ct-mail-template-list {
+    .ct-empty-state {
+        padding: 40px 0;
+    }
+}
+</style>

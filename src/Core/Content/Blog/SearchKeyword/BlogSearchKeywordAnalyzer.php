@@ -1,0 +1,148 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\SearchKeyword;
+
+use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
+
+class BlogSearchKeywordAnalyzer implements BlogSearchKeywordAnalyzerInterface
+{
+    private const MAXIMUM_KEYWORD_LENGTH = 500;
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly TokenizerInterface $tokenizer,
+        private readonly AbstractTokenFilter $tokenFilter,
+        private readonly SearchConfigLoader $configLoader,
+    ) {
+    }
+
+    public function analyze(BlogEntity $blog, Context $context, array $configFields): AnalyzedKeywordCollection
+    {
+        $keywords = new AnalyzedKeywordCollection();
+
+        foreach ($configFields as $configField) {
+            $path = $configField['field'];
+            $isTokenize = (bool) $configField['tokenize'];
+            $ranking = (float) $configField['ranking'];
+
+            $values = array_filter($this->resolveEntityValue($blog, $path));
+            ksort($values);
+
+            if ($isTokenize) {
+                $nonScalarValues = array_filter($values, static fn ($value) => !\is_scalar($value));
+
+                if ($nonScalarValues !== []) {
+                    continue;
+                }
+
+                /** @var array<int, non-falsy-string> $onlyScalarValues */
+                $onlyScalarValues = $values;
+                $values = $this->tokenize($onlyScalarValues, $context);
+                $values[] = implode(' ', $values);
+            }
+
+            $values = array_filter($values, static fn ($value) => \is_scalar($value)); // Keep only scalar values
+            $values = array_unique($values);
+
+            foreach ($values as $value) {
+                // even the field is non tokenize, if it reached 500 chars, we should break it anyway
+                $parts = array_filter(mb_str_split((string) $value, self::MAXIMUM_KEYWORD_LENGTH));
+
+                foreach ($parts as $part) {
+                    $keywords->add(new AnalyzedKeyword((string) $part, $ranking));
+                }
+            }
+        }
+
+        return $keywords;
+    }
+
+    /**
+     * @param array<int, string> $values
+     *
+     * @return list<string>
+     */
+    private function tokenize(array $values, Context $context): array
+    {
+        $config = $this->configLoader->load($context);
+
+        $values = $this->tokenizer->tokenize(
+            implode(' ', $values),
+            $config[0]['min_search_length'] ?? null
+        );
+
+        return $this->tokenFilter->filter($values, $context);
+    }
+
+    /**
+     * @return array<int, string|array<mixed>>
+     */
+    private function resolveEntityValue(Entity $entity, string $path): array
+    {
+        $value = $entity;
+        $parts = explode('.', $path);
+
+        // if property does not exist, try to omit the first key as it may contain the entity name.
+        // E.g. `blog.description` does not exist, but will be found if the first part is omitted.
+        $smartDetect = true;
+
+        while ($parts !== []) {
+            $part = array_shift($parts);
+
+            if ($value === null) {
+                break;
+            }
+
+            try {
+                if ($value instanceof EntityCollection) {
+                    $values = [];
+                    if ($parts !== []) {
+                        $part .= \sprintf('.%s', implode('.', $parts));
+                    }
+                    foreach ($value as $item) {
+                        $values = [...$values, ...$this->resolveEntityValue($item, $part)];
+                    }
+
+                    return $values;
+                }
+
+                if ($value instanceof Entity) {
+                    // if we are at the destination entity, and it does not have a value for the field
+                    // on it's on, then try to get the translation fallback
+                    $value = $value->get($part) ?? $value->getTranslation($part);
+                } elseif (\is_array($value)) {
+                    $value = $value[$part] ?? null;
+                }
+
+                if (\is_array($value) && $parts !== []) {
+                    continue;
+                }
+
+                if (\is_array($value)) {
+                    return $value;
+                }
+            } catch (PropertyNotFoundException|\InvalidArgumentException $ex) {
+                if (!$smartDetect) {
+                    throw $ex;
+                }
+            }
+
+            if ($value === null && !$smartDetect) {
+                break;
+            }
+
+            $smartDetect = false;
+        }
+
+        return (array) $value;
+    }
+}

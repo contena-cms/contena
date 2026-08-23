@@ -1,0 +1,46 @@
+@import "~scss/mixins";
+
+.ct-media-modal-move {
+    .ct-media-modal-move-folder-breadcrumbs {
+        display: flex;
+        font-size: var(--font-size-xs);
+        line-height: 22px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .ct-media-modal-move__breadcrumb-btn {
+        background: none;
+        border: none;
+        outline: none;
+        padding: 8px 6px 8px 0;
+        color: var(--color-text-primary-default);
+        max-width: 400px;
+
+        @include truncate;
+
+        &:hover {
+            background-color: var(--color-background-brand-default);
+        }
+
+        &.--target {
+            color: var(--color-text-brand-default);
+
+            .mt-icon {
+                color: var(--color-icon-primary-default);
+            }
+        }
+
+        &.--parent {
+            .mt-icon {
+                color: var(--color-icon-primary-default);
+            }
+        }
+    }
+
+    .ct-media-modal-move__folder-icon {
+        width: 16px;
+        margin-right: 10px;
+        margin-top: 2px;
+    }
+}

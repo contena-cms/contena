@@ -1,0 +1,86 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Migration;
+
+class Trigger
+{
+    final public const string TIME_BEFORE = 'BEFORE';
+    final public const string TIME_AFTER = 'AFTER';
+
+    final public const string EVENT_INSERT = 'INSERT';
+    final public const string EVENT_UPDATE = 'UPDATE';
+    final public const string EVENT_DELETE = 'DELETE';
+
+    private readonly string $time;
+
+    private readonly string $event;
+
+    public function __construct(
+        private readonly string $name,
+        private readonly string $table,
+        string $time,
+        string $event,
+        private readonly string $onTrigger
+    ) {
+        $this->time = $this->validateArgumentTime($time);
+        $this->event = $this->validateArgumentEvent($event);
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getOnTrigger(): string
+    {
+        return $this->onTrigger;
+    }
+
+    public function getTime(): string
+    {
+        return $this->time;
+    }
+
+    public function getEvent(): string
+    {
+        return $this->event;
+    }
+
+    private function validateArgumentTime(string $time): string
+    {
+        if (!\in_array(
+            $time,
+            [
+                self::TIME_AFTER,
+                self::TIME_BEFORE,
+            ],
+            true
+        )) {
+            throw MigrationException::invalidArgument('TriggerDefinition: argument time must be either \'BEFORE\' or \'AFTER\'');
+        }
+
+        return $time;
+    }
+
+    private function validateArgumentEvent(string $event): string
+    {
+        if (!\in_array(
+            $event,
+            [
+                self::EVENT_INSERT,
+                self::EVENT_UPDATE,
+                self::EVENT_DELETE,
+            ],
+            true
+        )) {
+            throw MigrationException::invalidArgument('TriggerDefinition: argument time must be either \'INSERT\', \'UPDATE\' or \'DELETE\'');
+        }
+
+        return $event;
+    }
+}

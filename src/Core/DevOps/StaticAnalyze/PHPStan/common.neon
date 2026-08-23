@@ -1,0 +1,85 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - extension.neon
+    - rules.neon
+
+parameters:
+    phpVersion: 80500
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    inferPrivatePropertyTypeFromConstructor: true
+    reportUnmatchedIgnoredErrors: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    reportAnyTypeWideningInVarTag: true
+
+    # Would otherwise flag usage of internal classes from different namespaces
+    featureToggles:
+        internalTag: false
+
+    # For stricter testing those should be set to true at some point
+    reportMaybesInMethodSignatures: false
+    reportWrongPhpDocTypeInVarTag: true
+
+    # For stricter testing those should be set to true at some point
+    strictRules:
+        disallowedLooseComparison: true
+        booleansInConditions: false
+        booleansInLoopConditions: false
+        uselessCast: true
+        requireParentConstructorCall: false
+        disallowedBacktick: true
+        disallowedEmpty: true
+        disallowedImplicitArrayCreation: true
+        disallowedShortTernary: false
+        overwriteVariablesWithLoop: true
+        closureUsesThis: true
+        matchingInheritedMethodNames: true
+        numericOperandsInArithmeticOperators: true
+        strictFunctionCalls: true
+        dynamicCallOnStaticMethod: false
+        switchConditionsMatchingType: true
+        noVariableVariables: true
+        strictArrayFilter: false
+        illegalConstructorMethodCall: true
+
+    type_perfect:
+        no_mixed_property: true
+        no_mixed_caller: true
+        null_over_false: true
+
+    contena:
+        allowedNonDomainExceptions:
+            - Contena\Core\Framework\Plugin\Exception\DecorationPatternException
+            - Contena\Core\Framework\Validation\Exception\ConstraintViolationException
+            - Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException
+            - Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException
+            - Twig\Error\LoaderError
+            - Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+            - Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException
+            - Symfony\Component\Messenger\Exception\RecoverableMessageHandlingException
+            - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+            - Symfony\Component\HttpFoundation\Exception\BadRequestException
+
+        allowedFrontendRouteNamespaces:
+            - Contena\Frontend
+            # Migration seeds store frontend route names as data (e.g. seo_url_template.route_name)
+            - Contena\Core\Migration
+            # Telemetry route resolvers classify frontend routes by name; they don't depend on the Frontend package being installed
+            - Contena\Core\Framework\Routing\Telemetry
+            - Contena\Core\System\Snippet
+        allowedUnitTestClassNamespaces:
+            - Contena\Tests\Unit\
+            - Contena\Tests\Migration\
+
+services:
+    -   factory: Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration(%contena%)
+    -   class: Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsHelper
+
+parametersSchema:
+    ?contenaTaggedServiceContractAdditionalTagContracts: arrayOf(string(), string())
+    contena: structure([
+        allowedNonDomainExceptions: list(string),
+        allowedFrontendRouteNamespaces: list(string),
+        allowedUnitTestClassNamespaces: list(string),
+])

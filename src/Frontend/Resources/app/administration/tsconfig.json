@@ -1,0 +1,15 @@
+{
+    "extends": "../../../../Administration/Resources/app/administration/tsconfig.json",
+    "compilerOptions": {
+        "typeRoots": [
+            "../../../../Administration/Resources/app/administration/node_modules/@types",
+            "../../../../Administration/Resources/app/administration/node_modules"
+        ]
+    },
+    "include": [
+        "../../../../Administration/Resources/app/administration/extension-tooling/admin-types.d.ts",
+        "../../../../Administration/Resources/app/administration/src/vue-shim.d.ts",
+        "src/**/*.ts",
+        "src/**/*.vue"
+    ]
+}

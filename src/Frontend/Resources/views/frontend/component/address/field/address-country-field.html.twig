@@ -1,0 +1,45 @@
+{% block component_address_field_country %}
+    {% if initialCountryId is not defined %}
+        {% set initialCountryId = context.channel.countryId %}
+    {% endif %}
+
+    {% if data.get('countryId') %}
+        {% set initialCountryId = data.get('countryId') %}
+    {% elseif page.countries|length == 1 %}
+        {% set initialCountryId = (page.countries|first).id %}
+    {% endif %}
+
+    {% if formViolations.getViolations('/countryId') is not empty %}
+        {% set violationPath = '/countryId' %}
+    {% elseif formViolations.getViolations("/#{prefix}/countryId") is not empty %}
+        {% set violationPath = "/#{prefix}/countryId" %}
+    {% endif %}
+
+    {% set countryOptions %}
+        {% if not initialCountryId %}
+            <option value="" disabled="disabled" selected="selected">
+                {{ 'address.countryPlaceholder'|trans|sw_sanitize }}
+            </option>
+        {% endif %}
+        {% for country in page.countries %}
+            <option value="{{ country.id }}"
+                    {% if country.id == initialCountryId %}selected="selected"{% endif %}
+                    data-zipcode-required="{{ country.postalCodeRequired }}">
+                {{ country.translated.name }}
+            </option>
+        {% endfor %}
+    {% endset %}
+
+    {% sw_include '@Frontend/frontend/component/form/form-select.html.twig' with {
+        label: 'address.countryLabel'|trans|sw_sanitize,
+        id: idPrefix ~ prefix ~ 'AddressCountry',
+        name: prefix ~ '[countryId]',
+        autocomplete: 'country-name',
+        options: countryOptions,
+        violationPath: violationPath,
+        validationRules: 'required',
+        additionalClass: additionalClass ?? 'col-md-6',
+        additionalSelectClass: 'country-select',
+        attributes: {'data-initial-country-id': initialCountryId},
+    } %}
+{% endblock %}

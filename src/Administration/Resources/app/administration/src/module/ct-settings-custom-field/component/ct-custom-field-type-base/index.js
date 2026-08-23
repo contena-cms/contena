@@ -1,0 +1,6 @@
+import component from './ct-custom-field-type-base.vue';
+
+/**
+ * @private
+ */
+export default Object.assign(component, { _renderedBySfcTemplate: true });

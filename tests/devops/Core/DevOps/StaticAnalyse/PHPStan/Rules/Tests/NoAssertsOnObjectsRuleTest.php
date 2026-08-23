@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Tests;
+
+use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\NoAssertsOnObjectsRule;
+
+/**
+ * @internal
+ *
+ * @extends  RuleTestCase<NoAssertsOnObjectsRule>
+ */
+class NoAssertsOnObjectsRuleTest extends RuleTestCase
+{
+    public function testRule(): void
+    {
+        $this->analyse([__DIR__ . '/../data/NoAssertOnResponseObject/contena-unit-test.php'], [
+            [
+                'Asserting for equality with Response Objects is not allowed. Responses contain a date time as header, and thus those comparisons are time sensitive and thus flaky. Please assert on the properties of the Response you are interested in directly or use the `AssertResponseHelper`.',
+                20,
+            ],
+            [
+                'Asserting for equality with Response Objects is not allowed. Responses contain a date time as header, and thus those comparisons are time sensitive and thus flaky. Please assert on the properties of the Response you are interested in directly or use the `AssertResponseHelper`.',
+                44,
+            ],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
+        return new NoAssertsOnObjectsRule();
+    }
+}

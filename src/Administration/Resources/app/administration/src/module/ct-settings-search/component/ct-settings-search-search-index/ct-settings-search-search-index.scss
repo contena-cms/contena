@@ -1,0 +1,23 @@
+.ct-settings-search {
+    &__search-index-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-10);
+    }
+
+    &__search-index-latest-build {
+        font-size: var(--font-size-xs);
+        color: var(--color-text-primary-default);
+    }
+
+    &__search-index-rebuilding-progress {
+        margin: var(--scale-size-20) 0;
+    }
+
+    @media (max-width: 767px) {
+        &__search-index-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+    }
+}

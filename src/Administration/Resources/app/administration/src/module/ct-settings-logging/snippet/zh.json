@@ -1,0 +1,4 @@
+{
+  "ct-settings-logging": { "general": { "mainMenuItemGeneral": "事件日志", "placeholderSearchBar": "搜索日志..." }, "list": { "title": "日志", "columnDate": "时间", "columnMessage": "消息", "columnLevel": "级别", "columnContent": "内容", "actionShowInfo": "查看详情...", "levelDebug": "调试", "levelInfo": "信息", "levelNotice": "通知", "levelWarning": "警告", "levelError": "错误", "levelCritical": "严重", "levelAlert": "告警", "levelEmergency": "紧急", "titleSidebarItemRefresh": "刷新" }, "entryInfo": { "title": "日志详情", "tabRaw": "原始数据" }, "mailInfo": { "tabHTML": "HTML", "tabPlain": "纯文本", "recipientsTitle": "收件人", "contentsTitle": "内容" } },
+  "ct-privileges": { "additional_permissions": { "system": { "logging": "事件日志" } } }
+}

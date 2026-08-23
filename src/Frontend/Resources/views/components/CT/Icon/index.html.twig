@@ -1,0 +1,63 @@
+{# ludtwig-ignore-file #}
+{# @ct-package framework #}
+{# @internal #}
+
+{% props
+    name = '',
+    pack = 'default',
+    namespace = 'Frontend',
+    size = null,
+    color = null,
+    rotation = null,
+    flip = null,
+%}
+
+{% set iconVariants = cva({
+    base: 'ct-icon ct-icon--' ~ pack ~ ' ct-icon--' ~ pack ~ '-' ~ name,
+    variants: {
+        size: {
+            fluid: 'ct-icon--fluid',
+            lg: 'ct-icon--lg',
+            sm: 'ct-icon--sm',
+            xs: 'ct-icon--xs',
+            '1x': 'ct-icon--1x',
+            '2x': 'ct-icon--2x',
+            '3x': 'ct-icon--3x',
+        },
+        color: {
+            primary: 'text-primary',
+            secondary: 'text-secondary',
+            success: 'text-success',
+            info: 'text-info',
+            warning: 'text-warning',
+            danger: 'text-danger',
+            light: 'text-light',
+            dark: 'text-dark',
+        },
+        rotation: {
+            90: 'ct-icon--rotate-90',
+            180: 'ct-icon--rotate-180',
+            270: 'ct-icon--rotate-270',
+        },
+        flip: {
+            horizontal: 'ct-icon--flip-horizontal',
+            vertical: 'ct-icon--flip-vertical',
+            both: 'ct-icon--flip-both',
+        }
+    }
+}) %}
+
+{% set attributeDefaults = {
+    'aria-hidden': true,
+    class: iconVariants.apply({size, color, rotation, flip}),
+} %}
+
+{%- if themeIconConfig[pack] is defined -%}
+    {% set icon = source('@' ~ themeIconConfig[pack].namespace ~ '/' ~ themeIconConfig[pack].path ~'/'~ name ~ '.svg', ignore_missing = true) %}
+{%- else -%}
+    {% set icon = source('@' ~ namespace ~ '/assets/icon/'~ pack ~'/'~ name ~'.svg', ignore_missing = true) %}
+{%- endif -%}
+
+<span {{ attributes.defaults(attributeDefaults) }}>
+    {{ icon|sw_icon_cache|raw }}
+</span>

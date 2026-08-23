@@ -1,0 +1,33 @@
+@import "~scss/variables";
+
+.ct-blog-list {
+    .ct-blog-list__content {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+
+        &:has(.mt-empty-state) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    &__add-button-group {
+        display: inline-flex;
+        align-items: stretch;
+    }
+
+    &__add-post-button {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &__button-context-menu {
+        min-height: 100%;
+        margin-left: -1px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

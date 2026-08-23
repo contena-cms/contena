@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="contena.messenger.enforce_message_size">true</parameter>
+    </parameters>
+
+    <services>
+        <defaults autoconfigure="true"/>
+
+        <service id="Contena\Tests\Integration\Core\Content\Seo\Channel\FixturesPhp\ChannelApiSeoResolverTestRoute" public="true">
+            <argument type="service" id="Contena\Core\Content\Category\Channel\CategoryRoute"/>
+            <argument type="service" id="Contena\Core\System\Channel\Context\AbstractChannelContextFactory"/>
+        </service>
+
+        <service id="Contena\Core\Content\Test\TestNavigationSeoUrlRoute">
+            <argument type="service" id="Contena\Core\Content\Category\CategoryDefinition"/>
+            <tag name="contena.seo_url.route"/>
+        </service>
+
+        <service id="Contena\Core\Content\Test\TestBlogSeoUrlRoute">
+            <argument type="service" id="Contena\Core\Content\Blog\BlogDefinition"/>
+            <tag name="contena.seo_url.route"/>
+        </service>
+
+        <service id="Contena\Core\Framework\Test\Telemetry\Factory\TraceableTransportFactory">
+            <tag name="contena.metric_transport_factory"/>
+        </service>
+
+        <service id="Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection" lazy="true">
+            <factory class="Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection" method="create"/>
+            <argument type="iterator">
+                <argument type="service" id="Contena\Core\Framework\Test\Telemetry\Factory\TraceableTransportFactory"/>
+            </argument>
+            <argument type="service" id="Contena\Core\Framework\Telemetry\Metrics\Config\TransportConfigProvider"/>
+        </service>
+
+    </services>
+</container>

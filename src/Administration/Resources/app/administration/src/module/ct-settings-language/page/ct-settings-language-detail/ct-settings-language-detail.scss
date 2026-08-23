@@ -1,0 +1,23 @@
+.ct-settings-language-detail {
+    &__content-card.is--loading .mt-card__content {
+        min-height: var(--scale-size-96);
+    }
+
+    &__snippet-updates-status {
+        margin: 0 0 var(--scale-size-16);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__snippet-updates-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-16);
+
+        .mt-switch {
+            margin: 0;
+        }
+    }
+}

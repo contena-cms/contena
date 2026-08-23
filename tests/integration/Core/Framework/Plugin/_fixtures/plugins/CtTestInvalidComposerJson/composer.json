@@ -1,0 +1,25 @@
+{
+    "name": "ct/test",
+    "description": "Test description",
+    "version": "v1.0.1",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "contena AG",
+            "role": "Manufacturer"
+        },
+        {
+            "name": "John Doe",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "contena/core": ">=6.0"
+    },
+    "autoload": {
+        "psr-4": {
+           "CtTest\\": "src"
+        }
+    }
+}

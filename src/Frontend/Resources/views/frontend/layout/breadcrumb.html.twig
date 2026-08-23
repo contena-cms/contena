@@ -1,0 +1,42 @@
+{% block layout_breadcrumb_inner %}
+    {% if breadcrumb and breadcrumb|length > 0 %}
+        {% set breadcrumbCollection = breadcrumb %}
+    {% elseif not breadcrumbCollection or breadcrumbCollection|length == 0 %}
+        {% return %}
+    {% endif %}
+
+    {% set activeId = breadcrumbCollection|last.categoryId %}
+    {% set breadcrumbDivider = 'url(data:image/svg+xml,' ~ source('@Frontend/assets/icon/solid/arrow-medium-right.svg')|url_encode ~ ')' %}
+
+    {% block layout_breadcrumb_container %}
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: {{ breadcrumbDivider }};">
+            {% block layout_breadcrumb_list %}
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbCollection %}
+                        {% set categoryId = breadcrumb.categoryId %}
+                        {% set type = breadcrumb.type %}
+                        {% set name = breadcrumb.name %}
+                        {% set categoryUrl = seoUrl('frontend.navigation.page', { navigationId: categoryId }) %}
+                        {% set shouldOpenInNewTab = breadcrumb.shouldOpenInNewTab %}
+                        {% set isActive = categoryId is same as(activeId) %}
+
+                        {% block layout_breadcrumb_list_item %}
+                            <li class="breadcrumb-item"{% if isActive %} aria-current="page"{% endif %}>
+                                {% if type == 'folder' %}
+                                    <div>{{ name }}</div>
+                                {% else %}
+                                    <a href="{{ categoryUrl }}"
+                                       class="breadcrumb-link{% if isActive %} is-active{% endif %}"
+                                       title="{{ name }}"
+                                       {% if shouldOpenInNewTab %}target="_blank"{% endif %}>
+                                        <span class="breadcrumb-title">{{ name }}</span>
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endblock %}
+                    {% endfor %}
+                </ol>
+            {% endblock %}
+        </nav>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,113 @@
+.ct-grid-column {
+    cursor: default;
+    position: relative;
+
+    &:last-child {
+        border-right: 0 none;
+    }
+
+    .ct-field {
+        margin-bottom: 0;
+
+        &.ct-field--checkbox,
+        &.ct-field--radio {
+            grid-template-columns: auto;
+            align-items: center;
+            justify-items: center;
+            justify-content: center;
+        }
+
+        .ct-field__radio-group .ct-field__radio-option {
+            margin: 0;
+        }
+    }
+
+    .ct-price-field {
+        label {
+            display: none;
+        }
+
+        .ct-price-field__lock {
+            margin-top: var(--scale-size-10);
+            align-self: center;
+        }
+    }
+
+    .ct-context-button {
+        height: var(--scale-size-24);
+    }
+
+    .ct-grid__cell-content {
+        height: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        text-align: left;
+        min-height: var(--scale-size-64);
+        padding: var(--scale-size-20);
+        font-size: var(--font-size-xs);
+        line-height: var(--font-line-height-xs);
+        color: var(--color-icon-primary-default);
+
+        &.is--truncate {
+            display: block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        a {
+            color: var(--color-icon-primary-default);
+            text-decoration: none;
+
+            &:hover {
+                color: var(--color-interaction-primary-hover);
+                text-decoration: underline;
+            }
+        }
+
+        .ct-field--checkbox {
+            margin-bottom: 0;
+        }
+    }
+
+    &.ct-grid-column--left {
+        .ct-grid__cell-content {
+            text-align: left;
+            justify-items: start;
+            justify-content: start;
+        }
+    }
+
+    &.ct-grid-column--center {
+        .ct-grid__cell-content {
+            text-align: center;
+            justify-items: center;
+            justify-content: center;
+        }
+    }
+
+    &.ct-grid-column--right {
+        .ct-grid__cell-content {
+            text-align: right;
+            justify-items: end;
+            justify-content: end;
+        }
+    }
+
+    &.ct-grid-column--stretch {
+        .ct-grid__cell-content {
+            text-align: left;
+            justify-items: stretch;
+            justify-content: stretch;
+        }
+    }
+
+    &.has--action {
+        cursor: pointer;
+
+        &:hover {
+            color: var(--color-interaction-primary-hover);
+        }
+    }
+}

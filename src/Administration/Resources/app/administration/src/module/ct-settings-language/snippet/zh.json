@@ -1,0 +1,62 @@
+{
+    "ct-settings-language": {
+        "general": { "mainMenuItemGeneral": "语言", "placeholderSearchBar": "搜索语言..." },
+        "list": {
+            "textHeadline": "语言",
+            "textDeleteConfirm": "确定要删除语言“{name}”吗？该语言下的全部内容都会被删除且无法恢复！",
+            "columnName": "名称",
+            "columnActive": "启用",
+            "columnLocaleName": "区域设置",
+            "columnIsoCode": "ISO 代码",
+            "columnInherit": "继承自",
+            "columnChannels": "渠道",
+            "columnDefault": "默认",
+            "defaultLabel": "默认",
+            "buttonAddLanguage": "新建语言",
+            "messageDeleteSuccess": "语言“{name}”已删除。",
+            "titleSidebarFilter": "筛选",
+            "titleSidebarQuickFilter": "快速筛选",
+            "textFilterRootLanguages": "仅显示根语言",
+            "textFilterInheritedLanguages": "仅显示继承语言",
+            "manageSnippets": "管理界面文本",
+            "channelCount": "{count} 个渠道"
+        },
+        "detail": {
+            "textHeadline": "新建语言",
+            "titleCard": "设置",
+            "messageSaveSuccess": "语言“{name}”已保存。",
+            "labelName": "名称",
+            "labelActive": "启用",
+            "labelLocale": "区域设置",
+            "labelParent": "继承自",
+            "labelIsoCode": "ISO 代码",
+            "placeholderName": "输入名称...",
+            "placeholderPleaseSelect": "请选择...",
+            "tooltipLanguageNotChoosable": "不能使用已继承其他语言的语言。",
+            "tooltipInheritanceNotPossible": "系统默认语言不能继承其他语言。",
+            "textAlertChangeParent": "修改父语言可能造成翻译不一致。",
+            "textIsoCodeIsInUse": "此 ISO 代码已被使用。",
+            "textLanguageHasParent": "此语言已继承其他语言。",
+            "snippetUpdates": {
+                "title": "界面文本更新",
+                "upToDate": "界面文本已是最新版本。",
+                "updateAvailable": "有新的更新可用。",
+                "updating": "正在更新界面文本。",
+                "builtIn": "内置界面文本会随 Contena 更新。",
+                "notAvailable": "此语言暂无可用更新。",
+                "notAvailableHelpText": "手动添加或由第三方扩展添加的语言可能采用其他更新方式，也可能不会收到更新。",
+                "notLinked": "Contena 支持此语言，但尚未连接翻译系统。",
+                "linking": "正在连接语言。",
+                "updateButton": "更新",
+                "updatingButton": "正在更新...",
+                "linkButton": "连接语言",
+                "linkingButton": "正在连接...",
+                "updateError": "无法更新此语言的界面文本。",
+                "statusLoadError": "无法加载界面文本更新状态。",
+                "autoUpdate": "自动更新",
+                "autoUpdateHelpText": "自动保持此语言的界面文本为最新版本。"
+            }
+        }
+    },
+    "ct-privileges": { "permissions": { "language": { "label": "语言" } } }
+}

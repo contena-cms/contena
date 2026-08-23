@@ -1,0 +1,8 @@
+{
+    "ct.category.view": {
+        "category": [
+            "name",
+            "type"
+        ]
+    }
+}

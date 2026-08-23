@@ -1,0 +1,77 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Plugin\Command\Scaffolding;
+
+/**
+ * @internal
+ */
+class Stub
+{
+    public const string TYPE_TEMPLATE = 'template';
+    public const string TYPE_RAW = 'raw';
+    public const string TYPE_APPEND = 'append';
+
+    /**
+     * @param array<string, string> $params
+     */
+    public function __construct(
+        private readonly string $path,
+        private readonly string $content,
+        private readonly string $type = self::TYPE_TEMPLATE,
+        private readonly array $params = [],
+    ) {
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getContent(): ?string
+    {
+        $content = $this->content;
+
+        if ($this->type === self::TYPE_TEMPLATE) {
+            $content = file_get_contents($this->content);
+        }
+
+        if ($content === false) {
+            return null;
+        }
+
+        return str_replace(
+            array_map(static fn (string $param) => '{{ ' . $param . ' }}', array_keys($this->params)),
+            array_values($this->params),
+            $content
+        );
+    }
+
+    /**
+     * @param array<string, string> $params
+     */
+    public static function template(string $destinationPath, string $sourcePath, array $params = []): self
+    {
+        return new self($destinationPath, $sourcePath, self::TYPE_TEMPLATE, $params);
+    }
+
+    /**
+     * @param array<string, string> $params
+     */
+    public static function raw(string $destinationPath, string $content, array $params = []): self
+    {
+        return new self($destinationPath, $content, self::TYPE_RAW, $params);
+    }
+
+    /**
+     * @param array<string, string> $params
+     */
+    public static function append(string $destinationPath, string $content, array $params = []): self
+    {
+        return new self($destinationPath, $content, self::TYPE_APPEND, $params);
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "ct-data-dictionary": {
+        "general": {
+            "mainMenuItemGeneral": "Data dictionaries",
+            "description": "Manage reusable dictionaries and their values."
+        },
+        "list": {
+            "placeholderSearchBar": "Search data dictionaries...",
+            "cardTitle": "Data dictionaries",
+            "create": "Create dictionary",
+            "emptyTitle": "No data dictionaries yet",
+            "emptyDescription": "Create a dictionary to reuse its values in other screens and extensions.",
+            "columns": {
+                "label": "Label",
+                "technicalName": "Technical name",
+                "description": "Description",
+                "active": "Active"
+            },
+            "grid": {
+                "label": "Label",
+                "technicalName": "Technical name",
+                "description": "Description",
+                "active": "Active"
+            }
+        },
+        "detail": {
+            "newTitle": "New data dictionary",
+            "settingsTitle": "Dictionary settings",
+            "settingsSubtitle": "Configure the label, technical name, description, and active state.",
+            "infoTitle": "Dictionary information",
+            "technicalName": "Technical name",
+            "label": "Label",
+            "description": "Description",
+            "active": "Active",
+            "inactive": "Inactive",
+            "statusLabel": "Status",
+            "rootNode": "Root node",
+            "itemCountLabel": "Values",
+            "itemsTitle": "Values",
+            "itemsSubtitle": "The dictionary is the root. Add values from the node menu and drag to reorder or reparent them.",
+            "structureTitle": "Value structure",
+            "treeHeadline": "Label and code",
+            "itemCount": "{count} nodes",
+            "addItem": "Add value",
+            "addChildItem": "Add child node",
+            "itemCode": "Code",
+            "itemLabel": "Label",
+            "itemDescription": "Description",
+            "itemPosition": "Position",
+            "itemActive": "Active",
+            "itemParent": "Parent node",
+            "rootLevel": "Root level",
+            "editorTitle": "Node settings",
+            "selectItemTitle": "Select a value",
+            "selectItemDescription": "Select a node from the structure tree to edit its details here.",
+            "untitledItem": "Untitled node",
+            "codePending": "Code required",
+            "systemLocked": "System locked",
+            "emptyItemsTitle": "No values yet",
+            "emptyItemsDescription": "Use the dictionary root menu to add the first value."
+        },
+        "notification": {
+            "saveSuccess": "The data dictionary has been saved.",
+            "saveError": "The data dictionary could not be saved. Please check all required fields."
+        }
+    }
+}

@@ -1,0 +1,102 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Mcp\Controller;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Integration\IntegrationCollection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+/**
+ * Saves the per-integration MCP allowlist (tools, resources, prompts).
+ * Requires the `integration_mcp.editor` admin ACL privilege.
+ */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
+class IntegrationMcpAllowlistController
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<IntegrationCollection> $integrationRepository
+     */
+    public function __construct(
+        private readonly EntityRepository $integrationRepository,
+    ) {
+    }
+
+    #[Route(
+        path: '/api/_action/integration/{integrationId}/mcp-allowlist',
+        name: 'api.action.integration.mcp-allowlist',
+        defaults: [
+            'auth_required' => true,
+            PlatformRequest::ATTRIBUTE_ACL => ['api_action_integration_mcp-allowlist'],
+        ],
+        methods: ['POST'],
+    )]
+    public function save(string $integrationId, Request $request, Context $context): Response
+    {
+        $integration = $this->integrationRepository
+            ->search(new Criteria([$integrationId]), $context)
+            ->getEntities()
+            ->first();
+
+        if ($integration === null) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $body = $request->toArray();
+
+        if (!\array_key_exists('allowlist', $body)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        $allowlist = $body['allowlist'];
+
+        if ($allowlist !== null && !\is_array($allowlist)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($allowlist !== null && !$this->isValidAllowlist($allowlist)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->integrationRepository->update([
+            ['id' => $integrationId, 'mcpAllowlist' => $allowlist],
+        ], $context);
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param array<mixed> $allowlist
+     */
+    private function isValidAllowlist(array $allowlist): bool
+    {
+        $knownKeys = [McpAllowlist::TOOLS, McpAllowlist::RESOURCES, McpAllowlist::PROMPTS];
+
+        if (array_diff(array_keys($allowlist), $knownKeys) !== []) {
+            return false;
+        }
+
+        foreach ($knownKeys as $key) {
+            if (!\array_key_exists($key, $allowlist)) {
+                continue;
+            }
+            $value = $allowlist[$key];
+            if ($value !== null && !\is_array($value)) {
+                return false;
+            }
+            if (\is_array($value) && array_filter($value, static fn ($item) => !\is_string($item)) !== []) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}

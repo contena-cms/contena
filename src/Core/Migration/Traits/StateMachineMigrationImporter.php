@@ -1,0 +1,262 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Migration\Traits;
+
+use Doctrine\DBAL\Connection;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Migration\MigrationException;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationDefinition;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionDefinition;
+use Contena\Core\System\StateMachine\StateMachineDefinition;
+use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
+
+class StateMachineMigrationImporter
+{
+    use ImportTranslationsTrait;
+
+    public function __construct(private readonly Connection $connection)
+    {
+    }
+
+    public function importStateMachine(StateMachineMigration $stateMachineMigration): StateMachineMigration
+    {
+        $stateMachineId = $this->createOrSkipExistingStateMachine($stateMachineMigration);
+        $states = $this->createOrSkipExistingStateMachineState($stateMachineMigration, $stateMachineId);
+        $transitions = $this->createOrSkipExistingStateMachineStateTransitions($stateMachineMigration, $stateMachineId);
+
+        $initialStateId = $this->updateInitialState($stateMachineMigration, $stateMachineId);
+
+        return new StateMachineMigration(
+            $stateMachineMigration->getTechnicalName(),
+            $stateMachineMigration->getZh(),
+            $stateMachineMigration->getEn(),
+            $states,
+            $transitions,
+            $initialStateId
+        );
+    }
+
+    private function createOrSkipExistingStateMachine(StateMachineMigration $stateMachineMigration): string
+    {
+        $id = $this->connection->fetchOne(
+            '
+            SELECT `id`
+            FROM `state_machine`
+            WHERE technical_name = :technicalName
+            ',
+            ['technicalName' => $stateMachineMigration->getTechnicalName()],
+        );
+
+        if ($id) {
+            return Uuid::fromBytesToHex($id);
+        }
+
+        $id = Uuid::randomBytes();
+
+        $this->connection->insert(
+            StateMachineDefinition::ENTITY_NAME,
+            [
+                'id' => $id,
+                'technical_name' => $stateMachineMigration->getTechnicalName(),
+                'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            ]
+        );
+
+        $this->importTranslation(
+            StateMachineTranslationDefinition::ENTITY_NAME,
+            new Translations(
+                ['state_machine_id' => $id, 'name' => $stateMachineMigration->getZh()],
+                ['state_machine_id' => $id, 'name' => $stateMachineMigration->getEn()]
+            ),
+            $this->connection
+        );
+
+        return Uuid::fromBytesToHex($id);
+    }
+
+    /**
+     * @return list<array{id: string, technicalName: string}>
+     */
+    private function createOrSkipExistingStateMachineState(
+        StateMachineMigration $stateMachineMigration,
+        string $stateMachineId
+    ): array {
+        $inserted = [];
+
+        foreach ($stateMachineMigration->getStates() as $state) {
+            if (!\array_key_exists('technicalName', $state)) {
+                throw MigrationException::migrationError('Please provide "technicalName" to all states'); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            if (!\array_key_exists('zh', $state) || !\array_key_exists('en', $state)) {
+                throw MigrationException::migrationError('Please provide "zh" and "en" translations to all states'); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            $technicalName = $state['technicalName'];
+            $zh = $state['zh'];
+            $en = $state['en'];
+
+            $id = $this->getStateMachineStateIdByName($stateMachineId, $technicalName);
+
+            if ($id) {
+                continue;
+            }
+
+            // state does not exist for now
+            $id = Uuid::randomBytes();
+
+            $this->connection->insert(
+                StateMachineStateDefinition::ENTITY_NAME,
+                [
+                    'id' => $id,
+                    'state_machine_id' => Uuid::fromHexToBytes($stateMachineId),
+                    'technical_name' => $technicalName,
+                    'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ]
+            );
+
+            $this->importTranslation(
+                StateMachineStateTranslationDefinition::ENTITY_NAME,
+                new Translations(
+                    ['state_machine_state_id' => $id, 'name' => $zh],
+                    ['state_machine_state_id' => $id, 'name' => $en]
+                ),
+                $this->connection
+            );
+
+            $inserted[] = [
+                'id' => Uuid::fromBytesToHex($id),
+                'technicalName' => $technicalName,
+            ];
+        }
+
+        return $inserted;
+    }
+
+    /**
+     * @return list<array{id: string, actionName: string, fromStateId: string, toStateId: string}>
+     */
+    private function createOrSkipExistingStateMachineStateTransitions(
+        StateMachineMigration $stateMachineMigration,
+        string $stateMachineId
+    ): array {
+        $inserted = [];
+
+        foreach ($stateMachineMigration->getTransitions() as $transition) {
+            if (!\array_key_exists('actionName', $transition)) {
+                throw MigrationException::migrationError('Please provide "actionName" to all transitions'); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            if (!\array_key_exists('from', $transition) || !\array_key_exists('to', $transition)) {
+                throw MigrationException::migrationError('Please provide "from" and "to" states to all transitions'); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            $actionName = $transition['actionName'];
+            $from = $transition['from'];
+            $to = $transition['to'];
+
+            $fromStateId = $this->getStateMachineStateIdByName($stateMachineId, $from);
+            $toStateId = $this->getStateMachineStateIdByName($stateMachineId, $to);
+
+            if (!$fromStateId) {
+                throw MigrationException::migrationError(\sprintf('State with name "%s" not found', $from)); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            if (!$toStateId) {
+                throw MigrationException::migrationError(\sprintf('State with name "%s" not found', $to)); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+            }
+
+            $id = $this->connection->fetchOne(
+                '
+                SELECT `id`
+                FROM `state_machine_transition`
+                WHERE `state_machine_id` = :stateMachineId
+                AND `action_name` = :actionName
+                AND `from_state_id` = :fromStateId
+                AND `to_state_id` = :toStateId
+                ',
+                [
+                    'stateMachineId' => Uuid::fromHexToBytes($stateMachineId),
+                    'actionName' => $actionName,
+                    'fromStateId' => Uuid::fromHexToBytes($fromStateId),
+                    'toStateId' => Uuid::fromHexToBytes($toStateId),
+                ]
+            );
+
+            if ($id) {
+                continue;
+            }
+
+            // transition does not exist for now
+            $id = Uuid::randomBytes();
+
+            $this->connection->insert(
+                StateMachineTransitionDefinition::ENTITY_NAME,
+                [
+                    'id' => $id,
+                    'state_machine_id' => Uuid::fromHexToBytes($stateMachineId),
+                    'action_name' => $actionName,
+                    'from_state_id' => Uuid::fromHexToBytes($fromStateId),
+                    'to_state_id' => Uuid::fromHexToBytes($toStateId),
+                    'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ]
+            );
+
+            $inserted[] = [
+                'id' => Uuid::fromBytesToHex($id),
+                'actionName' => $actionName,
+                'fromStateId' => $fromStateId,
+                'toStateId' => $toStateId,
+            ];
+        }
+
+        return $inserted;
+    }
+
+    private function updateInitialState(
+        StateMachineMigration $stateMachineMigration,
+        string $stateMachineId
+    ): ?string {
+        if (!$stateMachineMigration->getInitialState()) {
+            return null;
+        }
+
+        $id = $this->getStateMachineStateIdByName($stateMachineId, $stateMachineMigration->getInitialState());
+
+        if (!$id) {
+            throw MigrationException::migrationError(\sprintf('State with name "%s" not found', $stateMachineMigration->getTechnicalName())); // @phpstan-ignore contena.domainException (Preserves the upstream migration exception contract.)
+        }
+
+        $this->connection->update(
+            StateMachineDefinition::ENTITY_NAME,
+            ['initial_state_id' => Uuid::fromHexToBytes($id)],
+            ['id' => Uuid::fromHexToBytes($stateMachineId)]
+        );
+
+        return $id;
+    }
+
+    private function getStateMachineStateIdByName(string $stateMachineId, string $technicalName): ?string
+    {
+        $id = $this->connection->fetchOne(
+            '
+            SELECT `id`
+            FROM `state_machine_state`
+            WHERE `state_machine_id` = :stateMachineId
+            AND `technical_name` = :technicalName
+            ',
+            [
+                'stateMachineId' => Uuid::fromHexToBytes($stateMachineId),
+                'technicalName' => $technicalName,
+            ]
+        );
+
+        if (!$id) {
+            return null;
+        }
+
+        return Uuid::fromBytesToHex($id);
+    }
+}

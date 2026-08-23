@@ -1,0 +1,11 @@
+.ct-settings-country-list {
+    .ct-data-grid__cell:not(.ct-data-grid__cell--header) {
+        .is--inactive {
+            color: var(--color-icon-critical-default);
+        }
+
+        .is--active {
+            color: var(--color-icon-positive-default);
+        }
+    }
+}

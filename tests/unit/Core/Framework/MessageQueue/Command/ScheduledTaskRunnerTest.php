@@ -1,0 +1,38 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Command;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
+use Contena\Core\Framework\MessageQueue\Command\ScheduledTaskRunner;
+use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
+use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\Console\Tester\CommandTester;
+
+/**
+ * @internal
+ */
+#[CoversClass(ScheduledTaskRunner::class)]
+class ScheduledTaskRunnerTest extends TestCase
+{
+    public function testScheduleDirectly(): void
+    {
+        $scheduler = $this->createMock(TaskScheduler::class);
+        $scheduler
+            ->expects($this->once())
+            ->method('queueScheduledTasks');
+
+        $runner = new ScheduledTaskRunner(
+            $scheduler,
+            static::createStub(CacheItemPoolInterface::class),
+            new NativeClock()
+        );
+
+        $tester = new CommandTester($runner);
+
+        $tester->execute([
+            '--no-wait' => true,
+        ]);
+    }
+}

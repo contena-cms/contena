@@ -1,0 +1,87 @@
+@import "~scss/variables";
+@import "~scss/mixins";
+
+$ct-search-bar-item-border-radius: $border-radius-default;
+$ct-search-bar-item-color-label: var(--color-text-primary-default);
+$ct-search-bar-item-color-type: var(--color-text-primary-default);
+$ct-search-bar-item-hover-color-background: var(--color-background-brand-default);
+$ct-search-bar-item-label-hover-color-text: var(--color-text-brand-default);
+
+.ct-search-bar-item {
+    border-radius: $ct-search-bar-item-border-radius;
+    padding: 6px;
+
+    .ct-search-bar-item__link {
+        padding: 4px 10px;
+        border-radius: $ct-search-bar-item-border-radius;
+        display: flex;
+        text-decoration: none;
+        line-height: var(--font-line-height-s);
+
+        &:focus-visible {
+            outline-offset: var(--scale-size-2);
+            outline: var(--scale-size-2) solid var(--color-border-brand-default);
+        }
+    }
+
+    .mt-icon {
+        margin-right: 20px;
+        flex-shrink: 0;
+    }
+
+    .ct-search-bar-item__label {
+        color: $ct-search-bar-item-color-label;
+        font-size: var(--font-size-xs);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 10px;
+    }
+
+    .ct-search-bar-item__type {
+        color: $ct-search-bar-item-color-type;
+        font-size: var(--font-size-2xs);
+        margin-left: auto;
+    }
+
+    &.is--active {
+        background: $ct-search-bar-item-hover-color-background;
+
+        .ct-search-bar-item__label {
+            color: $ct-search-bar-item-label-hover-color-text;
+        }
+    }
+
+    &--v2 {
+        display: flex;
+        align-items: center;
+        padding: 3px 30px;
+        margin: 0;
+        border-radius: 0;
+
+        .ct-search-bar-item__link {
+            flex: 1;
+        }
+
+        .mt-icon {
+            margin-left: 8px;
+            margin-right: 2px;
+        }
+
+        .ct-search-bar-item__label {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .ct-highlight-text:first-child {
+            @include truncate;
+
+            width: 350px;
+        }
+
+        .ct-highlight-text:not(:first-child) {
+            color: var(--color-text-secondary-default);
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{% block component_address %}
+    <address class="address mb-0">
+        {{ address.firstName }} {{ address.lastName }}<br>
+        {{ address.street }}<br>
+        {{ address.zipcode }} {{ address.city }}<br>
+        {% if address.region %}{{ address.region.translated.name }}<br>{% endif %}
+        {{ address.country.translated.name }}
+    </address>
+{% endblock %}

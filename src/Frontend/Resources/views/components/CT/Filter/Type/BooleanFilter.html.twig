@@ -1,0 +1,25 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    name = 'boolean-filter-' ~ random(),
+    displayName = '',
+    hidden = false,
+%}
+
+{% set defaultAttributes = {
+    class: 'ct-boolean-filter ct-filter ct-filter-item' ~ (hidden ? ' is--hidden' : ''),
+    'data-component': 'CT:Filter:Type:BooleanFilter',
+} %}
+
+<div {{ attributes.defaults(defaultAttributes) }}>
+    <input
+        type="checkbox"
+        class="ct-boolean-filter__input form-check-input"
+        name="{{ name }}"
+        id="{{ name }}">
+
+    <label class="ct-boolean-filter__label form-check-label" for="{{ name }}">
+        {{ displayName }}
+    </label>
+</div>

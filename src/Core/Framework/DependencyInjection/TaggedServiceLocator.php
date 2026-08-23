@@ -1,0 +1,35 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DependencyInjection;
+
+use Symfony\Contracts\Service\ServiceProviderInterface;
+
+/**
+ * @internal
+ *
+ * @implements ServiceProviderInterface<mixed>
+ */
+class TaggedServiceLocator implements ServiceProviderInterface
+{
+    /**
+     * @param ServiceProviderInterface<mixed> $inner
+     */
+    public function __construct(private readonly ServiceProviderInterface $inner)
+    {
+    }
+
+    public function get(string $id): mixed
+    {
+        return $this->inner->get($id);
+    }
+
+    public function has(string $id): bool
+    {
+        return $this->inner->has($id);
+    }
+
+    public function getProvidedServices(): array
+    {
+        return $this->inner->getProvidedServices();
+    }
+}

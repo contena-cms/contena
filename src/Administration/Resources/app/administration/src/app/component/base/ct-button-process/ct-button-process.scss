@@ -1,0 +1,16 @@
+@import "~scss/mixins";
+
+.ct-button-process {
+    .ct-button-process__status-indicator {
+        @include size(12px);
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .ct-button-process__content.is--hidden {
+        visibility: hidden;
+    }
+}

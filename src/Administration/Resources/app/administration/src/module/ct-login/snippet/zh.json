@@ -1,0 +1,51 @@
+{
+    "ct-login": {
+        "general": { "moduleTitle": "登录" },
+        "index": {
+            "backToLogin": "返回登录",
+            "brandName": "Contena"
+        },
+        "credentials": {
+            "description": "使用你的 Contena 控制台账户登录。",
+            "labelUsername": "用户名",
+            "labelPassword": "密码",
+            "labelKeepLoggedIn": "保持登录",
+            "buttonLogin": "登录",
+            "forgotPassword": "忘记密码？",
+            "warningTooManyAttempts": "登录尝试次数过多，请稍后再试。",
+            "warningTooManyAttemptsCountdown": "登录尝试次数过多，请在 {time} 后重试。",
+            "errorInvalidCredentials": "用户名或密码不正确",
+            "errorUnexpected": "发生错误，请重试。"
+        },
+        "recovery": {
+            "title": "忘记密码？",
+            "description": "输入账户绑定的邮箱地址，我们会向你发送密码重置链接。",
+            "labelEmail": "邮箱地址",
+            "buttonSubmit": "发送重置链接",
+            "errorLinkExpired": "密码重置链接已过期或无效，请重新申请。",
+            "errorUnexpected": "无法发送密码重置邮件，请重试。",
+            "warningTooManyAttempts": "尝试次数过多，请稍后再试。"
+        },
+        "requestSent": {
+            "title": "邮件已发送",
+            "description": "如果 {email} 已绑定账户，你很快会收到密码重置邮件。",
+            "descriptionGeneric": "如果该邮箱已绑定账户，你很快会收到密码重置邮件。",
+            "rateLimited": "请等待 {seconds} 秒后再次申请。"
+        },
+        "reset": {
+            "title": "设置新密码",
+            "description": "为账户设置一个新密码。",
+            "labelNewPassword": "新密码",
+            "labelRepeatPassword": "确认新密码",
+            "buttonSubmit": "设置新密码",
+            "errorLinkExpired": "密码重置链接已过期或无效，请重新申请。",
+            "errorUnexpected": "无法更新密码，请重试。"
+        },
+        "accessDenied": {
+            "title": "无权访问此系统",
+            "description": "登录成功，但你的账户没有当前 Contena 系统的访问权限。",
+            "buttonDifferentAccount": "使用其他账户登录",
+            "loggedInAs": "当前账户："
+        }
+    }
+}

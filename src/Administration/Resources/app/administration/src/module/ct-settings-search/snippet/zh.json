@@ -1,0 +1,133 @@
+{
+    "ct-settings-search": {
+        "general": {
+            "mainMenuItemGeneral": "搜索"
+        },
+        "page": {
+            "generalTab": "常规",
+            "liveSearchTab": "实时搜索"
+        },
+        "textLeaveConfirm": "当前有未保存的更改，确定离开此页面吗？",
+        "generalTab": {
+            "labelSearchBehaviour": "搜索行为",
+            "textTitleSearchBehaviour": "设置输入的搜索词需要满足的匹配程度。",
+            "labelSearchAndCondition": "精确搜索（AND）",
+            "textSearchAndConditionExplain": "仅显示匹配全部搜索词的结果。",
+            "labelSearchOrCondition": "宽泛搜索（OR）",
+            "textSearchOrConditionExplain": "显示匹配任意搜索词的结果。",
+            "labelMinimalSearchTerm": "最小搜索词长度",
+            "labelExcludedSearchTerms": "排除的搜索词",
+            "textEmptyStateExcludedSearchTerms": "暂无排除的搜索词",
+            "textEmptyStateExcludedSearchTermsDescription": "排除不应出现在渠道搜索结果中的词。",
+            "buttonAddExcludedSearch": "排除搜索词",
+            "textPlaceholderTermsFilter": "搜索已排除的搜索词...",
+            "buttonAddExcludedSearchTerms": "排除搜索词",
+            "labelExcludedSearchTermsNoResults": "未找到结果。",
+            "labelExcludedSearchTermsNoResultsDescription": "请调整搜索条件。",
+            "labelSearchableContent": "可搜索内容",
+            "textDescriptionSearchableContent": "控制渠道中可搜索的文章内容，以及各字段对排序的影响。",
+            "buttonResetDefault": "恢复默认值",
+            "buttonAddContent": "添加可搜索内容",
+            "labelGeneralTab": "常规",
+            "labelCustomFieldsTab": "自定义字段",
+            "textEmptyStateSearchableContent": "尚未添加可搜索内容。",
+            "textEmptyStateSearchableContentDescription": "添加内容字段以控制渠道搜索范围。",
+            "textColumnSearchTerm": "排除的搜索词",
+            "labelSearchIndex": "搜索索引",
+            "buttonRebuildSearchIndex": "重建搜索索引",
+            "textWarningOpenTab": "请保持此窗口打开。",
+            "textRebuildSearchIndexDescription": "构建搜索索引需要一些时间，请在完成前保持此窗口打开。",
+            "textRebuildingSearchIndex": "正在重建搜索索引",
+            "textLastedBuild": "最近构建：",
+            "textSearchNotIndexedYet": "尚未构建搜索索引。",
+            "list": {
+                "columnSearchable": "可搜索",
+                "columnRankingPoints": "排序分数",
+                "columnContent": "内容",
+                "columnSplitKeywords": "拆分搜索词",
+                "textResetRanking": "重置排序"
+            },
+            "configFields": {
+                "name": "文章标题",
+                "description": "文章描述",
+                "descriptionTeaser": "文章摘要",
+                "keywords": "文章关键词",
+                "customSearchKeywords": "自定义搜索词",
+                "categoriesName": "分类名称",
+                "categoriesCustomFields": "分类自定义字段",
+                "tagsName": "文章标签",
+                "metaTitle": "文章元标题",
+                "metaDescription": "文章元描述"
+            },
+            "linkExample": "查看示例",
+            "titleExampleModal": "搜索排序示例",
+            "modal": {
+                "textExplain": "以下示例展示文章标题、描述和标签中的匹配项如何组成最终排序分数。",
+                "textTitle": "标题",
+                "textSuperBlog": "优质文章",
+                "textFancyBlog": "精选文章",
+                "textSuperContent": "优质内容",
+                "textFancyContent": "精选内容",
+                "textDescription": "描述",
+                "textTag": "标签",
+                "textJeans": "指南",
+                "textTotal": "总分",
+                "textBlogRankedFirstScore": "第一篇文章的标题、描述和标签均有匹配，总分为 170。",
+                "textBlogRankedSecondScore": "第二篇文章的标题和标签有匹配，总分为 120。",
+                "textBlogRankedThirdScore": "第三篇文章仅标签有匹配，总分为 20。"
+            }
+        },
+        "notification": {
+            "saveSuccess": "配置已保存。",
+            "excludedTermRequired": "排除的搜索词不能为空。",
+            "excludedTermAlreadyExists": "排除的搜索词已存在。",
+            "updateExcludedTermSuccess": "排除的搜索词已更新。",
+            "createExcludedTermSuccess": "排除的搜索词已创建。",
+            "deleteExcludedTermSuccess": "排除的搜索词已删除。",
+            "resetToDefaultExcludedTermSuccess": "排除的搜索词已恢复默认值。",
+            "resetToDefaultExcludedTermError": "无法恢复排除搜索词的默认值。",
+            "saveError": "无法保存配置。",
+            "loadError": "无法加载配置。",
+            "index": {
+                "started": "正在构建文章索引。",
+                "success": "文章索引已构建。"
+            },
+            "notSupportedLanguageError": "所选渠道不支持当前语言。"
+        },
+        "liveSearchTab": {
+            "titleCard": "渠道实时搜索",
+            "linkRebuildSearchIndex": "重建搜索索引",
+            "textDescription": "在下方测试自定义搜索设置。",
+            "textPlaceholderChannel": "选择渠道...",
+            "textPlaceholderSorting": "选择排序方式...",
+            "labelName": "搜索结果",
+            "labelScore": "排序分数",
+            "textNoResult": "未找到结果。",
+            "textNoResultDescription": "请尝试其他搜索词。",
+            "relevance": "相关性",
+            "explainTitle": "为什么这样排序？",
+            "totalScore": "总分",
+            "weight": "权重",
+            "partialContext": "{fragment} 位于 {word} 中",
+            "partialContextWhole": "位于 {word} 中",
+            "scoreHelpText": "该结果的综合相关性分数。字段分数已经过加权，可以直接比较。",
+            "uniformScoresHint": "所有结果分数相同，当前顺序不代表相关性高低。",
+            "matchedTerms": "已匹配",
+            "unmatchedTerms": "未匹配",
+            "matchType": {
+                "exact": "精确",
+                "fuzzy": "模糊",
+                "prefix": "前缀",
+                "ngram": "部分",
+                "phrase": "短语"
+            },
+            "matchTypeTooltip": {
+                "exact": "搜索词与该字段中的词完全匹配。",
+                "fuzzy": "通过拼写容差匹配。",
+                "prefix": "该字段中的词以搜索词开头。",
+                "ngram": "匹配了共同字符片段，而不是整个词。",
+                "phrase": "完整搜索短语按顺序出现在该字段中。"
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{% extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block title %}Contena{% endblock %}
+
+{% block content %}
+    <div class="contena-frontend-shell">
+        <section class="contena-frontend-hero">
+            <p class="contena-frontend-kicker">A general-purpose platform</p>
+            <h1>Build your next digital experience.</h1>
+            <p>Composable content, extensible themes and a secure frontend foundation for Contena.</p>
+            <p><twig:CT:Button text="Explore the blog" variant="primary" /></p>
+        </section>
+        <section id="blog" class="contena-frontend-surface">
+            <h2>Latest from the blog</h2>
+            <p>Blog content will be rendered by the platform ContentSystem.</p>
+        </section>
+    </div>
+{% endblock %}

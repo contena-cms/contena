@@ -1,0 +1,182 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/site-settings": {
+            "get": {
+                "tags": [
+                    "System & Context"
+                ],
+                "summary": "Fetch site settings",
+                "description": "Returns the channel-resolved subset of system configuration that headless frontends need to render the site consistently with the administration settings. Only UI- and validation-relevant, non-sensitive values are exposed.",
+                "operationId": "getSiteSettings",
+                "responses": {
+                    "200": {
+                        "description": "Returns the site settings of the current channel.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "apiAlias",
+                                        "general",
+                                        "loginRegistration"
+                                    ],
+                                    "properties": {
+                                        "apiAlias": {
+                                            "type": "string",
+                                            "const": "site_settings"
+                                        },
+                                        "general": {
+                                            "type": "object",
+                                            "description": "Site identity and meta defaults (core.basicInformation)",
+                                            "required": [
+                                                "apiAlias",
+                                                "siteName",
+                                                "metaAuthor",
+                                                "metaRobots",
+                                                "familyFriendly"
+                                            ],
+                                            "properties": {
+                                                "apiAlias": {
+                                                    "type": "string",
+                                                    "const": "site_settings_general"
+                                                },
+                                                "siteName": {
+                                                    "type": "string",
+                                                    "description": "Name of the site"
+                                                },
+                                                "metaAuthor": {
+                                                    "type": "string",
+                                                    "description": "Name displayed as the author of the website in search results or on social media"
+                                                },
+                                                "metaRobots": {
+                                                    "type": "string",
+                                                    "description": "Default content of the robots meta tag",
+                                                    "default": "index,follow"
+                                                },
+                                                "familyFriendly": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the isFamilyFriendly meta value is set"
+                                                }
+                                            }
+                                        },
+                                        "loginRegistration": {
+                                            "type": "object",
+                                            "description": "Login, registration and address form settings (core.loginRegistration)",
+                                            "required": [
+                                                "apiAlias",
+                                                "passwordMinLength",
+                                                "showTitleField",
+                                                "requireEmailConfirmation",
+                                                "requirePasswordConfirmation",
+                                                "doubleOptInRegistration",
+                                                "showPhoneNumberField",
+                                                "phoneNumberFieldRequired",
+                                                "showBirthdayField",
+                                                "birthdayFieldRequired",
+                                                "showAdditionalAddressField1",
+                                                "additionalAddressField1Required",
+                                                "showAdditionalAddressField2",
+                                                "additionalAddressField2Required",
+                                                "addressInputFieldArrangement",
+                                                "allowMemberDeletion",
+                                                "requireDataProtectionCheckbox"
+                                            ],
+                                            "properties": {
+                                                "apiAlias": {
+                                                    "type": "string",
+                                                    "const": "site_settings_login_registration"
+                                                },
+                                                "passwordMinLength": {
+                                                    "type": "integer",
+                                                    "description": "Minimum password length on member sign-up"
+                                                },
+                                                "showTitleField": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the title field is shown"
+                                                },
+                                                "requireEmailConfirmation": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the email address must be entered twice"
+                                                },
+                                                "requirePasswordConfirmation": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the password must be entered twice"
+                                                },
+                                                "doubleOptInRegistration": {
+                                                    "type": "boolean",
+                                                    "description": "Whether double opt-in is required for new member registrations"
+                                                },
+                                                "showPhoneNumberField": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the phone number field is shown"
+                                                },
+                                                "phoneNumberFieldRequired": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the phone number field is required"
+                                                },
+                                                "showBirthdayField": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the birthday field is shown"
+                                                },
+                                                "birthdayFieldRequired": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the birthday field is required"
+                                                },
+                                                "showAdditionalAddressField1": {
+                                                    "type": "boolean",
+                                                    "description": "Whether additional address line 1 is shown"
+                                                },
+                                                "additionalAddressField1Required": {
+                                                    "type": "boolean",
+                                                    "description": "Whether additional address line 1 is required"
+                                                },
+                                                "showAdditionalAddressField2": {
+                                                    "type": "boolean",
+                                                    "description": "Whether additional address line 2 is shown"
+                                                },
+                                                "additionalAddressField2Required": {
+                                                    "type": "boolean",
+                                                    "description": "Whether additional address line 2 is required"
+                                                },
+                                                "addressInputFieldArrangement": {
+                                                    "type": "string",
+                                                    "description": "Arrangement of City, ZIP and Region fields",
+                                                    "enum": [
+                                                        "city-zip-region",
+                                                        "zip-city-region",
+                                                        "city-region-zip",
+                                                        ""
+                                                    ]
+                                                },
+                                                "allowMemberDeletion": {
+                                                    "type": "boolean",
+                                                    "description": "Whether members may delete their own account"
+                                                },
+                                                "requireDataProtectionCheckbox": {
+                                                    "type": "boolean",
+                                                    "description": "Whether the privacy policy must be acknowledged during registration"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ]
+            }
+        }
+    }
+}

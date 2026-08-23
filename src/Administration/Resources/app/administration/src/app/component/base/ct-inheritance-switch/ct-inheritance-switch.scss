@@ -1,0 +1,14 @@
+@import "~scss/variables";
+
+.ct-inheritance-switch {
+    cursor: pointer;
+    margin-top: -1px;
+
+    &.ct-inheritance-switch--disabled {
+        cursor: default;
+    }
+
+    .icon--regular-link-horizontal {
+        color: $color-module-purple-900;
+    }
+}

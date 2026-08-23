@@ -1,0 +1,34 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Blog types",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "\/_action\/blog\/types": {
+            "get": {
+                "tags": [
+                    "Blog"
+                ],
+                "summary": "Get blog types",
+                "description": "Returns all registered blog content types.",
+                "operationId": "getBlogTypes",
+                "responses": {
+                    "200": {
+                        "description": "Returns the registered blog types.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

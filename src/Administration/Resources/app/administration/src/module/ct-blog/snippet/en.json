@@ -1,0 +1,129 @@
+{
+    "ct-blog": {
+        "general": {
+            "mainMenuItemGeneral": "Blog",
+            "descriptionTextModule": "Manage blog content.",
+            "placeholderSearchBar": "Search blog posts..."
+        },
+        "type": {
+            "post": "Post",
+            "media": "Media content"
+        },
+        "list": {
+            "textHeadline": "Blog posts",
+            "buttonAddBlog": "Add blog post",
+            "buttonAddMediaBlog": "Add media content",
+            "columnName": "Title",
+            "columnActive": "Active",
+            "columnReleaseDate": "Publication date",
+            "columnCategories": "Categories",
+            "columnUpdatedAt": "Updated",
+            "emptyState": "No blog posts yet.",
+            "deleteTitle": "Delete blog post",
+            "deleteText": "Do you really want to delete \"{name}\"?",
+            "deleteSuccess": "The blog post has been deleted.",
+            "deleteError": "The blog post could not be deleted."
+        },
+        "detail": {
+            "textHeadline": "New blog post",
+            "tabGeneral": "General",
+            "tabLayout": "Layout",
+            "tabSeo": "SEO",
+            "saveSuccess": "The blog post has been saved.",
+            "saveError": "The blog post could not be saved.",
+            "loadError": "The blog post could not be loaded."
+        },
+        "basicForm": {
+            "cardTitle": "Content",
+            "labelName": "Title",
+            "placeholderName": "Enter a title...",
+            "labelDescription": "Content source",
+            "placeholderDescription": "Write the blog content...",
+            "labelReleaseDate": "Publication date",
+            "labelActive": "Active"
+        },
+        "categoryForm": {
+            "cardTitle": "Organization and visibility",
+            "labelCategory": "Categories",
+            "labelCategories": "Categories",
+            "placeholderCategory": "Select categories...",
+            "placeholderCategories": "Select categories...",
+            "labelTags": "Tags",
+            "placeholderTags": "Select tags...",
+            "labelSearchKeyword": "Search keywords",
+            "labelSearchKeywords": "Search keywords",
+            "placeholderSearchKeywords": "Add search keywords...",
+            "textAddSearchKeyword": "Click here to add a search keyword",
+            "textEnterValidSearchKeyword": "Enter a valid search keyword",
+            "helpTextSearchKeyword": "The blog post can also be found using these keywords.",
+            "labelChannels": "Channels",
+            "placeholderChannels": "Select channels...",
+            "visibilityTitle": "Channel visibility",
+            "visibilityAll": "Visible everywhere",
+            "visibilitySearch": "Hidden in listings",
+            "visibilityLink": "Available by direct link"
+        },
+        "mediaForm": {
+            "cardTitle": "Media",
+            "uploadLabel": "Upload media",
+            "coverLabel": "Cover",
+            "coverSubline": "Cover",
+            "setCover": "Use as cover",
+            "remove": "Remove media",
+            "errorMediaItemDuplicated": "Media item \"{fileName}\" is already assigned."
+        },
+        "layout": {
+            "cardTitle": "Experience Studio layout",
+            "description": "Content layouts are assigned per channel in Experience Studio.",
+            "columnLayout": "Layout",
+            "columnChannel": "Channel",
+            "buttonOpen": "Open in Experience Studio",
+            "buttonCreate": "Create layout",
+            "emptyState": "No content layout is assigned to this blog post.",
+            "allChannels": "All channels",
+            "loadError": "The assigned content layouts could not be loaded."
+        },
+        "seo": {
+            "cardTitle": "Search engine information",
+            "cardTitleSeo": "SEO",
+            "labelMetaTitle": "Meta title",
+            "labelMetaDescription": "Meta description",
+            "labelKeywords": "Keywords",
+            "openGraphTitle": "Open Graph",
+            "labelOgTitle": "Open Graph title",
+            "labelOgDescription": "Open Graph description",
+            "labelOgImage": "Open Graph image"
+        },
+        "seoForm": {
+            "labelMetaTitle": "Meta title",
+            "labelMetaDescription": "Meta description",
+            "labelKeywords": "SEO keywords",
+            "placeholderMetaTitle": "Enter a meta title...",
+            "placeholderMetaDescription": "Enter a meta description...",
+            "placeholderKeywords": "Enter one or more keywords...",
+            "helpTextMetaTitle": "The meta title should be unique and concise.",
+            "helpTextMetaDescription": "Summarize the blog post for search result previews.",
+            "helpTextKeywords": "Define optional keywords under which the blog post should be found.",
+            "titleOpenGraph": "Open Graph",
+            "labelOpenGraphTitle": "Open Graph title",
+            "labelOpenGraphDescription": "Open Graph description",
+            "labelOpenGraphImage": "Open Graph image",
+            "placeholderOpenGraphTitle": "Enter an Open Graph title...",
+            "placeholderOpenGraphDescription": "Enter an Open Graph description...",
+            "helpTextOpenGraphTitle": "Used when the blog post is shared on social media. The meta title is used as fallback.",
+            "helpTextOpenGraphDescription": "Used when the blog post is shared on social media. The meta description is used as fallback."
+        },
+        "visibility": {
+            "textHeadline": "Blog visibility per Channel",
+            "placeholderVisibility": "Select Channels...",
+            "columnChannel": "Channel",
+            "columnAll": "Visible",
+            "columnSearchOnly": "Hide in listings",
+            "columnLinkOnly": "Hide in listings and search",
+            "visibilityModalDescription": "Hidden blog posts remain available through a direct URL according to the selected visibility.",
+            "linkAdvancedVisibility": "Set visibility for selected Channels",
+            "labelVisibility": "Channels",
+            "bodyVisibility": "Add the Channels in which this blog post should be displayed."
+        }
+    }
+}

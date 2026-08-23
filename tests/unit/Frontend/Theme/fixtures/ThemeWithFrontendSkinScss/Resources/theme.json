@@ -1,0 +1,21 @@
+{
+  "name": "SkinTheme",
+  "author": "contena AG",
+  "views": [
+    "@MockFrontend",
+    "@Plugins",
+    "@TestTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "@MockFrontend",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [
+    "@MockFrontend",
+    "app/frontend/dist/frontend/js/skin-theme.js"
+  ],
+  "asset": [
+    "app/frontend/src/assets"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+    "name": "Test theme",
+    "author": "Contena",
+    "style": [
+        "app/frontend/src/scss/overrides.scss",
+        "@Frontend",
+        {
+            "app/frontend/src/scss/base.scss": {
+                "resolve": {
+                    "vendor": "app/frontend/vendor"
+                }
+            }
+        }
+    ],
+    "script": [
+        "@Frontend",
+        "app/frontend/dist/js/main.js"
+    ],
+    "views": [
+        "@Frontend",
+        "@Plugins",
+        "@ContenaTheme"
+    ],
+    "asset": [
+        "app/frontend/dist/assets"
+    ],
+    "previewMedia": "app/frontend/dist/assets/preview.jpg",
+    "config": {
+        "fields": {
+            "contena-image": {
+                "type": "media",
+                "value": "app/frontend/dist/assets/test.jpg"
+            }
+        }
+    },
+    "iconSets": {
+        "custom-icons": "app/frontend/src/assets/icon-pack/custom-icons"
+    }
+}

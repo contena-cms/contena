@@ -1,0 +1,56 @@
+{# ludtwig-ignore-file #}
+{# @ct-package framework #}
+{# @internal #}
+
+{% props
+    mediaItems,
+    thumbnailSize = 70,
+    thumbnailNavigationPosition = 'left',
+%}
+
+{% set galleryLightboxCVA = cva({
+    base: 'ct-media-gallery-lightbox',
+}) %}
+
+{% set defaultAttributes = {
+    class: galleryLightboxCVA.apply({}),
+    id: 'ct-media-gallery-modal',
+    size: 'full',
+    fullscreen: true,
+    animation: false,
+} %}
+
+<twig:CT:Content:Modal {{ ...attributes.defaults(defaultAttributes)}}>
+    <twig:block name="modal_content">
+        <h2
+            class="ct-media-gallery-lightbox__title visually-hidden"
+            id="{{ id }}-title"
+        >
+            {{ 'component.cms.mediaGallery.lightboxTitle'|trans|striptags }}
+        </h2>
+
+        <twig:CT:Button
+            class="ct-media-gallery-lightbox__close-btn"
+            variant="light"
+            :iconOnly="true"
+            data-bs-dismiss="modal"
+            aria-label="{{ 'global.default.close'|trans|striptags }}"
+        >
+            <twig:CT:Icon name="x" size="sm" />
+        </twig:CT:Button>
+
+        <div class="ct-media-gallery-lightbox__content">
+            <twig:CT:Media:Gallery
+                class="ct-media-gallery-lightbox__gallery"
+                :isLightbox="true"
+                :mediaItems="mediaItems"
+                :thumbnailSize="thumbnailSize"
+                :showFullScreenGallery="false"
+                :showMagnifier="false"
+                :useSchemaMarkup="false"
+                :thumbnailNavigationPosition="thumbnailNavigationPosition"
+            />
+        </div>
+    </twig:block>
+
+</twig:CT:Content:Modal>

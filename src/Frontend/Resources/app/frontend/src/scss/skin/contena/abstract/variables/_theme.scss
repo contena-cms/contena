@@ -1,0 +1,35 @@
+/*
+Theme config variables
+==================================================
+Contains all custom Contena theme variables.
+
+@ct-package framework
+*/
+
+// Color system
+$ct-color-brand-primary: #0042a0 !default;
+$ct-color-brand-secondary: #474a57 !default;
+$ct-color-success: #007e4e !default;
+$ct-color-info: #005b99 !default;
+$ct-color-warning: #974200 !default;
+$ct-color-danger: #c20017 !default;
+
+$ct-background-color: #fff !default;
+$ct-text-color: #2b3136 !default;
+$ct-headline-color: #2b3136 !default;
+$ct-border-color: #798490 !default;
+
+// Fonts
+$ct-font-family-base: 'Inter', sans-serif !default;
+$ct-font-family-headline: 'Inter', sans-serif !default;
+
+// Logos
+$ct-logo-default: url('logo.png') !default;
+$ct-logo-default-sm: url('logo.png') !default;
+$ct-logo-default-md: url('logo.png') !default;
+$ct-logo-default-lg: url('logo.png') !default;
+$ct-logo-default-xl: url('logo.png') !default;
+
+$ct-logo-share: url('logo-share.png') !default;
+$ct-logo-favicon: url('logo-favicon.png') !default;
+$ct-logo-app-icon: url('logo-app-icon.png') !default;

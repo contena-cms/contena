@@ -1,0 +1,25 @@
+@import "~scss/variables";
+
+.ct-blog-category-form__visibility_modal.ct-modal .ct-modal__body {
+    font-size: var(--font-size-xs);
+    padding: var(--scale-size-20) var(--scale-size-30);
+
+    .ct-grid .ct-grid__header .ct-grid__cell-label {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: initial;
+    }
+
+    .ct-grid .ct-grid__header .ct-grid-column .ct-grid__cell-content {
+        font-size: var(--font-size-xs);
+    }
+}
+
+.ct-blog-category-form .ct-card__quick-link.advanced-visibility {
+    cursor: pointer;
+}
+
+.ct-blog-detail__select-visibility {
+    margin-top: var(--scale-size-16);
+    margin-bottom: var(--scale-size-22);
+}

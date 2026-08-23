@@ -1,0 +1,27 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Api\Exception;
+
+use Contena\Core\Framework\ContenaHttpException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @codeCoverageIgnore
+ */
+class InvalidVersionNameException extends ContenaHttpException
+{
+    public function __construct()
+    {
+        parent::__construct('Invalid version name given. Only alphanumeric characters are allowed');
+    }
+
+    public function getErrorCode(): string
+    {
+        return 'FRAMEWORK__INVALID_VERSION_NAME';
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_BAD_REQUEST;
+    }
+}

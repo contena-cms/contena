@@ -1,0 +1,22 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\CodeCoverageIgnoreEvaluation;
+
+use Contena\Tests\Unit\Core\Framework\SomeUnitTest;
+
+/**
+ * @codeCoverageIgnore
+ *
+ * @see SomeUnitTest
+ */
+class SeeUnitTestClass
+{
+    public function describe(int $age): string
+    {
+        if ($age >= 18) {
+            return 'adult';
+        }
+
+        return 'minor';
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "ct/dependent-plugin",
+    "description": "Plugin install command test fixture",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "require": {
+        "ct/base-plugin": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "DependentPlugin\\DependentPlugin"
+    }
+}

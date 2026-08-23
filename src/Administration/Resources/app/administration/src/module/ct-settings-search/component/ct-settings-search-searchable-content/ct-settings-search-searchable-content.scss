@@ -1,0 +1,35 @@
+.ct-settings-search-searchable-content {
+    &__title {
+        margin: 0 0 var(--scale-size-18);
+        font-size: var(--font-size-xs);
+        line-height: var(--font-line-height-xs);
+    }
+
+    &__actions,
+    &__button-group {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-12);
+    }
+
+    &__actions {
+        justify-content: space-between;
+        margin-bottom: var(--scale-size-24);
+    }
+
+    &__tabs {
+        margin: 0 !important;
+    }
+
+    &__tab-content {
+        padding-top: var(--scale-size-20);
+    }
+
+    @media (max-width: 767px) {
+        &__actions,
+        &__button-group {
+            align-items: stretch;
+            flex-direction: column;
+        }
+    }
+}

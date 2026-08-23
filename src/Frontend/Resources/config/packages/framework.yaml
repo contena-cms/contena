@@ -1,0 +1,6 @@
+framework:
+    exceptions:
+        Contena\Frontend\Theme\Exception\ThemeException:
+            log_level: notice
+    translator:
+        default_path: "%frontendRoot%/Resources/snippet"

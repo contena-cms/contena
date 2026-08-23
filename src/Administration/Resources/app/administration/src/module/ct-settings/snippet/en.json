@@ -1,0 +1,33 @@
+{
+    "ct-settings": {
+        "general": {
+            "mainMenuItemGeneral": "Settings"
+        },
+        "index": {
+            "title": "Settings",
+            "tabSystem": "System",
+            "tabGeneral": "General",
+            "tabLocalization": "Localisation",
+            "tabContent": "Content",
+            "tabMember": "Members",
+            "tabTransaction": "Transactions",
+            "tabPlugins": "Extensions",
+            "search": {
+                "placeholder": "Find settings...",
+                "noResultsHeadline": "No entries found",
+                "noResultsDescription": "Settings couldn't be found. Try to use another search term."
+            }
+        },
+        "system-config": {
+            "inherited": "Inherited",
+            "labelChannelSelect": "Channel"
+        }
+    },
+    "ct-privileges": {
+        "additional_permissions": {
+            "system": {
+                "system_config": "Basic configuration"
+            }
+        }
+    }
+}

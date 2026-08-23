@@ -1,0 +1,83 @@
+{% block error_maintenance_doctype %}
+    <!DOCTYPE html>
+{% endblock %}
+
+{% block error_maintenance_html %}
+    <html lang="{{ context.languageInfo.localeCode|default('en-GB') }}">
+{% endblock %}
+
+{% block error_maintenance_head %}
+    {% sw_include '@Frontend/frontend/layout/meta.html.twig' %}
+{% endblock %}
+
+{% block error_maintenance_body %}
+    <body class="{% block error_maintenance_body_classes %}{%- if activeRoute is not empty -%}is-active-route-{{ activeRoute|replace({'.': '-'}) }}{%- endif -%}{% endblock %}">
+        {% block error_maintenance_body_inner %}
+            {% block error_maintenance_noscript %}
+                <noscript class="noscript-main">
+                    <twig:CT:Alert variant="info" :icon="false">
+                        {{ 'general.noscriptNotice'|trans|sw_sanitize }}
+                    </twig:CT:Alert>
+                </noscript>
+            {% endblock %}
+
+            {% block error_maintenance_header %}
+                <header class="contena-frontend-header">
+                    <a href="{{ path('frontend.home.page') }}" class="contena-frontend-brand">Contena</a>
+                </header>
+            {% endblock %}
+
+            {% block error_maintenance_main %}
+                <main class="content-main" id="content-main">
+                    {% block error_maintenance_main_content %}
+                        {% if contentPage is defined and contentPage %}
+                            <div class="container-main content-page landing-page">
+                                <twig:CT:Content:Page :page="contentPage" />
+                            </div>
+                        {% else %}
+                            {% block error_maintenance_main_fallback %}
+                                <div class="container mt-5 text-center">
+                                    <img src="{{ asset('assets/illustration/maintenance_mode.svg', 'theme') }}"
+                                         alt="{{ 'general.maintenanceModeHeader'|trans|striptags }}"
+                                         class="rounded mx-auto d-block w-75">
+
+                                    <h1 class="mt-4">{{ 'general.maintenanceModeHeader'|trans|sw_sanitize }}</h1>
+                                    <p>{{ 'general.maintenanceModeDescription'|trans|sw_sanitize }}</p>
+                                </div>
+                            {% endblock %}
+                        {% endif %}
+                    {% endblock %}
+                </main>
+            {% endblock %}
+
+            {% block error_maintenance_footer %}
+                <footer class="contena-frontend-footer">
+                    {% block error_maintenance_footer_content %}
+                        {% if config('core.basicInformation.imprintPage') is not null %}
+                            <a href="{{ seoUrl('frontend.maintenance.singlepage', { id: config('core.basicInformation.imprintPage') }) }}">
+                                {{ 'general.imprintLink'|trans|sw_sanitize }}
+                            </a>
+                        {% endif %}
+
+                        {% if config('core.basicInformation.privacyPage') is not null %}
+                            <a href="{{ seoUrl('frontend.maintenance.singlepage', { id: config('core.basicInformation.privacyPage') }) }}">
+                                {{ 'general.privacyLink'|trans|sw_sanitize }}
+                            </a>
+                        {% endif %}
+                    {% endblock %}
+                </footer>
+            {% endblock %}
+        {% endblock %}
+
+        {% block error_maintenance_body_script %}
+            {% block error_maintenance_script_reload %}
+                <script>
+                    setTimeout(function () {
+                        location.reload();
+                    }, 30000);
+                </script>
+            {% endblock %}
+        {% endblock %}
+    </body>
+{% endblock %}
+</html>

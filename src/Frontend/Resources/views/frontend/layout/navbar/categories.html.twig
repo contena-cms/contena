@@ -1,0 +1,49 @@
+{% block layout_navbar_categories %}
+    {% set navigationMaxDepth = 3 %}
+
+    {% if not level %}
+        {% set level = 0 %}
+    {% endif %}
+
+    <div class="{% if level == 0 %}row {% endif %}navigation-flyout-categories is-level-{{ level|raw }}">
+        {% for treeItem in navigationTree %}
+            {% set category = treeItem.category %}
+            {% set id = category.id %}
+            {% set name = category.translated.name %}
+            {% set link = category.seoUrl %}
+
+            {% block layout_navbar_categories_item %}
+                {% set columnCount = navigationMedia ? 3 : 4 %}
+                <div class="{% if level == 0 %}col-{{ (12 / columnCount)|raw }} {% endif %}{% if loop.index0 % columnCount != 0 %}navigation-flyout-col{% endif %}">
+                    {% block layout_navbar_categories_item_link %}
+                        {% if category.type == 'folder' %}
+                            <div class="nav-item nav-item-{{ id|raw }} nav-link nav-item-{{ id|raw }}-link navigation-flyout-link is-level-{{ level|raw }}"
+                                 title="{{ name }}">
+                                <span>{{ name }}</span>
+                            </div>
+                        {% else %}
+                            <a class="nav-item nav-item-{{ id|raw }} nav-link nav-item-{{ id|raw }}-link navigation-flyout-link is-level-{{ level|raw }}"
+                               href="{{ link }}"
+                               {% if category.shouldOpenInNewTab %}target="_blank"
+                               {% if category.linkType == 'external' %}rel="noopener noreferrer"{% endif %}
+                                {% endif %}
+                               title="{{ name }}">
+                                <span>{{ name }}</span>
+                            </a>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block layout_navbar_categories_recoursion %}
+                        {% if level < navigationMaxDepth and treeItem.children %}
+                            {% sw_include '@Frontend/frontend/layout/navbar/categories.html.twig' with {
+                                navigationTree: treeItem.children,
+                                level: level + 1,
+                                page: page
+                            } only %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        {% endfor %}
+    </div>
+{% endblock %}

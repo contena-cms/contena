@@ -1,0 +1,1 @@
+{"openapi":"3.2.0","info":[],"paths":[],"components":{"responses":{"RegionListResponse":{"description":"Entity search result containing administrative regions.","content":{"application/json":{"schema":{"allOf":[{"properties":{"elements":{"type":"array","items":{"$ref":"#/components/schemas/Region"}}},"type":"object"},{"$ref":"#/components/schemas/EntitySearchResult"}]}}}}}}}

@@ -1,0 +1,6 @@
+@import "~scss/mixins";
+
+// Typography comes from the wrapping mt-text, only the truncation is ours
+.ct-version .ct-version__info {
+    @include truncate;
+}

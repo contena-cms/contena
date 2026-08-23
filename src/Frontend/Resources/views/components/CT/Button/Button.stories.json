@@ -1,0 +1,42 @@
+{
+    "title": "CT/Button",
+    "parameters": {
+        "server": {
+            "id": "CT:Button"
+        },
+        "template": "<twig:CT:Button text=\"Click me!\" variant=\"primary\" />"
+    },
+    "argTypes": {
+        "text": { "control": "text" },
+        "variant": {
+            "control": "select",
+            "options": ["primary", "secondary", "light", "dark", "danger", "warning", "success", "info", "buy", "link", "inline", "filter"]
+        },
+        "iconOnly": { "control": "boolean" },
+        "outline": { "control": "boolean" },
+        "size": {
+            "control": "select",
+            "options": ["sm", "lg"]
+        }
+    },
+    "stories": [
+        {
+            "name": "Button",
+            "args": {
+                "text": "Click me!",
+                "variant": "primary",
+                "iconOnly": false
+            }
+        },
+        {
+            "name": "Icon only",
+            "parameters": {
+                "template": "<twig:CT:Button variant=\"light\" :iconOnly=\"true\" aria-label=\"Previous\"><twig:CT:Icon name=\"arrow-head-left\" size=\"sm\" /></twig:CT:Button>"
+            },
+            "args": {
+                "variant": "light",
+                "iconOnly": true
+            }
+        }
+    ]
+}

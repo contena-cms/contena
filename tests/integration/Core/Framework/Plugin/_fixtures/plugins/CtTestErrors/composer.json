@@ -1,0 +1,20 @@
+{
+    "name": "ct/test-error",
+    "description": "test plugin with errors",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ct\\Foo\\": "src/"
+        }
+    },
+    "require": {
+        "contena/core": "~6.3"
+    },
+    "extra": {
+        "contena-plugin-class": "Ct\\Test\\CtTestErrors",
+        "label": {
+            "en_GB": "Invalid locale Code for label"
+        }
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "\/_info\/openapi3.json": {
+            "get": {
+                "tags": ["System Info"],
+                "summary": "Get Channel API OpenAPI specification",
+                "operationId": "channel-api-info",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {"type": "string", "enum": ["jsonapi", "json"]}
+                    }
+                ],
+                "responses": {
+                    "200": {"description": "Channel API specification."},
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The `type` query parameter is not a supported API type."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing. This endpoint can be opened up by setting `contena.api.api_browser.auth_required` to `false`."
+                    }
+                },
+                "security": [{"ApiKey": []}]
+            }
+        },
+        "\/_info\/open-api-schema.json": {
+            "get": {
+                "tags": ["System Info"],
+                "summary": "Get Channel API entity schema",
+                "operationId": "channel-api-open-api-schema",
+                "responses": {"200": {"description": "Channel API entity schema."}}
+            }
+        },
+        "\/_info\/stoplightio.html": {
+            "get": {
+                "tags": ["System Info"],
+                "summary": "Open Channel API documentation",
+                "operationId": "channel-api-stoplightio",
+                "responses": {"200": {"description": "Channel API documentation."}}
+            }
+        },
+        "\/_info\/routes": {
+            "get": {
+                "tags": ["System Info"],
+                "summary": "List Channel API routes",
+                "operationId": "channel-api-routes",
+                "responses": {
+                    "200": {"description": "Channel API routes."},
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `ct-access-key` header is missing. This endpoint can be opened up by setting `contena.api.api_browser.auth_required` to `false`."
+                    }
+                },
+                "security": [{"ApiKey": []}]
+            }
+        }
+    }
+}

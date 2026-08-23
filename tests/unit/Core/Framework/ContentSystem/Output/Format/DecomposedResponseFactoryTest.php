@@ -1,0 +1,37 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Output\Format;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\ContentSystem\Channel\ContentDecomposedRouteResponse;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigCanonicalizer;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
+use Contena\Core\Framework\ContentSystem\Output\Format\DecomposedResponseFactory;
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+
+/**
+ * @internal
+ */
+#[CoversClass(DecomposedResponseFactory::class)]
+class DecomposedResponseFactoryTest extends TestCase
+{
+    #[TestDox('creates ContentDecomposedRouteResponse from content page')]
+    public function testCreateResponseReturnsContentDecomposedRouteResponse(): void
+    {
+        $factory = new DecomposedResponseFactory(new DataLoaderConfigSerializerProvider(new ServiceLocator([])), new ConfigCanonicalizer());
+        $root = ContentElementBuilder::create('section', 'r1')->build();
+        $page = new ContentPage('layout-1', [$root], 'Test', null);
+
+        $response = $factory->createResponse($page);
+
+        static::assertInstanceOf(ContentDecomposedRouteResponse::class, $response);
+        $decomposedPage = $response->getContentDecomposedPage();
+        static::assertSame('layout-1', $decomposedPage->layoutId);
+        static::assertCount(1, $decomposedPage->skeletons);
+        static::assertSame('r1', $decomposedPage->skeletons[0]->id);
+    }
+}

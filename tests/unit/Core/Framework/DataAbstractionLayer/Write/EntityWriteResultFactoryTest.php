@@ -1,0 +1,314 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
+use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\JsonUpdateCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteResultFactory;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\DateTimeDefinition;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Country\CountryDefinition;
+use Contena\Core\Test\Stub\DataAbstractionLayer\EmptyEntityExistence;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+/**
+ * @internal
+ */
+#[CoversClass(EntityWriteResultFactory::class)]
+class EntityWriteResultFactoryTest extends TestCase
+{
+    /**
+     * @param array<array<string, mixed>> $commands
+     * @param array<string, array<string, array<string, mixed>>> $expected
+     */
+    #[DataProvider('buildResultProvider')]
+    public function testBuildResult(array $commands, array $expected): void
+    {
+        $registry = new StaticDefinitionInstanceRegistry(
+            [CountryDefinition::class, DateTimeDefinition::class],
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+
+        $factory = new EntityWriteResultFactory(
+            $registry,
+            static::createStub(Connection::class)
+        );
+
+        $queue = new WriteCommandQueue();
+
+        // add all commands to queue, use the identifier system of DAL
+        foreach ($commands as $command) {
+            // fake class to reduce constructor complexity
+            $command = new UpdateCommandStub(
+                $command['payload'],
+                $command['primaryKey'],
+                $registry->get($command['definition'])
+            );
+
+            $identifier = WriteCommandQueue::hashedPrimary($registry, $command);
+            $queue->add($command->getEntityName(), $identifier, $command);
+        }
+
+        $result = $factory->build($queue);
+
+        // loop over expected written entity names
+        foreach ($expected as $entity => $records) {
+            static::assertArrayHasKey($entity, $result, 'Expected write results for entity ' . $entity);
+
+            static::assertCount(\count($records), $result[$entity], 'Expected write results for entity ' . $entity);
+
+            // now loop over the written records and compare the payloads
+            foreach ($result[$entity] as $written) {
+                $id = $written->getPrimaryKey();
+
+                static::assertIsString($id, 'Expected write result to have a primary key as string in this test');
+
+                static::assertArrayHasKey($id, $records, \sprintf('Primary key %s was not expected to be written', $id));
+
+                static::assertEquals($records[$id], $written->getPayload(), 'Expected payload to be equal');
+            }
+        }
+    }
+
+    public static function buildResultProvider(): \Generator
+    {
+        $ids = new IdsCollection();
+
+        yield 'Test single definition, single command' => [
+            'commands' => [
+                [
+                    'payload' => ['id' => $ids->getBytes('country-1'), 'active' => false],
+                    'primaryKey' => ['id' => $ids->getBytes('country-1')],
+                    'definition' => CountryDefinition::class,
+                ],
+            ],
+            'expected' => [
+                'country' => [
+                    $ids->get('country-1') => ['id' => $ids->get('country-1'), 'active' => false],
+                ],
+            ],
+        ];
+
+        yield 'Test single definition, multiple commands' => [
+            'commands' => [
+                [
+                    'payload' => ['id' => $ids->getBytes('country-1'), 'active' => false],
+                    'primaryKey' => ['id' => $ids->getBytes('country-1')],
+                    'definition' => CountryDefinition::class,
+                ],
+                [
+                    'payload' => ['id' => $ids->getBytes('country-2'), 'active' => true],
+                    'primaryKey' => ['id' => $ids->getBytes('country-2')],
+                    'definition' => CountryDefinition::class,
+                ],
+            ],
+            'expected' => [
+                'country' => [
+                    $ids->get('country-1') => ['id' => $ids->get('country-1'), 'active' => false],
+                    $ids->get('country-2') => ['id' => $ids->get('country-2'), 'active' => true],
+                ],
+            ],
+        ];
+
+        yield 'Test multiple definitions, multiple commands' => [
+            'commands' => [
+                [
+                    'payload' => ['id' => $ids->getBytes('country-1'), 'active' => false],
+                    'primaryKey' => ['id' => $ids->getBytes('country-1')],
+                    'definition' => CountryDefinition::class,
+                ],
+                [
+                    'payload' => ['id' => $ids->getBytes('country-2'), 'active' => true],
+                    'primaryKey' => ['id' => $ids->getBytes('country-2')],
+                    'definition' => CountryDefinition::class,
+                ],
+                [
+                    'payload' => ['id' => $ids->getBytes('date-time-1'), 'name' => 'first'],
+                    'primaryKey' => ['id' => $ids->getBytes('date-time-1')],
+                    'definition' => DateTimeDefinition::class,
+                ],
+                [
+                    'payload' => ['id' => $ids->getBytes('date-time-2'), 'name' => 'second'],
+                    'primaryKey' => ['id' => $ids->getBytes('date-time-2')],
+                    'definition' => DateTimeDefinition::class,
+                ],
+            ],
+            'expected' => [
+                'country' => [
+                    $ids->get('country-1') => ['id' => $ids->get('country-1'), 'active' => false],
+                    $ids->get('country-2') => ['id' => $ids->get('country-2'), 'active' => true],
+                ],
+                'date_time_test' => [
+                    $ids->get('date-time-1') => ['id' => $ids->get('date-time-1'), 'name' => 'first'],
+                    $ids->get('date-time-2') => ['id' => $ids->get('date-time-2'), 'name' => 'second'],
+                ],
+            ],
+        ];
+
+        yield 'Test merge payload for same definition and same command primary key' => [
+            'commands' => [
+                [
+                    'payload' => ['id' => $ids->getBytes('country-1'), 'active' => false],
+                    'primaryKey' => ['id' => $ids->getBytes('country-1')],
+                    'definition' => CountryDefinition::class,
+                ],
+                [
+                    'payload' => ['id' => $ids->getBytes('country-1'), 'position' => 10],
+                    'primaryKey' => ['id' => $ids->getBytes('country-1')],
+                    'definition' => CountryDefinition::class,
+                ],
+            ],
+            'expected' => [
+                'country' => [
+                    $ids->get('country-1') => [
+                        'id' => $ids->get('country-1'),
+                        'active' => false,
+                        'position' => 10,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function testBuildResultKeepsInsertOperationWhenInsertedEntityIsUpdatedInSameQueue(): void
+    {
+        $ids = new IdsCollection();
+        $registry = new StaticDefinitionInstanceRegistry(
+            [CountryDefinition::class],
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+
+        $queue = new WriteCommandQueue();
+        $definition = $registry->get(CountryDefinition::class);
+
+        $insert = new InsertCommand(
+            definition: $definition,
+            payload: ['id' => $ids->getBytes('country-1'), 'active' => false],
+            primaryKey: ['id' => $ids->getBytes('country-1')],
+            existence: new EmptyEntityExistence(),
+            path: '/' . Uuid::randomHex()
+        );
+        $queue->add($insert->getEntityName(), WriteCommandQueue::hashedPrimary($registry, $insert), $insert);
+
+        $update = new UpdateCommandStub(
+            ['id' => $ids->getBytes('country-1'), 'position' => 10],
+            ['id' => $ids->getBytes('country-1')],
+            $definition
+        );
+        $queue->add($update->getEntityName(), WriteCommandQueue::hashedPrimary($registry, $update), $update);
+
+        $result = new EntityWriteResultFactory(
+            $registry,
+            static::createStub(Connection::class)
+        )->build($queue);
+
+        static::assertCount(1, $result['country']);
+        static::assertSame(EntityWriteResult::OPERATION_INSERT, $result['country'][0]->getOperation());
+        static::assertEquals([
+            'id' => $ids->get('country-1'),
+            'active' => false,
+            'position' => 10,
+        ], $result['country'][0]->getPayload());
+    }
+
+    public function testBuildResultKeepsInsertOperationWhenInsertedEntityGetsJsonUpdateInSameQueue(): void
+    {
+        $ids = new IdsCollection();
+        $registry = new StaticDefinitionInstanceRegistry(
+            [TestJsonDefinition::class],
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+
+        $queue = new WriteCommandQueue();
+        $definition = $registry->get(TestJsonDefinition::class);
+
+        $insert = new InsertCommand(
+            definition: $definition,
+            payload: ['id' => $ids->getBytes('json-entity-1')],
+            primaryKey: ['id' => $ids->getBytes('json-entity-1')],
+            existence: new EmptyEntityExistence(),
+            path: '/' . Uuid::randomHex()
+        );
+        $queue->add($insert->getEntityName(), WriteCommandQueue::hashedPrimary($registry, $insert), $insert);
+
+        $jsonUpdate = new JsonUpdateCommand(
+            definition: $definition,
+            storageName: 'payload_json',
+            payload: ['foo' => 'bar'],
+            primaryKey: ['id' => $ids->getBytes('json-entity-1')],
+            existence: new EmptyEntityExistence(),
+            path: '/' . Uuid::randomHex()
+        );
+        $queue->add($jsonUpdate->getEntityName(), WriteCommandQueue::hashedPrimary($registry, $jsonUpdate), $jsonUpdate);
+
+        $result = new EntityWriteResultFactory(
+            $registry,
+            static::createStub(Connection::class)
+        )->build($queue);
+
+        static::assertCount(1, $result[TestJsonDefinition::ENTITY_NAME]);
+        static::assertSame(EntityWriteResult::OPERATION_INSERT, $result[TestJsonDefinition::ENTITY_NAME][0]->getOperation());
+        static::assertEquals([
+            'id' => $ids->get('json-entity-1'),
+            'payloadJson' => ['foo' => 'bar'],
+        ], $result[TestJsonDefinition::ENTITY_NAME][0]->getPayload());
+    }
+}
+
+/**
+ * @internal
+ */
+class TestJsonDefinition extends EntityDefinition
+{
+    public const string ENTITY_NAME = 'test_json';
+
+    public function getEntityName(): string
+    {
+        return self::ENTITY_NAME;
+    }
+
+    protected function defineFields(): FieldCollection
+    {
+        return new FieldCollection([
+            new IdField('id', 'id')->addFlags(new PrimaryKey()),
+            new JsonField('payload_json', 'payloadJson'),
+        ]);
+    }
+}
+
+/**
+ * @internal
+ */
+class UpdateCommandStub extends UpdateCommand
+{
+    public function __construct(array $payload, array $primaryKey, ?EntityDefinition $definition = null)
+    {
+        $definition = $definition ?? new CountryDefinition();
+
+        parent::__construct(
+            definition: $definition,
+            payload: $payload,
+            primaryKey: $primaryKey,
+            existence: new EmptyEntityExistence(),
+            path: '/' . Uuid::randomHex()
+        );
+    }
+}

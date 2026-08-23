@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\Channel\Api;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\System\Channel\Api\ResponseFields;
+use Contena\Core\System\Channel\ChannelException;
+
+/**
+ * @internal
+ */
+#[CoversClass(ResponseFields::class)]
+class ResponseFieldsTest extends TestCase
+{
+    public function testIsAllowedReturnsTrueWhenTypeNotSet(): void
+    {
+        $responseFields = new ResponseFields();
+        static::assertTrue($responseFields->isAllowed('someType', 'someProperty'));
+    }
+
+    public function testIsAllowedThrowsExceptionWhenIncludesTypeIsNotArray(): void
+    {
+        $this->expectExceptionObject(ChannelException::invalidType('The includes for type "someType" must be of the type array, string given'));
+
+        /** @phpstan-ignore argument.type (for test purpose) */
+        new ResponseFields(['someType' => 'notArray']);
+    }
+
+    public function testIsAllowedThrowsExceptionWhenExcludesTypeIsNotArray(): void
+    {
+        $this->expectExceptionObject(ChannelException::invalidType('The excludes for type "someType" must be of the type array, string given'));
+
+        /** @phpstan-ignore argument.type (for test purpose) */
+        new ResponseFields(excludes: ['someType' => 'notArray']);
+    }
+
+    public function testIsAllowedReturnsFalseWhenPropertyNotIncluded(): void
+    {
+        $responseFields = new ResponseFields(['someType' => ['anotherProperty']]);
+        static::assertFalse($responseFields->isAllowed('someType', 'someProperty'));
+    }
+
+    public function testIsAllowedReturnsTrueWhenPropertyIsIncluded(): void
+    {
+        $responseFields = new ResponseFields(['someType' => ['someProperty']]);
+        static::assertTrue($responseFields->isAllowed('someType', 'someProperty'));
+    }
+
+    public function testHasNestedReturnsTrueWhenPropertyHasPrefix(): void
+    {
+        $responseFields = new ResponseFields(['alias' => ['prefix.property']]);
+        static::assertTrue($responseFields->hasNested('alias', 'prefix'));
+    }
+
+    public function testHasNestedReturnsFalseWhenPropertyDoesNotHavePrefix(): void
+    {
+        $responseFields = new ResponseFields(['alias' => ['otherprefix.property']]);
+        static::assertFalse($responseFields->hasNested('alias', 'prefix'));
+    }
+}

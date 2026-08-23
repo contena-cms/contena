@@ -1,0 +1,24 @@
+.ct-settings-search {
+    &__example-text {
+        display: block;
+        font-size: var(--font-size-xs);
+    }
+
+    &__searchable-content-example-list {
+        display: grid;
+        gap: var(--scale-size-32);
+        padding: 0;
+        list-style: none;
+    }
+
+    &__searchable-content-example-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: var(--scale-size-24);
+    }
+
+    &__searchable-content-example-detail {
+        display: grid;
+        grid-template-columns: 2fr 0.5fr;
+    }
+}

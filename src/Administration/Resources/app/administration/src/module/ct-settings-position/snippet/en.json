@@ -1,0 +1,41 @@
+{
+    "ct-settings-position": {
+        "general": {
+            "mainMenuItemGeneral": "Positions",
+            "description": "Manage translated positions assignable to users."
+        },
+        "list": {
+            "searchPlaceholder": "Search positions...",
+            "columnName": "Name",
+            "columnCode": "Position code",
+            "columnPosition": "Position",
+            "columnActive": "Active",
+            "columnCreatedAt": "Created at",
+            "columnUpdatedAt": "Updated at"
+        },
+        "detail": {
+            "titleNew": "New position",
+            "titleEdit": "Edit position",
+            "labelName": "Name",
+            "labelCode": "Position code",
+            "labelDescription": "Description",
+            "labelPosition": "Position",
+            "labelActive": "Active",
+            "customFieldsTitle": "Custom fields"
+        },
+        "notification": {
+            "loadError": "The positions could not be loaded.",
+            "saveSuccess": "The position has been saved.",
+            "saveError": "The position could not be saved. Please check all required fields.",
+            "deleteSuccess": "The position has been deleted.",
+            "deleteError": "The position could not be deleted."
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "position": {
+                "label": "Positions"
+            }
+        }
+    }
+}

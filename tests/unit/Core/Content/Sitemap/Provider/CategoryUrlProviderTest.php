@@ -1,0 +1,343 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Sitemap\Provider;
+
+use Doctrine\DBAL\Cache\ArrayResult;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Category\CategoryEntity;
+use Contena\Core\Content\Category\Event\ChannelCategoryIdsFetchedEvent;
+use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
+use Contena\Core\Content\Sitemap\Provider\CategoryUrlProvider;
+use Contena\Core\Content\Sitemap\Service\ConfigHandler;
+use Contena\Core\Content\Sitemap\Struct\Url;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Test\Generator;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Test\TestDefaults;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+/**
+ * @internal
+ */
+#[CoversClass(CategoryUrlProvider::class)]
+class CategoryUrlProviderTest extends TestCase
+{
+    private readonly ConfigHandler&Stub $configHandler;
+
+    private readonly Connection&Stub $connection;
+
+    private readonly CategoryDefinition&Stub $definition;
+
+    private readonly IteratorFactory&Stub $iteratorFactory;
+
+    private readonly EntityRouteResolver&Stub $entityRouteResolver;
+
+    private readonly EventDispatcher&MockObject $dispatcher;
+
+    private readonly IdsCollection $ids;
+
+    private int $categoryResultIncrement;
+
+    private (QueryBuilder&MockObject)|null $queryBuilder = null;
+
+    protected function setUp(): void
+    {
+        $this->configHandler = static::createStub(ConfigHandler::class);
+        $this->connection = static::createStub(Connection::class);
+        $this->definition = static::createStub(CategoryDefinition::class);
+        $this->iteratorFactory = static::createStub(IteratorFactory::class);
+        $this->entityRouteResolver = static::createStub(EntityRouteResolver::class);
+        $this->ids = new IdsCollection();
+        $this->dispatcher = $this->createMock(EventDispatcher::class);
+        $this->categoryResultIncrement = 0;
+    }
+
+    public function testGetDecorated(): void
+    {
+        static::expectException(DecorationPatternException::class);
+        $this->getCategoryUrlProvider()->getDecorated();
+    }
+
+    public function testGetName(): void
+    {
+        $name = $this->getCategoryUrlProvider()->getName();
+        static::assertSame('category', $name);
+    }
+
+    public function testGetCategoryUrls(): void
+    {
+        $categoryResult1 = $this->createCategoryResult();
+        $categoryResult2 = $this->createCategoryResult();
+        $queryResult = new Result(
+            new ArrayResult(
+                array_keys($categoryResult1),
+                [
+                    array_values($categoryResult1),
+                    array_values($categoryResult2),
+                ]
+            ),
+            $this->connection
+        );
+        $this->initServices($queryResult);
+        static::assertNotNull($this->queryBuilder);
+        $context = Generator::generateChannelContext();
+
+        $event = $this->createChannelCategoryIdsFetchedEvent(
+            \array_column([$categoryResult1, $categoryResult2], 'id'),
+            $context
+        );
+        $this->dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnArgument(0)
+            ->willReturn($event)
+        ;
+
+        $provider = $this->getCategoryUrlProvider();
+        $urlResult = $provider->getUrls($context, 100, 50);
+
+        $urls = $urlResult->getUrls();
+        static::assertCount(2, $urls);
+
+        $url = array_shift($urls);
+        static::assertInstanceOf(Url::class, $url);
+        static::assertSame($this->ids->get('category-1'), $url->getIdentifier());
+        static::assertSame('category/1/detail', $url->getLoc());
+
+        $url = array_shift($urls);
+        static::assertInstanceOf(Url::class, $url);
+        static::assertSame($this->ids->get('category-2'), $url->getIdentifier());
+        static::assertSame('category/2/detail', $url->getLoc());
+    }
+
+    public function testGetCategoryUrlsReturnsEmptyResult(): void
+    {
+        $categoryRowNames = array_keys($this->createCategoryResult());
+        $queryResult = new Result(
+            new ArrayResult($categoryRowNames, []),
+            $this->connection
+        );
+        $this->initServices($queryResult);
+        static::assertNotNull($this->queryBuilder);
+        $context = Generator::generateChannelContext();
+
+        $provider = $this->getCategoryUrlProvider();
+        $urlResult = $provider->getUrls($context, 100, 50);
+
+        $urls = $urlResult->getUrls();
+        static::assertCount(0, $urls);
+    }
+
+    public function testGetCategoryUrlsHasNoRestrictiveWhereConditionsBecauseGetExcludedCategoryIdsReturnedEmptyResult(): void
+    {
+        $categoryRowNames = array_keys($this->createCategoryResult());
+        $queryResult = new Result(
+            new ArrayResult($categoryRowNames, []),
+            $this->connection
+        );
+        $this->initServices($queryResult, []);
+        static::assertNotNull($this->queryBuilder);
+        $this->configHandler->method('get')->willReturn([]);
+        $context = Generator::generateChannelContext();
+
+        $provider = $this->getCategoryUrlProvider();
+
+        $this->queryBuilder
+            ->method('andWhere')
+            ->willReturnCallback(function ($parameter) {
+                $this->assertNotSame(
+                    '`category`.id NOT IN (:categoryIds)',
+                    $parameter,
+                    'andWhere should never be called with category ID exclusion'
+                );
+
+                return $this->queryBuilder;
+            });
+
+        $provider->getUrls($context, 100, 50);
+    }
+
+    public function testExcludeFilteredCategories(): void
+    {
+        $categoryResult1 = $this->createCategoryResult();
+        $categoryResult2 = $this->createCategoryResult();
+        $queryResult = new Result(
+            new ArrayResult(
+                array_keys($categoryResult1),
+                [
+                    array_values($categoryResult1),
+                    array_values($categoryResult2),
+                ]
+            ),
+            $this->connection
+        );
+        $this->initServices($queryResult);
+        static::assertNotNull($this->queryBuilder);
+        $context = Generator::generateChannelContext();
+
+        $event = $this->createChannelCategoryIdsFetchedEvent(
+            \array_column([$categoryResult1, $categoryResult2], 'id'),
+            $context,
+            [$categoryResult1['id']]
+        );
+        $this->dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnArgument(0)
+            ->willReturn($event)
+        ;
+
+        $provider = $this->getCategoryUrlProvider();
+        $urlResult = $provider->getUrls($context, 100, 50);
+
+        $urls = $urlResult->getUrls();
+        static::assertCount(1, $urls);
+
+        $url = array_shift($urls);
+        static::assertInstanceOf(Url::class, $url);
+        static::assertSame($this->ids->get('category-2'), $url->getIdentifier());
+        static::assertSame('category/2/detail', $url->getLoc());
+    }
+
+    public function testReturnNextOffsetIfAllCategoriesFiltered(): void
+    {
+        $categoryResult1 = $this->createCategoryResult();
+        $categoryResult2 = $this->createCategoryResult();
+        $queryResult = new Result(
+            new ArrayResult(
+                array_keys($categoryResult1),
+                [
+                    array_values($categoryResult1),
+                    array_values($categoryResult2),
+                ]
+            ),
+            $this->connection
+        );
+        $this->initServices($queryResult);
+        static::assertNotNull($this->queryBuilder);
+        $context = Generator::generateChannelContext();
+
+        $categoryIds = \array_column([$categoryResult1, $categoryResult2], 'id');
+        $event = $this->createChannelCategoryIdsFetchedEvent($categoryIds, $context, $categoryIds);
+        $this->dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnArgument(0)
+            ->willReturn($event)
+        ;
+
+        $provider = $this->getCategoryUrlProvider();
+        $urlResult = $provider->getUrls($context, 100, 50);
+
+        $urls = $urlResult->getUrls();
+        static::assertCount(0, $urls);
+        static::assertSame(2, $urlResult->getNextOffset());
+    }
+
+    /**
+     * @param array<array{resource: class-string, channelId: string, identifier: string}>|null $excludedUrls
+     */
+    private function initServices(
+        Result $categoryQueryResult,
+        ?array $excludedUrls = null,
+    ): void {
+        $this->connection->method('fetchAllAssociative')->willReturn([
+            [
+                'foreign_key' => $this->ids->get('category-1'),
+                'seo_path_info' => 'category/1/detail',
+            ],
+        ]);
+
+        $this->entityRouteResolver->method('getRouteNameForEntityName')->willReturn('frontend.navigation.page');
+        $this->entityRouteResolver->method('generateUrl')->willReturn('category/2/detail');
+
+        $this->queryBuilder = $this->createMock(QueryBuilder::class);
+        $this->queryBuilder->method('executeQuery')->willReturn($categoryQueryResult);
+
+        $query = static::createStub(IterableQuery::class);
+        $query->method('getQuery')->willReturn($this->queryBuilder);
+
+        $this->iteratorFactory->method('createIterator')->willReturn($query);
+        $this->configHandler->method('get')
+            ->willReturn($excludedUrls ?? $this->getDefaultExcludedUrls());
+    }
+
+    private function getCategoryUrlProvider(): CategoryUrlProvider
+    {
+        return new CategoryUrlProvider(
+            $this->configHandler,
+            $this->connection,
+            $this->definition,
+            $this->iteratorFactory,
+            $this->entityRouteResolver,
+            $this->dispatcher
+        );
+    }
+
+    /**
+     * @return array{increment: int, id: string, created_at: string, updated_at: ?string}
+     */
+    private function createCategoryResult(): array
+    {
+        return [
+            'increment' => ++$this->categoryResultIncrement,
+            'id' => $this->ids->get('category-' . $this->categoryResultIncrement),
+            'created_at' => '2021-01-01 00:00:00',
+            'updated_at' => null,
+        ];
+    }
+
+    /**
+     * @return array<array{resource: class-string, channelId: string, identifier: string}>
+     */
+    private function getDefaultExcludedUrls(): array
+    {
+        return [
+            [
+                'resource' => CategoryEntity::class,
+                'channelId' => TestDefaults::CHANNEL,
+                'identifier' => $this->ids->get('category-1'),
+            ],
+            [
+                'resource' => CategoryEntity::class,
+                'channelId' => Uuid::randomHex(),
+                'identifier' => $this->ids->get('category-2'),
+            ],
+            [
+                'resource' => BlogEntity::class,
+                'channelId' => Uuid::randomHex(),
+                'identifier' => $this->ids->get('blog-3'),
+            ],
+        ];
+    }
+
+    /**
+     * @param list<string> $categoryIds
+     * @param list<string> $filterIds
+     */
+    private function createChannelCategoryIdsFetchedEvent(
+        array $categoryIds,
+        ChannelContext $context,
+        array $filterIds = []
+    ): ChannelCategoryIdsFetchedEvent {
+        $categoryIdsFetchedEvent = new ChannelCategoryIdsFetchedEvent(
+            $categoryIds,
+            $context
+        );
+        \array_map(static fn (string $categoryId) => $categoryIdsFetchedEvent->filterId($categoryId), $filterIds);
+
+        return $categoryIdsFetchedEvent;
+    }
+}

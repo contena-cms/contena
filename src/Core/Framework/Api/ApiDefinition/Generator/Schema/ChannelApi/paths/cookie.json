@@ -1,0 +1,109 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": {
+    "/cookie-groups": {
+      "get": {
+        "tags": [
+          "Cookies"
+        ],
+        "summary": "Fetch all cookie groups",
+        "description": "Fetch all cookie groups available in the system with configuration hash.",
+        "operationId": "readCookieGroups",
+        "responses": {
+          "200": {
+            "description": "Successful response with a collection of cookie groups and their configuration hash.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CookieRouteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/cookie-consent-log": {
+      "post": {
+        "tags": [
+          "Cookies"
+        ],
+        "summary": "Log a cookie consent decision",
+        "description": "Persists an anonymous record of a visitor's cookie consent decision together with a snapshot of the current cookie configuration, so system operators can demonstrate that consent was obtained (GDPR Recital 42). No visitor identifiers are stored.",
+        "operationId": "logCookieConsent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "consentAction",
+                  "acceptedGroups"
+                ],
+                "properties": {
+                  "consentAction": {
+                    "type": "string",
+                    "enum": [
+                      "accept_all",
+                      "accept_required",
+                      "accept_selected"
+                    ],
+                    "description": "Which consent action the visitor performed."
+                  },
+                  "acceptedGroups": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Technical names of the accepted cookie groups."
+                  },
+                  "cookieConfigHash": {
+                    "type": "string",
+                    "description": "Hash of the cookie configuration the visitor saw, as returned by the cookie-groups endpoint. Defaults to the current configuration hash."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The consent decision was logged."
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    }
+  }
+}

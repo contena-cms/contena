@@ -1,0 +1,34 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }}\Core\Content\Example\Channel;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelContext;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
+class ExampleRoute extends AbstractExampleRoute
+{
+    public function __construct(private readonly EntityRepository $blogRepository)
+    {
+    }
+
+    public function getDecorated(): AbstractExampleRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    #[Route(
+        path: '/channel-api/example',
+        name: 'channel-api.example.search',
+        methods: ['GET', 'POST']
+    )]
+    public function load(Criteria $criteria, ChannelContext $context): ExampleRouteResponse
+    {
+        return new ExampleRouteResponse($this->blogRepository->search($criteria, $context->getContext()));
+    }
+}

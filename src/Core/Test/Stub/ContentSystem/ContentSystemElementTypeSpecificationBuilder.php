@@ -1,0 +1,58 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Test\Stub\ContentSystem;
+
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\CopilotSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
+
+/**
+ * @final
+ */
+class ContentSystemElementTypeSpecificationBuilder
+{
+    /**
+     * @var array<string, PropertySpecification>
+     */
+    private array $properties = [];
+
+    private function __construct(
+        private readonly string $name,
+        private readonly string $label,
+    ) {
+    }
+
+    public static function create(string $name = 'CT:Block', ?string $label = null): self
+    {
+        return new self($name, $label ?? $name);
+    }
+
+    public function primitive(string $key, string $type, bool $required = false, string|int|float|bool|null $default = null): self
+    {
+        $this->properties[$key] = new PropertySpecification('prop', new PropertyType($type, false, null, $default), $required, '', '', null);
+
+        return $this;
+    }
+
+    public function reference(string $key, string $fqcn, bool $required = false): self
+    {
+        $this->properties[$key] = new PropertySpecification('prop', new PropertyType($fqcn, false, null, null), $required, '', '', null);
+
+        return $this;
+    }
+
+    public function build(): ContentSystemElementTypeSpecification
+    {
+        return new ContentSystemElementTypeSpecification(
+            $this->name,
+            $this->label,
+            '',
+            null,
+            null,
+            new CopilotSpecification('', []),
+            $this->properties,
+            [],
+        );
+    }
+}

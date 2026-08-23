@@ -1,0 +1,43 @@
+{
+    "title": "CT/Alert",
+    "parameters": {
+        "server": {
+            "id": "CT:Alert"
+        },
+        "template": "<twig:CT:Alert text=\"Lorem ipsum dolor sit amet.\" variant=\"primary\" size=\"md\" />",
+        "slots": [
+            {
+                "name": "content",
+                "description": "Slot for displaying the alert content."
+            }
+        ]
+    },
+    "argTypes": {
+        "text": { "control": "text" },
+        "variant": {
+          "control": "select",
+          "options": ["primary", "secondary", "warning", "success", "info", "danger", "light", "dark"]
+        },
+        "size": {
+          "control": "select",
+          "options": ["sm", "md", "lg"]
+        }
+      },
+    "stories": [
+        {
+            "name": "Alert",
+            "args": {
+                "text": "Lorem ipsum dolor sit amet.",
+                "variant": "primary",
+                "size": "md"
+            },
+            "parameters": {
+                "docs": {
+                    "source": {
+                        "code": "<twig:CT:Alert text=\"Lorem ipsum dolor sit amet.\" variant=\"primary\" size=\"md\" />"
+                    }
+                }
+            }
+        }
+    ]
+}

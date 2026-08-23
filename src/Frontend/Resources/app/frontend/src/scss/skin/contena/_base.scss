@@ -1,0 +1,51 @@
+/*
+Contena skin
+==================================================
+Contains the imports to all Contena skin styles.
+
+The file organization follows the 7-1 pattern architecture
+https://sass-guidelin.es/#the-7-1-pattern
+*/
+
+/*
+ * Vendors
+ * ------- */
+@import 'vendor/inter-fontface';
+
+/*
+ * Base stuff
+ * ---------- */
+@import 'base/base';
+@import 'base/typography';
+
+/*
+ * Components
+ * ---------- */
+@import 'component/alert';
+@import 'component/badge';
+@import 'component/breadcrumb';
+@import 'component/button';
+@import 'component/card';
+@import 'component/custom-select';
+@import 'component/form';
+@import 'component/modal';
+@import 'component/tab-menu';
+@import 'component/pagination';
+@import 'component/skip-target';
+
+/*
+ * Layout-related sections
+ * ----------------------- */
+@import 'layout/top-bar';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/main-navigation';
+@import 'layout/navigation-flyout';
+@import 'layout/navigation-offcanvas';
+
+/*
+ * Page-specific styles
+ * -------------------- */
+@import 'page/account/aside';
+@import 'page/account/register';
+@import 'page/account/profile';

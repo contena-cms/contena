@@ -1,0 +1,49 @@
+{
+    "ct-settings-organization": {
+        "general": {
+            "mainMenuItemGeneral": "组织机构",
+            "description": "管理层级化的组织机构和组织单元。"
+        },
+        "list": {
+            "searchPlaceholder": "搜索组织机构...",
+            "treeTitle": "组织机构树",
+            "detailTitle": "组织机构详情",
+            "selectOrganizationTitle": "请选择组织机构",
+            "selectOrganizationDescription": "从左侧树中选择组织机构，或使用顶部新增按钮创建机构。",
+            "emptyTitle": "暂无组织机构",
+            "emptyDescription": "新增第一个组织机构以开始构建组织结构。"
+        },
+        "tree": {
+            "selected": "已选择 {count} 项",
+            "addChild": "新增下级",
+            "expand": "展开",
+            "collapse": "收起"
+        },
+        "detail": {
+            "titleNew": "新建组织机构",
+            "titleEdit": "编辑组织机构",
+            "labelName": "名称",
+            "labelShortName": "简称",
+            "labelCode": "组织编码",
+            "labelOrganizationUnit": "组织单元",
+            "placeholderOrganizationUnit": "请选择组织单元...",
+            "labelPosition": "排序",
+            "labelActive": "启用",
+            "customFieldsTitle": "自定义字段"
+        },
+        "notification": {
+            "loadError": "无法加载组织机构。",
+            "saveSuccess": "组织机构已保存。",
+            "saveError": "无法保存组织机构，请检查必填项。",
+            "deleteSuccess": "所选组织机构已删除。",
+            "deleteError": "无法删除所选组织机构。"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "organization": {
+                "label": "组织机构"
+            }
+        }
+    }
+}

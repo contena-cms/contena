@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>3D files</title>
+        <title lang="zh-CN">3D 文件</title>
+
+        <input-field type="bool">
+            <name>defaultEnableAugmentedReality</name>
+            <label>Enable AR by default</label>
+            <label lang="zh-CN">默认启用 AR</label>
+            <helpText>3D files will automatically have AR enabled when presented in the storefront.</helpText>
+            <helpText lang="zh-CN">展示 3D 文件时将自动启用 AR。</helpText>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>defaultARPlacement</name>
+            <options>
+                <option>
+                    <id>horizontal</id>
+                    <name>Horizontal</name>
+                    <name lang="zh-CN">水平</name>
+                </option>
+                <option>
+                    <id>vertical</id>
+                    <name>Vertical</name>
+                    <name lang="zh-CN">垂直</name>
+                </option>
+            </options>
+            <defaultValue>horizontal</defaultValue>
+            <label>Default AR placement</label>
+            <label lang="zh-CN">默认 AR 放置方式</label>
+            <helpText>Select whether the object is placed on a horizontal surface, like the floor, or on a vertical surface, like a wall.</helpText>
+            <helpText lang="zh-CN">选择对象放置在地面等水平表面，还是墙面等垂直表面。</helpText>
+        </input-field>
+    </card>
+</config>

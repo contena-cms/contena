@@ -1,0 +1,47 @@
+{
+  "name": "theme-with-file-associations",
+  "author": "contena AG",
+  "previewMedia": "app/contena_logo_preview.svg",
+  "tabs": {
+    "mainTab": {
+      "label": {
+        "en-GB": "mainTab"
+      }
+    }
+  },
+  "config": {
+    "sections": {
+      "mainSection": {
+        "label": {
+          "en-GB": "main section"
+        }
+      }
+    },
+    "blocks": {
+      "mainBlock": {
+        "label": {
+          "en-GB": "main block"
+        }
+      }
+    },
+
+    "fields": {
+      "contenaLogo": {
+        "label": {
+          "en-GB": "Contena Logo",
+          "de-DE": "Contena Logo"
+        },
+        "helpText": {
+          "en-GB": "this is the contena logo",
+          "de-DE": "this is the contena Logo"
+        },
+        "type": "media",
+        "value": "app/frontend/src/assets/image/contena_logo.svg",
+        "editable": true,
+        "tab": "tabGeneralLayout",
+        "block": "blockLayout",
+        "section": "sectionBackgroundImage"
+      }
+    }
+  }
+}

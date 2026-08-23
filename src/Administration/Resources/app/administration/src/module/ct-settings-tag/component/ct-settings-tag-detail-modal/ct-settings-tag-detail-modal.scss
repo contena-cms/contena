@@ -1,0 +1,38 @@
+.ct-settings-tag-detail-modal {
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--scale-size-8);
+        width: 100%;
+    }
+
+    &.mt-modal.mt-modal--width-full {
+        max-width: 1200px;
+
+        &.is--auto-height {
+            height: auto;
+        }
+    }
+
+    .mt-tabs {
+        display: grid;
+        height: 100%;
+        grid-template-rows: auto 1fr;
+        padding-bottom: 0;
+
+        &__custom-content {
+            display: grid;
+        }
+    }
+
+    &__tabs {
+        display: grid;
+        height: 100%;
+        grid-template-rows: auto 1fr;
+        padding-bottom: 0;
+    }
+
+    &__tabs-content {
+        display: grid;
+    }
+}

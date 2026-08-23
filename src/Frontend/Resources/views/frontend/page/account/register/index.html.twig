@@ -1,0 +1,8 @@
+{% sw_extends '@Frontend/frontend/layout/base.html.twig' %}
+{% block base_main_inner %}
+    <div class="container py-5"><div class="row justify-content-center"><div class="col-lg-7">
+        <h1 class="mb-4">{{ 'account.loginRegistrationHeader'|trans|sw_sanitize }}</h1>
+        {% sw_include '@Frontend/frontend/component/account/register.html.twig' with {cardTitle: 'account.registerPersonalHeader'|trans|sw_sanitize} %}
+        <p class="mt-3 text-center"><a href="{{ path('frontend.account.login.page') }}">{{ 'account.loginHeader'|trans|sw_sanitize }}</a></p>
+    </div></div></div>
+{% endblock %}

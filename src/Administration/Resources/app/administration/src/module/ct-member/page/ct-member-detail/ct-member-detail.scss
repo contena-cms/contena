@@ -1,0 +1,16 @@
+.ct-member-detail {
+    &__created-by-admin {
+        margin-top: 6px;
+    }
+
+    &__registration-request,
+    &__registration-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    &__registration-request {
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,56 @@
+includes:
+    - tagged-service-contracts.php
+
+parameters:
+    contenaTaggedServiceContractAdditionalTagContracts: []
+
+parametersSchema:
+    contenaTaggedServiceContractTagContracts: arrayOf(anyOf(string(), listOf(string())), string())
+    contenaTaggedServiceContractAdditionalTagContracts: arrayOf(anyOf(string(), listOf(string())), string())
+
+rules:
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedMethodsThrowDeprecationRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Internal\InternalClassRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Internal\InternalMethodRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\AddColumnRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\NoAfterStatementRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\NoDropStatementInUpdateRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\NonStandardFkGuardRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AbstractClassUsageRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\DecorationPatternRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ServiceDefinitionRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\DomainExceptionRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ExtensionRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoNewRequestInFrontendRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsInMethodRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsInRouteAttributesRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ContenaNamespaceStyleRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AttributeFinalRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NameConstantEntityDefinition
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\FrontendRouteUsageRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoRuntimeExceptionInDomainExceptionsRule
+
+services:
+    -
+        class: Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\TaggedServiceContractRule
+        arguments:
+            tagContracts: %contenaTaggedServiceContractTagContracts%
+            additionalTagContracts: %contenaTaggedServiceContractAdditionalTagContracts%
+            containerXmlPath: %symfony.containerXmlPath%
+        tags:
+            - phpstan.rules.rule
+
+    -
+        class: Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ServiceDefinitionCollector
+        tags:
+            - phpstan.collector
+
+    -
+        class: Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\MessageHandlerFinalRule
+        tags:
+            - phpat.test
+
+    -
+        class: Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\RestrictNamespacesRule
+        tags:
+            - phpat.test

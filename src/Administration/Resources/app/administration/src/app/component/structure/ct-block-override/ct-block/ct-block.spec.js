@@ -1,0 +1,418 @@
+/**
+ * @group disabledCompat
+ */
+import { mount } from '@vue/test-utils';
+import blockOverrideStore from '../../../../store/block-override.store';
+import createDataScopeFixture from '../ct-block-override.spec/test-utils/create-data-scope-fixture';
+
+async function createWrapper({
+    extensions = '',
+    defaultContent = '<div class="default-content"></div>',
+    renderExtensions = true,
+    moreBlockExtensions = '',
+    extraData = {},
+    extraOptions = {},
+} = {}) {
+    const wrapper = mount(
+        {
+            template: `
+            <div class="component-root">
+                <ct-block name="test-extension-point" :data="$dataScope">
+                    ${defaultContent}
+                </ct-block>
+            </div>
+            ${moreBlockExtensions}
+            <template v-if="renderExtensions">
+                ${extensions}
+            </template>
+        `,
+            components: {
+                'ct-block': await wrapTestComponent('ct-block', { sync: true }),
+                'ct-block-parent': await wrapTestComponent('ct-block-parent', { sync: true }),
+            },
+            data() {
+                return {
+                    renderExtensions,
+                    ...extraData,
+                };
+            },
+            ...extraOptions,
+        },
+        {
+            global: {
+                plugins: [createDataScopeFixture()],
+            },
+        },
+    );
+
+    async function toggleExtensions() {
+        await wrapper.setData({
+            renderExtensions: !wrapper.vm.renderExtensions,
+        });
+    }
+
+    return {
+        wrapper,
+        toggleExtensions,
+    };
+}
+
+describe('ct-block', () => {
+    beforeAll(() => {
+        Contena.Store.register('blockOverride', blockOverrideStore);
+    });
+
+    it('renders the default content inside the `block`', async () => {
+        const { wrapper } = await createWrapper();
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+    });
+
+    it('forwards fallthrough attributes to a single rendered root element', async () => {
+        const wrapper = mount(
+            {
+                template: `
+                    <ct-block name="test-attributes" id="settings-item" class="external-class">
+                        <a class="default-class"></a>
+                    </ct-block>
+                `,
+                components: {
+                    'ct-block': await wrapTestComponent('ct-block', { sync: true }),
+                },
+            },
+            {
+                global: {
+                    plugins: [createDataScopeFixture()],
+                },
+            },
+        );
+
+        const renderedRoot = wrapper.find('a');
+
+        expect(renderedRoot.attributes('id')).toBe('settings-item');
+        expect(renderedRoot.classes()).toEqual(
+            expect.arrayContaining([
+                'default-class',
+                'external-class',
+            ]),
+        );
+
+        await wrapper.unmount();
+    });
+
+    it('renders nothing if the `block` has no default content and there is no override', async () => {
+        const { wrapper } = await createWrapper({
+            defaultContent: '',
+        });
+
+        expect(wrapper.findAll('.component-root > *')).toHaveLength(0);
+    });
+
+    it('renders the `block` overridden content without default content', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <div class="extension-content"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeFalsy();
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeTruthy();
+    });
+
+    it('renders content from last `block` override when there are multiple overrides and not `block-parent` is used', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <div class="extension-content-1"></div>
+                </ct-block>
+                <ct-block extends="test-extension-point">
+                    <div class="extension-content-2"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeFalsy();
+        expect(wrapper.find('.component-root > .extension-content-1').exists()).toBeFalsy();
+        expect(wrapper.find('.component-root > .extension-content-2').exists()).toBeTruthy();
+    });
+
+    it('renders content from the parent before the `block` override', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content + .extension-content').exists()).toBeTruthy();
+    });
+
+    it('renders content from the parent after the `block` override', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <div class="extension-content"></div>
+                    <ct-block-parent/>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .extension-content + .default-content').exists()).toBeTruthy();
+    });
+
+    it('renders parent content from multiple `block`s', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content-1"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content-2"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-1').exists()).toBeTruthy();
+        expect(wrapper.find('.extension-content-2').exists()).toBeTruthy();
+        expect(wrapper.find('.default-content + .extension-content-1 + .extension-content-2').exists()).toBeTruthy();
+    });
+
+    it('does not render the `block` if this is not rendered', async () => {
+        const { wrapper } = await createWrapper({
+            renderExtensions: false,
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <div class="extension-content"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeFalsy();
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+    });
+
+    it('renders the `block` content only once if the extension component mounted and unmounted', async () => {
+        const { wrapper, toggleExtensions } = await createWrapper({
+            renderExtensions: false,
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeFalsy();
+
+        await toggleExtensions();
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeTruthy();
+
+        await toggleExtensions();
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeFalsy();
+
+        await toggleExtensions();
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content').exists()).toBeTruthy();
+        expect(wrapper.findAll('.extension-content')).toHaveLength(1);
+    });
+
+    it('renders multiple `block` overrides', async () => {
+        const { wrapper } = await createWrapper({
+            moreBlockExtensions: `
+                <div class="component-root-2">
+                    <ct-block  name="test-extension-point-2">
+                        <div class="default-content-2"></div>
+                    </ct-block >
+                </div>
+            `,
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content-1"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content-2"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point-2">
+                    <ct-block-parent/>
+                    <div class="extension-content-3"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point-2">
+                    <ct-block-parent/>
+                    <div class="extension-content-4"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-1').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-2').exists()).toBeTruthy();
+        expect(wrapper.find('.default-content + .extension-content-1 + .extension-content-2').exists()).toBeTruthy();
+
+        expect(wrapper.find('.component-root-2 > .default-content-2').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root-2 > .extension-content-3').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root-2 > .extension-content-4').exists()).toBeTruthy();
+        expect(wrapper.find('.default-content-2 + .extension-content-3 + .extension-content-4').exists()).toBeTruthy();
+    });
+
+    it('does not render anything if the `block` name to extend does not exist', async () => {
+        const { wrapper } = await createWrapper({
+            extensions: `
+                <ct-block extends="NOT-EXISTING-extension-point">
+                     <ct-block-parent/>
+                     <div class="extension-content"></div>
+                </ct-block>
+              `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.extension-content').exists()).toBeFalsy();
+    });
+
+    it('renders multiple nested blocks', async () => {
+        const { wrapper } = await createWrapper({
+            defaultContent: `
+                    <div class="default-content"></div>
+                    <ct-block name="test-extension-point-2">
+                        <div class="default-content-2"></div>
+
+                        <ct-block name="test-extension-point-3">
+                            <div class="default-content-3"></div>
+                        </ct-block>
+                    </ct-block>
+            `,
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content-1"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point-2">
+                    <ct-block-parent/>
+                    <div class="extension-content-2"></div>
+                </ct-block>
+
+                <ct-block extends="test-extension-point-3">
+                    <ct-block-parent/>
+                    <div class="extension-content-3"></div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .default-content').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .default-content-2').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .default-content-3').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-3').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-2').exists()).toBeTruthy();
+        expect(wrapper.find('.component-root > .extension-content-1').exists()).toBeTruthy();
+        expect(
+            wrapper
+                .find(
+                    '.default-content + .default-content-2 + .default-content-3 + .extension-content-3 + .extension-content-2 + .extension-content-1',
+                )
+                .exists(),
+        ).toBeTruthy();
+    });
+
+    it('renders parent content exactly once after multiple reactive re-renders and remounting the extension', async () => {
+        // Regression guard for the providedParents accumulation bug in ct-block's
+        // computed. The old push() implementation appended an entry to providedParents
+        // on every computed re-run without a matching pop (ct-block-parent only pops
+        // at setup time, not on every re-render). After remounting the extension a
+        // fresh ct-block-parent pops from that array; this verifies the DOM stays correct.
+        const { wrapper, toggleExtensions } = await createWrapper({
+            extraData: { label: 'initial' },
+            defaultContent: '<div class="default-content">{{ label }}</div>',
+            extensions: `
+                <ct-block extends="test-extension-point">
+                    <ct-block-parent/>
+                    <div class="extension-content"></div>
+                </ct-block>
+            `,
+        });
+
+        // Each setData triggers a reactive re-render that causes ct-block's computed
+        // to run again. With the old push(), each run added a stale entry.
+        await wrapper.setData({ label: 'a' });
+        await wrapper.setData({ label: 'ab' });
+        await wrapper.setData({ label: 'abc' });
+
+        // Unmount then remount the extension to create a fresh ct-block-parent
+        // instance that runs setup() and pops from providedParents.
+        await toggleExtensions();
+        await toggleExtensions();
+
+        expect(wrapper.findAll('.default-content')).toHaveLength(1);
+        expect(wrapper.findAll('.extension-content')).toHaveLength(1);
+        expect(wrapper.find('.default-content + .extension-content').exists()).toBeTruthy();
+    });
+
+    it('preserves the DOM element identity of rendered block content across reactive re-renders', async () => {
+        // When ct-block's computed re-runs it returns fresh VNodes, but Vue must
+        // recognise the element as the same type and update it in-place rather than
+        // recreating the DOM node, which would strip focus from active inputs.
+        const { wrapper } = await createWrapper({
+            extraData: { label: 'initial' },
+            defaultContent: '<div class="default-content">{{ label }}</div>',
+        });
+
+        const domNodeBefore = wrapper.find('.default-content').element;
+
+        await wrapper.setData({ label: 'a' });
+        await wrapper.setData({ label: 'ab' });
+        await wrapper.setData({ label: 'abc' });
+
+        expect(wrapper.find('.default-content').element).toBe(domNodeBefore);
+        expect(wrapper.find('.default-content').text()).toBe('abc');
+    });
+
+    it('has access to the component data scope', async () => {
+        const { wrapper } = await createWrapper({
+            extraData: {
+                testData: 'Hello World',
+            },
+            extraOptions: {
+                methods: {
+                    testMethod(param) {
+                        return `This is a method with parameter: ${param}`;
+                    },
+                },
+                computed: {
+                    testComputed() {
+                        return 'This is a computed';
+                    },
+                },
+            },
+            extensions: `
+                <ct-block extends="test-extension-point" #default="{testData, testMethod, testComputed}">
+                    <ct-block-parent/>
+                    <div class="extension-content-1">{{testData}}</div>
+                    <div class="extension-content-2">{{testMethod('param')}}</div>
+                    <div class="extension-content-3">{{testComputed}}</div>
+                </ct-block>
+            `,
+        });
+
+        expect(wrapper.find('.component-root > .extension-content-1').text()).toBe('Hello World');
+        expect(wrapper.find('.component-root > .extension-content-2').text()).toBe('This is a method with parameter: param');
+        expect(wrapper.find('.component-root > .extension-content-3').text()).toBe('This is a computed');
+    });
+});

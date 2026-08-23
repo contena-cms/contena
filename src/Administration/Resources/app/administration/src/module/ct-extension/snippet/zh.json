@@ -1,0 +1,90 @@
+{
+    "ct-extension": {
+        "my-extensions": {
+            "listing": {
+                "initialSearchType": "插件",
+                "placeholderSearchBar": "搜索插件...",
+                "emptyTitle": "暂无插件",
+                "noActivePlugins": "暂无启用的插件",
+                "controls": {
+                    "labelActiveStateSwitch": "隐藏未启用插件",
+                    "filterOptions": {
+                        "last-updated": "最近更新",
+                        "name-asc": "名称升序",
+                        "name-desc": "名称降序"
+                    }
+                },
+                "version": "版本",
+                "update": "更新"
+            },
+            "fileUpload": {
+                "buttonFileUpload": "上传插件",
+                "messageUploadSuccess": "插件上传成功。",
+                "descriptionWarningModal": "请仅上传来自可信来源的 Contena 插件。插件会在平台内执行代码，并可能访问管理数据。",
+                "textHideWarning": "不再提示"
+            }
+        },
+        "errors": {
+            "messageGenericFailure": "操作失败。",
+            "messageUploadFailureNotAZipFile": "上传的文件不是 ZIP 文件。",
+            "messageUploadFailureUnzipFailed": "无法解压 ZIP 文件。",
+            "messageUploadFailureNoPluginFoundInZipFile": "ZIP 文件中未找到插件。",
+            "messagePluginBaseClassNotFound": "无法加载插件基类，请检查插件的 Composer 自动加载配置。",
+            "messagePluginRequirementMismatch": "插件的技术要求与当前 Contena 版本不兼容，请联系插件提供方。"
+        },
+        "mainMenu": { "plugins": "插件", "myPlugins": "我的插件", "purchased": "我的插件", "store": "插件商城" },
+        "store": {
+            "landingLabel": "现在可用",
+            "landingTitle": "轻松发现和管理插件。",
+            "landingDescription": "安装插件商城，即可在后台发现很多实用插件并直接在线安装。",
+            "install": "安装插件商城",
+            "activating": "正在启用插件商城……",
+            "takeMinutes": "这可能需要几分钟。",
+            "activationErrorTitle": "启用失败",
+            "activationErrorDescription": "请重试。如果问题仍然存在，请联系管理员。",
+            "retry": "重试",
+            "activationSuccessTitle": "启用成功",
+            "activationSuccessDescription": "现在可以开始浏览插件商城了。"
+        },
+        "component": {
+            "ct-extension-card-base": {
+                "inactiveLabel": "（未启用）",
+                "installedLabel": "安装时间：",
+                "installExtensionLabel": "安装",
+                "contextMenu": { "uninstallLabel": "卸载", "updateLabel": "更新至 {version}", "openExtension": "打开插件" }
+            },
+            "ct-extension-my-extensions-listing": {
+                "alertExtensionManagement": {
+                    "title": "运行时插件管理已禁用",
+                    "description": "此安装环境已禁用运行时插件管理，无法在后台执行插件生命周期操作。"
+                }
+            },
+            "ct-extension-removal-modal": {
+                "titleRemove": "移除“{extensionName}”",
+                "description": "移除插件会从当前安装环境中删除其文件。",
+                "alertRemove": "确定要移除此插件吗？"
+            },
+            "ct-extension-uninstall-modal": {
+                "title": "卸载“{extensionName}”",
+                "description": "卸载后将无法继续使用此插件提供的功能。",
+                "alert": "确定要卸载此插件吗？",
+                "buttonLabel": "卸载",
+                "labelRemovePluginData": "永久删除全部插件数据",
+                "helpTextRemovePluginData": "警告：插件拥有的全部数据将被永久删除，此操作无法撤销。"
+            },
+            "ct-extension-config": {
+                "messageSaveSuccess": "配置已保存。",
+                "imageDescription": "“{extensionName}”图标",
+                "labelBy": "提供方"
+            }
+        }
+    },
+    "ct-privileges": {
+        "additional_permissions": {
+            "system": {
+                "plugin_maintain": "插件管理",
+                "extension_store": "插件商城"
+            }
+        }
+    }
+}

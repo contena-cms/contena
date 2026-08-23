@@ -1,0 +1,81 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Event\Listener\PostHydration;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\ContentSystem\Event\Listener\PostHydration\VirtualRootCleanupSubscriber;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
+use Contena\Core\Framework\ContentSystem\PlaceholderValues;
+use Contena\Core\Framework\ContentSystem\RenderingSpecification;
+use Contena\Core\System\Language\ContentSystem\DataLoader\LanguageLoaderConfig;
+use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
+use Contena\Core\Test\Stub\ContentSystem\EventFactory;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @internal
+ */
+#[CoversClass(VirtualRootCleanupSubscriber::class)]
+class VirtualRootCleanupSubscriberTest extends TestCase
+{
+    private VirtualRootCleanupSubscriber $subscriber;
+
+    protected function setUp(): void
+    {
+        $this->subscriber = new VirtualRootCleanupSubscriber(new VirtualRootWrapper());
+    }
+
+    #[TestDox('unwraps virtual root after hydration, restoring original elements')]
+    public function testUnwrapsVirtualRootAfterHydration(): void
+    {
+        $root1 = ContentElementBuilder::create('text', 'r1')->build();
+        $root2 = ContentElementBuilder::create('image', 'r2')->build();
+
+        $requirement = new DataRequirement('language', 'language', new LanguageLoaderConfig());
+        $specification = new RenderingSpecification(
+            [$requirement],
+            PlaceholderValues::from([]),
+            new Request(),
+        );
+
+        $wrapper = new VirtualRootWrapper();
+        $virtualRoot = $wrapper->wrap([$root1, $root2], $specification);
+        $event = EventFactory::postHydration([$virtualRoot], [$requirement]);
+
+        $this->subscriber->__invoke($event);
+
+        static::assertCount(2, $event->elements);
+        static::assertSame('r1', $event->elements[0]->getId());
+        static::assertSame('r2', $event->elements[1]->getId());
+    }
+
+    #[TestDox('skips cleanup when wrapping is not required')]
+    public function testSkipsCleanupWhenNoVirtualRoot(): void
+    {
+        $element = ContentElementBuilder::create('text', 'e1')->build();
+
+        $event = EventFactory::postHydration([$element], []);
+
+        $this->subscriber->__invoke($event);
+
+        static::assertCount(1, $event->elements);
+        static::assertSame($element, $event->elements[0]);
+    }
+
+    #[TestDox('skips cleanup gracefully when virtual root was pruned away during partial rendering')]
+    public function testSkipsCleanupWhenVirtualRootPrunedAway(): void
+    {
+        $requirement = new DataRequirement('language', 'language', new LanguageLoaderConfig());
+        $regularElement = ContentElementBuilder::create('text', 'e1')->build();
+
+        $event = EventFactory::postHydration([$regularElement], [$requirement]);
+
+        $this->subscriber->__invoke($event);
+
+        static::assertCount(1, $event->elements);
+        static::assertSame($regularElement, $event->elements[0]);
+    }
+}

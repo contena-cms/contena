@@ -1,0 +1,27 @@
+{
+    "name": "{{ composerName }}",
+    "description": "{{ composerName }}",
+    "type": "contena-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "contena/core": "~6.8.0"
+    },
+    "extra": {
+        "contena-plugin-class": "{{ namespace }}\\{{ className }}",
+        "label": {
+            "zh-CN": "插件骨架",
+            "en-GB": "Skeleton plugin"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "{{ namespace }}\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "{{ namespace }}\\Tests\\": "tests/"
+        }
+    }
+}

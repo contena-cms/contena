@@ -1,0 +1,10 @@
+{
+  "ct-experience-studio": {
+    "createWizard": {
+      "layoutTypes": {
+        "header": "页眉",
+        "footer": "页脚"
+      }
+    }
+  }
+}

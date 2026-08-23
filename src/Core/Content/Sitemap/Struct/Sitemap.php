@@ -1,0 +1,54 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Sitemap\Struct;
+
+use Contena\Core\Framework\Struct\Struct;
+use Symfony\Component\Clock\Clock;
+
+class Sitemap extends Struct
+{
+    protected \DateTimeInterface $created;
+
+    public function __construct(
+        protected string $filename,
+        private int $urlCount,
+        ?\DateTimeInterface $created = null,
+    ) {
+        $this->created = $created ?: Clock::get()->now()->setTimezone(new \DateTimeZone('UTC'));
+    }
+
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
+    }
+
+    public function getUrlCount(): int
+    {
+        return $this->urlCount;
+    }
+
+    public function setUrlCount(int $urlCount): void
+    {
+        $this->urlCount = $urlCount;
+    }
+
+    public function getCreated(): \DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): void
+    {
+        $this->created = $created;
+    }
+
+    public function getApiAlias(): string
+    {
+        return 'sitemap';
+    }
+}

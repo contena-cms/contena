@@ -1,0 +1,16 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <datetime name="test_datetime_field">
+                    <label>Test datetime field</label>
+                </datetime>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

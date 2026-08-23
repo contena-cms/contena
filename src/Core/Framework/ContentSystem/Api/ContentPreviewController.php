@@ -1,0 +1,77 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Api;
+
+use Contena\Core\Framework\ContentSystem\Output\Format\AbstractResponseFactory;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Routing\Attribute\Route;
+
+/**
+ * Previews how a draft content layout renders with real entity data, without persisting the layout.
+ *
+ * @final
+ */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
+class ContentPreviewController
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly ContentPreviewPageBuilder $previewPageBuilder,
+        private readonly AbstractResponseFactory $responseFactory,
+        private readonly ContentPreviewPayloadStore $payloadStore,
+    ) {
+    }
+
+    #[Route(path: '/api/_action/content-system/preview/entity', name: 'api.action.content_system.preview.entity', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['content_layout:read']], methods: [Request::METHOD_POST])]
+    public function preview(
+        #[MapRequestPayload(validationFailedStatusCode: Response::HTTP_BAD_REQUEST)]
+        ContentPreviewRequest $payload,
+        Context $context,
+    ): Response {
+        return $this->responseFactory->createResponse($this->previewPageBuilder->build($payload, $context)['contentPage']);
+    }
+
+    #[Route(path: '/api/_action/content-system/preview/entity/url', name: 'api.action.content_system.preview.entity.url', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['content_layout:read']], methods: [Request::METHOD_POST])]
+    public function previewUrl(
+        #[MapRequestPayload(validationFailedStatusCode: Response::HTTP_BAD_REQUEST)]
+        ContentPreviewRequest $payload,
+        Request $request,
+    ): JsonResponse {
+        $token = $this->payloadStore->store($this->serializePayload($payload));
+        $url = \sprintf(
+            '%s%s/content-system/preview/%s',
+            $request->getSchemeAndHttpHost(),
+            rtrim($request->getBaseUrl(), '/'),
+            $token,
+        );
+
+        return new JsonResponse([
+            'url' => $url,
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function serializePayload(ContentPreviewRequest $payload): array
+    {
+        return [
+            'layout' => $payload->layout,
+            'entityType' => $payload->entityType,
+            'entityId' => $payload->entityId,
+            'channelId' => $payload->channelId,
+            'languageId' => $payload->languageId,
+            'domainId' => $payload->domainId,
+            'memberId' => $payload->memberId,
+            'queryParameters' => $payload->queryParameters,
+        ];
+    }
+}

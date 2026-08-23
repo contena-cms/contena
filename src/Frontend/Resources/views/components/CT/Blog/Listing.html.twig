@@ -1,0 +1,72 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    listing = null,
+    slots = [],
+%}
+
+{% set listingCVA = cva({
+    base: 'ct-blog-listing',
+}) %}
+
+{% set attributeDefaults = {
+    class: listingCVA.apply({}),
+    'data-component': 'CT:Blog:Listing',
+} %}
+
+{% set layout = app.request.get('layout') %}
+
+<div {{ attributes.defaults(attributeDefaults) }}>
+    {% block filters %}
+        <twig:Slot name="filters-panel">
+            <twig:CT:Filter:Panel
+                :totalCount="listing.total"
+                :currentSorting="listing.sorting"
+                :filterAggregations="listing.aggregations"
+                :availableSortings="listing.availableSortings">
+            </twig:CT:Filter:Panel>
+        </twig:Slot>
+
+        <twig:Slot name="filters-active">
+            <twig:CT:Filter:ActiveFilters />
+        </twig:Slot>
+    {% endblock %}
+
+    {% block content %}
+        {% if listing.total > 0 %}
+            <twig:Slot name="blog-grid">
+                <twig:CT:Grid:Container
+                    class="ct-blog-listing__grid"
+                    :columns="layout == 'horizontal' ? '1' : { xs: '1', sm: '2', md: '3', lg: '4', xl: '4' }"
+                    gap="16">
+                    {% for blog in listing.entities.elements %}
+                        <twig:CT:Blog:Card
+                            :blog="blog"
+                            :layout="layout ? layout : 'default'"
+                        />
+                    {% endfor %}
+                </twig:CT:Grid:Container>
+            </twig:Slot>
+        {% else %}
+            <div class="ct-blog-listing__grid container">
+                <twig:CT:Alert type="info">
+                    {{ 'listing.emptyResultMessage'|trans|sw_sanitize }}
+                </twig:CT:Alert>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% block pagination %}
+        <twig:Slot name="pagination">
+            <twig:CT:Content:Pagination
+                class="ct-blog-listing__pagination"
+                :page="listing.page"
+                :total="listing.total"
+                :limit="listing.limit"
+                :scope="listing.entity"
+            />
+        </twig:Slot>
+    {% endblock %}
+
+</div>

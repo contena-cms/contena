@@ -1,0 +1,54 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Mutation\Op;
+
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Mutation\AbstractLayoutMutation;
+
+/**
+ * Splices an externally supplied element subtree into $parentElementId's $slot at $index (root when no parent is
+ * given), reminting every id so a detached subtree (e.g. a replace's orphans) or a copied subtree can be re-placed
+ * without collision. The inverse of the detachment a replace reports through orphaned(): nothing is created from a
+ * type, the caller's own subtree is placed. The supplied root's component must be a registered element type
+ * (mutationUnknownType), matching the type check insert/replace/wrap run. Clients never supply ids; the minted
+ * ids come back in affected().
+ *
+ * @internal
+ */
+final class AttachElement extends AbstractLayoutMutation
+{
+    public function __construct(
+        private readonly AbstractContentSystemElementTypeRegistry $registry,
+        private readonly ContentElement $element,
+        private readonly ?string $parentElementId = null,
+        private readonly ?string $slot = null,
+        private readonly ?int $index = null,
+    ) {
+    }
+
+    public function apply(array $tree): array
+    {
+        $this->requireRegistered($this->registry, $this->element->getComponent());
+
+        $clone = $this->cloneWithNewIds($this->element);
+        $this->affected = $this->subtreeIds($clone);
+
+        if ($this->parentElementId === null) {
+            return $this->insertAtRoot($tree, $this->index, [$clone]);
+        }
+
+        $slot = $this->slot;
+
+        if ($slot === null) {
+            throw ContentSystemException::mutationSlotRequired();
+        }
+
+        if ($this->findNode($tree, $this->parentElementId) === null) {
+            throw ContentSystemException::mutationTargetNotFound($this->parentElementId);
+        }
+
+        return $this->insertIntoSlot($tree, $this->parentElementId, $slot, $this->index, [$clone]);
+    }
+}

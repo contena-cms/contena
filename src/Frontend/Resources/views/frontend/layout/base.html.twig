@@ -1,0 +1,84 @@
+{% block base_doctype %}<!DOCTYPE html>{% endblock %}
+
+{% block base_html %}
+<html lang="{{ context.languageInfo.localeCode }}">
+{% endblock %}
+
+{% block base_head %}
+    {% sw_include '@Frontend/frontend/layout/meta.html.twig' %}
+{% endblock %}
+
+{% block base_body %}
+    <body class="{% block base_body_classes %}{%- if activeRoute is not empty -%}is-active-route-{{ activeRoute|replace({'.': '-'}) }}{%- endif -%}{% endblock %}">
+    {% block base_body_skip_to_content %}
+        {% sw_include '@Frontend/frontend/component/skip-to-content.html.twig' with {
+            skipToSearch: true,
+            skipToMainNav: true
+        } %}
+    {% endblock %}
+
+    {% block base_cookie_permission %}
+        {% sw_include '@Frontend/frontend/layout/cookie/cookie-permission.html.twig' %}
+    {% endblock %}
+
+    {% block base_body_inner %}
+        {% block base_noscript %}
+            <noscript class="noscript-main">
+                <twig:CT:Alert variant="info" :icon="false">
+                    {{ 'general.noscriptNotice'|trans|sw_sanitize }}
+                </twig:CT:Alert>
+            </noscript>
+        {% endblock %}
+
+        {% block base_header %}
+            {% block base_esi_header %}
+                {{ render_esi(path('frontend.header', { headerParameters: headerParameters }), { ignore_errors: false }) }}
+            {% endblock %}
+        {% endblock %}
+
+        {% block base_main %}
+            <main class="content-main" id="content-main">
+                {% block base_flashbags %}
+                    <div class="flashbags container">
+                        {% for type, messages in app.flashes %}
+                            {% for message in messages %}
+                                <twig:CT:Alert :variant="type">
+                                    {{ message|sw_sanitize }}
+                                </twig:CT:Alert>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endblock %}
+
+                {% block content %}{% endblock %}
+            </main>
+        {% endblock %}
+
+        {% block base_footer %}
+            {% block base_esi_footer %}
+                {{ render_esi(path('frontend.footer', { footerParameters: footerParameters }), { ignore_errors: false }) }}
+            {% endblock %}
+        {% endblock %}
+    {% endblock %}
+
+    {% block base_scroll_up %}
+        {% sw_include '@Frontend/frontend/layout/scroll-up.html.twig' %}
+    {% endblock %}
+
+    {% block base_pseudo_modal %}
+        {% sw_include '@Frontend/frontend/component/pseudo-modal.html.twig' %}
+    {% endblock %}
+
+    {% block base_speculation_rules %}
+        {% if config('core.frontendSettings.speculationRules') %}
+            {% set options = {
+                selectorNavigationLinks: '.nav-item.nav-link',
+            } %}
+            <template data-speculation-rules="true" data-speculation-rules-options="{{ options|json_encode }}"></template>
+        {% endif %}
+    {% endblock %}
+
+    {% block base_body_script %}{% endblock %}
+    </body>
+{% endblock %}
+</html>

@@ -1,0 +1,132 @@
+{
+    "title": "CT/Blog/Card",
+    "parameters": {
+        "server": {
+            "id": "CT:Blog:Card"
+        },
+        "slots": [
+            {
+                "name": "header-top",
+                "description": "Slot at the top of the blog card, typically used for badges, labels, or additional content."
+            },
+            {
+                "name": "media",
+                "description": "Main blog image slot, can be overridden to show custom media content."
+            },
+            {
+                "name": "badges",
+                "description": "Slot for displaying blog badges."
+            },
+            {
+                "name": "header-bottom",
+                "description": "Slot at the bottom of the blog card header."
+            },
+            {
+                "name": "body-top",
+                "description": "Slot at the top of the blog card body."
+            },
+            {
+                "name": "title",
+                "description": "Main content area containing the blog name."
+            },
+            {
+                "name": "body-bottom",
+                "description": "Slot at the bottom of the blog card body."
+            },
+            {
+                "name": "footer-top",
+                "description": "Slot at the top of the blog card footer."
+            },
+            {
+                "name": "actions",
+                "description": "Action area containing the blog detail link."
+            },
+            {
+                "name": "footer-bottom",
+                "description": "Slot at the bottom of the blog card footer."
+            }
+        ],
+        "template": "<twig:CT:Blog:Card :blog=\"blog\" mediaHeight=\"240\"></twig:CT:Blog:Card>"
+    },
+    "argTypes": {
+        "blog": {
+            "control": "object",
+            "description": "The full channel blog entity.",
+            "required": true,
+            "type": "BlogEntity",
+            "table": {
+                "readonly": true
+            }
+        },
+        "mediaHeight": {
+            "control": "text",
+            "description": "Height of the blog media (thumbnail).",
+            "table": {
+                "defaultValue": {
+                    "summary": "auto"
+                }
+            }
+        },
+        "mediaObjectFit": {
+            "control": "select",
+            "options": ["cover", "contain"],
+            "description": "Object fit of the blog media (thumbnail).",
+            "table": {
+                "defaultValue": {
+                    "summary": "contain"
+                }
+            }
+        },
+        "mediaSizes": {
+            "control": "text",
+            "description": "Sizes of the blog media (thumbnail).",
+            "table": {
+                "defaultValue": {
+                    "summary": "(max-width: 400px) 96vw, 400px"
+                }
+            }
+        },
+        "border": {
+            "control": "boolean",
+            "description": "Whether the card should have a border.",
+            "table": {
+                "defaultValue": {
+                    "summary": false
+                }
+            }
+        },
+        "rounded": {
+            "control": "boolean",
+            "description": "Whether the card should have rounded corners.",
+            "table": {
+                "defaultValue": {
+                    "summary": false
+                }
+            }
+        },
+        "layout": {
+            "control": "select",
+            "options": ["default", "horizontal"],
+            "description": "Layout of the card.",
+            "table": {
+                "defaultValue": {
+                    "summary": "default"
+                }
+            }
+        }
+    },
+    "stories": [
+        {
+            "name": "Card",
+            "args": {
+                "blog": {},
+                "mediaHeight": "auto",
+                "mediaObjectFit": "contain",
+                "mediaSizes": "(max-width: 400px) 96vw, 400px",
+                "layout": "default",
+                "border": false,
+                "rounded": false
+            }
+        }
+    ]
+}

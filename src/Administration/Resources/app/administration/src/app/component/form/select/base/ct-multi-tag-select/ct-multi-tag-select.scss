@@ -1,0 +1,40 @@
+@import "~scss/variables";
+
+.ct-select.ct-multi-tag-select {
+    .ct-select__selection-indicators {
+        display: none;
+    }
+
+    .ct-select-selection-list {
+        width: 100%;
+    }
+
+    .ct-select-selection-list .ct-select-selection-list__item-holder {
+        max-width: 16rem;
+    }
+
+    .ct-block-field__block {
+        min-height: 48px;
+        height: auto;
+    }
+}
+
+.ct-multi-tag-select-validation-popover {
+    z-index: $z-index-context-menu;
+}
+
+.ct-multi-tag-select-valid,
+.ct-multi-tag-select-invalid {
+    padding: 0.3rem 0.5rem;
+    margin: 0.3rem 0.5rem;
+    border-radius: $border-radius-default;
+}
+
+.ct-multi-tag-select-valid {
+    cursor: pointer;
+    background: var(--color-background-brand-default);
+}
+
+.ct-multi-tag-select-invalid {
+    background: var(--color-background-tertiary-default);
+}

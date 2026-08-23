@@ -1,0 +1,35 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Store\Struct;
+
+class BinaryStruct extends StoreStruct
+{
+    protected string $version;
+
+    protected string $text;
+
+    protected string $creationDate;
+
+    /**
+     * @return BinaryStruct
+     */
+    public static function fromArray(array $data): StoreStruct
+    {
+        return new self()->assign($data);
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    public function getCreationDate(): string
+    {
+        return $this->creationDate;
+    }
+}

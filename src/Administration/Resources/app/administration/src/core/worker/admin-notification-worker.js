@@ -1,0 +1,98 @@
+const { Service } = Contena;
+const READ_NOTIFICATION = 'notification.lastReadAt';
+
+/**
+ * Maps a backend notification status to a default title snippet key, mirroring the
+ * defaults the `notification` mixin applies to frontend notifications. Only the statuses
+ * emitted by Contena core are mapped (`info`, `warning`, `positive`); any other status
+ * keeps no title, preserving the previous behaviour.
+ */
+const STATUS_TITLE_MAP = {
+    info: 'global.default.info',
+    warning: 'global.default.warning',
+    positive: 'global.default.success',
+};
+
+/**
+ * @private
+ */
+export default class AdminNotificationWorker {
+    constructor() {
+        this._notificationService = Service('notificationsService');
+        this._userConfigService = Service('userConfigService');
+        this._userService = Service('userService');
+        this._notiticationInterval = 5000;
+        this._notiticationTimeoutId = null;
+        this._timestamp = null;
+        this._limit = 5;
+    }
+
+    start() {
+        if (!Contena.Context.app.config.adminWorker.enableNotificationWorker) {
+            return;
+        }
+
+        this.fetchUserConfig().then(() => {
+            this.loadNotifications();
+        });
+    }
+
+    loadNotifications() {
+        this._notificationService
+            .fetchNotifications(this._limit, this._timestamp)
+            .then(({ notifications, timestamp }) => {
+                notifications.forEach((notification) => {
+                    const { status, message } = notification;
+                    this.createNotification(status, message);
+                });
+
+                if (timestamp) {
+                    this._timestamp = timestamp;
+                    this._userConfigService.upsert({
+                        [READ_NOTIFICATION]: { timestamp },
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error while fetching notifications', error);
+            });
+
+        this._notiticationTimeoutId = setTimeout(() => {
+            this.loadNotifications();
+        }, this._notiticationInterval);
+    }
+
+    terminate() {
+        if (this._notiticationTimeoutId) {
+            clearTimeout(this._notiticationTimeoutId);
+            this._notiticationTimeoutId = null;
+        }
+    }
+
+    createNotification(variant, message) {
+        const notification = {
+            variant,
+            message,
+        };
+
+        const title = STATUS_TITLE_MAP[variant];
+        if (title) {
+            notification.title = title;
+        }
+
+        Contena.Store.get('notification').createNotification(notification);
+    }
+
+    async fetchUserConfig() {
+        const response = await this._userConfigService.search([READ_NOTIFICATION]);
+        const value = response.data[READ_NOTIFICATION];
+
+        if (value) {
+            this._timestamp = value.timestamp;
+        } else {
+            // If no timestamp is found, fetch the user's creation date as a fallback
+            const userResponse = await this._userService.getUser();
+            this._timestamp = userResponse.data.createdAt.timestamp;
+        }
+    }
+}

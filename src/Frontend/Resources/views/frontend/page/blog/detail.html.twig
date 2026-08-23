@@ -1,0 +1,9 @@
+{% extends '@Frontend/frontend/layout/base.html.twig' %}
+
+{% block title %}{{ page.metaInformation.metaTitle|default(page.blog.translated.name) }}{% endblock %}
+
+{% block content %}
+    <div class="container-main content-page blog-detail-page">
+        <twig:CT:Content:Page :page="contentPage" />
+    </div>
+{% endblock %}

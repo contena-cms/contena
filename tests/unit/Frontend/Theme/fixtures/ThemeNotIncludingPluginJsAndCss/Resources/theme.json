@@ -1,0 +1,17 @@
+{
+  "name": "CtTheme",
+  "author": "contena AG",
+  "views": [
+     "@MockFrontend",
+     "@CtTheme"
+  ],
+  "style": [
+    "@MockFrontend"
+  ],
+  "script": [
+    "@MockFrontend"
+  ],
+  "asset": [
+    "@MockFrontend"
+  ]
+}

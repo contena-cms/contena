@@ -1,0 +1,47 @@
+.ct-modal.ct-media-save-modal.ct-modal--full {
+    z-index: 1100;
+
+    .ct-modal__dialog {
+        height: 100%;
+    }
+
+    .ct-modal__body {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .ct-media-save-modal__content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        margin-top: 24px;
+    }
+
+    .ct-media-save-modal__breadcrumbs-and-search {
+        position: absolute;
+        top: 48px;
+        left: 24px;
+        z-index: 1;
+
+        .ct-media-breadcrumbs {
+            margin-bottom: 0;
+        }
+    }
+
+    .ct-media-save-modal__library-content {
+        display: contents;
+    }
+
+    .ct-media-save-modal__input-file-name {
+        width: 300px;
+
+        .mt-block-field__block {
+            min-height: 32px;
+        }
+    }
+
+    .ct-media-library {
+        margin-top: 24px;
+    }
+}

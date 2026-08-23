@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
+
+/**
+ * @final
+ */
+class JsonUpdateCommand extends UpdateCommand
+{
+    /**
+     * @param array<string, mixed> $payload
+     * @param array<string, string> $primaryKey
+     */
+    public function __construct(
+        EntityDefinition $definition,
+        private readonly string $storageName,
+        array $payload,
+        array $primaryKey,
+        EntityExistence $existence,
+        string $path
+    ) {
+        parent::__construct($definition, $payload, $primaryKey, $existence, $path);
+    }
+
+    public function getStorageName(): string
+    {
+        return $this->storageName;
+    }
+}

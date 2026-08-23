@@ -1,0 +1,19 @@
+.ct-settings-snippet-set-list {
+    &__table {
+        height: 100%;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .ct-settings-snippet-set-list__container {
+        height: 726px;
+    }
+
+    .mt-field {
+        margin-bottom: 0;
+    }
+}

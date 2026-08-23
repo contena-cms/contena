@@ -1,0 +1,50 @@
+.ct-custom-field-list {
+    .ct-empty-state {
+        position: static;
+    }
+
+    .media-column .ct-grid__cell-content {
+        padding: 0;
+    }
+
+    &.mt-card .mt-card__content {
+        padding: 0;
+    }
+
+    .ct-custom-field-list__toolbar {
+        padding: 25px 35px;
+        background-color: var(--color-elevation-surface-sunken);
+        border-bottom: 1px solid var(--color-border-secondary-default);
+
+        .ct-custom-field-list__delete-button.mt-button--square {
+            border-color: var(--color-border-critical-default);
+
+            .mt-icon {
+                color: var(--color-icon-critical-default);
+            }
+
+            &.mt-button--disabled {
+                opacity: 0.2;
+            }
+        }
+
+        .ct-tooltip--wrapper {
+            .mt-button {
+                width: 100%;
+            }
+        }
+    }
+
+    .ct-custom-field-list__custom-field-label {
+        cursor: pointer;
+
+        &:hover {
+            color: var(--color-text-brand-default);
+            text-decoration: underline;
+        }
+    }
+
+    .ct-simple-search-field {
+        margin: unset;
+    }
+}

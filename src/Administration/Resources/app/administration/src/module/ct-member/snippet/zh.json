@@ -1,0 +1,109 @@
+{
+    "ct-member": {
+        "general": {
+            "mainMenuItemGeneral": "会员",
+            "mainMenuItemList": "会员",
+            "descriptionTextModule": "管理会员、资料、地址和访问权限"
+        },
+        "list": {
+            "textHeadline": "会员",
+            "buttonAddMember": "添加会员",
+            "emptyState": "暂无会员",
+            "columnMemberNumber": "会员编号",
+            "columnName": "姓名",
+            "columnEmail": "电子邮箱",
+            "columnGroup": "会员组",
+            "columnChannel": "渠道",
+            "columnActive": "启用",
+            "loadError": "会员无法加载。",
+            "deleteError": "会员无法删除。"
+        },
+        "detail": {
+            "textHeadline": "新建会员",
+            "tabGeneral": "常规",
+            "tabAddresses": "地址",
+            "labelCreatedByAdmin": "由管理员创建",
+            "messageMemberNotFound": "找不到该会员。",
+            "messageSaveSuccess": "会员 {name} 已保存。",
+            "messageSaveError": "会员无法保存，请检查标记的字段。",
+            "messagePasswordMismatch": "两次输入的密码不一致。"
+        },
+        "baseForm": {
+            "labelTitle": "称谓",
+            "placeholderTitle": "输入称谓",
+            "labelName": "姓名",
+            "placeholderName": "输入姓名",
+            "labelEmail": "电子邮箱",
+            "placeholderEmail": "输入电子邮箱",
+            "labelPassword": "密码",
+            "placeholderPassword": "输入密码",
+            "labelNewPassword": "新密码",
+            "labelPasswordConfirmation": "确认密码",
+            "labelMemberGroup": "会员组",
+            "placeholderMemberGroup": "选择会员组",
+            "labelChannel": "渠道",
+            "placeholderChannel": "选择渠道",
+            "labelLanguage": "语言",
+            "placeholderLanguage": "选择语言",
+            "labelMemberNumber": "会员编号",
+            "placeholderMemberNumber": "输入会员编号",
+            "labelBirthday": "生日",
+            "labelPhoneNumber": "电话号码",
+            "placeholderPhoneNumber": "输入电话号码",
+            "labelTags": "标签",
+            "placeholderTags": "添加标签",
+            "labelActive": "启用"
+        },
+        "detailBase": {
+            "labelAccountCard": "账户",
+            "labelProfileCard": "资料",
+            "labelMemberSince": "注册时间",
+            "labelLastLogin": "最后登录",
+            "labelChannel": "渠道",
+            "labelGroup": "会员组"
+        },
+        "detailAddresses": {
+            "title": "地址",
+            "buttonAddAddress": "添加地址",
+            "emptyState": "暂无地址",
+            "columnName": "姓名",
+            "columnStreet": "街道",
+            "columnZipCode": "邮政编码",
+            "columnCity": "城市",
+            "columnCountry": "国家",
+            "columnRegion": "行政区域",
+            "textDeleteAddressConfirm": "确定要删除该地址吗？",
+            "saveError": "地址无法保存。",
+            "deleteError": "地址无法删除。"
+        },
+        "addressForm": {
+            "labelTitle": "称谓",
+            "labelFirstName": "名",
+            "labelLastName": "姓",
+            "labelStreet": "街道",
+            "labelAdditionalAddressLine1": "附加地址 1",
+            "labelAdditionalAddressLine2": "附加地址 2",
+            "labelZipCode": "邮政编码",
+            "labelCity": "城市",
+            "labelCountry": "国家",
+            "labelProvince": "省 / 州",
+            "labelCityRegion": "市 / 地区",
+            "labelDistrict": "区 / 县",
+            "labelPhoneNumber": "电话号码"
+        },
+        "memberGroupRegistration": {
+            "alert": "该会员申请加入会员组 {name}。",
+            "memberInactiveMessage": "接受申请不会自动启用该会员。",
+            "accept": "接受",
+            "decline": "拒绝",
+            "acceptMessage": "会员组申请已接受。",
+            "declineMessage": "会员组申请已拒绝。",
+            "errorMessage": "会员组申请无法更新。"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "member": { "label": "会员" }
+        }
+    }
+}

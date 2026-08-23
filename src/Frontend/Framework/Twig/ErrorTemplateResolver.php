@@ -1,0 +1,45 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Frontend\Framework\Twig;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Twig\Environment;
+
+class ErrorTemplateResolver
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        protected Environment $twig,
+    ) {
+    }
+
+    public function resolve(\Throwable $exception, Request $request): ErrorTemplateStruct
+    {
+        $template = '@Frontend/frontend/page/error/error';
+
+        if ($request->isXmlHttpRequest()) {
+            $template .= '-ajax';
+        }
+
+        $code = $exception->getCode();
+
+        if ($exception instanceof HttpException) {
+            $code = $exception->getStatusCode();
+        }
+
+        $dedicatedTemplate = $template . '-' . $code;
+
+        if ($this->twig->getLoader()->exists($dedicatedTemplate . '.html.twig')) {
+            $template = $dedicatedTemplate;
+        } else {
+            $template .= '-std';
+        }
+
+        $template .= '.html.twig';
+
+        return new ErrorTemplateStruct($template, ['exception' => $exception]);
+    }
+}

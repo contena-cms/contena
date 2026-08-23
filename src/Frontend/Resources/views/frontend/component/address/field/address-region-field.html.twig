@@ -1,0 +1,25 @@
+{% block component_address_field_region %}
+    {% if formViolations.getViolations('/regionId') is not empty %}
+        {% set violationPath = '/regionId' %}
+    {% elseif formViolations.getViolations("/#{prefix}/regionId") is not empty %}
+        {% set violationPath = "/#{prefix}/regionId" %}
+    {% endif %}
+
+    <input type="hidden" name="{{ prefix }}[regionId]" value="{{ data.get('regionId') }}" class="region-value">
+    {% for level in 1..3 %}
+        {% set regionOptions %}
+            <option value="" data-placeholder-option="true">{{ ('address.regionLevel' ~ level ~ 'Placeholder')|trans|sw_sanitize }}</option>
+        {% endset %}
+        {% sw_include '@Frontend/frontend/component/form/form-select.html.twig' with {
+            label: ('address.regionLevel' ~ level ~ 'Label')|trans|sw_sanitize,
+            id: idPrefix ~ prefix ~ 'AddressRegion' ~ level,
+            name: '',
+            options: regionOptions,
+            violationPath: violationPath,
+            additionalClass: 'col-md region-field' ~ level,
+            additionalSelectClass: 'region-select',
+            disabled: true,
+            attributes: {'data-region-level': level},
+        } %}
+    {% endfor %}
+{% endblock %}

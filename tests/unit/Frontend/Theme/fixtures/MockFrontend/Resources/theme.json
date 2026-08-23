@@ -1,0 +1,308 @@
+{
+  "name": "Mock Contena default theme",
+  "author": "contena AG",
+  "description": {
+    "en-GB": "Default theme of Contena 6",
+    "de-DE": "Standard Theme von Contena 6"
+  },
+  "previewMedia": "app/frontend/dist/assets/defaultThemePreview.jpg",
+  "style": [
+    {
+      "app/frontend/src/scss/base.scss": {
+        "resolve": {
+          "vendor": "app/frontend/vendor"
+        }
+      },
+      "app/frontend/src/scss/skin/contena/_base.scss": {
+        "resolve": {
+          "vendor": "app/frontend/vendor"
+        }
+      }
+    },
+    "@Plugins"
+  ],
+  "script": [
+    "app/frontend/dist/js/vendor-node.js",
+    "app/frontend/dist/js/vendor-shared.js",
+    "app/frontend/dist/js/runtime.js",
+    "app/frontend/dist/frontend/js/frontend.js",
+    "@Plugins"
+  ],
+  "asset": [
+    "app/frontend/dist/assets"
+  ],
+  "config": {
+    "blocks": {
+      "themeColors": {
+        "label": {
+          "en-GB": "Theme colours",
+          "de-DE": "Theme-Farben"
+        }
+      },
+      "typography": {
+        "label": {
+          "en-GB": "Typography",
+          "de-DE": "Typografie"
+        }
+      },
+      "content": {
+        "label": {
+          "en-GB": "Content",
+          "de-DE": "Content"
+        }
+      },
+      "statusColors": {
+        "label": {
+          "en-GB": "Status messages",
+          "de-DE": "Status-Ausgaben"
+        }
+      },
+      "media": {
+        "label": {
+          "en-GB": "Media",
+          "de-DE": "Medien"
+        }
+      },
+      "unordered": {
+        "label": {
+          "en-GB": "Misc",
+          "de-DE": "Sonstige"
+        }
+      }
+    },
+    "fields": {
+      "contena-color-brand-primary": {
+        "label": {
+          "en-GB": "Primary colour",
+          "de-DE": "Primärfarbe"
+        },
+        "type": "color",
+        "value": "#008490",
+        "editable": true,
+        "block": "themeColors",
+        "order": 100
+      },
+      "contena-color-brand-secondary": {
+        "label": {
+          "en-GB": "Secondary colour",
+          "de-DE": "Sekundärfarbe"
+        },
+        "type": "color",
+        "value": "#526e7f",
+        "editable": true,
+        "block": "themeColors",
+        "order": 200
+      },
+      "contena-border-color": {
+        "label": {
+          "en-GB": "Border",
+          "de-DE": "Rahmen"
+        },
+        "type": "color",
+        "value": "#bcc1c7",
+        "editable": true,
+        "block": "themeColors",
+        "order": 300
+      },
+      "contena-background-color": {
+        "label": {
+          "en-GB": "Background",
+          "de-DE": "Hintergrund"
+        },
+        "type": "color",
+        "value": "#fff",
+        "editable": true,
+        "block": "themeColors",
+        "order": 400
+      },
+      "contena-color-success": {
+        "label": {
+          "en-GB": "Success",
+          "de-DE": "Erfolg"
+        },
+        "type": "color",
+        "value": "#3cc261",
+        "editable": true,
+        "block": "statusColors",
+        "order": 100
+      },
+      "contena-color-info": {
+        "label": {
+          "en-GB": "Information",
+          "de-DE": "Information"
+        },
+        "type": "color",
+        "value": "#26b6cf",
+        "editable": true,
+        "block": "statusColors",
+        "order": 200
+      },
+      "contena-color-warning": {
+        "label": {
+          "en-GB": "Notice",
+          "de-DE": "Hinweis"
+        },
+        "type": "color",
+        "value": "#ffbd5d",
+        "editable": true,
+        "block": "statusColors",
+        "order": 300
+      },
+      "contena-color-danger": {
+        "label": {
+          "en-GB": "Error",
+          "de-DE": "Fehler"
+        },
+        "type": "color",
+        "value": "#e52427",
+        "editable": true,
+        "block": "statusColors",
+        "order": 400
+      },
+      "contena-font-family-base": {
+        "label": {
+          "en-GB": "Fonttype text",
+          "de-DE": "Schriftart Text"
+        },
+        "type": "fontFamily",
+        "value": "'Inter', sans-serif",
+        "editable": true,
+        "block": "typography",
+        "order": 100
+      },
+      "contena-text-color": {
+        "label": {
+          "en-GB": "Text colour",
+          "de-DE": "Textfarbe"
+        },
+        "type": "color",
+        "value": "#4a545b",
+        "editable": true,
+        "block": "typography",
+        "order": 200
+      },
+      "contena-font-family-headline": {
+        "label": {
+          "en-GB": "Fonttype headline",
+          "de-DE": "Schriftart Überschrift"
+        },
+        "type": "fontFamily",
+        "value": "'Inter', sans-serif",
+        "editable": true,
+        "block": "typography",
+        "order": 300
+      },
+      "contena-headline-color": {
+        "label": {
+          "en-GB": "Headline colour",
+          "de-DE": "Überschriftfarbe"
+        },
+        "type": "color",
+        "value": "#4a545b",
+        "editable": true,
+        "block": "typography",
+        "order": 400
+      },
+      "contena-color-content-accent": {
+        "label": {
+          "en-GB": "Content accent",
+          "de-DE": "Inhaltsakzent"
+        },
+        "type": "color",
+        "value": "#4a545b",
+        "editable": true,
+        "block": "content",
+        "order": 100
+      },
+      "contena-color-primary-action": {
+        "label": {
+          "en-GB": "Primary action",
+          "de-DE": "Primäraktion"
+        },
+        "type": "color",
+        "value": "#008490",
+        "editable": true,
+        "block": "content",
+        "order": 200
+      },
+      "contena-color-primary-action-text": {
+        "label": {
+          "en-GB": "Primary action text",
+          "de-DE": "Primäraktion Text"
+        },
+        "type": "color",
+        "value": "#fff",
+        "editable": true,
+        "block": "content",
+        "order": 300
+      },
+      "contena-logo-desktop": {
+        "label": {
+          "en-GB": "Desktop",
+          "de-DE": "Desktop"
+        },
+        "helpText": {
+          "en-GB": "Displayed for viewports of above 991px",
+          "de-DE": "Wird über einem Viewport von 991px angezeigt"
+        },
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/default-logo.png",
+        "editable": true,
+        "block": "media",
+        "order": 100
+      },
+      "contena-logo-tablet": {
+        "label": {
+          "en-GB": "Tablet",
+          "de-DE": "Tablet"
+        },
+        "helpText": {
+          "en-GB": "Displayed between a viewport of 767px to 991px",
+          "de-DE": "Wird zwischen einem viewport von 767px bis 991px angezeigt"
+        },
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/default-logo.png",
+        "editable": true,
+        "block": "media",
+        "order": 200
+      },
+      "contena-logo-mobile": {
+        "label": {
+          "en-GB": "Mobile",
+          "de-DE": "Mobil"
+        },
+        "helpText": {
+          "en-GB": "Displayed up to a viewport of 767px",
+          "de-DE": "Wird bis zu einem Viewport von 767px angezeigt"
+        },
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/default-logo.png",
+        "editable": true,
+        "block": "media",
+        "order": 300
+      },
+      "contena-logo-share": {
+        "label": {
+          "en-GB": "Share icon",
+          "de-DE": "Share-Icon"
+        },
+        "type": "media",
+        "value": "",
+        "editable": true,
+        "block": "media",
+        "order": 400
+      },
+      "contena-logo-favicon": {
+        "label": {
+          "en-GB": "Favicon",
+          "de-DE": "Favicon"
+        },
+        "type": "media",
+        "value": "app/frontend/dist/assets/logo/favicon.png",
+        "editable": true,
+        "block": "media",
+        "order": 500
+      }
+    }
+  }
+}

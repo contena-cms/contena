@@ -1,0 +1,110 @@
+$ct-media-modal-v2-non-grid-margin: 0 24px;
+
+// mt-modal styles for ct-media-modal-v2
+// Using :has() selector because teleport removes the class from mt-modal
+.mt-modal:has(.ct-media-modal-v2__content) {
+    z-index: 1100;
+    height: calc(100dvh - 2rem);
+
+    .mt-modal__content {
+        flex: 1;
+        min-height: 0;
+    }
+
+    .mt-modal__content-inner {
+        padding: 0;
+        height: 100%;
+    }
+
+    .ct-media-modal-v2__content {
+        display: grid;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        grid-template-columns: 1fr auto;
+    }
+
+    .ct-media-modal-v2__tabs {
+        max-width: unset;
+        width: 100%;
+        padding: 15px 30px;
+
+        .ct-tabs__bar {
+            margin: 0 24px 40px;
+            max-width: unset;
+        }
+    }
+
+    .ct-tabs .ct-tabs__custom-content {
+        height: 100%;
+    }
+
+    .ct-media-modal-v2__tab-content {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ct-media-modal-v2__upload-container {
+        margin: $ct-media-modal-v2-non-grid-margin 16px;
+    }
+
+    .ct-media-modal-v2__upload-media-grid--compact {
+        margin: $ct-media-modal-v2-non-grid-margin;
+    }
+
+    .ct-media-modal-v2__breadcrumbs-and-search--compact {
+        margin: $ct-media-modal-v2-non-grid-margin;
+        flex-direction: column-reverse;
+
+        .ct-simple-search-field {
+            margin-bottom: 16px;
+        }
+
+        .ct-media-modal-v2__search-field {
+            width: 100%;
+            margin-bottom: 16px;
+
+            .mt-field__label {
+                display: none;
+            }
+        }
+    }
+
+    .ct-media-modal-v2__breadcrumbs-and-search {
+        display: flex;
+        justify-content: space-between;
+        margin: $ct-media-modal-v2-non-grid-margin 16px;
+
+        .ct-media-breadcrumbs {
+            margin-bottom: 0;
+        }
+
+        .ct-simple-search-field {
+            margin-bottom: 0;
+        }
+
+        .ct-media-modal-v2__search-field {
+            width: min(360px, 48%);
+            margin-bottom: 0;
+
+            .mt-field__label {
+                display: none;
+            }
+        }
+    }
+
+    .ct-media-modal-v2__library-content {
+        display: contents;
+    }
+
+    .ct-media-modal-v2__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        width: 100%;
+    }
+}

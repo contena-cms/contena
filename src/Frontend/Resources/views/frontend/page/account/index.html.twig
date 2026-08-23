@@ -1,0 +1,30 @@
+{% sw_extends '@Frontend/frontend/page/account/_page.html.twig' %}
+
+{% block page_account_main_content %}
+    <div class="account-overview">
+        {% block page_account_overview_welcome %}
+            <h1>{{ 'account.overviewTitle'|trans|sw_sanitize }}</h1>
+            <p>{{ 'account.overviewInfo'|trans|sw_sanitize }}</p>
+        {% endblock %}
+
+        {% block page_account_overview_profile %}
+            <section class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h5 card-title">{{ 'account.overviewProfileHeader'|trans|sw_sanitize }}</h2>
+                    <p class="mb-1">{{ page.member.name }}</p>
+                    <p class="text-muted">{{ page.member.email }}</p>
+                    <a href="{{ path('frontend.account.profile.page') }}" class="btn btn-outline-primary">{{ 'account.profileLink'|trans|sw_sanitize }}</a>
+                </div>
+            </section>
+        {% endblock %}
+
+        {% block page_account_overview_addresses %}
+            <section>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 mb-0">{{ 'account.addressLink'|trans|sw_sanitize }}</h2>
+                    <a href="{{ path('frontend.account.address.page') }}" class="btn btn-outline-primary">{{ 'account.addressLink'|trans|sw_sanitize }}</a>
+                </div>
+            </section>
+        {% endblock %}
+    </div>
+{% endblock %}

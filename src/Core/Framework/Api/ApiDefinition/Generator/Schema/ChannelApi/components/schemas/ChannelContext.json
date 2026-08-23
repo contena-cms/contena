@@ -1,0 +1,20 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "ChannelContext": {
+                "type": "object",
+                "properties": {
+                    "token": {"type": "string"},
+                    "channel": {"type": "object"},
+                    "currentMemberGroup": {"type": "object"},
+                    "member": {"type": ["object", "null"]},
+                    "languageInfo": {"type": "object"}
+                },
+                "required": ["token", "channel", "currentMemberGroup", "languageInfo"]
+            }
+        }
+    }
+}

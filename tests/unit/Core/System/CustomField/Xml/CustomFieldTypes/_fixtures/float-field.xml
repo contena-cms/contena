@@ -1,0 +1,23 @@
+<custom-fields>
+        <custom-field-set>
+            <name>custom_field_test</name>
+            <label>Custom field test</label>
+            <label lang="de-DE">Zusatzfeld Test</label>
+            <related-entities>
+                <media/>
+                <user/>
+            </related-entities>
+            <fields>
+                <float name="test_float_field">
+                    <label>Test float field</label>
+                    <label lang="de-DE">Test Kommazahlenfeld</label>
+                    <help-text>This is a float field.</help-text>
+                    <position>2</position>
+                    <steps>2.2</steps>
+                    <min>0.5</min>
+                    <max>1.6</max>
+                    <placeholder>Enter a float...</placeholder>
+                </float>
+            </fields>
+        </custom-field-set>
+    </custom-fields>

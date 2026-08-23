@@ -1,0 +1,93 @@
+{
+    "global": {
+        "error-codes": {
+            "DUPLICATED_SNIPPET_KEY": "Snippet “{key}”已存在，请使用其他名称。"
+        }
+    },
+    "ct-settings-snippet": {
+        "general": {
+            "mainMenuItemGeneral": "Snippet",
+            "description": "管理界面文案与翻译。",
+            "copyName": "副本",
+            "errorBackRoutingTitle": "页面请求无效",
+            "errorBackRoutingMessage": "无法加载请求的页面，即将返回 Snippet 列表。",
+            "placeholderSearchBarSets": "搜索 Snippet 集...",
+            "placeholderSearchBarSnippets": "搜索 Snippet...",
+            "placeholderValue": "输入内容...",
+            "searchBarTitleSets": "Snippet 集",
+            "searchBarTitleSnippets": "Snippet"
+        },
+        "detail": {
+            "cardGeneralTitle": "基本信息",
+            "cardSnippetSetsTitle": "翻译",
+            "labelContent": "Snippet 集：{name}",
+            "labelName": "名称",
+            "labelNamePlaceholder": "输入名称...",
+            "labelNamespace": "分区",
+            "labelNamespacePlaceholder": "选择分区",
+            "messageSaveError": "无法保存“{key}”的 Snippet。",
+            "messageSaveErrorNumericKey": "Snippet 键不能只包含数字。",
+            "messageSaveSuccess": "Snippet“{key}”已保存。",
+            "textHeadline": "新建 Snippet",
+            "labelOriginal": "原始内容："
+        },
+        "list": {
+            "identifier": "{setName} | Snippet 集对照",
+            "buttonAdd": "新建 Snippet",
+            "buttonEmpty": "返回标准 Snippet",
+            "columnKey": "名称",
+            "columnValue": "内容",
+            "contextMenuDelete": "删除 | 重置",
+            "columnHeaderGridColumnTitleSet": "Snippet 集",
+            "columnHeaderResetTo": "原始内容",
+            "checkboxDeleteAll": "从所有 Snippet 集删除 | 重置所有 Snippet 集",
+            "emptyStateHeadLine": "暂无 Snippet。",
+            "messageDeleteSuccess": "Snippet“{key}”已重置。",
+            "messageSaveError": "无法保存 Snippet“{key}”。 | 无法保存“{key}”的 Snippet。",
+            "messageSaveSuccess": "Snippet“{key}”已保存。 | “{key}”的 Snippet 已保存。",
+            "textDeleteConfirm": "确定删除“{key}”的 Snippet 吗？",
+            "textResetConfirm": "确定重置当前 Snippet 集中的“{key}”吗？ | 确定重置所选 Snippet 集中的“{key}”吗？",
+            "textSnippetList": "“{setName}”中的 Snippet | Snippet",
+            "resetErrorMessage": "无法重置 Snippet“{key}”。 | 无法删除 Snippet“{key}”。",
+            "resetSuccessMessage": "Snippet“{key}”已恢复默认值。 | Snippet“{key}”已删除。",
+            "titleSidebarCustomItems": "自定义 Snippet",
+            "titleSidebarItemRefresh": "刷新",
+            "titleSidebarItemFilter": "筛选"
+        },
+        "setList": {
+            "cardTitle": "Snippet 集",
+            "buttonAddSet": "添加 Snippet 集",
+            "buttonImport": "导入",
+            "newSnippetName": "# 新 Snippet 集",
+            "cloneErrorMessage": "复制 Snippet 集时发生错误。",
+            "cloneSuccessMessage": "Snippet 集已复制。",
+            "columnBaseFile": "基础文件",
+            "columnIso": "区域语言",
+            "columnChangedAt": "最后更新",
+            "columnName": "名称",
+            "deleteNoteErrorMessage": "无法删除 Snippet 集。",
+            "deleteNoteSuccessMessage": "Snippet 集已删除。",
+            "inlineEditErrorMessage": "无法保存 Snippet 集 | 无法保存 Snippet 集“{name}”。",
+            "inlineEditSuccessMessage": "Snippet 集“{name}”已保存。",
+            "modalTitleClone": "复制 Snippet 集",
+            "notEditableNoteErrorMessage": "编辑 Snippet 集时发生错误。",
+            "placeholderName": "输入 Snippet 集名称...",
+            "placeholderBaseFile": "选择基础文件...",
+            "textDeleteConfirm": "确定删除 Snippet 集“{name}”吗？"
+        },
+        "filter": {
+            "showOnlyEmpty": "仅显示空 Snippet",
+            "showOnlyCustom": "仅显示已编辑 Snippet",
+            "showOnlyAdded": "仅显示新增 Snippet",
+            "author": "作者",
+            "more": "更多筛选"
+        }
+    },
+    "ct-privileges": {
+        "permissions": {
+            "snippet": {
+                "label": "Snippet"
+            }
+        }
+    }
+}

@@ -1,0 +1,1245 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": {
+    "/account/change-profile": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Change the member's information",
+        "description": "Make changes to a member's account, like changing their name, salutation or title.",
+        "operationId": "changeProfile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "salutationId": {
+                    "description": "Id of the salutation for the member account. Fetch options using `salutation` endpoint.",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "(Academic) title of the member",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Display name of the member.",
+                    "type": "string"
+                  },
+                  "phoneNumber": {
+                    "description": "Phone number of the member.",
+                    "type": "string"
+                  },
+                  "birthdayDay": {
+                    "description": "Birthday day",
+                    "type": "integer"
+                  },
+                  "birthdayMonth": {
+                    "description": "Birthday month",
+                    "type": "integer"
+                  },
+                  "birthdayYear": {
+                    "description": "Birthday year",
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a success response indicating a successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted profile data failed validation, e.g. a missing name, an overlong phone number or an invalid birthday."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/change-email": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Change the member's email address",
+        "description": "Changes a member's email address to a new email address, using their current password as a validation.",
+        "operationId": "changeEmail",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "emailConfirmation",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "New email address. Has to be unique amongst all members",
+                    "type": "string"
+                  },
+                  "emailConfirmation": {
+                    "description": "Confirmation of the new email address.",
+                    "type": "string"
+                  },
+                  "password": {
+                    "description": "Member's current password",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a success response indicating a successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted data failed validation, e.g. a malformed email address, a confirmation that does not match, an email that is already in use or a wrong password."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in, or the logged in member is a guest."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/change-language": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Change the member's language.",
+        "description": "Changes the language of the logged in member",
+        "operationId": "changeLanguage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "languageId"
+                ],
+                "properties": {
+                  "languageId": {
+                    "description": "New languageId",
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{32}$"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a success response indicating a successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The `languageId` is not a valid UUID or does not reference a language assigned to the current channel."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in, or the logged in member is a guest."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/change-password": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Change the member's password",
+        "description": "Changes a member's password using their current password as a validation.",
+        "operationId": "changePassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "password",
+                  "newPassword",
+                  "newPasswordConfirm"
+                ],
+                "properties": {
+                  "password": {
+                    "description": "Current password of the member",
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "description": "New Password for the member",
+                    "type": "string"
+                  },
+                  "newPasswordConfirm": {
+                    "description": "Confirmation of the new password",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a success response indicating a successful update.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted data failed validation, e.g. a password confirmation that does not match, a new password below the configured minimum length or a wrong current password."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in, or the logged in member is a guest."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/member-recovery-is-expired": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Checks if the member recovery entry for a given hash is expired.",
+        "description": "This can be used to validate a provided hash has a valid and not expired member recovery hash.",
+        "operationId": "getMemberRecoveryIsExpired",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "hash"
+                ],
+                "properties": {
+                  "hash": {
+                    "description": "Parameter from the link in the confirmation mail sent in Step 1",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a MemberRecoveryIsExpiredResponse that indicates if the hash is expired or not.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "isExpired": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "isExpired"
+                        ]
+                      }
+                    },
+                    "apiAlias": {
+                      "type": "string",
+                      "const": "array_struct"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The `hash` is missing or is not a 32 character string."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "404": {
+            "$ref": "#/components/responses/404",
+            "description": "No member recovery exists for the given `hash`."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/member": {
+      "post": {
+        "tags": [
+          "Profile",
+          "Endpoints supporting Criteria "
+        ],
+        "summary": "Get information about current member",
+        "description": "Returns information about the current member.\n\n**Available Associations:**\n- `group` - Member group determining pricing and permissions\n- `language` - Preferred language for member communication\n- `lastPaymentMethod` - Last used payment method by the member\n- `defaultBillingAddress` - Default billing address for the member\n- `activeBillingAddress` - Currently active billing address in the session\n- `defaultShippingAddress` - Default shipping address for the member\n- `activeShippingAddress` - Currently active shipping address in the session\n- `salutation` - Member salutation (e.g., Mr., Mrs., Ms.)\n- `addresses` - All addresses saved for the member\n- `tags` - Tags assigned to the member for organization and segmentation",
+        "operationId": "readMember",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/NoneFieldsCriteria"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the logged in member, also for guest sessions. Check for the value of `guest` field to see whether the member is a guest.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Member"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The `Criteria` sent with the request is invalid, e.g. an unknown filter field, sorting field or association."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ct-include-search-info",
+            "in": "header",
+            "description": "Controls whether API search information is included in the response. Default is 1 (enabled), will be 0 (disabled) in the next major version.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ],
+              "default": "1"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Delete the member's profile",
+        "description": "Deletes a member profile along with their addresses, wishlists and associated data. Created orders and their payment/shipping information (addresses) and reviews are not deleted.",
+        "operationId": "deleteMember",
+        "responses": {
+          "204": {
+            "description": "Returns a no content response indicating a successful removal of the member profile"
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ]
+      }
+    },
+    "/account/address/{addressId}": {
+      "delete": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Delete an address of a member",
+        "description": "Delete an address of member.\n\n    Only addresses which are not set as default addresses for shipping or billing can be deleted. You can check the current default addresses of your member using the profile information endpoint and change them using the default address endpoint.\n\n    **A member must have at least one address (which can be used for shipping and billing).**\n\n    An automatic fallback is not applied.",
+        "operationId": "deleteMemberAddress",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID of the address to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content response, when the address has been deleted"
+          },
+          "400": {
+            "description": "Response containing a list of errors, most likely due to the address being in use"
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Modify an address of a member",
+        "description": "Modifies an existing address of a member.",
+        "operationId": "updateMemberAddress",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "Address ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemberAddressBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/MemberAddress"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MemberAddressRead"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The address does not belong to the logged in member, or the submitted address data failed validation."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ]
+      }
+    },
+    "/account/list-address": {
+      "post": {
+        "tags": [
+          "Address",
+          "Endpoints supporting Criteria "
+        ],
+        "summary": "Fetch addresses of a member",
+        "description": "Lists all addresses of the current member and allows filtering them based on a criteria.",
+        "operationId": "listAddress",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Criteria"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "elements"
+                      ],
+                      "properties": {
+                        "elements": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/MemberAddress"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "$ref": "#/components/schemas/EntitySearchResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The `Criteria` sent with the request is invalid, e.g. an unknown filter field, sorting field or association."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "ct-include-search-info",
+            "in": "header",
+            "description": "Controls whether API search information is included in the response. Default is 1 (enabled), will be 0 (disabled) in the next major version.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ],
+              "default": "1"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/login": {
+      "post": {
+        "tags": [
+          "Login & Registration"
+        ],
+        "summary": "Log in a member",
+        "description": "Logs in members given their credentials.",
+        "operationId": "loginMember",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "description": "Email",
+                    "type": "string"
+                  },
+                  "password": {
+                    "description": "Password",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ContextTokenResponse"
+          },
+          "401": {
+            "description": "If credentials are incorrect an error is returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/429",
+            "description": "Too many failed login attempts for this email address or client IP. The `Retry-After` window is contained in the error."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/login/imitate-member": {
+      "post": {
+        "tags": [
+          "Login & Registration"
+        ],
+        "summary": "Imitate the log in as a member",
+        "description": "Imitate the log in as a member given a generated token.",
+        "operationId": "imitateMemberLogin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "token",
+                  "memberId",
+                  "userId"
+                ],
+                "properties": {
+                  "token": {
+                    "description": "Generated member impersonation token",
+                    "type": "string"
+                  },
+                  "memberId": {
+                    "description": "ID of the member",
+                    "type": "string"
+                  },
+                  "userId": {
+                    "description": "ID of the user who generated the token",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ContextTokenResponse"
+          },
+          "400": {
+            "description": "If the token is incorrect an error is returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing. The response also uses this status when the member to imitate cannot be authenticated."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/logout": {
+      "post": {
+        "tags": [
+          "Login & Registration"
+        ],
+        "summary": "Log out a member",
+        "description": "Logs out a member.",
+        "operationId": "logoutMember",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ContextTokenResponse"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/register-confirm": {
+      "post": {
+        "tags": [
+          "Login & Registration"
+        ],
+        "summary": "Confirm a member registration",
+        "description": "Confirms a member registration when double opt-in is activated.\n\nLearn more about double opt-in registration in our guide \"Register a member\".",
+        "operationId": "registerConfirm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "hash",
+                  "em"
+                ],
+                "properties": {
+                  "hash": {
+                    "description": "Hash from the email received",
+                    "type": "string"
+                  },
+                  "em": {
+                    "description": "Email hash from the email received",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the logged in member. The member is automatically logged in with the `ct-context-token` header provided, which can be reused for subsequent requests."
+          },
+          "404": {
+            "description": "No hash provided"
+          },
+          "412": {
+            "description": "The member has already been confirmed"
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/register": {
+      "post": {
+        "tags": [
+          "Login & Registration"
+        ],
+        "summary": "Register a member",
+        "description": "Registers a member. Used both for normal members and members.See the Guide \"Register a member\" for more information on member registration.",
+        "operationId": "register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "description": "Email of the member. Has to be unique, unless `guest` is `true`",
+                    "type": "string"
+                  },
+                  "password": {
+                    "description": "Password for the member. Required, unless `guest` is `true`",
+                    "type": "string"
+                  },
+                  "salutationId": {
+                    "description": "Id of the salutation for the member account. Fetch options using `salutation` endpoint.",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Display name of the member.",
+                    "type": "string"
+                  },
+                  "phoneNumber": {
+                    "description": "Phone number of the member.",
+                    "type": "string"
+                  },
+                  "acceptedDataProtection": {
+                    "description": "Flag indicating accepted data protection",
+                    "type": "boolean"
+                  },
+                  "frontendUrl": {
+                    "description": "URL of the frontend for that registration. Used in confirmation emails. Has to be one of the configured domains of the channel.",
+                    "type": "string"
+                  },
+                  "requestedGroupId": {
+                    "description": "Optional member group registration request. The member is created in the current channel group and this field stores the requested target group. The group must be available for registration in the current channel.",
+                    "type": "string"
+                  },
+                  "billingAddress": {
+                    "$ref": "#/components/schemas/MemberAddress"
+                  },
+                  "shippingAddress": {
+                    "$ref": "#/components/schemas/MemberAddress"
+                  },
+                  "guest": {
+                    "description": "If set, will create a member. Guest members can re-use an email address and don't need a password.",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "birthdayDay": {
+                    "description": "Birthday day",
+                    "type": "integer"
+                  },
+                  "birthdayMonth": {
+                    "description": "Birthday month",
+                    "type": "integer"
+                  },
+                  "birthdayYear": {
+                    "description": "Birthday year",
+                    "type": "integer"
+                  },
+                  "title": {
+                    "description": "(Academic) title of the member",
+                    "type": "string"
+                  },
+                  "affiliateCode": {
+                    "description": "Field can be used to store an affiliate tracking code",
+                    "type": "string"
+                  },
+                  "campaignCode": {
+                    "description": "Field can be used to store a campaign tracking code",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "name",
+                  "acceptedDataProtection",
+                  "frontendUrl",
+                  "billingAddress"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Member"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted registration data failed validation, e.g. a missing required field, an email address that is already registered or an unknown country or region."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/recovery-password-confirm": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Reset a password with recovery credentials",
+        "description": "This operation is Step 2 of the password reset flow. It is required to conduct Step 1 \"Send a password recovery mail\" in order to obtain the required credentials for this step.Resets a member's password using credentials from a password recovery mail as a validation.",
+        "operationId": "recoveryPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "hash",
+                  "newPassword",
+                  "newPasswordConfirm"
+                ],
+                "properties": {
+                  "hash": {
+                    "description": "Parameter from the link in the confirmation mail sent in Step 1",
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "description": "New password for the member",
+                    "type": "string"
+                  },
+                  "newPasswordConfirm": {
+                    "description": "Confirmation of the new password",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a success response indicating a successful update.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted data failed validation, e.g. a missing hash or a new password that does not match its confirmation."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "404": {
+            "$ref": "#/components/responses/404",
+            "description": "No member recovery exists for the given `hash`."
+          },
+          "410": {
+            "description": "The password recovery hash has expired and can no longer be used."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/recovery-password": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Send a password recovery mail",
+        "description": "This operation is Step 1 of the password reset flow. Make sure to implement Step 2 \"Reset password with recovery credentials\" in order to allow for the complete flow in your application. Sends a recovery mail containing a link with credentials that allows a member to reset their password.",
+        "operationId": "sendRecoveryMail",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "frontendUrl"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "E-Mail address to identify the member",
+                    "type": "string"
+                  },
+                  "frontendUrl": {
+                    "description": "URL of the frontend to use for the generated reset link. It has to be a domain that is configured in the channel domain settings.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "If email corresponds to an existing member, a mail will be sent out to that member containing a link assembled using the following schema:\n\nReturns a success indicating a successful initialisation of the reset flow.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted data failed validation, e.g. a malformed email address or a frontend URL that does not belong to the channel."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing. The response also uses this status when no member exists for the given email address in this channel."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    },
+    "/account/address": {
+      "post": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Create a new address for a member",
+        "description": "Creates a new address for a member.",
+        "operationId": "createMemberAddress",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemberAddressBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/MemberAddress"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MemberAddressRead"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400",
+            "description": "The submitted address data failed validation, e.g. a missing required field or an unknown country or region."
+          },
+          "401": {
+            "$ref": "#/components/responses/401",
+            "description": "The `ct-access-key` header is missing."
+          },
+          "403": {
+            "$ref": "#/components/responses/403",
+            "description": "No member is logged in."
+          }
+        },
+        "security": [
+          {
+            "ApiKey": [],
+            "ContextToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/swLanguageId"
+          }
+        ]
+      }
+    }
+  }
+}

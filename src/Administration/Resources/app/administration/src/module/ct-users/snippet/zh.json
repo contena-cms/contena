@@ -1,0 +1,119 @@
+{
+    "ct-users": {
+        "general": {
+            "mainMenuItemGeneral": "用户",
+            "placeholderSearchBar": "搜索用户...",
+            "labelUserList": "用户",
+            "labelCreateNewUser": "新建用户",
+            "cardLabel": "用户"
+        },
+        "filter": {
+            "title": "筛选",
+            "status": "状态",
+            "statusLabel": {
+                "active": "启用",
+                "inactive": "停用"
+            },
+            "allStatuses": "全部状态",
+            "active": "启用",
+            "inactive": "停用",
+            "roles": "角色",
+            "rolesPlaceholder": "选择角色...",
+            "reset": "重置筛选"
+        },
+        "user-grid": {
+            "labelUserCode": "用户编码",
+            "labelUsername": "用户名",
+            "labelName": "姓名",
+            "labelPhoneNumber": "手机号",
+            "labelGender": "性别",
+            "labelGenderPlaceholder": "选择性别...",
+            "labelRoles": "角色",
+            "labelEmail": "邮箱地址",
+            "status": "状态",
+            "titleModalDelete": "删除用户",
+            "textModalDelete": "确定要删除用户“{name}”吗？",
+            "notification": {
+                "deleteSuccess": {
+                    "message": "用户“{name}”已删除。"
+                },
+                "deleteError": {
+                    "message": "无法删除用户“{name}”。"
+                },
+                "deleteUserLoggedInError": {
+                    "message": "用户不能删除自己。"
+                }
+            }
+        },
+        "user-detail": {
+            "labelCard": "基本信息",
+            "labelIntegrationsCard": "集成",
+            "labelRolesPermissionsCard": "角色与权限",
+            "labelUserCode": "用户编码",
+            "labelName": "姓名",
+            "labelPhoneNumber": "手机号",
+            "labelGender": "性别",
+            "labelGenderPlaceholder": "选择性别...",
+            "labelEmail": "邮箱地址",
+            "errorEmailUsed": "此邮箱地址已被使用。",
+            "errorUsernameUsed": "此用户名已被使用。",
+            "labelUsername": "用户名",
+            "labelPassword": "密码",
+            "labelProfilePicture": "头像",
+            "labelUserInterface": "界面设置",
+            "labelLanguage": "界面语言",
+            "labelLanguagePlaceholder": "选择语言...",
+            "labelChangePassword": "修改密码",
+            "labelState": "状态",
+            "labelAdministrator": "管理员",
+            "labelTimezone": "时区",
+            "labelPositions": "岗位",
+            "placeholderPositions": "选择岗位...",
+            "labelRoles": "角色",
+            "labelTags": "标签",
+            "placeholderTags": "选择标签...",
+            "labelNewPassword": "新密码",
+            "labelNewUser": "新建用户",
+            "placeholderNewPassword": "输入新密码...",
+            "placeholderNewPasswordConfirm": "确认新密码...",
+            "labelButtonChangePassword": "修改",
+            "writeAccess": "写入",
+            "readAccess": "读取",
+            "contextMenuEdit": "编辑集成",
+            "textChangePassword": "点击“修改”后将立即保存新密码！",
+            "addAccessKey": "新建访问密钥",
+            "noAccessKeysTitle": "暂无访问密钥",
+            "noAccessKeysSubline": "在此创建访问密钥",
+            "labelAccessKey": "访问密钥",
+            "labelPermissions": "权限",
+            "disabledRoleSelectWarning": "只有非管理员用户可以分配角色。",
+            "modal": {
+                "detailModalTitle": "新建集成",
+                "confirmDelete": "确定要删除此集成吗？",
+                "buttonApply": "保存集成",
+                "buttonApplyEdit": "保存修改",
+                "buttonCreateNewApiKeys": "生成新 API 密钥",
+                "hintCreateNewApiKeys": "生成新 API 密钥后，建议更新所有相关脚本和应用。",
+                "labelFieldLabel": "名称",
+                "idFieldLabel": "访问密钥 ID",
+                "secretFieldLabel": "安全访问密钥",
+                "secretHelpText": "请立即复制访问密钥。保存后出于安全原因将不再显示。",
+                "messageSaveSuccess": "集成已保存。",
+                "messageSaveError": "无法保存集成。",
+                "messageCreateNewError": "无法保存集成。"
+            },
+            "mcpAllowlistTitle": "MCP 工具白名单",
+            "mcpAllowlistSaveError": "无法保存 MCP 白名单。",
+            "notification": {
+                "saveError": {
+                    "message": "无法保存用户“{name}”。"
+                },
+                "saveSuccess": {
+                    "message": "用户“{name}”已保存。"
+                },
+                "invalidEmailErrorMessage": "请输入有效的邮箱地址。",
+                "duplicateEmailErrorMessage": "此邮箱地址已被注册。"
+            }
+        }
+    }
+}
