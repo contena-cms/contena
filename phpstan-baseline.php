@@ -14,7 +14,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Content/Media/TypeDetector/TypeDetector.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/DevOps/Environment/EnvironmentHelper.php',
@@ -44,7 +44,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/Api/Controller/ApiController.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/Api/EventListener/JsonRequestTransformerListener.php',
@@ -62,13 +62,13 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/Api/Exception/ResourceNotFoundException.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/Api/Response/ResponseFactoryRegistry.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 7,
     'path' => __DIR__ . '/src/Core/Framework/Api/Serializer/JsonApiDecoder.php',
@@ -80,13 +80,13 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/Api/Serializer/JsonApiEncodingResult.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/System/CustomField/Xml/CustomFieldTypes/CustomFieldTypeFactory.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/CompiledFieldCollection.php',
@@ -98,31 +98,31 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Dbal/EntityReader.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Dbal/FieldAccessorBuilder/DefaultFieldAccessorBuilder.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Dbal/FieldResolver/ManyToManyAssociationFieldResolver.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Dbal/FieldResolver/ManyToOneAssociationFieldResolver.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Dbal/FieldResolver/TranslationFieldResolver.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 4,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/EntityProtection/EntityProtectionValidator.php',
@@ -134,7 +134,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/EntityProtection/WriteProtection.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/EntityTranslationDefinition.php',
@@ -176,19 +176,19 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/FieldSerializer/AbstractFieldSerializer.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/FieldSerializer/AbstractFieldSerializer.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/FieldSerializer/StateMachineStateFieldSerializer.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/FieldSerializer/TenantFieldSerializer.php',
@@ -230,19 +230,19 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Indexing/TreeUpdaterBag.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/MappingEntityDefinition.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 3,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Search/ApiCriteriaValidator.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Search/Filter/MultiFilter.php',
@@ -350,7 +350,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/DataAbstractionLayer/Write/Validation/WriteCommandExceptionEvent.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/DependencyInjection/CompilerPass/FeatureFlagCompilerPass.php',
@@ -404,7 +404,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/Plugin/PluginService.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/Plugin/Requirement/RequirementExceptionStack.php',
@@ -416,25 +416,25 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Framework/Plugin/Util/PluginFinder.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 2,
     'path' => __DIR__ . '/src/Core/Framework/RateLimiter/Policy/TimeBackoffLimiter.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/Routing/RouteScopeRegistry.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 4,
     'path' => __DIR__ . '/src/Core/Framework/Struct/Serializer/StructNormalizer.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Framework/Struct/Struct.php',
@@ -476,7 +476,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Installer/Controller/InstallerController.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/Installer/InstallerKernel.php',
@@ -488,7 +488,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/src/Core/Maintenance/System/Command/SystemSetupCommand.php',
 ];
 $ignoreErrors[] = [
-    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+    'rawMessage' => 'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
     'identifier' => 'contena.domainException',
     'count' => 1,
     'path' => __DIR__ . '/src/Core/System/Language/TranslationValidator.php',

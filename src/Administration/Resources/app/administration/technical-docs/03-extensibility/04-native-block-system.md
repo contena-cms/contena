@@ -408,7 +408,7 @@ Administration blocks are native Vue components. Components are compiled from SF
 
 ## Known Limitations
 
-From the ADR (`2024-09-26-native-block-system.md`):
+The native block system has these limitations:
 
 **`v-if` / `v-else` disruption** — inserting an `ct-block` between `v-if` and `v-else` siblings breaks Vue's conditional rendering, because the block inserts a DOM node between them:
 

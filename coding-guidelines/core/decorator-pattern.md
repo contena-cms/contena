@@ -10,7 +10,7 @@ https://symfony.com/doc/current/service_container/service_decoration.html
 
 ## How to use the decorator pattern
 
-Instead of interfaces, we use abstract classes to define the base functionality of a service. This allows us to add more functions without breaking existing code. This decision was made in this [ADR](https://github.com/contena/contena/blob/trunk/adr/2020-11-25-decoration-pattern.md).
+Instead of interfaces, we use abstract classes to define the base functionality of a service. This allows us to add more functions without breaking existing code.
 
 ## Rules for the decorator pattern
 

@@ -11,8 +11,6 @@ Domain exception are always stored directly inside the top level domain in each 
 - `Content\Product`
 - ...
 
-This decision was made in this [ADR](https://github.com/contena/contena/blob/71ef1dffc97a131069cd4649f71ba35d04771e24/adr/2022-02-24-domain-exceptions.md).
-
 ## Example
 ```php
 <?php declare(strict_types=1);

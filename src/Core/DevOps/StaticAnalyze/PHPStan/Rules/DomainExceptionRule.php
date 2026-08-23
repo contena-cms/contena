@@ -2,6 +2,14 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
+use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
+use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyException;
+use Contena\Core\Framework\Adapter\Cache\ReverseProxy\VarnishReverseProxyGateway;
+use Contena\Core\Framework\Framework;
+use Contena\Core\Framework\FrameworkException;
+use Contena\Core\Framework\HttpException;
+use Contena\Core\Kernel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -12,14 +20,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
-use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyException;
-use Contena\Core\Framework\Adapter\Cache\ReverseProxy\VarnishReverseProxyGateway;
-use Contena\Core\Framework\Framework;
-use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\HttpException;
-use Contena\Core\Kernel;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -120,7 +120,7 @@ class DomainExceptionRule implements Rule
         }
 
         return [
-            RuleErrorBuilder::message('Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md')
+            RuleErrorBuilder::message('Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md')
                 ->identifier('contena.domainException')
                 ->build(),
         ];

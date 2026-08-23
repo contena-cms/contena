@@ -81,8 +81,8 @@ Remote-instance developer introspection via `/api/_mcp`. Fills the gap that [ai-
 | Item | Status | Notes | Effort | Horizon |
 |------|--------|-------|--------|---------|
 | All `merchant-*` tools moved out of core | **Done** | `custom/plugins/CtMcpMerchantAssistant/` — 9 tools; zero merchant tools remain in `src/Core/` | L | — |
-| Core keeps only platform primitives | **Done** | Per [ADR](../../../../../adr/2026-03-17-mcp-server-placement-and-extensibility.md) | — | — |
-| Human-readable tool matrix (core vs plugin) | **Partial** | Keep aligned with ADR as tools evolve | S | V1 |
+| Core keeps only platform primitives | **Done** | Platform architecture boundary | — | — |
+| Human-readable tool matrix (core vs plugin) | **Partial** | Keep aligned with the architecture as tools evolve | S | V1 |
 
 ---
 
@@ -94,7 +94,7 @@ First public slice shipped via `contena/docs#2264`. In-repo `docs/` is now the c
 |------|--------|-------|--------|---------|
 | First public slice on developer.contena.cn | **Done** | Overview, setup, security, extensibility, examples | M | — |
 | Extension guide (plugins, bundles, apps) | **Partial** | Base content ported; polish + expansion needed | M | V1 |
-| Architecture: core vs dev bundle vs external | **Partial** | `agent-user-stories.md` + ADR narrative; needs public "Concepts" page | S–M | V1 |
+| Architecture: core vs dev bundle vs external | **Partial** | `agent-user-stories.md` + architecture narrative; needs public "Concepts" page | S–M | V1 |
 | `ai-coding-tools` companion story (local vs remote) | **Partial** | Short in-repo stub exists; public page pending | S–M | V1 |
 | In-repo pointers to canonical URLs | **Open** | Add after public pages are stable; avoid two sources of truth | S | After V1 docs |
 | Full docs expansion (exhaustive reference, automation) | **Open** | Post-SCD depth | L | V2 |

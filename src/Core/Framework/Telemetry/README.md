@@ -241,6 +241,3 @@ MeterProvider::meter()?->emit(new ConfiguredMetric(name: 'database.locks.count',
 
 ## Future improvements
 - Currently, emit expects the metric value to be precalculated. That means that if some metric will be disabled, the
-
-## ADRs
-- [ADR-2024-07-30-Add-Telemetry-Abstraction-Layer](../../../../adr/2024-07-30-add-telemetry-abstraction-layer.md)

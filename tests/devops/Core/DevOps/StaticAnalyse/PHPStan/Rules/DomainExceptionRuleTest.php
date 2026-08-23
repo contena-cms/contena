@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\DomainExceptionRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\DomainExceptionRule;
 
 /**
  * @internal
@@ -20,7 +20,7 @@ class DomainExceptionRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/data/DomainExceptionRule/DomainExceptionViolations.php'], [
             [
-                'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena/platform/blob/v6.4.20.0/adr/2022-02-24-domain-exceptions.md',
+                'Throwing new exceptions within classes are not allowed. Please use domain exception pattern. See https://github.com/contena-cms/contena/blob/trunk/coding-guidelines/core/domain-exceptions.md',
                 9,
             ],
         ]);

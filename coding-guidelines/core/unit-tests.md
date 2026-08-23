@@ -116,12 +116,6 @@ Nobody who starts with a test would start with configuring a mock.
 
 While we provide insights on this, it is essential to validate the information. So we encourage you to explore the following references to gain a deeper understanding and form your own opinion.
 
-## Related ADRs
-
-- [Test structure](../../adr/2022-10-20-test-structure.md)
-- [Follow test pyramid](../../adr/2023-02-13-follow-test-pyramid.md)
-- [Mocking repositories](../../adr/2023-04-01-mocking-repositories.md)
-
 ## References
 
 Frank De Jonge on the exact same topic (with more examples in PHP): https://blog.frankdejonge.nl/testing-without-mocking-frameworks/
