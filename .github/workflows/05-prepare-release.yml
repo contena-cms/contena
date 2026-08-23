@@ -1,0 +1,59 @@
+name: Sync split repositories
+
+on:
+  push:
+    branches:
+      - trunk
+      - 6.8.x
+      - 6.8.*.x
+    tags:
+      - "*"
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      TOKEN:
+        required: true
+
+concurrency:
+  group: split-repositories-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  split:
+    name: Sync ${{ matrix.package }}
+    if: github.repository == 'contena-cms/contena'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - administration
+          - core
+          - elasticsearch
+          - frontend
+    env:
+      TOKEN: ${{ secrets.TOKEN }}
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Validate split token
+        run: |
+          if [[ -z "${TOKEN}" ]]; then
+            echo "TOKEN is required to push split repositories" >&2
+            exit 1
+          fi
+
+      - name: Install git-subtree
+        run: sudo apt-get update && sudo apt-get install --yes git-subtree
+
+      - name: Split and push ${{ matrix.package }}
+        env:
+          REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: bash .github/bin/split.bash "${{ matrix.package }}" "${REF_NAME}" "${REF_TYPE}"
