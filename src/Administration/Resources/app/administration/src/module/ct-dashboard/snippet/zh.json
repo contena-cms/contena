@@ -1,52 +1,8 @@
 {
-    "ct-dashboard": {
-        "general": { "mainMenuItemGeneral": "首页", "descriptionTextModule": "业务数据概览" },
-        "overview": { "title": "数据概览", "loading": "正在更新数据", "updatedAt": "数据更新于 {time}" },
-        "filters": { "today": "今日", "days": "{days} 天", "all": "全部" },
-        "actions": { "refresh": "刷新数据", "viewAll": "查看全部" },
-        "metrics": {
-            "sectionLabel": "核心业务数据",
-            "paymentAmount": "成交金额（{currency}）",
-            "successfulOrders": "成交订单",
-            "memberTotal": "会员总数",
-            "refundAmount": "退款金额",
-            "refundOrders": "退款订单",
-            "pendingOrders": "待支付订单"
-        },
-        "comparison": { "value": "较上一周期 {value}%", "new": "上一周期暂无数据", "noChange": "与上一周期持平" },
-        "trend": {
-            "paymentTitle": "支付订单趋势",
-            "rangeDescription": "最近 {days} 天",
-            "pendingOrders": "待支付订单",
-            "paidOrders": "支付成功订单"
-        },
-        "business": {
-            "title": "业务摘要",
-            "refundAmount": "退款金额",
-            "refundOrders": "退款订单",
-            "newMembers": "周期新增会员",
-            "memberTotal": "会员总数",
-            "periodAverage": "周期金额",
-            "periodCount": "周期订单数",
-            "memberTotalNote": "当前累计会员",
-            "pendingNote": "仍待完成支付",
-            "newMembersCount": "周期新增 {count} 人"
-        },
-        "recentOrders": {
-            "title": "最近支付订单",
-            "order": "订单",
-            "amount": "金额",
-            "status": "状态",
-            "createdAt": "创建时间",
-            "unknownStatus": "未知状态"
-        },
-        "states": {
-            "loadError": "数据加载失败，请刷新后重试。",
-            "noData": "暂无数据",
-            "noOrders": "暂无支付订单",
-            "memberNoAccess": "当前账号没有会员数据查看权限",
-            "noAccessTitle": "暂无可展示的数据",
-            "noAccessDescription": "当前账号没有支付或会员数据的查看权限。"
-        }
+  "ct-dashboard": {
+    "general": {
+      "mainMenuItemGeneral": "首页",
+      "descriptionTextModule": "管理首页"
     }
+  }
 }

@@ -4,14 +4,12 @@
             "FRAMEWORK__MISSING_PRIVILEGE_ERROR": "缺少所需权限。",
             "FRAMEWORK__DELETE_RESTRICTED": "删除失败。",
             "c1051bb4-d103-4f74-8988-acbcafc7fdc3": "此字段不能为空。",
-            "PARENT_MUST_NOT_BE_EMPTY": "继承来源不能为空。",
             "INVALID_MEDIA_URL": "请输入有效的文件 URL。",
             "CONTENA_INVALID_IP": "请输入有效的 IP 地址。",
             "CONTENA_INVALID_IP_CIDR": "请输入有效的 IP 地址或 CIDR 地址。",
             "INVALID_URL": "请输入有效的 URL。",
             "INVALID_MAIL": "请输入有效的邮箱地址。",
             "FRAMEWORK__RATE_LIMIT_EXCEEDED": "请求次数过多，请等待 {seconds} 秒后重试。",
-            "DUPLICATED_URL": "此 URL 已被使用，请更换。",
             "DUPLICATED_NAME": "此名称已被使用。",
             "CONTENT__MEDIA_EMPTY_FILE": "必须提供有效的文件名。"
         },
@@ -43,8 +41,6 @@
             "bulkEdit": "批量编辑",
             "back": "返回",
             "discard": "放弃",
-            "submit": "提交",
-            "attention": "注意",
             "configure": "配置"
         },
         "notification": {
@@ -52,11 +48,8 @@
             "notificationSaveErrorMessageRequiredFieldsInvalid": "请填写全部必填项。",
             "notificationSaveErrorMessageRequiredField": "此字段为必填项。",
             "unspecifiedSaveErrorMessage": "发生错误。",
-            "notificationSaveSuccessMessage": "“{entityName}”已保存。",
             "messageDeleteSuccess": "“{name}”已删除。",
             "messageDeleteFailed": "“{entityName}”仍被以下模块使用：",
-            "noTitle": "未设置标题",
-            "noMessage": "未设置消息内容",
             "notificationLoadingDataErrorMessage": "加载数据失败"
         },
         "ct-skip-link": { "label": "跳转到内容" },
@@ -67,23 +60,9 @@
             "emptyText": "暂无未读通知",
             "emptyDescription": "新通知会显示在这里。",
             "ringBellLabel": "播放通知提示音",
-            "deleteModal": { "title": "删除通知", "textConfirm": "确定要删除全部通知吗？" },
-            "worker-listener": {
-                "thumbnailGeneration": {
-                    "title": "正在生成缩略图",
-                    "message": "没有待处理缩略图。 | 剩余 1 张缩略图... | 剩余 {n} 张缩略图...",
-                    "messageSuccess": "缩略图生成完成。"
-                },
-                "dalIndexing": { "message": "数据索引完成。 | 正在索引数据。", "messageSuccess": "索引完成。" },
-                "media": {
-                    "title": "正在索引媒体",
-                    "message": "媒体索引完成。 | 剩余 1 个媒体文件... | 剩余 {n} 个媒体文件...",
-                    "messageSuccess": "媒体索引完成。"
-                }
-            },
-            "plugin-updates-listener": {
-                "updatesAvailableTitle": "有可用更新",
-                "updatesAvailableMessage": "现在可下载插件的最新版本。"
+            "deleteModal": {
+                "title": "删除通知",
+                "textConfirm": "确定要删除全部通知吗？"
             }
         },
         "ct-admin-menu": {
@@ -92,10 +71,8 @@
             "linkMinimizeMenu": "收起菜单",
             "linkCloseMenu": "关闭菜单",
             "textVersion": "版本：",
-            "openUserMenu": "打开用户菜单",
             "textContenaAdmin": "Contena 控制台",
             "textProjectName": "Contena 控制台",
-            "platformStatusReady": "平台状态：正常",
             "administrator": "管理员",
             "themeToggle": {
                 "switchToLight": "浅色模式",
@@ -111,18 +88,13 @@
             }
         },
         "entity-components": {
-            "deleteMessage": "确定要删除此项吗？ | 确定要删除这 {count} 项吗？",
-            "deleteTitle": "删除记录",
-            "placeholderToManyAssociationCard": "搜索关联项...",
-            "labelRemoveAssociation": "移除关联"
+            "deleteMessage": "确定要删除此项吗？ | 确定要删除这 {count} 项吗？"
         },
         "ct-field": {
             "notification": {
                 "notificationCopySuccessMessage": "文本已复制到剪贴板。",
                 "notificationCopyFailureMessage": "无法复制文本，请确认通过安全连接（HTTPS）访问后台后重试。"
             },
-            "titleShowPassword": "显示密码",
-            "titleHidePassword": "隐藏密码",
             "tooltipRestoreInheritance": "恢复继承",
             "tooltipRemoveInheritance": "取消继承",
             "ariaLinkInheritance": "关联继承",
@@ -140,7 +112,10 @@
             },
             "caption": "将文件拖到此处上传"
         },
-        "ct-tag-field": { "title": "标签", "listItemAdd": "添加“{term}”", "placeholder": "搜索标签..." },
+        "ct-tag-field": {
+            "title": "标签",
+            "listItemAdd": "添加“{term}”"
+        },
         "ct-data-grid": {
             "tooltipListSettings": "列表设置",
             "labelSettingsCompactMode": "使用紧凑模式",
@@ -182,7 +157,6 @@
             "labelContextMenuCopyLink": "复制链接",
             "labelContextMenuReplace": "替换",
             "labelContextMenuRename": "重命名",
-            "labelContextMenuDetail": "详情",
             "labelContextMenuMove": "移动",
             "labelContextMenuSetCover": "设为封面",
             "labelContextMenuRemoveCover": "移除封面",
@@ -197,15 +171,9 @@
                 "coverSelectionInvalid": { "message": "请选择要用作封面的图片。" },
                 "coverSaveError": { "message": "无法保存封面。" },
                 "downloadError": { "message": "下载文件失败。" }
-            },
-            "labelUploading": "正在上传..."
+            }
         },
         "ct-media-modal-delete": {
-            "titleModal": {
-                "media": "删除媒体文件",
-                "folder": "删除文件夹",
-                "mediaAndFolder": "删除文件夹和媒体文件"
-            },
             "deleteMessage": {
                 "media": "确定要删除“{name}”吗？ | 确定要删除这 {count} 个媒体文件吗？",
                 "folder": "确定要删除文件夹“{name}”吗？<br>其所有子文件夹和媒体文件也会一并删除。 | 确定要删除这 {count} 个文件夹吗？<br>其所有子文件夹和媒体文件也会一并删除。",
@@ -237,44 +205,34 @@
             }
         },
         "ct-media-upload": {
-            "buttonFileUpload": "上传文件",
-            "buttonUrlUpload": "通过 URL 上传",
-            "buttonSwitchToFileUpload": "从电脑上传",
-            "buttonSwitchToUrlUpload": "通过 URL 上传",
-            "buttonOpenMedia": "打开媒体",
             "snackbar": {
                 "message": "正在上传文件 | 正在上传文件（{processed}/{total}）",
                 "errorMessage": "文件上传失败。 | 部分文件上传失败。"
             },
             "notification": {
-                "success": { "message": "未保存文件。 | 文件已保存。 | 已保存 {count}/{total} 个文件。" },
-                "assigned": { "message": "媒体文件已关联。" },
+                "assigned": {
+                    "message": "媒体文件已关联。"
+                },
                 "failure": { "message": "上传文件时发生错误。" },
                 "illegalFilename": { "message": "文件名“{fileName}”包含无效字符。" },
-                "illegalFileUrl": { "title": "URL 无效", "message": "不允许从本地 URL 上传。" },
+                "illegalFileUrl": {
+                    "message": "不允许从本地 URL 上传。"
+                },
                 "illegalFileType": { "message": "无法上传文件“{name}”，不支持此文件类型。" },
                 "requestCanceled": { "message": "上传已取消。" },
                 "payloadTooLarge": { "message": "文件过大，请减小文件或检查服务器配置。" },
                 "transportError": { "message": "连接或服务器超时导致上传失败，请检查连接或服务器限制。" }
-            },
-            "caption": "将文件拖到此处上传"
+            }
         },
         "ct-media-upload-v2": {
             "switchMode": "切换上传方式",
             "buttonFileUpload": "上传文件",
-            "buttonFilesUpload": "上传多个文件",
             "buttonUrlUpload": "通过 URL 上传",
-            "buttonSwitchToFileUpload": "从电脑上传",
-            "buttonSwitchToUrlUpload": "通过 URL 上传",
             "buttonOpenMedia": "打开媒体",
             "notification": {
-                "success": {
-                    "title": "媒体上传",
-                    "message": "未保存文件。 | 文件已保存。 | 已保存 {count}/{total} 个文件。"
+                "invalidFileType": {
+                    "message": "文件“{name}”的格式不受支持，请使用以下类型：{supportedTypes}。"
                 },
-                "failure": { "message": "上传文件时发生错误。" },
-                "illegalFilename": { "title": "文件名无效", "message": "文件名“{fileName}”包含无效字符。" },
-                "invalidFileType": { "message": "文件“{name}”的格式不受支持，请使用以下类型：{supportedTypes}。" },
                 "invalidFileSize": { "message": "文件“{name}”过大，不能超过 {limit}。" },
                 "invalidUrl": { "message": "请输入有效的 URL。" }
             },
@@ -286,7 +244,6 @@
             "messageNoResults": "未找到与“{term}”相关的结果。",
             "messageNoTypeResults": "未找到类型。",
             "placeholderSearchField": "搜索模块、设置和媒体...",
-            "placeholderTypeSearchField": "搜索“{entity}”...",
             "moduleFiltersHeadline": "模块筛选",
             "searchTypeAll": "全部",
             "moduleFilter": "模块筛选",
@@ -294,8 +251,9 @@
             "messageNoResultsDetailV2": "请尝试其他关键词或检查搜索配置。",
             "addNew": "新建"
         },
-        "ct-simple-search-field": { "defaultPlaceholder": "搜索..." },
-        "ct-tabs-item": { "tooltipTabHasErrors": "此页面包含错误。", "tooltipTabHasWarnings": "此页面包含警告。" },
+        "ct-simple-search-field": {
+            "defaultPlaceholder": "搜索..."
+        },
         "entities": {
             "all": "全部",
             "custom_field": "自定义字段 | 自定义字段",
@@ -323,15 +281,6 @@
             "frequently_used": "常用",
             "recently_searched": "最近搜索"
         },
-        "day-of-week": {
-            "monday": "星期一",
-            "tuesday": "星期二",
-            "wednesday": "星期三",
-            "thursday": "星期四",
-            "friday": "星期五",
-            "saturday": "星期六",
-            "sunday": "星期日"
-        },
         "ct-page": { "backButton": "返回" },
         "ct-multi-tag-ip-select": {
             "enterValidIp": "请输入有效的 IPv4 或 IPv6 地址",
@@ -344,7 +293,10 @@
         }
     },
     "ct-base-filter": { "resetButton": "重置" },
-    "ct-boolean-filter": { "placeholder": "全部", "active": "启用", "inactive": "停用" },
+    "ct-boolean-filter": {
+        "active": "启用",
+        "inactive": "停用"
+    },
     "ct-date-filter": {
         "selectTimeframe": { "placeholder": "选择时间范围" },
         "options": {
@@ -366,22 +318,12 @@
             "custom": "自定义"
         }
     },
-    "ct-existence-filter": { "placeholder": "全部", "noCriteria": "无{criteriaName}", "hasCriteria": "有{criteriaName}" },
     "ct-filter-panel": { "titleSidebarItemFilter": "筛选" },
     "ct-sidebar-filter-panel": { "resetButton": "全部重置" },
     "ct-empty-state": {
         "messageNoResultTitle": "未找到结果",
         "messageNoResultSublineSimple": "请修改筛选条件或搜索词。",
-        "messageNoResultSubline": "请修改筛选条件、搜索词或检查搜索配置。",
-        "messageNoResultSublineBefore": "请修改筛选条件、搜索词，并检查",
-        "messageNoResultSublineLink": "搜索配置",
-        "messageNoResultLink": "前往搜索偏好",
-        "messageNoResultSublineAfter": "。"
-    },
-    "ct-datepicker": {
-        "date": { "placeholder": "选择日期..." },
-        "time": { "placeholder": "选择时间..." },
-        "datetime": { "placeholder": "选择日期和时间..." }
+        "messageNoResultSubline": "请修改筛选条件、搜索词或检查搜索配置。"
     },
     "ct-context-button": { "ariaLabel": "打开快捷菜单" },
     "ct-category-tree-field": { "emptySearchResults": "未找到分类。" },
@@ -394,18 +336,16 @@
     "locale": { "zh-CN": "简体中文", "en-GB": "英语（英国）" },
     "sidebar": {
         "ariaLabelButtonClose": "关闭侧边栏",
-        "ariaLabelButtonOpen": "打开侧边栏",
-        "ariaLabelButtonCollapse": "收起侧边栏",
-        "buttonCollapse": "收起"
+        "ariaLabelButtonOpen": "打开侧边栏"
     },
     "help-center": {
         "sidebar": {
-            "title": "帮助",
             "ariaLabelButtonOpen": "打开帮助",
-            "ariaLabelButtonClose": "关闭帮助",
             "support": {
-                "title": "支持",
-                "documentation": { "text": "开发文档", "href": "https://docs.contena.cn/zh-CN" },
+                "documentation": {
+                    "text": "开发文档",
+                    "href": "https://docs.contena.cn/zh-CN"
+                },
                 "createSupportRequest": { "text": "创建支持请求", "href": "https://account.contena.cn/" }
             }
         }
