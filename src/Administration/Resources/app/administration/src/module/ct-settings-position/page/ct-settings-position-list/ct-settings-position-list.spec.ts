@@ -42,7 +42,7 @@ async function createWrapper(privileges: string[] = []) {
             stubs: {
                 'ct-page': {
                     template:
-                        '<div><slot name="search-bar" /><slot name="smart-bar-header" /><slot name="language-switch" /><slot name="smart-bar-actions" /><slot name="content" /><slot /></div>',
+                        '<div class="ct-page-stub"><slot name="search-bar" /><slot name="smart-bar-header" /><slot name="language-switch" /><slot name="smart-bar-actions" /><slot name="content" /><slot /></div>',
                 },
                 'ct-card-view': { template: '<div><slot /></div>' },
                 'mt-data-table': {
@@ -53,11 +53,20 @@ async function createWrapper(privileges: string[] = []) {
                         'disableEdit',
                         'disableDelete',
                         'additionalContextButtons',
+                        'layout',
+                        'disableSearch',
                     ],
-                    template: '<div class="data-table" />',
+                    template: '<div class="data-table"><slot name="empty-state" /></div>',
                 },
                 'mt-button': { props: ['disabled'], template: '<button :disabled="disabled"><slot /></button>' },
-                'ct-search-bar': true,
+                'ct-search-bar': {
+                    name: 'CtSearchBar',
+                    props: [
+                        'initialSearchType',
+                        'placeholder',
+                    ],
+                    template: '<div class="global-search" />',
+                },
                 'ct-language-switch': true,
                 'mt-icon': true,
                 'mt-link': true,
@@ -82,12 +91,22 @@ describe('module/ct-settings-position/page/ct-settings-position-list', () => {
             ]),
         );
         expect(wrapper.findComponent({ name: 'MtDataTable' }).props('disableEdit')).toBe('');
+        expect(wrapper.findComponent({ name: 'MtDataTable' }).props('layout')).toBe('full');
+        expect(wrapper.findComponent({ name: 'MtDataTable' }).props('disableSearch')).toBe('');
+        expect(wrapper.findComponent({ name: 'CtSearchBar' }).props('initialSearchType')).toBe('position');
+        expect(wrapper.vm.columns).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ property: 'code', renderer: 'text' }),
+                expect.objectContaining({ property: 'position', renderer: 'number' }),
+                expect.objectContaining({ property: 'extensions.positionCreatedAtLabel', renderer: 'text' }),
+            ]),
+        );
     });
 
     it('searches, sorts and paginates through listing criteria', async () => {
         const { wrapper, positionRepository } = await createWrapper(['position.viewer']);
 
-        wrapper.vm.onSearch('manager');
+        wrapper.findComponent({ name: 'CtSearchBar' }).vm.$emit('search', 'manager');
         await flushPromises();
         wrapper.vm.onSortColumn({ dataIndex: 'createdAt', naturalSorting: false });
         await flushPromises();

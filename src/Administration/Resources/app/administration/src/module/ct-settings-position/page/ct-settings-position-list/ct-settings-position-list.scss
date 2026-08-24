@@ -1,0 +1,19 @@
+.ct-settings-position-list {
+    .ct-page__search-bar .ct-search-bar__container {
+        max-width: 720px;
+    }
+
+    .ct-card-view__content {
+        display: grid;
+    }
+
+    .mt-card__tabs:empty,
+    .mt-card__toolbar:has(.mt-data-table__toolbar:empty) {
+        display: none;
+    }
+
+    &__content {
+        width: 100%;
+        height: 100%;
+    }
+}

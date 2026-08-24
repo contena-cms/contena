@@ -3,10 +3,10 @@
         <ct-page class="ct-settings-position-list">
             <template #search-bar>
                 <ct-block name="sw_settings_position_list_search_bar">
-                    <mt-search
-                        :model-value="term"
+                    <ct-search-bar
+                        initial-search-type="position"
                         :placeholder="translate('ct-settings-position.list.searchPlaceholder')"
-                        @change="onSearch"
+                        @search="onSearch"
                     />
                 </ct-block>
             </template>
@@ -14,8 +14,6 @@
             <template #smart-bar-header>
                 <ct-block name="sw_settings_position_list_header">
                     <h2>
-                        {{ translate('ct-settings.index.title') }}
-                        <mt-icon name="regular-chevron-right-xs" size="12px" />
                         {{ translate('ct-settings-position.general.mainMenuItemGeneral') }}
                         <span v-if="!isLoading" class="ct-page__smart-bar-amount"> ({{ total }}) </span>
                     </h2>
@@ -45,46 +43,50 @@
 
             <template #content>
                 <ct-block name="sw_settings_position_list_content">
-                    <mt-data-table
-                        :caption="translate('ct-settings-position.general.mainMenuItemGeneral')"
-                        :data-source="positions"
-                        :columns="columns"
-                        :is-loading="isLoading"
-                        :pagination-total-items="total"
-                        :current-page="page"
-                        :pagination-limit="limit"
-                        :sort-by="sortBy"
-                        :sort-direction="sortDirection"
-                        disable-search
-                        disable-edit
-                        :disable-delete="!canDelete"
-                        :additional-context-buttons="additionalContextButtons"
-                        @reload="getList"
-                        @pagination-current-page-change="onPageChange"
-                        @pagination-limit-change="onLimitChange"
-                        @sort-change="onSort"
-                        @item-delete="onItemDelete"
-                        @context-select="onContextSelect"
-                    >
-                        <template #column-name="{ data }">
-                            <router-link :to="{ name: 'ct.settings.position.detail', params: { id: data.id } }">
-                                {{ getPositionName(data) }}
-                            </router-link>
-                        </template>
-                        <template #column-active="{ data }">
-                            <mt-icon
-                                :name="data.active ? 'regular-checkmark-xs' : 'regular-times-s'"
-                                size="16px"
-                                :class="data.active ? 'is--active' : 'is--inactive'"
-                            />
-                        </template>
-                    </mt-data-table>
+                    <ct-card-view>
+                        <mt-data-table
+                            class="ct-settings-position-list__content"
+                            layout="full"
+                            :caption="translate('ct-settings-position.general.mainMenuItemGeneral')"
+                            :data-source="positions ?? []"
+                            :columns="columns"
+                            :is-loading="isLoading"
+                            :pagination-total-items="total"
+                            :current-page="page"
+                            :pagination-limit="limit"
+                            :sort-by="sortBy"
+                            :sort-direction="sortDirection"
+                            disable-search
+                            disable-edit
+                            :disable-delete="!canDelete"
+                            :additional-context-buttons="additionalContextButtons"
+                            @reload="getList"
+                            @pagination-current-page-change="onPageChange"
+                            @pagination-limit-change="onLimitChange"
+                            @sort-change="onSort"
+                            @item-delete="onItemDelete"
+                            @context-select="onContextSelect"
+                        >
+                            <template #column-name="{ data }">
+                                <router-link :to="{ name: 'ct.settings.position.detail', params: { id: data.id } }">
+                                    {{ getPositionName(data) }}
+                                </router-link>
+                            </template>
+                            <template #column-active="{ data }">
+                                <mt-badge :variant="data.active ? 'positive' : 'neutral'">
+                                    {{ data.active ? translate('global.default.yes') : translate('global.default.no') }}
+                                </mt-badge>
+                            </template>
 
-                    <mt-empty-state
-                        v-if="!isLoading && positions?.length === 0"
-                        icon="regular-list"
-                        :headline="translate('ct-settings-position.general.mainMenuItemGeneral')"
-                    />
+                            <template #empty-state>
+                                <mt-empty-state
+                                    icon="regular-list"
+                                    :headline="translate('ct-settings-position.list.emptyTitle')"
+                                    :description="translate('ct-settings-position.list.emptyDescription')"
+                                />
+                            </template>
+                        </mt-data-table>
+                    </ct-card-view>
                 </ct-block>
             </template>
         </ct-page>
@@ -107,6 +109,8 @@
 
 <script setup lang="ts">
 /* global Entity, EntityCollection */
+import './ct-settings-position-list.scss';
+
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
 import type AclService from 'src/app/service/acl.service';
 
@@ -155,7 +159,8 @@ const columns = computed(() => [
         property: 'name',
         dataIndex: 'name',
         label: translate('ct-settings-position.list.columnName'),
-        width: '180px',
+        width: '240px',
+        renderer: 'text' as const,
         routerLink: 'ct.settings.position.detail',
         primary: true,
     },
@@ -163,33 +168,38 @@ const columns = computed(() => [
         property: 'code',
         dataIndex: 'code',
         label: translate('ct-settings-position.list.columnCode'),
-        width: '170px',
+        width: '200px',
+        renderer: 'text' as const,
     },
     {
         property: 'position',
         dataIndex: 'position',
         label: translate('ct-settings-position.list.columnPosition'),
-        width: '80px',
+        align: 'center',
+        width: '100px',
+        renderer: 'number' as const,
     },
     {
         property: 'active',
         dataIndex: 'active',
         label: translate('ct-settings-position.list.columnActive'),
         align: 'center',
-        width: '80px',
-        inlineEdit: 'boolean',
+        width: '110px',
+        renderer: 'text' as const,
     },
     {
         property: 'extensions.positionCreatedAtLabel',
         dataIndex: 'createdAt',
         label: translate('ct-settings-position.list.columnCreatedAt'),
         width: '170px',
+        renderer: 'text' as const,
     },
     {
         property: 'extensions.positionUpdatedAtLabel',
         dataIndex: 'updatedAt',
         label: translate('ct-settings-position.list.columnUpdatedAt'),
         width: '170px',
+        renderer: 'text' as const,
     },
 ]);
 const formatDate = Contena.Filter.getByName('date');
@@ -368,15 +378,3 @@ defineExpose({
     onSortColumn,
 });
 </script>
-
-<style lang="scss">
-.ct-settings-position-list {
-    .is--inactive {
-        color: var(--color-icon-critical-default);
-    }
-
-    .is--active {
-        color: var(--color-icon-positive-default);
-    }
-}
-</style>

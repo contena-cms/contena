@@ -11,7 +11,9 @@
             "columnPosition": "排序",
             "columnActive": "启用",
             "columnCreatedAt": "创建时间",
-            "columnUpdatedAt": "更新时间"
+            "columnUpdatedAt": "更新时间",
+            "emptyTitle": "暂无岗位",
+            "emptyDescription": "新建岗位后，可将岗位分配给组织成员。"
         },
         "detail": {
             "titleNew": "新建岗位",

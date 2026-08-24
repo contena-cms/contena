@@ -11,7 +11,9 @@
             "columnPosition": "Position",
             "columnActive": "Active",
             "columnCreatedAt": "Created at",
-            "columnUpdatedAt": "Updated at"
+            "columnUpdatedAt": "Updated at",
+            "emptyTitle": "No positions yet",
+            "emptyDescription": "Create a position to assign it to organization members."
         },
         "detail": {
             "titleNew": "New position",
