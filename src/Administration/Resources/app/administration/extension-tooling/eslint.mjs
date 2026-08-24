@@ -239,7 +239,6 @@ export function contenaAdminExtension(options = {}) {
                 'ct-deprecation-rules': swDeprecationRules,
             },
             rules: {
-                'ct-deprecation-rules/no-deprecated-components': templateDeprecationSeverity,
                 'ct-deprecation-rules/no-deprecated-component-usage': templateDeprecationSeverity,
             },
         },

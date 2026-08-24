@@ -94,9 +94,16 @@ describe('extension-tooling eslint factory host options', () => {
             ruleSeverity(
                 blocks,
                 'contena/admin-extension/template-deprecations',
-                'ct-deprecation-rules/no-deprecated-components',
+                'ct-deprecation-rules/no-deprecated-component-usage',
             ),
         ).toBe('error');
+        expect(
+            ruleSeverity(
+                blocks,
+                'contena/admin-extension/template-deprecations',
+                'ct-deprecation-rules/no-deprecated-components',
+            ),
+        ).toBeUndefined();
     });
 
     it('bakes native setup support into every extension config by default', () => {
@@ -200,7 +207,7 @@ describe('extension-tooling eslint factory host options', () => {
             ruleSeverity(
                 blocks,
                 'contena/admin-extension/template-deprecations',
-                'ct-deprecation-rules/no-deprecated-components',
+                'ct-deprecation-rules/no-deprecated-component-usage',
             ),
         ).toBe('warn');
     });
