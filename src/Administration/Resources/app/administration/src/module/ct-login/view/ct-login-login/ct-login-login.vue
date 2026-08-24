@@ -20,51 +20,55 @@
                 </p>
             </ct-block>
 
-            <mt-banner v-if="isRateLimited" class="ct-login-credentials__warning" variant="attention">
-                {{ $t('ct-login.credentials.warningTooManyAttemptsCountdown', { time: countdownLabel }) }}
-            </mt-banner>
+            <a-alert
+                v-if="isRateLimited"
+                class="ct-login-credentials__warning"
+                type="warning"
+                show-icon
+                :message="$t('ct-login.credentials.warningTooManyAttemptsCountdown', { time: countdownLabel })"
+            />
 
             <ct-block name="sw_login_login_user_field">
-                <mt-text-field
-                    v-model="username"
-                    v-autofocus
-                    class="ct-login-credentials__username"
-                    :label="$t('ct-login.credentials.labelUsername')"
-                    name="username"
-                    autocomplete="username"
-                    :disabled="isDisabled"
-                    required
-                />
+                <a-form-item class="ct-login-credentials__field" :label="$t('ct-login.credentials.labelUsername')" required>
+                    <a-input
+                        v-model:value="username"
+                        v-autofocus
+                        name="username"
+                        autocomplete="username"
+                        size="large"
+                        :disabled="isDisabled"
+                    />
+                </a-form-item>
             </ct-block>
 
             <ct-block name="sw_login_login_password_field">
-                <mt-password-field
-                    ref="passwordField"
-                    v-model="password"
-                    class="ct-login-credentials__password"
-                    :label="$t('ct-login.credentials.labelPassword')"
-                    name="password"
-                    autocomplete="current-password"
-                    :disabled="isDisabled"
-                    required
-                />
+                <a-form-item class="ct-login-credentials__field" :label="$t('ct-login.credentials.labelPassword')" required>
+                    <a-input-password
+                        v-model:value="password"
+                        name="password"
+                        autocomplete="current-password"
+                        size="large"
+                        :disabled="isDisabled"
+                    />
+                </a-form-item>
             </ct-block>
 
             <ct-block name="sw_login_login_alert">
-                <mt-banner v-if="error" class="ct-login-credentials__error" variant="critical">
-                    {{ $t('ct-login.credentials.errorInvalidCredentials') }}
-                </mt-banner>
+                <a-alert
+                    v-if="error"
+                    class="ct-login-credentials__error"
+                    type="error"
+                    show-icon
+                    :message="$t('ct-login.credentials.errorInvalidCredentials')"
+                />
             </ct-block>
 
             <ct-block name="sw_login_login_submit">
                 <ct-block name="sw_login_login_support">
                     <div class="ct-login-credentials__support">
-                        <mt-checkbox
-                            v-model:checked="rememberMe"
-                            class="ct-login-credentials__remember-me"
-                            :label="$t('ct-login.credentials.labelKeepLoggedIn')"
-                            :disabled="isDisabled"
-                        />
+                        <a-checkbox v-model:checked="rememberMe" :disabled="isDisabled">
+                            {{ $t('ct-login.credentials.labelKeepLoggedIn') }}
+                        </a-checkbox>
 
                         <ct-block name="sw_login_login_forgot_password">
                             <router-link
@@ -78,17 +82,17 @@
                 </ct-block>
 
                 <ct-block name="sw_login_login_submit_button">
-                    <mt-button
+                    <a-button
                         class="ct-login-credentials__login-button"
-                        type="submit"
-                        variant="primary"
+                        html-type="submit"
+                        type="primary"
                         size="large"
                         block
-                        :is-loading="isLoggingIn"
+                        :loading="isLoggingIn"
                         :disabled="isDisabled"
                     >
                         {{ $t('ct-login.credentials.buttonLogin') }}
-                    </mt-button>
+                    </a-button>
                 </ct-block>
             </ct-block>
         </form>
@@ -96,7 +100,6 @@
 </template>
 
 <script setup lang="ts">
-import './ct-login-login.scss';
 import { parseApiRejection } from '../../service/login-error';
 import { HTTP_STATUS, ROUTES, STORAGE_KEYS, TIMING } from '../../service/login.constants';
 
@@ -112,7 +115,6 @@ const { t } = useI18n();
 const assetFilter = computed(() => {
     return Contena.Filter.getByName('asset');
 });
-
 // ESLint does not detect countdownLabel inside the translated template parameter object.
 
 const loginService = inject('loginService') as LoginService;
@@ -317,3 +319,85 @@ defineExpose({
     onSubmit,
 });
 </script>
+
+<style lang="scss">
+.ct-login-credentials {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--scale-size-40);
+        height: var(--scale-size-40);
+        margin: 0 auto var(--scale-size-16);
+        background: rgba(37, 99, 235, 8%);
+        border: 1px solid rgba(37, 99, 235, 14%);
+        border-radius: var(--border-radius-m);
+    }
+
+    &__icon-logo {
+        display: block;
+        width: var(--scale-size-32);
+        height: var(--scale-size-32);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--font-line-height-2xl);
+        text-align: center;
+    }
+
+    &__description {
+        margin: var(--scale-size-8) 0 var(--scale-size-32);
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-sm);
+        text-align: center;
+    }
+
+    &__warning,
+    &__error {
+        margin: 0 0 var(--scale-size-24);
+    }
+
+    &__field.ant-form-item {
+        margin-bottom: var(--scale-size-16);
+
+        .ant-form-item-row {
+            display: block;
+        }
+
+        .ant-form-item-label {
+            display: block;
+            padding: 0 0 var(--scale-size-8);
+            text-align: left;
+        }
+
+        .ant-form-item-label > label {
+            display: inline-flex;
+            height: auto;
+        }
+
+        .ant-form-item-control {
+            width: 100%;
+        }
+    }
+
+    &__support {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--scale-size-16);
+        margin: var(--scale-size-8) 0 var(--scale-size-24);
+    }
+
+    &__forgot-password {
+        flex-shrink: 0;
+        font-size: var(--font-size-sm);
+    }
+}
+</style>

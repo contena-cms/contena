@@ -15,6 +15,7 @@
         },
         "default": {
             "add": "新增",
+            "actions": "操作",
             "apply": "应用",
             "cancel": "取消",
             "delete": "删除",
@@ -51,6 +52,18 @@
             "messageDeleteSuccess": "“{name}”已删除。",
             "messageDeleteFailed": "“{entityName}”仍被以下模块使用：",
             "notificationLoadingDataErrorMessage": "加载数据失败"
+        },
+        "ct-desktop": {
+            "stagingBarText": "系统当前处于预发布模式。"
+        },
+        "ct-route-tabs": {
+            "actions": "标签页操作",
+            "refresh": "刷新当前页",
+            "closeCurrent": "关闭当前",
+            "closeLeft": "关闭左侧",
+            "closeRight": "关闭右侧",
+            "closeOthers": "关闭其他",
+            "closeAll": "关闭全部"
         },
         "ct-skip-link": { "label": "跳转到内容" },
         "notification-center": {

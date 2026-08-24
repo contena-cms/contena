@@ -51,6 +51,7 @@
         "safari >= 7"
     ],
     "dependencies": {
+        "@ant-design/icons-vue": "^7.0.1",
         "@contena-ag/dive": "3.1.0",
         "@contena/meteor-admin-sdk": "6.11.0",
         "@contena/meteor-component-library": "5.5.0",
@@ -66,6 +67,7 @@
         "@vueuse/core": "11.3.0",
         "@vvo/tzdb": "6.158.0",
         "ace-builds": "1.37.4",
+        "ant-design-vue": "^4.2.6",
         "apexcharts": "4.4.0",
         "app-module-path": "2.2.0",
         "autoprefixer": "10.4.20",
@@ -99,6 +101,7 @@
         "process": "0.11.10",
         "punycode": "2.3.1",
         "rollup": "4.59.0",
+        "sortablejs": "^1.15.7",
         "ts-morph": "17.0.1",
         "ts-node": "10.9.2",
         "uuid": "14.0.0",
@@ -151,6 +154,7 @@
         "@types/lodash-es": "4.17.12",
         "@types/mime-types": "2.1.4",
         "@types/node": "20.17.14",
+        "@types/sortablejs": "^1.15.9",
         "@types/three": "0.163.0",
         "@types/uuid": "9.0.8",
         "@typescript-eslint/eslint-plugin": "8.56.1",

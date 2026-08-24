@@ -1,17 +1,17 @@
 import { nextTick } from 'vue';
 import initializeTheme from 'src/app/init/theme.init';
-import useTheme from 'src/app/composables/use-theme';
+import useTheme, { ADMIN_THEME_STORAGE_KEY } from 'src/app/composables/use-theme';
 
 describe('src/app/init/theme.init.ts', () => {
     afterEach(async () => {
         useTheme().setTheme('system');
         await nextTick();
 
-        localStorage.removeItem('mt-theme');
+        localStorage.removeItem(ADMIN_THEME_STORAGE_KEY);
     });
 
     it('applies the persisted theme preference to the document root', async () => {
-        localStorage.setItem('mt-theme', 'dark');
+        localStorage.setItem(ADMIN_THEME_STORAGE_KEY, 'dark');
 
         initializeTheme();
         await nextTick();

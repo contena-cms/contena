@@ -1,4 +1,5 @@
 import { mount, type VueWrapper } from '@vue/test-utils';
+import type { TableColumnSetting } from 'src/app/component/base/ct-table-column-setting';
 
 interface UserListingVm {
     setStatusFilter(value: string): void;
@@ -8,9 +9,13 @@ interface UserListingVm {
 
 interface UserPageVm {
     statusFilter: string;
+    roleFilter: string[];
+    columnSettings: TableColumnSetting[];
+    defaultColumnSettings: TableColumnSetting[];
     onStatusFilterChange(value: string): void;
     resetUserFilters(): void;
     onUserSearch(term: string): void;
+    onColumnSettingsApply(settings: TableColumnSetting[]): void;
     $refs: {
         userListing: UserListingVm;
     };
@@ -36,20 +41,12 @@ describe('modules/ct-users/page/ct-users', () => {
                         'ct-page': {
                             template: `
                                 <div>
-                                    <slot name="search-bar"></slot>
-                                    <slot name="smart-bar-header"></slot>
-                                    <slot name="smart-bar-actions"></slot>
                                     <slot name="content"></slot>
                                 </div>
                             `,
                         },
-                        'ct-card-view': {
-                            template: '<div class="ct-card-view"><slot /></div>',
-                        },
-                        'ct-search-bar': {
-                            template: '<div class="user-search"></div>',
-                        },
                         'ct-users-user-listing': {
+                            props: ['columnSettings'],
                             template: '<div class="user-listing"></div>',
                             data() {
                                 return {
@@ -68,9 +65,12 @@ describe('modules/ct-users/page/ct-users', () => {
                                 resetFilters: jest.fn(),
                             },
                         },
-                        'mt-select': {
-                            name: 'mt-select',
-                            template: '<div class="mt-select-stub" />',
+                        'ct-table-column-setting': {
+                            props: [
+                                'columns',
+                                'defaultColumns',
+                            ],
+                            template: '<button class="column-setting"></button>',
                         },
                     },
                 },
@@ -88,25 +88,20 @@ describe('modules/ct-users/page/ct-users', () => {
         wrapper.unmount();
     });
 
-    it('renders the user list, search and filter controls', () => {
+    it('renders one page heading with Ant search and filter controls', () => {
         expect(wrapper.find('.user-listing').exists()).toBe(true);
-        expect(wrapper.find('.user-search').exists()).toBe(true);
-        expect(wrapper.find('.ct-users__filter-menu-trigger').exists()).toBe(true);
+        expect(wrapper.findAll('h1')).toHaveLength(1);
+        expect(wrapper.find('.ct-users__search').exists()).toBe(true);
+        expect(wrapper.find('.ct-users__filter').exists()).toBe(true);
+        expect(wrapper.find('.ct-users__role-filter').exists()).toBe(true);
+        expect(wrapper.find('.ct-users__table-tools').exists()).toBe(true);
     });
 
     it('enables user creation for creators', async () => {
         wrapper.unmount();
         await createWrapper(['users_and_permissions.creator']);
 
-        expect(wrapper.find('.ct-users__create-user').attributes('disabled')).toBeUndefined();
-    });
-
-    it('uses default sizing for the filter and create-user actions', () => {
-        const filterButton = wrapper.findComponent('.ct-users__filter-menu-trigger') as VueWrapper;
-        const createButton = wrapper.findComponent('.ct-users__create-user') as VueWrapper;
-
-        expect((filterButton.props() as { size?: string }).size).toBe('default');
-        expect((createButton.props() as { size?: string }).size).toBe('default');
+        expect(wrapper.vm.acl.can('users_and_permissions.creator')).toBe(true);
     });
 
     it('forwards status filter changes and keeps the selection visible', async () => {
@@ -119,7 +114,7 @@ describe('modules/ct-users/page/ct-users', () => {
         expect(wrapper.vm.statusFilter).toBe('active');
 
         wrapper.vm.onStatusFilterChange('active');
-        expect(setStatusFilter).toHaveBeenCalledTimes(1);
+        expect(setStatusFilter).toHaveBeenCalledTimes(2);
     });
 
     it('resets the status selection and listing filters together', async () => {
@@ -139,5 +134,36 @@ describe('modules/ct-users/page/ct-users', () => {
         wrapper.vm.onUserSearch('alex');
 
         expect(onSearch).toHaveBeenCalledWith('alex');
+    });
+
+    it('provides ordered Ant table column settings with required fixed columns', () => {
+        expect(wrapper.vm.defaultColumnSettings).toEqual([
+            expect.objectContaining({ key: 'user', checked: true, fixed: 'left', required: true }),
+            expect.objectContaining({ key: 'userCode', checked: true }),
+            expect.objectContaining({ key: 'contact', checked: true }),
+            expect.objectContaining({ key: 'aclRoles', checked: true }),
+            expect.objectContaining({ key: 'active', checked: true }),
+            expect.objectContaining({ key: 'action', checked: true, fixed: 'right', required: true }),
+        ]);
+    });
+
+    it('applies the complete column configuration to the user listing', async () => {
+        const settings: TableColumnSetting[] = [
+            { key: 'user', title: 'Name', checked: true, required: true, fixed: 'left' },
+            { key: 'active', title: 'Status', checked: true },
+            { key: 'contact', title: 'Contact', checked: false },
+            { key: 'action', title: '', checked: true, required: true, fixed: 'right' },
+        ];
+
+        wrapper.vm.onColumnSettingsApply(settings);
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.columnSettings).toEqual(settings);
+        expect(wrapper.findComponent({ ref: 'userListing' }).props('columnSettings')).toEqual([
+            { ...settings[0], title: 'ct-users.user-grid.labelName' },
+            { ...settings[1], title: 'ct-users.user-grid.status' },
+            { ...settings[2], title: 'ct-users.user-grid.labelContact' },
+            settings[3],
+        ]);
     });
 });

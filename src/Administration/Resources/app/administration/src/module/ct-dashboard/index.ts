@@ -17,7 +17,7 @@ Contena.Module.register('ct-dashboard', {
     version: '1.0.0',
     targetVersion: '1.0.0',
     color: '#6AD6F0',
-    icon: 'regular-dashboard',
+    icon: 'DashboardOutlined',
     favicon: 'icon-module-dashboard.png',
     snippets: {
         'en-GB': enGB,
@@ -30,6 +30,9 @@ Contena.Module.register('ct-dashboard', {
                 default: 'ct-dashboard-index',
             },
             path: 'index',
+            meta: {
+                keepAlive: true,
+            },
         },
     },
 
@@ -38,7 +41,7 @@ Contena.Module.register('ct-dashboard', {
             id: 'ct-home',
             label: 'global.ct-admin-menu.navigation.mainMenuItemHome',
             color: '#6AD6F0',
-            icon: 'regular-dashboard',
+            icon: 'DashboardOutlined',
             path: 'ct.dashboard.index',
             position: 10,
         },

@@ -1,8 +1,78 @@
 {
-  "ct-dashboard": {
-    "general": {
-      "mainMenuItemGeneral": "首页",
-      "descriptionTextModule": "管理首页"
+    "ct-dashboard": {
+        "general": {
+            "mainMenuItemGeneral": "首页",
+            "descriptionTextModule": "管理首页"
+        },
+        "home": {
+            "welcome": "你好，{name}",
+            "defaultUser": "管理员",
+            "summary": "这里是今天的内容运营概览。",
+            "viewAll": "查看全部",
+            "actions": {
+                "createContent": "新建内容",
+                "media": "媒体中心",
+                "workflow": "工作流"
+            },
+            "metrics": {
+                "label": "内容运营指标",
+                "published": "已发布内容",
+                "pending": "待审核",
+                "pendingHint": "需要处理",
+                "media": "媒体资源",
+                "members": "成员总数"
+            },
+            "tasks": {
+                "title": "待办事项",
+                "reviewTitle": "内容审核",
+                "reviewDescription": "等待编辑或管理员审核",
+                "publishTitle": "定时发布",
+                "publishDescription": "未来 7 天的发布任务",
+                "completedTitle": "本周已完成",
+                "completedDescription": "已完成的内容任务"
+            },
+            "recent": {
+                "title": "最近内容",
+                "searchPlaceholder": "搜索内容",
+                "columns": {
+                    "title": "内容",
+                    "owner": "负责人",
+                    "status": "状态",
+                    "updatedAt": "最近更新"
+                },
+                "items": {
+                    "one": "年度产品能力更新",
+                    "two": "企业内容运营解决方案",
+                    "three": "平台使用指南"
+                },
+                "times": {
+                    "minutes": "12 分钟前",
+                    "hours": "2 小时前",
+                    "yesterday": "昨天"
+                }
+            },
+            "status": {
+                "published": "已发布",
+                "review": "审核中",
+                "draft": "草稿"
+            }
+        },
+        "preview": {
+            "openMenu": "打开菜单",
+            "globalSearch": "搜索菜单、内容和设置",
+            "help": "帮助中心",
+            "tasksDescription": "需要你处理的运营任务",
+            "recentDescription": "最近编辑和发布的内容",
+            "trend": {
+                "title": "内容访问趋势",
+                "description": "全部渠道的访问与转化概览",
+                "visits": "访问量",
+                "conversion": "转化率",
+                "averageTime": "平均停留",
+                "sevenDays": "近 7 天",
+                "thirtyDays": "近 30 天",
+                "quarter": "本季度"
+            }
+        }
     }
-  }
 }

@@ -5,7 +5,10 @@
             "placeholderSearchBar": "Find users...",
             "labelUserList": "Users",
             "labelCreateNewUser": "Create new user",
-            "cardLabel": "Users"
+            "cardLabel": "Users",
+            "description": "Manage Administration users, account status and role access.",
+            "openMenu": "Open menu",
+            "total": "{total} users"
         },
         "filter": {
             "title": "Filter",
@@ -21,11 +24,27 @@
             "rolesPlaceholder": "Select roles...",
             "reset": "Reset filters"
         },
+        "columns": {
+            "title": "Column settings",
+            "all": "All columns",
+            "reset": "Reset",
+            "fixedLeft": "Fix to the left",
+            "fixedRight": "Fix to the right"
+        },
+        "bulk": {
+            "selected": "{count} selected",
+            "delete": "Delete selected",
+            "title": "Delete selected users",
+            "confirm": "Delete the {count} selected users?",
+            "deleteSuccess": "Deleted {count} users.",
+            "deleteError": "Some or all users could not be deleted. Refresh and try again."
+        },
         "user-grid": {
             "labelUserCode": "User code",
             "labelUsername": "User name",
             "labelName": "Name",
             "labelPhoneNumber": "Phone number",
+            "labelContact": "Contact",
             "labelGender": "Gender",
             "labelGenderPlaceholder": "Choose gender...",
             "labelRoles": "Roles",
@@ -59,6 +78,7 @@
             "errorUsernameUsed": "This username is already in use.",
             "labelUsername": "User name",
             "labelPassword": "Password",
+            "labelActive": "Active",
             "labelProfilePicture": "Profile picture",
             "labelUserInterface": "User interface",
             "labelLanguage": "User interface language",

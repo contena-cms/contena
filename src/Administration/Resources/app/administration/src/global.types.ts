@@ -52,6 +52,7 @@ import type { FileValidationService } from './app/service/file-validation.servic
 import type DataDictionaryService from './app/service/data-dictionary.service';
 import type { DevtoolComponent } from './app/adapter/view/ct-vue-devtools';
 import type { AdminMenuStore } from './app/store/admin-menu.store';
+import type { RouteTabsStore } from './app/store/route-tabs.store';
 import type { BlockOverrideStore } from './app/store/block-override.store';
 import type { ExtensionEntryRoutes } from './app/store/extension-entry-routes.store';
 import type { ErrorStore } from './app/store/error.store';
@@ -256,6 +257,7 @@ declare global {
 
     interface PiniaRootState {
         adminMenu: AdminMenuStore;
+        routeTabs: RouteTabsStore;
         blockOverride: BlockOverrideStore;
         extensionEntryRoutes: ExtensionEntryRoutes;
         error: ErrorStore;

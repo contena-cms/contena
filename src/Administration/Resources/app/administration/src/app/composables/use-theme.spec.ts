@@ -1,6 +1,6 @@
 import { nextTick } from 'vue';
 import type UserConfigService from 'src/core/service/api/user-config.api.service';
-import useTheme, { USER_THEME_CONFIG_KEY } from './use-theme';
+import useTheme, { ADMIN_THEME_STORAGE_KEY, USER_THEME_CONFIG_KEY } from './use-theme';
 
 describe('src/app/composables/use-theme.ts', () => {
     beforeAll(() => {
@@ -24,11 +24,30 @@ describe('src/app/composables/use-theme.ts', () => {
         useTheme().setTheme('system');
         await nextTick();
 
-        localStorage.removeItem('mt-theme');
+        localStorage.removeItem(ADMIN_THEME_STORAGE_KEY);
     });
 
     it('returns the same state on every call', () => {
         expect(useTheme()).toBe(useTheme());
+    });
+
+    it('provides the default Administration component theme', () => {
+        const { themeName, themeConfig } = useTheme();
+
+        expect(themeName).toBe('default');
+        expect(themeConfig.value.token).toEqual(
+            expect.objectContaining({
+                colorPrimary: '#2563eb',
+                controlHeight: 32,
+            }),
+        );
+    });
+
+    it('exposes Ant theme tokens to teleported overlays', () => {
+        useTheme();
+
+        expect(document.documentElement.style.getPropertyValue('--ct-spacing-lg')).toBe('24px');
+        expect(document.documentElement.style.getPropertyValue('--ct-color-bg-layout')).not.toBe('');
     });
 
     it('defaults to the system preference', () => {
@@ -58,7 +77,7 @@ describe('src/app/composables/use-theme.ts', () => {
         useTheme().setTheme('dark');
         await nextTick();
 
-        expect(localStorage.getItem('mt-theme')).toBe('dark');
+        expect(localStorage.getItem(ADMIN_THEME_STORAGE_KEY)).toBe('dark');
     });
 
     it('saves the preference to the user configuration', async () => {

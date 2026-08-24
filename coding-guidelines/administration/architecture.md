@@ -22,7 +22,7 @@ These rules apply to code under `src/Administration/Resources/app/administration
 
 ## Modules and UI
 
-- Name and consume Administration components with the `mt-*` prefix. Legacy `ct-*` UI components are migration targets, not extension points for new code; replace their usages and remove them as each area is converted.
+- Use Ant Design Vue as the primary Administration UI library and prefer its native components and theme tokens. Name project-owned Administration abstractions with the `ct-*` prefix. Legacy Meteor `mt-*` components are migration targets; do not introduce new usages or compatibility layers.
 - Protect module routes, navigation entries, and templates with the required ACL privileges.
 - When adding Admin UI that reads or persists a DAL entity or association, update the matching ACL privilege mapping in the same change. Verify limited-role users get the needed `read`, `create`, `update`, and `delete` privileges through the feature's viewer/editor/creator/deleter roles instead of relying on super-admin behavior.
 - If new privileges must apply to roles that already exist in installations, add a migration that updates stored `acl_role.privileges`; changing the Administration mapping alone only fixes future role evaluation.
@@ -30,7 +30,7 @@ These rules apply to code under `src/Administration/Resources/app/administration
 - Use snippets for visible text; do not hardcode user-facing strings.
 - Keep business logic out of templates.
 - Prefer composables for new shared Vue logic. Do not add new mixin-based APIs unless you are extending legacy code.
-- Use BEM-style class names and Meteor design tokens for Administration styling. Avoid inline styles.
+- Use BEM-style class names and Ant Design Vue theme tokens for Administration styling. Avoid inline styles and equivalent hard-coded design values.
 
 ## Data access
 
