@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
@@ -11,7 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\ChannelApiRouteScope;
+use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -25,6 +24,8 @@ use Contena\Core\System\Tenant\Resolver\TenantResolverChain;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\TestDefaults;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\TenantIsolationTestTrait;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -93,16 +94,30 @@ class TenantContextResolverTest extends TestCase
         $this->resolveAdminContext($userId, $otherTenantId);
     }
 
+    public function testUserCanSwitchBetweenTheirTenants(): void
+    {
+        $tenantA = $this->seedTenant('resolver-member-a');
+        $tenantB = $this->seedTenant('resolver-member-b');
+        $userId = $this->createUser($tenantA);
+        $this->addUserMembership($userId, $tenantB);
+
+        static::assertSame($tenantA, $this->resolveAdminContext($userId, $tenantA)->getTenantId());
+        static::assertSame($tenantB, $this->resolveAdminContext($userId, $tenantB)->getTenantId());
+    }
+
     public function testChannelSourceInheritsTheTenantOfTheChannel(): void
     {
         $tenantId = $this->seedTenant('resolver-e');
         $channelId = $this->createChannel($tenantId);
 
         $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ChannelApiRouteScope::ID]);
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
         $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_ID, $channelId);
 
-        static::getContainer()->get(ApiRequestContextResolver::class)->resolve($request);
+        new ApiRequestContextResolver(
+            static::getContainer()->get(Connection::class),
+            static::getContainer()->get(RouteScopeRegistry::class),
+        )->resolve($request);
 
         $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT);
         static::assertInstanceOf(Context::class, $context);
@@ -188,10 +203,6 @@ class TenantContextResolverTest extends TestCase
     private function createUser(?string $tenantId): string
     {
         $userId = Uuid::randomHex();
-        $context = $tenantId === null
-            ? Context::createDefaultContext()
-            : $this->createTenantContext($tenantId);
-
         $this->userRepository()->create([[
             'id' => $userId,
             'username' => 'tenant-scope-' . \bin2hex(\random_bytes(4)),
@@ -201,9 +212,23 @@ class TenantContextResolverTest extends TestCase
             'active' => true,
             'admin' => false,
             'localeId' => $this->systemLocaleId(),
-        ]], $context);
+        ]], Context::createDefaultContext());
+
+        if ($tenantId !== null) {
+            $this->addUserMembership($userId, $tenantId);
+        }
 
         return $userId;
+    }
+
+    private function addUserMembership(string $userId, string $tenantId): void
+    {
+        static::getContainer()->get('user_tenant.repository')->create([[
+            'userId' => $userId,
+            'tenantId' => $tenantId,
+            'active' => true,
+            'admin' => false,
+        ]], $this->createTenantContext($tenantId));
     }
 
     private function createIntegration(?string $tenantId): string
@@ -244,7 +269,15 @@ class TenantContextResolverTest extends TestCase
             'navigationCategoryVersionId' => $default->getNavigationCategoryVersionId(),
             'languages' => [['id' => $default->getLanguageId()]],
             'countries' => [['id' => $default->getCountryId()]],
-        ]], $this->createTenantContext($tenantId));
+        ]], Context::createDefaultContext());
+
+        static::getContainer()->get(Connection::class)->executeStatement(
+            'UPDATE channel SET tenant_id = :tenantId WHERE id = :channelId',
+            [
+                'tenantId' => Uuid::fromHexToBytes($tenantId),
+                'channelId' => Uuid::fromHexToBytes($channelId),
+            ],
+        );
 
         return $channelId;
     }

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Migration\Core\V6_8;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -59,7 +59,7 @@ class ConsolidatedCoreSchemaTest extends TestCase
             }
         }
 
-        static::assertCount(90, $tables);
+        static::assertCount(91, $tables);
     }
 
     public function testConsolidatedMigrationsCanBeExecutedAgain(): void

@@ -10,23 +10,11 @@ class UserRecoveryEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
-
     protected string $userId;
 
     protected string $hash;
 
     protected ?UserEntity $user = null;
-
-    public function getTenantId(): ?string
-    {
-        return $this->tenantId;
-    }
-
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
-    }
 
     public function getUserId(): string
     {

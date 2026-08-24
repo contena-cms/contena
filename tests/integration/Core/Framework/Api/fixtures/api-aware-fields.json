@@ -408,7 +408,7 @@
     "member_tag.tag",
     "user.createdAt",
     "user.updatedAt",
-    "user.tenant",
+    "user.tenants",
     "user.userCode",
     "user.gender",
     "user.firstLogin",

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\User;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -13,6 +11,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserEntity;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -58,8 +59,11 @@ class TenantOwnedUserAggregateTest extends TestCase
 
         foreach ($this->contexts as $scope => $context) {
             foreach (['user' => 'user', 'user_access_key' => 'accessKey', 'user_config' => 'config', 'user_recovery' => 'recovery', 'tag' => 'tag'] as $entityName => $idKey) {
+                $expectedCount = \in_array($entityName, ['user_access_key', 'user_recovery'], true)
+                    ? 4
+                    : $expectedCounts[$scope];
                 static::assertCount(
-                    $expectedCounts[$scope],
+                    $expectedCount,
                     $this->repository($entityName)->searchIds(new Criteria(array_column($ids, $idKey)), $context)->getIds(),
                     'Unexpected ' . $entityName . ' rows for ' . $scope,
                 );
@@ -86,7 +90,10 @@ class TenantOwnedUserAggregateTest extends TestCase
                     \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
                     ['id' => Uuid::fromHexToBytes($id)],
                 );
-                static::assertSame($expectedTenants[$scope], $tenantId === false ? null : $tenantId);
+                $expectedTenant = \in_array($table, ['user', 'user_access_key', 'user_recovery'], true)
+                    ? null
+                    : $expectedTenants[$scope];
+                static::assertSame($expectedTenant, $tenantId === false ? null : $tenantId);
             }
         }
 
@@ -105,19 +112,8 @@ class TenantOwnedUserAggregateTest extends TestCase
 
         foreach (['platform', 'tenant-b', 'global'] as $scope) {
             $this->assertWriteRejected(
-                fn () => $this->repository('user_access_key')->update([[
-                    'id' => $ids['tenant-a']['accessKey'],
-                    'lastUsageAt' => new \DateTimeImmutable(),
-                ]], $this->contexts[$scope]),
-                'Expected user_access_key write protection for ' . $scope,
-            );
-            $this->assertWriteRejected(
                 fn () => $this->repository('user_config')->delete([['id' => $ids['tenant-a']['config']]], $this->contexts[$scope]),
                 'Expected user_config write protection for ' . $scope,
-            );
-            $this->assertWriteRejected(
-                fn () => $this->repository('user_recovery')->delete([['id' => $ids['tenant-a']['recovery']]], $this->contexts[$scope]),
-                'Expected user_recovery write protection for ' . $scope,
             );
             $this->assertWriteRejected(
                 fn () => $this->repository('user_tag')->delete([[
@@ -148,6 +144,89 @@ class TenantOwnedUserAggregateTest extends TestCase
         );
     }
 
+    public function testTenantMembershipProjectsUserProperties(): void
+    {
+        $userId = Uuid::randomHex();
+        $localeId = static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(`id`)) FROM `locale` LIMIT 1');
+        static::assertIsString($localeId);
+        $this->repository('user')->create([[
+            'id' => $userId,
+            'userCode' => 'PLATFORM',
+            'username' => 'membership-projection-' . $userId,
+            'password' => 'integration-test-password',
+            'name' => 'Membership projection',
+            'email' => $userId . '@example.invalid',
+            'localeId' => $localeId,
+            'active' => true,
+            'admin' => false,
+        ]], Context::createDefaultContext());
+        foreach ([
+            [$this->tenantA, false, true, 'TENANT-A'],
+            [$this->tenantB, true, false, 'TENANT-B'],
+        ] as [$tenantId, $active, $admin, $userCode]) {
+            $context = Context::createTenantContext($tenantId);
+            $this->repository('user_tenant')->create([[
+                'userId' => $userId,
+                'tenantId' => $tenantId,
+                'active' => $active,
+                'admin' => $admin,
+                'userCode' => $userCode,
+            ]], $context);
+        }
+
+        $tenantAUser = $this->repository('user')->search(new Criteria([$userId]), Context::createTenantContext($this->tenantA))->getEntities()->first();
+        $tenantBUser = $this->repository('user')->search(new Criteria([$userId]), Context::createTenantContext($this->tenantB))->getEntities()->first();
+        static::assertInstanceOf(UserEntity::class, $tenantAUser);
+        static::assertInstanceOf(UserEntity::class, $tenantBUser);
+        static::assertFalse($tenantAUser->getActive());
+        static::assertTrue($tenantAUser->isAdmin());
+        static::assertSame('TENANT-A', $tenantAUser->getUserCode());
+        static::assertTrue($tenantBUser->getActive());
+        static::assertFalse($tenantBUser->isAdmin());
+        static::assertSame('TENANT-B', $tenantBUser->getUserCode());
+
+        static::assertNull($this->repository('user')->search(new Criteria([$userId]), Context::createDefaultContext())->getEntities()->first());
+    }
+
+    public function testUserConfigKeyMayExistInEachMembershipScope(): void
+    {
+        $userId = Uuid::randomHex();
+        $configKey = 'shared-config-' . Uuid::randomHex();
+        $localeId = static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(`id`)) FROM `locale` LIMIT 1');
+        static::assertIsString($localeId);
+
+        $this->repository('user')->create([[
+            'id' => $userId,
+            'username' => 'config-scope-' . $userId,
+            'password' => 'integration-test-password',
+            'name' => 'Config scope user',
+            'email' => $userId . '@example.invalid',
+            'localeId' => $localeId,
+        ]], Context::createDefaultContext());
+        foreach ([$this->tenantA, $this->tenantB] as $tenantId) {
+            $tenantContext = Context::createTenantContext($tenantId);
+            $this->repository('user_tenant')->create([[
+                'userId' => $userId,
+                'tenantId' => $tenantId,
+                'active' => true,
+                'admin' => false,
+            ]], $tenantContext);
+        }
+
+        foreach ([$this->tenantA, $this->tenantB] as $tenantId) {
+            $this->repository('user_config')->create([[
+                'userId' => $userId,
+                'key' => $configKey,
+                'value' => ['scope' => $tenantId],
+            ]], Context::createTenantContext($tenantId));
+        }
+
+        static::assertSame(2, (int) static::getContainer()->get(Connection::class)->fetchOne(
+            'SELECT COUNT(*) FROM user_config WHERE user_id = :userId AND `key` = :configKey',
+            ['userId' => Uuid::fromHexToBytes($userId), 'configKey' => $configKey],
+        ));
+    }
+
     /**
      * @return array{user: string, accessKey: string, config: string, recovery: string, tag: string}
      */
@@ -158,7 +237,7 @@ class TenantOwnedUserAggregateTest extends TestCase
         $configId = Uuid::randomHex();
         $recoveryId = Uuid::randomHex();
         $tagId = Uuid::randomHex();
-        $businessScope = \str_starts_with($scope, 'tenant-') ? 'tenant' : $scope;
+        $businessScope = $scope . '-' . $userId;
 
         $localeId = static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(`id`)) FROM `locale` LIMIT 1');
         static::assertIsString($localeId);
@@ -171,7 +250,15 @@ class TenantOwnedUserAggregateTest extends TestCase
             'name' => 'User aggregate ' . $scope,
             'email' => 'user-email-' . $businessScope . '@example.invalid',
             'localeId' => $localeId,
-        ]], $context);
+        ]], Context::createDefaultContext());
+        if ($context->getTenantId() !== null) {
+            $this->repository('user_tenant')->create([[
+                'userId' => $userId,
+                'tenantId' => $context->getTenantId(),
+                'active' => true,
+                'admin' => false,
+            ]], $context);
+        }
         $this->repository('tag')->create([[
             'id' => $tagId,
             'name' => 'User aggregate tag ' . $scope,

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\OAuth;
 
-use Doctrine\DBAL\Connection;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use PHPUnit\Framework\TestCase;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Api\OAuth\UserRepository;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -18,6 +14,10 @@ use Contena\Core\System\Tenant\Resolver\SubdomainTenantResolver;
 use Contena\Core\System\Tenant\Resolver\TenantResolution;
 use Contena\Core\System\User\UserCollection;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\TenantIsolationTestTrait;
+use Doctrine\DBAL\Connection;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -63,36 +63,34 @@ class TenantDomainLoginTest extends TestCase
         static::assertNotNull($user);
     }
 
-    public function testSameUsernameResolvesWithinPlatformAndTenantDomains(): void
+    public function testPlatformUserCanLoginWithoutTenantDomain(): void
+    {
+        [$username, $password] = $this->createUser(null);
+
+        $user = $this->userRepositoryWithStack(new RequestStack())
+            ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
+
+        static::assertNotNull($user);
+    }
+
+    public function testSameUserCanLoginOnEachAssignedTenantDomain(): void
     {
         $tenantA = $this->seedTenantByCode('login-shared-a');
         $tenantB = $this->seedTenantByCode('login-shared-b');
-        $username = 'shared-login-user';
-        $email = 'shared-login-user@example.com';
+        [$username, $password, $userId] = $this->createUser($tenantA);
+        $this->addUserMembership($userId, $tenantB);
 
-        [, $platformPassword] = $this->createUser(null, $username, 'platform-password', $email);
-        [, $tenantAPassword] = $this->createUser($tenantA, $username, 'tenant-a-password', $email);
-        [, $tenantBPassword] = $this->createUser($tenantB, $username, 'tenant-b-password', $email);
-
-        static::assertNotNull(
-            $this->userRepositoryWithStack(new RequestStack())
-                ->getUserEntityByUserCredentials($username, $platformPassword, 'password', $this->clientEntity()),
-        );
         static::assertNotNull(
             $this->userRepositoryWithStack($this->requestStack('login-shared-a.contena.cn', $tenantA))
-                ->getUserEntityByUserCredentials($username, $tenantAPassword, 'password', $this->clientEntity()),
+                ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity()),
         );
         static::assertNotNull(
             $this->userRepositoryWithStack($this->requestStack('login-shared-b.contena.cn', $tenantB))
-                ->getUserEntityByUserCredentials($username, $tenantBPassword, 'password', $this->clientEntity()),
-        );
-        static::assertNull(
-            $this->userRepositoryWithStack($this->requestStack('login-shared-a.contena.cn', $tenantA))
-                ->getUserEntityByUserCredentials($username, $tenantBPassword, 'password', $this->clientEntity()),
+                ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity()),
         );
         static::assertNull(
             $this->userRepositoryWithStack(new RequestStack())
-                ->getUserEntityByUserCredentials($username, $tenantAPassword, 'password', $this->clientEntity()),
+                ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity()),
         );
     }
 
@@ -108,7 +106,7 @@ class TenantDomainLoginTest extends TestCase
     }
 
     /**
-     * @return array{string, string}
+     * @return array{string, string, string}
      */
     private function createUser(
         ?string $tenantId,
@@ -119,12 +117,10 @@ class TenantDomainLoginTest extends TestCase
         $username ??= 'tenant-login-' . \bin2hex(\random_bytes(4));
         $password ??= 'i am safe';
         $email ??= \bin2hex(\random_bytes(4)) . '@example.com';
-        $context = $tenantId === null
-            ? Context::createDefaultContext()
-            : Context::createTenantContext($tenantId);
+        $userId = Uuid::randomHex();
 
         $this->userRepository()->create([[
-            'id' => Uuid::randomHex(),
+            'id' => $userId,
             'username' => $username,
             'password' => $password,
             'email' => $email,
@@ -132,9 +128,23 @@ class TenantDomainLoginTest extends TestCase
             'active' => true,
             'admin' => false,
             'localeId' => $this->systemLocaleId(),
-        ]], $context);
+        ]], Context::createDefaultContext());
 
-        return [$username, $password];
+        if ($tenantId !== null) {
+            $this->addUserMembership($userId, $tenantId);
+        }
+
+        return [$username, $password, $userId];
+    }
+
+    private function addUserMembership(string $userId, string $tenantId): void
+    {
+        static::getContainer()->get('user_tenant.repository')->create([[
+            'userId' => $userId,
+            'tenantId' => $tenantId,
+            'active' => true,
+            'admin' => false,
+        ]], Context::createTenantContext($tenantId));
     }
 
     private function systemLocaleId(): string

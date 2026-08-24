@@ -12,8 +12,6 @@ class UserAccessKeyEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
-
     protected string $userId;
 
     protected string $accessKey;
@@ -23,16 +21,6 @@ class UserAccessKeyEntity extends Entity
     protected ?\DateTimeInterface $lastUsageAt = null;
 
     protected ?UserEntity $user = null;
-
-    public function getTenantId(): ?string
-    {
-        return $this->tenantId;
-    }
-
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
-    }
 
     public function getUserId(): string
     {

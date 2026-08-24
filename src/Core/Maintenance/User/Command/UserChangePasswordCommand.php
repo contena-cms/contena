@@ -68,16 +68,12 @@ class UserChangePasswordCommand extends Command
             return self::FAILURE;
         }
 
-        $writeContext = $user->getTenantId() === null
-            ? $context
-            : Context::createTenantContext($user->getTenantId());
-
         $this->userRepository->update([
             [
                 'id' => $user->getId(),
                 'password' => $password,
             ],
-        ], $writeContext);
+        ], $context);
 
         $io->success(\sprintf('The password of user "%s" has been changed successfully.', $username));
 

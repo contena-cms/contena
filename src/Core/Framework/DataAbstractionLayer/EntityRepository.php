@@ -12,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchResultLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -212,11 +213,16 @@ class EntityRepository
         }
 
         $field = $this->definition->getFields()->filterInstance(TenantField::class)->first();
-        if (!$field instanceof TenantField) {
+        if ($field instanceof TenantField) {
+            $criteria->addFilter(new EqualsFilter($field->getPropertyName(), $context->getTenantId()));
+
             return;
         }
 
-        $criteria->addFilter(new EqualsFilter($field->getPropertyName(), $context->getTenantId()));
+        $membership = $this->definition->getFields()->filterInstance(TenantMembershipAssociationField::class)->first();
+        if ($membership instanceof TenantMembershipAssociationField) {
+            $criteria->addFilter(new EqualsFilter($membership->getPropertyName() . '.id', $context->getTenantId()));
+        }
     }
 
     /**

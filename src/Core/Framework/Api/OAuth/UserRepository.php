@@ -2,16 +2,16 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
-use Doctrine\DBAL\Connection;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\UserEntityInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\User\User;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Tenant\Resolver\TenantResolution;
+use Doctrine\DBAL\Connection;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\UserEntityInterface;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class UserRepository implements UserRepositoryInterface
@@ -42,16 +42,26 @@ class UserRepository implements UserRepositoryInterface
 
         $builder = $this->connection->createQueryBuilder();
         $user = $builder->select('user.id', 'user.password', 'user.active')
-            ->from('user')
+            ->from('user', 'user')
             ->where('username = :username')
             ->setParameter('username', $username);
 
         if ($resolution instanceof TenantResolution) {
-            $builder->andWhere('(user.tenant_id = :tenantId OR user.tenant_id IS NULL)')
+            $builder->addSelect('COALESCE(membership.active, user.active) AS active')
+                ->leftJoin(
+                    'user',
+                    'user_tenant',
+                    'membership',
+                    'membership.user_id = user.id AND membership.tenant_id = :tenantId AND membership.active = 1',
+                )
+                ->andWhere(<<<'SQL'
+membership.user_id IS NOT NULL
+OR NOT EXISTS (SELECT 1 FROM user_tenant any_membership WHERE any_membership.user_id = user.id)
+SQL)
                 ->setParameter('tenantId', Uuid::fromHexToBytes($resolution->tenantId))
-                ->addOrderBy('user.tenant_id IS NULL', 'ASC');
+                ->addOrderBy('membership.user_id IS NULL', 'ASC');
         } else {
-            $builder->andWhere('user.tenant_id IS NULL');
+            $builder->andWhere('NOT EXISTS (SELECT 1 FROM user_tenant membership WHERE membership.user_id = user.id)');
         }
 
         $user = $builder->fetchAssociative();

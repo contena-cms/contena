@@ -2,8 +2,6 @@
 
 namespace Contena\Administration\Controller;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\ApiException;
@@ -19,6 +17,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigCollection;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigDefinition;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,9 +73,8 @@ class UserConfigController extends AbstractController
     private function getOwnUserConfig(Context $context, array $keys): UserConfigCollection
     {
         $userId = $this->getUserId($context);
-        $tenantId = $this->getUserTenantId($userId);
 
-        return $this->searchUserConfig($userId, $keys, $this->createUserContext($context, $tenantId));
+        return $this->searchUserConfig($userId, $keys, $this->configContext($context, $userId));
     }
 
     /**
@@ -113,11 +112,11 @@ class UserConfigController extends AbstractController
     private function massUpsert(Context $context, array $postUpdateConfigs): void
     {
         $userId = $this->getUserId($context);
-        $tenantId = $this->getUserTenantId($userId);
+        $configContext = $this->configContext($context, $userId);
         $userConfigs = $this->searchUserConfig(
             $userId,
             array_keys($postUpdateConfigs),
-            $this->createUserContext($context, $tenantId),
+            $configContext,
         );
 
         $userConfigsGroupByKey = [];
@@ -129,7 +128,7 @@ class UserConfigController extends AbstractController
         foreach ($postUpdateConfigs as $key => $value) {
             $data = [
                 'value' => Json::encode($value),
-                'tenant_id' => $tenantId !== null ? Uuid::fromHexToBytes($tenantId) : null,
+                'tenant_id' => $configContext->getTenantId() !== null ? Uuid::fromHexToBytes($configContext->getTenantId()) : null,
                 'user_id' => Uuid::fromHexToBytes($userId),
                 'key' => $key,
                 'id' => Uuid::randomBytes(),
@@ -145,26 +144,23 @@ class UserConfigController extends AbstractController
         $queue->execute();
     }
 
-    private function getUserTenantId(string $userId): ?string
+    private function configContext(Context $context, string $userId): Context
     {
-        $tenantId = $this->connection->fetchOne(
-            'SELECT LOWER(HEX(`tenant_id`)) FROM `user` WHERE `id` = :userId',
-            ['userId' => Uuid::fromHexToBytes($userId)],
-        );
-
-        if ($tenantId === false) {
-            throw ApiException::userNotLoggedIn();
-        }
-
-        return \is_string($tenantId) && $tenantId !== '' ? $tenantId : null;
-    }
-
-    private function createUserContext(Context $context, ?string $tenantId): Context
-    {
-        if ($tenantId !== null) {
-            return Context::createTenantContext($tenantId, $context->getSource());
+        if ($context->getTenantId() !== null && $this->hasTenantMembership($userId, $context->getTenantId())) {
+            return $context;
         }
 
         return Context::createDefaultContext($context->getSource());
+    }
+
+    private function hasTenantMembership(string $userId, string $tenantId): bool
+    {
+        return (bool) $this->connection->fetchOne(
+            'SELECT 1 FROM user_tenant WHERE user_id = :userId AND tenant_id = :tenantId LIMIT 1',
+            [
+                'userId' => Uuid::fromHexToBytes($userId),
+                'tenantId' => Uuid::fromHexToBytes($tenantId),
+            ],
+        );
     }
 }

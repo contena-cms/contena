@@ -6,6 +6,7 @@ use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Notification\NotificationCollection;
@@ -22,9 +23,10 @@ class UserEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?TenantEntity $tenant = null;
-
-    protected ?string $tenantId = null;
+    /**
+     * @var EntityCollection<TenantEntity>|null
+     */
+    protected ?EntityCollection $tenants = null;
 
     protected string $localeId;
 
@@ -79,24 +81,20 @@ class UserEntity extends Entity
 
     protected string $timeZone;
 
-    public function getTenant(): ?TenantEntity
+    /**
+     * @return EntityCollection<TenantEntity>|null
+     */
+    public function getTenants(): ?EntityCollection
     {
-        return $this->tenant;
+        return $this->tenants;
     }
 
-    public function setTenant(?TenantEntity $tenant): void
+    /**
+     * @param EntityCollection<TenantEntity> $tenants
+     */
+    public function setTenants(EntityCollection $tenants): void
     {
-        $this->tenant = $tenant;
-    }
-
-    public function getTenantId(): ?string
-    {
-        return $this->tenantId;
-    }
-
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
+        $this->tenants = $tenants;
     }
 
     public function getUserCode(): ?string

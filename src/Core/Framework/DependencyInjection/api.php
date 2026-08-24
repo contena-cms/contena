@@ -2,12 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Lcobucci\JWT\Configuration as JWTConfiguration;
-use League\OAuth2\Server\AuthorizationServer;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Clock\ClockInterface;
-use Psr\Container\ContainerInterface;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
 use Contena\Core\Content\Media\Upload\PresignedMediaUploadService;
@@ -98,6 +92,12 @@ use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\UserDefinition;
+use Doctrine\DBAL\Connection;
+use Lcobucci\JWT\Configuration as JWTConfiguration;
+use League\OAuth2\Server\AuthorizationServer;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Clock\ClockInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -457,6 +457,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('acl_user_role.repository'),
             service('acl_role.repository'),
             service('user_access_key.repository'),
+            service('user_tenant.repository'),
             service(UserDefinition::class),
             service(RefreshTokenRepository::class),
             service(AbstractNumberRangeValueGenerator::class),

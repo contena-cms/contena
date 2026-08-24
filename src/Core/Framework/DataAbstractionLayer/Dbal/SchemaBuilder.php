@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
-use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Types\Types;
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
 use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementField;
 use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementListField;
@@ -62,6 +58,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreeBreadcrumbField;
@@ -73,6 +70,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
+use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * @internal
@@ -92,6 +93,7 @@ class SchemaBuilder
         UpdatedByField::class => Types::BINARY,
         StateMachineStateField::class => Types::BINARY,
         TenantField::class => Types::BINARY,
+        TenantMembershipField::class => Types::BINARY,
 
         CreatedAtField::class => Types::DATETIME_MUTABLE,
         UpdatedAtField::class => Types::DATETIME_MUTABLE,

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\ApiException;
@@ -16,11 +15,13 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\User\Aggregate\UserAccessKey\UserAccessKeyCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserDefinition;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,12 +37,14 @@ class UserController extends AbstractController
      * @param EntityRepository<EntityCollection<Entity>> $userRoleRepository
      * @param EntityRepository<AclRoleCollection> $roleRepository
      * @param EntityRepository<UserAccessKeyCollection> $keyRepository
+     * @param EntityRepository<EntityCollection<Entity>> $userTenantRepository
      */
     public function __construct(
         private readonly EntityRepository $userRepository,
         private readonly EntityRepository $userRoleRepository,
         private readonly EntityRepository $roleRepository,
         private readonly EntityRepository $keyRepository,
+        private readonly EntityRepository $userTenantRepository,
         private readonly UserDefinition $userDefinition,
         private readonly RefreshTokenRepository $refreshTokenRepository,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
@@ -64,9 +67,15 @@ class UserController extends AbstractController
             throw ApiException::userNotLoggedIn();
         }
         $criteria = new Criteria([$userId]);
-        $criteria->addAssociations(['aclRoles', 'avatarMedia', 'tenant']);
+        $criteria->addAssociations(['aclRoles', 'avatarMedia', 'tenants']);
 
         $user = $this->userRepository->search($criteria, $context)->getEntities()->first();
+        if (!$user && $context->getTenantId() !== null) {
+            $user = $this->userRepository->search(
+                $criteria,
+                Context::createGlobalContext($context->getSource()),
+            )->getEntities()->first();
+        }
         if (!$user) {
             throw OAuthServerException::invalidCredentials();
         }
@@ -120,6 +129,13 @@ class UserController extends AbstractController
         }
         $result = $this->userRepository->searchIds(new Criteria([$userId]), $context);
 
+        if ($result->getTotal() === 0 && $context->getTenantId() !== null) {
+            $result = $this->userRepository->searchIds(
+                new Criteria([$userId]),
+                Context::createGlobalContext($context->getSource()),
+            );
+        }
+
         if ($result->getTotal() === 0) {
             throw OAuthServerException::invalidCredentials();
         }
@@ -169,6 +185,15 @@ class UserController extends AbstractController
         }
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($userId): void {
+            if ($context->getTenantId() !== null) {
+                $this->userTenantRepository->delete([[
+                    'userId' => $userId,
+                    'tenantId' => $context->getTenantId(),
+                ]], $context);
+
+                return;
+            }
+
             $this->userRepository->delete([['id' => $userId]], $context);
         });
 
@@ -205,10 +230,7 @@ class UserController extends AbstractController
     public function upsertUser(?string $userId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
     {
         $data = $request->request->all();
-        if (!isset($data['id'])) {
-            $data['id'] = null;
-        }
-        $data['id'] = $userId ?: $data['id'];
+        $data['id'] = $userId ?: ($data['id'] ?? null);
 
         $source = $context->getSource();
         if (!$source instanceof AdminApiSource) {
@@ -224,7 +246,9 @@ class UserController extends AbstractController
 
         $isTryingToChangeAdmin = isset($data['admin']);
 
-        if ($data['id'] === null) {
+        $isNewUser = $data['id'] === null;
+        if ($isNewUser) {
+            $data['id'] = Uuid::randomHex();
             $userCode = $data['userCode'] ?? null;
             if ($userCode === null || $userCode === '') {
                 $data['userCode'] = $this->numberRangeValueGenerator->getValue('user', $context);
@@ -235,10 +259,59 @@ class UserController extends AbstractController
             throw new PermissionDeniedException();
         }
 
-        $events = $context->scope(Context::SYSTEM_SCOPE, fn (Context $context) => $this->userRepository->upsert([$data], $context));
-        $eventIds = $events->getEventByEntityName(UserDefinition::ENTITY_NAME)?->getIds() ?? [];
-        $entityId = array_last($eventIds);
-        \assert(\is_string($entityId), 'There should be a user ID, as it just was written');
+        $entityId = $data['id'];
+        \assert(\is_string($entityId));
+
+        $membership = [];
+        $tenantRelations = [];
+        if ($context->getTenantId() !== null) {
+            foreach (['active', 'admin', 'userCode'] as $property) {
+                if (!\array_key_exists($property, $data)) {
+                    continue;
+                }
+
+                $membership[$property] = $data[$property];
+                unset($data[$property]);
+            }
+
+            if ($isNewUser) {
+                $membership += ['active' => true, 'admin' => false];
+            }
+
+            foreach (['aclRoles', 'positions', 'tags', 'configs'] as $association) {
+                if (!\array_key_exists($association, $data)) {
+                    continue;
+                }
+
+                $tenantRelations[$association] = $data[$association];
+                unset($data[$association]);
+            }
+        }
+
+        $tenantId = $context->getTenantId();
+        $writeContext = $tenantId !== null
+            ? Context::createTenantContext($tenantId, $context->getSource())
+            : Context::createGlobalContext($context->getSource());
+        $writeContext->scope(Context::SYSTEM_SCOPE, function (Context $writeContext) use ($data, $entityId, $membership, $tenantRelations, $isNewUser, $tenantId): void {
+            if ($isNewUser || array_keys($data) !== ['id']) {
+                $this->userRepository->upsert([$data], $writeContext);
+            }
+
+            if ($tenantId !== null) {
+                $this->userTenantRepository->upsert([[
+                    'userId' => $entityId,
+                    'tenantId' => $tenantId,
+                    ...$membership,
+                ]], $writeContext);
+
+                if ($tenantRelations !== []) {
+                    $this->userRepository->upsert([[
+                        'id' => $entityId,
+                        ...$tenantRelations,
+                    ]], $writeContext);
+                }
+            }
+        });
 
         return $factory->createRedirectResponse($this->userRepository->getDefinition(), $entityId, $request, $context);
     }

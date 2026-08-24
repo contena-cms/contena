@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
@@ -24,6 +22,8 @@ use Contena\Core\System\Position\PositionCollection;
 use Contena\Core\System\Position\PositionEntity;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -147,8 +147,6 @@ class TenantOwnedIdentityStructureTest extends TestCase
 
             $user = $this->userRepository()->search(new Criteria([$scopeIds['user']]), Context::createGlobalContext())->getEntities()->first();
             static::assertInstanceOf(UserEntity::class, $user);
-            static::assertSame($expectedTenants[$scope], $user->getTenantId());
-
             foreach (['acl_user_role', 'user_position'] as $mappingTable) {
                 $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
                     \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `user_id` = :userId', $mappingTable),
@@ -174,7 +172,7 @@ class TenantOwnedIdentityStructureTest extends TestCase
         $unitId = Uuid::randomHex();
         $organizationId = Uuid::randomHex();
         $userId = Uuid::randomHex();
-        $businessScope = \str_starts_with($scope, 'tenant-') ? 'tenant' : $scope;
+        $businessScope = $scope;
 
         $this->roleRepository()->create([[
             'id' => $roleId,
@@ -208,9 +206,33 @@ class TenantOwnedIdentityStructureTest extends TestCase
             'password' => 'integration-test-password',
             'name' => 'Tenant identity ' . $scope,
             'email' => $userId . '@example.invalid',
-            'aclRoles' => [['id' => $roleId]],
-            'positions' => [['id' => $positionId]],
-        ]], $context);
+        ]], Context::createDefaultContext());
+
+        if ($context->getTenantId() !== null) {
+            $this->repository('user_tenant')->create([[
+                'userId' => $userId,
+                'tenantId' => $context->getTenantId(),
+                'active' => true,
+                'admin' => false,
+            ]], $context);
+            $this->repository('acl_user_role')->create([[
+                'userId' => $userId,
+                'aclRoleId' => $roleId,
+            ]], $context);
+            $this->repository('user_position')->create([[
+                'userId' => $userId,
+                'positionId' => $positionId,
+            ]], $context);
+        } else {
+            $this->repository('acl_user_role')->create([[
+                'userId' => $userId,
+                'aclRoleId' => $roleId,
+            ]], Context::createDefaultContext());
+            $this->repository('user_position')->create([[
+                'userId' => $userId,
+                'positionId' => $positionId,
+            ]], Context::createDefaultContext());
+        }
 
         return [
             'role' => $roleId,
@@ -231,7 +253,6 @@ class TenantOwnedIdentityStructureTest extends TestCase
         $this->positionRepository()->update([['id' => $ids['position'], 'position' => 20]], $context);
         $this->organizationUnitRepository()->update([['id' => $ids['unit'], 'position' => 20]], $context);
         $this->organizationRepository()->update([['id' => $ids['organization'], 'position' => 20]], $context);
-        $this->userRepository()->update([['id' => $ids['user'], 'name' => 'Updated tenant user']], $context);
         $this->repository('position_translation')->update([[
             'positionId' => $ids['position'],
             'languageId' => Defaults::LANGUAGE_SYSTEM,
@@ -259,7 +280,6 @@ class TenantOwnedIdentityStructureTest extends TestCase
             ['position', ['id' => $ids['position'], 'position' => 30]],
             ['organization_unit', ['id' => $ids['unit'], 'position' => 30]],
             ['organization', ['id' => $ids['organization'], 'position' => 30]],
-            ['user', ['id' => $ids['user'], 'name' => 'Invalid user update']],
         ];
         foreach ($updates as [$entityName, $payload]) {
             $this->assertWriteRejected(

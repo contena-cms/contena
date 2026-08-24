@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\Validation;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
@@ -11,10 +9,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -57,7 +59,11 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
 
             foreach ($reference['commands'] as $commandReference) {
                 $valueKey = $this->valueKey($commandReference['value']);
-                if (!\array_key_exists($valueKey, $owners) || $owners[$valueKey] === $expectedTenant) {
+                if (!\array_key_exists($valueKey, $owners)) {
+                    if (!$reference['membership'] || $expectedTenant === null) {
+                        continue;
+                    }
+                } elseif (\in_array($expectedTenant, $owners[$valueKey], true)) {
                     continue;
                 }
 
@@ -83,7 +89,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
     /**
      * @param list<WriteCommand> $commands
      *
-     * @return array<string, array{table: string, field: string, binary: bool, values: list<string>, commands: list<array{command: WriteCommand, property: string, value: string}>}>
+     * @return array<string, array{table: string, field: string, binary: bool, membership: bool, values: list<string>, commands: list<array{command: WriteCommand, property: string, value: string}>}>
      */
     private function collectReferences(array $commands): array
     {
@@ -98,6 +104,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
             foreach ($definition->getFields()->filterInstance(FkField::class) as $field) {
                 if (!$field instanceof FkField
                     || $field instanceof TenantField
+                    || $field instanceof TenantMembershipField
                     || $field instanceof CreatedByField
                     || $field instanceof UpdatedByField
                     || !$command->hasField($field->getStorageName())
@@ -111,7 +118,9 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                 }
 
                 $referenceDefinition = $field->getReferenceDefinition();
-                if (!$referenceDefinition->getFields()->filterInstance(TenantField::class)->first() instanceof TenantField) {
+                $membership = $referenceDefinition->getFields()->filterInstance(TenantMembershipAssociationField::class)->first();
+                $tenantField = $referenceDefinition->getFields()->filterInstance(TenantField::class)->first();
+                if (!$tenantField instanceof TenantField && !$membership instanceof TenantMembershipAssociationField) {
                     continue;
                 }
 
@@ -121,11 +130,19 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     continue;
                 }
 
-                $key = $referenceDefinition->getEntityName() . '::' . $referenceField->getStorageName();
+                $table = $referenceDefinition->getEntityName();
+                $referenceStorageField = $referenceField->getStorageName();
+                if ($membership instanceof TenantMembershipAssociationField) {
+                    $table = $membership->getMappingDefinition()->getEntityName();
+                    $referenceStorageField = $membership->getMappingLocalColumn();
+                }
+
+                $key = $table . '::' . $referenceStorageField;
                 $references[$key] ??= [
-                    'table' => $referenceDefinition->getEntityName(),
-                    'field' => $referenceField->getStorageName(),
+                    'table' => $table,
+                    'field' => $referenceStorageField,
                     'binary' => $referenceField instanceof IdField,
+                    'membership' => $membership instanceof TenantMembershipAssociationField,
                     'values' => [],
                     'commands' => [],
                 ];
@@ -149,7 +166,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
     /**
      * @param list<string> $values
      *
-     * @return array<string, string|null>
+     * @return array<string, list<string|null>>
      */
     private function loadOwners(string $table, string $field, array $values, bool $binary): array
     {
@@ -169,7 +186,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     continue;
                 }
 
-                $owners[$this->valueKey($row['reference_value'])] = \is_string($row['tenant_id']) ? $row['tenant_id'] : null;
+                $owners[$this->valueKey($row['reference_value'])][] = \is_string($row['tenant_id']) ? $row['tenant_id'] : null;
             }
         }
 

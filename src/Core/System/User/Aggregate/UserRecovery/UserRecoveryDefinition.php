@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\User\UserDefinition;
 
@@ -47,7 +46,6 @@ class UserRecoveryDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned user recovery.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of user recovery.'),
             new StringField('hash', 'hash')->removeFlag(ApiAware::class)->addFlags(new Required())->setDescription('Password hash for user recovery.'),
             new FkField('user_id', 'userId', UserDefinition::class)->addFlags(new Required())->setDescription('Unique identity of user.'),
