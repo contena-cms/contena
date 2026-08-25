@@ -1,9 +1,6 @@
 import 'src/app/component/structure/ct-admin';
 import { mount } from '@vue/test-utils';
 
-jest.mock('ant-design-vue/es/locale/en_GB', () => ({ default: {} }));
-jest.mock('ant-design-vue/es/locale/zh_CN', () => ({ default: {} }));
-
 async function createWrapper(isLoggedIn) {
     return mount(await wrapTestComponent('ct-admin', { sync: true }), {
         global: {
@@ -19,14 +16,6 @@ async function createWrapper(isLoggedIn) {
                 'mt-theme-provider': {
                     name: 'MtThemeProvider',
                     props: ['future'],
-                    template: '<div><slot /></div>',
-                },
-                'a-config-provider': {
-                    name: 'AConfigProvider',
-                    props: [
-                        'locale',
-                        'theme',
-                    ],
                     template: '<div><slot /></div>',
                 },
             },
@@ -59,18 +48,5 @@ describe('src/app/component/structure/ct-admin/index.ts', () => {
         expect(wrapper.findComponent({ name: 'MtThemeProvider' }).props('future')).toEqual({
             removeCardWidth: true,
         });
-    });
-
-    it('provides the Ant Design theme to the administration', async () => {
-        wrapper = await createWrapper(false);
-
-        expect(wrapper.findComponent({ name: 'AConfigProvider' }).props('theme')).toEqual(
-            expect.objectContaining({
-                token: expect.objectContaining({
-                    colorPrimary: '#2563eb',
-                    controlHeight: 32,
-                }),
-            }),
-        );
     });
 });

@@ -71,12 +71,6 @@ async function createWrapper(
                         checkUserEmail: () => Promise.resolve({ emailIsUnique: true }),
                     },
                     integrationService: {},
-                    dataDictionaryService: {
-                        getOptions: jest.fn().mockResolvedValue([
-                            { value: 'male', label: 'Male', code: 'male' },
-                            { value: 'female', label: 'Female', code: 'female' },
-                        ]),
-                    },
                     repositoryFactory: {
                         create: (entityName) => {
                             if (entityName === 'user') {
@@ -139,7 +133,6 @@ async function createWrapper(
                     },
                 },
                 stubs: {
-                    teleport: true,
                     'ct-page': {
                         template: `
 <div>

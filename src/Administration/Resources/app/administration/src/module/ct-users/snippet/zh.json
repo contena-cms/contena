@@ -5,10 +5,7 @@
             "placeholderSearchBar": "搜索用户...",
             "labelUserList": "用户",
             "labelCreateNewUser": "新建用户",
-            "cardLabel": "用户",
-            "description": "管理后台用户、账号状态及角色权限。",
-            "openMenu": "打开菜单",
-            "total": "共 {total} 个用户"
+            "cardLabel": "用户"
         },
         "filter": {
             "title": "筛选",
@@ -24,27 +21,11 @@
             "rolesPlaceholder": "选择角色...",
             "reset": "重置筛选"
         },
-        "columns": {
-            "title": "列设置",
-            "all": "全部列",
-            "reset": "重置",
-            "fixedLeft": "固定到左侧",
-            "fixedRight": "固定到右侧"
-        },
-        "bulk": {
-            "selected": "已选 {count} 项",
-            "delete": "批量删除",
-            "title": "删除所选用户",
-            "confirm": "确定要删除选中的 {count} 个用户吗？",
-            "deleteSuccess": "已删除 {count} 个用户。",
-            "deleteError": "部分或全部用户删除失败，请刷新后重试。"
-        },
         "user-grid": {
             "labelUserCode": "用户编码",
             "labelUsername": "用户名",
             "labelName": "姓名",
             "labelPhoneNumber": "手机号",
-            "labelContact": "联系方式",
             "labelGender": "性别",
             "labelGenderPlaceholder": "选择性别...",
             "labelRoles": "角色",
@@ -78,7 +59,6 @@
             "errorUsernameUsed": "此用户名已被使用。",
             "labelUsername": "用户名",
             "labelPassword": "密码",
-            "labelActive": "启用",
             "labelProfilePicture": "头像",
             "labelUserInterface": "界面设置",
             "labelLanguage": "界面语言",

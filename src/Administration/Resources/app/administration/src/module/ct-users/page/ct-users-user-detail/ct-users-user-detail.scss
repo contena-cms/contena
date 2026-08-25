@@ -1,0 +1,98 @@
+@import "~scss/variables";
+
+.ct-users-user-detail {
+    .ct-card-view__content {
+        max-width: $content-width;
+        margin: 0 auto;
+    }
+
+    .ct-users-user-detail__grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-column-gap: var(--scale-size-32);
+    }
+
+    .ct-users-user-detail__information-grid {
+        grid-template-areas:
+            "Name PhoneNumber"
+            "EMail State"
+            "Username Password"
+            "UserCode Gender";
+    }
+
+    .ct-users-user-detail__user-interface-grid {
+        grid-template-areas:
+            "Language ProfilePicture"
+            "Timezone ProfilePicture";
+    }
+
+    .ct-users-user-detail__roles-permissions-grid {
+        grid-template-areas:
+            "AclRoles JobTitle"
+            "IsAdmin IsAdmin";
+    }
+
+    .ct-users-user-detail__grid-name {
+        grid-area: Name;
+    }
+
+    .ct-users-user-detail__grid-phoneNumber {
+        grid-area: PhoneNumber;
+    }
+
+    .ct-users-user-detail__grid-eMail {
+        grid-area: EMail;
+    }
+
+    .ct-users-user-detail__grid-user-code {
+        grid-area: UserCode;
+    }
+
+    .ct-users-user-detail__grid-gender {
+        grid-area: Gender;
+    }
+
+    .ct-users-user-detail__grid-username {
+        grid-area: Username;
+    }
+
+    .ct-users-user-detail__grid-password {
+        grid-area: Password;
+    }
+
+    .ct-users-user-detail__grid-language {
+        grid-area: Language;
+    }
+
+    .ct-users-user-detail__grid-profile-picture {
+        grid-area: ProfilePicture;
+    }
+
+    .ct-users-user-detail__grid-jobTitle {
+        grid-area: JobTitle;
+    }
+
+    .ct-users-user-detail__grid-aclRoles {
+        grid-area: AclRoles;
+    }
+
+    .ct-users-user-detail__grid-is-admin {
+        grid-area: IsAdmin;
+    }
+
+    .ct-users-user-detail__grid-state {
+        grid-area: State;
+    }
+
+    .mt-switch {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    &__grid-timezone {
+        grid-area: Timezone;
+        margin-top: 0;
+    }
+}

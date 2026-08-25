@@ -1,6 +1,4 @@
 import { ADMIN_MENU_ROOTS } from 'src/core/constant/admin-menu.constant';
-import enGB from './snippet/en.json';
-import zhCN from './snippet/zh.json';
 
 /* eslint-disable ct-deprecation-rules/private-feature-declarations */
 Contena.Component.register('ct-users', () => import('./page/ct-users'));
@@ -18,25 +16,20 @@ Contena.Module.register('ct-users', {
     version: '1.0.0',
     targetVersion: '1.0.0',
     color: '#9AA8B5',
-    icon: 'UserOutlined',
+    icon: 'regular-user',
     favicon: 'icon-module-settings.png',
     entity: 'user',
-    snippets: {
-        'en-GB': enGB,
-        'zh-CN': zhCN,
-    },
 
     routes: {
         index: {
             component: 'ct-users',
             path: 'index',
             meta: {
-                keepAlive: true,
                 privilege: 'users_and_permissions.viewer',
             },
         },
         'user.detail': {
-            component: 'ct-users',
+            component: 'ct-users-user-detail',
             path: 'user.detail/:id?',
             meta: {
                 parentPath: 'ct.users.index',
@@ -44,7 +37,7 @@ Contena.Module.register('ct-users', {
             },
         },
         'user.create': {
-            component: 'ct-users',
+            component: 'ct-users-user-create',
             path: 'user.create',
             meta: {
                 parentPath: 'ct.users.index',
@@ -59,7 +52,7 @@ Contena.Module.register('ct-users', {
             label: 'ct-users.general.cardLabel',
             path: 'ct.users.index',
             parent: ADMIN_MENU_ROOTS.system,
-            icon: 'UserOutlined',
+            icon: 'regular-user',
             position: 10,
             privilege: 'users_and_permissions.viewer',
         },

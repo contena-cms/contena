@@ -1,6 +1,5 @@
 import Store from 'src/app/store';
 import '../store/admin-menu.store';
-import '../store/route-tabs.store';
 import '../store/block-override.store';
 import 'src/app/store/extension-entry-routes.store';
 import 'src/app/store/error.store';

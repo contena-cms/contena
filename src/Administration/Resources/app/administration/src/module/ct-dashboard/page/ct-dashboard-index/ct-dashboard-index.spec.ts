@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
+
 describe('module/ct-dashboard/page/ct-dashboard-index', () => {
-    it('renders only the mock dashboard without loading repositories', async () => {
+    it('renders an empty home page without loading or displaying data', async () => {
         const component = await wrapTestComponent('ct-dashboard-index', { sync: true });
         const createRepository = jest.fn();
         const wrapper = mount(component, {
@@ -18,12 +19,8 @@ describe('module/ct-dashboard/page/ct-dashboard-index', () => {
         });
 
         expect(wrapper.find('.ct-dashboard-index').exists()).toBe(true);
-        expect(wrapper.findAll('.ct-dashboard-index__metric')).toHaveLength(4);
-        expect(wrapper.find('.ct-dashboard-index__recent-panel').exists()).toBe(true);
-        expect(wrapper.find('.ct-dashboard-index__settings-layout').exists()).toBe(false);
-        expect(wrapper.find('.ct-dashboard-index__list-surface').exists()).toBe(false);
+        expect(wrapper.text()).toBe('');
+        expect(wrapper.find('section, article, table, apexchart, mt-empty-state').exists()).toBe(false);
         expect(createRepository).not.toHaveBeenCalled();
-
-        wrapper.unmount();
     });
 });

@@ -195,12 +195,6 @@ export default () => {
     Contena.Component.register('ct-context-menu', () => import('src/app/component/context-menu/ct-context-menu/index'));
     Contena.Component.register('ct-context-button', () => import('src/app/component/context-menu/ct-context-button/index'));
     Contena.Component.register('ct-version', () => import('src/app/component/base/ct-version/index'));
-    Contena.Component.register('ct-icon', () => import('src/app/component/base/ct-icon/index'));
-    Contena.Component.register('ct-route-tabs', () => import('src/app/component/structure/ct-route-tabs/index'));
-    Contena.Component.register(
-        'ct-table-column-setting',
-        () => import('src/app/component/base/ct-table-column-setting/index'),
-    );
     Contena.Component.register(
         'ct-simple-search-field',
         () => import('src/app/component/base/ct-simple-search-field/index'),

@@ -184,11 +184,7 @@ describe('src/app/component/structure/ct-desktop', () => {
             icon: 'default-symbol-products',
             color: '#57D9A3',
             entity: 'product',
-            privilege: undefined,
-            route: {
-                name: 'ct.product.create',
-                children: [{ name: 'ct.product.create.base' }],
-            },
+            route: { name: 'ct.product.create' },
             action: true,
         });
     });

@@ -4,14 +4,14 @@ const coreNavigationEntries = Object.freeze([
     {
         id: ADMIN_MENU_ROOTS.content,
         label: 'global.ct-admin-menu.navigation.mainMenuItemContent',
-        icon: 'FolderOutlined',
+        icon: 'regular-folder',
         position: 20,
         moduleType: 'core',
     },
     {
         id: ADMIN_MENU_ROOTS.system,
         label: 'global.ct-admin-menu.navigation.mainMenuItemSystem',
-        icon: 'DesktopOutlined',
+        icon: 'regular-desktop',
         position: 70,
         moduleType: 'core',
     },

@@ -1,152 +1,176 @@
 <template>
     <ct-block name="sw_users_user_list">
-        <div class="ct-users-user-listing">
-            <ct-block name="sw_users_user_list_content">
-                <a-table
-                    class="ct-users-user-listing__table"
-                    :columns="userColumns"
-                    :data-source="user ?? []"
-                    :loading="isLoading"
-                    :pagination="tablePagination"
-                    :row-selection="rowSelection"
-                    row-key="id"
-                    size="middle"
-                    :scroll="{ x: 1040 }"
-                    @change="onTableChange"
-                >
-                    <template #bodyCell="{ column, record }">
-                        <template v-if="column.key === 'user'">
-                            <ct-block name="sw_users_user_list_column_username">
-                                <div class="ct-users-user-listing__identity">
-                                    <a-avatar :src="record.avatarMedia?.url">
-                                        {{ getUserAvatarText(record) }}
-                                    </a-avatar>
-                                    <router-link
-                                        class="ct-users-user-listing__username"
-                                        :to="{ name: userDetailRouterLink, params: { id: record.id } }"
-                                    >
-                                        <strong>{{ getUserDisplayName(record) }}</strong>
-                                        <span>@{{ record.username }}</span>
-                                    </router-link>
-                                </div>
-                            </ct-block>
-                        </template>
+        <mt-card class="ct-users-user-listing ct-users-user-listing" position-identifier="ct-users-user-listing">
+            <template #grid>
+                <ct-block name="sw_users_user_list_content">
+                    <ct-block name="sw_users_user_list_content_grid">
+                        <ct-entity-listing
+                            v-if="isLoading || user"
+                            :data-source="user"
+                            :columns="userColumns"
+                            :repository="userRepository"
+                            identifier="user-grid"
+                            :show-settings="true"
+                            :show-selection="false"
+                            :is-loading="isLoading"
+                            :disable-data-fetching="true"
+                            :full-page="false"
+                            :compact-mode="true"
+                            :sort-by="sortBy"
+                            :sort-direction="sortDirection"
+                            :allow-view="acl.can('users_and_permissions.viewer')"
+                            :allow-edit="acl.can('users_and_permissions.editor')"
+                            :allow-delete="acl.can('users_and_permissions.deleter')"
+                            @column-sort="onSortColumn"
+                            @page-change="onPageChange"
+                        >
+                            <template #actions="{ item }">
+                                <ct-block name="sw_users_user_list_content_grid_actions">
+                                    <ct-block name="sw_users_user_list_actions_edit">
+                                        <ct-context-menu-item
+                                            class="ct-users-user-listing__user-view-action"
+                                            :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                            @click="onEdit(item)"
+                                        >
+                                            {{ $t('global.default.edit') }}
+                                        </ct-context-menu-item>
+                                    </ct-block>
 
-                        <template v-else-if="column.key === 'contact'">
-                            <div class="ct-users-user-listing__contact">
-                                <span>{{ record.phoneNumber || '-' }}</span>
-                                <span>{{ record.email || '-' }}</span>
-                            </div>
-                        </template>
+                                    <ct-block name="sw_users_user_list_actions_delete">
+                                        <ct-context-menu-item
+                                            class="ct-users-user-listing__user-delete-action"
+                                            variant="danger"
+                                            :disabled="!acl.can('users_and_permissions.deleter') || undefined"
+                                            @click="onDelete(item)"
+                                        >
+                                            {{ $t('global.default.delete') }}
+                                        </ct-context-menu-item>
+                                    </ct-block>
+                                </ct-block>
+                            </template>
 
-                        <template v-else-if="column.key === 'aclRoles'">
-                            <ct-block name="sw_users_user_list_column_username_acl_roles">
-                                <a-space v-if="record.aclRoles?.length" :size="[4, 4]" wrap>
-                                    <a-tag v-for="role in record.aclRoles" :key="role.id ?? role.name">
-                                        {{ role.name }}
-                                    </a-tag>
-                                </a-space>
-                                <span v-else class="ct-users-user-listing__empty">-</span>
-                            </ct-block>
-                        </template>
+                            <template #preview-username="{ item }">
+                                <ct-block name="sw_users_user_list_column_username_preview">
+                                    <mt-avatar
+                                        size="xs"
+                                        :name="item.name"
+                                        variant="square"
+                                        :image-url="item.avatarMedia?.url"
+                                    />
+                                </ct-block>
+                            </template>
 
-                        <template v-else-if="column.key === 'active'">
-                            <ct-block name="sw_users_user_list_column_active">
-                                <a-badge
-                                    :status="record.active ? 'success' : 'default'"
-                                    :text="
-                                        $t(
-                                            record.active
-                                                ? 'ct-users.filter.statusLabel.active'
-                                                : 'ct-users.filter.statusLabel.inactive',
-                                        )
-                                    "
-                                />
-                            </ct-block>
-                        </template>
+                            <template #column-username="{ item }">
+                                <ct-block name="sw_users_user_list_column_username">
+                                    <ct-block name="sw_users_user_list_column_username_content">
+                                        <mt-link
+                                            :as="RouterLink"
+                                            class="ct-users-user-listing__columns"
+                                            :to="{ name: userDetailRouterLink, params: { id: item.id } }"
+                                        >
+                                            {{ item.username }}
+                                        </mt-link>
+                                    </ct-block>
+                                </ct-block>
+                            </template>
 
-                        <template v-else-if="column.key === 'action'">
-                            <ct-block name="sw_users_user_list_content_grid_actions">
-                                <a-dropdown :trigger="['click']">
-                                    <a-button type="text" shape="circle" :aria-label="$t('global.default.edit')">
-                                        <ct-icon name="MoreOutlined" :size="18" />
-                                    </a-button>
-                                    <template #overlay>
-                                        <a-menu @click="onActionClick($event.key, record)">
-                                            <a-menu-item key="edit" :disabled="!acl.can('users_and_permissions.editor')">
-                                                <ct-icon name="EditOutlined" />
-                                                {{ $t('global.default.edit') }}
-                                            </a-menu-item>
-                                            <a-menu-divider />
-                                            <a-menu-item
-                                                key="delete"
-                                                danger
-                                                :disabled="
-                                                    !acl.can('users_and_permissions.deleter') ||
-                                                    record.id === currentUser?.id
-                                                "
-                                            >
-                                                <ct-icon name="DeleteOutlined" />
-                                                {{ $t('global.default.delete') }}
-                                            </a-menu-item>
-                                        </a-menu>
+                            <!-- ct-block preserves this slot variable at runtime. -->
+                            <!-- eslint-disable-next-line vue/no-unused-vars -->
+                            <template #column-email="emailColumn">
+                                <ct-block name="sw_users_user_list_column_email">
+                                    <ct-block name="sw_users_user_list_column_email_content">
+                                        <span class="ct-data-grid__cell-value">
+                                            {{ emailColumn.item.email }}
+                                        </span>
+                                    </ct-block>
+                                </ct-block>
+                            </template>
+
+                            <template #column-aclRoles="{ item }">
+                                <ct-block name="sw_users_user_list_column_username_acl_roles">
+                                    <template v-if="item.aclRoles && item.aclRoles.length > 0">
+                                        <span class="ct-data-grid__cell-value">
+                                            <span v-for="(role, index) in item.aclRoles" :key="index">
+                                                {{ role.name
+                                                }}<template v-if="index + 1 < item.aclRoles.length">,&nbsp;</template>
+                                            </span>
+                                        </span>
                                     </template>
-                                </a-dropdown>
-                            </ct-block>
-                        </template>
-                    </template>
-                </a-table>
-            </ct-block>
 
-            <ct-block name="sw_users_user_list_delete_modal">
-                <a-modal
-                    :open="Boolean(itemToDelete)"
-                    :title="$t('ct-users.user-grid.titleModalDelete')"
-                    :confirm-loading="isDeleting"
-                    :ok-text="$t('global.default.delete')"
-                    :cancel-text="$t('global.default.cancel')"
-                    ok-type="danger"
-                    @ok="onConfirmDelete(itemToDelete)"
-                    @cancel="onCloseDeleteModal"
-                >
-                    <p v-if="itemToDelete" class="ct-users-user-listing__confirm-delete-text">
-                        {{ $t('ct-users.user-grid.textModalDelete', { name: getUserDisplayName(itemToDelete) }, 0) }}
-                    </p>
-                </a-modal>
-            </ct-block>
+                                    <span v-else></span>
+                                </ct-block>
+                            </template>
 
-            <ct-block name="sw_users_user_list_bulk_delete_modal">
-                <a-modal
-                    :open="isBulkDeleteModalOpen"
-                    :title="$t('ct-users.bulk.title')"
-                    :confirm-loading="isDeleting"
-                    :ok-text="$t('ct-users.bulk.delete')"
-                    :cancel-text="$t('global.default.cancel')"
-                    ok-type="danger"
-                    @ok="onConfirmBulkDelete"
-                    @cancel="onCloseBulkDeleteModal"
-                >
-                    <p class="ct-users-user-listing__confirm-delete-text">
-                        {{ $t('ct-users.bulk.confirm', { count: selectedRowKeys.length }) }}
-                    </p>
-                </a-modal>
-            </ct-block>
-        </div>
+                            <template #column-active="{ item }">
+                                <ct-block name="sw_users_user_list_column_active">
+                                    <mt-badge :variant="item.active ? 'positive' : 'critical'" size="s">
+                                        {{
+                                            $t(
+                                                item.active
+                                                    ? 'ct-users.filter.statusLabel.active'
+                                                    : 'ct-users.filter.statusLabel.inactive',
+                                            )
+                                        }}
+                                    </mt-badge>
+                                </ct-block>
+                            </template>
+
+                            <template #action-modals="{ item }">
+                                <ct-block name="sw_users_user_list_delete_modal">
+                                    <ct-modal
+                                        v-if="getItemToDelete(item)"
+                                        :title="$t('global.default.warning')"
+                                        variant="small"
+                                        class="ct-users-user-listing__delete-modal"
+                                        @modal-close="onCloseDeleteModal"
+                                    >
+                                        <ct-block name="sw_users_user_list_delete_modal_confirm_delete_text">
+                                            <p class="ct-users-user-listing__confirm-delete-text">
+                                                {{
+                                                    $t(
+                                                        'ct-users.user-grid.textModalDelete',
+                                                        { name: getUserDisplayName(item) },
+                                                        0,
+                                                    )
+                                                }}
+                                            </p>
+                                        </ct-block>
+
+                                        <template #modal-footer>
+                                            <ct-block name="sw_users_user_list_delete_modal_footer">
+                                                <ct-block name="sw_users_user_list_delete_modal_cancel">
+                                                    <mt-button size="small" variant="secondary" @click="onCloseDeleteModal">
+                                                        {{ $t('global.default.cancel') }}
+                                                    </mt-button>
+                                                </ct-block>
+
+                                                <ct-block name="sw_users_user_list_delete_modal_confirm">
+                                                    <mt-button
+                                                        :is-loading="isLoading"
+                                                        variant="critical"
+                                                        size="small"
+                                                        @click="onConfirmDelete(item)"
+                                                    >
+                                                        {{ $t('global.default.delete') }}
+                                                    </mt-button>
+                                                </ct-block>
+                                            </ct-block>
+                                        </template>
+                                    </ct-modal>
+                                </ct-block>
+                            </template>
+                        </ct-entity-listing>
+                    </ct-block>
+                </ct-block>
+            </template>
+        </mt-card>
     </ct-block>
 </template>
 
-<script setup lang="ts">
-import { computed, inject, nextTick, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import type { TablePaginationConfig } from 'ant-design-vue';
-import type { SorterResult } from 'ant-design-vue/es/table/interface';
-import type AclService from 'src/app/service/acl.service';
-import { useListing } from 'src/app/composables/use-listing';
-import { useNotification } from 'src/app/composables/use-notification';
-import type { TableColumnSetting } from 'src/app/component/base/ct-table-column-setting';
-
-const { Criteria } = Contena.Data;
+<script setup>
+import './ct-users-user-listing.scss';
+const { Data } = Contena;
+const { Criteria } = Data;
 
 defineOptions({
     metaInfo() {
@@ -156,69 +180,49 @@ defineOptions({
     },
 });
 
-const props = withDefaults(
-    defineProps<{
-        columnSettings?: TableColumnSetting[];
-    }>(),
-    {
-        columnSettings: () => [],
-    },
-);
-const emit = defineEmits<{
-    'get-list': [];
-    'loading-change': [loading: boolean];
-    'selection-change': [count: number];
-    'total-change': [total: number];
-}>();
+defineProps({});
+const emit = defineEmits([
+    'get-list',
+    'loading-change',
+    'total-change',
+]);
 
-interface UserRecord {
-    id: string;
-    username: string;
-    userCode?: string;
-    name?: string;
-    phoneNumber?: string;
-    email?: string;
-    active?: boolean;
-    avatarMedia?: { url?: string };
-    aclRoles?: Array<{ id?: string; name: string }>;
-}
-
-interface Repository {
-    search(criteria: unknown): Promise<any>;
-    delete(id: string, context: unknown): Promise<void>;
-}
-
-interface RepositoryFactory {
-    create(entity: string): Repository;
-}
+import { ref, computed, inject, nextTick } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useListing } from 'src/app/composables/use-listing';
+import { useNotification } from 'src/app/composables/use-notification';
 
 const { t } = useI18n();
 const router = useRouter();
-const { page, limit, total, sortDirection, term, initializeListing } = useListing();
+const { page, limit, total, sortDirection, term, onPageChange, onSortColumn, initializeListing } = useListing();
 const { createNotificationSuccess, createNotificationError } = useNotification();
-const repositoryFactory = inject<RepositoryFactory>('repositoryFactory');
-const acl = inject<AclService>('acl');
 
-if (!repositoryFactory || !acl) {
-    throw new Error('The user listing services are unavailable.');
-}
+const userService = inject('userService');
+const repositoryFactory = inject('repositoryFactory');
+const acl = inject('acl');
 
-const user = ref<any>(null);
+const user = ref(null);
 const isLoading = ref(false);
-const isDeleting = ref(false);
-const itemToDelete = ref<UserRecord | null>(null);
-const isBulkDeleteModalOpen = ref(false);
-const selectedRowKeys = ref<Array<string | number>>([]);
+const itemToDelete = ref(null);
 const disableRouteParams = ref(true);
 const sortBy = ref('username');
-const roles = ref<Array<{ id: string; name: string }>>([]);
+const roles = ref([]);
 const statusFilter = ref('all');
-const roleFilter = ref<string[]>([]);
+const roleFilter = ref([]);
 
-const userRepository = computed(() => repositoryFactory.create('user'));
-const roleRepository = computed(() => repositoryFactory.create('acl_role'));
-const currentUser = computed<UserRecord | null>(() => Contena.Store.get('session').currentUser);
-const userDetailRouterLink = computed(() => 'ct.users.user.detail');
+const userRepository = computed(() => {
+    return repositoryFactory.create('user');
+});
+const roleRepository = computed(() => {
+    return repositoryFactory.create('acl_role');
+});
+const currentUser = computed(() => {
+    return Contena.Store.get('session').currentUser;
+});
+const userDetailRouterLink = computed(() => {
+    return 'ct.users.user.detail';
+});
 const userCriteria = computed(() => {
     const criteria = new Criteria(page.value, limit.value);
 
@@ -227,6 +231,8 @@ const userCriteria = computed(() => {
     }
 
     if (sortBy.value) {
+        // Criteria is a local mutable query object, not component state.
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         criteria.addSorting(Criteria.sort(sortBy.value, sortDirection.value || 'ASC'));
     }
 
@@ -243,255 +249,190 @@ const userCriteria = computed(() => {
 
     return criteria;
 });
-const allUserColumns = computed(() => [
-    {
-        title: t('ct-users.user-grid.labelName'),
-        key: 'user',
-        dataIndex: 'name',
-        sorter: true,
-        width: 240,
-    },
-    { title: t('ct-users.user-grid.labelUserCode'), key: 'userCode', dataIndex: 'userCode', sorter: true, width: 140 },
-    {
-        title: t('ct-users.user-grid.labelContact'),
-        key: 'contact',
-        width: 240,
-    },
-    { title: t('ct-users.user-grid.labelRoles'), key: 'aclRoles', dataIndex: 'aclRoles', width: 220 },
-    { title: t('ct-users.user-grid.status'), key: 'active', dataIndex: 'active', align: 'center', width: 100 },
-    { title: '', key: 'action', align: 'center', width: 64 },
-]);
-const defaultColumnSettings = computed<TableColumnSetting[]>(() =>
-    allUserColumns.value.map((column) => ({
-        key: String(column.key),
-        title: String(column.title ?? ''),
-        checked: true,
-        fixed: column.key === 'user' ? 'left' : column.key === 'action' ? 'right' : false,
-        required: column.key === 'user' || column.key === 'action',
-    })),
-);
 const userColumns = computed(() => {
-    const settings = props.columnSettings.length > 0 ? props.columnSettings : defaultColumnSettings.value;
-    const columnsByKey = new Map(
-        allUserColumns.value.map((column) => [
-            String(column.key),
-            column,
-        ]),
-    );
-
-    return settings.reduce<typeof allUserColumns.value>((columns, setting) => {
-        const column = columnsByKey.get(setting.key);
-        if (!column || (!setting.checked && !setting.required)) {
-            return columns;
-        }
-
-        columns.push({
-            ...column,
-            ...(setting.fixed ? { fixed: setting.fixed } : {}),
-        });
-        return columns;
-    }, []);
-});
-const statusFilterOptions = computed(() => [
-    { value: 'all', label: t('ct-users.filter.allStatuses') },
-    { value: 'active', label: t('ct-users.filter.active') },
-    { value: 'inactive', label: t('ct-users.filter.inactive') },
-]);
-const roleFilterOptions = computed(() => roles.value.map((role) => ({ value: role.id, label: role.name })));
-const filterCount = computed(() => Number(statusFilter.value !== 'all') + Number(roleFilter.value.length > 0));
-const selectedUsers = computed<UserRecord[]>(() => {
-    const records = Array.from(user.value ?? []) as UserRecord[];
-
-    return records.filter((record) => selectedRowKeys.value.includes(record.id));
-});
-const rowSelection = computed(() => {
-    if (!acl.can('users_and_permissions.deleter')) {
-        return undefined;
-    }
-
-    return {
-        selectedRowKeys: selectedRowKeys.value,
-        onChange: (keys: Array<string | number>) => {
-            selectedRowKeys.value = keys;
-            emit('selection-change', keys.length);
+    return [
+        {
+            property: 'username',
+            label: t('ct-users.user-grid.labelUsername'),
         },
-        getCheckboxProps: (record: UserRecord) => ({
-            disabled: record.id === currentUser.value?.id,
-        }),
-    };
+        {
+            property: 'userCode',
+            label: t('ct-users.user-grid.labelUserCode'),
+        },
+        {
+            property: 'name',
+            label: t('ct-users.user-grid.labelName'),
+        },
+        {
+            property: 'phoneNumber',
+            label: t('ct-users.user-grid.labelPhoneNumber'),
+        },
+        {
+            property: 'aclRoles',
+            sortable: false,
+            label: t('ct-users.user-grid.labelRoles'),
+        },
+        {
+            property: 'email',
+            label: t('ct-users.user-grid.labelEmail'),
+        },
+        {
+            property: 'active',
+            label: t('ct-users.user-grid.status'),
+            align: 'center',
+        },
+    ];
 });
-const tablePagination = computed<TablePaginationConfig>(() => ({
-    current: page.value,
-    pageSize: limit.value,
-    total: total.value,
-    showSizeChanger: true,
-    hideOnSinglePage: true,
-}));
+const statusFilterOptions = computed(() => {
+    return [
+        { value: 'all', label: t('ct-users.filter.allStatuses') },
+        { value: 'active', label: t('ct-users.filter.active') },
+        { value: 'inactive', label: t('ct-users.filter.inactive') },
+    ];
+});
+const roleFilterOptions = computed(() => {
+    return roles.value.map((role) => ({
+        value: role.id,
+        label: role.name,
+    }));
+});
+const filterCount = computed(() => {
+    return Number(statusFilter.value !== 'all') + Number(roleFilter.value.length > 0);
+});
 
-const getUserDisplayName = (record: UserRecord) => record.name || record.username;
-const getUserAvatarText = (record: UserRecord) => getUserDisplayName(record).trim().charAt(0).toUpperCase();
-const loadRoles = async () => {
+const getUserDisplayName = (user) => {
+    return user.name || user.username;
+};
+const getItemToDelete = (item) => {
+    if (!itemToDelete.value) {
+        return false;
+    }
+    return itemToDelete.value.id === item.id;
+};
+const loadRoles = () => {
     const criteria = new Criteria(1, 500);
     criteria.addSorting(Criteria.sort('name', 'ASC'));
-    roles.value = await roleRepository.value.search(criteria);
+
+    return roleRepository.value.search(criteria).then((result) => {
+        roles.value = result;
+    });
 };
-const onSearch = (value: string) => {
+const onSearch = (value) => {
     term.value = value;
     page.value = 1;
-    return getList();
+
+    getList();
 };
 const onFilterChange = () => {
     page.value = 1;
-    return getList();
+    getList();
 };
-const setStatusFilter = async (value: string) => {
+const setStatusFilter = async (value) => {
     statusFilter.value = value;
     await nextTick();
     return onFilterChange();
 };
-const setRoleFilter = (value: string[]) => {
+const setRoleFilter = (value) => {
     roleFilter.value = value;
-    return onFilterChange();
+    onFilterChange();
 };
 const resetFilters = () => {
     statusFilter.value = 'all';
     roleFilter.value = [];
-    return onFilterChange();
+    onFilterChange();
 };
-const getList = async () => {
+const getList = () => {
     isLoading.value = true;
+    user.value = null;
+
     emit('get-list');
     emit('loading-change', true);
 
-    try {
-        const users = await userRepository.value.search(userCriteria.value);
-        total.value = users.total;
-        user.value = users;
-        emit('total-change', users.total);
-    } finally {
-        isLoading.value = false;
-        emit('loading-change', false);
-    }
+    return userRepository.value
+        .search(userCriteria.value)
+        .then((users) => {
+            total.value = users.total;
+            user.value = users;
+            emit('total-change', users.total);
+        })
+        .finally(() => {
+            isLoading.value = false;
+            emit('loading-change', false);
+        });
 };
-const onTableChange = (
-    pagination: TablePaginationConfig,
-    _filters: Record<string, unknown>,
-    sorter: SorterResult<UserRecord> | SorterResult<UserRecord>[],
-) => {
-    page.value = pagination.current ?? 1;
-    limit.value = pagination.pageSize ?? limit.value;
-
-    const activeSorter = Array.isArray(sorter) ? sorter[0] : sorter;
-    if (activeSorter?.field && activeSorter.order) {
-        sortBy.value = String(activeSorter.field);
-        sortDirection.value = activeSorter.order === 'descend' ? 'DESC' : 'ASC';
-    }
-
-    return getList();
-};
-const onEdit = (record: UserRecord) => {
+const onEdit = (user) => {
     if (!acl.can('users_and_permissions.editor')) {
         return;
     }
 
-    void router.push({ name: userDetailRouterLink.value, params: { id: record.id } });
+    void router.push({
+        name: userDetailRouterLink.value,
+        params: { id: user.id },
+    });
 };
-const onDelete = (record: UserRecord) => {
-    itemToDelete.value = record;
+const onDelete = (user) => {
+    itemToDelete.value = user;
 };
-const onActionClick = (key: string, record: UserRecord) => {
-    if (key === 'edit') {
-        onEdit(record);
-    } else if (key === 'delete') {
-        onDelete(record);
-    }
-};
-const onConfirmDelete = async (record: UserRecord | null) => {
-    if (!record) {
-        return;
-    }
+const onConfirmDelete = (user) => {
+    const username = getUserDisplayName(user);
+    const titleDeleteSuccess = t('global.default.success');
+    const messageDeleteSuccess = t('ct-users.user-grid.notification.deleteSuccess.message', { name: username }, 0);
+    const titleDeleteError = t('global.default.error');
+    const messageDeleteError = t(
+        'ct-users.user-grid.notification.deleteError.message',
+        {
+            name: username,
+        },
+        0,
+    );
 
-    if (record.id === currentUser.value?.id) {
+    if (user.id === currentUser.value?.id) {
         createNotificationError({
             title: t('global.default.error'),
             message: t('ct-users.user-grid.notification.deleteUserLoggedInError.message'),
         });
+
         onCloseDeleteModal();
+
         return;
     }
 
-    isDeleting.value = true;
-    try {
-        await userRepository.value.delete(record.id, Contena.Context.api);
-        createNotificationSuccess({
-            title: t('global.default.success'),
-            message: t('ct-users.user-grid.notification.deleteSuccess.message', { name: getUserDisplayName(record) }, 0),
+    userRepository.value
+        .delete(user.id, Contena.Context.api)
+        .then(() => {
+            createNotificationSuccess({
+                title: titleDeleteSuccess,
+                message: messageDeleteSuccess,
+            });
+            getList();
+        })
+        .catch(() => {
+            createNotificationError({
+                title: titleDeleteError,
+                message: messageDeleteError,
+            });
         });
-        onCloseDeleteModal();
-        await getList();
-    } catch {
-        createNotificationError({
-            title: t('global.default.error'),
-            message: t('ct-users.user-grid.notification.deleteError.message', { name: getUserDisplayName(record) }, 0),
-        });
-    } finally {
-        isDeleting.value = false;
-    }
+
+    onCloseDeleteModal();
 };
 const onCloseDeleteModal = () => {
     itemToDelete.value = null;
 };
-const requestBulkDelete = () => {
-    if (selectedRowKeys.value.length === 0 || !acl.can('users_and_permissions.deleter')) {
-        return;
-    }
 
-    isBulkDeleteModalOpen.value = true;
-};
-const onCloseBulkDeleteModal = () => {
-    isBulkDeleteModalOpen.value = false;
-};
-const onConfirmBulkDelete = async () => {
-    const records = selectedUsers.value.filter((record) => record.id !== currentUser.value?.id);
-    if (records.length === 0) {
-        onCloseBulkDeleteModal();
-        return;
-    }
-
-    isDeleting.value = true;
-    try {
-        await Promise.all(records.map((record) => userRepository.value.delete(record.id, Contena.Context.api)));
-        createNotificationSuccess({
-            title: t('global.default.success'),
-            message: t('ct-users.bulk.deleteSuccess', { count: records.length }),
-        });
-        selectedRowKeys.value = [];
-        emit('selection-change', 0);
-        onCloseBulkDeleteModal();
-        await getList();
-    } catch {
-        createNotificationError({
-            title: t('global.default.error'),
-            message: t('ct-users.bulk.deleteError'),
-        });
-        await getList();
-    } finally {
-        isDeleting.value = false;
-    }
-};
-
-void loadRoles();
-initializeListing({ getList, sortBy, disableRouteParams });
+loadRoles();
+initializeListing({
+    getList,
+    sortBy,
+    disableRouteParams,
+});
 
 swDefinePublic({
+    userService,
     repositoryFactory,
     acl,
     user,
     isLoading,
-    isDeleting,
     itemToDelete,
-    isBulkDeleteModalOpen,
-    selectedRowKeys,
     disableRouteParams,
     sortBy,
     roles,
@@ -503,15 +444,11 @@ swDefinePublic({
     userDetailRouterLink,
     userCriteria,
     userColumns,
-    allUserColumns,
-    selectedUsers,
-    rowSelection,
     statusFilterOptions,
     roleFilterOptions,
     filterCount,
-    tablePagination,
     getUserDisplayName,
-    getUserAvatarText,
+    getItemToDelete,
     loadRoles,
     onSearch,
     onFilterChange,
@@ -519,142 +456,45 @@ swDefinePublic({
     setRoleFilter,
     resetFilters,
     getList,
-    onTableChange,
     onEdit,
     onDelete,
-    onActionClick,
     onConfirmDelete,
     onCloseDeleteModal,
-    requestBulkDelete,
-    onCloseBulkDeleteModal,
-    onConfirmBulkDelete,
 });
 
 defineExpose({
+    userService,
+    repositoryFactory,
+    acl,
+    user,
+    isLoading,
+    itemToDelete,
+    disableRouteParams,
+    sortBy,
+    roles,
     statusFilter,
     roleFilter,
+    userRepository,
+    roleRepository,
+    currentUser,
+    userDetailRouterLink,
+    userCriteria,
+    userColumns,
     statusFilterOptions,
     roleFilterOptions,
     filterCount,
-    selectedRowKeys,
-    getList,
+    getUserDisplayName,
+    getItemToDelete,
+    loadRoles,
     onSearch,
+    onFilterChange,
     setStatusFilter,
     setRoleFilter,
     resetFilters,
-    requestBulkDelete,
+    getList,
+    onEdit,
+    onDelete,
+    onConfirmDelete,
+    onCloseDeleteModal,
 });
 </script>
-
-<style lang="scss">
-.ct-users-user-listing {
-    display: flex;
-    min-height: 0;
-    overflow: hidden;
-    flex: 1;
-    flex-direction: column;
-
-    &__table,
-    &__table .ant-spin-nested-loading,
-    &__table .ant-spin-container {
-        display: flex;
-        min-height: 0;
-        flex: 1;
-        flex-direction: column;
-    }
-
-    &__table .ant-table {
-        flex: 1;
-    }
-
-    &__table .ant-table {
-        border-radius: 0;
-    }
-
-    &__table .ant-table-thead > tr > th {
-        color: var(--ct-color-text-secondary);
-        background: var(--ct-color-bg-container);
-        border-bottom-color: var(--ct-color-border-secondary);
-        font-size: var(--ct-font-size-sm);
-        font-weight: 500;
-    }
-
-    &__table .ant-table-tbody > tr > td {
-        padding-block: 14px;
-    }
-
-    &__identity {
-        display: flex;
-        align-items: center;
-        min-width: 0;
-        gap: 10px;
-
-        .ant-avatar {
-            flex: 0 0 auto;
-            color: var(--ct-color-primary);
-            background: var(--ct-color-primary-bg);
-        }
-    }
-
-    &__username {
-        display: flex;
-        overflow: hidden;
-        min-width: 0;
-        flex-direction: column;
-        text-decoration: none;
-
-        strong,
-        span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        strong {
-            color: var(--ct-color-text);
-            font-size: var(--ct-font-size);
-            font-weight: 500;
-            line-height: 20px;
-        }
-
-        span {
-            color: var(--ct-color-text-tertiary);
-            font-size: var(--ct-font-size-sm);
-            line-height: 18px;
-        }
-    }
-
-    &__contact {
-        display: flex;
-        min-width: 0;
-        flex-direction: column;
-
-        span {
-            overflow: hidden;
-            color: var(--ct-color-text-secondary);
-            font-size: var(--ct-font-size-sm);
-            line-height: 20px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        span + span {
-            color: var(--ct-color-text-tertiary);
-        }
-    }
-
-    &__empty {
-        color: var(--ct-color-text-tertiary);
-    }
-
-    &__confirm-delete-text {
-        margin: 0;
-        color: var(--ct-color-text-secondary);
-        line-height: 24px;
-    }
-
-    .ant-pagination {
-        margin: var(--ct-spacing) var(--ct-spacing-lg);
-    }
-}
-</style>

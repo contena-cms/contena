@@ -14,7 +14,7 @@ Keep general Administration structure, tech stack, docs links, and scripts in `s
 - Do not introduce public API breaks without prior discussion.
 - Follow existing component, module, service, repository, and store patterns.
 - Administration Vue components must be native `.vue` SFCs using `<script setup>`. Base components declare extension-facing bindings with one top-level `swDefinePublic({ ... })`; `.override.vue` components use `useSwPreviousState()` and one top-level `swDefineOverride({ ... })`. Do not author `createExtendableSetup` wrappers or `ComponentPublicApiMapping` entries.
-- Add named `<ct-block name="ct_...">` seams around meaningful template regions so plugins can extend pages and components. The native setup transform injects `:data="$dataScope"`; do not add it manually. Use snake_case `ct_` names and `<ct-block-parent />` in extending blocks when preserving default content; do not register blocks inside `v-for` loops. Use Ant Design Vue for visible controls and the `ct-*` prefix for project-owned abstractions; do not introduce legacy Meteor `mt-*` components or compatibility layers.
+- Add named `<ct-block name="ct_...">` seams around meaningful template regions so plugins can extend pages and components. The native setup transform injects `:data="$dataScope"`; do not add it manually. Use snake_case `ct_` names and `<ct-block-parent />` in extending blocks when preserving default content; do not register blocks inside `v-for` loops. Structural `ct-page`/`ct-block` tags are allowed, but visible UI controls must use `mt-*` components.
 - For Admin UI that reads or persists DAL entities or associations, update matching ACL privilege mapping and migrations for existing roles when needed.
 
 ## Tests

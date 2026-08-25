@@ -1,16 +1,36 @@
 <template>
     <ct-block name="sw_admin">
-        <a-config-provider :locale="antLocale" :theme="themeConfig">
+        <mt-theme-provider :future="{ removeCardWidth: true }">
             <ct-skip-link />
 
-            <div id="app" :style="cssVariables">
+            <div id="app">
+                <div id="overrideComponents" style="display: none">
+                    <component
+                        :is="overrideComponent"
+                        v-for="(overrideComponent, index) in overrideComponents"
+                        v-once
+                        :key="index"
+                    />
+                </div>
+
+                <template v-if="isLoggedIn">
+                    <ct-duplicated-media-v2 />
+                    <ct-settings-cache-modal />
+                    <ct-media-modal-renderer />
+                    <ct-upload-status />
+                </template>
+
+                <ct-notifications ref="notifications" />
                 <router-view />
+                <mt-snackbar />
             </div>
-        </a-config-provider>
+        </mt-theme-provider>
     </ct-block>
 </template>
 
 <script setup lang="ts">
+const { Component } = Contena;
+
 defineOptions({
     metaInfo() {
         return {
@@ -21,26 +41,26 @@ defineOptions({
 
 defineProps({});
 
-import { computed } from 'vue';
-import enGB from 'ant-design-vue/es/locale/en_GB';
-import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import useSession from 'src/app/composables/use-session';
-import useTheme from 'src/app/composables/use-theme';
+import { computed, inject } from 'vue';
 
-const { currentLocale } = useSession();
-const { themeConfig, cssVariables } = useTheme();
+const loginService = inject('loginService');
 
-const antLocale = computed(() => (currentLocale.value === 'zh-CN' ? zhCN : enGB));
+const isLoggedIn = computed(() => {
+    return loginService.isLoggedIn();
+});
+const overrideComponents = computed(() => {
+    return Component.getOverrideComponents();
+});
 
 swDefinePublic({
-    antLocale,
-    themeConfig,
-    cssVariables,
+    loginService,
+    isLoggedIn,
+    overrideComponents,
 });
 
 defineExpose({
-    antLocale,
-    themeConfig,
-    cssVariables,
+    loginService,
+    isLoggedIn,
+    overrideComponents,
 });
 </script>

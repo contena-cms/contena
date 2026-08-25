@@ -1,710 +1,700 @@
 {
-    "global": {
-        "error-codes": {
-            "FRAMEWORK__MISSING_PRIVILEGE_ERROR": "Missing permissions.",
-            "FRAMEWORK__DELETE_RESTRICTED": "Deletion failed.",
-            "c1051bb4-d103-4f74-8988-acbcafc7fdc3": "This field must not be empty.",
-            "INVALID_MEDIA_URL": "Please enter a valid URL to upload a file.",
-            "CONTENT__INVALID_CATEGORY_TYPE_AS_ENTRY_POINT": "The type can not be assigned while category is an entry point.",
-            "CONTENA_INVALID_IP": "Please enter a valid IP address.",
-            "CONTENA_INVALID_IP_CIDR": "Please enter a valid IP address or a valid IP-address with CIDR mask.",
-            "INVALID_URL": "Please enter a valid url.",
-            "INVALID_MAIL": "Please enter a valid email address.",
-            "FRAMEWORK__RATE_LIMIT_EXCEEDED": "Too many requests. Please wait {seconds} seconds before trying again.",
-            "FRAMEWORK__ROUTE_BLOCKED_MESSAGE": "The URL {path} conflicts with the existing route {blockedSegment} and cannot be used.",
-            "DUPLICATED_NAME": "This name is already in use.",
-            "CONTENT__MEDIA_EMPTY_FILE": "A valid filename must be provided.",
-            "FRAMEWORK__API_SALES_CHANNEL_MAINTENANCE_MODE": "The selected sales channel is in maintenance mode and your IP address is not allowlisted. Disable maintenance mode or add your IP address to the allowlist.",
-            "THEME__INVALID_SCSS_VAR": "SCSS value \"{value}\" is not valid for type \"{type}\"."
+  "global": {
+    "error-codes": {
+      "FRAMEWORK__MISSING_PRIVILEGE_ERROR": "Missing permissions.",
+      "FRAMEWORK__DELETE_RESTRICTED": "Deletion failed.",
+      "c1051bb4-d103-4f74-8988-acbcafc7fdc3": "This field must not be empty.",
+      "INVALID_MEDIA_URL": "Please enter a valid URL to upload a file.",
+      "CONTENT__INVALID_CATEGORY_TYPE_AS_ENTRY_POINT": "The type can not be assigned while category is an entry point.",
+      "CONTENA_INVALID_IP": "Please enter a valid IP address.",
+      "CONTENA_INVALID_IP_CIDR": "Please enter a valid IP address or a valid IP-address with CIDR mask.",
+      "INVALID_URL": "Please enter a valid url.",
+      "INVALID_MAIL": "Please enter a valid email address.",
+      "FRAMEWORK__RATE_LIMIT_EXCEEDED": "Too many requests. Please wait {seconds} seconds before trying again.",
+      "FRAMEWORK__ROUTE_BLOCKED_MESSAGE": "The URL {path} conflicts with the existing route {blockedSegment} and cannot be used.",
+      "DUPLICATED_NAME": "This name is already in use.",
+      "CONTENT__MEDIA_EMPTY_FILE": "A valid filename must be provided.",
+      "FRAMEWORK__API_SALES_CHANNEL_MAINTENANCE_MODE": "The selected sales channel is in maintenance mode and your IP address is not allowlisted. Disable maintenance mode or add your IP address to the allowlist.",
+      "THEME__INVALID_SCSS_VAR": "SCSS value \"{value}\" is not valid for type \"{type}\"."
+    },
+    "default": {
+      "add": "Add",
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "remove": "Remove",
+      "edit": "Edit",
+      "duplicate": "Duplicate",
+      "copy": "Copy",
+      "error": "Error",
+      "warning": "Warning",
+      "save": "Save",
+      "success": "Success",
+      "info": "Info",
+      "yes": "Yes",
+      "no": "No",
+      "confirm": "Confirm",
+      "view": "View",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "xTimesIn": "{n} times in",
+      "open": "Open",
+      "close": "Close",
+      "from": "From",
+      "to": "To",
+      "bulkEdit": "Bulk edit",
+      "back": "Back",
+      "discard": "Discard",
+      "configure": "Configure"
+    },
+    "notification": {
+      "notificationSaveErrorMessage": "An error occurred while saving the entity \"{entityName}\".",
+      "notificationSaveErrorMessageRequiredFieldsInvalid": "Please fill in all required fields.",
+      "notificationSaveErrorMessageRequiredField": "The field is required.",
+      "unspecifiedSaveErrorMessage": "An error occurred.",
+      "messageDeleteSuccess": "\"{name}\" deleted.",
+      "messageDeleteFailed": "The entity \"{entityName}\" is still in use by the following modules: ",
+      "notificationLoadingDataErrorMessage": "Error loading data"
+    },
+    "ct-desktop": {
+      "stagingBarText": "The system is in staging mode."
+    },
+    "ct-skip-link": {
+      "label": "Skip to content"
+    },
+    "notification-center": {
+      "title": "Notifications",
+      "triggerAriaLabel": "Notifications",
+      "optionsAriaLabel": "Notification options",
+      "emptyText": "You're all caught up",
+      "emptyDescription": "New notifications will appear here.",
+      "ringBellLabel": "Ring notification bell",
+      "deleteModal": {
+        "title": "Delete notifications",
+        "textConfirm": "Are you sure you really want to delete all notifications?"
+      }
+    },
+    "ct-admin-menu": {
+      "linkLogout": "Logout",
+      "linkExpandMenu": "Expand menu",
+      "linkMinimizeMenu": "Collapse menu",
+      "linkCloseMenu": "Close menu",
+      "textVersion": "Version:",
+      "textContenaAdmin": "Contena Console",
+      "textProjectName": "Contena Console",
+      "administrator": "Administrator",
+      "themeToggle": {
+        "switchToLight": "Light mode",
+        "switchToDark": "Dark mode"
+      },
+      "navigation": {
+        "label": "Main navigation",
+        "mainMenuItemHome": "Home",
+        "mainMenuItemContent": "Content",
+        "mainMenuItemSystem": "System",
+        "mainMenuItemSettings": "Settings",
+        "mainMenuItemAutomation": "Automation"
+      }
+    },
+    "entity-components": {
+      "deleteMessage": "Are you sure you want to delete this item? | Are you sure you want to delete these {count} items?"
+    },
+    "accessibility": {
+      "optionWarning": "In the interest of accessibility, it is not recommended to activate this option."
+    },
+    "ct-field": {
+      "notification": {
+        "notificationCopySuccessMessage": "Text has been copied to clipboard.",
+        "notificationCopyFailureMessage": "Text could not be copied to clipboard. Make sure you're accessing the administration via a secure connection (HTTPS) and try again."
+      },
+      "tooltipRestoreInheritance": "Restore inheritance",
+      "tooltipRemoveInheritance": "Remove inheritance",
+      "ariaLinkInheritance": "Link inheritance",
+      "ariaUnlinkInheritance": "Unlink inheritance"
+    },
+    "ct-field-copyable": {
+      "tooltip": {
+        "wasCopied": "Copied to clipboard.",
+        "canCopy": "Copy to clipboard."
+      }
+    },
+    "ct-file-input": {
+      "buttonChoose": "Choose file",
+      "notification": {
+        "invalidFileType": {
+          "message": "The selected file \"{name}\" has an unsupported format. Please use one of the following types: {supportedTypes}."
         },
-        "default": {
-            "add": "Add",
-            "actions": "Actions",
-            "apply": "Apply",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "remove": "Remove",
-            "edit": "Edit",
-            "duplicate": "Duplicate",
-            "copy": "Copy",
-            "error": "Error",
-            "warning": "Warning",
-            "save": "Save",
-            "success": "Success",
-            "info": "Info",
-            "yes": "Yes",
-            "no": "No",
-            "confirm": "Confirm",
-            "view": "View",
-            "ascending": "Ascending",
-            "descending": "Descending",
-            "xTimesIn": "{n} times in",
-            "open": "Open",
-            "close": "Close",
-            "from": "From",
-            "to": "To",
-            "bulkEdit": "Bulk edit",
-            "back": "Back",
-            "discard": "Discard",
-            "configure": "Configure"
+        "invalidFileExtension": {
+          "message": "The selected file \"{name}\" has an unsupported file extension. Please use one of the following file extensions: {supportedExtensions}."
         },
-        "notification": {
-            "notificationSaveErrorMessage": "An error occurred while saving the entity \"{entityName}\".",
-            "notificationSaveErrorMessageRequiredFieldsInvalid": "Please fill in all required fields.",
-            "notificationSaveErrorMessageRequiredField": "The field is required.",
-            "unspecifiedSaveErrorMessage": "An error occurred.",
-            "messageDeleteSuccess": "\"{name}\" deleted.",
-            "messageDeleteFailed": "The entity \"{entityName}\" is still in use by the following modules: ",
-            "notificationLoadingDataErrorMessage": "Error loading data"
-        },
-        "ct-desktop": {
-            "stagingBarText": "The system is in staging mode."
-        },
-        "ct-route-tabs": {
-            "actions": "Tab actions",
-            "refresh": "Refresh current",
-            "closeCurrent": "Close current",
-            "closeLeft": "Close left",
-            "closeRight": "Close right",
-            "closeOthers": "Close others",
-            "closeAll": "Close all"
-        },
-        "ct-skip-link": {
-            "label": "Skip to content"
-        },
-        "notification-center": {
-            "title": "Notifications",
-            "triggerAriaLabel": "Notifications",
-            "optionsAriaLabel": "Notification options",
-            "emptyText": "You're all caught up",
-            "emptyDescription": "New notifications will appear here.",
-            "ringBellLabel": "Ring notification bell",
-            "deleteModal": {
-                "title": "Delete notifications",
-                "textConfirm": "Are you sure you really want to delete all notifications?"
-            }
-        },
-        "ct-admin-menu": {
-            "linkLogout": "Logout",
-            "linkExpandMenu": "Expand menu",
-            "linkMinimizeMenu": "Collapse menu",
-            "linkCloseMenu": "Close menu",
-            "textVersion": "Version:",
-            "textContenaAdmin": "Contena Console",
-            "textProjectName": "Contena Console",
-            "administrator": "Administrator",
-            "themeToggle": {
-                "switchToLight": "Light mode",
-                "switchToDark": "Dark mode"
-            },
-            "navigation": {
-                "label": "Main navigation",
-                "mainMenuItemHome": "Home",
-                "mainMenuItemContent": "Content",
-                "mainMenuItemSystem": "System",
-                "mainMenuItemSettings": "Settings",
-                "mainMenuItemAutomation": "Automation"
-            }
-        },
-        "entity-components": {
-            "deleteMessage": "Are you sure you want to delete this item? | Are you sure you want to delete these {count} items?"
-        },
-        "accessibility": {
-            "optionWarning": "In the interest of accessibility, it is not recommended to activate this option."
-        },
-        "ct-field": {
-            "notification": {
-                "notificationCopySuccessMessage": "Text has been copied to clipboard.",
-                "notificationCopyFailureMessage": "Text could not be copied to clipboard. Make sure you're accessing the administration via a secure connection (HTTPS) and try again."
-            },
-            "tooltipRestoreInheritance": "Restore inheritance",
-            "tooltipRemoveInheritance": "Remove inheritance",
-            "ariaLinkInheritance": "Link inheritance",
-            "ariaUnlinkInheritance": "Unlink inheritance"
-        },
-        "ct-field-copyable": {
-            "tooltip": {
-                "wasCopied": "Copied to clipboard.",
-                "canCopy": "Copy to clipboard."
-            }
-        },
-        "ct-file-input": {
-            "buttonChoose": "Choose file",
-            "notification": {
-                "invalidFileType": {
-                    "message": "The selected file \"{name}\" has an unsupported format. Please use one of the following types: {supportedTypes}."
-                },
-                "invalidFileExtension": {
-                    "message": "The selected file \"{name}\" has an unsupported file extension. Please use one of the following file extensions: {supportedExtensions}."
-                },
-                "invalidFileSize": {
-                    "message": "The selected file \"{name}\" is too big to upload. File size must not exceed {limit}."
-                }
-            },
-            "caption": "Drag a file here to upload"
-        },
-        "ct-gtc-checkbox": {
-            "label": "I accept the",
-            "link": "terms and conditions.",
-            "url": "https://www.contena.cn/en/gtc"
-        },
-        "ct-tag-field": {
-            "title": "Tags",
-            "listItemAdd": "Add \"{term}\""
-        },
-        "ct-data-grid": {
-            "tooltipListSettings": "List settings",
-            "labelSettingsCompactMode": "Use compact view",
-            "labelSettingsPreviewImages": "Show preview images",
-            "labelColumnHide": "Hide column",
-            "labelSelectionCount": "Selected:",
-            "labelDeSelectAll": "Deselect all",
-            "maximumSelectionExceed": "Maximum amount of items selected",
-            "columnsActions": "Column actions",
-            "actionsMenu": "Open actions menu",
-            "labelSelectAll": "Select all",
-            "labelSelected": "Selected"
-        },
-        "ct-pagination": {
-            "labelItemsPerPage": "Items per page:",
-            "previousPage": "Go to previous page",
-            "nextPage": "Go to next page",
-            "page": "Go to page {page}"
-        },
-        "ct-text-preview": {
-            "showMoreButton": "Show more"
-        },
-        "ct-time-ago": {
-            "justNow": "Just now",
-            "minutesAgo": "One minute ago | {minutesAgo} minutes ago",
-            "aboutNow": "About now",
-            "minutesFromNow": "One minute from now | {minutesFromNow} minutes from now"
-        },
-        "ct-media-field": {
-            "labelToggleSearchExisting": "Search media...",
-            "labelToggleUploadNew": "Upload new media",
-            "labelUnlink": "Unlink media"
-        },
-        "ct-media-folder-item": {
-            "labelContextMenuRename": "Rename",
-            "labelContextMenuMove": "Move",
-            "labelContextMenuShowMedia": "Show media",
-            "labelContextMenuShowSettings": "Settings",
-            "labelContextMenuDissolve": "Dissolve",
-            "notification": {
-                "errorBlankItemName": {
-                    "message": "Folder could not be saved: Please enter a name."
-                },
-                "renamingError": {
-                    "message": "Error saving folder."
-                },
-                "errorInvalidItemName": {
-                    "message": "Folder could not be saved: Please enter a valid name."
-                }
-            }
-        },
-        "ct-media-media-item": {
-            "labelContextMenuCopyLink": "Copy Link",
-            "labelContextMenuReplace": "Replace",
-            "labelContextMenuRename": "Rename",
-            "labelContextMenuMove": "Move",
-            "labelContextMenuSetCover": "Set cover image",
-            "labelContextMenuRemoveCover": "Remove cover",
-            "notification": {
-                "errorBlankItemName": {
-                    "message": "Media item could not be saved: Please enter a name."
-                },
-                "renamingSuccess": {
-                    "message": "Media item has been renamed."
-                },
-                "renamingError": {
-                    "message": "Error saving file."
-                },
-                "fileNameTooLong": {
-                    "message": "Provided file name is too long. The maximum length is {length} characters."
-                },
-                "settingsSuccess": {
-                    "message": "Settings have been saved."
-                },
-                "coverSaveSuccess": {
-                    "message": "Cover image has been saved."
-                },
-                "coverRemoveSuccess": {
-                    "message": "Cover image has been removed."
-                },
-                "coverSelectionInvalid": {
-                    "message": "Please select an image to use as the cover."
-                },
-                "coverSaveError": {
-                    "message": "Cover image could not be saved."
-                },
-                "downloadError": {
-                    "message": "Error downloading file."
-                }
-            }
-        },
-        "ct-media-modal-delete": {
-            "deleteMessage": {
-                "media": "Are you sure you want to delete \"{name}\"? | Are you sure you want to delete these {count} media files?",
-                "folder": "Are you sure you want to delete the folder \"{name}\"?<br>All subfolders and contained media items will be deleted too. | Are you sure you want to delete {count} folders?<br>All subfolders and contained media items will be deleted too.",
-                "mediaAndFolder": "Are you sure you want to delete {mediaCount} media items and {folderCount} folders?<br>All subfolders and all media items within will be deleted too."
-            },
-            "mediaQuickInfoMessage": "This media file is currently in use by",
-            "mediaInUsagesMessage": "The following media files are still in use",
-            "notification": {
-                "errorSingle": {
-                    "message": {
-                        "media": "Error deleting file \"{name}\".",
-                        "folder": "Error deleting folder \"{name}\"."
-                    }
-                },
-                "successOverall": {
-                    "message": {
-                        "media": "No file has been deleted. | File has been deleted. | {count} / {total} files have been deleted.",
-                        "folder": "No folder has been deleted. | Folder has been deleted. | {count} / {total} folders have been deleted.",
-                        "mediaAndFolder": "No file or folder has been deleted. | File or folder has been deleted. | {count} / {total} files or folders have been deleted."
-                    }
-                },
-                "errorOverall": {
-                    "message": {
-                        "media": "Error deleting files.",
-                        "folder": "Error deleting folders.",
-                        "mediaAndFolder": "Error deleting files and folders."
-                    }
-                }
-            }
-        },
-        "ct-media-modal-folder-dissolve": {
-            "dissolveMessage": "Are you sure you want to dissolve \"{folderName}\" ? | Are you sure you want to dissolve {count} folders?",
-            "buttonDissolve": "Dissolve",
-            "notification": {
-                "successSingle": {
-                    "message": "Folder \"{folderName}\" has been dissolved."
-                },
-                "errorSingle": {
-                    "message": "Error dissolving \"{folderName}\"."
-                },
-                "successOverall": {
-                    "message": "Folders have been dissolved."
-                },
-                "errorOverall": {
-                    "message": "Error dissolving folders."
-                }
-            }
-        },
-        "ct-duplicated-media-v2": {
-            "titleModal": "File already exists",
-            "description": "A file with the name \"{fileName}\" already exists.",
-            "buttonReplace": "Replace file",
-            "buttonRename": "Rename file",
-            "buttonKeep": "Use file",
-            "buttonSkip": "Skip file",
-            "labelSaveSelection": "Save selection and apply to {count} more.",
-            "labelOptionReplace": "Upload and replace",
-            "labelOptionRename": "Upload and rename",
-            "labelOptionKeep": "Use existing file",
-            "labelOptionSkip": "Skip file",
-            "labelOldFile": "Existing file",
-            "labelNewFile": "Uploaded file"
-        },
-        "ct-media-modal-move": {
-            "titleModal": "Move \"{mediaName}\" | Move {count} items",
-            "buttonMove": "Move",
-            "notification": {
-                "successSingle": {
-                    "message": "Folder \"{mediaName}\" has been moved."
-                },
-                "errorSingle": {
-                    "message": "Could not move \"{mediaName}\"."
-                },
-                "successOverall": {
-                    "message": "Media items have been moved."
-                },
-                "errorOverall": {
-                    "message": "Could not move items."
-                },
-                "errorFetchNavigation": {
-                    "message": "Could not fetch folder navigation."
-                }
-            }
-        },
-        "ct-media-modal-replace": {
-            "titleModal": "Replace media file",
-            "buttonReplace": "Replace",
-            "warningFileExtension": "The new file has a different file extension ({extension}). The file may need to be re-indexed by search engines."
-        },
-        "ct-media-preview-v2": {
-            "fallbackVideoTagSupport": "Your browser does not support the video tag",
-            "fallbackAudioTagSupport": "Your browser does not support the audio tag",
-            "textNoMedia": "No media available",
-            "warningUnsupportedFormat": "Format \"{format}\" may not be supported in all browsers."
-        },
-        "ct-media-upload": {
-            "snackbar": {
-                "message": "Uploading file | Uploading files ({processed}/{total})",
-                "errorMessage": "File could not be uploaded. | Some files could not be uploaded."
-            },
-            "notification": {
-                "assigned": {
-                    "message": "Media file has been assigned."
-                },
-                "failure": {
-                    "message": "Error while uploading file."
-                },
-                "illegalFilename": {
-                    "message": "The filename \"{fileName}\" contains invalid characters."
-                },
-                "illegalFileUrl": {
-                    "message": "Upload from local URLs not allowed."
-                },
-                "illegalFileType": {
-                    "message": "The file \"{name}\" could not be uploaded. This file type is not supported."
-                },
-                "requestCanceled": {
-                    "message": "The upload has been cancelled."
-                },
-                "payloadTooLarge": {
-                    "message": "File is too large. Please reduce the file size or check the server configuration."
-                },
-                "transportError": {
-                    "message": "Upload failed due to a connection or server timeout. Please check your connection or server limits."
-                }
-            }
-        },
-        "ct-media-upload-v2": {
-            "switchMode": "Switch upload mode",
-            "buttonFileUpload": "Upload file",
-            "buttonUrlUpload": "Upload file from URL",
-            "buttonOpenMedia": "Open media",
-            "notification": {
-                "invalidFileType": {
-                    "message": "The selected file \"{name}\" has an unsupported format. Please use one of the following types: {supportedTypes}."
-                },
-                "invalidFileSize": {
-                    "message": "The selected file \"{name}\" is too big to upload. File size must not exceed {limit}."
-                },
-                "invalidUrl": {
-                    "message": "The provided URL is invalid."
-                }
-            },
-            "caption": "Drag files here to upload"
-        },
-        "ct-media-url-form": {
-            "title": "Upload file from URL",
-            "upload": "Upload",
-            "example": "https://www.example.com",
-            "labelFileExtension": "File extension",
-            "missingFileExtension": "The URL does not contain a file extension. Please specify the file extension below."
-        },
-        "ct-media-modal-folder-settings": {
-            "labelSettings": "Settings",
-            "labelThumbnails": "Thumbnails",
-            "labelFolderName": "Name",
-            "labelInheritSettings": "Inherit settings from parent folder",
-            "labelGenerateThumbnails": "Generate thumbnails for this folder",
-            "labelThumbnailQuality": "Thumbnail quality",
-            "labelThumbnailSize": "Thumbnail size",
-            "labelKeepProportions": "Keep aspect ratio",
-            "notification": {
-                "success": {
-                    "message": "Settings have been saved."
-                },
-                "error": {
-                    "message": "Error while saving settings.",
-                    "messageThumbnailSizeExisted": "The thumbnail size already exists."
-                }
-            },
-            "labelDefaultFolder": "Default media location for",
-            "placeholderDefaultFolder": "Select entity...",
-            "tooltipCanNotDeleteThumbnailSize": "This thumbnail size cannot be deleted because it is currently in use."
-        },
-        "ct-media-add-thumbnail-form": {
-            "labelMaximumSize": "Maximum size"
-        },
-        "ct-sidebar-media-item": {
-            "title": "Media",
-            "labelLoadMore": "Load more items"
-        },
-        "ct-select-base": {
-            "buttonClear": "Clear all elements"
-        },
-        "ct-select-result-list": {
-            "messageNoResults": "No results found."
-        },
-        "ct-single-select": {
-            "messageNoResults": "No results found for \"{term}\".",
-            "valuePlaceholder": "Select...",
-            "labelEntity": "element",
-            "labelEntityAdd": "Create new {entity} \"{term}\"",
-            "labelEntityAddedSuccess": "The {entity} with the name \"{term}\" was created successfully."
-        },
-        "ct-multi-tag-select": {
-            "enterValidData": "Enter a valid value...",
-            "addData": "Add new entry"
-        },
-        "ct-multi-tag-ip-select": {
-            "enterValidIp": "Please enter a valid IPv4 or IPv6 address",
-            "addIpAddress": "Add IP address",
-            "knownIps": {
-                "you": "You",
-                "youIPv6Block56": "You and others (same endsite)",
-                "youIPv6Block64": "You and others (home network)"
-            }
-        },
-        "ct-entity-advanced-selection-modal": {
-            "link": "Use advanced selection",
-            "title": "Advanced selection: {entity}",
-            "searchPlaceholder": "Search...",
-            "filter": "Filter",
-            "resetFilters": "Reset filters",
-            "applySelection": "Apply selection"
-        },
-        "ct-entity-multi-select": {
-            "messageNoResults": "No results found for \"{term}\"."
-        },
-        "ct-search-bar": {
-            "ariaLabelCloseSearch": "Close search",
-            "ariaLabelOpenSearch": "Open search",
-            "messageNoResults": "No results found for \"{term}\".",
-            "messageNoTypeResults": "No type found.",
-            "placeholderSearchField": "Search modules, settings and media...",
-            "moduleFiltersHeadline": "Module filters",
-            "searchTypeAll": "All",
-            "moduleFilter": "Module filter",
-            "messageNoResultsV2": "No exact matches found for \"{term}\".",
-            "messageNoResultsDetailV2": "Try using different keywords or check your search configuration.",
-            "addNew": "add new"
-        },
-        "ct-search-bar-item": {
-            "typeLabelModule": "Module",
-            "typeLabelAction": "Action",
-            "addNewEntity": "Add new {entity}"
-        },
-        "ct-search-more-results": {
-            "labelShowResultsInModule": "Show results in module({count})",
-            "labelShowResultsInModuleV2": "Show all matching results in {entityNameLower}..."
-        },
-        "ct-tagged-field": {
-            "text-default-placeholder": "Press the enter key to add values."
-        },
-        "ct-simple-search-field": {
-            "defaultPlaceholder": "Search..."
-        },
-        "entities": {
-            "all": "All",
-            "custom_field": "Custom field | Custom fields",
-            "custom-field-set": "Custom field set | Custom field sets",
-            "data_dictionary": "Data dictionary | Data dictionaries",
-            "country": "Country | Countries",
-            "region": "Administrative division | Administrative divisions",
-            "organization": "Organization | Organizations",
-            "organization_unit": "Organization unit | Organization units",
-            "position": "Position | Positions",
-            "extension": "Extension | Extensions",
-            "integration": "Integration | Integrations",
-            "language": "Language | Languages",
-            "media": "Media",
-            "media_default_folder": "Default folder | Default folders",
-            "media_folder": "Folder | Folders",
-            "media_thumbnail": "Thumbnail | Thumbnails",
-            "media_thumbnail_size": "Thumbnail size | Thumbnail sizes",
-            "module": "Module | Modules",
-            "number_range": "Number range | Number ranges",
-            "plugin_manager": "Plugins",
-            "privacy": "Privacy",
-            "tag": "Tag | Tags",
-            "user": "User | Users",
-            "frequently_used": "Frequently used",
-            "recently_searched": "Recently searched"
-        },
-        "ct-bulk-edit-modal": {
-            "startBulkEdit": "Start bulk edit",
-            "bulkEditModalTitle": "Bulk edit - {count} item selected | Bulk edit - {count} items selected"
-        },
-        "ct-search-preferences-modal": {
-            "title": "Search preferences",
-            "description": "Only selected elements will appear in the search results. For detailed settings <span id='ct-search-preferences-modal-link'>open search settings &#8594;</span>",
-            "columnActive": "Active",
-            "columnModuleName": "Module name"
-        },
-        "ct-page": {
-            "backButton": "Go back"
+        "invalidFileSize": {
+          "message": "The selected file \"{name}\" is too big to upload. File size must not exceed {limit}."
         }
+      },
+      "caption": "Drag a file here to upload"
     },
-    "ct-text-editor-toolbar-button-link": {
-        "modalTitle": "Insert/Edit link",
-        "linkTo": "Link to",
-        "linkUrl": "URL",
-        "linkPhone": "Phone number",
-        "linkPhonePrefix": "tel:",
-        "linkEmail": "Email",
-        "linkEmailPlaceholder": "Enter email address...",
-        "displayAsButton": "Display as button",
-        "openInNewTab": "Open in new tab",
-        "applyLink": "Apply",
-        "linkType": "Link type",
-        "removeLink": "Remove link",
-        "linkOptions": {
-            "link": "URL",
-            "media": "File",
-            "email": "Email",
-            "phoneNumber": "Phone number"
+    "ct-gtc-checkbox": {
+      "label": "I accept the",
+      "link": "terms and conditions.",
+      "url": "https://www.contena.cn/en/gtc"
+    },
+    "ct-tag-field": {
+      "title": "Tags",
+      "listItemAdd": "Add \"{term}\""
+    },
+    "ct-data-grid": {
+      "tooltipListSettings": "List settings",
+      "labelSettingsCompactMode": "Use compact view",
+      "labelSettingsPreviewImages": "Show preview images",
+      "labelColumnHide": "Hide column",
+      "labelSelectionCount": "Selected:",
+      "labelDeSelectAll": "Deselect all",
+      "maximumSelectionExceed": "Maximum amount of items selected",
+      "columnsActions": "Column actions",
+      "actionsMenu": "Open actions menu",
+      "labelSelectAll": "Select all",
+      "labelSelected": "Selected"
+    },
+    "ct-pagination": {
+      "labelItemsPerPage": "Items per page:",
+      "previousPage": "Go to previous page",
+      "nextPage": "Go to next page",
+      "page": "Go to page {page}"
+    },
+    "ct-text-preview": {
+      "showMoreButton": "Show more"
+    },
+    "ct-time-ago": {
+      "justNow": "Just now",
+      "minutesAgo": "One minute ago | {minutesAgo} minutes ago",
+      "aboutNow": "About now",
+      "minutesFromNow": "One minute from now | {minutesFromNow} minutes from now"
+    },
+    "ct-media-field": {
+      "labelToggleSearchExisting": "Search media...",
+      "labelToggleUploadNew": "Upload new media",
+      "labelUnlink": "Unlink media"
+    },
+    "ct-media-folder-item": {
+      "labelContextMenuRename": "Rename",
+      "labelContextMenuMove": "Move",
+      "labelContextMenuShowMedia": "Show media",
+      "labelContextMenuShowSettings": "Settings",
+      "labelContextMenuDissolve": "Dissolve",
+      "notification": {
+        "errorBlankItemName": {
+          "message": "Folder could not be saved: Please enter a name."
         },
-        "buttonVariantPrimary": "Primary",
-        "buttonVariantSecondary": "Secondary",
-        "buttonVariantPrimarySmall": "Primary (small)",
-        "buttonVariantSecondarySmall": "Secondary (small)"
-    },
-    "ct-tree": {
-        "general": {
-            "placeholderSearch": "Search...",
-            "treeHeadSelected": "{count} selected",
-            "treeHeadline": "Tree structure",
-            "buttonCreate": "Create element",
-            "actions": {
-                "createSub": "New subelement",
-                "createBefore": "New element before",
-                "createAfter": "New element after",
-                "actionsDisabledInLanguage": "Elements can only be created in the default system language"
-            }
+        "renamingError": {
+          "message": "Error saving folder."
         },
-        "modal": {
-            "textDeleteConfirm": "Are you sure you really want to delete the element \"{name}\"?",
-            "textDeleteMultipleConfirm": "Are you sure you want to delete the \"{count}\" selected elements?",
-            "textDeleteChildrenConfirm": "All subcategories will be deleted too."
+        "errorInvalidItemName": {
+          "message": "Folder could not be saved: Please enter a valid name."
         }
+      }
     },
-    "ct-tree-item": {
-        "toggleTreeItem": "Toggle tree item \"{name}\"",
-        "toggleItem": "Toggle item \"{name}\"",
-        "childrenLabel": "Subitems for \"{name}\""
-    },
-    "ct-sidebar-collapse": {
-        "collapseIndicator": "Collapse sidebar"
-    },
-    "ct-error": {
-        "general": {
-            "messagePlaceholder": "Oops, something went terribly wrong."
+    "ct-media-media-item": {
+      "labelContextMenuCopyLink": "Copy Link",
+      "labelContextMenuReplace": "Replace",
+      "labelContextMenuRename": "Rename",
+      "labelContextMenuMove": "Move",
+      "labelContextMenuSetCover": "Set cover image",
+      "labelContextMenuRemoveCover": "Remove cover",
+      "notification": {
+        "errorBlankItemName": {
+          "message": "Media item could not be saved: Please enter a name."
+        },
+        "renamingSuccess": {
+          "message": "Media item has been renamed."
+        },
+        "renamingError": {
+          "message": "Error saving file."
+        },
+        "fileNameTooLong": {
+          "message": "Provided file name is too long. The maximum length is {length} characters."
+        },
+        "settingsSuccess": {
+          "message": "Settings have been saved."
+        },
+        "coverSaveSuccess": {
+          "message": "Cover image has been saved."
+        },
+        "coverRemoveSuccess": {
+          "message": "Cover image has been removed."
+        },
+        "coverSelectionInvalid": {
+          "message": "Please select an image to use as the cover."
+        },
+        "coverSaveError": {
+          "message": "Cover image could not be saved."
+        },
+        "downloadError": {
+          "message": "Error downloading file."
         }
+      }
     },
-    "ct-language-info": {
-        "infoTextChildLanguage": "\"{entityDescription}\" displayed in the content language <span>\"{language}\"</span>, inheriting from",
-        "infoTextRootLanguage": "\"{entityDescription}\" displayed in the content language <span>\"{language}\"</span>. Fallback is the system default language",
-        "infoTextNewEntity": "\"{entityDescription}\" is displayed in the system default language. Always maintain new data in your chosen system default language."
-    },
-    "ct-language-switch": {
-        "messageModalUnsavedChanges": "There are unsaved changes in the current language. Do you want to save them now?",
-        "titleModalUnsavedChanges": "Unsaved changes",
-        "titleModalButtonRevertUnsavedChanges": "Discard changes"
-    },
-    "ct-inheritance-warning": {
-        "infoTextInheritedField": "{moduleName} has inherited fields. Meaning that as long as the inherited state is active the content will be inherited. Inherited fields can be unlinked by clicking the link symbol. Clicking the symbol again will set the inherited state back."
-    },
-    "ct-channel-switch": {
-        "messageModalUnsavedChanges": "There are unsaved changes regarding the current channel. Do you want to save them now?",
-        "titleModalUnsavedChanges": "Unsaved changes",
-        "titleModalButtonRevertUnsavedChanges": "Discard changes",
-        "labelDefaultOption": "All Channels"
-    },
-    "ct-config-form-renderer": {
-        "configLoadErrorMessage": "Encountered an error while loading the configuration: | There were errors loading the configuration:"
-    },
-    "locale": {
-        "zh-CN": "Simplified Chinese",
-        "en-GB": "English (GB)"
-    },
-    "ct-image-slider": {
-        "imageAlt": "Image {index} / {total}"
-    },
-    "ct-confirm-modal": {
-        "defaultText": "Are you sure you want to proceed?"
-    },
-    "ct-discard-changes-modal": {
-        "title": "Discard unsaved changes?",
-        "message": "You have unsaved changes, do you want to leave the page and discard them?",
-        "actions": {
-            "discard": "Discard changes",
-            "keepEditing": "Keep editing"
+    "ct-media-modal-delete": {
+      "deleteMessage": {
+        "media": "Are you sure you want to delete \"{name}\"? | Are you sure you want to delete these {count} media files?",
+        "folder": "Are you sure you want to delete the folder \"{name}\"?<br>All subfolders and contained media items will be deleted too. | Are you sure you want to delete {count} folders?<br>All subfolders and contained media items will be deleted too.",
+        "mediaAndFolder": "Are you sure you want to delete {mediaCount} media items and {folderCount} folders?<br>All subfolders and all media items within will be deleted too."
+      },
+      "mediaQuickInfoMessage": "This media file is currently in use by",
+      "mediaInUsagesMessage": "The following media files are still in use",
+      "notification": {
+        "errorSingle": {
+          "message": {
+            "media": "Error deleting file \"{name}\".",
+            "folder": "Error deleting folder \"{name}\"."
+          }
+        },
+        "successOverall": {
+          "message": {
+            "media": "No file has been deleted. | File has been deleted. | {count} / {total} files have been deleted.",
+            "folder": "No folder has been deleted. | Folder has been deleted. | {count} / {total} folders have been deleted.",
+            "mediaAndFolder": "No file or folder has been deleted. | File or folder has been deleted. | {count} / {total} files or folders have been deleted."
+          }
+        },
+        "errorOverall": {
+          "message": {
+            "media": "Error deleting files.",
+            "folder": "Error deleting folders.",
+            "mediaAndFolder": "Error deleting files and folders."
+          }
         }
+      }
     },
-    "ct-privileges": {
-        "tooltip": {
-            "warning": "You have insufficient permissions."
+    "ct-media-modal-folder-dissolve": {
+      "dissolveMessage": "Are you sure you want to dissolve \"{folderName}\" ? | Are you sure you want to dissolve {count} folders?",
+      "buttonDissolve": "Dissolve",
+      "notification": {
+        "successSingle": {
+          "message": "Folder \"{folderName}\" has been dissolved."
+        },
+        "errorSingle": {
+          "message": "Error dissolving \"{folderName}\"."
+        },
+        "successOverall": {
+          "message": "Folders have been dissolved."
+        },
+        "errorOverall": {
+          "message": "Error dissolving folders."
+        }
+      }
+    },
+    "ct-duplicated-media-v2": {
+      "titleModal": "File already exists",
+      "description": "A file with the name \"{fileName}\" already exists.",
+      "buttonReplace": "Replace file",
+      "buttonRename": "Rename file",
+      "buttonKeep": "Use file",
+      "buttonSkip": "Skip file",
+      "labelSaveSelection": "Save selection and apply to {count} more.",
+      "labelOptionReplace": "Upload and replace",
+      "labelOptionRename": "Upload and rename",
+      "labelOptionKeep": "Use existing file",
+      "labelOptionSkip": "Skip file",
+      "labelOldFile": "Existing file",
+      "labelNewFile": "Uploaded file"
+    },
+    "ct-media-modal-move": {
+      "titleModal": "Move \"{mediaName}\" | Move {count} items",
+      "buttonMove": "Move",
+      "notification": {
+        "successSingle": {
+          "message": "Folder \"{mediaName}\" has been moved."
+        },
+        "errorSingle": {
+          "message": "Could not move \"{mediaName}\"."
+        },
+        "successOverall": {
+          "message": "Media items have been moved."
+        },
+        "errorOverall": {
+          "message": "Could not move items."
+        },
+        "errorFetchNavigation": {
+          "message": "Could not fetch folder navigation."
+        }
+      }
+    },
+    "ct-media-modal-replace": {
+      "titleModal": "Replace media file",
+      "buttonReplace": "Replace",
+      "warningFileExtension": "The new file has a different file extension ({extension}). The file may need to be re-indexed by search engines."
+    },
+    "ct-media-preview-v2": {
+      "fallbackVideoTagSupport": "Your browser does not support the video tag",
+      "fallbackAudioTagSupport": "Your browser does not support the audio tag",
+      "textNoMedia": "No media available",
+      "warningUnsupportedFormat": "Format \"{format}\" may not be supported in all browsers."
+    },
+    "ct-media-upload": {
+      "snackbar": {
+        "message": "Uploading file | Uploading files ({processed}/{total})",
+        "errorMessage": "File could not be uploaded. | Some files could not be uploaded."
+      },
+      "notification": {
+        "assigned": {
+          "message": "Media file has been assigned."
+        },
+        "failure": {
+          "message": "Error while uploading file."
+        },
+        "illegalFilename": {
+          "message": "The filename \"{fileName}\" contains invalid characters."
+        },
+        "illegalFileUrl": {
+          "message": "Upload from local URLs not allowed."
+        },
+        "illegalFileType": {
+          "message": "The file \"{name}\" could not be uploaded. This file type is not supported."
+        },
+        "requestCanceled": {
+          "message": "The upload has been cancelled."
+        },
+        "payloadTooLarge": {
+          "message": "File is too large. Please reduce the file size or check the server configuration."
+        },
+        "transportError": {
+          "message": "Upload failed due to a connection or server timeout. Please check your connection or server limits."
+        }
+      }
+    },
+    "ct-media-upload-v2": {
+      "switchMode": "Switch upload mode",
+      "buttonFileUpload": "Upload file",
+      "buttonUrlUpload": "Upload file from URL",
+      "buttonOpenMedia": "Open media",
+      "notification": {
+        "invalidFileType": {
+          "message": "The selected file \"{name}\" has an unsupported format. Please use one of the following types: {supportedTypes}."
+        },
+        "invalidFileSize": {
+          "message": "The selected file \"{name}\" is too big to upload. File size must not exceed {limit}."
+        },
+        "invalidUrl": {
+          "message": "The provided URL is invalid."
+        }
+      },
+      "caption": "Drag files here to upload"
+    },
+    "ct-media-url-form": {
+      "title": "Upload file from URL",
+      "upload": "Upload",
+      "example": "https://www.example.com",
+      "labelFileExtension": "File extension",
+      "missingFileExtension": "The URL does not contain a file extension. Please specify the file extension below."
+    },
+    "ct-media-modal-folder-settings": {
+      "labelSettings": "Settings",
+      "labelThumbnails": "Thumbnails",
+      "labelFolderName": "Name",
+      "labelInheritSettings": "Inherit settings from parent folder",
+      "labelGenerateThumbnails": "Generate thumbnails for this folder",
+      "labelThumbnailQuality": "Thumbnail quality",
+      "labelThumbnailSize": "Thumbnail size",
+      "labelKeepProportions": "Keep aspect ratio",
+      "notification": {
+        "success": {
+          "message": "Settings have been saved."
         },
         "error": {
-            "description": "You do not have the necessary permissions for this action, please ask your administrator for authorisation. The required permissions are: "
+          "message": "Error while saving settings.",
+          "messageThumbnailSizeExisted": "The thumbnail size already exists."
         }
+      },
+      "labelDefaultFolder": "Default media location for",
+      "placeholderDefaultFolder": "Select entity...",
+      "tooltipCanNotDeleteThumbnailSize": "This thumbnail size cannot be deleted because it is currently in use."
     },
-    "ct-rating-stars": {
-        "ratingTooltipText": "{actual} of {max} stars"
+    "ct-media-add-thumbnail-form": {
+      "labelMaximumSize": "Maximum size"
     },
-    "ct-base-filter": {
-        "resetButton": "Reset"
+    "ct-sidebar-media-item": {
+      "title": "Media",
+      "labelLoadMore": "Load more items"
     },
-    "ct-boolean-filter": {
-        "active": "Active",
-        "inactive": "Inactive"
+    "ct-select-base": {
+      "buttonClear": "Clear all elements"
     },
-    "ct-date-filter": {
-        "selectTimeframe": {
-            "placeholder": "Select timeframe"
-        },
-        "options": {
-            "today": "Today",
-            "yesterday": "Yesterday",
-            "currentWeek": "Current week",
-            "lastWeek": "Last 7 days",
-            "lastCalendarWeek": "Last calendar week",
-            "currentMonth": "Current month",
-            "lastMonth": "Last 30 days",
-            "lastCalendarMonth": "Last calendar month",
-            "currentQuarter": "Current quarter",
-            "lastQuarter": "Last quarter",
-            "last3Months": "Last 3 months",
-            "last6Months": "Last 6 months",
-            "last12Months": "Last 12 months",
-            "currentYear": "Current year",
-            "previousYear": "Previous year",
-            "custom": "Custom"
-        }
+    "ct-select-result-list": {
+      "messageNoResults": "No results found."
     },
-    "ct-filter-panel": {
-        "titleSidebarItemFilter": "Filters"
+    "ct-single-select": {
+      "messageNoResults": "No results found for \"{term}\".",
+      "valuePlaceholder": "Select...",
+      "labelEntity": "element",
+      "labelEntityAdd": "Create new {entity} \"{term}\"",
+      "labelEntityAddedSuccess": "The {entity} with the name \"{term}\" was created successfully."
     },
-    "ct-sidebar-filter-panel": {
-        "resetButton": "Reset all"
+    "ct-multi-tag-select": {
+      "enterValidData": "Enter a valid value...",
+      "addData": "Add new entry"
     },
-    "ct-empty-state": {
-        "messageNoResultTitle": "Nothing found",
-        "messageNoResultSublineSimple": "Edit your filters or search terms to find results.",
-        "messageNoResultSubline": "Edit your filters or your search terms to find results. Please also check the configuration of your search."
+    "ct-multi-tag-ip-select": {
+      "enterValidIp": "Please enter a valid IPv4 or IPv6 address",
+      "addIpAddress": "Add IP address",
+      "knownIps": {
+        "you": "You",
+        "youIPv6Block56": "You and others (same endsite)",
+        "youIPv6Block64": "You and others (home network)"
+      }
     },
-    "ct-ai-copilot-warning": {
-        "text": "AI responses can be inaccurate or misleading."
+    "ct-entity-advanced-selection-modal": {
+      "link": "Use advanced selection",
+      "title": "Advanced selection: {entity}",
+      "searchPlaceholder": "Search...",
+      "filter": "Filter",
+      "resetFilters": "Reset filters",
+      "applySelection": "Apply selection"
     },
-    "sidebar": {
-        "ariaLabelButtonClose": "Close sidebar",
-        "ariaLabelButtonOpen": "Open sidebar"
+    "ct-entity-multi-select": {
+      "messageNoResults": "No results found for \"{term}\"."
     },
-    "help-center": {
-        "sidebar": {
-            "ariaLabelButtonOpen": "Open help",
-            "support": {
-                "documentation": {
-                    "text": "Documentation",
-                    "href": "https://docs.contena.cn/en"
-                },
-                "createSupportRequest": {
-                    "text": "Create support request",
-                    "href": "https://account.contena.cn/"
-                }
-            }
-        }
+    "ct-search-bar": {
+      "ariaLabelCloseSearch": "Close search",
+      "ariaLabelOpenSearch": "Open search",
+      "messageNoResults": "No results found for \"{term}\".",
+      "messageNoTypeResults": "No type found.",
+      "placeholderSearchField": "Search modules, settings and media...",
+      "moduleFiltersHeadline": "Module filters",
+      "searchTypeAll": "All",
+      "moduleFilter": "Module filter",
+      "messageNoResultsV2": "No exact matches found for \"{term}\".",
+      "messageNoResultsDetailV2": "Try using different keywords or check your search configuration.",
+      "addNew": "add new"
     },
-    "ct-context-button": {
-        "ariaLabel": "Open context menu"
+    "ct-search-bar-item": {
+      "typeLabelModule": "Module",
+      "typeLabelAction": "Action",
+      "addNewEntity": "Add new {entity}"
     },
-    "ct-category-tree-field": {
-        "emptySearchResults": "No categories found."
+    "ct-search-more-results": {
+      "labelShowResultsInModule": "Show results in module({count})",
+      "labelShowResultsInModuleV2": "Show all matching results in {entityNameLower}..."
+    },
+    "ct-tagged-field": {
+      "text-default-placeholder": "Press the enter key to add values."
+    },
+    "ct-simple-search-field": {
+      "defaultPlaceholder": "Search..."
+    },
+    "entities": {
+      "all": "All",
+      "custom_field": "Custom field | Custom fields",
+      "custom-field-set": "Custom field set | Custom field sets",
+      "data_dictionary": "Data dictionary | Data dictionaries",
+      "country": "Country | Countries",
+      "region": "Administrative division | Administrative divisions",
+      "organization": "Organization | Organizations",
+      "organization_unit": "Organization unit | Organization units",
+      "position": "Position | Positions",
+      "extension": "Extension | Extensions",
+      "integration": "Integration | Integrations",
+      "language": "Language | Languages",
+      "media": "Media",
+      "media_default_folder": "Default folder | Default folders",
+      "media_folder": "Folder | Folders",
+      "media_thumbnail": "Thumbnail | Thumbnails",
+      "media_thumbnail_size": "Thumbnail size | Thumbnail sizes",
+      "module": "Module | Modules",
+      "number_range": "Number range | Number ranges",
+      "plugin_manager": "Plugins",
+      "privacy": "Privacy",
+      "tag": "Tag | Tags",
+      "user": "User | Users",
+      "frequently_used": "Frequently used",
+      "recently_searched": "Recently searched"
+    },
+    "ct-bulk-edit-modal": {
+      "startBulkEdit": "Start bulk edit",
+      "bulkEditModalTitle": "Bulk edit - {count} item selected | Bulk edit - {count} items selected"
+    },
+    "ct-search-preferences-modal": {
+      "title": "Search preferences",
+      "description": "Only selected elements will appear in the search results. For detailed settings <span id='ct-search-preferences-modal-link'>open search settings &#8594;</span>",
+      "columnActive": "Active",
+      "columnModuleName": "Module name"
+    },
+    "ct-page": {
+      "backButton": "Go back"
     }
+  },
+  "ct-text-editor-toolbar-button-link": {
+    "modalTitle": "Insert/Edit link",
+    "linkTo": "Link to",
+    "linkUrl": "URL",
+    "linkPhone": "Phone number",
+    "linkPhonePrefix": "tel:",
+    "linkEmail": "Email",
+    "linkEmailPlaceholder": "Enter email address...",
+    "displayAsButton": "Display as button",
+    "openInNewTab": "Open in new tab",
+    "applyLink": "Apply",
+    "linkType": "Link type",
+    "removeLink": "Remove link",
+    "linkOptions": {
+      "link": "URL",
+      "media": "File",
+      "email": "Email",
+      "phoneNumber": "Phone number"
+    },
+    "buttonVariantPrimary": "Primary",
+    "buttonVariantSecondary": "Secondary",
+    "buttonVariantPrimarySmall": "Primary (small)",
+    "buttonVariantSecondarySmall": "Secondary (small)"
+  },
+  "ct-tree": {
+    "general": {
+      "placeholderSearch": "Search...",
+      "treeHeadSelected": "{count} selected",
+      "treeHeadline": "Tree structure",
+      "buttonCreate": "Create element",
+      "actions": {
+        "createSub": "New subelement",
+        "createBefore": "New element before",
+        "createAfter": "New element after",
+        "actionsDisabledInLanguage": "Elements can only be created in the default system language"
+      }
+    },
+    "modal": {
+      "textDeleteConfirm": "Are you sure you really want to delete the element \"{name}\"?",
+      "textDeleteMultipleConfirm": "Are you sure you want to delete the \"{count}\" selected elements?",
+      "textDeleteChildrenConfirm": "All subcategories will be deleted too."
+    }
+  },
+  "ct-tree-item": {
+    "toggleTreeItem": "Toggle tree item \"{name}\"",
+    "toggleItem": "Toggle item \"{name}\"",
+    "childrenLabel": "Subitems for \"{name}\""
+  },
+  "ct-sidebar-collapse": {
+    "collapseIndicator": "Collapse sidebar"
+  },
+  "ct-error": {
+    "general": {
+      "messagePlaceholder": "Oops, something went terribly wrong."
+    }
+  },
+  "ct-language-info": {
+    "infoTextChildLanguage": "\"{entityDescription}\" displayed in the content language <span>\"{language}\"</span>, inheriting from",
+    "infoTextRootLanguage": "\"{entityDescription}\" displayed in the content language <span>\"{language}\"</span>. Fallback is the system default language",
+    "infoTextNewEntity": "\"{entityDescription}\" is displayed in the system default language. Always maintain new data in your chosen system default language."
+  },
+  "ct-language-switch": {
+    "messageModalUnsavedChanges": "There are unsaved changes in the current language. Do you want to save them now?",
+    "titleModalUnsavedChanges": "Unsaved changes",
+    "titleModalButtonRevertUnsavedChanges": "Discard changes"
+  },
+  "ct-inheritance-warning": {
+    "infoTextInheritedField": "{moduleName} has inherited fields. Meaning that as long as the inherited state is active the content will be inherited. Inherited fields can be unlinked by clicking the link symbol. Clicking the symbol again will set the inherited state back."
+  },
+  "ct-channel-switch": {
+    "messageModalUnsavedChanges": "There are unsaved changes regarding the current channel. Do you want to save them now?",
+    "titleModalUnsavedChanges": "Unsaved changes",
+    "titleModalButtonRevertUnsavedChanges": "Discard changes",
+    "labelDefaultOption": "All Channels"
+  },
+  "ct-config-form-renderer": {
+    "configLoadErrorMessage": "Encountered an error while loading the configuration: | There were errors loading the configuration:"
+  },
+  "locale": {
+    "zh-CN": "Simplified Chinese",
+    "en-GB": "English (GB)"
+  },
+  "ct-image-slider": {
+    "imageAlt": "Image {index} / {total}"
+  },
+  "ct-confirm-modal": {
+    "defaultText": "Are you sure you want to proceed?"
+  },
+  "ct-discard-changes-modal": {
+    "title": "Discard unsaved changes?",
+    "message": "You have unsaved changes, do you want to leave the page and discard them?",
+    "actions": {
+      "discard": "Discard changes",
+      "keepEditing": "Keep editing"
+    }
+  },
+  "ct-privileges": {
+    "tooltip": {
+      "warning": "You have insufficient permissions."
+    },
+    "error": {
+      "description": "You do not have the necessary permissions for this action, please ask your administrator for authorisation. The required permissions are: "
+    }
+  },
+  "ct-rating-stars": {
+    "ratingTooltipText": "{actual} of {max} stars"
+  },
+  "ct-base-filter": {
+    "resetButton": "Reset"
+  },
+  "ct-boolean-filter": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "ct-date-filter": {
+    "selectTimeframe": {
+      "placeholder": "Select timeframe"
+    },
+    "options": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "currentWeek": "Current week",
+      "lastWeek": "Last 7 days",
+      "lastCalendarWeek": "Last calendar week",
+      "currentMonth": "Current month",
+      "lastMonth": "Last 30 days",
+      "lastCalendarMonth": "Last calendar month",
+      "currentQuarter": "Current quarter",
+      "lastQuarter": "Last quarter",
+      "last3Months": "Last 3 months",
+      "last6Months": "Last 6 months",
+      "last12Months": "Last 12 months",
+      "currentYear": "Current year",
+      "previousYear": "Previous year",
+      "custom": "Custom"
+    }
+  },
+  "ct-filter-panel": {
+    "titleSidebarItemFilter": "Filters"
+  },
+  "ct-sidebar-filter-panel": {
+    "resetButton": "Reset all"
+  },
+  "ct-empty-state": {
+    "messageNoResultTitle": "Nothing found",
+    "messageNoResultSublineSimple": "Edit your filters or search terms to find results.",
+    "messageNoResultSubline": "Edit your filters or your search terms to find results. Please also check the configuration of your search."
+  },
+  "ct-ai-copilot-warning": {
+    "text": "AI responses can be inaccurate or misleading."
+  },
+  "sidebar": {
+    "ariaLabelButtonClose": "Close sidebar",
+    "ariaLabelButtonOpen": "Open sidebar"
+  },
+  "help-center": {
+    "sidebar": {
+      "ariaLabelButtonOpen": "Open help",
+      "support": {
+        "documentation": {
+          "text": "Documentation",
+          "href": "https://docs.contena.cn/en"
+        },
+        "createSupportRequest": {
+          "text": "Create support request",
+          "href": "https://account.contena.cn/"
+        }
+      }
+    }
+  },
+  "ct-context-button": {
+    "ariaLabel": "Open context menu"
+  },
+  "ct-category-tree-field": {
+    "emptySearchResults": "No categories found."
+  }
 }

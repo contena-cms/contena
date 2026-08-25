@@ -1,78 +1,8 @@
 {
-    "ct-dashboard": {
-        "general": {
-            "mainMenuItemGeneral": "Dashboard",
-            "descriptionTextModule": "Administration home"
-        },
-        "home": {
-            "welcome": "Hello, {name}",
-            "defaultUser": "Administrator",
-            "summary": "Here is today's content operations overview.",
-            "viewAll": "View all",
-            "actions": {
-                "createContent": "New content",
-                "media": "Media library",
-                "workflow": "Workflows"
-            },
-            "metrics": {
-                "label": "Content operations metrics",
-                "published": "Published content",
-                "pending": "Pending review",
-                "pendingHint": "Needs attention",
-                "media": "Media assets",
-                "members": "Members"
-            },
-            "tasks": {
-                "title": "Tasks",
-                "reviewTitle": "Content review",
-                "reviewDescription": "Waiting for an editor or administrator",
-                "publishTitle": "Scheduled publishing",
-                "publishDescription": "Publishing jobs in the next 7 days",
-                "completedTitle": "Completed this week",
-                "completedDescription": "Finished content tasks"
-            },
-            "recent": {
-                "title": "Recent content",
-                "searchPlaceholder": "Search content",
-                "columns": {
-                    "title": "Content",
-                    "owner": "Owner",
-                    "status": "Status",
-                    "updatedAt": "Updated"
-                },
-                "items": {
-                    "one": "Annual product capability update",
-                    "two": "Enterprise content operations solution",
-                    "three": "Platform user guide"
-                },
-                "times": {
-                    "minutes": "12 minutes ago",
-                    "hours": "2 hours ago",
-                    "yesterday": "Yesterday"
-                }
-            },
-            "status": {
-                "published": "Published",
-                "review": "In review",
-                "draft": "Draft"
-            }
-        },
-        "preview": {
-            "openMenu": "Open menu",
-            "globalSearch": "Search menus, content and settings",
-            "help": "Help center",
-            "tasksDescription": "Operational tasks that need your attention",
-            "recentDescription": "Recently edited and published content",
-            "trend": {
-                "title": "Content traffic trend",
-                "description": "Traffic and conversion across all channels",
-                "visits": "Visits",
-                "conversion": "Conversion",
-                "averageTime": "Average time",
-                "sevenDays": "7 days",
-                "thirtyDays": "30 days",
-                "quarter": "Quarter"
-            }
-        }
+  "ct-dashboard": {
+    "general": {
+      "mainMenuItemGeneral": "Dashboard",
+      "descriptionTextModule": "Administration home"
     }
+  }
 }
