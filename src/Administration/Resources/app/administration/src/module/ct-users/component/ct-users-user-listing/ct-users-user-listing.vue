@@ -38,12 +38,14 @@
                 @context-select="onContextSelect"
             >
                 <template #column-username="{ data: item }">
-                    <ct-block name="ct_users_user_list_column_username">
-                        <mt-link as="button" class="ct-users-user-listing__columns" @click.stop.prevent="emit('edit', item)">
-                            <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
-                            {{ item.username }}
-                        </mt-link>
-                    </ct-block>
+                    <span class="ct-users-user-listing__username-click-target" @click.stop>
+                        <ct-block name="ct_users_user_list_column_username">
+                            <mt-link as="button" class="ct-users-user-listing__columns" @click="emit('edit', item)">
+                                <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
+                                {{ item.username }}
+                            </mt-link>
+                        </ct-block>
+                    </span>
                 </template>
 
                 <template #column-aclRoles="{ data: item }">

@@ -146,6 +146,20 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(router.push).not.toHaveBeenCalled();
     });
 
+    it('keeps a username click from bubbling to document listeners', async () => {
+        const { wrapper } = await createWrapper(['users_and_permissions.viewer']);
+        await flushPromises();
+
+        const documentClick = jest.fn();
+        document.addEventListener('click', documentClick);
+
+        await wrapper.find('.ct-users-user-listing__columns').trigger('click');
+
+        document.removeEventListener('click', documentClick);
+
+        expect(documentClick).not.toHaveBeenCalled();
+    });
+
     it('places the create action in the table toolbar', async () => {
         const { wrapper } = await createWrapper(['users_and_permissions.creator']);
         await flushPromises();
