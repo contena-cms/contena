@@ -4,3 +4,14 @@
         display: block;
     }
 }
+
+.ct-channel-defaults-select [class*='ct-channel-detail__assign-'] {
+    .mt-select__selection {
+        height: auto;
+    }
+
+    .mt-block-field__block {
+        height: auto;
+        min-height: var(--scale-size-48);
+    }
+}
