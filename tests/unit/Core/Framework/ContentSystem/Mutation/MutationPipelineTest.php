@@ -13,6 +13,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
+use Contena\Core\Framework\ContentSystem\Mutation\PageContextConsumerWiring;
 use Contena\Core\Framework\ContentSystem\Resolution\PropertyKind;
 use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
 use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
@@ -29,7 +30,7 @@ class MutationPipelineTest extends TestCase
         $mutated = new ContentElement('new-1', 'CT:Card');
         $report = new DiagnosticsReport([]);
 
-        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis($report, ['new-1' => []])));
+        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis($report, ['new-1' => []])), new PageContextConsumerWiring());
 
         $result = $pipeline->run($this->mutation([$mutated], ['new-1']), [new ContentElement('el-1', 'CT:Block')], null);
 
@@ -46,7 +47,7 @@ class MutationPipelineTest extends TestCase
             'other' => [new PropertyResolution('title', PropertyKind::Primitive, false, 'string', 'x')],
         ];
 
-        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)));
+        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)), new PageContextConsumerWiring());
 
         $result = $pipeline->run($this->mutation([new ContentElement('new-1', 'CT:Card')], ['new-1']), [new ContentElement('el-1', 'CT:Block')], null);
 
@@ -60,7 +61,7 @@ class MutationPipelineTest extends TestCase
             'new-1' => [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'hi')],
         ];
 
-        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)));
+        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)), new PageContextConsumerWiring());
 
         $result = $pipeline->run($this->mutation([new ContentElement('new-1', 'CT:Card')], []), [new ContentElement('el-1', 'CT:Block')], null);
 
@@ -72,7 +73,7 @@ class MutationPipelineTest extends TestCase
     {
         $orphan = new ContentElement('orphan', 'CT:Block');
 
-        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), [])));
+        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), [])), new PageContextConsumerWiring());
 
         $result = $pipeline->run($this->mutation([new ContentElement('el-1', 'CT:New')], ['el-1'], [$orphan]), [new ContentElement('el-1', 'CT:Block')], null);
 
@@ -82,7 +83,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('passes dropped wiring keys from the op through to the result')]
     public function testRunCarriesDroppedWiring(): void
     {
-        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), [])));
+        $pipeline = new MutationPipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), [])), new PageContextConsumerWiring());
 
         $result = $pipeline->run($this->mutation([new ContentElement('el-1', 'CT:New')], ['el-1'], [], ['legacy']), [new ContentElement('el-1', 'CT:Block')], null);
 
@@ -101,9 +102,26 @@ class MutationPipelineTest extends TestCase
             ->with([$mutated], $rootContext)
             ->willReturn(new LayoutAnalysis(new DiagnosticsReport([]), []));
 
-        $pipeline = new MutationPipeline($diagnostics);
+        $pipeline = new MutationPipeline($diagnostics, new PageContextConsumerWiring());
 
         $pipeline->run($this->mutation([$mutated], ['new-1']), [new ContentElement('el-1', 'CT:Block')], $rootContext);
+    }
+
+    #[TestDox('wires page-context consumers into the mutated layout')]
+    public function testRunWiresContextConsumers(): void
+    {
+        $article = new ContentElement('a1', 'CT:Blog:Card');
+        $resolutions = ['a1' => [new PropertyResolution('blog', PropertyKind::Reference, false, null, null, 'Contena\\Core\\Content\\Blog\\BlogEntity')]];
+        $rootContext = [new ProvidedContext('blog', 'Contena\\Core\\Content\\Blog\\BlogEntity', ContextType::Single, null, DistributionStrategy::Broadcast)];
+
+        $pipeline = new MutationPipeline(
+            $this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)),
+            new PageContextConsumerWiring(),
+        );
+
+        $result = $pipeline->run($this->mutation([$article], ['a1']), [new ContentElement('el-1', 'CT:Block')], $rootContext);
+
+        static::assertArrayHasKey('blog', $result->layout[0]->getAcceptsContext());
     }
 
     /**

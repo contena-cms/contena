@@ -80,6 +80,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemEleme
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\ElementTypeCollisionDetector;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
+use Contena\Core\Framework\ContentSystem\Mutation\PageContextConsumerWiring;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
 use Contena\Core\Framework\ContentSystem\Output\ElementTreePruner;
 use Contena\Core\Framework\ContentSystem\Output\Format\DataResponseFactory;
@@ -635,9 +636,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     // Mutation Pipeline
+    $services->set(PageContextConsumerWiring::class);
+
     $services->set(MutationPipeline::class)
         ->args([
             service(LayoutDiagnostics::class),
+            service(PageContextConsumerWiring::class),
         ]);
 
     // Layout Mutation Actions (Admin API)

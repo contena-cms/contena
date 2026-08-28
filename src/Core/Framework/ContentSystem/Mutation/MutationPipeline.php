@@ -15,6 +15,7 @@ class MutationPipeline
 {
     public function __construct(
         private readonly LayoutDiagnostics $diagnostics,
+        private readonly PageContextConsumerWiring $contextWiring,
     ) {
     }
 
@@ -28,6 +29,10 @@ class MutationPipeline
         $affected = $mutation->affected();
 
         $analysis = $this->diagnostics->analyze($mutated, $rootContext);
+
+        // Wire page-context consumers into the mutated tree so the returned layout carries the
+        // distribution wiring required by every consumer.
+        $this->contextWiring->apply($mutated, $analysis->resolutions, $rootContext ?? []);
 
         // This MutationResult assembly is intentionally duplicated in PersistedLayoutMutator::mutate(): sharing it
         // would couple Mutation/ to a Diagnostics/LayoutAnalysis-shaped helper or require a banned static helper,
