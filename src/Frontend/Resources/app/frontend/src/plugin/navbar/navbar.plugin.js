@@ -31,6 +31,7 @@ export default class NavbarPlugin extends Plugin {
         this._topLevelLinks = this.el.querySelectorAll(`${this.options.topLevelLinksSelector}`);
         this._registerEvents();
         this._isMouseOver = false;
+        this._setCurrentPage();
     }
 
     _registerEvents() {
@@ -49,9 +50,6 @@ export default class NavbarPlugin extends Plugin {
             }
         });
 
-        window.addEventListener('load', () => {
-            this._setCurrentPage();
-        });
     }
 
     _toggleNavbar(topLevelLink, event) {
@@ -194,4 +192,3 @@ export default class NavbarPlugin extends Plugin {
         window.focusHandler.setFocus(link);
     }
 }
-

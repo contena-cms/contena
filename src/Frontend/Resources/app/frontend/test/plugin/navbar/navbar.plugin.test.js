@@ -218,14 +218,10 @@ describe('NavbarPlugin', () => {
         expect(navbarPlugin._debounce).toHaveBeenCalled();
     });
 
-    test('current page is applied on load event', () => {
-        const mockEvent = new Event('load');
-        jest.spyOn(navbarPlugin, '_setCurrentPage'); // Spy on the method
+    test('current page is applied during initialization', () => {
+        jest.spyOn(navbarPlugin, '_setCurrentPage');
 
-        window.addEventListener('load', () => {
-            navbarPlugin._setCurrentPage();
-        });
-        window.dispatchEvent(mockEvent);
+        navbarPlugin.init();
 
         expect(navbarPlugin._setCurrentPage).toHaveBeenCalled();
     });
@@ -385,4 +381,3 @@ describe('NavbarPlugin', () => {
         expect(mockLink.blur).toHaveBeenCalled();
     });
 });
-
