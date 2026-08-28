@@ -348,6 +348,31 @@ class JsonEntityEncoderTest extends TestCase
         static::assertArrayHasKey('otherExtension', $actual['extensions']);
     }
 
+    public function testEncodeKeepsDecodedKeysWithoutBackingStructVars(): void
+    {
+        $encoder = $this->createEncoder();
+
+        $definition = $this->createDefinition(CustomFieldTestDefinition::class);
+
+        $struct = new class extends Entity {
+            /**
+             * @return array<string, mixed>
+             */
+            public function jsonSerialize(): array
+            {
+                $data = parent::jsonSerialize();
+                $data['relatedContent'] = [['id' => '0fa91ce3e96a4bc2be4bd9ce752c3425']];
+
+                return $data;
+            }
+        };
+        $struct->setUniqueIdentifier('test-id');
+
+        $actual = $encoder->encode(new Criteria(), $definition, $struct, SerializationFixture::API_BASE_URL);
+
+        static::assertSame([['id' => '0fa91ce3e96a4bc2be4bd9ce752c3425']], $actual['relatedContent']);
+    }
+
     public function testExtensionsRemovedCompletely(): void
     {
         $encoder = $this->createEncoder();
