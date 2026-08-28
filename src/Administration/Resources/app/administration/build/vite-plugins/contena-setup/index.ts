@@ -67,8 +67,8 @@ export default function contenaSetupPlugin(options: Options): Plugin {
     const baseComponentFiles = new Map<string, string>();
     const virtualSourcemap = createVirtualSetupSourcemapContext(options.administrationRoot);
     // resolveId has to run the transform to detect a setup SFC at all, so its result is stashed here for
-    // the matching load(). One-shot: load() deletes on read, so it can never serve stale output.
-    const resolvedTransforms = new Map<string, ContenaSetupTransformResult>();
+    // the matching load(). Keyed by source content so an edit between resolveId and load cannot serve stale output.
+    const resolvedTransforms = new Map<string, { source: string; result: ContenaSetupTransformResult }>();
     // Set from the resolved Vite config; the remap is pointless when the build emits no maps.
     let sourcemapsEnabled = true;
     // caveat: also rejections are cached
@@ -87,11 +87,13 @@ export default function contenaSetupPlugin(options: Options): Plugin {
      * plugin reads it itself. The in-hand-code variant is {@link transformSource}, used by `transform`
      * where Rollup already supplies the module code.
      */
-    async function transformFile(fileName: string): Promise<ContenaSetupTransformResult | null> {
+    async function transformFile(
+        fileName: string,
+    ): Promise<{ source: string; result: ContenaSetupTransformResult | null }> {
         const transformContenaSetupSfc = await loadContenaSetupTransform();
-        const code = await fs.readFile(fileName, 'utf8');
+        const source = await fs.readFile(fileName, 'utf8');
 
-        return transformContenaSetupSfc(code, fileName);
+        return { source, result: transformContenaSetupSfc(source, fileName) };
     }
 
     /** Transforms already-loaded module code; see {@link transformFile} for the read-from-disk variant. */
@@ -169,7 +171,7 @@ export default function contenaSetupPlugin(options: Options): Plugin {
                 return null;
             }
 
-            const result = await transformFile(fileName);
+            const { source: fileSource, result } = await transformFile(fileName);
 
             if (!result) {
                 return null;
@@ -177,7 +179,7 @@ export default function contenaSetupPlugin(options: Options): Plugin {
 
             const virtualFileName = virtualSourcemap.toVirtualFileName(fileName);
             virtualSourcemap.rememberOriginalFile(virtualFileName, fileName);
-            resolvedTransforms.set(fileName, result);
+            resolvedTransforms.set(fileName, { source: fileSource, result });
 
             return virtualFileName;
         },
@@ -207,9 +209,10 @@ export default function contenaSetupPlugin(options: Options): Plugin {
             // this virtual module in dev/watch mode.
             this.addWatchFile(originalFileName);
 
+            const source = await fs.readFile(originalFileName, 'utf8');
             const cached = resolvedTransforms.get(originalFileName);
             resolvedTransforms.delete(originalFileName);
-            const result = cached ?? (await transformFile(originalFileName));
+            const result = cached?.source === source ? cached.result : await transformSource(source, originalFileName);
 
             if (!result) {
                 return null;
@@ -244,6 +247,21 @@ export default function contenaSetupPlugin(options: Options): Plugin {
                 code: result.code,
                 map: result.map,
             };
+        },
+
+        /** Map edits of authored SFCs to their virtual module so Vite invalidates the transformed source. */
+        hotUpdate({ file, modules }) {
+            if (!file.endsWith('.vue') || virtualSourcemap.isVirtualFileName(file) || isDependencyFile(file)) {
+                return undefined;
+            }
+
+            const virtualModule = this.environment.moduleGraph.getModuleById(virtualSourcemap.toVirtualFileName(file));
+
+            if (!virtualModule) {
+                return undefined;
+            }
+
+            return [...modules, virtualModule];
         },
 
         watchChange(id, change) {

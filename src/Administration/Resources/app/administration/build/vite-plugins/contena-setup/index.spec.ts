@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import type { SourceMap } from 'rollup';
@@ -32,6 +33,7 @@ type CallableSetupPlugin = {
     resolveId(source: string, importer: string): Promise<string | null>;
     load(id: string): Promise<LoadedModule | null>;
     transform(code: string, id: string): Promise<LoadedModule | null>;
+    hotUpdate(options: { file: string; modules: { id: string }[]; type: string }): { id: string }[] | undefined;
     watchChange(id: string, change: { event: 'create' | 'delete' | 'update' }): void;
     generateBundle: unknown;
 };
@@ -126,16 +128,94 @@ const count = 1;
 swDefinePublic({ count });
 </script>`;
         const vueFile = await createVueFile(source, 'ct-cached-component.vue');
-        const transformSpy = jest.spyOn(fs, 'readFile');
+        const nodeRequire = createRequire(path.join(process.cwd(), 'package.json'));
+        const transformModule = nodeRequire(path.join(process.cwd(), 'build/vue-setup-transform/index.js')) as {
+            transformContenaSetupSfc: (code: string, fileName: string) => unknown;
+        };
+        const transformSpy = jest.spyOn(transformModule, 'transformContenaSetupSfc');
 
         const { loaded } = await resolveAndLoadVueFile(plugin, vueFile);
 
         // resolveId + load together read (and therefore transform) the source exactly once; the second
         // pass is served from the resolveId cache.
         expect(loaded).toHaveProperty('code');
-        expect(transformSpy.mock.calls.filter(([file]) => file === vueFile)).toHaveLength(1);
+        expect(transformSpy.mock.calls.filter(([, file]) => file === vueFile)).toHaveLength(1);
 
         transformSpy.mockRestore();
+    });
+
+    it('serves current file content when the source changed after resolveId stashed its transform', async () => {
+        const plugin = createPlugin();
+        const vueFile = await createVueFile(
+            `<script setup>\nconst count = 1;\nswDefinePublic({ count });\n</script>`,
+            'ct-stale-stash-component.vue',
+        );
+        const context = { resolve: jest.fn().mockResolvedValue({ id: vueFile }) };
+        const resolvedId = await plugin.resolveId.call(
+            context,
+            `./${path.basename(vueFile)}`,
+            path.join(path.dirname(vueFile), 'entry.js'),
+        );
+
+        await fs.writeFile(vueFile, `<script setup>\nconst countEdited = 2;\nswDefinePublic({ countEdited });\n</script>`);
+
+        const loaded = await plugin.load.call({ addWatchFile: jest.fn() }, resolvedId as string);
+
+        expect(loaded?.code).toContain('countEdited');
+    });
+
+    describe('hot updates', () => {
+        function createHotUpdateContext(knownVirtualIds: string[]) {
+            return {
+                environment: {
+                    moduleGraph: {
+                        getModuleById: jest.fn((id: string) => (knownVirtualIds.includes(id) ? { id } : undefined)),
+                    },
+                },
+            };
+        }
+
+        it('maps an authored SFC change to its virtual module', () => {
+            const plugin = createPlugin();
+            const virtualId = '/example/ct-my-component.vue.contena-setup.vue';
+            const context = createHotUpdateContext([virtualId]);
+            const otherModule = { id: '/example/other-module.ts' };
+
+            const result = plugin.hotUpdate.call(context, {
+                file: '/example/ct-my-component.vue',
+                modules: [otherModule],
+                type: 'update',
+            });
+
+            expect(result).toEqual([otherModule, { id: virtualId }]);
+        });
+
+        it('leaves plain SFC changes alone', () => {
+            const plugin = createPlugin();
+            const context = createHotUpdateContext([]);
+
+            const result = plugin.hotUpdate.call(context, {
+                file: '/example/PlainComponent.vue',
+                modules: [],
+                type: 'update',
+            });
+
+            expect(result).toBeUndefined();
+        });
+
+        it('does not map a virtual module id onto itself', () => {
+            const plugin = createPlugin();
+            const context = createHotUpdateContext([]);
+
+            const result = plugin.hotUpdate.call(context, {
+                file: '/example/ct-my-component.vue.contena-setup.vue',
+                modules: [],
+                type: 'update',
+            });
+
+            expect(result).toBeUndefined();
+            expect(context.environment.moduleGraph.getModuleById).not.toHaveBeenCalled();
+        });
     });
 
     it('delegates .override.vue files to the shared override transform', async () => {
