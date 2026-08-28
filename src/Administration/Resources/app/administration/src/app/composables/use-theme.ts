@@ -10,6 +10,12 @@ import type { Theme, UseThemeReturn } from '@contena/meteor-component-library';
  */
 export const USER_THEME_CONFIG_KEY = 'core.userTheme';
 
+/**
+ * Preference used before the user has chosen a theme. Administration starts in light mode
+ * instead of inheriting the operating system preference.
+ */
+export const DEFAULT_THEME: Theme = 'light';
+
 type UseAdminThemeReturn = UseThemeReturn & {
     loadUserTheme: () => Promise<void>;
     saveUserTheme: (theme: Theme) => Promise<void>;
@@ -23,11 +29,16 @@ function isTheme(value: unknown): value is Theme {
 
 async function loadUserTheme(): Promise<void> {
     const response = await Contena.Service('userConfigService').search([USER_THEME_CONFIG_KEY]);
-    const value = response?.data?.[USER_THEME_CONFIG_KEY] as { theme?: unknown } | undefined;
 
-    if (value && isTheme(value.theme)) {
-        useTheme().setTheme(value.theme);
+    // The service swallows request errors and resolves without a response. Keep the current preference then.
+    if (!response) {
+        return;
     }
+
+    const value = response.data?.[USER_THEME_CONFIG_KEY] as { theme?: unknown } | undefined;
+
+    // localStorage is shared by every browser user, so an absent server preference must not inherit another user's choice.
+    useTheme().setTheme(value && isTheme(value.theme) ? value.theme : DEFAULT_THEME);
 }
 
 async function saveUserTheme(theme: Theme): Promise<void> {
@@ -46,7 +57,7 @@ export default function useTheme(): UseAdminThemeReturn {
         const scope = effectScope(true);
 
         themeState = {
-            ...scope.run(() => useMeteorTheme())!,
+            ...scope.run(() => useMeteorTheme({ defaultTheme: DEFAULT_THEME }))!,
             loadUserTheme,
             saveUserTheme,
         };
