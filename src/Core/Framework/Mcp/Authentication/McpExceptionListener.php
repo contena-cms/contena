@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\Mcp\Authentication;
 
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Mcp\Schema\JsonRpc\Error;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,12 +76,23 @@ class McpExceptionListener implements EventSubscriberInterface
     private function handleMcpException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        $httpCode = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
+        $message = $exception->getMessage();
+
+        if ($exception instanceof OAuthServerException) {
+            // OAuth errors do not implement getStatusCode(), but expose their HTTP status explicitly.
+            $httpCode = $exception->getHttpStatusCode();
+
+            if ($exception->getHint() !== null) {
+                $message .= ' ' . $exception->getHint();
+            }
+        } else {
+            $httpCode = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
 
         $error = new Error(
             id: '',
             code: $this->toJsonRpcCode($httpCode),
-            message: $exception->getMessage(),
+            message: $message,
         );
 
         $event->setResponse(new JsonResponse($error->jsonSerialize(), $httpCode));
