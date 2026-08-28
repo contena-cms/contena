@@ -1,5 +1,5 @@
-import DeviceDetection from 'src/helper/device-detection.helper';
-import Plugin from 'src/plugin-system/plugin.class';
+import DeviceDetection from "src/helper/device-detection.helper";
+import Plugin from "src/plugin-system/plugin.class";
 
 export default class NavbarPlugin extends Plugin {
     static options = {
@@ -10,80 +10,99 @@ export default class NavbarPlugin extends Plugin {
         /**
          * Class to select the main navigation items, which contain both the top level link and the dropdown navigation.
          */
-        navItemSelector: '.nav-item',
+        navItemSelector: ".nav-item",
         /**
          * Class to select the top level links.
          */
-        topLevelLinksSelector: '.main-navigation-link',
+        topLevelLinksSelector: ".main-navigation-link",
         /**
          * Class to select the current page to add aria label current page to it.
          */
-        ariaCurrentPageSelector: '.nav-item-{id}-link',
+        ariaCurrentPageSelector: ".nav-item-{id}-link",
 
         /**
          * Class to show the currently active category.
          */
-        activeClass: 'active',
-
+        activeClass: "active",
     };
 
     init() {
-        this._topLevelLinks = this.el.querySelectorAll(`${this.options.topLevelLinksSelector}`);
+        this._topLevelLinks = this.el.querySelectorAll(
+            `${this.options.topLevelLinksSelector}`,
+        );
         this._registerEvents();
         this._isMouseOver = false;
+        this._setCurrentPage();
     }
 
     _registerEvents() {
-        const openEvent = (DeviceDetection.isTouchDevice()) ? 'touchstart' : 'mouseenter';
-        const closeEvent = (DeviceDetection.isTouchDevice()) ? 'touchstart' : 'mouseleave';
-        const clickEvent = (DeviceDetection.isTouchDevice()) ? 'touchstart' : 'click';
+        const openEvent = DeviceDetection.isTouchDevice()
+            ? "touchstart"
+            : "mouseenter";
+        const closeEvent = DeviceDetection.isTouchDevice()
+            ? "touchstart"
+            : "mouseleave";
+        const clickEvent = DeviceDetection.isTouchDevice()
+            ? "touchstart"
+            : "click";
 
-        this.el.addEventListener('mouseleave', this._closeAllDropdowns.bind(this));
-        this.el.addEventListener('focusout', this._restoreFocusAfterBtnClose.bind(this));
+        this.el.addEventListener(
+            "mouseleave",
+            this._closeAllDropdowns.bind(this),
+        );
+        this.el.addEventListener(
+            "focusout",
+            this._restoreFocusAfterBtnClose.bind(this),
+        );
 
-        this._topLevelLinks.forEach(el => {
+        this._topLevelLinks.forEach((el) => {
             el.addEventListener(openEvent, this._toggleNavbar.bind(this, el));
             el.addEventListener(closeEvent, this._toggleNavbar.bind(this, el));
-            if (el.getAttribute('href') !== null) {
-                el.addEventListener(clickEvent, this._navigateToLinkOnClick.bind(this, el));
+            if (el.getAttribute("href") !== null) {
+                el.addEventListener(
+                    clickEvent,
+                    this._navigateToLinkOnClick.bind(this, el),
+                );
             }
-        });
-
-        window.addEventListener('load', () => {
-            this._setCurrentPage();
         });
     }
 
     _toggleNavbar(topLevelLink, event) {
-        const currentDropdown = window.bootstrap.Dropdown.getOrCreateInstance(topLevelLink);
-        if (event.type === 'mouseenter') {
+        const currentDropdown =
+            window.bootstrap.Dropdown.getOrCreateInstance(topLevelLink);
+        if (event.type === "mouseenter") {
             this._isMouseOver = true;
             this._debounce(() => {
                 if (this._isMouseOver) {
                     this._closeAllDropdowns();
 
-                    if (currentDropdown?._menu && !currentDropdown._menu.classList.contains('show')) {
+                    if (
+                        currentDropdown?._menu &&
+                        !currentDropdown._menu.classList.contains("show")
+                    ) {
                         currentDropdown.show();
                         topLevelLink.blur();
                     }
 
-                    this.$emitter.publish('showDropdown');
+                    this.$emitter.publish("showDropdown");
                 }
             }, this.options.debounceTime);
-        } else if (event.type === 'mouseleave') {
+        } else if (event.type === "mouseleave") {
             this._isMouseOver = false;
         }
     }
 
     _closeAllDropdowns() {
-        const dropdowns = Array.from(this._topLevelLinks).map(link => window.bootstrap.Dropdown.getInstance(link));
-        dropdowns.forEach(dropdown => {
-            if (dropdown?._menu && dropdown._menu.classList.contains('show')) {
+        const dropdowns = Array.from(this._topLevelLinks).map((link) =>
+            window.bootstrap.Dropdown.getInstance(link),
+        );
+        dropdowns.forEach((dropdown) => {
+            if (dropdown?._menu && dropdown._menu.classList.contains("show")) {
                 dropdown.hide();
             }
         });
 
-        this.$emitter.publish('closeAllDropdowns');
+        this.$emitter.publish("closeAllDropdowns");
     }
 
     /**
@@ -98,14 +117,18 @@ export default class NavbarPlugin extends Plugin {
      * @private
      */
     _navigateToLinkOnClick(topLevelLink, event) {
-        if (event.type === 'click' && event.pageX !== 0) {
+        if (event.type === "click" && event.pageX !== 0) {
             // Only dropdown links lose their native navigation; plain links are handled by the browser.
-            if (!topLevelLink.classList.contains('dropdown-toggle')) {
+            if (!topLevelLink.classList.contains("dropdown-toggle")) {
                 return;
             }
 
-            if (topLevelLink.target === '_blank') {
-                window.open(topLevelLink.href, '_blank', 'noopener, noreferrer');
+            if (topLevelLink.target === "_blank") {
+                window.open(
+                    topLevelLink.href,
+                    "_blank",
+                    "noopener, noreferrer",
+                );
                 return;
             }
 
@@ -126,7 +149,10 @@ export default class NavbarPlugin extends Plugin {
      */
     _debounce(fn, ...args) {
         this._clearDebounce();
-        this._debouncer = setTimeout(fn.bind(this, ...args), this.options.debounceTime);
+        this._debouncer = setTimeout(
+            fn.bind(this, ...args),
+            this.options.debounceTime,
+        );
     }
 
     /**
@@ -144,11 +170,15 @@ export default class NavbarPlugin extends Plugin {
      */
     _setCurrentPage() {
         if (window.activeNavigationId) {
-            const navItemSelector = this.options.ariaCurrentPageSelector.replace('{id}', window.activeNavigationId);
+            const navItemSelector =
+                this.options.ariaCurrentPageSelector.replace(
+                    "{id}",
+                    window.activeNavigationId,
+                );
             const activeNavItem = this.el.querySelector(navItemSelector);
 
             if (activeNavItem) {
-                activeNavItem.setAttribute('aria-current', 'page');
+                activeNavItem.setAttribute("aria-current", "page");
                 activeNavItem.classList.add(this.options.activeClass);
             }
         }
@@ -156,7 +186,8 @@ export default class NavbarPlugin extends Plugin {
         // Use the path from the main page because the navigation itself may be ESI-cached.
         const pathIdList = window.activeNavigationPathIdList || [];
         pathIdList.forEach((id) => {
-            const navItemSelector = this.options.ariaCurrentPageSelector.replace('{id}', id);
+            const navItemSelector =
+                this.options.ariaCurrentPageSelector.replace("{id}", id);
             const activeNavItem = this.el.querySelector(navItemSelector);
 
             if (activeNavItem) {
@@ -181,11 +212,16 @@ export default class NavbarPlugin extends Plugin {
      * @return {void}
      */
     _restoreFocusAfterBtnClose(event) {
-        if (event.relatedTarget || event.target.matches(this.options.topLevelLinksSelector)) {
+        if (
+            event.relatedTarget ||
+            event.target.matches(this.options.topLevelLinksSelector)
+        ) {
             return;
         }
 
-        const link = event.target.closest(this.options.navItemSelector)?.querySelector(this.options.topLevelLinksSelector);
+        const link = event.target
+            .closest(this.options.navItemSelector)
+            ?.querySelector(this.options.topLevelLinksSelector);
 
         if (!link) {
             return;
@@ -194,4 +230,3 @@ export default class NavbarPlugin extends Plugin {
         window.focusHandler.setFocus(link);
     }
 }
-
