@@ -30,7 +30,10 @@ pb.stop();
 
 const outputFile = path.join(__dirname, '../../src/meta/data-sets.json');
 
+// Keep the generated file stable regardless of filesystem traversal order.
+const sortedDataSetIds = result.sort((a, b) => a.localeCompare(b));
+
 console.log(colors.blueBright(`\nWriting to ${outputFile}`));
-fs.writeFileSync(outputFile, JSON.stringify(result));
+fs.writeFileSync(outputFile, JSON.stringify(sortedDataSetIds));
 
 console.log(colors.green('\nAll done!'));
