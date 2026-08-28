@@ -4,6 +4,10 @@
 
 <details>
 
+## Administration user detail and create routes removed
+
+The `ct.users.user.detail` and `ct.users.user.create` Administration routes are no longer registered. User details and creation are now handled by the user-listing drawer. Extensions that linked to these routes should link to `ct.users.index` and open the corresponding list action instead.
+
 ## API access keys must be globally unique within their credential type
 
 Integration, Administration user, and Channel API access keys are now globally unique within their respective credential types. Authentication resolves the credential owner before a tenant context exists, so allowing the same access key in multiple tenants could select an ambiguous owner.

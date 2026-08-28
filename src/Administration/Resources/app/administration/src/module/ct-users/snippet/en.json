@@ -33,12 +33,19 @@
             "status": "Status",
             "titleModalDelete": "Delete user",
             "textModalDelete": "Do you really want to delete the user \"{name}\"?",
+            "textModalDeleteMultiple": "Do you really want to delete these {count} users?",
             "notification": {
                 "deleteSuccess": {
                     "message": "User \"{name}\" deleted."
                 },
                 "deleteError": {
                     "message": "The user \"{name}\" could not be deleted."
+                },
+                "deleteSuccessMultiple": {
+                    "message": "{count} users deleted."
+                },
+                "deleteErrorMultiple": {
+                    "message": "The selected users could not be deleted."
                 },
                 "deleteUserLoggedInError": {
                     "message": "Users cannot delete themselves."

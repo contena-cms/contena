@@ -7,10 +7,13 @@ interface UserListingVm {
 }
 
 interface UserPageVm {
+    userFormMode: 'create' | 'edit' | null;
     statusFilter: string;
     onStatusFilterChange(value: string): void;
     resetUserFilters(): void;
     onUserSearch(term: string): void;
+    onCreateUser(): void;
+    onEditUser(user: { id: string }): void;
     $refs: {
         userListing: UserListingVm;
     };
@@ -34,6 +37,8 @@ describe('modules/ct-users/page/ct-users', () => {
                     },
                     stubs: {
                         'ct-page': {
+                            name: 'CtPage',
+                            props: ['showSmartBar'],
                             template: `
                                 <div>
                                     <slot name="search-bar"></slot>
@@ -47,10 +52,14 @@ describe('modules/ct-users/page/ct-users', () => {
                             template: '<div class="ct-card-view"><slot /></div>',
                         },
                         'ct-search-bar': {
-                            template: '<div class="user-search"></div>',
+                            name: 'CtSearchBar',
+                            props: ['initialSearchType'],
+                            template: '<div class="global-search"></div>',
                         },
                         'ct-users-user-listing': {
-                            template: '<div class="user-listing"></div>',
+                            emits: ['create'],
+                            template:
+                                '<div class="user-listing"><button class="ct-users__create-user" @click="$emit(\'create\')">新增</button></div>',
                             data() {
                                 return {
                                     filterCount: 0,
@@ -67,6 +76,29 @@ describe('modules/ct-users/page/ct-users', () => {
                                 setRoleFilter: jest.fn(),
                                 resetFilters: jest.fn(),
                             },
+                        },
+                        'ct-users-user-detail': {
+                            name: 'CtUsersUserDetail',
+                            props: ['initialUserId'],
+                            template: '<div class="user-detail-drawer" />',
+                        },
+                        'ct-users-user-create': {
+                            template: '<div class="user-create-drawer" />',
+                        },
+                        'mt-modal-root': {
+                            template: '<div class="modal-root"><slot /></div>',
+                        },
+                        'mt-modal': {
+                            props: ['title'],
+                            template: '<div class="modal"><slot /><slot name="footer" /></div>',
+                        },
+                        'mt-button': {
+                            props: [
+                                'disabled',
+                                'isLoading',
+                                'size',
+                            ],
+                            template: '<button v-bind="$attrs" :disabled="disabled"><slot /></button>',
                         },
                         'mt-select': {
                             name: 'mt-select',
@@ -88,25 +120,44 @@ describe('modules/ct-users/page/ct-users', () => {
         wrapper.unmount();
     });
 
-    it('renders the user list, search and filter controls', () => {
+    it('renders the user list and global search control', () => {
         expect(wrapper.find('.user-listing').exists()).toBe(true);
-        expect(wrapper.find('.user-search').exists()).toBe(true);
-        expect(wrapper.find('.ct-users__filter-menu-trigger').exists()).toBe(true);
+        expect(wrapper.find('.global-search').exists()).toBe(true);
+        expect(wrapper.findComponent({ name: 'CtSearchBar' }).props('initialSearchType')).toBe('user');
+        expect(wrapper.findComponent({ name: 'CtPage' }).props('showSmartBar')).toBe(false);
     });
 
-    it('enables user creation for creators', async () => {
-        wrapper.unmount();
-        await createWrapper(['users_and_permissions.creator']);
+    it('forwards global searches to the user listing', async () => {
+        const onSearch = jest.spyOn(wrapper.vm.$refs.userListing, 'onSearch');
+        const searchBar = wrapper.findComponent({ name: 'CtSearchBar' });
 
-        expect(wrapper.find('.ct-users__create-user').attributes('disabled')).toBeUndefined();
+        (searchBar.vm as unknown as { $emit: (event: string, ...args: unknown[]) => void }).$emit('search', 'alex');
+        await wrapper.vm.$nextTick();
+
+        expect(onSearch).toHaveBeenCalledWith('alex');
     });
 
-    it('uses default sizing for the filter and create-user actions', () => {
-        const filterButton = wrapper.findComponent('.ct-users__filter-menu-trigger') as VueWrapper;
-        const createButton = wrapper.findComponent('.ct-users__create-user') as VueWrapper;
+    it('opens the create form in the right drawer', async () => {
+        (wrapper.vm as unknown as { onCreateUser: () => void }).onCreateUser();
+        await wrapper.vm.$nextTick();
 
-        expect((filterButton.props() as { size?: string }).size).toBe('default');
-        expect((createButton.props() as { size?: string }).size).toBe('default');
+        expect(wrapper.vm.userFormMode).toBe('create');
+        expect(wrapper.find('.user-create-drawer').exists()).toBe(true);
+    });
+
+    it('opens the selected user in the right drawer', async () => {
+        wrapper.vm.onEditUser({ id: 'user-42' });
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.userFormMode).toBe('edit');
+        expect(wrapper.findComponent({ name: 'CtUsersUserDetail' }).props('initialUserId')).toBe('user-42');
+    });
+
+    it('opens the create drawer from the listing toolbar action', async () => {
+        await wrapper.find('.ct-users__create-user').trigger('click');
+
+        expect(wrapper.vm.userFormMode).toBe('create');
+        expect(wrapper.find('.user-create-drawer').exists()).toBe(true);
     });
 
     it('forwards status filter changes and keeps the selection visible', async () => {

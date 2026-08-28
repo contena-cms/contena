@@ -1,4 +1,4 @@
-@import "~scss/variables";
+@import '~scss/variables';
 
 .ct-users-user-detail {
     .ct-card-view__content {
@@ -12,26 +12,30 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
         grid-column-gap: var(--scale-size-32);
+
+        > ct-block {
+            display: contents;
+        }
     }
 
     .ct-users-user-detail__information-grid {
         grid-template-areas:
-            "Name PhoneNumber"
-            "EMail State"
-            "Username Password"
-            "UserCode Gender";
+            'Name UserCode'
+            'PhoneNumber Gender'
+            'EMail Username'
+            'Password Active';
     }
 
     .ct-users-user-detail__user-interface-grid {
         grid-template-areas:
-            "Language ProfilePicture"
-            "Timezone ProfilePicture";
+            'Language ProfilePicture'
+            'Timezone ProfilePicture';
     }
 
     .ct-users-user-detail__roles-permissions-grid {
         grid-template-areas:
-            "AclRoles JobTitle"
-            "IsAdmin IsAdmin";
+            'AclRoles JobTitle'
+            'IsAdmin .';
     }
 
     .ct-users-user-detail__grid-name {
@@ -86,6 +90,10 @@
         grid-area: State;
     }
 
+    .ct-users-user-detail__grid-active {
+        grid-area: Active;
+    }
+
     .mt-switch {
         margin-top: 0;
         margin-bottom: 0;
@@ -94,5 +102,21 @@
     &__grid-timezone {
         grid-area: Timezone;
         margin-top: 0;
+    }
+
+    @media (max-width: 720px) {
+        .ct-users-user-detail__grid {
+            grid-template-columns: 1fr;
+            grid-template-areas: none;
+            row-gap: var(--scale-size-16);
+
+            > ct-block {
+                display: block;
+            }
+
+            > ct-block > * {
+                grid-area: auto;
+            }
+        }
     }
 }

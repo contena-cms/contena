@@ -33,12 +33,19 @@
             "status": "状态",
             "titleModalDelete": "删除用户",
             "textModalDelete": "确定要删除用户“{name}”吗？",
+            "textModalDeleteMultiple": "确定要删除这 {count} 个用户吗？",
             "notification": {
                 "deleteSuccess": {
                     "message": "用户“{name}”已删除。"
                 },
                 "deleteError": {
                     "message": "无法删除用户“{name}”。"
+                },
+                "deleteSuccessMultiple": {
+                    "message": "已删除 {count} 个用户。"
+                },
+                "deleteErrorMultiple": {
+                    "message": "无法删除所选用户。"
                 },
                 "deleteUserLoggedInError": {
                     "message": "用户不能删除自己。"

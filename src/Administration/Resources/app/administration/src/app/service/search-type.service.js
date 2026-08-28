@@ -17,6 +17,11 @@ export default function createSearchTypeService() {
             placeholderSnippet: 'ct-media.general.placeholderSearchBar',
             listingRoute: 'ct.media.index',
         },
+        user: {
+            entityName: 'user',
+            placeholderSnippet: 'ct-users.general.placeholderSearchBar',
+            listingRoute: 'ct.users.index',
+        },
     };
 
     let $typeStore = {};

@@ -1,556 +1,479 @@
 <template>
-    <ct-block name="sw_users_user_detail">
-        <ct-page class="ct-users-user-detail">
-            <template #smart-bar-header>
-                <ct-block name="sw_users_user_detail_header">
-                    <h2 v-if="!isLoading">
-                        {{ fullName }}
-                    </h2>
-                </ct-block>
-            </template>
-
-            <template #smart-bar-actions>
-                <ct-block name="sw_users_user_detail_actions">
-                    <ct-block name="sw_users_user_detail_actions_cancel">
-                        <mt-button variant="secondary" size="default" @click="onCancel">
-                            {{ translate('global.default.cancel') }}
-                        </mt-button>
-                    </ct-block>
-
-                    <ct-block name="sw_users_user_detail_actions_save">
-                        <ct-button-process
-                            size="default"
-                            class="ct-users-user-detail__save-action"
-                            :is-loading="isLoading"
-                            :process-success="isSaveSuccessful"
-                            :disabled="isLoading || !acl.can('users_and_permissions.editor') || undefined"
-                            variant="primary"
-                            @update:process-success="saveFinish"
-                            @click.prevent="onSave"
-                        >
-                            {{ translate('global.default.save') }}
-                        </ct-button-process>
-                    </ct-block>
-                </ct-block>
-            </template>
-
-            <template #content>
-                <ct-block name="sw_users_user_detail_content">
-                    <ct-card-view>
-                        <ct-block name="sw_users_user_detail_content_inner">
-                            <div class="ct-users-user-detail__content">
-                                <ct-block name="sw_users_user_detail_card_basic_information">
-                                    <mt-card
-                                        position-identifier="ct-users-user-detail"
-                                        :title="translate('ct-users.user-detail.labelCard')"
-                                        :is-loading="isLoading"
-                                    >
-                                        <ct-block name="sw_users_user_detail_content_grid">
-                                            <div
-                                                v-if="user"
-                                                class="ct-users-user-detail__grid ct-users-user-detail__information-grid"
-                                            >
-                                                <ct-block name="sw_users_user_detail_content_name">
-                                                    <mt-text-field
-                                                        v-model="user.name"
-                                                        name="ct-field--user-name"
-                                                        class="ct-users-user-detail__grid-name"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :error="userNameError"
-                                                        required
-                                                        :label="translate('ct-users.user-detail.labelName')"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_user_code">
-                                                    <template v-if="user && user.userCode">
-                                                        <mt-text-field
-                                                            :model-value="user.userCode"
-                                                            name="ct-field--user-userCode"
-                                                            class="ct-users-user-detail__grid-user-code"
-                                                            disabled
-                                                            :label="translate('ct-users.user-detail.labelUserCode')"
-                                                        />
-                                                    </template>
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_phone_number">
-                                                    <mt-text-field
-                                                        v-model="user.phoneNumber"
-                                                        name="ct-field--user-phoneNumber"
-                                                        class="ct-users-user-detail__grid-phoneNumber"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :error="userPhoneNumberError"
-                                                        :label="translate('ct-users.user-detail.labelPhoneNumber')"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_gender">
-                                                    <ct-data-dictionary-select
-                                                        v-model="user.gender"
-                                                        technical-name="core.gender"
-                                                        name="ct-field--user-gender"
-                                                        class="ct-users-user-detail__grid-gender"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :label="translate('ct-users.user-detail.labelGender')"
-                                                        :placeholder="
-                                                            translate('ct-users.user-detail.labelGenderPlaceholder')
-                                                        "
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_email">
-                                                    <mt-text-field
-                                                        v-model="user.email"
-                                                        name="ct-field--user-email"
-                                                        class="ct-users-user-detail__grid-eMail"
-                                                        :error="userEmailError"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        required
-                                                        :label="translate('ct-users.user-detail.labelEmail')"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_username">
-                                                    <mt-text-field
-                                                        v-model="user.username"
-                                                        name="ct-field--user-username"
-                                                        class="ct-users-user-detail__grid-username"
-                                                        :error-message="
-                                                            isUsernameUsed
-                                                                ? translate('ct-users.user-detail.errorUsernameUsed')
-                                                                : ''
-                                                        "
-                                                        :error="userUsernameError"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        required
-                                                        :label="translate('ct-users.user-detail.labelUsername')"
-                                                        @update:model-value="checkUsername"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_password">
-                                                    <mt-password-field
-                                                        class="ct-users-user-detail__grid-password"
-                                                        :model-value="user.password"
-                                                        name="ct-field--user-password"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :label="translate('ct-users.user-detail.labelPassword')"
-                                                        :error="userPasswordError"
-                                                        autocomplete="new-password"
-                                                        @update:model-value="setPassword"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_grid_content_active">
-                                                    <mt-switch
-                                                        v-model="user.active"
-                                                        name="ct-field--user-active"
-                                                        class="ct-users-user-detail__grid-active"
-                                                        :label="translate('ct-users.user-detail.labelActive')"
-                                                        :disabled="
-                                                            isCurrentUser ||
-                                                            !acl.can('users_and_permissions.editor') ||
-                                                            undefined
-                                                        "
-                                                    />
-                                                </ct-block>
-                                            </div>
-                                        </ct-block>
-
-                                        <ct-block name="sw_users_user_detail_content_tags">
-                                            <ct-entity-tag-select
-                                                v-if="user"
-                                                v-model:entity-collection="user.tags"
-                                                name="ct-field--user-tags"
-                                                class="ct-users-user-detail__tags"
-                                                :label="translate('ct-users.user-detail.labelTags')"
-                                                :placeholder="translate('ct-users.user-detail.placeholderTags')"
-                                                :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                            />
-                                        </ct-block>
-                                    </mt-card>
-                                </ct-block>
-
-                                <ct-block name="sw_users_user_detail_card_user_interface">
-                                    <mt-card
-                                        position-identifier="ct-users-user-detail-user-interface"
-                                        :title="translate('ct-users.user-detail.labelUserInterface')"
-                                        :is-loading="isLoading"
-                                    >
-                                        <ct-block name="sw_users_user_detail_user_interface_grid">
-                                            <div
-                                                v-if="user"
-                                                class="ct-users-user-detail__grid ct-users-user-detail__user-interface-grid"
-                                            >
-                                                <ct-block name="sw_users_user_detail_grid_content_language">
-                                                    <mt-select
-                                                        v-model="user.localeId"
-                                                        name="ct-field--user-localeId"
-                                                        class="ct-users-user-detail__grid-language"
-                                                        :label="translate('ct-users.user-detail.labelLanguage')"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :error="userLocaleIdError"
-                                                        :options="localeOptions"
-                                                        required
-                                                        :placeholder="
-                                                            translate('ct-users.user-detail.labelLanguagePlaceholder')
-                                                        "
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_grid_content_timezone">
-                                                    <mt-select
-                                                        v-model="user.timeZone"
-                                                        name="ct-field--user-timeZone"
-                                                        class="ct-users-user-detail__grid-timezone"
-                                                        :options="timezoneOptions"
-                                                        required
-                                                        :label="translate('ct-users.user-detail.labelTimezone')"
-                                                        :disabled="!acl.can('user.update_profile') || undefined"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_content_media_upload">
-                                                    <ct-upload-listener
-                                                        :upload-tag="user.id"
-                                                        auto-upload
-                                                        @media-upload-finish="setMediaItem"
-                                                    />
-                                                    <ct-media-upload-v2
-                                                        class="ct-users-user-detail__grid-profile-picture"
-                                                        :source="avatarMedia"
-                                                        :label="translate('ct-users.user-detail.labelProfilePicture')"
-                                                        :upload-tag="user.id"
-                                                        :allow-multi-select="false"
-                                                        :source-context="user"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        default-folder="user"
-                                                        @media-drop="onDropMedia"
-                                                        @media-upload-sidebar-open="onOpenMedia"
-                                                        @media-upload-remove-image="onUnlinkLogo"
-                                                    />
-                                                </ct-block>
-                                            </div>
-                                        </ct-block>
-                                    </mt-card>
-                                </ct-block>
-
-                                <ct-block name="sw_users_user_detail_card_roles_permissions">
-                                    <mt-card
-                                        position-identifier="ct-users-user-detail-roles-permissions"
-                                        :title="translate('ct-users.user-detail.labelRolesPermissionsCard')"
-                                        :is-loading="isLoading"
-                                    >
-                                        <ct-block name="sw_users_user_detail_roles_permissions_grid">
-                                            <div
-                                                v-if="user"
-                                                class="ct-users-user-detail__grid ct-users-user-detail__roles-permissions-grid"
-                                            >
-                                                <ct-block name="sw_users_user_detail_grid_content_acl_roles">
-                                                    <mt-entity-select
-                                                        v-tooltip="{
-                                                            showDelay: 300,
-                                                            message: translate(
-                                                                'ct-users.user-detail.disabledRoleSelectWarning',
-                                                            ),
-                                                            disabled:
-                                                                !user.admin || !acl.can('users_and_permissions.editor'),
-                                                        }"
-                                                        :model-value="aclRoleIds"
-                                                        name="ct-field--user-aclRoles"
-                                                        class="ct-users-user-detail__grid-aclRoles"
-                                                        :label="translate('ct-users.user-detail.labelRoles')"
-                                                        :disabled="
-                                                            user.admin ||
-                                                            !acl.can('users_and_permissions.editor') ||
-                                                            undefined
-                                                        "
-                                                        label-property="name"
-                                                        entity="acl_role"
-                                                        :repository="aclRoleRepositoryFactory"
-                                                        enable-multi-selection
-                                                        @item-add="onAclRoleAdd"
-                                                        @item-remove="onAclRoleRemove"
-                                                        @update:model-value="onAclRolesUpdate"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_grid_content_job_title">
-                                                    <mt-entity-select
-                                                        :model-value="positionIds"
-                                                        entity="position"
-                                                        label-property="name"
-                                                        name="ct-field--user-positions"
-                                                        class="ct-users-user-detail__grid-jobTitle"
-                                                        enable-multi-selection
-                                                        :criteria="positionCriteria"
-                                                        :disabled="!acl.can('users_and_permissions.editor') || undefined"
-                                                        :label="translate('ct-users.user-detail.labelPositions')"
-                                                        :placeholder="translate('ct-users.user-detail.placeholderPositions')"
-                                                        @item-add="onPositionAdd"
-                                                        @item-remove="onPositionRemove"
-                                                        @update:model-value="onPositionsUpdate"
-                                                    />
-                                                </ct-block>
-
-                                                <ct-block name="sw_users_user_detail_grid_content_acl_is_admin">
-                                                    <mt-switch
-                                                        v-model="user.admin"
-                                                        name="ct-field--user-admin"
-                                                        class="ct-users-user-detail__grid-is-admin"
-                                                        :label="translate('ct-users.user-detail.labelAdministrator')"
-                                                        :disabled="
-                                                            isCurrentUser ||
-                                                            !acl.can('users_and_permissions.editor') ||
-                                                            undefined
-                                                        "
-                                                    />
-                                                </ct-block>
-                                            </div>
-                                        </ct-block>
-                                    </mt-card>
-                                </ct-block>
-
-                                <ct-block name="sw_users_user_detail_card_integrations">
-                                    <mt-card
-                                        :title="translate('ct-users.user-detail.labelIntegrationsCard')"
-                                        position-identifier="ct-users-user-detail-integrations"
-                                    >
-                                        <template #headerRight>
-                                            <ct-block name="sw_users_user_detail_grid_toolbar">
-                                                <ct-block name="sw_users_user_detail_grid_add_key">
-                                                    <mt-button
-                                                        variant="secondary"
-                                                        size="small"
-                                                        :disabled="
-                                                            !$route.params.id ||
-                                                            !acl.can('users_and_permissions.editor') ||
-                                                            undefined
-                                                        "
-                                                        @click="addAccessKey"
-                                                    >
-                                                        {{ translate('ct-users.user-detail.addAccessKey') }}
-                                                    </mt-button>
-                                                </ct-block>
+    <div class="ct-users-user-detail">
+        <ct-block name="sw_users_user_detail">
+            <ct-block name="sw_users_user_detail_content">
+                <ct-card-view>
+                    <ct-block name="sw_users_user_detail_content_inner">
+                        <div class="ct-users-user-detail__content">
+                            <ct-block name="sw_users_user_detail_card_basic_information">
+                                <mt-card
+                                    position-identifier="ct-users-user-detail"
+                                    :title="translate('ct-users.user-detail.labelCard')"
+                                    :is-loading="isLoading"
+                                >
+                                    <ct-block name="sw_users_user_detail_content_grid">
+                                        <div
+                                            v-if="user"
+                                            class="ct-users-user-detail__grid ct-users-user-detail__information-grid"
+                                        >
+                                            <ct-block name="sw_users_user_detail_content_name">
+                                                <mt-text-field
+                                                    v-model="user.name"
+                                                    name="ct-field--user-name"
+                                                    class="ct-users-user-detail__grid-name"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :error="userNameError"
+                                                    required
+                                                    :label="translate('ct-users.user-detail.labelName')"
+                                                />
                                             </ct-block>
-                                        </template>
 
-                                        <template #grid>
-                                            <ct-block name="sw_users_user_detail_key_grid">
-                                                <ct-block name="sw_users_user_detail_key_grid_content">
-                                                    <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
-                                                    <ct-data-grid
-                                                        :is-loading="isLoading"
-                                                        :data-source="integrations"
-                                                        :columns="integrationColumns"
-                                                        identifier="user-grid"
-                                                        :show-settings="true"
-                                                        :skeleton-item-amount="skeletonItemAmount"
-                                                    >
-                                                        <template #actions="{ item }">
-                                                            <ct-block name="sw_users_user_detail_grid_columns_actions">
-                                                                <ct-block
-                                                                    name="sw_users_user_detail_grid_columns_actions_edit"
-                                                                >
-                                                                    <ct-context-menu-item
-                                                                        class="ct-users-user-detail__grid-context-menu-edit"
-                                                                        :disabled="
-                                                                            !acl.can('users_and_permissions.editor') ||
-                                                                            undefined
-                                                                        "
-                                                                        @click="onShowDetailModal(item.id)"
-                                                                    >
-                                                                        {{
-                                                                            translate('ct-users.user-detail.contextMenuEdit')
-                                                                        }}
-                                                                    </ct-context-menu-item>
-                                                                </ct-block>
-
-                                                                <ct-block
-                                                                    name="sw_users_user_detail_grid_columns_actions_delete"
-                                                                >
-                                                                    <ct-context-menu-item
-                                                                        class="ct-users-user-detail__grid-context-menu-delete"
-                                                                        :disabled="
-                                                                            !acl.can('users_and_permissions.editor') ||
-                                                                            undefined
-                                                                        "
-                                                                        variant="danger"
-                                                                        @click="showDeleteModal = item.id"
-                                                                    >
-                                                                        {{ translate('global.default.delete') }}
-                                                                    </ct-context-menu-item>
-                                                                </ct-block>
-                                                            </ct-block>
-                                                        </template>
-                                                    </ct-data-grid>
-
-                                                    <mt-empty-state
-                                                        v-if="integrations.length === 0 && !isLoading"
-                                                        :icon="$route.meta.$module.icon"
-                                                        :headline="translate('ct-users.user-detail.noAccessKeysTitle')"
-                                                        :description="translate('ct-users.user-detail.noAccessKeysSubline')"
+                                            <ct-block name="sw_users_user_detail_content_user_code">
+                                                <template v-if="user && user.userCode">
+                                                    <mt-text-field
+                                                        :model-value="user.userCode"
+                                                        name="ct-field--user-userCode"
+                                                        class="ct-users-user-detail__grid-user-code"
+                                                        disabled
+                                                        :label="translate('ct-users.user-detail.labelUserCode')"
                                                     />
-                                                </ct-block>
+                                                </template>
                                             </ct-block>
-                                        </template>
-                                    </mt-card>
-                                </ct-block>
-                            </div>
-                        </ct-block>
-                    </ct-card-view>
 
-                    <ct-block name="sw_users_user_detail_grid_inner_slot_media_modal">
-                        <ct-media-modal-v2
-                            v-if="showMediaModal"
-                            :allow-multi-select="false"
-                            :initial-folder-id="mediaDefaultFolderId"
-                            entity-context="user"
-                            @modal-close="showMediaModal = false"
-                            @media-modal-selection-change="onMediaSelectionChange"
-                        />
-                    </ct-block>
+                                            <ct-block name="sw_users_user_detail_content_phone_number">
+                                                <mt-text-field
+                                                    v-model="user.phoneNumber"
+                                                    name="ct-field--user-phoneNumber"
+                                                    class="ct-users-user-detail__grid-phoneNumber"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :error="userPhoneNumberError"
+                                                    :label="translate('ct-users.user-detail.labelPhoneNumber')"
+                                                />
+                                            </ct-block>
 
-                    <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal">
-                        <ct-modal
-                            v-if="showDeleteModal"
-                            :title="translate('global.default.warning')"
-                            @modal-close="onCloseDeleteModal"
-                        >
-                            <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal_confirm_text">
-                                <p>
-                                    {{ translate('ct-users.user-detail.modal.confirmDelete') }}
-                                </p>
+                                            <ct-block name="sw_users_user_detail_content_gender">
+                                                <ct-data-dictionary-select
+                                                    v-model="user.gender"
+                                                    technical-name="core.gender"
+                                                    name="ct-field--user-gender"
+                                                    class="ct-users-user-detail__grid-gender"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :label="translate('ct-users.user-detail.labelGender')"
+                                                    :placeholder="translate('ct-users.user-detail.labelGenderPlaceholder')"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_content_email">
+                                                <mt-text-field
+                                                    v-model="user.email"
+                                                    name="ct-field--user-email"
+                                                    class="ct-users-user-detail__grid-eMail"
+                                                    :error="userEmailError"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    required
+                                                    :label="translate('ct-users.user-detail.labelEmail')"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_content_username">
+                                                <mt-text-field
+                                                    v-model="user.username"
+                                                    name="ct-field--user-username"
+                                                    class="ct-users-user-detail__grid-username"
+                                                    :error-message="
+                                                        isUsernameUsed
+                                                            ? translate('ct-users.user-detail.errorUsernameUsed')
+                                                            : ''
+                                                    "
+                                                    :error="userUsernameError"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    required
+                                                    :label="translate('ct-users.user-detail.labelUsername')"
+                                                    @update:model-value="checkUsername"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_content_password">
+                                                <mt-password-field
+                                                    class="ct-users-user-detail__grid-password"
+                                                    :model-value="user.password"
+                                                    name="ct-field--user-password"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :label="translate('ct-users.user-detail.labelPassword')"
+                                                    :error="userPasswordError"
+                                                    autocomplete="new-password"
+                                                    @update:model-value="setPassword"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_grid_content_active">
+                                                <mt-switch
+                                                    v-model="user.active"
+                                                    name="ct-field--user-active"
+                                                    class="ct-users-user-detail__grid-active"
+                                                    :label="translate('ct-users.user-detail.labelActive')"
+                                                    :disabled="
+                                                        isCurrentUser ||
+                                                        !acl.can('users_and_permissions.editor') ||
+                                                        undefined
+                                                    "
+                                                />
+                                            </ct-block>
+                                        </div>
+                                    </ct-block>
+
+                                    <ct-block name="sw_users_user_detail_content_tags">
+                                        <ct-entity-tag-select
+                                            v-if="user"
+                                            v-model:entity-collection="user.tags"
+                                            name="ct-field--user-tags"
+                                            class="ct-users-user-detail__tags"
+                                            :label="translate('ct-users.user-detail.labelTags')"
+                                            :placeholder="translate('ct-users.user-detail.placeholderTags')"
+                                            :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                        />
+                                    </ct-block>
+                                </mt-card>
                             </ct-block>
 
-                            <template #modal-footer>
-                                <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal_footer">
-                                    <mt-button size="small" variant="secondary" @click="onCloseDeleteModal">
-                                        {{ translate('global.default.cancel') }}
-                                    </mt-button>
+                            <ct-block name="sw_users_user_detail_card_user_interface">
+                                <mt-card
+                                    position-identifier="ct-users-user-detail-user-interface"
+                                    :title="translate('ct-users.user-detail.labelUserInterface')"
+                                    :is-loading="isLoading"
+                                >
+                                    <ct-block name="sw_users_user_detail_user_interface_grid">
+                                        <div
+                                            v-if="user"
+                                            class="ct-users-user-detail__grid ct-users-user-detail__user-interface-grid"
+                                        >
+                                            <ct-block name="sw_users_user_detail_grid_content_language">
+                                                <mt-select
+                                                    v-model="user.localeId"
+                                                    name="ct-field--user-localeId"
+                                                    class="ct-users-user-detail__grid-language"
+                                                    :label="translate('ct-users.user-detail.labelLanguage')"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :error="userLocaleIdError"
+                                                    :options="localeOptions"
+                                                    required
+                                                    :placeholder="translate('ct-users.user-detail.labelLanguagePlaceholder')"
+                                                />
+                                            </ct-block>
 
-                                    <mt-button size="small" variant="critical" @click="onConfirmDelete(showDeleteModal)">
-                                        {{ translate('global.default.delete') }}
-                                    </mt-button>
-                                </ct-block>
-                            </template>
-                        </ct-modal>
+                                            <ct-block name="sw_users_user_detail_grid_content_timezone">
+                                                <mt-select
+                                                    v-model="user.timeZone"
+                                                    name="ct-field--user-timeZone"
+                                                    class="ct-users-user-detail__grid-timezone"
+                                                    :options="timezoneOptions"
+                                                    required
+                                                    :label="translate('ct-users.user-detail.labelTimezone')"
+                                                    :disabled="!acl.can('user.update_profile') || undefined"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_content_media_upload">
+                                                <ct-upload-listener
+                                                    :upload-tag="user.id"
+                                                    auto-upload
+                                                    @media-upload-finish="setMediaItem"
+                                                />
+                                                <ct-media-upload-v2
+                                                    class="ct-users-user-detail__grid-profile-picture"
+                                                    :source="avatarMedia"
+                                                    :label="translate('ct-users.user-detail.labelProfilePicture')"
+                                                    :upload-tag="user.id"
+                                                    :allow-multi-select="false"
+                                                    :source-context="user"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    default-folder="user"
+                                                    @media-drop="onDropMedia"
+                                                    @media-upload-sidebar-open="onOpenMedia"
+                                                    @media-upload-remove-image="onUnlinkLogo"
+                                                />
+                                            </ct-block>
+                                        </div>
+                                    </ct-block>
+                                </mt-card>
+                            </ct-block>
+
+                            <ct-block name="sw_users_user_detail_card_roles_permissions">
+                                <mt-card
+                                    position-identifier="ct-users-user-detail-roles-permissions"
+                                    :title="translate('ct-users.user-detail.labelRolesPermissionsCard')"
+                                    :is-loading="isLoading"
+                                >
+                                    <ct-block name="sw_users_user_detail_roles_permissions_grid">
+                                        <div
+                                            v-if="user"
+                                            class="ct-users-user-detail__grid ct-users-user-detail__roles-permissions-grid"
+                                        >
+                                            <ct-block name="sw_users_user_detail_grid_content_acl_roles">
+                                                <mt-entity-select
+                                                    v-tooltip="{
+                                                        showDelay: 300,
+                                                        message: translate('ct-users.user-detail.disabledRoleSelectWarning'),
+                                                        disabled: !user.admin || !acl.can('users_and_permissions.editor'),
+                                                    }"
+                                                    :model-value="aclRoleIds"
+                                                    name="ct-field--user-aclRoles"
+                                                    class="ct-users-user-detail__grid-aclRoles"
+                                                    :label="translate('ct-users.user-detail.labelRoles')"
+                                                    :disabled="
+                                                        user.admin || !acl.can('users_and_permissions.editor') || undefined
+                                                    "
+                                                    label-property="name"
+                                                    entity="acl_role"
+                                                    :repository="aclRoleRepositoryFactory"
+                                                    enable-multi-selection
+                                                    @item-add="onAclRoleAdd"
+                                                    @item-remove="onAclRoleRemove"
+                                                    @update:model-value="onAclRolesUpdate"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_grid_content_job_title">
+                                                <mt-entity-select
+                                                    :model-value="positionIds"
+                                                    entity="position"
+                                                    label-property="name"
+                                                    name="ct-field--user-positions"
+                                                    class="ct-users-user-detail__grid-jobTitle"
+                                                    enable-multi-selection
+                                                    :criteria="positionCriteria"
+                                                    :disabled="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :label="translate('ct-users.user-detail.labelPositions')"
+                                                    :placeholder="translate('ct-users.user-detail.placeholderPositions')"
+                                                    @item-add="onPositionAdd"
+                                                    @item-remove="onPositionRemove"
+                                                    @update:model-value="onPositionsUpdate"
+                                                />
+                                            </ct-block>
+
+                                            <ct-block name="sw_users_user_detail_grid_content_acl_is_admin">
+                                                <mt-switch
+                                                    v-model="user.admin"
+                                                    name="ct-field--user-admin"
+                                                    class="ct-users-user-detail__grid-is-admin"
+                                                    :label="translate('ct-users.user-detail.labelAdministrator')"
+                                                    :disabled="
+                                                        isCurrentUser ||
+                                                        !acl.can('users_and_permissions.editor') ||
+                                                        undefined
+                                                    "
+                                                />
+                                            </ct-block>
+                                        </div>
+                                    </ct-block>
+                                </mt-card>
+                            </ct-block>
+
+                            <ct-block name="sw_users_user_detail_card_integrations">
+                                <mt-card
+                                    :title="translate('ct-users.user-detail.labelIntegrationsCard')"
+                                    position-identifier="ct-users-user-detail-integrations"
+                                >
+                                    <template #grid>
+                                        <ct-block name="sw_users_user_detail_key_grid">
+                                            <ct-block name="sw_users_user_detail_key_grid_content">
+                                                <mt-data-table
+                                                    :caption="translate('ct-users.user-detail.labelIntegrationsCard')"
+                                                    :data-source="integrations"
+                                                    :columns="integrationColumns"
+                                                    :is-loading="isLoading"
+                                                    :pagination-total-items="integrations.length"
+                                                    :current-page="1"
+                                                    :pagination-limit="25"
+                                                    :disable-edit="true"
+                                                    :disable-delete="!acl.can('users_and_permissions.editor') || undefined"
+                                                    :additional-context-buttons="integrationContextButtons"
+                                                    @context-select="onIntegrationContextSelect"
+                                                    @item-delete="onIntegrationDelete"
+                                                >
+                                                    <template #toolbar>
+                                                        <ct-block name="sw_users_user_detail_grid_toolbar">
+                                                            <ct-block name="sw_users_user_detail_grid_add_key">
+                                                                <mt-button
+                                                                    variant="secondary"
+                                                                    size="default"
+                                                                    :disabled="
+                                                                        !acl.can('users_and_permissions.editor') || undefined
+                                                                    "
+                                                                    @click.stop.prevent="addAccessKey"
+                                                                >
+                                                                    {{ translate('ct-users.user-detail.addAccessKey') }}
+                                                                </mt-button>
+                                                            </ct-block>
+                                                        </ct-block>
+                                                    </template>
+
+                                                    <template #empty-state>
+                                                        <mt-empty-state
+                                                            icon="regular-key"
+                                                            :headline="translate('ct-users.user-detail.noAccessKeysTitle')"
+                                                            :description="
+                                                                translate('ct-users.user-detail.noAccessKeysSubline')
+                                                            "
+                                                        />
+                                                    </template>
+                                                </mt-data-table>
+                                            </ct-block>
+                                        </ct-block>
+                                    </template>
+                                </mt-card>
+                            </ct-block>
+                        </div>
                     </ct-block>
+                </ct-card-view>
 
-                    <ct-block name="sw_users_user_detail_detail_modal">
-                        <ct-modal
-                            v-if="currentIntegration"
-                            size="550px"
-                            class="ct-users-user-detail__detail"
-                            :is-loading="isModalLoading"
-                            :title="
-                                showSecretAccessKey ? translate('global.default.warning') : translate('global.default.edit')
-                            "
-                            @modal-close="onCloseDetailModal"
-                        >
-                            <ct-block name="sw_users_user_detail_detail_modal_inner_field_access_key">
+                <ct-block name="sw_users_user_detail_grid_inner_slot_media_modal">
+                    <ct-media-modal-v2
+                        v-if="showMediaModal"
+                        :allow-multi-select="false"
+                        :initial-folder-id="mediaDefaultFolderId"
+                        entity-context="user"
+                        @modal-close="showMediaModal = false"
+                        @media-modal-selection-change="onMediaSelectionChange"
+                    />
+                </ct-block>
+
+                <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal">
+                    <ct-modal
+                        v-if="showDeleteModal"
+                        :title="translate('global.default.warning')"
+                        @modal-close="onCloseDeleteModal"
+                    >
+                        <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal_confirm_text">
+                            <p>
+                                {{ translate('ct-users.user-detail.modal.confirmDelete') }}
+                            </p>
+                        </ct-block>
+
+                        <template #modal-footer>
+                            <ct-block name="sw_users_user_detail_grid_inner_slot_delete_modal_footer">
+                                <mt-button size="small" variant="secondary" @click="onCloseDeleteModal">
+                                    {{ translate('global.default.cancel') }}
+                                </mt-button>
+
+                                <mt-button size="small" variant="critical" @click="onConfirmDelete(showDeleteModal)">
+                                    {{ translate('global.default.delete') }}
+                                </mt-button>
+                            </ct-block>
+                        </template>
+                    </ct-modal>
+                </ct-block>
+
+                <ct-block name="sw_users_user_detail_detail_modal">
+                    <ct-modal
+                        v-if="currentIntegration"
+                        size="550px"
+                        class="ct-users-user-detail__detail"
+                        :is-loading="isModalLoading"
+                        :title="showSecretAccessKey ? translate('global.default.warning') : translate('global.default.edit')"
+                        @modal-close="onCloseDetailModal"
+                    >
+                        <ct-block name="sw_users_user_detail_detail_modal_inner_field_access_key">
+                            <mt-text-field
+                                v-model="currentIntegration.accessKey"
+                                :label="translate('ct-users.user-detail.modal.idFieldLabel')"
+                                :disabled="true"
+                                :copyable="true"
+                                :copyable-tooltip="true"
+                            />
+                        </ct-block>
+
+                        <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key">
+                            <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key_field">
                                 <mt-text-field
-                                    v-model="currentIntegration.accessKey"
-                                    :label="translate('ct-users.user-detail.modal.idFieldLabel')"
+                                    v-if="showSecretAccessKey"
+                                    v-model="currentIntegration.secretAccessKey"
+                                    :label="translate('ct-users.user-detail.modal.secretFieldLabel')"
                                     :disabled="true"
-                                    :copyable="true"
+                                    :password-toggle-able="false"
+                                    :copyable="showSecretAccessKey"
                                     :copyable-tooltip="true"
+                                />
+
+                                <mt-password-field
+                                    v-else
+                                    v-model="currentIntegration.secretAccessKey"
+                                    :label="translate('ct-users.user-detail.modal.secretFieldLabel')"
+                                    :disabled="true"
+                                    :password-toggle-able="false"
+                                    :copyable="showSecretAccessKey"
+                                    :copyable-tooltip="true"
+                                    autocomplete="off"
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key">
-                                <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key_field">
-                                    <mt-text-field
-                                        v-if="showSecretAccessKey"
-                                        v-model="currentIntegration.secretAccessKey"
-                                        :label="translate('ct-users.user-detail.modal.secretFieldLabel')"
-                                        :disabled="true"
-                                        :password-toggle-able="false"
-                                        :copyable="showSecretAccessKey"
-                                        :copyable-tooltip="true"
-                                    />
+                            <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key_button">
+                                <mt-button
+                                    v-if="!showSecretAccessKey"
+                                    class="ct-users-user-detail__secret-help-text-button ct-field"
+                                    variant="critical"
+                                    :block="true"
+                                    @click.stop.prevent="addAccessKey"
+                                >
+                                    {{ translate('ct-users.user-detail.modal.buttonCreateNewApiKeys') }}
+                                </mt-button>
+                            </ct-block>
 
-                                    <mt-password-field
-                                        v-else
-                                        v-model="currentIntegration.secretAccessKey"
-                                        :label="translate('ct-users.user-detail.modal.secretFieldLabel')"
-                                        :disabled="true"
-                                        :password-toggle-able="false"
-                                        :copyable="showSecretAccessKey"
-                                        :copyable-tooltip="true"
-                                        autocomplete="off"
-                                    />
-                                </ct-block>
+                            <ct-block name="sw_users_user_detail_detail_modal_inner_field_help_text">
+                                <mt-banner
+                                    v-if="!showSecretAccessKey"
+                                    variant="attention"
+                                    class="ct-users-user-detail__secret-help-text-alert"
+                                >
+                                    {{ translate('ct-users.user-detail.modal.hintCreateNewApiKeys') }}
+                                </mt-banner>
+                            </ct-block>
+                        </ct-block>
 
-                                <ct-block name="sw_users_user_detail_detail_modal_inner_field_secret_access_key_button">
+                        <ct-block name="sw_users_user_detail_detail_modal_inner_help_text">
+                            <template v-if="!showSecretAccessKey"
+                                ><!-- Keeps the conditional chain connected across ct-block. --></template
+                            >
+                            <mt-banner v-else variant="attention" class="ct-users-user-detail__secret-help-text-alert">
+                                {{ translate('ct-users.user-detail.modal.secretHelpText') }}
+                            </mt-banner>
+                        </ct-block>
+
+                        <template #modal-footer>
+                            <ct-block name="sw_users_user_detail_detail_modal_inner_footer">
+                                <ct-block name="sw_users_user_detail_detail_modal_inner_footer_cancel">
                                     <mt-button
-                                        v-if="!showSecretAccessKey"
-                                        class="ct-users-user-detail__secret-help-text-button ct-field"
-                                        variant="critical"
-                                        :block="true"
-                                        @click="addAccessKey"
+                                        size="small"
+                                        :disabled="isModalLoading || undefined"
+                                        variant="secondary"
+                                        @click="onCloseDetailModal"
                                     >
-                                        {{ translate('ct-users.user-detail.modal.buttonCreateNewApiKeys') }}
+                                        {{ translate('global.default.cancel') }}
                                     </mt-button>
                                 </ct-block>
 
-                                <ct-block name="sw_users_user_detail_detail_modal_inner_field_help_text">
-                                    <mt-banner
-                                        v-if="!showSecretAccessKey"
-                                        variant="attention"
-                                        class="ct-users-user-detail__secret-help-text-alert"
+                                <ct-block name="sw_users_user_detail_detail_modal_inner_footer_apply">
+                                    <mt-button
+                                        size="small"
+                                        class="ct-users-user-detail__save-action"
+                                        :disabled="(isModalLoading && !!currentIntegration.label) || undefined"
+                                        variant="primary"
+                                        @click="onSaveIntegration"
                                     >
-                                        {{ translate('ct-users.user-detail.modal.hintCreateNewApiKeys') }}
-                                    </mt-banner>
+                                        {{
+                                            showSecretAccessKey
+                                                ? translate('ct-users.user-detail.modal.buttonApply')
+                                                : translate('ct-users.user-detail.modal.buttonApplyEdit')
+                                        }}
+                                    </mt-button>
                                 </ct-block>
                             </ct-block>
-
-                            <ct-block name="sw_users_user_detail_detail_modal_inner_help_text">
-                                <template v-if="!showSecretAccessKey"
-                                    ><!-- Keeps the conditional chain connected across ct-block. --></template
-                                >
-                                <mt-banner v-else variant="attention" class="ct-users-user-detail__secret-help-text-alert">
-                                    {{ translate('ct-users.user-detail.modal.secretHelpText') }}
-                                </mt-banner>
-                            </ct-block>
-
-                            <template #modal-footer>
-                                <ct-block name="sw_users_user_detail_detail_modal_inner_footer">
-                                    <ct-block name="sw_users_user_detail_detail_modal_inner_footer_cancel">
-                                        <mt-button
-                                            size="small"
-                                            :disabled="isModalLoading || undefined"
-                                            variant="secondary"
-                                            @click="onCloseDetailModal"
-                                        >
-                                            {{ translate('global.default.cancel') }}
-                                        </mt-button>
-                                    </ct-block>
-
-                                    <ct-block name="sw_users_user_detail_detail_modal_inner_footer_apply">
-                                        <mt-button
-                                            size="small"
-                                            class="ct-users-user-detail__save-action"
-                                            :disabled="(isModalLoading && !!currentIntegration.label) || undefined"
-                                            variant="primary"
-                                            @click="onSaveIntegration"
-                                        >
-                                            {{
-                                                showSecretAccessKey
-                                                    ? translate('ct-users.user-detail.modal.buttonApply')
-                                                    : translate('ct-users.user-detail.modal.buttonApplyEdit')
-                                            }}
-                                        </mt-button>
-                                    </ct-block>
-                                </ct-block>
-                            </template>
-                        </ct-modal>
-                    </ct-block>
+                        </template>
+                    </ct-modal>
                 </ct-block>
-            </template>
-        </ct-page>
-    </ct-block>
+            </ct-block>
+        </ct-block>
+    </div>
 </template>
 
 <script setup>
@@ -559,16 +482,17 @@ const { Criteria } = Contena.Data;
 const { warn } = Contena.Utils.debug;
 const { ContenaError } = Contena.Classes;
 
-defineProps({});
+const props = defineProps({
+    initialUserId: {
+        type: String,
+        default: '',
+    },
+});
 
 import { ref, computed, inject, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
 
-const router = useRouter();
-const route = useRoute();
 const { t } = useI18n();
 const { createNotificationError } = useNotification();
 
@@ -664,9 +588,6 @@ const userPasswordError = computed(() => {
 
     return Contena.Store.get('error').getApiError(entity, 'password');
 });
-const identifier = computed(() => {
-    return fullName.value;
-});
 const fullName = computed(() => {
     if (!user.value) {
         return t('ct-users.user-detail.labelNewUser');
@@ -674,6 +595,7 @@ const fullName = computed(() => {
 
     return user.value.name || user.value.username || t('ct-users.user-detail.labelNewUser');
 });
+const identifier = computed(() => fullName.value);
 const userRepository = computed(() => {
     return repositoryFactory.create('user');
 });
@@ -745,9 +667,26 @@ const integrationColumns = computed(() => {
         {
             property: 'accessKey',
             label: t('ct-users.user-detail.labelAccessKey'),
+            position: 100,
+            renderer: 'text',
+            width: 420,
         },
     ];
 });
+const integrationContextButtons = computed(() => [
+    {
+        key: 'edit',
+        label: t('ct-users.user-detail.contextMenuEdit'),
+    },
+]);
+const onIntegrationContextSelect = ({ key, data }) => {
+    if (key === 'edit') {
+        onShowDetailModal(data.id);
+    }
+};
+const onIntegrationDelete = (item) => {
+    showDeleteModal.value = item.id;
+};
 const languageId = computed(() => {
     return Contena.Store.get('session').languageId;
 });
@@ -761,7 +700,7 @@ const localeOptions = computed(() => {
     });
 });
 const loadUser = () => {
-    userId.value = route.params.id?.toLowerCase();
+    userId.value = props.initialUserId.toLowerCase();
 
     return userRepository.value.get(userId.value, Contena.Context.api, userCriteria.value).then((loadedUser) => {
         user.value = loadedUser;
@@ -817,6 +756,10 @@ const onPositionsUpdate = (positionIds) => {
     positions.filter((position) => !positionIds.includes(position.id)).forEach((position) => positions.remove(position.id));
 };
 const addAccessKey = () => {
+    if (!keyRepository.value) {
+        return;
+    }
+
     const newKey = keyRepository.value.create();
 
     isModalLoading.value = true;
@@ -852,7 +795,7 @@ const createdComponent = () => {
         loadLanguages(),
         loadCurrentUser(),
     ];
-    if (route.params.id) {
+    if (props.initialUserId) {
         requests.push(loadUser());
     }
 
@@ -994,9 +937,6 @@ const updateCurrentUser = async () => {
         Contena.Store.get('session').setCurrentUser(data);
     });
 };
-const onCancel = () => {
-    void router.push({ name: 'ct.users.index' });
-};
 const setPassword = (password) => {
     if (typeof password === 'string' && password.length <= 0) {
         delete user.value.password;
@@ -1113,11 +1053,14 @@ swDefinePublic({
     isCurrentUser,
     mediaRepository,
     integrationColumns,
+    integrationContextButtons,
     languageId,
     localeOptions,
     createdComponent,
     loadUser,
     addAccessKey,
+    onIntegrationContextSelect,
+    onIntegrationDelete,
     loadLanguages,
     loadCurrentUser,
     loadKeys,
@@ -1134,7 +1077,6 @@ swDefinePublic({
     onSave,
     saveUser,
     updateCurrentUser,
-    onCancel,
     setPassword,
     onShowDetailModal,
     onCloseDetailModal,
@@ -1143,8 +1085,6 @@ swDefinePublic({
     onConfirmDelete,
     updateAuthToken,
 });
-usePageTitle(() => identifier.value);
-
 defineExpose({
     userService,
     loginService,
@@ -1205,11 +1145,14 @@ defineExpose({
     isCurrentUser,
     mediaRepository,
     integrationColumns,
+    integrationContextButtons,
     languageId,
     localeOptions,
     createdComponent,
     loadUser,
     addAccessKey,
+    onIntegrationContextSelect,
+    onIntegrationDelete,
     loadLanguages,
     loadCurrentUser,
     loadKeys,
@@ -1226,7 +1169,6 @@ defineExpose({
     onSave,
     saveUser,
     updateCurrentUser,
-    onCancel,
     setPassword,
     onShowDetailModal,
     onCloseDetailModal,

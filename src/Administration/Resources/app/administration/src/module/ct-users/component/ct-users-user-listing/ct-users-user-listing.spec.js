@@ -1,397 +1,256 @@
-import { mount, RouterLinkStub } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
 import EntityCollection from 'src/core/data/entity-collection.data';
 import Criteria from 'src/core/data/criteria.data';
 import 'src/app/mixin/translate-with-fallback.mixin';
 
+const users = [
+    {
+        id: 'user-1',
+        username: 'maxmuster',
+        name: 'Max Mustermann',
+        userCode: '10001',
+        phoneNumber: '13800138000',
+        email: 'max@mustermann.com',
+        active: false,
+        aclRoles: [{ name: 'Editors' }],
+    },
+    {
+        id: 'user-2',
+        username: 'admin',
+        name: 'admin',
+        userCode: '10002',
+        phoneNumber: null,
+        email: 'info@contena.cn',
+        active: true,
+        aclRoles: [
+            { name: 'Administrators' },
+            { name: 'Editors' },
+        ],
+    },
+];
+
 async function createWrapper(privileges = []) {
-    const router = {
-        push: jest.fn(),
-        replace: jest.fn(),
+    const router = { push: jest.fn(), replace: jest.fn() };
+    const deleteUser = jest.fn(() => Promise.resolve());
+
+    const repositoryFactory = {
+        create: (entityName) => ({
+            delete: deleteUser,
+            search: () => {
+                if (entityName === 'acl_role') {
+                    return Promise.resolve([
+                        { id: 'role-1', name: 'Administrators' },
+                        { id: 'role-2', name: 'Editors' },
+                    ]);
+                }
+
+                return Promise.resolve(
+                    new EntityCollection('user', 'user', Contena.Context.api, new Criteria(1), users, users.length),
+                );
+            },
+        }),
     };
 
-    return mount(
-        await wrapTestComponent('ct-users-user-listing', {
-            sync: true,
-        }),
-        {
-            global: {
-                renderStubDefaultSlot: true,
-                provide: {
-                    [routeLocationKey]: {
-                        name: 'user-listing',
-                        query: {},
-                        params: {},
-                    },
-                    [routerKey]: router,
-                    acl: {
-                        can: (identifier) => {
-                            if (!identifier) {
-                                return true;
-                            }
-
-                            return privileges.includes(identifier);
-                        },
-                    },
-                    userService: {},
-                    repositoryFactory: {
-                        create: (entityName) => ({
-                            delete: () => Promise.resolve(),
-                            search: () => {
-                                if (entityName === 'acl_role') {
-                                    return Promise.resolve([
-                                        { id: 'role-1', name: 'Administrators' },
-                                        { id: 'role-2', name: 'Editors' },
-                                    ]);
-                                }
-
-                                return Promise.resolve(
-                                    new EntityCollection(
-                                        'user',
-                                        'user',
-                                        Contena.Context.api,
-                                        new Criteria(1),
-                                        [
-                                            {
-                                                id: '019bff8c86e773e79ec5538c7b1edabc',
-                                                username: 'maxmuster',
-                                                name: 'Max Mustermann',
-                                                phoneNumber: '13800138000',
-                                                email: 'max@mustermann.com',
-                                                active: false,
-                                                aclRoles: [
-                                                    { name: 'testRole' },
-                                                ],
-                                            },
-                                            {
-                                                id: '019bff8c86e773e79ec5538c7b1ed571',
-                                                username: 'admin',
-                                                name: 'admin',
-                                                phoneNumber: null,
-                                                email: 'info@contena.cn',
-                                                active: true,
-                                                aclRoles: [
-                                                    { name: 'adminRole' },
-                                                    { name: 'superUser' },
-                                                ],
-                                            },
-                                            {
-                                                id: '019bff8c86e773e79ec5538c7b1ed572',
-                                                username: 'supperadmin',
-                                                name: 'supperadmin',
-                                                phoneNumber: null,
-                                                email: 'user@example.com',
-                                                active: true,
-                                                admin: true,
-                                                aclRoles: [],
-                                            },
-                                        ],
-                                        1,
-                                    ),
-                                );
-                            },
-                        }),
-                    },
-                    loginService: {},
-                    searchRankingService: {
-                        isValidTerm: (term) => {
-                            return term && term.trim().length >= 1;
-                        },
-                    },
+    const wrapper = mount(await wrapTestComponent('ct-users-user-listing', { sync: true }), {
+        global: {
+            renderStubDefaultSlot: true,
+            provide: {
+                [routeLocationKey]: { name: 'user-listing', query: {}, params: {} },
+                [routerKey]: router,
+                acl: { can: (identifier) => privileges.includes(identifier) },
+                userService: {},
+                repositoryFactory,
+                searchRankingService: { isValidTerm: () => true },
+            },
+            stubs: {
+                'mt-data-table': {
+                    name: 'MtDataTable',
+                    inheritAttrs: false,
+                    props: [
+                        'dataSource',
+                        'columns',
+                        'isLoading',
+                        'paginationTotalItems',
+                        'currentPage',
+                        'paginationLimit',
+                        'sortBy',
+                        'sortDirection',
+                        'layout',
+                        'disableSearch',
+                        'allowRowSelection',
+                        'allowBulkDelete',
+                        'selectedRows',
+                        'disableDelete',
+                        'additionalContextButtons',
+                        'filters',
+                        'appliedFilters',
+                    ],
+                    template: `
+                            <div class="mt-data-table">
+                                <div v-for="item in dataSource" :key="item.id" class="mt-data-table__row">
+                                    <slot name="column-username" :data="item" />
+                                    <slot name="column-aclRoles" :data="item" />
+                                    <slot name="column-active" :data="item" />
+                                </div>
+                                <slot name="toolbar" />
+                                <slot name="empty-state" />
+                            </div>
+                        `,
                 },
-                mocks: {
-                    $route: { query: '' },
-                    $router: router,
-                },
-                stubs: {
-                    'ct-entity-listing': await wrapTestComponent('ct-entity-listing'),
-                    'router-link': RouterLinkStub,
-                    'ct-context-menu-item': {
-                        template:
-                            '<div class="ct-context-menu-item-stub" :disabled="disabled ? \'true\' : undefined"><slot /></div>',
-                        props: [
-                            'disabled',
-                            'routerLink',
-                            'variant',
-                        ],
-                    },
-                    'ct-container': true,
-                    'mt-avatar': true,
-                    'ct-pagination': true,
-                    'ct-context-button': true,
-                    'ct-data-grid-settings': true,
-                    'ct-data-grid-column-boolean': true,
-                    'ct-data-grid-inline-edit': true,
-                    'ct-provide': true,
-                    'ct-data-grid-skeleton': true,
-                    'ct-color-badge': true,
-                },
+                'mt-link': { template: '<a><slot /></a>' },
+                'mt-avatar': true,
+                'mt-badge': { template: '<span><slot /></span>' },
+                'mt-empty-state': true,
+                'mt-modal-root': { template: '<div><slot /></div>' },
+                'mt-modal': { template: '<div><slot /><slot name="footer" /></div>' },
+                'mt-button': { template: '<button><slot /></button>' },
             },
         },
-    );
+    });
+
+    return { wrapper, router, deleteUser };
 }
 
 describe('module/ct-users/component/ct-users-user-listing', () => {
-    let wrapper;
-
-    beforeEach(async () => {
-        wrapper = await createWrapper();
-    });
-
-    it('the data-grid should show the right columns', async () => {
-        await flushPromises();
-
-        expect(wrapper.vm.userColumns).toEqual([
-            expect.objectContaining({
-                property: 'username',
-                label: 'ct-users.user-grid.labelUsername',
-            }),
-            expect.objectContaining({
-                property: 'userCode',
-                label: 'ct-users.user-grid.labelUserCode',
-            }),
-            expect.objectContaining({
-                property: 'name',
-                label: 'ct-users.user-grid.labelName',
-            }),
-            expect.objectContaining({
-                property: 'phoneNumber',
-                label: 'ct-users.user-grid.labelPhoneNumber',
-            }),
-            expect.objectContaining({
-                property: 'aclRoles',
-                label: 'ct-users.user-grid.labelRoles',
-            }),
-            expect.objectContaining({
-                property: 'email',
-                label: 'ct-users.user-grid.labelEmail',
-            }),
-            expect.objectContaining({
-                property: 'active',
-                label: 'ct-users.user-grid.status',
-            }),
+    it('configures an mt data table with users and native controls', async () => {
+        const { wrapper } = await createWrapper([
+            'users_and_permissions.viewer',
+            'users_and_permissions.deleter',
         ]);
-    });
-
-    it('the data-grid should get the right user data', async () => {
         await flushPromises();
 
-        const expectedUser = [
-            {
-                username: 'maxmuster',
-                name: 'Max Mustermann',
-                phoneNumber: '13800138000',
-                email: 'max@mustermann.com',
-                aclRoles: ['testRole'],
-            },
-            {
-                username: 'admin',
-                name: 'admin',
-                phoneNumber: null,
-                email: 'info@contena.cn',
-                aclRoles: [
-                    'adminRole',
-                    'superUser',
-                ],
-            },
-            {
-                username: 'supperadmin',
-                name: 'supperadmin',
-                phoneNumber: null,
-                email: 'user@example.com',
-                aclRoles: [],
-            },
-        ];
+        const table = wrapper.getComponent({ name: 'MtDataTable' });
+        expect(table.props('dataSource')).toHaveLength(2);
+        expect(table.props('allowRowSelection')).toBe(true);
+        expect(table.props('allowBulkDelete')).toBe(true);
+        expect(table.props('selectedRows')).toEqual([]);
+        expect(table.props('disableDelete')).toBe(false);
+        expect(table.props('disableSearch')).toBe('');
+        expect(table.props('layout')).toBe('full');
+        expect(table.props('columns')).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ property: 'username', renderer: 'text', position: 100 }),
+                expect.objectContaining({ property: 'active', renderer: 'text', position: 700 }),
+            ]),
+        );
+    });
 
-        const allAclRoles = wrapper.findAll('td.ct-data-grid__cell--aclRoles');
-        allAclRoles.forEach((aclRole, index) => {
-            expectedUser[index].aclRoles.forEach((role) => {
-                expect(aclRole.text()).toContain(role);
-            });
+    it('opens the edit drawer from a username without navigating', async () => {
+        const { wrapper, router } = await createWrapper(['users_and_permissions.viewer']);
+        await flushPromises();
+
+        await wrapper.find('.ct-users-user-listing__columns').trigger('click');
+
+        expect(wrapper.emitted('edit')).toEqual([[users[0]]]);
+        expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it('places the create action in the table toolbar', async () => {
+        const { wrapper } = await createWrapper(['users_and_permissions.creator']);
+        await flushPromises();
+
+        const createButton = wrapper.find('.ct-users__create-user');
+
+        expect(createButton.exists()).toBe(true);
+        expect(createButton.attributes('disabled')).toBeUndefined();
+
+        await createButton.trigger('click');
+        expect(wrapper.emitted('create')).toEqual([[]]);
+    });
+
+    it('exposes status and role filters to the mt data table', async () => {
+        const { wrapper } = await createWrapper();
+        await flushPromises();
+
+        const table = wrapper.getComponent({ name: 'MtDataTable' });
+        expect(table.props('filters')).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ id: 'status' }),
+                expect.objectContaining({ id: 'role' }),
+            ]),
+        );
+
+        await table.vm.$emit('update:applied-filters', [
+            { id: 'status', type: { options: [{ id: 'active', label: 'Active' }] } },
+        ]);
+        await flushPromises();
+
+        expect(wrapper.vm.statusFilter).toBe('active');
+        expect(wrapper.vm.userCriteria.filters).toEqual([Criteria.equals('active', true)]);
+    });
+
+    it('keeps row selection controlled by the listing', async () => {
+        const { wrapper } = await createWrapper(['users_and_permissions.deleter']);
+        await flushPromises();
+        const table = wrapper.getComponent({ name: 'MtDataTable' });
+
+        await table.vm.$emit('selection-change', { id: 'user-1', value: true });
+        await wrapper.vm.$nextTick();
+        expect(wrapper.vm.selectedUserIds).toEqual(['user-1']);
+        expect(table.props('selectedRows')).toEqual(['user-1']);
+
+        await table.vm.$emit('selection-change', { id: 'user-1', value: false });
+        expect(wrapper.vm.selectedUserIds).toEqual([]);
+    });
+
+    it('handles table pagination and sorting events', async () => {
+        const { wrapper } = await createWrapper();
+        await flushPromises();
+        const table = wrapper.getComponent({ name: 'MtDataTable' });
+        const search = jest.spyOn(wrapper.vm.userRepository, 'search');
+
+        await table.vm.$emit('pagination-limit-change', 50);
+        await table.vm.$emit('pagination-current-page-change', 2);
+        await table.vm.$emit('sort-change', { sortBy: 'email', sortDirection: 'DESC' });
+        await flushPromises();
+
+        expect(wrapper.vm.limit).toBe(50);
+        expect(wrapper.vm.page).toBe(2);
+        expect(wrapper.vm.sortBy).toBe('email');
+        expect(wrapper.vm.sortDirection).toBe('DESC');
+        expect(search).toHaveBeenCalled();
+    });
+
+    it('emits the table context edit action according to ACL', async () => {
+        const { wrapper, router } = await createWrapper(['users_and_permissions.viewer']);
+        await wrapper.vm.onContextSelect({ key: 'edit', data: users[0] });
+
+        expect(wrapper.emitted('edit')).toEqual([[users[0]]]);
+        expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it('confirms and executes single and bulk deletes', async () => {
+        const { wrapper, deleteUser } = await createWrapper(['users_and_permissions.deleter']);
+        await flushPromises();
+
+        wrapper.vm.onDelete(users[0]);
+        expect(wrapper.vm.itemsToDelete).toEqual([users[0]]);
+        await wrapper.vm.onConfirmDelete(users[0]);
+        await flushPromises();
+        expect(deleteUser).toHaveBeenCalledWith('user-1', Contena.Context.api);
+
+        wrapper.vm.onMultipleSelectionChange({
+            selections: [
+                'user-1',
+                'user-2',
+            ],
+            value: true,
         });
-        expect(allAclRoles[2].text()).toBe('');
-
-        expectedUser.forEach((user) => {
-            const userName = wrapper.findByText('a.ct-users-user-listing__columns', user.username);
-            expect(userName.exists()).toBe(true);
-
-            const name = wrapper.findByText('div.ct-data-grid__cell-content', user.name);
-            expect(name.exists()).toBe(true);
-
-            const email = wrapper.findByText('div.ct-data-grid__cell-content', user.email);
-            expect(email.exists()).toBe(true);
-        });
-    });
-
-    it('renders active and inactive status badges like upstream', async () => {
+        wrapper.vm.onBulkDelete();
+        expect(wrapper.vm.itemsToDelete).toHaveLength(2);
+        await wrapper.vm.onConfirmDelete(users[0]);
         await flushPromises();
-
-        const statusCell = wrapper.find('.ct-data-grid__cell--active');
-        expect(statusCell.exists()).toBe(true);
-        expect(wrapper.text()).toContain('ct-users.filter.statusLabel.inactive');
-        expect(wrapper.text()).toContain('ct-users.filter.statusLabel.active');
-    });
-
-    it('should use the display name', () => {
-        expect(
-            wrapper.vm.getUserDisplayName({
-                name: 'Max Mustermann',
-                username: 'maxmuster',
-            }),
-        ).toBe('Max Mustermann');
-
-        expect(
-            wrapper.vm.getUserDisplayName({
-                name: '',
-                username: 'maxmuster',
-            }),
-        ).toBe('maxmuster');
-    });
-
-    it('does not render a duplicate search field or card title', () => {
-        expect(wrapper.findComponent({ name: 'ct-simple-search-field' }).exists()).toBe(false);
-        expect(wrapper.text()).not.toContain('ct-users.general.cardLabel');
-    });
-
-    it('lets the entity listing determine its content height', async () => {
-        await flushPromises();
-
-        expect(wrapper.find('.ct-data-grid').classes()).not.toContain('ct-data-grid--full-page');
-    });
-
-    it('the context menu should be disabled', async () => {
-        wrapper = await createWrapper([]);
-        await flushPromises();
-
-        const contextMenuEdit = wrapper.find('.ct-users-user-listing__user-view-action');
-        const contextMenuDelete = wrapper.find('.ct-users-user-listing__user-delete-action');
-
-        expect(contextMenuEdit.attributes().disabled).toBe('true');
-        expect(contextMenuDelete.attributes().disabled).toBe('true');
-    });
-
-    it('the context menu edit should be enabled', async () => {
-        wrapper = await createWrapper(['users_and_permissions.editor']);
-        await flushPromises();
-
-        const contextMenuEdit = wrapper.find('.ct-users-user-listing__user-view-action');
-        const contextMenuDelete = wrapper.find('.ct-users-user-listing__user-delete-action');
-
-        expect(contextMenuEdit.attributes().disabled).toBeUndefined();
-        expect(contextMenuDelete.attributes().disabled).toBe('true');
-    });
-
-    it('the context menu delete should be enabled', async () => {
-        wrapper = await createWrapper(['users_and_permissions.deleter']);
-        await flushPromises();
-
-        const contextMenuEdit = wrapper.find('.ct-users-user-listing__user-view-action');
-        const contextMenuDelete = wrapper.find('.ct-users-user-listing__user-delete-action');
-
-        expect(contextMenuEdit.attributes().disabled).toBe('true');
-        expect(contextMenuDelete.attributes().disabled).toBeUndefined();
-    });
-
-    it('deletes a user after the standard confirmation without a password', async () => {
-        const user = {
-            id: 'user-to-delete',
-            username: 'editor',
-        };
-        const deleteSpy = jest.spyOn(wrapper.vm.userRepository, 'delete').mockResolvedValue();
-
-        wrapper.vm.onDelete(user);
-        await wrapper.vm.onConfirmDelete(user);
-        await flushPromises();
-
-        expect(deleteSpy).toHaveBeenCalledWith(user.id, Contena.Context.api);
+        expect(deleteUser).toHaveBeenCalledWith('user-2', Contena.Context.api);
         expect(wrapper.vm.itemToDelete).toBeNull();
     });
 
-    it('should add avatar media as association', async () => {
-        wrapper = await createWrapper(['users_and_permissions.editor']);
-        await flushPromises();
+    it('does not allow deletion without the deleter privilege', async () => {
+        const { wrapper, deleteUser } = await createWrapper();
+        wrapper.vm.onDelete(users[0]);
+        await wrapper.vm.onConfirmDelete(users[0]);
 
-        expect(wrapper.vm.userCriteria.associations[1].association).toBe('avatarMedia');
-    });
-
-    it('applies status and role filters to the Criteria', async () => {
-        wrapper.vm.statusFilter = 'active';
-        wrapper.vm.roleFilter = ['role-2'];
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.vm.filterCount).toBe(2);
-        expect(wrapper.vm.userCriteria.filters).toEqual([
-            Criteria.equals('active', true),
-            Criteria.equalsAny('aclRoles.id', ['role-2']),
-        ]);
-    });
-
-    it('reloads users with the selected status filter', async () => {
-        const search = jest.spyOn(wrapper.vm.userRepository, 'search');
-
-        await wrapper.vm.setStatusFilter('inactive');
-
-        expect(search).toHaveBeenCalled();
-        expect(search.mock.calls[search.mock.calls.length - 1][0].filters).toEqual([
-            Criteria.equals('active', false),
-        ]);
-    });
-
-    it('resets all user filters', async () => {
-        wrapper.vm.statusFilter = 'inactive';
-        wrapper.vm.roleFilter = ['role-1'];
-
-        wrapper.vm.resetFilters();
-        await flushPromises();
-
-        expect(wrapper.vm.statusFilter).toBe('all');
-        expect(wrapper.vm.roleFilter).toEqual([]);
-        expect(wrapper.vm.filterCount).toBe(0);
-    });
-
-    it('loads roles for the role filter', async () => {
-        await flushPromises();
-
-        expect(wrapper.vm.roleFilterOptions).toEqual([
-            { value: 'role-1', label: 'Administrators' },
-            { value: 'role-2', label: 'Editors' },
-        ]);
-    });
-
-    it('shows an edit action for every user and opens the selected user', async () => {
-        wrapper = await createWrapper(['users_and_permissions.editor']);
-
-        await flushPromises();
-
-        const contextMenuEdits = wrapper.findAll('.ct-users-user-listing__user-view-action');
-        expect(contextMenuEdits).toHaveLength(3);
-
-        await contextMenuEdits[1].trigger('click');
-
-        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-            name: 'ct.users.user.detail',
-            params: { id: '019bff8c86e773e79ec5538c7b1ed571' },
-        });
-    });
-
-    it('does not open user editing without editor privilege', () => {
-        wrapper.vm.onEdit({ id: 'user-id' });
-
-        expect(wrapper.vm.$router.push).not.toHaveBeenCalled();
-    });
-
-    it('should use the correct route for editing on the user name', async () => {
-        wrapper = await createWrapper(['users_and_permissions.editor']);
-
-        await flushPromises();
-
-        const routerLink = wrapper.findComponent('.ct-users-user-listing__columns');
-        expect(routerLink.exists()).toBe(true);
-
-        // Check that the router-link prop uses the correct route name
-        const routerLinkProp = routerLink.vm.$props.to;
-        expect(routerLinkProp).toBeDefined();
-        expect(routerLinkProp.name).toBe('ct.users.user.detail');
-        expect(routerLinkProp.params.id).toBe('019bff8c86e773e79ec5538c7b1edabc');
+        expect(wrapper.vm.itemToDelete).toBeNull();
+        expect(deleteUser).not.toHaveBeenCalled();
     });
 });

@@ -1,103 +1,42 @@
 <template>
     <ct-block name="sw_users">
-        <ct-page class="ct-users">
+        <ct-page class="ct-users" :show-smart-bar="false">
             <template #search-bar>
                 <ct-block name="sw_users_search_bar">
-                    <mt-search
-                        :model-value="userSearchTerm"
-                        :placeholder="$t('ct-users.general.placeholderSearchBar')"
-                        @change="onUserSearch"
-                    />
-                </ct-block>
-            </template>
-
-            <template #smart-bar-header>
-                <ct-block name="sw_users_smart_bar_header">
-                    <h2>
-                        <ct-block name="sw_users_smart_bar_header_title_text">
-                            <span>{{ $t('ct-users.general.cardLabel') }}</span>
-                        </ct-block>
-
-                        <span v-if="!userListingLoading" class="ct-page__smart-bar-amount">({{ userTotal }})</span>
-                    </h2>
-                </ct-block>
-            </template>
-
-            <template #smart-bar-actions>
-                <ct-block name="sw_users_smart_bar_actions">
-                    <mt-popover width="medium" :title="$t('ct-users.filter.title')">
-                        <template #trigger="{ toggleFloatingUi }">
-                            <mt-button
-                                class="ct-users__filter-menu-trigger"
-                                variant="secondary"
-                                size="default"
-                                @click.stop="toggleFloatingUi"
-                            >
-                                <mt-icon name="regular-filter-s" size="16" />
-                                {{ $t('ct-users.filter.title') }}
-                                <i v-if="userListingFilterCount > 0" class="filter-badge">
-                                    {{ userListingFilterCount }}
-                                </i>
-                            </mt-button>
-                        </template>
-
-                        <template #popover-items__base>
-                            <mt-select
-                                :model-value="statusFilter"
-                                class="ct-users__status-filter"
-                                :label="$t('ct-users.filter.status')"
-                                :options="userListing?.statusFilterOptions ?? []"
-                                @update:model-value="onStatusFilterChange"
-                            />
-
-                            <mt-select
-                                :model-value="userListing?.roleFilter ?? []"
-                                :label="$t('ct-users.filter.roles')"
-                                :placeholder="$t('ct-users.filter.rolesPlaceholder')"
-                                :options="userListing?.roleFilterOptions ?? []"
-                                enable-multi-selection
-                                @update:model-value="userListing?.setRoleFilter($event)"
-                            />
-
-                            <mt-popover-item
-                                type="critical"
-                                icon="solid-undo"
-                                :label="$t('ct-users.filter.reset')"
-                                :on-label-click="resetUserFilters"
-                            />
-                        </template>
-                    </mt-popover>
-
-                    <mt-button
-                        v-tooltip.bottom="{
-                            message: $t('ct-privileges.tooltip.warning'),
-                            disabled: acl.can('users_and_permissions.creator'),
-                            showOnDisabledElements: true,
-                        }"
-                        class="ct-users__create-user"
-                        variant="primary"
-                        size="default"
-                        :disabled="!acl.can('users_and_permissions.creator') || undefined"
-                        @click="$router.push({ name: 'ct.users.user.create' })"
-                    >
-                        {{ $t('global.default.add') }}
-                    </mt-button>
+                    <ct-search-bar initial-search-type="user" @search="onUserSearch" />
                 </ct-block>
             </template>
 
             <template #content>
                 <ct-block name="sw_users_content">
-                    <ct-card-view>
-                        <ct-users-user-listing
-                            ref="userListing"
-                            @loading-change="onUserLoadingChange"
-                            @total-change="onUserTotalChange"
-                        />
-                    </ct-card-view>
+                    <ct-users-user-listing
+                        ref="userListing"
+                        @loading-change="onUserLoadingChange"
+                        @total-change="onUserTotalChange"
+                        @edit="onEditUser"
+                        @create="onCreateUser"
+                    />
                 </ct-block>
             </template>
         </ct-page>
     </ct-block>
+
+    <span v-if="userFormMode" class="ct-users__drawer-marker" aria-hidden="true"></span>
+    <mt-modal-root v-if="userFormMode" :is-open="true" @change="onCloseUserForm">
+        <mt-modal :title="userFormTitle" width="l">
+            <ct-users-user-detail v-if="userFormMode === 'edit'" ref="userForm" :initial-user-id="userFormId" />
+            <ct-users-user-create v-else ref="userForm" />
+
+            <template #footer>
+                <mt-button variant="secondary" @click="onCloseUserForm">
+                    {{ $t('global.default.cancel') }}
+                </mt-button>
+                <mt-button variant="primary" :is-loading="isUserFormSaving" @click="onSaveUserForm">
+                    {{ $t('global.default.save') }}
+                </mt-button>
+            </template>
+        </mt-modal>
+    </mt-modal-root>
 </template>
 
 <script setup lang="ts">
@@ -114,11 +53,11 @@ defineProps({});
 import { computed, inject, ref } from 'vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
 import type AclService from 'src/app/service/acl.service';
+import { useI18n } from 'vue-i18n';
 import SwUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
 
+const { t } = useI18n();
 const userListing = ref<ComponentExposed<typeof SwUsersUserListing>>();
-const userListingFilterCount = computed<number>(() => userListing.value?.filterCount ?? 0);
-const userSearchTerm = ref('');
 const statusFilter = ref('all');
 
 const acl = inject<AclService>('acl');
@@ -127,10 +66,23 @@ if (!acl) {
 }
 const userTotal = ref(0);
 const userListingLoading = ref(true);
+const userFormMode = ref<'create' | 'edit' | null>(null);
+const userFormId = ref('');
+const userForm = ref<{
+    onSave?: () => Promise<unknown>;
+    isSaveSuccessful?: boolean;
+    isLoading?: boolean;
+    user?: { name?: string; username?: string };
+}>();
+const userFormTitle = computed(() =>
+    userFormMode.value === 'create'
+        ? t('ct-users.user-detail.labelNewUser')
+        : userForm.value?.user?.name || userForm.value?.user?.username || t('ct-users.user-detail.labelCard'),
+);
+const isUserFormSaving = computed(() => Boolean(userForm.value?.isLoading));
 
 const reloadUserListing = () => userListing.value?.getList();
 const onUserSearch = (term: string) => {
-    userSearchTerm.value = term;
     userListing.value?.onSearch(term);
 };
 const onStatusFilterChange = (value: string) => {
@@ -151,6 +103,30 @@ const onUserTotalChange = (total: number) => {
 const onUserLoadingChange = (loading: boolean) => {
     userListingLoading.value = loading;
 };
+const onCreateUser = () => {
+    userFormId.value = '';
+    userFormMode.value = 'create';
+};
+const onEditUser = (user: { id: string }) => {
+    userFormId.value = user.id;
+    userFormMode.value = 'edit';
+};
+const onCloseUserForm = () => {
+    userFormMode.value = null;
+    userFormId.value = '';
+    userForm.value = undefined;
+};
+const onSaveUserForm = async () => {
+    if (!userForm.value?.onSave) {
+        return;
+    }
+
+    await userForm.value.onSave();
+    if (userForm.value.isSaveSuccessful) {
+        onCloseUserForm();
+        void userListing.value?.getList();
+    }
+};
 
 swDefinePublic({
     acl,
@@ -162,6 +138,14 @@ swDefinePublic({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
+    userFormMode,
+    userFormId,
+    userFormTitle,
+    isUserFormSaving,
+    onCreateUser,
+    onEditUser,
+    onCloseUserForm,
+    onSaveUserForm,
 });
 
 defineExpose({
@@ -175,5 +159,47 @@ defineExpose({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
+    userFormMode,
+    userFormId,
+    userFormTitle,
+    isUserFormSaving,
+    onCreateUser,
+    onEditUser,
+    onCloseUserForm,
+    onSaveUserForm,
 });
 </script>
+
+<style lang="scss">
+.ct-page.ct-users .ct-page__main-content-inner {
+    padding: var(--scale-size-16);
+}
+
+body:has(.ct-users__drawer-marker) > .mt-modal {
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: min(64rem, calc(100vw - 1rem)) !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    translate: none !important;
+}
+
+body:has(.ct-users__drawer-marker) > .mt-modal .mt-modal__content {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+body:has(.ct-users__drawer-marker) > .mt-modal .mt-modal__content-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+body:has(.ct-users__drawer-marker) > .mt-modal .ct-card-view {
+    min-height: 0;
+}
+</style>

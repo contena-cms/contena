@@ -132,6 +132,24 @@ async function createWrapper(privileges = []) {
                 },
                 'ct-skeleton': true,
                 'ct-data-grid': true,
+                'mt-data-table': {
+                    props: [
+                        'dataSource',
+                        'disableDelete',
+                        'additionalContextButtons',
+                        'layout',
+                    ],
+                    template: `
+                        <div>
+                            <template v-for="item in dataSource" :key="item.id">
+                                <slot name="column-accessKey" v-bind="{ data: item }"></slot>
+                                <slot name="context-select" v-bind="{ data: item }"></slot>
+                            </template>
+                            <slot name="toolbar"></slot>
+                            <slot name="empty-state"></slot>
+                        </div>
+                    `,
+                },
                 'ct-context-menu-item': true,
                 'ct-button-process': true,
                 'ct-media-modal-v2': true,

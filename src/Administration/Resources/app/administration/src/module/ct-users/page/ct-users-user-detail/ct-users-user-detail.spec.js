@@ -27,6 +27,9 @@ async function createWrapper(
             sync: true,
         }),
         {
+            props: {
+                initialUserId: '1a2b3c4d',
+            },
             global: {
                 directives: {
                     tooltip: {
@@ -193,6 +196,28 @@ async function createWrapper(
                         </div>
                     `,
                     },
+                    'mt-data-table': {
+                        props: [
+                            'dataSource',
+                            'disableDelete',
+                            'additionalContextButtons',
+                            'layout',
+                        ],
+                        template: `
+                        <div
+                            class="mt-data-table-stub"
+                            :data-disable-delete="disableDelete"
+                            :data-layout="layout || 'default'"
+                        >
+                            <template v-for="item in dataSource">
+                                <slot name="column-accessKey" v-bind="{ data: item }"></slot>
+                                <slot name="context-select" v-bind="{ data: item }"></slot>
+                            </template>
+                            <slot name="toolbar"></slot>
+                            <slot name="empty-state"></slot>
+                        </div>
+                    `,
+                    },
                     'ct-context-menu-item': true,
                     'ct-skeleton': true,
                     'ct-loader': true,
@@ -235,7 +260,6 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         Object.assign(wrapper.vm, { isLoading: false });
         await wrapper.vm.$nextTick();
         await flushPromises();
-
         const fieldName = wrapper.findComponent('.ct-users-user-detail__grid-name');
         const fieldPhoneNumber = wrapper.findComponent('.ct-users-user-detail__grid-phoneNumber');
         const fieldEmail = wrapper.findComponent('.ct-users-user-detail__grid-eMail');
@@ -428,8 +452,7 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         const fieldPassword = wrapper.findByLabel('ct-users.user-detail.labelPassword');
         const fieldLanguage = wrapper.findComponent('.ct-users-user-detail__grid-language');
         const fieldActive = wrapper.findComponent('.ct-users-user-detail__grid-active');
-        const contextMenuItemEdit = wrapper.findComponent('.ct-users-user-detail__grid-context-menu-edit');
-        const contextMenuItemDelete = wrapper.findComponent('.ct-users-user-detail__grid-context-menu-delete');
+        const integrationsTable = wrapper.find('.mt-data-table-stub');
 
         expect(fieldName.props('disabled')).toBe(true);
         expect(fieldPhoneNumber.props('disabled')).toBe(true);
@@ -439,8 +462,7 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         expect(fieldPassword.attributes('disabled')).toBeDefined();
         expect(fieldLanguage.props().disabled).toBe(true);
         expect(fieldActive.props().disabled).toBe(true);
-        expect(contextMenuItemEdit.attributes().disabled).toBe('true');
-        expect(contextMenuItemDelete.attributes().disabled).toBe('true');
+        expect(integrationsTable.attributes('data-disable-delete')).toBe('true');
     });
 
     it('should enable all fields when user has not editor rights', async () => {
@@ -470,8 +492,7 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         const fieldPassword = wrapper.find('.ct-users-user-detail__grid-password');
         const fieldLanguage = wrapper.find('.ct-users-user-detail__grid-language');
         const fieldActive = wrapper.find('.ct-users-user-detail__grid-active');
-        const contextMenuItemEdit = wrapper.find('.ct-users-user-detail__grid-context-menu-edit');
-        const contextMenuItemDelete = wrapper.find('.ct-users-user-detail__grid-context-menu-delete');
+        const integrationsTable = wrapper.find('.mt-data-table-stub');
 
         expect(fieldName.attributes().disabled).toBeUndefined();
         expect(fieldPhoneNumber.attributes().disabled).toBeUndefined();
@@ -481,8 +502,7 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         expect(fieldPassword.attributes().disabled).toBeUndefined();
         expect(fieldLanguage.attributes().disabled).toBeUndefined();
         expect(fieldActive.attributes().disabled).toBeUndefined();
-        expect(contextMenuItemEdit.attributes().disabled).toBeUndefined();
-        expect(contextMenuItemDelete.attributes().disabled).toBeUndefined();
+        expect(integrationsTable.attributes('data-disable-delete')).toBeUndefined();
     });
 
     it('should not allow deactivating the current user', async () => {

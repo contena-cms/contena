@@ -28,22 +28,6 @@ Contena.Module.register('ct-users', {
                 privilege: 'users_and_permissions.viewer',
             },
         },
-        'user.detail': {
-            component: 'ct-users-user-detail',
-            path: 'user.detail/:id?',
-            meta: {
-                parentPath: 'ct.users.index',
-                privilege: 'users_and_permissions.viewer',
-            },
-        },
-        'user.create': {
-            component: 'ct-users-user-create',
-            path: 'user.create',
-            meta: {
-                parentPath: 'ct.users.index',
-                privilege: 'users_and_permissions.creator',
-            },
-        },
     },
 
     navigation: [
