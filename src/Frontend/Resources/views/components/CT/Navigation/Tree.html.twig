@@ -4,6 +4,7 @@
 {% props
     navigationTree = [],
     navigationMaxDepth = context.channel.navigationCategoryDepth,
+    displayType = 'static',
     expandAll = false,
     activeId = contena.navigation.id,
     activePath = contena.navigation.pathIdList,
@@ -28,6 +29,7 @@
         <twig:CT:Navigation:TreeItems
             :navigationTree="treeItems"
             :navigationMaxDepth="navigationMaxDepth"
+            :displayType="displayType"
             :expandAll="expandAll"
             :activeId="activeId"
             :activePath="activePath"

@@ -106,6 +106,18 @@ class NavigationTreeComponentTest extends TestCase
         }
     }
 
+    public function testDisplayTypeReachesTheSchemaWithItsOptions(): void
+    {
+        $types = static::getContainer()->get(ContentSystemElementTypeRegistry::class);
+        static::assertInstanceOf(AbstractContentSystemElementTypeRegistry::class, $types);
+
+        $displayType = $types->get('CT:Navigation:Tree')->properties()['displayType']->toSchema();
+
+        static::assertSame('static', $displayType['default']);
+        static::assertSame(['static', 'collapse'], $displayType['enum']);
+        static::assertSame('select', $displayType['adminUI']['component'] ?? null);
+    }
+
     /**
      * A landmark with an empty name is worse than an unnamed one: screen readers announce it without
      * any hint of what it contains. A stored empty value must therefore not beat the snippet default.
@@ -247,6 +259,120 @@ class NavigationTreeComponentTest extends TestCase
         static::assertStringContainsString('HiddenChild', $expanded);
     }
 
+    public function testStaticModeRendersNoInteractiveMarkup(): void
+    {
+        $child = $this->treeItem('Shirts', '/shirts');
+        $parent = $this->treeItem('Clothing', '/clothing', children: [$child]);
+
+        $html = $this->render([
+            'navigationTree' => [$parent],
+            'expandAll' => true,
+        ]);
+
+        static::assertStringNotContainsString('<button', $html);
+        static::assertStringNotContainsString('aria-expanded', $html);
+        static::assertStringNotContainsString('data-bs-toggle', $html);
+        static::assertStringNotContainsString('is--collapse', $html);
+    }
+
+    public function testCollapseModeWiresTheToggleToThePanelItControls(): void
+    {
+        $child = $this->treeItem('Shirts', '/shirts');
+        $parent = $this->treeItem('Clothing', '/clothing', children: [$child]);
+
+        $html = $this->render([
+            'navigationTree' => [$parent],
+            'displayType' => 'collapse',
+        ]);
+
+        static::assertStringContainsString('data-bs-toggle="collapse"', $html);
+        static::assertSame(1, preg_match('/aria-controls="([^"]+)"/', $html, $matches));
+        static::assertStringContainsString('data-bs-target="#' . $matches[1] . '"', $html);
+        static::assertStringContainsString('id="' . $matches[1] . '"', $html);
+        static::assertStringContainsString('href="/clothing"', $html);
+    }
+
+    public function testCollapseModeRendersThePlusAndMinusIcons(): void
+    {
+        $child = $this->treeItem('Shirts', '/shirts');
+        $parent = $this->treeItem('Clothing', '/clothing', children: [$child]);
+
+        $html = $this->render([
+            'navigationTree' => [$parent],
+            'displayType' => 'collapse',
+        ]);
+
+        static::assertStringContainsString('ct-icon--default-plus', $html);
+        static::assertStringContainsString('ct-icon--default-minus', $html);
+        static::assertStringNotContainsString('arrow-head', $html);
+        static::assertSame(2, substr_count($html, '<svg'));
+    }
+
+    public function testCollapseModeStartsTheActiveBranchOpenAndLeavesSiblingsClosed(): void
+    {
+        $activeChild = $this->treeItem('ActiveChild', '/active-child');
+        $activeBranch = $this->treeItem('ActiveBranch', '/active-branch', children: [$activeChild]);
+        $siblingChild = $this->treeItem('SiblingChild', '/sibling-child');
+        $siblingBranch = $this->treeItem('SiblingBranch', '/sibling-branch', children: [$siblingChild]);
+
+        $html = $this->render([
+            'navigationTree' => [$activeBranch, $siblingBranch],
+            'displayType' => 'collapse',
+            'activePath' => [$activeBranch->getCategory()->getId()],
+        ]);
+
+        static::assertStringContainsString('ActiveChild', $html);
+        static::assertStringContainsString('SiblingChild', $html);
+        static::assertSame(1, substr_count($html, 'aria-expanded="true"'));
+        static::assertSame(1, substr_count($html, 'aria-expanded="false"'));
+        static::assertSame(1, substr_count($html, 'collapse show'));
+    }
+
+    public function testCollapseModeUsesExpandAllAsTheInitialState(): void
+    {
+        $child = $this->treeItem('HiddenChild', '/hidden-child');
+        $branch = $this->treeItem('Branch', '/branch', children: [$child]);
+
+        $closed = $this->render(['navigationTree' => [$branch], 'displayType' => 'collapse']);
+        $open = $this->render(['navigationTree' => [$branch], 'displayType' => 'collapse', 'expandAll' => true]);
+
+        static::assertStringContainsString('HiddenChild', $closed);
+        static::assertStringContainsString('HiddenChild', $open);
+        static::assertStringContainsString('aria-expanded="false"', $closed);
+        static::assertStringContainsString('aria-expanded="true"', $open);
+    }
+
+    public function testCollapseModeDoesNotRenderATogglePastTheDepthLimit(): void
+    {
+        $level3 = $this->treeItem('Level3', '/level-3');
+        $level2 = $this->treeItem('Level2', '/level-2', children: [$level3]);
+        $level1 = $this->treeItem('Level1', '/level-1', children: [$level2]);
+
+        $html = $this->render([
+            'navigationTree' => [$level1],
+            'navigationMaxDepth' => 2,
+            'displayType' => 'collapse',
+        ]);
+
+        static::assertStringContainsString('Level2', $html);
+        static::assertStringNotContainsString('Level3', $html);
+        static::assertSame(1, substr_count($html, 'data-bs-toggle="collapse"'));
+    }
+
+    public function testCollapseModeKeepsAChildlessFolderNonInteractive(): void
+    {
+        $folder = $this->treeItem('Structure', null, CategoryDefinition::TYPE_FOLDER);
+
+        $html = $this->render([
+            'navigationTree' => [$folder],
+            'displayType' => 'collapse',
+        ]);
+
+        static::assertStringContainsString('ct-navigation-tree-items__folder nav-link', $html);
+        static::assertStringNotContainsString('<button', $html);
+        static::assertStringNotContainsString('aria-expanded', $html);
+    }
+
     public function testAcceptsTreeStructAsWellAsItemList(): void
     {
         $item = $this->treeItem('Clothing', '/clothing');
@@ -311,6 +437,7 @@ class NavigationTreeComponentTest extends TestCase
 
         $props = \array_merge([
             'navigationMaxDepth' => 3,
+            'displayType' => 'static',
             'expandAll' => false,
             'activeId' => Uuid::randomHex(),
             'activePath' => [],

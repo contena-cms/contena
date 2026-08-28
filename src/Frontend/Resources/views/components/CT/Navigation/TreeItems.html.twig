@@ -5,10 +5,16 @@
     navigationTree = [],
     navigationLevel = 1,
     navigationMaxDepth = context.channel.navigationCategoryDepth,
+    displayType = 'static',
     expandAll = false,
     activeId = contena.navigation.id,
     activePath = contena.navigation.pathIdList,
+    panelId = null,
+    expanded = true,
 %}
+
+{% set isCollapse = displayType == 'collapse' %}
+{% set isPanel = panelId is not null %}
 
 {% set treeItemsCVA = cva({
     base: 'ct-navigation-tree-items nav flex-column',
@@ -17,13 +23,34 @@
             true: ['is--root'],
             false: null,
         },
+        displayType: {
+            static: null,
+            collapse: ['is--collapse'],
+        },
+        panel: {
+            true: ['collapse'],
+            false: null,
+        },
+        expanded: {
+            true: ['show'],
+            false: null,
+        },
     },
 }) %}
 
 {% set attributeDefaults = {
-    class: treeItemsCVA.apply({ root: navigationLevel == 1 }),
+    class: treeItemsCVA.apply({
+        root: navigationLevel == 1,
+        displayType,
+        panel: isPanel,
+        expanded: isPanel and expanded,
+    }),
     style: '--ct-navigation-tree-items-level: ' ~ navigationLevel ~ ';',
 } %}
+
+{% if isPanel %}
+    {% set attributeDefaults = attributeDefaults|merge({ id: panelId }) %}
+{% endif %}
 
 <ul {{ attributes.defaults(attributeDefaults) }}>
     {% for treeItem in navigationTree %}
@@ -35,7 +62,10 @@
         {# NavigationRoute loads the active path beyond the requested depth on purpose, so the limit
            must not reach it — clipping it would drop the item carrying aria-current. #}
         {% set showChildren = treeItem.children|length > 0
-            and (onActivePath or (expandAll and navigationLevel < navigationMaxDepth)) %}
+            and (onActivePath or ((expandAll or isCollapse) and navigationLevel < navigationMaxDepth)) %}
+
+        {% set startExpanded = not isCollapse or expandAll or onActivePath %}
+        {% set childPanelId = (isCollapse and showChildren) ? ('ct-navigation-tree-panel-' ~ random()) : null %}
 
         <li class="ct-navigation-tree-items__item">
             {% if category.seoUrl %}
@@ -53,14 +83,33 @@
                 </span>
             {% endif %}
 
+            {% if childPanelId %}
+                <twig:CT:Button
+                    variant="inline"
+                    :iconOnly="true"
+                    class="ct-navigation-tree-items__toggle"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#{{ childPanelId }}"
+                    aria-controls="{{ childPanelId }}"
+                    aria-expanded="{{ startExpanded ? 'true' : 'false' }}"
+                    aria-label="{{ 'general.toggleSubcategories'|trans({'%category%': category.translated.name})|striptags }}"
+                >
+                    <twig:CT:Icon name="plus" size="xs" />
+                    <twig:CT:Icon name="minus" size="xs" />
+                </twig:CT:Button>
+            {% endif %}
+
             {% if showChildren %}
                 <twig:CT:Navigation:TreeItems
                     :navigationTree="treeItem.children"
                     :navigationLevel="navigationLevel + 1"
                     :navigationMaxDepth="navigationMaxDepth"
+                    :displayType="displayType"
                     :expandAll="expandAll"
                     :activeId="activeId"
                     :activePath="activePath"
+                    :panelId="childPanelId"
+                    :expanded="startExpanded"
                 />
             {% endif %}
         </li>
