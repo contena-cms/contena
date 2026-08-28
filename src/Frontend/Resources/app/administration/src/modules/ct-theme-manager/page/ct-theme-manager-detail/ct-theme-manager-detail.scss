@@ -50,7 +50,7 @@
         margin-top: 25px;
 
         .ct-theme-manager-detail__area {
-            .ct-card__content {
+            .ct-card-section {
                 padding: 0;
             }
         }
@@ -98,6 +98,7 @@
 
     .ct-theme-manager-detail__channels-select {
         margin-top: 20px;
+        margin-bottom: 0;
     }
 
     .ct-theme-manager-detail__content-section-field {
@@ -138,7 +139,8 @@
             height: 24px;
         }
 
-        &.ct-theme-manager-detail__inherit-wrapper-media > .ct-inherit-wrapper__toggle-wrapper {
+        &.ct-theme-manager-detail__inherit-wrapper-media
+            > .ct-inherit-wrapper__toggle-wrapper {
             width: fit-content;
 
             .ct-help-text {
