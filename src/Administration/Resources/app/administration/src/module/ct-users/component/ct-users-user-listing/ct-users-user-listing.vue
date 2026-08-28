@@ -4,7 +4,6 @@
             <ct-block name="sw_users_user_list_content_grid">
                 <mt-data-table
                     class="ct-users-user-listing__table"
-                    layout="full"
                     :caption="$t('ct-users.general.cardLabel')"
                     :data-source="users"
                     :columns="userColumns"
@@ -643,7 +642,8 @@ defineExpose({
     justify-content: flex-end;
 }
 
-.ct-users-user-listing__table {
+.mt-data-table.ct-users-user-listing__table {
+    height: 100%;
     margin-bottom: 0;
 }
 
