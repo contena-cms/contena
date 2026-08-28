@@ -52,8 +52,8 @@
     ],
     "dependencies": {
         "@contena-ag/dive": "3.1.0",
-        "@contena/meteor-admin-sdk": "6.11.0",
-        "@contena/meteor-component-library": "5.5.0",
+        "@contena/meteor-admin-sdk": "6.12.0",
+        "@contena/meteor-component-library": "5.6.0",
         "@contena/meteor-icon-kit": "5.10.0",
         "@swc/core": "1.10.7",
         "@tiptap/core": "2.22.3",
