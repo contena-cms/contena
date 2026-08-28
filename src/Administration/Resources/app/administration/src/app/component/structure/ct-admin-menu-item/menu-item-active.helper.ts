@@ -1,11 +1,31 @@
+import type { ModuleManifest, ModuleTypes } from 'src/core/factory/module.factory';
+
+type ModuleNavigationPath = Pick<Exclude<ModuleManifest['navigation'], undefined>[number], 'path'>;
+
 type RouteLike = {
     name?: string;
     matched?: Array<{ name?: string }>;
     params?: Record<string, unknown>;
     meta?: {
         parentPath?: string;
+        $module?: { type?: ModuleTypes; navigation?: ModuleNavigationPath[] };
     };
 };
+
+function ownModuleMenuPaths(route: RouteLike | undefined, activeNames: Set<string>): string[] {
+    const module = route?.meta?.$module;
+    const menuPaths = (module?.navigation ?? []).map((entry) => entry.path).filter((path): path is string => !!path);
+
+    if (menuPaths.some((path) => activeNames.has(path))) {
+        return [];
+    }
+
+    if (menuPaths.length > 1 && module?.type === 'core') {
+        return [];
+    }
+
+    return menuPaths;
+}
 
 type RouterLike = {
     getRoutes?: () => Array<RouteLike>;
@@ -38,12 +58,22 @@ export function getActiveRouteNames(route?: RouteLike, router?: RouterLike): Set
 
     const findRoute = (name: string) => router?.getRoutes?.().find((candidate) => candidate.name === name) ?? null;
     const visited = new Set<string>();
-    let parentPath = route?.meta?.parentPath;
+    const pending = route?.meta?.parentPath ? [route.meta.parentPath] : ownModuleMenuPaths(route, names);
 
-    while (parentPath && !visited.has(parentPath)) {
+    while (pending.length) {
+        const parentPath = pending.shift() as string;
+
+        if (visited.has(parentPath)) {
+            continue;
+        }
+
         visited.add(parentPath);
         names.add(parentPath);
-        parentPath = findRoute(parentPath)?.meta?.parentPath ?? undefined;
+
+        const grandParentPath = findRoute(parentPath)?.meta?.parentPath;
+        if (grandParentPath) {
+            pending.push(grandParentPath);
+        }
     }
 
     return names;

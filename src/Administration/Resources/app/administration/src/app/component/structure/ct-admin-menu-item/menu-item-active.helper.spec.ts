@@ -83,6 +83,44 @@ describe('src/app/component/structure/ct-admin-menu-item/menu-item-active.helper
                 ]),
             );
         });
+
+        it('uses the module navigation path when no parentPath is declared', () => {
+            const route = {
+                name: 'ct.extension.detail',
+                matched: [{ name: 'ct.extension.detail' }],
+                meta: {
+                    $module: {
+                        type: 'plugin' as const,
+                        navigation: [{ path: 'ct.extension' }],
+                    },
+                },
+            };
+
+            expect(getActiveRouteNames(route)).toEqual(
+                new Set([
+                    'ct.extension.detail',
+                    'ct.extension',
+                ]),
+            );
+        });
+
+        it('does not infer an ambiguous core module navigation path', () => {
+            const route = {
+                name: 'ct.core.detail',
+                matched: [{ name: 'ct.core.detail' }],
+                meta: {
+                    $module: {
+                        type: 'core' as const,
+                        navigation: [
+                            { path: 'ct.first' },
+                            { path: 'ct.second' },
+                        ],
+                    },
+                },
+            };
+
+            expect(getActiveRouteNames(route)).toEqual(new Set(['ct.core.detail']));
+        });
     });
 
     describe('entryParamsMatchRoute', () => {

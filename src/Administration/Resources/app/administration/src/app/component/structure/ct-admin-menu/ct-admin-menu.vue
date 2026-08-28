@@ -936,9 +936,12 @@ const expandAncestorBranchesForCurrentRoute = () => {
     }
 
     const activeNames = getActiveRouteNames(route, router);
-    const owner = mainMenuEntries.value.find(
-        (entry) => (entry.children?.length ?? 0) > 0 && isEntryOnActiveRoute(entry, route, activeNames),
-    );
+    const activeEntries = mainMenuEntries.value.filter((entry) => isEntryOnActiveRoute(entry, route, activeNames));
+    if (!activeEntries.length) {
+        return;
+    }
+
+    const owner = activeEntries.find((entry) => (entry.children?.length ?? 0) > 0);
     const ownerKey = owner ? (owner.id ?? owner.path) : null;
 
     if (ownerKey === activeBranchKey.value && (!owner || isNavigationEntryExpanded(owner))) {
