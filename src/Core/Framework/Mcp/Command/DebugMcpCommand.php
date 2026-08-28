@@ -227,7 +227,8 @@ class DebugMcpCommand extends Command
     {
         $rows = [];
         $properties = $tool->inputSchema['properties'] ?? [];
-        $required = \is_array($tool->inputSchema['required']) ? $tool->inputSchema['required'] : [];
+        // The SDK omits the key when no parameter is required; third-party registrations may also use a non-array value.
+        $required = \is_array($tool->inputSchema['required'] ?? null) ? $tool->inputSchema['required'] : [];
 
         if (\is_array($properties)) {
             foreach ($properties as $paramName => $def) {

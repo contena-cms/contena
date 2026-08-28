@@ -74,6 +74,50 @@ class DebugMcpCommandTest extends TestCase
         static::assertStringContainsString('All entities', $tester->getDisplay());
     }
 
+    public function testDetailViewRendersToolWithoutRequiredSchemaKey(): void
+    {
+        $registry = new Registry();
+        $registry->registerTool(
+            new Tool(
+                'my-tool',
+                null,
+                ['type' => 'object', 'properties' => ['limit' => ['type' => 'integer']]],
+                'Does things',
+                null,
+            ),
+            'Acme\\MyTool',
+        );
+
+        $tester = new CommandTester($this->makeCommand($registry));
+        $tester->execute(['name' => 'my-tool']);
+
+        static::assertSame(0, $tester->getStatusCode());
+        static::assertStringContainsString('limit', $tester->getDisplay());
+        static::assertStringContainsString('optional', $tester->getDisplay());
+    }
+
+    public function testDetailViewRendersToolWithNonArrayRequiredSchemaValue(): void
+    {
+        $registry = new Registry();
+        $registry->registerTool(
+            new Tool(
+                'my-tool',
+                null,
+                ['type' => 'object', 'properties' => ['limit' => ['type' => 'integer']], 'required' => 'invalid'],
+                'Does things',
+                null,
+            ),
+            'Acme\\MyTool',
+        );
+
+        $tester = new CommandTester($this->makeCommand($registry));
+        $tester->execute(['name' => 'my-tool']);
+
+        static::assertSame(0, $tester->getStatusCode());
+        static::assertStringContainsString('limit', $tester->getDisplay());
+        static::assertStringContainsString('optional', $tester->getDisplay());
+    }
+
     public function testIntegrationAllowlistOnlyFiltersAdminScope(): void
     {
         $adminRegistry = new Registry();
