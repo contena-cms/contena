@@ -127,7 +127,7 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(table.props('selectedRows')).toEqual([]);
         expect(table.props('disableDelete')).toBe(false);
         expect(table.props('disableSearch')).toBe('');
-        expect(table.props('layout')).toBeUndefined();
+        expect(table.props('layout')).toBe('full');
         expect(table.props('columns')).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ property: 'username', renderer: 'text', position: 100 }),
@@ -157,6 +157,20 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
 
         await createButton.trigger('click');
         expect(wrapper.emitted('create')).toEqual([[]]);
+    });
+
+    it('keeps the create action from bubbling to document listeners', async () => {
+        const { wrapper } = await createWrapper(['users_and_permissions.creator']);
+        await flushPromises();
+
+        const documentClick = jest.fn();
+        document.addEventListener('click', documentClick);
+
+        await wrapper.find('.ct-users__create-user').trigger('click');
+
+        document.removeEventListener('click', documentClick);
+
+        expect(documentClick).not.toHaveBeenCalled();
     });
 
     it('exposes status and role filters to the mt data table', async () => {

@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_users">
+    <ct-block name="ct_users">
         <ct-page class="ct-users" :show-smart-bar="false">
             <template #search-bar>
-                <ct-block name="sw_users_search_bar">
+                <ct-block name="ct_users_search_bar">
                     <ct-search-bar initial-search-type="user" @search="onUserSearch" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_users_content">
+                <ct-block name="ct_users_content">
                     <ct-users-user-listing
                         ref="userListing"
                         @loading-change="onUserLoadingChange"
@@ -22,21 +22,27 @@
     </ct-block>
 
     <span v-if="userFormMode" class="ct-users__drawer-marker" aria-hidden="true"></span>
-    <mt-modal-root v-if="userFormMode" :is-open="true" @change="onCloseUserForm">
-        <mt-modal :title="userFormTitle" width="l">
-            <ct-users-user-detail v-if="userFormMode === 'edit'" ref="userForm" :initial-user-id="userFormId" />
-            <ct-users-user-create v-else ref="userForm" />
+    <ct-block name="ct_users_user_form_drawer">
+        <mt-modal-root v-if="userFormMode" :is-open="true" @change="onCloseUserForm">
+            <ct-block name="ct_users_user_form_drawer_content">
+                <mt-modal :title="userFormTitle" width="l">
+                    <ct-users-user-detail v-if="userFormMode === 'edit'" ref="userForm" :initial-user-id="userFormId" />
+                    <ct-users-user-create v-else ref="userForm" />
 
-            <template #footer>
-                <mt-button variant="secondary" @click="onCloseUserForm">
-                    {{ $t('global.default.cancel') }}
-                </mt-button>
-                <mt-button variant="primary" :is-loading="isUserFormSaving" @click="onSaveUserForm">
-                    {{ $t('global.default.save') }}
-                </mt-button>
-            </template>
-        </mt-modal>
-    </mt-modal-root>
+                    <template #footer>
+                        <ct-block name="ct_users_user_form_drawer_footer">
+                            <mt-button variant="secondary" @click="onCloseUserForm">
+                                {{ $t('global.default.cancel') }}
+                            </mt-button>
+                            <mt-button variant="primary" :is-loading="isUserFormSaving" @click="onSaveUserForm">
+                                {{ $t('global.default.save') }}
+                            </mt-button>
+                        </ct-block>
+                    </template>
+                </mt-modal>
+            </ct-block>
+        </mt-modal-root>
+    </ct-block>
 </template>
 
 <script setup lang="ts">
@@ -171,10 +177,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-.ct-page.ct-users .ct-page__main-content-inner {
-    padding: var(--scale-size-16);
-}
-
 body:has(.ct-users__drawer-marker) > .mt-modal {
     top: 0 !important;
     right: 0 !important;

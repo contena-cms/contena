@@ -43,12 +43,12 @@ Used inside an override block to render the content from the previous block in t
 In a component SFC:
 
 ```html
-<ct-block name="sw_product_detail_summary" :data="$dataScope">
+<ct-block name="ct_product_detail_summary" :data="$dataScope">
     <p>Default summary content</p>
 </ct-block>
 ```
 
-- `name` — unique identifier for this block, scoped globally across the app. Block names use the `sw_` prefix and snake_case (e.g., `sw_product_detail_summary`).
+- `name` — unique identifier for this block, scoped globally across the app. New block names use the `ct_` prefix and snake_case (e.g., `ct_product_detail_summary`). Existing `sw_` names remain valid legacy extension points.
 - `:data="$dataScope"` — passes the component's entire data/computed/methods scope to any override that wants it (more on this below)
 
 ### Complete end-to-end example
@@ -58,7 +58,7 @@ The following shows both sides together: the base component that declares the bl
 ```html
 <!-- ── Base component: ct-product-detail.vue ── -->
 <div class="ct-product-detail">
-    <ct-block name="sw_product_detail_summary" :data="$dataScope">
+    <ct-block name="ct_product_detail_summary" :data="$dataScope">
         <p>Default summary content</p>
     </ct-block>
 </div>
@@ -69,7 +69,7 @@ The following shows both sides together: the base component that declares the bl
 <!--                                                                    -->
 <!-- <ct-block extends> renders nothing at the position it is placed.   -->
 <!-- Its slot is registered globally and picked up by the named block.  -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent />
     <p class="my-badge">Added by MyPlugin</p>
 </ct-block>
@@ -89,7 +89,7 @@ Rendered output:
 
 ```html
 <!-- Replaces the default content entirely -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <p class="custom-summary">My custom summary</p>
 </ct-block>
 ```
@@ -98,7 +98,7 @@ Rendered output:
 
 ```html
 <!-- Keeps the default content and adds to it -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent />
     <div class="custom-badge">New!</div>
 </ct-block>
@@ -108,13 +108,13 @@ Rendered output:
 
 ```html
 <!-- Prepend: custom content appears BEFORE default -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <div class="prepended">I go first</div>
     <ct-block-parent />
 </ct-block>
 
 <!-- Append: custom content appears AFTER default -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent />
     <div class="appended">I go last</div>
 </ct-block>
@@ -128,13 +128,13 @@ Multiple `ct-block extends="..."` blocks for the same name are supported and for
 
 ```html
 <!-- Override 1 -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent />
     <div class="from-plugin-a">Added by Plugin A</div>
 </ct-block>
 
 <!-- Override 2 -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent />
     <div class="from-plugin-b">Added by Plugin B</div>
 </ct-block>
@@ -151,11 +151,11 @@ Multiple `ct-block extends="..."` blocks for the same name are supported and for
 When there are multiple overrides and none uses `<ct-block-parent />`, only the **last registered** override is rendered. The earlier ones are silently discarded:
 
 ```html
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <div class="from-plugin-a">Plugin A (never shown)</div>
 </ct-block>
 
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <div class="from-plugin-b">Plugin B (shown)</div>
 </ct-block>
 ```
@@ -172,7 +172,7 @@ The component that owns the block passes itself down via `:data="$dataScope"`:
 
 ```html
 <!-- In the component being extended -->
-<ct-block name="sw_product_price_display" :data="$dataScope">
+<ct-block name="ct_product_price_display" :data="$dataScope">
     <span>{{ product.price }}</span>
 </ct-block>
 ```
@@ -184,7 +184,7 @@ The component that owns the block passes itself down via `:data="$dataScope"`:
 The override block receives the scope as its default slot argument:
 
 ```html
-<ct-block extends="sw_product_price_display" #default="{ product, formatPrice }">
+<ct-block extends="ct_product_price_display" #default="{ product, formatPrice }">
     <ct-block-parent />
     <span class="custom-price">{{ formatPrice(product.price) }}</span>
 </ct-block>
@@ -200,22 +200,22 @@ Blocks can be nested freely. Each block is independently overrideable:
 
 ```html
 <!-- Component template -->
-<ct-block name="sw_product_tabs" :data="$dataScope">
+<ct-block name="ct_product_tabs" :data="$dataScope">
     <div class="tabs">
-        <ct-block name="sw_product_tab_basic" :data="$dataScope">
+        <ct-block name="ct_product_tab_basic" :data="$dataScope">
             <span>Basic Info</span>
         </ct-block>
 
-        <ct-block name="sw_product_tab_advanced" :data="$dataScope">
+        <ct-block name="ct_product_tab_advanced" :data="$dataScope">
             <span>Advanced</span>
         </ct-block>
     </div>
 </ct-block>
 
 <!-- Plugin: add a new tab without touching the outer block -->
-<ct-block extends="sw_product_tabs">
+<ct-block extends="ct_product_tabs">
     <ct-block-parent />
-    <ct-block name="sw_product_tab_custom" :data="$dataScope">
+    <ct-block name="ct_product_tab_custom" :data="$dataScope">
         <span>Custom Tab</span>
     </ct-block>
 </ct-block>
@@ -415,7 +415,7 @@ The native block system has these limitations:
 ```html
 <!-- ❌ This breaks v-else -->
 <div v-if="condition">...</div>
-<ct-block name="sw_between_conditions">...</ct-block>
+<ct-block name="ct_between_conditions">...</ct-block>
 <div v-else>...</div>
 ```
 
@@ -425,7 +425,7 @@ The native block system has these limitations:
 
 ```html
 <!-- ❌ Multiple instances each pop() a different slot from the chain -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <template v-for="item in items">
         <ct-block-parent />
     </template>
@@ -436,7 +436,7 @@ The native block system has these limitations:
 
 ```html
 <!-- ❌ Re-mounting ct-block-parent calls .pop() again -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent v-if="condition" />
     <div>My content</div>
 </ct-block>
@@ -446,7 +446,7 @@ The native block system has these limitations:
 
 ```html
 <!-- ❌ Conditional ct-block-parent breaks the parent chain -->
-<ct-block extends="sw_product_detail_summary">
+<ct-block extends="ct_product_detail_summary">
     <ct-block-parent v-if="showParent" />
     <div v-else>Local fallback</div>
 </ct-block>
@@ -457,7 +457,7 @@ The native block system has these limitations:
 ```html
 <!-- ❌ Registers one override per list item -->
 <template v-for="item in items">
-    <ct-block extends="sw_product_detail_summary">
+    <ct-block extends="ct_product_detail_summary">
         <div>{{ item.name }}</div>
     </ct-block>
 </template>

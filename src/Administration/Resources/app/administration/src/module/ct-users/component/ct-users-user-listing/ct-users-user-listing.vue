@@ -1,98 +1,97 @@
 <template>
-    <ct-block name="sw_users_user_list">
-        <ct-block name="sw_users_user_list_content">
-            <ct-block name="sw_users_user_list_content_grid">
-                <mt-data-table
-                    class="ct-users-user-listing__table"
-                    :caption="$t('ct-users.general.cardLabel')"
-                    :data-source="users"
-                    :columns="userColumns"
-                    :is-loading="isLoading"
-                    :pagination-total-items="total"
-                    :current-page="page"
-                    :pagination-limit="limit"
-                    :sort-by="sortBy"
-                    :sort-direction="sortDirection"
-                    :search-value="term || ''"
-                    :number-of-results="total"
-                    disable-search
-                    enable-reload
-                    disable-edit
-                    :allow-row-selection="acl.can('users_and_permissions.deleter')"
-                    :allow-bulk-delete="acl.can('users_and_permissions.deleter')"
-                    :selected-rows="selectedUserIds"
-                    :disable-delete="!acl.can('users_and_permissions.deleter')"
-                    :additional-context-buttons="additionalContextButtons"
-                    :filters="filters"
-                    :applied-filters="appliedFilters"
-                    @reload="getList"
-                    @pagination-current-page-change="onPageChange"
-                    @pagination-limit-change="onLimitChange"
-                    @sort-change="onSort"
-                    @search-value-change="onSearch"
-                    @item-delete="onDelete"
-                    @bulk-delete="onBulkDelete"
-                    @selection-change="onSelectionChange"
-                    @multiple-selection-change="onMultipleSelectionChange"
-                    @update:applied-filters="onAppliedFiltersChange"
-                    @context-select="onContextSelect"
-                >
-                    <template #column-username="{ data: item }">
-                        <ct-block name="sw_users_user_list_column_username">
-                            <mt-link
-                                as="button"
-                                class="ct-users-user-listing__columns"
-                                @click.stop.prevent="emit('edit', item)"
+    <ct-block name="ct_users_user_list">
+        <div class="ct-users-user-listing__content">
+            <mt-data-table
+                class="ct-users-user-listing__table"
+                layout="full"
+                :caption="$t('ct-users.general.cardLabel')"
+                :data-source="users"
+                :columns="userColumns"
+                :is-loading="isLoading"
+                :pagination-total-items="total"
+                :current-page="page"
+                :pagination-limit="limit"
+                :sort-by="sortBy"
+                :sort-direction="sortDirection"
+                :search-value="term || ''"
+                :number-of-results="total"
+                disable-search
+                enable-reload
+                disable-edit
+                :allow-row-selection="acl.can('users_and_permissions.deleter')"
+                :allow-bulk-delete="acl.can('users_and_permissions.deleter')"
+                :selected-rows="selectedUserIds"
+                :disable-delete="!acl.can('users_and_permissions.deleter')"
+                :additional-context-buttons="additionalContextButtons"
+                :filters="filters"
+                :applied-filters="appliedFilters"
+                @reload="getList"
+                @pagination-current-page-change="onPageChange"
+                @pagination-limit-change="onLimitChange"
+                @sort-change="onSort"
+                @search-value-change="onSearch"
+                @item-delete="onDelete"
+                @bulk-delete="onBulkDelete"
+                @selection-change="onSelectionChange"
+                @multiple-selection-change="onMultipleSelectionChange"
+                @update:applied-filters="onAppliedFiltersChange"
+                @context-select="onContextSelect"
+            >
+                <template #column-username="{ data: item }">
+                    <ct-block name="ct_users_user_list_column_username">
+                        <mt-link as="button" class="ct-users-user-listing__columns" @click.stop.prevent="emit('edit', item)">
+                            <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
+                            {{ item.username }}
+                        </mt-link>
+                    </ct-block>
+                </template>
+
+                <template #column-aclRoles="{ data: item }">
+                    <ct-block name="ct_users_user_list_column_acl_roles">
+                        {{ item.aclRoles?.map((role) => role.name).join(', ') || '' }}
+                    </ct-block>
+                </template>
+
+                <template #column-active="{ data: item }">
+                    <ct-block name="ct_users_user_list_column_active">
+                        <mt-badge :variant="item.active ? 'positive' : 'critical'" size="s">
+                            {{
+                                $t(
+                                    item.active
+                                        ? 'ct-users.filter.statusLabel.active'
+                                        : 'ct-users.filter.statusLabel.inactive',
+                                )
+                            }}
+                        </mt-badge>
+                    </ct-block>
+                </template>
+
+                <template #toolbar>
+                    <div class="ct-users-user-listing__toolbar" @click.stop>
+                        <ct-block name="ct_users_user_list_toolbar">
+                            <mt-button
+                                v-tooltip.bottom="{
+                                    message: $t('ct-privileges.tooltip.warning'),
+                                    disabled: acl.can('users_and_permissions.creator'),
+                                    showOnDisabledElements: true,
+                                }"
+                                class="ct-users__create-user"
+                                variant="primary"
+                                size="default"
+                                :disabled="!acl.can('users_and_permissions.creator') || undefined"
+                                @click="emit('create')"
                             >
-                                <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
-                                {{ item.username }}
-                            </mt-link>
+                                {{ $t('global.default.add') }}
+                            </mt-button>
                         </ct-block>
-                    </template>
+                    </div>
+                </template>
 
-                    <template #column-aclRoles="{ data: item }">
-                        <ct-block name="sw_users_user_list_column_acl_roles">
-                            {{ item.aclRoles?.map((role) => role.name).join(', ') || '' }}
-                        </ct-block>
-                    </template>
-
-                    <template #column-active="{ data: item }">
-                        <ct-block name="sw_users_user_list_column_active">
-                            <mt-badge :variant="item.active ? 'positive' : 'critical'" size="s">
-                                {{
-                                    $t(
-                                        item.active
-                                            ? 'ct-users.filter.statusLabel.active'
-                                            : 'ct-users.filter.statusLabel.inactive',
-                                    )
-                                }}
-                            </mt-badge>
-                        </ct-block>
-                    </template>
-
-                    <template #toolbar>
-                        <mt-button
-                            v-tooltip.bottom="{
-                                message: $t('ct-privileges.tooltip.warning'),
-                                disabled: acl.can('users_and_permissions.creator'),
-                                showOnDisabledElements: true,
-                            }"
-                            class="ct-users__create-user"
-                            variant="primary"
-                            size="default"
-                            :disabled="!acl.can('users_and_permissions.creator') || undefined"
-                            @click.stop.prevent="emit('create')"
-                        >
-                            {{ $t('global.default.add') }}
-                        </mt-button>
-                    </template>
-
-                    <template #empty-state>
-                        <mt-empty-state icon="regular-users" :headline="$t('ct-users.general.cardLabel')" />
-                    </template>
-                </mt-data-table>
-            </ct-block>
-        </ct-block>
+                <template #empty-state>
+                    <mt-empty-state icon="regular-users" :headline="$t('ct-users.general.cardLabel')" />
+                </template>
+            </mt-data-table>
+        </div>
     </ct-block>
 
     <mt-modal-root v-if="itemToDelete" :is-open="true" @change="onCloseDeleteModal">
@@ -643,8 +642,16 @@ defineExpose({
 }
 
 .mt-data-table.ct-users-user-listing__table {
+    width: 100%;
+    max-width: none;
     height: 100%;
     margin-bottom: 0;
+}
+
+.ct-users-user-listing__content {
+    height: 100%;
+    padding: var(--scale-size-16);
+    box-sizing: border-box;
 }
 
 .ct-users-user-listing__confirm-delete-text {
