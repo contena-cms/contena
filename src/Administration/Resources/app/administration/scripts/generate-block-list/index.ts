@@ -2,14 +2,15 @@ import path from 'path';
 import fs from 'fs';
 import { globSync } from 'glob';
 import { extractBlocks } from './extract-blocks';
+import { isTemplateSourceFile } from '../public-api-source-files';
 
 const BLOCKS_LIST_FILE = path.join(__dirname, '../../blocks-list.json');
 
 function main() {
     const sourcePath = path.join(__dirname, '../../src');
-    const listOfTemplateFiles = globSync(`${sourcePath}/**/*.vue`);
+    const listOfTemplateFiles = globSync(`${sourcePath}/**/*.*`).filter(isTemplateSourceFile);
 
-    const blocks = extractBlocks(listOfTemplateFiles);
+    const blocks = listOfTemplateFiles.flatMap((filePath) => extractBlocks(fs.readFileSync(filePath, 'utf8')));
     updateBlocksList(blocks);
 }
 

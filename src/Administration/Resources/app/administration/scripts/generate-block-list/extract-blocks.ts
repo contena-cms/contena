@@ -1,17 +1,9 @@
-import fs from 'fs';
+import { captures } from '../public-api-source-files';
 
 const OLD_BLOCK_START_REGEX = /\{%\s*block\s+([^%\s\}]+)\s*%\}/g;
-const NEW_BLOCK_START_REGEX = /<ct-block[^>]+(?:name|extends)="([^"]+)"/g;
-export function extractBlocks(filesPath: string[]) {
-    return filesPath.reduce(function (listOfBlocks, filePath) {
-        const code = fs.readFileSync(filePath, 'utf8');
-        let match;
-        while ((match = OLD_BLOCK_START_REGEX.exec(code)) !== null) {
-            listOfBlocks.push(match[1]);
-        }
-        while ((match = NEW_BLOCK_START_REGEX.exec(code)) !== null) {
-            listOfBlocks.push(match[1]);
-        }
-        return listOfBlocks;
-    }, [] as string[]);
+// Keep block-field, block-parent and block-override components out of the public block list.
+const NEW_BLOCK_START_REGEX = /<ct-block(?![-\w])[^>]*\s(?:name|extends)="([^"]+)"/g;
+
+export function extractBlocks(code: string): string[] {
+    return captures(code, OLD_BLOCK_START_REGEX, NEW_BLOCK_START_REGEX);
 }
