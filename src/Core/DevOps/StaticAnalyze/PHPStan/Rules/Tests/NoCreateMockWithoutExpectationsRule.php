@@ -19,6 +19,7 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 
 /**
  * Static guard for the PHPUnit 12+ "no expectations configured for mock … use a test stub" notice: flags a
@@ -41,16 +42,16 @@ class NoCreateMockWithoutExpectationsRule implements Rule
     public const string ERROR_MIXED = 'createMock(%s) is a shared mock that is ->expects()-ed in some test methods but left without an expectation in others, so it triggers the PHPUnit "no expectations" notice there. Do not mix mock and stub usage on one shared double: give it a real expectation (e.g. ->expects($this->never())) in every test, split the test, or use a per-test double.';
 
     /**
-     * The domain-by-domain rollout is complete: every unit test suite is covered.
+     * Narrows enforcement to matching test namespaces; an empty list disables the rule.
      *
      * @var list<string>
      */
-    private const array ENABLED_NAMESPACES = [
-        'Contena\\Tests\\Unit\\Core\\',
-        'Contena\\Tests\\Unit\\Administration\\',
-        'Contena\\Tests\\Unit\\Frontend\\',
-        'Contena\\Tests\\Unit\\Elasticsearch\\',
-    ];
+    private readonly array $enabledNamespaces;
+
+    public function __construct(Configuration $configuration)
+    {
+        $this->enabledNamespaces = $configuration->getCreateMockWithoutExpectationsEnabledNamespaces();
+    }
 
     public function getNodeType(): string
     {
@@ -65,7 +66,7 @@ class NoCreateMockWithoutExpectationsRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         $classReflection = $node->getClassReflection();
-        if (!TestRuleHelper::isUnitTestClass($classReflection) || !$this->isEnabledNamespace($classReflection->getName())) {
+        if (!TestRuleHelper::isTestClass($classReflection) || !$this->isEnabledNamespace($classReflection->getName())) {
             return [];
         }
 
@@ -425,7 +426,7 @@ class NoCreateMockWithoutExpectationsRule implements Rule
 
     private function isEnabledNamespace(string $className): bool
     {
-        foreach (self::ENABLED_NAMESPACES as $namespace) {
+        foreach ($this->enabledNamespaces as $namespace) {
             if (\str_contains($className, $namespace)) {
                 return true;
             }

@@ -4,6 +4,7 @@ namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\NoCreateMockWithoutExpectationsRule;
 
 /**
@@ -51,6 +52,8 @@ class NoCreateMockWithoutExpectationsRuleTest extends RuleTestCase
 
     protected function getRule(): Rule
     {
-        return new NoCreateMockWithoutExpectationsRule();
+        return new NoCreateMockWithoutExpectationsRule(
+            new Configuration(['createMockWithoutExpectationsEnabledNamespaces' => ['Contena\\Tests\\Unit\\']]),
+        );
     }
 }

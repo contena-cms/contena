@@ -71,6 +71,8 @@ parameters:
         allowedUnitTestClassNamespaces:
             - Contena\Tests\Unit\
             - Contena\Tests\Migration\
+        createMockWithoutExpectationsEnabledNamespaces:
+            - 'Contena\Tests\Unit\'
 
 services:
     -   factory: Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration(%contena%)
@@ -82,4 +84,5 @@ parametersSchema:
         allowedNonDomainExceptions: list(string),
         allowedFrontendRouteNamespaces: list(string),
         allowedUnitTestClassNamespaces: list(string),
+        createMockWithoutExpectationsEnabledNamespaces: list(string),
 ])
