@@ -147,20 +147,6 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(router.push).not.toHaveBeenCalled();
     });
 
-    it('keeps a username click from bubbling to document listeners', async () => {
-        const { wrapper } = await createWrapper(['users_and_permissions.viewer']);
-        await flushPromises();
-
-        const documentClick = jest.fn();
-        document.addEventListener('click', documentClick);
-
-        await wrapper.find('.ct-users-user-listing__columns').trigger('click');
-
-        document.removeEventListener('click', documentClick);
-
-        expect(documentClick).not.toHaveBeenCalled();
-    });
-
     it('places the create action in the table toolbar', async () => {
         const { wrapper } = await createWrapper(['users_and_permissions.creator']);
         await flushPromises();
@@ -172,20 +158,6 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
 
         await createButton.trigger('click');
         expect(wrapper.emitted('create')).toEqual([[]]);
-    });
-
-    it('keeps the create action from bubbling to document listeners', async () => {
-        const { wrapper } = await createWrapper(['users_and_permissions.creator']);
-        await flushPromises();
-
-        const documentClick = jest.fn();
-        document.addEventListener('click', documentClick);
-
-        await wrapper.find('.ct-users__create-user').trigger('click');
-
-        document.removeEventListener('click', documentClick);
-
-        expect(documentClick).not.toHaveBeenCalled();
     });
 
     it('exposes status and role filters to the mt data table', async () => {

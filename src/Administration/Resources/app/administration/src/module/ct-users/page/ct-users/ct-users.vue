@@ -3,12 +3,7 @@
         <ct-page class="ct-users" :show-smart-bar="false">
             <template #search-bar>
                 <ct-block name="ct_users_search_bar">
-                    <ct-search-bar
-                        ref="searchBar"
-                        initial-search-type="user"
-                        :ignore-route-term="true"
-                        @search="onUserSearch"
-                    />
+                    <ct-search-bar initial-search-type="user" :ignore-route-term="true" @search="onUserSearch" />
                 </ct-block>
             </template>
 
@@ -68,7 +63,6 @@ import { useI18n } from 'vue-i18n';
 import SwUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
 
 const { t } = useI18n();
-const searchBar = ref<{ dismissSearchOverlays?: () => void }>();
 const userListing = ref<ComponentExposed<typeof SwUsersUserListing>>();
 const statusFilter = ref('all');
 
@@ -115,16 +109,11 @@ const onUserTotalChange = (total: number) => {
 const onUserLoadingChange = (loading: boolean) => {
     userListingLoading.value = loading;
 };
-const dismissSearchOverlays = () => {
-    searchBar.value?.dismissSearchOverlays?.();
-};
 const onCreateUser = () => {
-    dismissSearchOverlays();
     userFormId.value = '';
     userFormMode.value = 'create';
 };
 const onEditUser = (user: { id: string }) => {
-    dismissSearchOverlays();
     userFormId.value = user.id;
     userFormMode.value = 'edit';
 };
@@ -155,7 +144,6 @@ swDefinePublic({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
-    dismissSearchOverlays,
     userFormMode,
     userFormId,
     userFormTitle,
@@ -177,7 +165,6 @@ defineExpose({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
-    dismissSearchOverlays,
     userFormMode,
     userFormId,
     userFormTitle,

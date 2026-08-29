@@ -38,9 +38,14 @@
                 @context-select="onContextSelect"
             >
                 <template #column-username="{ data: item }">
-                    <span class="ct-users-user-listing__username-click-target" @click.stop>
+                    <span class="ct-users-user-listing__username-click-target">
                         <ct-block name="ct_users_user_list_column_username">
-                            <mt-link as="button" class="ct-users-user-listing__columns" @click="emit('edit', item)">
+                            <mt-link
+                                as="button"
+                                type="button"
+                                class="ct-users-user-listing__columns"
+                                @click.prevent="emit('edit', item)"
+                            >
                                 <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
                                 {{ item.username }}
                             </mt-link>
@@ -69,7 +74,7 @@
                 </template>
 
                 <template #toolbar>
-                    <div class="ct-users-user-listing__toolbar" @click.stop>
+                    <div class="ct-users-user-listing__toolbar">
                         <ct-block name="ct_users_user_list_toolbar">
                             <mt-button
                                 v-tooltip.bottom="{
@@ -81,7 +86,7 @@
                                 variant="primary"
                                 size="default"
                                 :disabled="!acl.can('users_and_permissions.creator') || undefined"
-                                @click="emit('create')"
+                                @click.prevent="emit('create')"
                             >
                                 {{ $t('global.default.add') }}
                             </mt-button>

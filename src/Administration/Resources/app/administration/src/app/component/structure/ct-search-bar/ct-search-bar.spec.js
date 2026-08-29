@@ -70,6 +70,20 @@ describe('src/app/component/structure/ct-search-bar', () => {
                     'ct-search-more-results': true,
                     'ct-search-bar-item': await wrapTestComponent('ct-search-bar-item', { sync: true }),
                     'ct-search-preferences-modal': true,
+                    'mt-search': {
+                        props: [
+                            'modelValue',
+                            'placeholder',
+                            'size',
+                            'disabled',
+                        ],
+                        emits: [
+                            'change',
+                            'update:modelValue',
+                        ],
+                        template:
+                            '<div class="mt-search"><input class="mt-search__input" type="search" :value="modelValue" :placeholder="placeholder" :disabled="disabled" @input="$emit(\'update:modelValue\', $event.target.value)" @change="$emit(\'change\', $event.target.value)" /></div>',
+                    },
                     'router-link': true,
                     'ct-highlight-text': true,
                 },
@@ -346,8 +360,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         });
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // check if search results are hidden and types container are visible
@@ -359,33 +373,25 @@ describe('src/app/component/structure/ct-search-bar', () => {
         expect(activeType.text()).toBe('global.entities.product');
     });
 
-    it('dismisses search overlays without changing the current term', async () => {
-        wrapper = await createWrapper({ initialSearch: 'supperadmin' });
-        wrapper.vm.showResultsContainer = true;
-        wrapper.vm.showResultsSearchTrends = true;
-        wrapper.vm.showTypeSelectContainer = true;
-        wrapper.vm.showModuleFiltersContainer = true;
-        wrapper.vm.isActive = true;
-
-        wrapper.vm.dismissSearchOverlays();
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.vm.searchTerm).toBe('supperadmin');
-        expect(wrapper.vm.showResultsContainer).toBe(false);
-        expect(wrapper.vm.showResultsSearchTrends).toBe(false);
-        expect(wrapper.vm.showTypeSelectContainer).toBe(false);
-        expect(wrapper.vm.showModuleFiltersContainer).toBe(false);
-        expect(wrapper.vm.isActive).toBe(false);
-    });
-
     it('does not reopen search trends after the input loses focus', async () => {
         wrapper = await createWrapper();
 
         wrapper.vm.onFocusInput();
-        wrapper.vm.dismissSearchOverlays();
+        wrapper.vm.onBlur();
         await flushPromises();
 
         expect(wrapper.vm.showResultsSearchTrends).toBe(false);
+    });
+
+    it('does not reopen search trends after an outside click', async () => {
+        wrapper = await createWrapper();
+
+        wrapper.vm.onFocusInput();
+        wrapper.vm.closeOnClickOutside({ target: { closest: () => null } });
+        await flushPromises();
+
+        expect(wrapper.vm.showResultsSearchTrends).toBe(false);
+        expect(wrapper.vm.isActive).toBe(false);
     });
 
     it('should hide the tags and not show the search results when initialSearchType and currentSearchType matches', async () => {
@@ -394,8 +400,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         });
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // check if search results are hidden and types container are visible
@@ -422,10 +428,10 @@ describe('src/app/component/structure/ct-search-bar', () => {
             initialSearchType: 'product',
         });
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
 
         // open search
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // check if search results are hidden and types container are visible
@@ -438,7 +444,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         await secondTypeItem.trigger('click');
 
         // open search again
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // check if new type is set
@@ -471,8 +477,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         });
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         const route = {
             query: {
@@ -577,10 +583,10 @@ describe('src/app/component/structure/ct-search-bar', () => {
             },
         );
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
 
         // open search
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // set categories as active type
@@ -589,7 +595,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         await secondTypeItem.trigger('click');
 
         // open search again
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         // check if new type is set
@@ -710,7 +716,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
             },
         );
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
         await searchInput.setValue('shirt');
 
         const moduleFilterSelect = wrapper.find('.ct-search-bar__type--v2');
@@ -771,8 +777,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         await moduleFilterItems.at(2).trigger('click');
 
         // open search again
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         // check if new type is set
         const activeType = wrapper.find('.ct-search-bar__field .ct-search-bar__type--v2');
@@ -847,8 +853,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         );
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         await searchInput.setValue('ord');
         expect(searchInput.element.value).toBe('ord');
@@ -932,7 +938,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         );
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
         await searchInput.trigger('focus');
 
         await searchInput.setValue('cat');
@@ -992,8 +998,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
             });
 
             // open search
-            const searchInput = wrapper.find('.ct-search-bar__input');
-            await searchInput.trigger('focus');
+            const searchInput = wrapper.find('.mt-search__input');
+            await searchInput.trigger('focusin');
 
             await searchInput.setValue(term);
             expect(searchInput.element.value).toBe(term);
@@ -1054,8 +1060,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
             );
 
             // open search
-            const searchInput = wrapper.find('.ct-search-bar__input');
-            await searchInput.trigger('focus');
+            const searchInput = wrapper.find('.mt-search__input');
+            await searchInput.trigger('focusin');
 
             await searchInput.setValue(term);
             expect(searchInput.element.value).toBe(term);
@@ -1126,8 +1132,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         const moduleFilterItems = wrapper.findAll('.ct-search-bar__type-item');
         await moduleFilterItems.at(2).trigger('click');
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
         await searchInput.setValue('#');
 
         await searchInput.setValue('#');
@@ -1160,10 +1166,10 @@ describe('src/app/component/structure/ct-search-bar', () => {
             },
         );
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
 
         // open search
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
 
         // set categories as active type
         const moduleFilterSelect = wrapper.find('.ct-search-bar__type--v2');
@@ -1173,7 +1179,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         await moduleFilterItems.at(0).trigger('click');
 
         // open search again
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
 
         // type search value
         await searchInput.setValue('shorts');
@@ -1222,10 +1228,10 @@ describe('src/app/component/structure/ct-search-bar', () => {
             return {};
         });
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
+        const searchInput = wrapper.find('.mt-search__input');
 
         // open search
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
 
         // set categories as active type
         const moduleFilterSelect = wrapper.find('.ct-search-bar__type--v2');
@@ -1235,7 +1241,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         await moduleFilterItems.at(0).trigger('click');
 
         // open search again
-        await searchInput.trigger('focus');
+        await searchInput.trigger('focusin');
 
         // type search value
         await searchInput.setValue('shorts');
@@ -1277,8 +1283,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
 
         expect(moduleFilterSelect.text()).toBe('global.entities.all');
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         // type search value
         await searchInput.setValue('shorts');
@@ -1368,8 +1374,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
 
         expect(moduleFilterSelect.text()).toBe('global.entities.all');
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         await flushPromises();
 
@@ -1454,8 +1460,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
 
         expect(moduleFilterSelect.text()).toBe('global.entities.all');
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         await flushPromises();
 
@@ -1534,8 +1540,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
         });
 
         // open search
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         await searchInput.setValue('sto');
         expect(searchInput.element.value).toBe('sto');
@@ -1598,8 +1604,8 @@ describe('src/app/component/structure/ct-search-bar', () => {
             initialSearch: '',
         });
 
-        const searchInput = wrapper.find('.ct-search-bar__input');
-        await searchInput.trigger('focus');
+        const searchInput = wrapper.find('.mt-search__input');
+        await searchInput.trigger('focusin');
 
         await searchInput.setValue('shorts'.repeat(100));
 

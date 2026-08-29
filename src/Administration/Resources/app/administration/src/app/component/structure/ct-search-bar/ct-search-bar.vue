@@ -56,30 +56,27 @@
                                 <ct-block name="sw_search_bar_input">
                                     <slot name="search-input">
                                         <ct-block name="sw_search_bar_slot_input">
-                                            <input
-                                                ref="searchInput"
-                                                v-model="searchTerm"
-                                                class="ct-search-bar__input"
-                                                :placeholder="placeholderSearchInput"
-                                                :aria-label="placeholderSearchInput"
-                                                role="searchbox"
-                                                @input="onSearchTermChange"
-                                                @focus="onFocusInput"
-                                                @blur="onBlur"
+                                            <div
+                                                class="ct-search-bar__input-wrapper"
+                                                @focusin="onFocusInput"
+                                                @focusout="onBlur"
                                                 @keydown.delete="resetSearchType"
                                                 @keyup.esc="clearSearchTerm"
                                                 @keyup.enter.prevent="onKeyUpEnter"
                                                 @keydown.up.prevent="navigateUpResults"
                                                 @keydown.down.prevent="navigateDownResults"
-                                            />
+                                            >
+                                                <mt-search
+                                                    ref="searchInput"
+                                                    class="ct-search-bar__input"
+                                                    :model-value="searchTerm"
+                                                    :placeholder="placeholderSearchInput"
+                                                    :aria-label="placeholderSearchInput"
+                                                    @update:model-value="onSearchTermUpdate"
+                                                />
+                                            </div>
                                         </ct-block>
                                     </slot>
-                                </ct-block>
-
-                                <ct-block name="sw_search_bar_icon">
-                                    <span class="ct-search-bar__field-icon ct-search-bar__field-search-icon">
-                                        <mt-icon name="regular-search" size="16px" />
-                                    </span>
                                 </ct-block>
                             </div>
 
@@ -564,22 +561,15 @@ const currentUser = computed(() => {
 });
 
 const clearSearchTerm = () => {
+    searchTrendsRequestId += 1;
     showResultsContainer.value = false;
     showResultsSearchTrends.value = false;
     activeResultIndex.value = 0;
     activeResultColumn.value = 0;
 };
-const dismissSearchOverlays = () => {
-    searchTrendsRequestId += 1;
-    showResultsContainer.value = false;
-    showResultsSearchTrends.value = false;
-    showTypeSelectContainer.value = false;
-    showModuleFiltersContainer.value = false;
-    isActive.value = false;
-    searchInput.value?.blur();
-};
 const closeOnClickOutside = (event) => {
     if (!event.target.closest('.ct-search-bar')) {
+        isActive.value = false;
         clearSearchTerm();
         showTypeSelectContainer.value = false;
         showModuleFiltersContainer.value = false;
@@ -650,8 +640,13 @@ const getLabelSearchType = (type) => {
 
     return t(`global.entities.${type}`, 2);
 };
+const getSearchInputElement = () => searchInput.value?.$el?.querySelector('input') || searchInput.value;
 const setFocus = () => {
-    searchInput.value.focus();
+    getSearchInputElement()?.focus();
+};
+const onSearchTermUpdate = (value) => {
+    searchTerm.value = value;
+    onSearchTermChange();
 };
 const onFocusInput = () => {
     isActive.value = true;
@@ -749,7 +744,7 @@ function filterTypeSelectResults(term) {
 }
 const onClickType = (type) => {
     setSearchType(type);
-    searchInput.value.focus();
+    setFocus();
 };
 function setSearchType(type) {
     const searchTermValue = searchTerm.value.startsWith('#') ? '' : searchTerm.value;
@@ -1350,7 +1345,6 @@ swDefinePublic({
     registerListener,
     closeOnClickOutside,
     clearSearchTerm,
-    dismissSearchOverlays,
     showSearchFieldOnLargerViewports,
     onMouseOver,
     registerActiveItemIndexSelectHandler,
@@ -1443,7 +1437,6 @@ defineExpose({
     registerListener,
     closeOnClickOutside,
     clearSearchTerm,
-    dismissSearchOverlays,
     showSearchFieldOnLargerViewports,
     onMouseOver,
     registerActiveItemIndexSelectHandler,
