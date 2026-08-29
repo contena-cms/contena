@@ -493,6 +493,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
             initialSearch: 'shirt',
             ignoreRouteTerm: true,
         });
+        wrapper.vm.isActive = true;
 
         wrapper.vm.onRouteChange({
             query: {

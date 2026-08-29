@@ -1252,10 +1252,7 @@ function getInfoModuleFrequentlyUsed(key) {
 
 const onRouteChange = (newValue) => {
     if (props.ignoreRouteTerm) {
-        if (!isActive.value) {
-            searchTerm.value = '';
-        }
-
+        searchTerm.value = '';
         return;
     }
 
