@@ -401,3 +401,18 @@ $ct-search-bar-types-item-border-radius: $border-radius-default;
         }
     }
 }
+
+.ct-search-bar__floating-content {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+
+    .ct-search-bar__results,
+    .ct-search-bar__types_container,
+    .ct-search-bar__types_container--v2 {
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+}

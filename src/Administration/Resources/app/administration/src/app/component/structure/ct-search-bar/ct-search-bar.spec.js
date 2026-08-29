@@ -70,6 +70,17 @@ describe('src/app/component/structure/ct-search-bar', () => {
                     'ct-search-more-results': true,
                     'ct-search-bar-item': await wrapTestComponent('ct-search-bar-item', { sync: true }),
                     'ct-search-preferences-modal': true,
+                    'mt-floating-ui': {
+                        props: [
+                            'isOpened',
+                            'anchorElement',
+                            'matchReferenceWidth',
+                            'detached',
+                            'floatingUiOptions',
+                        ],
+                        emits: ['close'],
+                        template: '<div class="mt-floating-ui"><slot v-if="isOpened" /></div>',
+                    },
                     'mt-search': {
                         props: [
                             'modelValue',

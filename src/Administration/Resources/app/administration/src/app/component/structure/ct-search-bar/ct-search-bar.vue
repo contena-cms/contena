@@ -39,7 +39,7 @@
 
                     <ct-block name="sw_search_bar_field">
                         <div v-if="isSearchBarShown" class="ct-search-bar__field-wrapper" @click="setFocus">
-                            <div class="ct-search-bar__field" :class="searchBarFieldClasses">
+                            <div ref="searchBarField" class="ct-search-bar__field" :class="searchBarFieldClasses">
                                 <ct-block name="sw_search_bar_type">
                                     <span
                                         class="ct-search-bar__type--v2"
@@ -61,7 +61,7 @@
                                                 @focusin="onFocusInput"
                                                 @focusout="onBlur"
                                                 @keydown.delete="resetSearchType"
-                                                @keyup.esc="clearSearchTerm"
+                                                @keyup.esc="closeSearchOverlays"
                                                 @keyup.enter.prevent="onKeyUpEnter"
                                                 @keydown.up.prevent="navigateUpResults"
                                                 @keydown.down.prevent="navigateDownResults"
@@ -93,307 +93,338 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_search_bar_results">
-                        <div
-                            v-if="showResultsContainer"
-                            ref="resultsContainer"
-                            class="ct-search-bar__results ct-search-bar__results--v2"
-                            :class="{ 'is-empty-state': isResultEmpty() }"
-                        >
-                            <ct-block name="sw_search_bar_results_content">
-                                <div class="ct-search-bar__results-wrapper-content">
-                                    <ct-block name="sw_search_bar_results_empty_state">
-                                        <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
-                                        <mt-loader v-if="isLoading" />
+                    <mt-floating-ui
+                        :is-opened="isSearchOverlayOpened"
+                        :anchor-element="searchBarField"
+                        :match-reference-width="true"
+                        :detached="true"
+                        :floating-ui-options="{ placement: 'bottom-start', strategy: 'fixed' }"
+                        @close="closeSearchOverlays"
+                    >
+                        <div class="ct-search-bar__floating-content ct-search-bar">
+                            <ct-block name="sw_search_bar_results">
+                                <div
+                                    v-if="showResultsContainer"
+                                    ref="resultsContainer"
+                                    class="ct-search-bar__results ct-search-bar__results--v2"
+                                    :class="{ 'is-empty-state': isResultEmpty() }"
+                                >
+                                    <ct-block name="sw_search_bar_results_content">
+                                        <div class="ct-search-bar__results-wrapper-content">
+                                            <ct-block name="sw_search_bar_results_empty_state">
+                                                <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
+                                                <mt-loader v-if="isLoading" />
+                                            </ct-block>
+
+                                            <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks -->
+                                            <template v-if="isLoading"
+                                                ><!-- Keeps the conditional chain connected across ct-block. --></template
+                                            >
+                                            <template
+                                                v-for="(entity, column) in results"
+                                                v-else-if="!isResultEmpty()"
+                                                :key="entity.entity"
+                                            >
+                                                <ct-block name="sw_search_bar_results_list">
+                                                    <div class="ct-search-bar__results-column">
+                                                        <ct-block name="sw_search_bar_results_list_column">
+                                                            <ct-block name="sw_search_bar_results_list_column_header">
+                                                                <div class="ct-search-bar__results-column-header">
+                                                                    <ct-block
+                                                                        name="sw_search_bar_results_list_column_header_title"
+                                                                    >
+                                                                        <span class="ct-search-bar__types-header-entity">
+                                                                            {{
+                                                                                $t(
+                                                                                    `global.entities.${entity.entity}`,
+                                                                                    entity.total,
+                                                                                )
+                                                                            }}
+                                                                        </span>
+                                                                    </ct-block>
+                                                                </div>
+                                                            </ct-block>
+
+                                                            <!-- "34" below is the <ct-search-bar-item />'s height -->
+                                                            <ul
+                                                                class="ct-search-bar__results-list"
+                                                                :style="{ minHeight: `${34 * entity.entities.length}px` }"
+                                                            >
+                                                                <ct-search-bar-item
+                                                                    v-for="(item, index) in entity.entities"
+                                                                    :key="item.id"
+                                                                    :item="item"
+                                                                    :type="entity.entity"
+                                                                    :search-term="searchTerm"
+                                                                    :column="column"
+                                                                    :index="index"
+                                                                    :entity-icon-color="getEntityIconColor(entity.entity)"
+                                                                    :entity-icon-name="getEntityIconName(entity.entity)"
+                                                                />
+
+                                                                <ct-block name="sw_search_bar_results_list_bar_item">
+                                                                    <li
+                                                                        v-if="entity.entity !== 'module'"
+                                                                        class="ct-search-bar-item ct-search-bar-item--v2"
+                                                                    >
+                                                                        <ct-block
+                                                                            name="sw_search_bar_results_list_bar_item_icon"
+                                                                        >
+                                                                            <mt-icon
+                                                                                name="regular-double-chevron-right-s"
+                                                                                color="rgb(179, 191, 204)"
+                                                                            />
+                                                                        </ct-block>
+
+                                                                        <ct-block
+                                                                            name="sw_search_bar_results_list_bar_item_more_results"
+                                                                        >
+                                                                            <ct-search-more-results
+                                                                                :entity="entity.entity"
+                                                                                :term="searchTerm"
+                                                                            />
+                                                                        </ct-block>
+                                                                    </li>
+                                                                </ct-block>
+                                                            </ul>
+                                                        </ct-block>
+                                                    </div>
+                                                </ct-block>
+                                            </template>
+
+                                            <ct-block name="sw_search_bar_results_empty">
+                                                <template v-if="isLoading || !isResultEmpty()"
+                                                    ><!-- Keeps the conditional chain connected across ct-block. --></template
+                                                >
+                                                <div
+                                                    v-else
+                                                    class="ct-search-bar__results-empty-message ct-search-bar__results-empty-message--v2"
+                                                >
+                                                    <ct-block name="sw_search_bar_results_empty_content">
+                                                        <ct-block name="sw_search_bar_results_empty_text">
+                                                            <div class="ct-search-bar__results-empty-text">
+                                                                {{
+                                                                    $t(
+                                                                        'global.ct-search-bar.messageNoResultsV2',
+                                                                        { term: searchTerm },
+                                                                        0,
+                                                                    )
+                                                                }}
+                                                            </div>
+                                                        </ct-block>
+
+                                                        <ct-block name="sw_search_bar_results_empty_detail">
+                                                            <div class="ct-search-bar__results-empty-detail">
+                                                                {{ $t('global.ct-search-bar.messageNoResultsDetailV2') }}
+                                                            </div>
+                                                        </ct-block>
+                                                    </ct-block>
+                                                </div>
+                                            </ct-block>
+                                        </div>
                                     </ct-block>
 
-                                    <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks -->
-                                    <template v-if="isLoading"
-                                        ><!-- Keeps the conditional chain connected across ct-block. --></template
-                                    >
-                                    <template
-                                        v-for="(entity, column) in results"
-                                        v-else-if="!isResultEmpty()"
-                                        :key="entity.entity"
-                                    >
-                                        <ct-block name="sw_search_bar_results_list">
-                                            <div class="ct-search-bar__results-column">
-                                                <ct-block name="sw_search_bar_results_list_column">
-                                                    <ct-block name="sw_search_bar_results_list_column_header">
-                                                        <div class="ct-search-bar__results-column-header">
-                                                            <ct-block name="sw_search_bar_results_list_column_header_title">
-                                                                <span class="ct-search-bar__types-header-entity">
-                                                                    {{
-                                                                        $t(`global.entities.${entity.entity}`, entity.total)
-                                                                    }}
-                                                                </span>
-                                                            </ct-block>
-                                                        </div>
-                                                    </ct-block>
-
-                                                    <!-- "34" below is the <ct-search-bar-item />'s height -->
-                                                    <ul
-                                                        class="ct-search-bar__results-list"
-                                                        :style="{ minHeight: `${34 * entity.entities.length}px` }"
-                                                    >
-                                                        <ct-search-bar-item
-                                                            v-for="(item, index) in entity.entities"
-                                                            :key="item.id"
-                                                            :item="item"
-                                                            :type="entity.entity"
-                                                            :search-term="searchTerm"
-                                                            :column="column"
-                                                            :index="index"
-                                                            :entity-icon-color="getEntityIconColor(entity.entity)"
-                                                            :entity-icon-name="getEntityIconName(entity.entity)"
-                                                        />
-
-                                                        <ct-block name="sw_search_bar_results_list_bar_item">
-                                                            <li
-                                                                v-if="entity.entity !== 'module'"
-                                                                class="ct-search-bar-item ct-search-bar-item--v2"
-                                                            >
-                                                                <ct-block name="sw_search_bar_results_list_bar_item_icon">
-                                                                    <mt-icon
-                                                                        name="regular-double-chevron-right-s"
-                                                                        color="rgb(179, 191, 204)"
-                                                                    />
-                                                                </ct-block>
-
-                                                                <ct-block
-                                                                    name="sw_search_bar_results_list_bar_item_more_results"
-                                                                >
-                                                                    <ct-search-more-results
-                                                                        :entity="entity.entity"
-                                                                        :term="searchTerm"
-                                                                    />
-                                                                </ct-block>
-                                                            </li>
-                                                        </ct-block>
-                                                    </ul>
-                                                </ct-block>
-                                            </div>
-                                        </ct-block>
-                                    </template>
-
-                                    <ct-block name="sw_search_bar_results_empty">
-                                        <template v-if="isLoading || !isResultEmpty()"
-                                            ><!-- Keeps the conditional chain connected across ct-block. --></template
-                                        >
-                                        <div
-                                            v-else
-                                            class="ct-search-bar__results-empty-message ct-search-bar__results-empty-message--v2"
-                                        >
-                                            <ct-block name="sw_search_bar_results_empty_content">
-                                                <ct-block name="sw_search_bar_results_empty_text">
-                                                    <div class="ct-search-bar__results-empty-text">
-                                                        {{
-                                                            $t(
-                                                                'global.ct-search-bar.messageNoResultsV2',
-                                                                { term: searchTerm },
-                                                                0,
-                                                            )
-                                                        }}
-                                                    </div>
-                                                </ct-block>
-
-                                                <ct-block name="sw_search_bar_results_empty_detail">
-                                                    <div class="ct-search-bar__results-empty-detail">
-                                                        {{ $t('global.ct-search-bar.messageNoResultsDetailV2') }}
-                                                    </div>
-                                                </ct-block>
-                                            </ct-block>
+                                    <ct-block name="sw_search_bar_results_footer">
+                                        <div class="ct-search-bar__footer">
+                                            <mt-icon
+                                                name="regular-cog"
+                                                class="ct-search-bar__footer-action-setting"
+                                                color="var(--color-icon-primary-default)"
+                                                size="var(--scale-size-16)"
+                                                @click="toggleSearchPreferencesModal"
+                                            />
                                         </div>
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_results_footer">
-                                <div class="ct-search-bar__footer">
-                                    <mt-icon
-                                        name="regular-cog"
-                                        class="ct-search-bar__footer-action-setting"
-                                        color="var(--color-icon-primary-default)"
-                                        size="var(--scale-size-16)"
-                                        @click="toggleSearchPreferencesModal"
-                                    />
-                                </div>
-                            </ct-block>
-                        </div>
-                    </ct-block>
+                            <ct-block name="sw_search_bar_types_container">
+                                <div v-if="showTypeSelectContainer" class="ct-search-bar__types_container--v2">
+                                    <ct-block name="sw_search_bar_types_container_header">
+                                        <div class="ct-search-bar__header">
+                                            <p class="ct-search-bar__header-title">
+                                                {{ $t('global.ct-search-bar.moduleFiltersHeadline') }}
+                                            </p>
+                                        </div>
+                                    </ct-block>
+                                    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events vuejs-accessibility/mouse-events-have-key-events -->
+                                    <div
+                                        v-for="(type, index) in typeSelectResults"
+                                        :key="index"
+                                        class="ct-search-bar__type-item"
+                                        :class="{ 'is--active': activeTypeListIndex === index }"
+                                        role="row"
+                                        tabindex="0"
+                                        @mouseenter="onMouseEnterSearchType(index)"
+                                        @keydown.enter.prevent="onClickType(type.entityName)"
+                                        @click="onClickType(type.entityName)"
+                                    >
+                                        <span class="ct-search-bar__type-item-name">
+                                            <mt-icon
+                                                class="ct-search-bar__type-item-icon"
+                                                size="12px"
+                                                :style="{ color: getEntityIconColor(type.entityName) }"
+                                                :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
+                                            />
 
-                    <ct-block name="sw_search_bar_types_container">
-                        <div v-if="showTypeSelectContainer" class="ct-search-bar__types_container--v2">
-                            <ct-block name="sw_search_bar_types_container_header">
-                                <div class="ct-search-bar__header">
-                                    <p class="ct-search-bar__header-title">
-                                        {{ $t('global.ct-search-bar.moduleFiltersHeadline') }}
-                                    </p>
-                                </div>
-                            </ct-block>
-                            <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events vuejs-accessibility/mouse-events-have-key-events -->
-                            <div
-                                v-for="(type, index) in typeSelectResults"
-                                :key="index"
-                                class="ct-search-bar__type-item"
-                                :class="{ 'is--active': activeTypeListIndex === index }"
-                                role="row"
-                                tabindex="0"
-                                @mouseenter="onMouseEnterSearchType(index)"
-                                @keydown.enter.prevent="onClickType(type.entityName)"
-                                @click="onClickType(type.entityName)"
-                            >
-                                <span class="ct-search-bar__type-item-name">
-                                    <mt-icon
-                                        class="ct-search-bar__type-item-icon"
-                                        size="12px"
-                                        :style="{ color: getEntityIconColor(type.entityName) }"
-                                        :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
-                                    />
+                                            {{
+                                                type.entityName
+                                                    ? getLabelSearchType(type.entityName)
+                                                    : $t('global.ct-search-bar.searchTypeAll')
+                                            }}
+                                        </span>
 
-                                    {{
-                                        type.entityName
-                                            ? getLabelSearchType(type.entityName)
-                                            : $t('global.ct-search-bar.searchTypeAll')
-                                    }}
-                                </span>
+                                        <p class="ct-search-bar__type--filter">
+                                            {{ $t('global.ct-search-bar.moduleFilter') }}
+                                        </p>
+                                    </div>
 
-                                <p class="ct-search-bar__type--filter">
-                                    {{ $t('global.ct-search-bar.moduleFilter') }}
-                                </p>
-                            </div>
+                                    <ct-block name="sw_search_bar_types_container_empty">
+                                        <div
+                                            v-if="typeSelectResults.length < 1"
+                                            class="ct-search-bar__type-results-empty-message"
+                                        >
+                                            <ct-block name="sw_search_bar_types_container_empty_text">
+                                                {{ $t('global.ct-search-bar.messageNoTypeResults') }}
+                                            </ct-block>
+                                        </div>
+                                    </ct-block>
 
-                            <ct-block name="sw_search_bar_types_container_empty">
-                                <div v-if="typeSelectResults.length < 1" class="ct-search-bar__type-results-empty-message">
-                                    <ct-block name="sw_search_bar_types_container_empty_text">
-                                        {{ $t('global.ct-search-bar.messageNoTypeResults') }}
+                                    <ct-block name="sw_search_bar_types_container_footer">
+                                        <div class="ct-search-bar__footer">
+                                            <mt-icon
+                                                name="regular-cog"
+                                                class="ct-search-bar__footer-action-setting"
+                                                color="var(--color-icon-primary-default)"
+                                                size="var(--scale-size-16)"
+                                                @click="toggleSearchPreferencesModal"
+                                            />
+                                        </div>
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_types_container_footer">
-                                <div class="ct-search-bar__footer">
-                                    <mt-icon
-                                        name="regular-cog"
-                                        class="ct-search-bar__footer-action-setting"
-                                        color="var(--color-icon-primary-default)"
-                                        size="var(--scale-size-16)"
-                                        @click="toggleSearchPreferencesModal"
-                                    />
-                                </div>
-                            </ct-block>
-                        </div>
-                    </ct-block>
+                            <ct-block name="sw_search_bar_types_module_filters_container">
+                                <div
+                                    v-if="showModuleFiltersContainer"
+                                    class="ct-search-bar__types_module-filters-container ct-search-bar__types_container--v2"
+                                >
+                                    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events vuejs-accessibility/mouse-events-have-key-events -->
+                                    <div
+                                        v-for="(type, index) in typeSelectResults"
+                                        :key="index"
+                                        class="ct-search-bar__type-item"
+                                        :class="{ 'is--active': activeTypeListIndex === index }"
+                                        role="row"
+                                        tabindex="0"
+                                        @mouseenter="onMouseEnterSearchType(index)"
+                                        @keydown.enter.prevent="onClickType(type.entityName)"
+                                        @click="onClickType(type.entityName)"
+                                    >
+                                        <span class="ct-search-bar__type-item-name">
+                                            <mt-icon
+                                                class="ct-search-bar__type-item-icon"
+                                                size="14px"
+                                                :style="{ color: getEntityIconColor(type.entityName) }"
+                                                :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
+                                            />
+                                            {{
+                                                type.entityName
+                                                    ? getLabelSearchType(type.entityName)
+                                                    : $t('global.ct-search-bar.searchTypeAll')
+                                            }}
+                                        </span>
+                                    </div>
 
-                    <ct-block name="sw_search_bar_types_module_filters_container">
-                        <div
-                            v-if="showModuleFiltersContainer"
-                            class="ct-search-bar__types_module-filters-container ct-search-bar__types_container--v2"
-                        >
-                            <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events vuejs-accessibility/mouse-events-have-key-events -->
-                            <div
-                                v-for="(type, index) in typeSelectResults"
-                                :key="index"
-                                class="ct-search-bar__type-item"
-                                :class="{ 'is--active': activeTypeListIndex === index }"
-                                role="row"
-                                tabindex="0"
-                                @mouseenter="onMouseEnterSearchType(index)"
-                                @keydown.enter.prevent="onClickType(type.entityName)"
-                                @click="onClickType(type.entityName)"
-                            >
-                                <span class="ct-search-bar__type-item-name">
-                                    <mt-icon
-                                        class="ct-search-bar__type-item-icon"
-                                        size="14px"
-                                        :style="{ color: getEntityIconColor(type.entityName) }"
-                                        :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
-                                    />
-                                    {{
-                                        type.entityName
-                                            ? getLabelSearchType(type.entityName)
-                                            : $t('global.ct-search-bar.searchTypeAll')
-                                    }}
-                                </span>
-                            </div>
+                                    <ct-block name="sw_search_bar_types_module_filters_container_empty">
+                                        <div
+                                            v-if="typeSelectResults.length < 1"
+                                            class="ct-search-bar__type-results-empty-message"
+                                        >
+                                            <ct-block name="sw_search_bar_types_module_filters_container_empty_text">
+                                                {{ $t('global.ct-search-bar.messageNoTypeResults') }}
+                                            </ct-block>
+                                        </div>
+                                    </ct-block>
 
-                            <ct-block name="sw_search_bar_types_module_filters_container_empty">
-                                <div v-if="typeSelectResults.length < 1" class="ct-search-bar__type-results-empty-message">
-                                    <ct-block name="sw_search_bar_types_module_filters_container_empty_text">
-                                        {{ $t('global.ct-search-bar.messageNoTypeResults') }}
+                                    <ct-block name="sw_search_bar_types_module_filters_container_footer">
+                                        <div class="ct-search-bar__footer"></div>
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_types_module_filters_container_footer">
-                                <div class="ct-search-bar__footer"></div>
-                            </ct-block>
-                        </div>
-                    </ct-block>
-
-                    <ct-block name="sw_search_bar_trends_results">
-                        <div
-                            v-if="showResultsSearchTrends && !showResultsContainer"
-                            class="ct-search-bar__results ct-search-bar__results--v2"
-                        >
-                            <ct-block name="sw_search_bar_trends_results_content">
-                                <div class="ct-search-bar__results-wrapper-content">
-                                    <template v-for="(entity, column) in resultsSearchTrends" :key="entity.entity">
-                                        <ct-block name="sw_search_bar_trends_results_list">
-                                            <div class="ct-search-bar__results-column">
-                                                <ct-block name="sw_search_bar_trends_results_list_column">
-                                                    <ct-block name="sw_search_bar_trends_results_list_column_header">
-                                                        <div class="ct-search-bar__results-column-header">
-                                                            <ct-block
-                                                                name="sw_search_bar_trends_results_list_column_header_title"
-                                                            >
-                                                                <span class="ct-search-bar__types-header-entity">
-                                                                    {{
-                                                                        $t(`global.entities.${entity.entity}`, entity.total)
-                                                                    }}
-                                                                </span>
+                            <ct-block name="sw_search_bar_trends_results">
+                                <div
+                                    v-if="showResultsSearchTrends && !showResultsContainer"
+                                    class="ct-search-bar__results ct-search-bar__results--v2"
+                                >
+                                    <ct-block name="sw_search_bar_trends_results_content">
+                                        <div class="ct-search-bar__results-wrapper-content">
+                                            <template v-for="(entity, column) in resultsSearchTrends" :key="entity.entity">
+                                                <ct-block name="sw_search_bar_trends_results_list">
+                                                    <div class="ct-search-bar__results-column">
+                                                        <ct-block name="sw_search_bar_trends_results_list_column">
+                                                            <ct-block name="sw_search_bar_trends_results_list_column_header">
+                                                                <div class="ct-search-bar__results-column-header">
+                                                                    <ct-block
+                                                                        name="sw_search_bar_trends_results_list_column_header_title"
+                                                                    >
+                                                                        <span class="ct-search-bar__types-header-entity">
+                                                                            {{
+                                                                                $t(
+                                                                                    `global.entities.${entity.entity}`,
+                                                                                    entity.total,
+                                                                                )
+                                                                            }}
+                                                                        </span>
+                                                                    </ct-block>
+                                                                </div>
                                                             </ct-block>
-                                                        </div>
-                                                    </ct-block>
-                                                    <ul class="ct-search-bar__results-list">
-                                                        <ct-search-bar-item
-                                                            v-for="(item, index) in entity.entities"
-                                                            :key="index"
-                                                            :item="entity.entity === 'frequently_used' ? item : item.item"
-                                                            :type="
-                                                                entity.entity === 'frequently_used'
-                                                                    ? entity.entity
-                                                                    : item.entity
-                                                            "
-                                                            :search-term="searchTerm"
-                                                            :column="column"
-                                                            :index="index"
-                                                            :entity-icon-color="getEntityIconColor(item.entity)"
-                                                            :entity-icon-name="getEntityIconName(item.entity)"
-                                                        />
-                                                    </ul>
+                                                            <ul class="ct-search-bar__results-list">
+                                                                <ct-search-bar-item
+                                                                    v-for="(item, index) in entity.entities"
+                                                                    :key="index"
+                                                                    :item="
+                                                                        entity.entity === 'frequently_used'
+                                                                            ? item
+                                                                            : item.item
+                                                                    "
+                                                                    :type="
+                                                                        entity.entity === 'frequently_used'
+                                                                            ? entity.entity
+                                                                            : item.entity
+                                                                    "
+                                                                    :search-term="searchTerm"
+                                                                    :column="column"
+                                                                    :index="index"
+                                                                    :entity-icon-color="getEntityIconColor(item.entity)"
+                                                                    :entity-icon-name="getEntityIconName(item.entity)"
+                                                                />
+                                                            </ul>
+                                                        </ct-block>
+                                                    </div>
                                                 </ct-block>
-                                            </div>
-                                        </ct-block>
-                                    </template>
-                                </div>
-                            </ct-block>
+                                            </template>
+                                        </div>
+                                    </ct-block>
 
-                            <ct-block name="sw_search_bar_trends_results_empty_content"></ct-block>
+                                    <ct-block name="sw_search_bar_trends_results_empty_content"></ct-block>
 
-                            <ct-block name="sw_search_bar_trends_results_footer">
-                                <div class="ct-search-bar__footer">
-                                    <mt-icon
-                                        name="regular-cog"
-                                        class="ct-search-bar__footer-action-setting"
-                                        color="var(--color-icon-primary-default)"
-                                        size="var(--scale-size-16)"
-                                        @click="toggleSearchPreferencesModal"
-                                    />
+                                    <ct-block name="sw_search_bar_trends_results_footer">
+                                        <div class="ct-search-bar__footer">
+                                            <mt-icon
+                                                name="regular-cog"
+                                                class="ct-search-bar__footer-action-setting"
+                                                color="var(--color-icon-primary-default)"
+                                                size="var(--scale-size-16)"
+                                                @click="toggleSearchPreferencesModal"
+                                            />
+                                        </div>
+                                    </ct-block>
                                 </div>
                             </ct-block>
                         </div>
-                    </ct-block>
+                    </mt-floating-ui>
                 </div>
             </ct-block>
 
@@ -490,6 +521,7 @@ const userActivityApiService = inject('userActivityApiService');
 const recentlySearchService = inject('recentlySearchService');
 
 const currentSearchType = ref(props.initialSearchType);
+const searchBarField = ref(null);
 const showResultsContainer = ref(false);
 const showModuleFiltersContainer = ref(false);
 const searchTerm = ref(props.initialSearch);
@@ -513,7 +545,15 @@ const userSearchPreference = ref(null);
 const isComponentMounted = ref(true);
 const activeItemIndexSelectHandler = ref([]);
 const keyupEnterHandler = ref([]);
-let searchTrendsRequestId = 0;
+
+const isSearchOverlayOpened = computed(() => {
+    return (
+        showResultsContainer.value ||
+        showResultsSearchTrends.value ||
+        showTypeSelectContainer.value ||
+        showModuleFiltersContainer.value
+    );
+});
 
 const searchBarFieldClasses = computed(() => {
     return {
@@ -561,19 +601,19 @@ const currentUser = computed(() => {
 });
 
 const clearSearchTerm = () => {
-    searchTrendsRequestId += 1;
     showResultsContainer.value = false;
     showResultsSearchTrends.value = false;
     activeResultIndex.value = 0;
     activeResultColumn.value = 0;
 };
-const closeOnClickOutside = (event) => {
-    if (!event.target.closest('.ct-search-bar')) {
-        isActive.value = false;
-        clearSearchTerm();
-        showTypeSelectContainer.value = false;
-        showModuleFiltersContainer.value = false;
-    }
+const closeSearchOverlays = () => {
+    isActive.value = false;
+    clearSearchTerm();
+    showTypeSelectContainer.value = false;
+    showModuleFiltersContainer.value = false;
+};
+const closeOnClickOutside = () => {
+    closeSearchOverlays();
 };
 const showSearchFieldOnLargerViewports = () => {
     if ((device?.getViewportWidth() ?? Number.POSITIVE_INFINITY) > 500) {
@@ -581,11 +621,9 @@ const showSearchFieldOnLargerViewports = () => {
     }
 };
 const registerListener = () => {
-    document.addEventListener('click', closeOnClickOutside);
     Contena.Utils.EventBus.on('ct-admin-menu/toggle-offcanvas', onOffCanvasToggle);
 };
 const destroyedComponent = () => {
-    document.removeEventListener('click', closeOnClickOutside);
     Contena.Utils.EventBus.off('ct-admin-menu/toggle-offcanvas', onOffCanvasToggle);
     device?.removeResizeListener(instance?.proxy);
 };
@@ -650,7 +688,6 @@ const onSearchTermUpdate = (value) => {
 };
 const onFocusInput = () => {
     isActive.value = true;
-    const requestId = ++searchTrendsRequestId;
 
     if (searchTerm.value === '#') {
         showTypeContainer();
@@ -663,7 +700,7 @@ const onFocusInput = () => {
     }
 
     void loadSearchTrends().then((response) => {
-        if (!isActive.value || requestId !== searchTrendsRequestId) {
+        if (!isActive.value) {
             return;
         }
 
@@ -672,9 +709,14 @@ const onFocusInput = () => {
         showResultsSearchTrends.value = !!response?.length;
     });
 };
-const onBlur = () => {
-    isActive.value = false;
-    searchTrendsRequestId += 1;
+const onBlur = (event) => {
+    const nextFocusedElement = event?.relatedTarget;
+
+    if (nextFocusedElement?.closest?.('.ct-search-bar, .mt-floating-ui__content')) {
+        return;
+    }
+
+    closeSearchOverlays();
 };
 const showSearchBar = () => {
     isSearchBarShown.value = true;
@@ -685,8 +727,7 @@ const showSearchBar = () => {
 };
 const hideSearchBar = () => {
     isSearchBarShown.value = false;
-    isActive.value = false;
-    showResultsContainer.value = false;
+    closeSearchOverlays();
 };
 const onSearchTermChange = () => {
     const match = searchTerm.value.match(/^#(.*)/);
