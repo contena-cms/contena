@@ -38,6 +38,11 @@
             "IsAdmin .";
     }
 
+    .ct-users-user-detail__integration-table {
+        width: calc(100% - (var(--scale-size-16) * 2));
+        margin-inline: auto;
+    }
+
     .ct-users-user-detail__grid-name {
         grid-area: Name;
     }

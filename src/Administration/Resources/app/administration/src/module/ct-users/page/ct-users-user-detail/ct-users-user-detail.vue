@@ -270,6 +270,7 @@
                                 <template #grid>
                                     <ct-block name="ct_users_user_detail_key_grid">
                                         <mt-data-table
+                                            class="ct-users-user-detail__integration-table"
                                             :caption="translate('ct-users.user-detail.labelIntegrationsCard')"
                                             :data-source="integrations"
                                             :columns="integrationColumns"
