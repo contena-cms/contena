@@ -487,6 +487,22 @@ describe('src/app/component/structure/ct-search-bar', () => {
         expect(wrapper.vm.searchTerm).toBe('shirt');
     });
 
+    it('should isolate a module search field from route search terms when requested', async () => {
+        wrapper = await createWrapper({
+            initialSearchType: 'product',
+            initialSearch: 'shirt',
+            ignoreRouteTerm: true,
+        });
+
+        wrapper.vm.onRouteChange({
+            query: {
+                term: 'Foo product',
+            },
+        });
+
+        expect(wrapper.vm.searchTerm).toBe('');
+    });
+
     it('should update off-canvas state when admin menu toggles it', async () => {
         wrapper = await createWrapper();
 

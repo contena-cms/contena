@@ -53,7 +53,10 @@ describe('modules/ct-users/page/ct-users', () => {
                         },
                         'ct-search-bar': {
                             name: 'CtSearchBar',
-                            props: ['initialSearchType'],
+                            props: [
+                                'initialSearchType',
+                                'ignoreRouteTerm',
+                            ],
                             template: '<div class="global-search"></div>',
                         },
                         'ct-users-user-listing': {
@@ -124,6 +127,7 @@ describe('modules/ct-users/page/ct-users', () => {
         expect(wrapper.find('.user-listing').exists()).toBe(true);
         expect(wrapper.find('.global-search').exists()).toBe(true);
         expect(wrapper.findComponent({ name: 'CtSearchBar' }).props('initialSearchType')).toBe('user');
+        expect(wrapper.findComponent({ name: 'CtSearchBar' }).props('ignoreRouteTerm')).toBe(true);
         expect(wrapper.findComponent({ name: 'CtPage' }).props('showSmartBar')).toBe(false);
     });
 

@@ -3,7 +3,7 @@
         <ct-page class="ct-users" :show-smart-bar="false">
             <template #search-bar>
                 <ct-block name="ct_users_search_bar">
-                    <ct-search-bar initial-search-type="user" @search="onUserSearch" />
+                    <ct-search-bar initial-search-type="user" :ignore-route-term="true" @search="onUserSearch" />
                 </ct-block>
             </template>
 

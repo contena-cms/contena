@@ -448,6 +448,14 @@ const props = defineProps({
         default: '',
     },
     /**
+     * Keeps module-local search fields independent from the global route term.
+     */
+    ignoreRouteTerm: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    /**
      * Color of the entity tag in the search bar
      */
     entitySearchColor: {
@@ -588,7 +596,7 @@ const createdComponent = async () => {
         component: instance?.proxy,
     });
 
-    if ($route.query.term) {
+    if ($route.query.term && !props.ignoreRouteTerm) {
         searchTerm.value = $route.query.term;
     }
 
@@ -1243,6 +1251,14 @@ function getInfoModuleFrequentlyUsed(key) {
 }
 
 const onRouteChange = (newValue) => {
+    if (props.ignoreRouteTerm) {
+        if (!isActive.value) {
+            searchTerm.value = '';
+        }
+
+        return;
+    }
+
     // Use type search again when route changes and the term is undefined
     if (isComponentMounted.value === true && newValue.query.term === undefined && props.initialSearchType) {
         currentSearchType.value = props.initialSearchType;

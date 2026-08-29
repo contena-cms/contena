@@ -108,7 +108,7 @@
                                                 v-model="user.active"
                                                 name="ct-field--user-active"
                                                 class="ct-users-user-detail__grid-active"
-                                                :label="translate('ct-users.user-detail.labelActive')"
+                                                :label="translate('ct-users.filter.active')"
                                                 :disabled="
                                                     isCurrentUser || !acl.can('users_and_permissions.editor') || undefined
                                                 "

@@ -1,4 +1,4 @@
-@import '~scss/variables';
+@import "~scss/variables";
 
 .ct-users-user-detail {
     .ct-card-view__content {
@@ -20,22 +20,22 @@
 
     .ct-users-user-detail__information-grid {
         grid-template-areas:
-            'Name UserCode'
-            'PhoneNumber Gender'
-            'EMail Username'
-            'Password Active';
+            "Name UserCode"
+            "PhoneNumber Gender"
+            "EMail Username"
+            "Password Active";
     }
 
     .ct-users-user-detail__user-interface-grid {
         grid-template-areas:
-            'Language ProfilePicture'
-            'Timezone ProfilePicture';
+            "Language ProfilePicture"
+            "Timezone ProfilePicture";
     }
 
     .ct-users-user-detail__roles-permissions-grid {
         grid-template-areas:
-            'AclRoles JobTitle'
-            'IsAdmin .';
+            "AclRoles JobTitle"
+            "IsAdmin .";
     }
 
     .ct-users-user-detail__grid-name {
@@ -92,11 +92,7 @@
 
     .ct-users-user-detail__grid-active {
         grid-area: Active;
-    }
-
-    .mt-switch {
-        margin-top: 0;
-        margin-bottom: 0;
+        margin-top: var(--scale-size-24);
     }
 
     &__grid-timezone {

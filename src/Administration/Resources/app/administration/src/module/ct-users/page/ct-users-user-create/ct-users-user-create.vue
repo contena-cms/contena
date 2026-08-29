@@ -108,7 +108,7 @@
                                                 v-model="user.active"
                                                 name="ct-field--user-active"
                                                 class="ct-users-user-detail__grid-active"
-                                                :label="$t('ct-users.user-detail.labelActive')"
+                                                :label="$t('ct-users.filter.active')"
                                                 :disabled="!acl.can('users_and_permissions.editor') || undefined"
                                             />
                                         </ct-block>

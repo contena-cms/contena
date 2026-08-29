@@ -128,6 +128,7 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(table.props('disableDelete')).toBe(false);
         expect(table.props('disableSearch')).toBe('');
         expect(table.props('layout')).toBe('full');
+        expect(table.props('sortBy')).toBeNull();
         expect(table.props('columns')).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ property: 'username', renderer: 'text', position: 100 }),

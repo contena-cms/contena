@@ -173,7 +173,7 @@ const isDeleting = ref(false);
 const itemToDelete = ref(null);
 const itemsToDelete = ref([]);
 const disableRouteParams = ref(true);
-const sortBy = ref('username');
+const sortBy = ref(null);
 const roles = ref([]);
 const statusFilter = ref('all');
 const roleFilter = ref([]);
@@ -197,11 +197,9 @@ const userCriteria = computed(() => {
         criteria.setTerm(term.value);
     }
 
-    if (sortBy.value) {
-        // Criteria is a local mutable query object, not component state.
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        criteria.addSorting(Criteria.sort(sortBy.value, sortDirection.value || 'ASC'));
-    }
+    // Keep the initial data order stable without marking a table column as actively sorted.
+    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+    criteria.addSorting(Criteria.sort(sortBy.value || 'username', sortDirection.value || 'ASC'));
 
     if (statusFilter.value !== 'all') {
         criteria.addFilter(Criteria.equals('active', statusFilter.value === 'active'));

@@ -66,6 +66,7 @@
             "errorUsernameUsed": "This username is already in use.",
             "labelUsername": "User name",
             "labelPassword": "Password",
+            "labelActive": "Active",
             "labelProfilePicture": "Profile picture",
             "labelUserInterface": "User interface",
             "labelLanguage": "User interface language",

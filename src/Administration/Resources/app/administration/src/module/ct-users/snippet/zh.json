@@ -66,6 +66,7 @@
             "errorUsernameUsed": "此用户名已被使用。",
             "labelUsername": "用户名",
             "labelPassword": "密码",
+            "labelActive": "启用",
             "labelProfilePicture": "头像",
             "labelUserInterface": "界面设置",
             "labelLanguage": "界面语言",
