@@ -359,6 +359,35 @@ describe('src/app/component/structure/ct-search-bar', () => {
         expect(activeType.text()).toBe('global.entities.product');
     });
 
+    it('dismisses search overlays without changing the current term', async () => {
+        wrapper = await createWrapper({ initialSearch: 'supperadmin' });
+        wrapper.vm.showResultsContainer = true;
+        wrapper.vm.showResultsSearchTrends = true;
+        wrapper.vm.showTypeSelectContainer = true;
+        wrapper.vm.showModuleFiltersContainer = true;
+        wrapper.vm.isActive = true;
+
+        wrapper.vm.dismissSearchOverlays();
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.searchTerm).toBe('supperadmin');
+        expect(wrapper.vm.showResultsContainer).toBe(false);
+        expect(wrapper.vm.showResultsSearchTrends).toBe(false);
+        expect(wrapper.vm.showTypeSelectContainer).toBe(false);
+        expect(wrapper.vm.showModuleFiltersContainer).toBe(false);
+        expect(wrapper.vm.isActive).toBe(false);
+    });
+
+    it('does not reopen search trends after the input loses focus', async () => {
+        wrapper = await createWrapper();
+
+        wrapper.vm.onFocusInput();
+        wrapper.vm.dismissSearchOverlays();
+        await flushPromises();
+
+        expect(wrapper.vm.showResultsSearchTrends).toBe(false);
+    });
+
     it('should hide the tags and not show the search results when initialSearchType and currentSearchType matches', async () => {
         wrapper = await createWrapper({
             initialSearchType: 'product',

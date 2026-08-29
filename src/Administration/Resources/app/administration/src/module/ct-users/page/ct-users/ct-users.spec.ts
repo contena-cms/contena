@@ -21,6 +21,7 @@ interface UserPageVm {
 
 describe('modules/ct-users/page/ct-users', () => {
     let wrapper: VueWrapper<UserPageVm>;
+    const dismissSearchOverlaysMock = jest.fn();
 
     async function createWrapper(privileges: string[] = []) {
         wrapper = mount(
@@ -57,6 +58,11 @@ describe('modules/ct-users/page/ct-users', () => {
                                 'initialSearchType',
                                 'ignoreRouteTerm',
                             ],
+                            setup() {
+                                return {
+                                    dismissSearchOverlays: dismissSearchOverlaysMock,
+                                };
+                            },
                             template: '<div class="global-search"></div>',
                         },
                         'ct-users-user-listing': {
@@ -116,6 +122,7 @@ describe('modules/ct-users/page/ct-users', () => {
     }
 
     beforeEach(async () => {
+        dismissSearchOverlaysMock.mockClear();
         await createWrapper();
     });
 
@@ -147,6 +154,7 @@ describe('modules/ct-users/page/ct-users', () => {
 
         expect(wrapper.vm.userFormMode).toBe('create');
         expect(wrapper.find('.user-create-drawer').exists()).toBe(true);
+        expect(dismissSearchOverlaysMock).toHaveBeenCalled();
     });
 
     it('opens the selected user in the right drawer', async () => {
@@ -155,6 +163,7 @@ describe('modules/ct-users/page/ct-users', () => {
 
         expect(wrapper.vm.userFormMode).toBe('edit');
         expect(wrapper.findComponent({ name: 'CtUsersUserDetail' }).props('initialUserId')).toBe('user-42');
+        expect(dismissSearchOverlaysMock).toHaveBeenCalled();
     });
 
     it('opens the create drawer from the listing toolbar action', async () => {

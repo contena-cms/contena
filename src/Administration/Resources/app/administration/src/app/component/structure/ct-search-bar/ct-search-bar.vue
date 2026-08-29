@@ -516,6 +516,7 @@ const userSearchPreference = ref(null);
 const isComponentMounted = ref(true);
 const activeItemIndexSelectHandler = ref([]);
 const keyupEnterHandler = ref([]);
+let searchTrendsRequestId = 0;
 
 const searchBarFieldClasses = computed(() => {
     return {
@@ -567,6 +568,15 @@ const clearSearchTerm = () => {
     showResultsSearchTrends.value = false;
     activeResultIndex.value = 0;
     activeResultColumn.value = 0;
+};
+const dismissSearchOverlays = () => {
+    searchTrendsRequestId += 1;
+    showResultsContainer.value = false;
+    showResultsSearchTrends.value = false;
+    showTypeSelectContainer.value = false;
+    showModuleFiltersContainer.value = false;
+    isActive.value = false;
+    searchInput.value?.blur();
 };
 const closeOnClickOutside = (event) => {
     if (!event.target.closest('.ct-search-bar')) {
@@ -645,6 +655,7 @@ const setFocus = () => {
 };
 const onFocusInput = () => {
     isActive.value = true;
+    const requestId = ++searchTrendsRequestId;
 
     if (searchTerm.value === '#') {
         showTypeContainer();
@@ -657,6 +668,10 @@ const onFocusInput = () => {
     }
 
     void loadSearchTrends().then((response) => {
+        if (!isActive.value || requestId !== searchTrendsRequestId) {
+            return;
+        }
+
         resultsSearchTrends.value = response;
 
         showResultsSearchTrends.value = !!response?.length;
@@ -664,6 +679,7 @@ const onFocusInput = () => {
 };
 const onBlur = () => {
     isActive.value = false;
+    searchTrendsRequestId += 1;
 };
 const showSearchBar = () => {
     isSearchBarShown.value = true;
@@ -1334,6 +1350,7 @@ swDefinePublic({
     registerListener,
     closeOnClickOutside,
     clearSearchTerm,
+    dismissSearchOverlays,
     showSearchFieldOnLargerViewports,
     onMouseOver,
     registerActiveItemIndexSelectHandler,
@@ -1426,6 +1443,7 @@ defineExpose({
     registerListener,
     closeOnClickOutside,
     clearSearchTerm,
+    dismissSearchOverlays,
     showSearchFieldOnLargerViewports,
     onMouseOver,
     registerActiveItemIndexSelectHandler,
