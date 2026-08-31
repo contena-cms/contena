@@ -21,16 +21,15 @@
         </ct-page>
     </ct-block>
 
-    <span v-if="userFormMode" class="ct-users__drawer-marker" aria-hidden="true"></span>
-    <ct-block name="ct_users_user_form_drawer">
+    <ct-block name="ct_users_user_form_modal">
         <mt-modal-root v-if="userFormMode" :is-open="true" @change="onCloseUserForm">
-            <ct-block name="ct_users_user_form_drawer_content">
+            <ct-block name="ct_users_user_form_modal_content">
                 <mt-modal :title="userFormTitle" width="l">
                     <ct-users-user-detail v-if="userFormMode === 'edit'" ref="userForm" :initial-user-id="userFormId" />
                     <ct-users-user-create v-else ref="userForm" />
 
                     <template #footer>
-                        <ct-block name="ct_users_user_form_drawer_footer">
+                        <ct-block name="ct_users_user_form_modal_footer">
                             <mt-button variant="secondary" @click="onCloseUserForm">
                                 {{ $t('global.default.cancel') }}
                             </mt-button>
@@ -175,33 +174,3 @@ defineExpose({
     onSaveUserForm,
 });
 </script>
-
-<style lang="scss">
-body:has(.ct-users__drawer-marker) > .mt-modal {
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: auto !important;
-    width: min(64rem, calc(100vw - 1rem)) !important;
-    height: 100dvh !important;
-    max-height: 100dvh !important;
-    border-radius: 0 !important;
-    translate: none !important;
-}
-
-body:has(.ct-users__drawer-marker) > .mt-modal .mt-modal__content {
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-body:has(.ct-users__drawer-marker) > .mt-modal .mt-modal__content-inner {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100%;
-}
-
-body:has(.ct-users__drawer-marker) > .mt-modal .ct-card-view {
-    min-height: 0;
-}
-</style>

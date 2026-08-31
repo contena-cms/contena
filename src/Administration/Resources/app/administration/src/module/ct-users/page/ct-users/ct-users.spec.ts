@@ -83,10 +83,10 @@ describe('modules/ct-users/page/ct-users', () => {
                         'ct-users-user-detail': {
                             name: 'CtUsersUserDetail',
                             props: ['initialUserId'],
-                            template: '<div class="user-detail-drawer" />',
+                            template: '<div class="user-detail-modal" />',
                         },
                         'ct-users-user-create': {
-                            template: '<div class="user-create-drawer" />',
+                            template: '<div class="user-create-modal" />',
                         },
                         'mt-modal-root': {
                             template: '<div class="modal-root"><slot /></div>',
@@ -141,15 +141,15 @@ describe('modules/ct-users/page/ct-users', () => {
         expect(onSearch).toHaveBeenCalledWith('alex');
     });
 
-    it('opens the create form in the right drawer', async () => {
+    it('opens the create form in a modal', async () => {
         (wrapper.vm as unknown as { onCreateUser: () => void }).onCreateUser();
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.userFormMode).toBe('create');
-        expect(wrapper.find('.user-create-drawer').exists()).toBe(true);
+        expect(wrapper.find('.user-create-modal').exists()).toBe(true);
     });
 
-    it('opens the selected user in the right drawer', async () => {
+    it('opens the selected user in a modal', async () => {
         wrapper.vm.onEditUser({ id: 'user-42' });
         await wrapper.vm.$nextTick();
 
@@ -157,11 +157,11 @@ describe('modules/ct-users/page/ct-users', () => {
         expect(wrapper.findComponent({ name: 'CtUsersUserDetail' }).props('initialUserId')).toBe('user-42');
     });
 
-    it('opens the create drawer from the listing toolbar action', async () => {
+    it('opens the create modal from the listing toolbar action', async () => {
         await wrapper.find('.ct-users__create-user').trigger('click');
 
         expect(wrapper.vm.userFormMode).toBe('create');
-        expect(wrapper.find('.user-create-drawer').exists()).toBe(true);
+        expect(wrapper.find('.user-create-modal').exists()).toBe(true);
     });
 
     it('forwards status filter changes and keeps the selection visible', async () => {
