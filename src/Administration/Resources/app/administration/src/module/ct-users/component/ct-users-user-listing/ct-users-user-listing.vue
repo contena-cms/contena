@@ -37,9 +37,9 @@
                 @update:applied-filters="onAppliedFiltersChange"
                 @context-select="onContextSelect"
             >
-                <template #column-user="{ data: item }">
+                <template #column-username="{ data: item }">
                     <span class="ct-users-user-listing__username-click-target">
-                        <ct-block name="ct_users_user_list_column_user">
+                        <ct-block name="ct_users_user_list_column_username">
                             <mt-link
                                 as="button"
                                 type="button"
@@ -47,10 +47,7 @@
                                 @click.prevent="emit('edit', item)"
                             >
                                 <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
-                                <span class="ct-users-user-listing__user-details">
-                                    <span>{{ item.name || '-' }}</span>
-                                    <span>{{ item.username || '-' }}</span>
-                                </span>
+                                {{ item.username }}
                             </mt-link>
                         </ct-block>
                     </span>
@@ -59,15 +56,6 @@
                 <template #column-aclRoles="{ data: item }">
                     <ct-block name="ct_users_user_list_column_acl_roles">
                         {{ item.aclRoles?.map((role) => role.name).join(', ') || '' }}
-                    </ct-block>
-                </template>
-
-                <template #column-contact="{ data: item }">
-                    <ct-block name="ct_users_user_list_column_contact">
-                        <div class="ct-users-user-listing__contact">
-                            <span>{{ $t('ct-users.user-grid.labelEmail') }}: {{ item.email || '-' }}</span>
-                            <span>{{ $t('ct-users.user-grid.labelPhoneNumber') }}: {{ item.phoneNumber || '-' }}</span>
-                        </div>
                     </ct-block>
                 </template>
 
@@ -234,11 +222,11 @@ const userCriteria = computed(() => {
 const userColumns = computed(() => {
     return [
         {
-            property: 'user',
-            label: t('ct-users.user-grid.labelUser'),
+            property: 'username',
+            label: t('ct-users.user-grid.labelUsername'),
             position: 100,
             renderer: 'text',
-            width: 240,
+            width: 220,
         },
         {
             property: 'userCode',
@@ -248,25 +236,38 @@ const userColumns = computed(() => {
             width: 160,
         },
         {
-            property: 'contact',
-            sortable: false,
-            label: t('ct-users.user-grid.labelContact'),
+            property: 'name',
+            label: t('ct-users.user-grid.labelName'),
             position: 300,
             renderer: 'text',
-            width: 240,
+            width: 220,
+        },
+        {
+            property: 'phoneNumber',
+            label: t('ct-users.user-grid.labelPhoneNumber'),
+            position: 400,
+            renderer: 'text',
+            width: 180,
         },
         {
             property: 'aclRoles',
             sortable: false,
             label: t('ct-users.user-grid.labelRoles'),
-            position: 400,
+            position: 500,
             renderer: 'text',
             width: 220,
         },
         {
+            property: 'email',
+            label: t('ct-users.user-grid.labelEmail'),
+            position: 600,
+            renderer: 'text',
+            width: 260,
+        },
+        {
             property: 'active',
             label: t('ct-users.user-grid.status'),
-            position: 500,
+            position: 700,
             renderer: 'text',
             width: 130,
         },
@@ -662,14 +663,4 @@ defineExpose({
     margin-bottom: var(--scale-size-24);
 }
 
-.ct-users-user-listing__contact {
-    display: grid;
-    gap: var(--scale-size-4);
-}
-
-.ct-users-user-listing__user-details {
-    display: grid;
-    gap: var(--scale-size-4);
-    text-align: start;
-}
 </style>

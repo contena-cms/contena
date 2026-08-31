@@ -89,9 +89,8 @@ async function createWrapper(privileges = []) {
                     template: `
                             <div class="mt-data-table">
                                 <div v-for="item in dataSource" :key="item.id" class="mt-data-table__row">
-                                    <slot name="column-user" :data="item" />
+                                    <slot name="column-username" :data="item" />
                                     <slot name="column-aclRoles" :data="item" />
-                                    <slot name="column-contact" :data="item" />
                                     <slot name="column-active" :data="item" />
                                 </div>
                                 <slot name="toolbar" />
@@ -132,14 +131,11 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(table.props('sortBy')).toBeNull();
         expect(table.props('columns')).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ property: 'user', renderer: 'text', position: 100 }),
-                expect.objectContaining({
-                    property: 'contact',
-                    label: 'ct-users.user-grid.labelContact',
-                    position: 300,
-                    sortable: false,
-                }),
-                expect.objectContaining({ property: 'active', renderer: 'text', position: 500 }),
+                expect.objectContaining({ property: 'username', renderer: 'text', position: 100 }),
+                expect.objectContaining({ property: 'name', renderer: 'text', position: 300 }),
+                expect.objectContaining({ property: 'phoneNumber', renderer: 'text', position: 400 }),
+                expect.objectContaining({ property: 'email', renderer: 'text', position: 600 }),
+                expect.objectContaining({ property: 'active', renderer: 'text', position: 700 }),
             ]),
         );
     });
@@ -165,19 +161,6 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
 
         await createButton.trigger('click');
         expect(wrapper.emitted('create')).toEqual([[]]);
-    });
-
-    it('renders contact details on two lines with fallbacks', async () => {
-        const { wrapper } = await createWrapper();
-        await flushPromises();
-
-        const contacts = wrapper.findAll('.ct-users-user-listing__contact');
-
-        expect(contacts).toHaveLength(2);
-        expect(contacts[0].text()).toContain('max@mustermann.com');
-        expect(contacts[0].text()).toContain('13800138000');
-        expect(contacts[1].text()).toContain('info@contena.cn');
-        expect(contacts[1].text()).toContain('-');
     });
 
     it('exposes status and role filters to the mt data table', async () => {

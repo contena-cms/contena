@@ -1,6 +1,4 @@
 import { ADMIN_MENU_ROOTS } from 'src/core/constant/admin-menu.constant';
-import enGB from './snippet/en.json';
-import zhCN from './snippet/zh.json';
 
 /* eslint-disable ct-deprecation-rules/private-feature-declarations */
 Contena.Component.register('ct-users', () => import('./page/ct-users'));
@@ -21,11 +19,6 @@ Contena.Module.register('ct-users', {
     icon: 'regular-user',
     favicon: 'icon-module-settings.png',
     entity: 'user',
-    snippets: {
-        'en-GB': enGB,
-        'zh-CN': zhCN,
-    },
-
     routes: {
         index: {
             component: 'ct-users',
