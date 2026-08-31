@@ -25,6 +25,7 @@
             "labelUserCode": "用户编码",
             "labelUsername": "用户名",
             "labelName": "姓名",
+            "labelContact": "联系方式",
             "labelPhoneNumber": "手机号",
             "labelGender": "性别",
             "labelGenderPlaceholder": "选择性别...",

@@ -25,6 +25,7 @@
             "labelUserCode": "User code",
             "labelUsername": "User name",
             "labelName": "Name",
+            "labelContact": "Contact",
             "labelPhoneNumber": "Phone number",
             "labelGender": "Gender",
             "labelGenderPlaceholder": "Choose gender...",

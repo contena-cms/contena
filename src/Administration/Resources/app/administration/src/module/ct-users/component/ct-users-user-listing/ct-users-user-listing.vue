@@ -59,6 +59,15 @@
                     </ct-block>
                 </template>
 
+                <template #column-contact="{ data: item }">
+                    <ct-block name="ct_users_user_list_column_contact">
+                        <div class="ct-users-user-listing__contact">
+                            <span>{{ $t('ct-users.user-grid.labelEmail') }}: {{ item.email || '-' }}</span>
+                            <span>{{ $t('ct-users.user-grid.labelPhoneNumber') }}: {{ item.phoneNumber || '-' }}</span>
+                        </div>
+                    </ct-block>
+                </template>
+
                 <template #column-active="{ data: item }">
                     <ct-block name="ct_users_user_list_column_active">
                         <mt-badge :variant="item.active ? 'positive' : 'critical'" size="s">
@@ -243,11 +252,12 @@ const userColumns = computed(() => {
             width: 220,
         },
         {
-            property: 'phoneNumber',
-            label: t('ct-users.user-grid.labelPhoneNumber'),
+            property: 'contact',
+            sortable: false,
+            label: t('ct-users.user-grid.labelContact'),
             position: 400,
             renderer: 'text',
-            width: 180,
+            width: 240,
         },
         {
             property: 'aclRoles',
@@ -256,13 +266,6 @@ const userColumns = computed(() => {
             position: 500,
             renderer: 'text',
             width: 220,
-        },
-        {
-            property: 'email',
-            label: t('ct-users.user-grid.labelEmail'),
-            position: 600,
-            renderer: 'text',
-            width: 260,
         },
         {
             property: 'active',
@@ -661,5 +664,10 @@ defineExpose({
 
 .ct-users-user-listing__confirm-delete-text {
     margin-bottom: var(--scale-size-24);
+}
+
+.ct-users-user-listing__contact {
+    display: grid;
+    gap: var(--scale-size-4);
 }
 </style>

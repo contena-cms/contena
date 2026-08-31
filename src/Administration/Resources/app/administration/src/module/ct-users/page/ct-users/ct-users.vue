@@ -174,3 +174,31 @@ defineExpose({
     onSaveUserForm,
 });
 </script>
+
+<style lang="scss">
+.mt-modal:has(.ct-users-user-detail),
+.mt-modal:has(.ct-users-user-create) {
+    height: min(960px, calc(100dvh - 32px));
+    max-height: calc(100dvh - 32px);
+
+    .mt-modal__content {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .mt-modal__content-inner {
+        height: 100%;
+        padding: 0;
+    }
+
+    .ct-users-user-detail,
+    .ct-card-view {
+        position: relative;
+        height: 100%;
+    }
+
+    .ct-card-view__content {
+        height: 100%;
+    }
+}
+</style>
