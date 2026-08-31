@@ -37,9 +37,9 @@
                 @update:applied-filters="onAppliedFiltersChange"
                 @context-select="onContextSelect"
             >
-                <template #column-username="{ data: item }">
+                <template #column-user="{ data: item }">
                     <span class="ct-users-user-listing__username-click-target">
-                        <ct-block name="ct_users_user_list_column_username">
+                        <ct-block name="ct_users_user_list_column_user">
                             <mt-link
                                 as="button"
                                 type="button"
@@ -47,7 +47,10 @@
                                 @click.prevent="emit('edit', item)"
                             >
                                 <mt-avatar size="xs" :name="item.name" variant="square" :image-url="item.avatarMedia?.url" />
-                                {{ item.username }}
+                                <span class="ct-users-user-listing__user-details">
+                                    <span>{{ item.name || '-' }}</span>
+                                    <span>{{ item.username || '-' }}</span>
+                                </span>
                             </mt-link>
                         </ct-block>
                     </span>
@@ -231,11 +234,11 @@ const userCriteria = computed(() => {
 const userColumns = computed(() => {
     return [
         {
-            property: 'username',
-            label: t('ct-users.user-grid.labelUsername'),
+            property: 'user',
+            label: t('ct-users.user-grid.labelUser'),
             position: 100,
             renderer: 'text',
-            width: 220,
+            width: 240,
         },
         {
             property: 'userCode',
@@ -245,17 +248,10 @@ const userColumns = computed(() => {
             width: 160,
         },
         {
-            property: 'name',
-            label: t('ct-users.user-grid.labelName'),
-            position: 300,
-            renderer: 'text',
-            width: 220,
-        },
-        {
             property: 'contact',
             sortable: false,
             label: t('ct-users.user-grid.labelContact'),
-            position: 400,
+            position: 300,
             renderer: 'text',
             width: 240,
         },
@@ -263,14 +259,14 @@ const userColumns = computed(() => {
             property: 'aclRoles',
             sortable: false,
             label: t('ct-users.user-grid.labelRoles'),
-            position: 500,
+            position: 400,
             renderer: 'text',
             width: 220,
         },
         {
             property: 'active',
             label: t('ct-users.user-grid.status'),
-            position: 700,
+            position: 500,
             renderer: 'text',
             width: 130,
         },
@@ -669,5 +665,11 @@ defineExpose({
 .ct-users-user-listing__contact {
     display: grid;
     gap: var(--scale-size-4);
+}
+
+.ct-users-user-listing__user-details {
+    display: grid;
+    gap: var(--scale-size-4);
+    text-align: start;
 }
 </style>

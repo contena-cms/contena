@@ -89,7 +89,7 @@ async function createWrapper(privileges = []) {
                     template: `
                             <div class="mt-data-table">
                                 <div v-for="item in dataSource" :key="item.id" class="mt-data-table__row">
-                                    <slot name="column-username" :data="item" />
+                                    <slot name="column-user" :data="item" />
                                     <slot name="column-aclRoles" :data="item" />
                                     <slot name="column-contact" :data="item" />
                                     <slot name="column-active" :data="item" />
@@ -132,19 +132,19 @@ describe('module/ct-users/component/ct-users-user-listing', () => {
         expect(table.props('sortBy')).toBeNull();
         expect(table.props('columns')).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ property: 'username', renderer: 'text', position: 100 }),
+                expect.objectContaining({ property: 'user', renderer: 'text', position: 100 }),
                 expect.objectContaining({
                     property: 'contact',
                     label: 'ct-users.user-grid.labelContact',
-                    position: 400,
+                    position: 300,
                     sortable: false,
                 }),
-                expect.objectContaining({ property: 'active', renderer: 'text', position: 700 }),
+                expect.objectContaining({ property: 'active', renderer: 'text', position: 500 }),
             ]),
         );
     });
 
-    it('opens the edit drawer from a username without navigating', async () => {
+    it('opens the edit modal from a user without navigating', async () => {
         const { wrapper, router } = await createWrapper(['users_and_permissions.viewer']);
         await flushPromises();
 
