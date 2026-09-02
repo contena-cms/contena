@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_settings_rule_list">
+    <ct-block name="ct_settings_rule_list">
         <ct-page class="ct-settings-rule-list">
             <template #search-bar>
-                <ct-block name="sw_settings_rule_list_search">
+                <ct-block name="ct_settings_rule_list_search">
                     <mt-search :model-value="term" :placeholder="$t('ct-settings-rule.list.search')" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_rule_list_header">
+                <ct-block name="ct_settings_rule_list_header">
                     <h2>
                         {{ $t('ct-settings-rule.list.title') }} <span v-if="!isLoading">({{ rules?.total ?? 0 }})</span>
                     </h2>
@@ -16,7 +16,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_rule_list_actions">
+                <ct-block name="ct_settings_rule_list_actions">
                     <mt-button variant="primary" :disabled="!acl?.can('rule.creator') || undefined" @click="onCreate">
                         {{ $t('global.default.add') }}
                     </mt-button>
@@ -24,7 +24,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_rule_list_content">
+                <ct-block name="ct_settings_rule_list_content">
                     <mt-data-table
                         layout="full"
                         :caption="$t('ct-settings-rule.list.title')"
@@ -261,7 +261,7 @@ onMounted(() => {
     void load();
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     ruleRepository,
     rules,

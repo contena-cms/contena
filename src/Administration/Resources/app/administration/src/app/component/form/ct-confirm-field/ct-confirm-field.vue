@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_confirm_field">
+    <ct-block name="ct_confirm_field">
         <div class="ct-confirm-field" :class="confirmFieldClasses">
-            <ct-block name="sw_confirm_field_input_field">
+            <ct-block name="ct_confirm_field_input_field">
                 <mt-text-field
                     v-model="draft"
                     v-bind="$attrs"
@@ -17,9 +17,9 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_confirm_field_button_list">
+            <ct-block name="ct_confirm_field_button_list">
                 <span v-show="isEditing" class="ct-confirm-field__button-list">
-                    <ct-block name="sw_confirm_field_cancel_button">
+                    <ct-block name="ct_confirm_field_cancel_button">
                         <mt-button
                             :disabled="disabled"
                             class="ct-confirm-field__button ct-confirm-field__button--cancel"
@@ -29,13 +29,13 @@
                             variant="secondary"
                             @click="onCancelSubmit"
                         >
-                            <ct-block name="sw_field_inline_cancel_submit_button_icon">
+                            <ct-block name="ct_field_inline_cancel_submit_button_icon">
                                 <mt-icon size="10px" name="regular-times-xs" />
                             </ct-block>
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_confirm_field_confirm_button">
+                    <ct-block name="ct_confirm_field_confirm_button">
                         <mt-button
                             class="ct-confirm-field__button ct-confirm-field__button--submit"
                             :disabled="(preventEmptySubmit && !draft) || disabled"
@@ -45,7 +45,7 @@
                             tabindex="-1"
                             @click="onSubmitValue"
                         >
-                            <ct-block name="sw_field_inline_submit_button_icon">
+                            <ct-block name="ct_field_inline_submit_button_icon">
                                 <mt-icon size="10px" name="regular-checkmark-xxs" />
                             </ct-block>
                         </mt-button>
@@ -176,7 +176,7 @@ onBeforeUnmount(() => {
     emit('remove-error');
 });
 
-swDefinePublic({
+ctDefinePublic({
     hasSubmittedFromKey,
     isEditing,
     draft,

@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_mail_template_list">
+    <ct-block name="ct_mail_template_list">
         <ct-page class="ct-mail-template-index">
             <template #search-bar>
-                <ct-block name="sw_mail_templates_list_search_bar">
+                <ct-block name="ct_mail_templates_list_search_bar">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_mail_template_list_smart_bar_header">
+                <ct-block name="ct_mail_template_list_smart_bar_header">
                     <h2>{{ $t('ct-mail-template.list.textMailTemplateOverview') }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_mail_template_list_smart_bar_actions">
+                <ct-block name="ct_mail_template_list_smart_bar_actions">
                     <ct-button-group split-button>
                         <mt-button variant="primary" :disabled="!canCreate || undefined" @click="onCreateTemplate">
                             {{ $t('ct-mail-template.list.buttonAddMailTemplate') }}
@@ -36,15 +36,15 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_mail_template_list_language_switch">
+                <ct-block name="ct_mail_template_list_language_switch">
                     <ct-language-switch @on-change="onLanguageChange" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_mail_template_list_content">
+                <ct-block name="ct_mail_template_list_content">
                     <ct-card-view>
-                        <ct-block name="sw_mail_template_list_tabs">
+                        <ct-block name="ct_mail_template_list_tabs">
                             <mt-tabs
                                 class="ct-mail-template-list__tabs"
                                 position-identifier="ct-mail-template-index"
@@ -54,7 +54,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_mail_template_list_router_view">
+                        <ct-block name="ct_mail_template_list_router_view">
                             <router-view v-slot="{ Component }">
                                 <component :is="Component" :key="languageKey" ref="tabContent" />
                             </router-view>
@@ -125,7 +125,7 @@ function onLanguageChange(languageId: string): void {
     tabContent.value?.getList?.();
 }
 
-swDefinePublic({
+ctDefinePublic({
     languageKey,
     term,
     searchType,

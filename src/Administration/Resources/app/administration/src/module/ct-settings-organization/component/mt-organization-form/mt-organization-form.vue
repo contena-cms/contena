@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_organization_form">
+    <ct-block name="ct_organization_form">
         <div class="mt-organization-form">
-            <ct-block name="sw_organization_form_fields">
+            <ct-block name="ct_organization_form_fields">
                 <div class="mt-organization-form__grid">
                     <mt-text-field
                         :model-value="organization.name"
@@ -62,7 +62,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_organization_form_custom_fields">
+            <ct-block name="ct_organization_form_custom_fields">
                 <div v-if="customFieldSets.length > 0" class="mt-organization-form__custom-fields">
                     <h3>{{ translate('ct-settings-organization.detail.customFieldsTitle') }}</h3>
                     <ct-custom-field-set-renderer :entity="organization" :sets="customFieldSets" :disabled="disabled" />
@@ -111,7 +111,7 @@ const onUpdateOrganization = (path: string, value: unknown): void => {
     emit('update:organization', path, value);
 };
 
-swDefinePublic({
+ctDefinePublic({
     organizationUnitCriteria,
     placeholder,
     onUpdateOrganization,

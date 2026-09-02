@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_base_item">
+    <ct-block name="ct_media_base_item">
         <div
             class="ct-media-base-item"
             :class="mediaItemClasses"
@@ -8,7 +8,7 @@
             @click="handleItemClick"
             @keydown.enter.self="handleItemClick"
         >
-            <ct-block name="sw_media_base_item_selected_indicator">
+            <ct-block name="ct_media_base_item_selected_indicator">
                 <mt-checkbox
                     v-if="!isList && allowEdit"
                     v-model:checked="listSelected"
@@ -18,13 +18,13 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_base_item_preview">
+            <ct-block name="ct_media_base_item_preview">
                 <div class="ct-media-base-item__preview-container">
                     <slot name="preview" v-bind="{ item }">
-                        <ct-block name="sw_media_base_item_slot_media_preview"></ct-block>
+                        <ct-block name="ct_media_base_item_slot_media_preview"></ct-block>
                     </slot>
 
-                    <ct-block name="sw_media_base_spatial_label_indicator">
+                    <ct-block name="ct_media_base_spatial_label_indicator">
                         <div v-if="isSpatial" class="ct-media-base-item__labels">
                             <ct-label variant="neutral-reversed" appearance="pill" size="medium">
                                 <mt-icon
@@ -45,36 +45,36 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_base_item_name_container">
+            <ct-block name="ct_media_base_item_name_container">
                 <div class="ct-media-base-item__name-container" :class="mediaNameContainerClasses">
                     <slot name="name" v-bind="{ item, isInlineEdit, startInlineEdit, endInlineEdit }"></slot>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_base_item_metadata_container">
+            <ct-block name="ct_media_base_item_metadata_container">
                 <div
                     v-if="(isList || showGridMetadata) && showContextMenuButton"
                     class="ct-media-base-item__metadata-container"
                 >
-                    <ct-block name="sw_media_base_item_metadata">
+                    <ct-block name="ct_media_base_item_metadata">
                         <slot name="metadata" v-bind="{ item }">
-                            <ct-block name="sw_media_base_item_slot_media_item_metadata"></ct-block>
+                            <ct-block name="ct_media_base_item_slot_media_item_metadata"></ct-block>
                         </slot>
                     </ct-block>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_base_item_context_menu">
-                <ct-context-button v-if="showContextMenuButton && !isLoading" ref="swContextButton">
-                    <ct-block name="sw_media_base_item_context_items">
+            <ct-block name="ct_media_base_item_context_menu">
+                <ct-context-button v-if="showContextMenuButton && !isLoading" ref="ctContextButton">
+                    <ct-block name="ct_media_base_item_context_items">
                         <slot name="context-menu" v-bind="{ item, startInlineEdit, allowEdit, allowDelete }">
-                            <ct-block name="sw_media_base_item_slot_media_item_context_menu"></ct-block>
+                            <ct-block name="ct_media_base_item_slot_media_item_context_menu"></ct-block>
                         </slot>
                     </ct-block>
                 </ct-context-button>
             </ct-block>
 
-            <ct-block name="sw_media_base_item_list_selected_indicator">
+            <ct-block name="ct_media_base_item_list_selected_indicator">
                 <mt-checkbox
                     v-if="isList && showSelectionIndicator && allowMultiSelect"
                     v-model:checked="listSelected"
@@ -84,7 +84,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_base_item_loading_indicator">
+            <ct-block name="ct_media_base_item_loading_indicator">
                 <mt-icon v-if="isLoading" class="ct-media-base-item__loader" name="regular-spinner-star" size="16px" />
             </ct-block>
 
@@ -268,7 +268,7 @@ const endInlineEdit = () => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     systemConfigApiService,
     isInlineEdit,
     defaultArReady,

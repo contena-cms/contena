@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_member_detail_addresses">
+    <ct-block name="ct_member_detail_addresses">
         <mt-card
             position-identifier="ct-member-detail-addresses"
             :title="t('ct-member.detailAddresses.title')"
@@ -15,7 +15,7 @@
                 </mt-button>
             </template>
 
-            <ct-block name="sw_member_detail_addresses_grid">
+            <ct-block name="ct_member_detail_addresses_grid">
                 <mt-data-table
                     v-if="addresses.length > 0"
                     :data-source="addresses"
@@ -263,7 +263,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     addresses,
     currentAddress,
     addressToDelete,

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_custom_field_set_list">
+    <ct-block name="ct_settings_custom_field_set_list">
         <ct-page class="ct-settings-custom-field-set-list">
             <template #search-bar>
-                <ct-block name="sw_settings_custom_field_set_list_search_bar">
+                <ct-block name="ct_settings_custom_field_set_list_search_bar">
                     <mt-search
                         :model-value="term"
                         :placeholder="translate('ct-settings-custom-field.general.placeholderSearchBar')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_custom_field_set_list_header">
+                <ct-block name="ct_settings_custom_field_set_list_header">
                     <h2>
                         {{ translate('ct-settings.index.title') }}
                         <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -24,8 +24,8 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_custom_field_set_list_actions">
-                    <ct-block name="sw_settings_custom_field_set_list_actions_add">
+                <ct-block name="ct_settings_custom_field_set_list_actions">
+                    <ct-block name="ct_settings_custom_field_set_list_actions_add">
                         <mt-button
                             v-tooltip.bottom="{
                                 message: translate('ct-privileges.tooltip.warning'),
@@ -45,15 +45,15 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_custom_field_set_list_content">
+                <ct-block name="ct_settings_custom_field_set_list_content">
                     <ct-card-view>
-                        <ct-block name="sw_settings_custom_field_set_list_content_inner">
+                        <ct-block name="ct_settings_custom_field_set_list_content_inner">
                             <mt-card
                                 class="ct-settings-custom-field-set-list__card"
                                 position-identifier="ct-settings-custom-field-set-list"
                             >
                                 <template #grid>
-                                    <ct-block name="sw_settings_custom_field_set_list_grid">
+                                    <ct-block name="ct_settings_custom_field_set_list_grid">
                                         <ct-grid
                                             v-show="items.length > 0"
                                             class="ct-settings-custom-field-set-list-grid"
@@ -62,8 +62,8 @@
                                             table
                                         >
                                             <template #columns="{ item }">
-                                                <ct-block name="sw_settings_custom_field_set_list_grid_columns">
-                                                    <ct-block name="sw_settings_custom_field_set_list_grid_column_label">
+                                                <ct-block name="ct_settings_custom_field_set_list_grid_columns">
+                                                    <ct-block name="ct_settings_custom_field_set_list_grid_column_label">
                                                         <ct-grid-column
                                                             flex="minmax(180px, 2fr)"
                                                             :label="
@@ -96,7 +96,7 @@
                                                         </ct-grid-column>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_settings_custom_field_set_list_grid_column_actions">
+                                                    <ct-block name="ct_settings_custom_field_set_list_grid_column_actions">
                                                         <ct-grid-column flex="minmax(70px, 70px)" align="center" label="">
                                                             <ct-context-button>
                                                                 <ct-context-menu-item
@@ -137,7 +137,7 @@
                                                         </ct-grid-column>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_settings_custom_field_set_list_grid_delete_modal">
+                                                    <ct-block name="ct_settings_custom_field_set_list_grid_delete_modal">
                                                         <ct-modal
                                                             v-if="showDeleteModal === item.id"
                                                             :title="translate('global.default.warning')"
@@ -145,7 +145,7 @@
                                                             @modal-close="onCloseDeleteModal"
                                                         >
                                                             <ct-block
-                                                                name="sw_settings_custom_field_set_list_grid_delete_modal_text"
+                                                                name="ct_settings_custom_field_set_list_grid_delete_modal_text"
                                                             >
                                                                 <p>
                                                                     {{
@@ -164,10 +164,10 @@
 
                                                             <template #modal-footer>
                                                                 <ct-block
-                                                                    name="sw_settings_custom_field_set_list_grid_delete_modal_footer"
+                                                                    name="ct_settings_custom_field_set_list_grid_delete_modal_footer"
                                                                 >
                                                                     <ct-block
-                                                                        name="sw_settings_custom_field_set_list_grid_delete_modal_cancel"
+                                                                        name="ct_settings_custom_field_set_list_grid_delete_modal_cancel"
                                                                     >
                                                                         <mt-button
                                                                             size="small"
@@ -179,7 +179,7 @@
                                                                     </ct-block>
 
                                                                     <ct-block
-                                                                        name="sw_settings_custom_field_set_list_grid_delete_modal_delete"
+                                                                        name="ct_settings_custom_field_set_list_grid_delete_modal_delete"
                                                                     >
                                                                         <mt-button
                                                                             variant="critical"
@@ -198,7 +198,7 @@
 
                                             <template #pagination>
                                                 <ct-block
-                                                    name="sw_settings_custom_field_set_list_content_columns_pagination"
+                                                    name="ct_settings_custom_field_set_list_content_columns_pagination"
                                                 >
                                                     <ct-pagination
                                                         :page="page"
@@ -212,7 +212,7 @@
                                         </ct-grid>
                                     </ct-block>
                                 </template>
-                                <ct-block name="sw_settings_custom_fields_set_list_empty_message">
+                                <ct-block name="ct_settings_custom_fields_set_list_empty_message">
                                     <mt-empty-state
                                         v-if="!isLoading && items.length <= 0"
                                         :icon="$route.meta.$module.icon"
@@ -338,7 +338,7 @@ initializeSettingsListing({
     entityName,
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     feature,
     entityName,

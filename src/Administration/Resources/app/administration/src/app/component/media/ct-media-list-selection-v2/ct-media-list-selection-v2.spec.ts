@@ -63,7 +63,7 @@ describe('components/media/ct-media-list-selection-v2', () => {
     let wrapper: VueWrapper | undefined;
 
     beforeAll(() => {
-        (globalThis as unknown as { swDefinePublic: (bindings: unknown) => void }).swDefinePublic = () => undefined;
+        (globalThis as unknown as { ctDefinePublic: (bindings: unknown) => void }).ctDefinePublic = () => undefined;
     });
 
     afterEach(() => {
@@ -71,7 +71,7 @@ describe('components/media/ct-media-list-selection-v2', () => {
     });
 
     afterAll(() => {
-        Reflect.deleteProperty(globalThis, 'swDefinePublic');
+        Reflect.deleteProperty(globalThis, 'ctDefinePublic');
     });
 
     it('should set the position property for each item by index in computed', async () => {

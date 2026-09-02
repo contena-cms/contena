@@ -1,0 +1,47 @@
+name: PHP
+
+on:
+    push:
+        branches: [trunk]
+    pull_request:
+    workflow_dispatch:
+
+concurrency:
+    group: php-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    php:
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.5"
+                  extensions: mbstring, intl, pdo_mysql
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Cache Composer downloads
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/composer
+                  key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+                  restore-keys: composer-${{ runner.os }}-
+
+            - name: Install dependencies
+              run: composer install --no-interaction --prefer-dist
+
+            - name: Check PHP style
+              run: composer cs
+
+            - name: Run PHPStan
+              run: composer phpstan
+
+            - name: Run PHPUnit
+              run: composer phpunit

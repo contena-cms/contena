@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_search_bar_item">
+    <ct-block name="ct_search_bar_item">
         <li class="ct-search-bar-item ct-search-bar-item--v2" :class="componentClasses" @mouseenter="onMouseEnter($event)">
-            <ct-block name="sw_search_bar_item_icon">
+            <ct-block name="ct_search_bar_item_icon">
                 <mt-icon v-if="iconName" :name="iconName" :color="iconColor" size="16px" />
             </ct-block>
 
-            <ct-block name="sw_search_bar_item_media">
+            <ct-block name="ct_search_bar_item_media">
                 <router-link
                     v-if="type === 'media'"
                     ref="routerLinkRef"
@@ -30,7 +30,7 @@
                 </router-link>
             </ct-block>
 
-            <ct-block name="sw_search_bar_item_module">
+            <ct-block name="ct_search_bar_item_module">
                 <template v-if="type === 'media'"><!-- Keeps the conditional chain connected across ct-block. --></template>
                 <router-link
                     v-else-if="['frequently_used', 'module'].includes(type)"
@@ -47,7 +47,7 @@
                 </router-link>
             </ct-block>
 
-            <ct-block name="sw_search_bar_item_other_entity">
+            <ct-block name="ct_search_bar_item_other_entity">
                 <template v-if="type === 'media' || ['frequently_used', 'module'].includes(type)"
                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                 >
@@ -248,7 +248,7 @@ onUnmounted(() => {
     destroyedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     searchTypeService,
     feature,
     recentlySearchService,

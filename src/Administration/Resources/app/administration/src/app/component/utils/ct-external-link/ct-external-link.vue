@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_external_link">
+    <ct-block name="ct_external_link">
         <a
             v-if="$attrs.hasOwnProperty('href')"
             v-bind="$attrs"
@@ -72,7 +72,7 @@ const onClick = (event) => {
     emit('click', event);
 };
 
-swDefinePublic({
+ctDefinePublic({
     classes,
     iconSize,
     onClick,

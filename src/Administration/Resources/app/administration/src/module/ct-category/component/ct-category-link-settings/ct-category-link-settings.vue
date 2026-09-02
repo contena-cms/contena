@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_category_link_settings">
+    <ct-block name="ct_category_link_settings">
         <mt-card
             class="ct-category-link-settings"
             position-identifier="ct-category-link-settings"
             :title="$t('ct-category.base.link.title')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_category_detail_link_type_select_main">
+            <ct-block name="ct_category_detail_link_type_select_main">
                 <ct-single-select
                     v-model:value="mainType"
                     class="ct-category-link-settings__type"
@@ -19,7 +19,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_link_type_select_entity">
+            <ct-block name="ct_category_detail_link_type_select_entity">
                 <ct-single-select
                     v-if="isInternal"
                     v-model:value="category.linkType"
@@ -33,7 +33,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_link_type_select_entity_category">
+            <ct-block name="ct_category_detail_link_type_select_entity_category">
                 <template v-if="category.linkType === 'category'">
                     <ct-category-tree-field
                         :allowed-types="allowedCategoryTypes"
@@ -50,7 +50,7 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_category_detail_link_type_select_entity_blog">
+            <ct-block name="ct_category_detail_link_type_select_entity_blog">
                 <ct-entity-single-select
                     v-if="category.linkType === 'blog'"
                     v-model:value="category.internalLink"
@@ -63,7 +63,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_link_type_select_entity_landing_page">
+            <ct-block name="ct_category_detail_link_type_select_entity_landing_page">
                 <ct-entity-single-select
                     v-if="category.linkType === 'landing_page'"
                     v-model:value="category.internalLink"
@@ -76,7 +76,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_link_field">
+            <ct-block name="ct_category_detail_link_field">
                 <component
                     :is="linkHasProtocol ? 'mt-url-field' : 'mt-text-field'"
                     v-if="isExternal"
@@ -96,7 +96,7 @@
                 :label="$t('ct-category.base.link.linkHasProtocol')"
             />
 
-            <ct-block name="sw_category_detail_link_new_tab">
+            <ct-block name="ct_category_detail_link_new_tab">
                 <mt-switch
                     v-model="category.linkNewTab"
                     class="ct-category-link-settings__link-new-tab"
@@ -247,7 +247,7 @@ const onSelectionRemove = () => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repositoryFactory,
     categoriesCollection,

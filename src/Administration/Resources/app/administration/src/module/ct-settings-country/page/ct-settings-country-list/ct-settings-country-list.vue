@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_settings_list">
-        <ct-block name="sw_settings_country_index">
+    <ct-block name="ct_settings_list">
+        <ct-block name="ct_settings_country_index">
             <ct-page class="ct-settings-country-list">
                 <template #search-bar>
-                    <ct-block name="sw_settings_country_list_search_bar">
+                    <ct-block name="ct_settings_country_list_search_bar">
                         <mt-search
                             :placeholder="$t('ct-settings-country.general.placeholderSearchBar')"
                             :model-value="term"
@@ -13,16 +13,16 @@
                 </template>
 
                 <template #smart-bar-header>
-                    <ct-block name="sw_settings_country_list_smart_bar_header">
-                        <ct-block name="sw_settings_country_list_smart_bar_header_title">
+                    <ct-block name="ct_settings_country_list_smart_bar_header">
+                        <ct-block name="ct_settings_country_list_smart_bar_header_title">
                             <h2>
-                                <ct-block name="sw_settings_country_list_smart_bar_header_title_text">
+                                <ct-block name="ct_settings_country_list_smart_bar_header_title_text">
                                     {{ $t('ct-settings.index.title') }}
                                     <mt-icon name="regular-chevron-right-xs" size="12px" />
                                     {{ $t('ct-settings-country.list.textHeadline') }}
                                 </ct-block>
 
-                                <ct-block name="sw_settings_country_list_smart_bar_header_amount">
+                                <ct-block name="ct_settings_country_list_smart_bar_header_amount">
                                     <span v-if="!isLoading" class="ct-page__smart-bar-amount"> ({{ total }}) </span>
                                 </ct-block>
                             </h2>
@@ -31,8 +31,8 @@
                 </template>
 
                 <template #smart-bar-actions>
-                    <ct-block name="sw_settings_country_list_smart_bar_actions">
-                        <ct-block name="sw_settings_country_list_smart_bar_actions_add">
+                    <ct-block name="ct_settings_country_list_smart_bar_actions">
+                        <ct-block name="ct_settings_country_list_smart_bar_actions_add">
                             <mt-button
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
@@ -52,13 +52,13 @@
                 </template>
 
                 <template #language-switch>
-                    <ct-block name="sw_settings_country_list_language_switch">
+                    <ct-block name="ct_settings_country_list_language_switch">
                         <ct-language-switch @on-change="onChangeLanguage" />
                     </ct-block>
                 </template>
 
                 <template #content>
-                    <ct-block name="sw_settings_country_list_content">
+                    <ct-block name="ct_settings_country_list_content">
                         <mt-data-table
                             layout="full"
                             :caption="$t('ct-settings-country.list.textHeadline')"
@@ -283,7 +283,7 @@ initializeListing({
     naturalSorting,
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     entityName,

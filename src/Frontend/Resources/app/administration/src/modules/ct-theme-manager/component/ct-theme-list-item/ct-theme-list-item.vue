@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_theme_list_item">
+    <ct-block name="ct_theme_list_item">
         <div class="ct-theme-list-item" :class="componentClasses">
-            <ct-block name="sw_theme_list_item_options">
+            <ct-block name="ct_theme_list_item_options">
                 <slot name="contextMenu"></slot>
             </ct-block>
 
-            <ct-block name="sw_theme_list_item_image">
+            <ct-block name="ct_theme_list_item_image">
                 <div
                     v-if="theme"
                     class="ct-theme-list-item__image"
@@ -18,7 +18,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_theme_list_item_info">
+            <ct-block name="ct_theme_list_item_info">
                 <div class="ct-theme-list-item__info">
                     <div v-if="theme" class="ct-theme-list-item__status" :class="componentClasses"></div>
                     <div v-if="theme" class="ct-theme-list-item__title" @click="onThemeClick">
@@ -145,7 +145,7 @@ const emitItemClick = (item: Theme): void => {
     emit('item-click', item);
 };
 
-swDefinePublic({
+ctDefinePublic({
     previewMedia,
     defaultThemeAsset,
     lockToolTip,

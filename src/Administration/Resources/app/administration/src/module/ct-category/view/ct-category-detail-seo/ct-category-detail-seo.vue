@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_category_detail_seo">
+    <ct-block name="ct_category_detail_seo">
         <div class="ct-category-detail-seo">
-            <ct-block name="sw_category_detail_seo_config">
+            <ct-block name="ct_category_detail_seo_config">
                 <mt-card
                     position-identifier="ct-category-detail-seo"
                     :title="$t('ct-category.base.seo.title')"
@@ -11,7 +11,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_category_detail_seo_list">
+            <ct-block name="ct_category_detail_seo_list">
                 <ct-seo-url
                     v-if="category.seoUrls"
                     :is-loading="isLoading"
@@ -37,10 +37,10 @@ import { computed, inject } from 'vue';
 const acl = inject('acl');
 
 const category = computed(() => {
-    return Contena.Store.get('swCategoryDetail').category;
+    return Contena.Store.get('ctCategoryDetail').category;
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     category,
 });

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_internal_link">
+    <ct-block name="ct_internal_link">
         <component
             :is="elementType"
             v-if="!disabled"
@@ -9,21 +9,21 @@
             :class="componentClasses"
             @click="$emit('click')"
         >
-            <ct-block name="sw_internal_link__slot">
+            <ct-block name="ct_internal_link__slot">
                 <slot></slot>
             </ct-block>
 
-            <ct-block name="sw_internal_link__icon">
+            <ct-block name="ct_internal_link__icon">
                 <mt-icon v-if="!hideIcon" :name="icon" size="16px" />
             </ct-block>
         </component>
 
         <span v-else class="ct-internal-link ct-internal-link--disabled">
-            <ct-block name="sw_internal_link__slot">
+            <ct-block name="ct_internal_link__slot">
                 <slot></slot>
             </ct-block>
 
-            <ct-block name="sw_internal_link__icon">
+            <ct-block name="ct_internal_link__icon">
                 <mt-icon v-if="!hideIcon" :name="icon" size="16px" />
             </ct-block>
         </span>
@@ -83,7 +83,7 @@ const componentClasses = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     elementType,
     componentClasses,
 });

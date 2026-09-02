@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_category_tree_field">
-        <div ref="swCategoryTreeField" class="ct-category-tree-field" :class="{ 'is--disabled': disabled }">
+    <ct-block name="ct_category_tree_field">
+        <div ref="ctCategoryTreeField" class="ct-category-tree-field" :class="{ 'is--disabled': disabled }">
             <mt-floating-ui
                 :is-opened="isExpanded"
                 :match-reference-width="true"
@@ -12,7 +12,7 @@
                         <template #ct-field-input="{ setFocusClass, removeFocusClass }">
                             <mt-loader v-if="isCategoriesLoading" class="ct-category-tree-field__loader" />
 
-                            <ct-block name="sw_category_tree_field_input_labels">
+                            <ct-block name="ct_category_tree_field_input_labels">
                                 <mt-badge
                                     v-for="selectedCategory in visibleTags"
                                     :key="selectedCategory.id"
@@ -42,7 +42,7 @@
                                 </mt-badge>
                             </ct-block>
 
-                            <ct-block name="sw_category_tree_field_input_labels_hidden_tag">
+                            <ct-block name="ct_category_tree_field_input_labels_hidden_tag">
                                 <button
                                     v-if="numberOfHiddenTags > 0"
                                     class="ct-category-tree-field__label-more"
@@ -53,7 +53,7 @@
                                 </button>
                             </ct-block>
 
-                            <ct-block name="sw_category_tree_field_input_field">
+                            <ct-block name="ct_category_tree_field_input_field">
                                 <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                                 <input
                                     ref="searchInput"
@@ -71,10 +71,10 @@
                 </template>
 
                 <div ref="resultsPopover" class="ct-category-tree-field__results-popover">
-                    <ct-block name="sw_category_tree_field_input_results_tree">
+                    <ct-block name="ct_category_tree_field_input_results_tree">
                         <ct-tree
                             v-if="term.length <= 0 && categories.length > 0"
-                            ref="swTree"
+                            ref="ctTree"
                             :items="categories"
                             after-id-property="afterCategoryId"
                             :sortable="false"
@@ -104,7 +104,7 @@
                         </ct-tree>
                     </ct-block>
 
-                    <ct-block name="sw_category_tree_field_input_results_search_results">
+                    <ct-block name="ct_category_tree_field_input_results_search_results">
                         <ul v-if="searchResult.length > 0 && term.length > 0" class="ct-category-tree-field__search-results">
                             <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                             <li
@@ -134,7 +134,7 @@
                         </ul>
                     </ct-block>
 
-                    <ct-block name="sw_category_tree_field_input_search_results_empty">
+                    <ct-block name="ct_category_tree_field_input_search_results_empty">
                         <p v-if="term.length > 0 && searchResult.length === 0" class="ct-category-tree-field__empty-state">
                             {{ $t('ct-category-tree-field.emptySearchResults') }}
                         </p>
@@ -212,11 +212,11 @@ const emit = defineEmits([
     'update:categoriesCollection',
 ]);
 
-const swCategoryTreeField = ref<HTMLElement | null>(null);
+const ctCategoryTreeField = ref<HTMLElement | null>(null);
 const searchInput = ref<HTMLInputElement | null>(null);
 const resultsPopover = ref<HTMLElement | null>(null);
 
-const swTree = ref<{ treeItems: TreeItem[]; findById: (_id: string) => TreeItem | null } | null>(null);
+const ctTree = ref<{ treeItems: TreeItem[]; findById: (_id: string) => TreeItem | null } | null>(null);
 
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory')!;
 const isFetching = ref(false);
@@ -465,7 +465,7 @@ function changeSearchSelection(direction: 'next' | 'previous' = 'next') {
         searchResultFocusItem.value = nextItem;
     }
 }
-const getFirstChildById = (itemId: string, children = swTree.value?.treeItems ?? []): TreeItem | null => {
+const getFirstChildById = (itemId: string, children = ctTree.value?.treeItems ?? []): TreeItem | null => {
     const item = children.find((child) => child.id === itemId);
     if (item) {
         return item.children[0] ?? null;
@@ -476,7 +476,7 @@ const getFirstChildById = (itemId: string, children = swTree.value?.treeItems ??
     }
     return null;
 };
-function getSibling(isNext: boolean, item: TreeItem | null, children = swTree.value?.treeItems ?? []): TreeItem | null {
+function getSibling(isNext: boolean, item: TreeItem | null, children = ctTree.value?.treeItems ?? []): TreeItem | null {
     if (!item) return null;
     const sibling = isNext
         ? children.find((child) => child.data.afterCategoryId === item.id)
@@ -511,7 +511,7 @@ function toggleSelectedTreeItem(shouldOpen: boolean) {
 }
 function findTreeItemById(itemId?: string | null) {
     const id = itemId ?? ('id' in selectedTreeItem.value ? selectedTreeItem.value.id : null);
-    return id ? (swTree.value?.findById(id) ?? null) : null;
+    return id ? (ctTree.value?.findById(id) ?? null) : null;
 }
 function removeCheckedItems(keepId: string) {
     if (!props.singleSelect) return;
@@ -543,7 +543,7 @@ watch(
         }
 
         await nextTick();
-        selectedTreeItem.value = swTree.value?.treeItems[0] ?? {};
+        selectedTreeItem.value = ctTree.value?.treeItems[0] ?? {};
     },
     { immediate: true },
 );
@@ -558,7 +558,7 @@ watch(selectedTreeItem, (newItem) => {
 onMounted(createdComponent);
 onBeforeUnmount(destroyedComponent);
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     isFetching,
     isComponentReady,

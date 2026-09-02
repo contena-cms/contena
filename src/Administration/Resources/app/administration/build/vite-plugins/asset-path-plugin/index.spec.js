@@ -22,7 +22,7 @@ describe('build/vite-plugins/asset-path-plugin', () => {
         // Test renderChunk method modifies code if it contains the module preload function
         const code = 'const assetsURL = function(dep) { return "/bundles/testbundle/administration/"+dep };';
         const modified =
-            'const assetsURL = function(dep) { return window.__sw__.assetPath+"/bundles/testbundle/administration/"+dep };';
+            'const assetsURL = function(dep) { return window.__ct__.assetPath+"/bundles/testbundle/administration/"+dep };';
         expect(plugin.renderChunk(code)).toEqual({ code: modified, map: null });
     });
 
@@ -46,7 +46,7 @@ describe('build/vite-plugins/asset-path-plugin', () => {
         plugin.generateBundle({}, bundle);
 
         expect(bundle['ct-admin-worker.js'].code).toBe(
-            'new SharedWorker(window.__sw__.assetPath+"/bundles/administration/administration/assets/adminWorker-abc123.js")',
+            'new SharedWorker(window.__ct__.assetPath+"/bundles/administration/administration/assets/adminWorker-abc123.js")',
         );
     });
 
@@ -63,7 +63,7 @@ describe('build/vite-plugins/asset-path-plugin', () => {
         plugin.generateBundle({}, bundle);
 
         expect(bundle['worker.js'].code).toBe(
-            'new Worker(window.__sw__.assetPath+"/bundles/administration/administration/assets/worker-def456.js")',
+            'new Worker(window.__ct__.assetPath+"/bundles/administration/administration/assets/worker-def456.js")',
         );
     });
 
@@ -80,7 +80,7 @@ describe('build/vite-plugins/asset-path-plugin', () => {
         plugin.generateBundle({}, bundle);
 
         expect(bundle['worker.js'].code).toBe(
-            'new SharedWorker(window.__sw__.assetPath+"/bundles/testbundle/administration/assets/worker-ghi789.js")',
+            'new SharedWorker(window.__ct__.assetPath+"/bundles/testbundle/administration/assets/worker-ghi789.js")',
         );
     });
 
@@ -105,7 +105,7 @@ describe('build/vite-plugins/asset-path-plugin', () => {
         plugin.generateBundle({}, bundle);
 
         expect(bundle['worker.js'].code).toBe(
-            'new SharedWorker(window.__sw__.assetPath+"/bundles/my.plugin+name/administration/assets/worker-jkl012.js")',
+            'new SharedWorker(window.__ct__.assetPath+"/bundles/my.plugin+name/administration/assets/worker-jkl012.js")',
         );
         expect(bundle['other.js'].code).toBe(
             'new SharedWorker("/bundles/myXpluginnname/administration/assets/worker-jkl012.js")',

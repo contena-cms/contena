@@ -47,7 +47,7 @@ const media = [
 ] as EntitySchema.blog_media[];
 
 function createWrapper(canEdit = true) {
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     store.blog = {
         id: 'blog1',

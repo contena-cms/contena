@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_gtc_checkbox">
+    <ct-block name="ct_gtc_checkbox">
         <div class="ct-gtc-checkbox">
-            <ct-block name="sw_gtc_checkbox_input">
+            <ct-block name="ct_gtc_checkbox_input">
                 <mt-checkbox :checked="value" @update:checked="onChange">
                     <template #label>
                         {{ $t('global.ct-gtc-checkbox.label') }}
@@ -32,7 +32,7 @@ const onChange = (value) => {
     emit('update:value', value);
 };
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     onChange,
 });

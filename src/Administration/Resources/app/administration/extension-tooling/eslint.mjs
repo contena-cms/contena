@@ -11,9 +11,9 @@ import globals from 'globals';
 import pluginVue from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tseslint from 'typescript-eslint';
-import swDeprecationRules from 'eslint-plugin-ct-deprecation-rules';
-import swPluginRules from 'eslint-plugin-plugin-rules';
-import swCoreRules from 'eslint-plugin-ct-core-rules';
+import ctDeprecationRules from 'eslint-plugin-ct-deprecation-rules';
+import ctPluginRules from 'eslint-plugin-plugin-rules';
+import ctCoreRules from 'eslint-plugin-ct-core-rules';
 
 const javascriptFilePatterns = [
     '**/*.js',
@@ -184,15 +184,15 @@ export function contenaAdminExtension(options = {}) {
             files: scope(vueFilePatterns),
             languageOptions: {
                 globals: {
-                    swDefinePublic: 'readonly',
-                    swDefineOverride: 'readonly',
-                    useSwPreviousState: 'readonly',
-                    useSwProps: 'readonly',
-                    useSwContext: 'readonly',
+                    ctDefinePublic: 'readonly',
+                    ctDefineOverride: 'readonly',
+                    useCtPreviousState: 'readonly',
+                    useCtProps: 'readonly',
+                    useCtContext: 'readonly',
                 },
             },
             plugins: {
-                'ct-core-rules': swCoreRules,
+                'ct-core-rules': ctCoreRules,
             },
             rules: {
                 'ct-core-rules/valid-contena-setup': 'error',
@@ -215,7 +215,7 @@ export function contenaAdminExtension(options = {}) {
                 },
             },
             plugins: {
-                'plugin-rules': swPluginRules,
+                'plugin-rules': ctPluginRules,
             },
             rules: {
                 'plugin-rules/no-src-imports': srcImportBoundary ? 'error' : 'off',
@@ -236,7 +236,7 @@ export function contenaAdminExtension(options = {}) {
             name: 'contena/admin-extension/template-deprecations',
             files: scope(templateFilePatterns),
             plugins: {
-                'ct-deprecation-rules': swDeprecationRules,
+                'ct-deprecation-rules': ctDeprecationRules,
             },
             rules: {
                 'ct-deprecation-rules/no-deprecated-components': templateDeprecationSeverity,
@@ -269,6 +269,6 @@ export function contenaAdminExtension(options = {}) {
     return config;
 }
 
-export { pluginVue, swCoreRules, swDeprecationRules, swPluginRules, tseslint };
+export { pluginVue, ctCoreRules, ctDeprecationRules, ctPluginRules, tseslint };
 
 export default contenaAdminExtension;

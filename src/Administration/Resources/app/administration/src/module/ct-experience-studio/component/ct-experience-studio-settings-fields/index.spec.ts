@@ -5,11 +5,11 @@ import settingsFieldsComponent from './index';
 
 describe('module/ct-experience-studio/component/ct-experience-studio-settings-fields', () => {
     beforeAll(() => {
-        (globalThis as unknown as { swDefinePublic: (bindings: unknown) => void }).swDefinePublic = () => undefined;
+        (globalThis as unknown as { ctDefinePublic: (bindings: unknown) => void }).ctDefinePublic = () => undefined;
     });
 
     afterAll(() => {
-        Reflect.deleteProperty(globalThis, 'swDefinePublic');
+        Reflect.deleteProperty(globalThis, 'ctDefinePublic');
     });
     const createWrapper = (props: Record<string, unknown> = {}) =>
         shallowMount(settingsFieldsComponent, {

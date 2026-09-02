@@ -21,7 +21,7 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
             emit('save', headline);
             Boolean(slots.default);
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -40,11 +40,11 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
 
         const source = stripIndent`
             <script setup lang="ts">
-            const previousState = useSwPreviousState();
-            const context = useSwContext();
+            const previousState = useCtPreviousState();
+            const context = useCtContext();
             const doubled = previousState.count.value * 2;
 
-            swDefineOverride({
+            ctDefineOverride({
                 doubled,
             });
             </script>
@@ -54,8 +54,8 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
 
         // An override body runs inside a generated callback, so the useSw* helpers are emitted as
         // transform-authored headers above it and must not map back to the author's calls.
-        expectGeneratedTokenUnmapped(result, 'const useSwContext = () => __swSetupContext;');
-        expectGeneratedTokenUnmapped(result, 'const useSwPreviousState = () => __swSetupPreviousState;');
+        expectGeneratedTokenUnmapped(result, 'const useCtContext = () => __ctSetupContext;');
+        expectGeneratedTokenUnmapped(result, 'const useCtPreviousState = () => __ctSetupPreviousState;');
     });
 
     it('does not map injected data scope attributes to user-authored template source', () => {
@@ -63,14 +63,14 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <p>{{ headline }}</p>
                 </ct-block>
             </template>
             <script setup>
             const headline = 'Hello';
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -78,7 +78,7 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
 
         const result = transformOrFail(source, 'template-data-scope.vue');
 
-        expect(result.code).toContain('<ct-block :data="$dataScope" name="sw_example_card">');
+        expect(result.code).toContain('<ct-block :data="$dataScope" name="ct_example_card">');
         expectGeneratedTokenUnmapped(result, ':data="$dataScope"');
     });
 
@@ -87,7 +87,7 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block extends="sw_example_card">
+                <ct-block extends="ct_example_card">
                     <p>{{ headline }}</p>
                     <small>{{ info }}</small>
                 </ct-block>
@@ -96,7 +96,7 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
             const headline = 'Hello';
             const info = 'Local';
 
-            swDefineOverride({
+            ctDefineOverride({
                 headline,
             });
             </script>
@@ -105,8 +105,8 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
         const result = transformOrFail(source, 'template-slot-merge.override.vue');
 
         // The whole #default scope is transform-generated, so its tokens must stay unmapped.
-        expect(result.code).toContain('__swOverride');
-        expectGeneratedTokenUnmapped(result, '__swOverride');
+        expect(result.code).toContain('__ctOverride');
+        expectGeneratedTokenUnmapped(result, '__ctOverride');
     });
 
     it('does not map the generated no-template override registration template', () => {
@@ -115,7 +115,7 @@ describe('build/vue-setup-transform sourcemap generated code', () => {
         const source = `<script setup>
 const headline = 'Hello';
 
-swDefineOverride({
+ctDefineOverride({
     headline,
 });
 </script>`;
@@ -133,7 +133,7 @@ swDefineOverride({
         const source = `<script setup>
 const headline = 'Hello';
 
-swDefineOverride({
+ctDefineOverride({
     headline,
 });
 </script>`;
@@ -148,7 +148,7 @@ swDefineOverride({
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <button @click="emitSave">{{ headline }}</button>
                 </ct-block>
             </template>
@@ -169,7 +169,7 @@ swDefineOverride({
                 emit('save', headline.value);
             }
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
                 emitSave,
             });

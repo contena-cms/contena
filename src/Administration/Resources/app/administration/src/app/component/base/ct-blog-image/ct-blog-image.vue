@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_blog_image">
+    <ct-block name="ct_blog_image">
         <div class="ct-blog-image" :class="blogImageClasses">
             <template v-if="!isPlaceholder">
-                <ct-block name="sw_blog_image_preview">
+                <ct-block name="ct_blog_image_preview">
                     <ct-media-preview-v2 class="ct-blog-image__image" :source="mediaId" :hide-tooltip="false" />
 
                     <ct-label
@@ -15,7 +15,7 @@
                         {{ $t('ct-blog.mediaForm.coverSubline') }}
                     </ct-label>
 
-                    <ct-block name="sw_blog_image_preview_spatial_labels">
+                    <ct-block name="ct_blog_image_preview_spatial_labels">
                         <ct-label
                             v-if="isSpatial"
                             class="ct-blog-image__spatial-label"
@@ -35,8 +35,8 @@
                     </ct-block>
                 </ct-block>
                 <ct-context-button class="ct-blog-image__context-button">
-                    <ct-block name="sw_blog_image_context">
-                        <ct-block name="sw_blog_image_context_cover_action">
+                    <ct-block name="ct_blog_image_context">
+                        <ct-block name="ct_blog_image_context_cover_action">
                             <ct-context-menu-item
                                 v-if="showCoverLabel && !isCover"
                                 class="ct-blog-image__button-cover"
@@ -46,7 +46,7 @@
                             </ct-context-menu-item>
                         </ct-block>
 
-                        <ct-block name="sw_blog_image_context_delete_action">
+                        <ct-block name="ct_blog_image_context_delete_action">
                             <ct-context-menu-item
                                 variant="danger"
                                 class="ct-blog-image__button-delete"
@@ -59,7 +59,7 @@
                 </ct-context-button>
             </template>
             <div v-else class="is--invalid-drag">
-                <ct-block name="sw_blog_image_placeholder">
+                <ct-block name="ct_blog_image_placeholder">
                     <mt-icon class="ct-blog-image__placeholder-icon" :name="'regular-image'" size="16px" />
                 </ct-block>
             </div>
@@ -121,7 +121,7 @@ const blogImageClasses = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     blogImageClasses,
 });
 

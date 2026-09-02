@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_modal_folder_settings">
+    <ct-block name="ct_media_modal_folder_settings">
         <ct-modal
             v-if="!!mediaFolder"
             class="ct-media-modal-folder-settings"
@@ -8,12 +8,12 @@
             variant="large"
             @modal-close="closeModal"
         >
-            <ct-block name="sw_media_modal_folder_settings_tabs">
+            <ct-block name="ct_media_modal_folder_settings_tabs">
                 <div position-identifier="ct-media-modal-folder-settings">
                     <mt-tabs :items="tabItems" default-item="settings" @new-item-active="onActiveTabChanged" />
-                    <ct-block name="sw_media_modal_folder_settings_tab_content_settings">
+                    <ct-block name="ct_media_modal_folder_settings_tab_content_settings">
                         <ct-container v-if="activeTab === 'settings'" columns="1fr 1fr" gap="32px">
-                            <ct-block name="sw_media_modal_folder_settings_name_field">
+                            <ct-block name="ct_media_modal_folder_settings_name_field">
                                 <mt-text-field
                                     v-model="mediaFolder.name"
                                     :disabled="disabled"
@@ -22,7 +22,7 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_media_modal_folder_settings_default_folder">
+                            <ct-block name="ct_media_modal_folder_settings_default_folder">
                                 <ct-entity-single-select
                                     id="defaultFolder"
                                     :disabled="disabled"
@@ -63,16 +63,16 @@
                         </ct-container>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_folder_settings_tab_content_thumbnails">
+                    <ct-block name="ct_media_modal_folder_settings_tab_content_thumbnails">
                         <ct-container
                             v-if="activeTab === 'thumbnails'"
                             class="ct-media-modal-folder-settings__thumbnails-container"
                             columns="1fr 1fr"
                             gap="32px"
                         >
-                            <ct-block name="sw_media_modal_folder_settings_tab_content_thumbnails_left_container">
+                            <ct-block name="ct_media_modal_folder_settings_tab_content_thumbnails_left_container">
                                 <div class="ct-media-modal-folder-settings__thumbnails-left-container">
-                                    <ct-block name="sw_media_modal_folder_settings_inherit_settings_field">
+                                    <ct-block name="ct_media_modal_folder_settings_inherit_settings_field">
                                         <mt-switch
                                             v-model="mediaFolder.useParentConfiguration"
                                             :label="translate('global.ct-media-modal-folder-settings.labelInheritSettings')"
@@ -81,7 +81,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_media_modal_folder_settings_generate_thumbnails_field">
+                                    <ct-block name="ct_media_modal_folder_settings_generate_thumbnails_field">
                                         <mt-switch
                                             v-model="configuration.createThumbnails"
                                             :label="
@@ -91,7 +91,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_media_modal_folder_settings_keep_proportions_field">
+                                    <ct-block name="ct_media_modal_folder_settings_keep_proportions_field">
                                         <mt-switch
                                             v-model="configuration.keepAspectRatio"
                                             :label="translate('global.ct-media-modal-folder-settings.labelKeepProportions')"
@@ -99,7 +99,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_media_modal_folder_settings_thumbnails_quality_field">
+                                    <ct-block name="ct_media_modal_folder_settings_thumbnails_quality_field">
                                         <mt-number-field
                                             v-model="configuration.thumbnailQuality"
                                             number-type="int"
@@ -114,9 +114,9 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_media_modal_folder_settings_tab_content_thumbnails_right_container">
+                            <ct-block name="ct_media_modal_folder_settings_tab_content_thumbnails_right_container">
                                 <div class="ct-media-modal-folder-settings__thumbnails-right-container">
-                                    <ct-block name="sw_media_modal_folder_settings_thumbnail_list_caption">
+                                    <ct-block name="ct_media_modal_folder_settings_thumbnail_list_caption">
                                         <div class="ct-media-modal-folder-settings__thumbnails-list-caption">
                                             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                                             <label>{{
@@ -125,7 +125,7 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_media_modal_folder_settings_thumbnail_list_container">
+                                    <ct-block name="ct_media_modal_folder_settings_thumbnail_list_container">
                                         <div class="ct-media-modal-folder-settings__thumbnails-list-container">
                                             <ct-media-add-thumbnail-form
                                                 v-if="!notEditable"
@@ -134,9 +134,9 @@
                                                 @thumbnail-form-size-add="addThumbnail"
                                             />
 
-                                            <ct-block name="sw_media_modal_folder_settings_thumbnail_list">
+                                            <ct-block name="ct_media_modal_folder_settings_thumbnail_list">
                                                 <ul class="ct-media-modal-folder-settings__thumbnails-list">
-                                                    <ct-block name="sw_media_modal_folder_settings_thumbnail_size">
+                                                    <ct-block name="ct_media_modal_folder_settings_thumbnail_size">
                                                         <li
                                                             v-for="(size, index) in thumbnailSizes"
                                                             :key="`thumbnail-size-${index}`"
@@ -144,7 +144,7 @@
                                                             :class="'ct-media-modal-folder-settings__entry--' + index"
                                                         >
                                                             <ct-block
-                                                                name="sw_media_modal_folder_settings_thumbnail_size_switch"
+                                                                name="ct_media_modal_folder_settings_thumbnail_size_switch"
                                                             >
                                                                 <mt-switch
                                                                     :model-value="isThumbnailSizeActive(size)"
@@ -156,7 +156,7 @@
                                                             </ct-block>
 
                                                             <ct-block
-                                                                name="sw_media_modal_folder_settings_thumbnail_size_delete_button"
+                                                                name="ct_media_modal_folder_settings_thumbnail_size_delete_button"
                                                             >
                                                                 <button
                                                                     v-tooltip="{
@@ -189,14 +189,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_media_modal_folder_settings_footer">
-                    <ct-block name="sw_media_modal_folder_settings_cancel_button">
+                <ct-block name="ct_media_modal_folder_settings_footer">
+                    <ct-block name="ct_media_modal_folder_settings_cancel_button">
                         <mt-button size="small" variant="secondary" @click="onClickCancel">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_folder_settings_confirm_button">
+                    <ct-block name="ct_media_modal_folder_settings_confirm_button">
                         <mt-button
                             v-tooltip="{
                                 message: translate('ct-privileges.tooltip.warning'),
@@ -523,7 +523,7 @@ function loadMediaFolder() {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     modalClass,
     activeTab,

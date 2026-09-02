@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="mt_card">
+    <ct-block name="ct_mt_card">
         <!-- mt-card is using fragments, therefore v-show doesn't work.
  This "div" is needed to make it work again.  -->
         <div class="mt-card__wrapper">
@@ -64,7 +64,7 @@ const getFilteredSlots = () => {
     return filteredSlots;
 };
 
-swDefinePublic({
+ctDefinePublic({
     getFilteredSlots,
 });
 

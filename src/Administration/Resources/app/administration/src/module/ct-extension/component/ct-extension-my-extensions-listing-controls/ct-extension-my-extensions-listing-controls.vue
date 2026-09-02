@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_extension_my_extensions_listing_controls">
+    <ct-block name="ct_extension_my_extensions_listing_controls">
         <div class="ct-extension-my-extensions-listing-controls">
-            <ct-block name="sw_extension_my_extensions_listing_controls_active_switch">
+            <ct-block name="ct_extension_my_extensions_listing_controls_active_switch">
                 <mt-switch
                     v-model="filterByActiveState"
                     class="ct-extension-my-extensions-listing-controls__active-filter-switch"
@@ -9,7 +9,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_extension_my_extensions_listing_controls_sorting_select">
+            <ct-block name="ct_extension_my_extensions_listing_controls_sorting_select">
                 <mt-select
                     v-model="selectedSortingOption"
                     class="ct-extension-my-extensions-listing-controls__sorting-dropdown"
@@ -81,7 +81,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     filterByActiveState,
     selectedSortingOption,
     sortingOptions,

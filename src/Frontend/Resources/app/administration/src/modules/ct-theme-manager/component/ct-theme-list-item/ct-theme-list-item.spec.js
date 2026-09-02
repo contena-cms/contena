@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
-import swThemeListItem from './index';
+import ctThemeListItem from './index';
 
-Contena.Component.register('ct-theme-list-item', swThemeListItem);
+Contena.Component.register('ct-theme-list-item', ctThemeListItem);
 
 describe('ct-theme-list-item', () => {
     async function createWrapper(props = {}) {

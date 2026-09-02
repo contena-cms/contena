@@ -29,7 +29,7 @@ developers working on the transform itself.
 ## Glossary
 
 - **Runtime binding** — a top-level author declaration that becomes returned setup state:
-  `const count = ref(0)`. Public if listed in `swDefinePublic({...})`, private otherwise.
+  `const count = ref(0)`. Public if listed in `ctDefinePublic({...})`, private otherwise.
 - **Setup input declaration** — a declaration that reads a setup input through a macro/helper:
   `const props = defineProps<Props>()`. In base mode the macro call stays exactly where it was written
   and Vue compiles it; in override mode the `useSw*` helpers are emitted as generated headers above the
@@ -38,12 +38,12 @@ developers working on the transform itself.
   (`const emit = defineEmits(...)`). Exposed as private state so the template can read `emit`,
   `slots`, and `props.<name>`. The macro call itself is left in place for Vue.
 - **Runtime input alias** — an override-only declaration reading a callback parameter:
-  `const context = useSwContext()`, `useSwProps()`, `useSwPreviousState()`. Never returned as
+  `const context = useCtContext()`, `useCtProps()`, `useCtPreviousState()`. Never returned as
   independent state, but forwarded to an override slot scope when the template references it. Base mode
   has no runtime input aliases - its body is native, so there is nothing to alias.
-- **Marker macro** — `swDefinePublic({...})` / `swDefineOverride({...})`. Compile-time only; removed
+- **Marker macro** — `ctDefinePublic({...})` / `ctDefineOverride({...})`. Compile-time only; removed
   from the generated output after their entries are extracted.
-- **Author alias** — the `__swSetupAuthor_<name>` name every top-level base runtime binding is renamed
+- **Author alias** — the `__ctSetupAuthor_<name>` name every top-level base runtime binding is renamed
   to, so the generated footer can re-declare the original name from `attachOverrides(...)`.
 - **Public entries / override entries** — the shorthand binding names extracted from the markers.
 - **Hoistable type declaration** — `interface`, `type`, or ambient `declare` statement; moved to the
@@ -56,8 +56,8 @@ developers working on the transform itself.
   strips imports, type declarations and markers from the body it moves into the callback; base lowering
   strips only the markers and rewrites every rename target to its author alias, because its body never
   moves. Which ranges are removed, and what a rename is replaced with, belongs to the lowerer.
-- **Override-private namespace** — the module-root `Symbol()` (bound to `__swSetupNamespace`) used as a
-  **computed** key under the reserved `__swOverride` slot-scope channel, through which an override's
+- **Override-private namespace** — the module-root `Symbol()` (bound to `__ctSetupNamespace`) used as a
+  **computed** key under the reserved `__ctOverride` slot-scope channel, through which an override's
   non-public bindings reach its `<ct-block extends>` template content. Emitted only when the override
   actually forwards locals. Uniqueness comes from the symbol, so the binding name can be fixed.
 - **Chunks** — the source IR: `generated` (compiler-owned text) and `original` (a slice of the author's

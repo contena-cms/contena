@@ -26,7 +26,7 @@ function withoutQuery(id: string): string {
 /**
  * Whether a file belongs to an installed dependency.
  *
- * A missing `<script setup>` is a build error, and nobody can add `swDefinePublic()` to a package they do
+ * A missing `<script setup>` is a build error, and nobody can add `ctDefinePublic()` to a package they do
  * not own - so the rule applies to authored source only. Backslashes are normalized for Windows ids.
  */
 function isDependencyFile(fileName: string): boolean {

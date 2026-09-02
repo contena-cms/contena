@@ -1,25 +1,25 @@
 <template>
-    <ct-block name="sw_media_preview_v2">
+    <ct-block name="ct_media_preview_v2">
         <div
             ref="previewRoot"
             v-tooltip.bottom="{ message: mediaName, disabled: hideTooltip }"
             class="ct-media-preview-v2"
             :class="mediaPreviewClasses"
         >
-            <ct-block name="sw_media_preview_v2_no_media">
+            <ct-block name="ct_media_preview_v2_no_media">
                 <template v-if="!source">
-                    <ct-block name="sw_media_preview_v2_no_media_icon">
+                    <ct-block name="ct_media_preview_v2_no_media_icon">
                         <mt-icon name="regular-image" size="var(--scale-size-16)" />
                     </ct-block>
                 </template>
             </ct-block>
 
-            <ct-block name="sw_media_preview_v2_file_types">
+            <ct-block name="ct_media_preview_v2_file_types">
                 <template v-if="!source"><!-- Keeps the conditional chain connected across ct-block. --></template>
                 <template v-else>
-                    <ct-block name="sw_media_preview_v2_file_type_check">
+                    <ct-block name="ct_media_preview_v2_file_type_check">
                         <template v-if="mimeTypeGroup === 'image'">
-                            <ct-block name="sw_media_preview_v2_file_type_image">
+                            <ct-block name="ct_media_preview_v2_file_type_image">
                                 <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                                 <img
                                     v-if="!imagePreviewFailed"
@@ -48,7 +48,7 @@
                         </template>
 
                         <template v-else-if="isPlayable && mimeTypeGroup === 'video'">
-                            <ct-block name="sw_media_preview_v2_file_type_video">
+                            <ct-block name="ct_media_preview_v2_file_type_video">
                                 <img
                                     v-if="mediaIsPrivate"
                                     class="ct-media-preview-v2__item ct-media-preview-v2__placeholder"
@@ -84,7 +84,7 @@
                         </template>
 
                         <template v-else-if="isPlayable && mimeTypeGroup === 'audio'">
-                            <ct-block name="sw_media_preview_v2_file_type_audio">
+                            <ct-block name="ct_media_preview_v2_file_type_audio">
                                 <img
                                     class="ct-media-preview-v2__item ct-media-preview-v2__placeholder"
                                     :src="assetFilter(placeholderIconPath)"
@@ -123,14 +123,14 @@
                         </template>
 
                         <template v-else>
-                            <ct-block name="sw_media_preview_v2_file_type_placeholder">
+                            <ct-block name="ct_media_preview_v2_file_type_placeholder">
                                 <img
                                     class="ct-media-preview-v2__item ct-media-preview-v2__placeholder"
                                     :src="assetFilter(placeholderIconPath)"
                                     :alt="mimeType"
                                 />
                             </ct-block>
-                            <ct-block name="sw_media_preview_v2_unsupported_format_warning">
+                            <ct-block name="ct_media_preview_v2_unsupported_format_warning">
                                 <mt-icon
                                     v-if="showUnsupportedFormatWarning"
                                     v-tooltip.bottom="{
@@ -562,7 +562,7 @@ onMounted(() => {
     mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     feature,
     trueSource,

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_experience_studio_sidebar_tree_node">
+    <ct-block name="ct_experience_studio_sidebar_tree_node">
         <div class="ct-experience-studio-sidebar-tree-node">
-            <ct-block name="sw_experience_studio_sidebar_tree_node_element">
+            <ct-block name="ct_experience_studio_sidebar_tree_node_element">
                 <div
                     v-draggable="dragConfig()"
                     v-droppable="dropConfigForElement()"
@@ -15,7 +15,7 @@
                     @click="onSelectElement"
                     @keydown.enter="onSelectElement"
                 >
-                    <ct-block name="sw_experience_studio_sidebar_tree_node_toggle">
+                    <ct-block name="ct_experience_studio_sidebar_tree_node_toggle">
                         <button
                             v-if="hasSlots"
                             class="ct-experience-studio-sidebar-tree-node__toggle"
@@ -30,7 +30,7 @@
                         </button>
                     </ct-block>
 
-                    <ct-block name="sw_experience_studio_sidebar_tree_node_label">
+                    <ct-block name="ct_experience_studio_sidebar_tree_node_label">
                         <div class="ct-experience-studio-sidebar-tree-node__label">
                             <mt-icon
                                 class="ct-experience-studio-sidebar-tree-node__type-icon"
@@ -44,7 +44,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_experience_studio_sidebar_tree_node_actions">
+                    <ct-block name="ct_experience_studio_sidebar_tree_node_actions">
                         <div class="ct-experience-studio-sidebar-tree-node__actions">
                             <button
                                 v-tooltip="{
@@ -78,11 +78,11 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_experience_studio_sidebar_tree_node_children">
+            <ct-block name="ct_experience_studio_sidebar_tree_node_children">
                 <div v-if="isExpanded && hasSlots" class="ct-experience-studio-sidebar-tree-node__children">
                     <template v-for="slot in slotEntries" :key="slot.name">
                         <div class="ct-experience-studio-sidebar-tree-node__slot">
-                            <ct-block name="sw_experience_studio_sidebar_tree_node_slot_header">
+                            <ct-block name="ct_experience_studio_sidebar_tree_node_slot_header">
                                 <div class="ct-experience-studio-sidebar-tree-node__slot-header">
                                     <div class="ct-experience-studio-sidebar-tree-node__slot-label">
                                         <mt-icon
@@ -112,7 +112,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_experience_studio_sidebar_tree_node_slot_elements">
+                            <ct-block name="ct_experience_studio_sidebar_tree_node_slot_elements">
                                 <div class="ct-experience-studio-sidebar-tree-node__slot-elements">
                                     <ct-experience-studio-sidebar-tree-node
                                         v-for="(childElement, childIndex) in slot.elements"
@@ -159,7 +159,7 @@ type MoveElementPayload = {
 
 const DRAG_GROUP = 'experience-studio-sidebar-tree';
 
-defineOptions({ name: 'SwExperienceStudioSidebarTreeNode' });
+defineOptions({ name: 'CtExperienceStudioSidebarTreeNode' });
 
 const props = defineProps({
     element: {
@@ -361,7 +361,7 @@ const onDropElement = (dragData: { elementId: string } | null, dropData: Omit<Mo
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     isExpanded,
     contentElement,

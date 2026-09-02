@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_base_field">
-        <div class="ct-field" :class="swFieldClasses" v-bind="$attrs" :label="label">
+    <ct-block name="ct_base_field">
+        <div class="ct-field" :class="ctFieldClasses" v-bind="$attrs" :label="label">
             <div v-if="hasLabel" class="ct-field__label">
                 <ct-inheritance-switch
                     v-if="isInheritanceField"
@@ -12,7 +12,7 @@
                 />
 
                 <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-                <label v-if="showLabel" :for="identification" :class="swFieldLabelClasses">
+                <label v-if="showLabel" :for="identification" :class="ctFieldLabelClasses">
                     <slot name="label">
                         {{ label }}
                     </slot>
@@ -146,7 +146,7 @@ const hasError = computed(() => {
 const hasHint = computed(() => {
     return !!props.hint || slots.hint?.()[0]?.children.length > 0;
 });
-const swFieldClasses = computed(() => {
+const ctFieldClasses = computed(() => {
     return {
         'has--error': hasError.value,
         'has--hint': hasHint.value,
@@ -154,7 +154,7 @@ const swFieldClasses = computed(() => {
         'is--inherited': props.isInherited,
     };
 });
-const swFieldLabelClasses = computed(() => {
+const ctFieldLabelClasses = computed(() => {
     return {
         'is--required': props.required,
     };
@@ -167,15 +167,15 @@ onMounted(() => {
     emit('base-field-mounted');
 });
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     id,
     identification,
     hasLabel,
     hasError,
     hasHint,
-    swFieldClasses,
-    swFieldLabelClasses,
+    ctFieldClasses,
+    ctFieldLabelClasses,
     showLabel,
 });
 
@@ -186,8 +186,8 @@ defineExpose({
     hasLabel,
     hasError,
     hasHint,
-    swFieldClasses,
-    swFieldLabelClasses,
+    ctFieldClasses,
+    ctFieldLabelClasses,
     showLabel,
 });
 </script>

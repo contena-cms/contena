@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_landing_page_view">
+    <ct-block name="ct_landing_page_view">
         <ct-card-view class="ct-landing-page-view" position-identifier="ct-landing-page-view">
-            <ct-block name="sw_landing_page_view_language_info">
+            <ct-block name="ct_landing_page_view_language_info">
                 <ct-language-info
                     :entity-description="
                         placeholder(landingPage, 'name', $t('ct-landing-page.general.headlineLandingPages'))
@@ -9,8 +9,8 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_landing_page_view_tabs">
-                <ct-block name="sw_landing_page_view_mt_tabs">
+            <ct-block name="ct_landing_page_view_tabs">
+                <ct-block name="ct_landing_page_view_mt_tabs">
                     <mt-tabs
                         v-if="!isLoading"
                         class="ct-landing-page-detail-page__tabs"
@@ -21,7 +21,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_landing_page_view_mt_tabs_permission_warning">
+                <ct-block name="ct_landing_page_view_mt_tabs_permission_warning">
                     <mt-banner
                         v-if="!acl.can('landing_page.editor')"
                         class="ct-landing-page-view__cms-permission-warning"
@@ -32,7 +32,7 @@
                 </ct-block>
             </ct-block>
 
-            <ct-block name="sw_landing_page_view_content">
+            <ct-block name="ct_landing_page_view_content">
                 <router-view v-slot="{ Component }">
                     <component :is="Component" :is-loading="isLoading" />
                 </router-view>
@@ -61,7 +61,7 @@ const { t } = useI18n();
 const { placeholder } = usePlaceholder();
 const acl = inject('acl');
 
-const landingPage = computed(() => Contena.Store.get('swCategoryDetail').landingPage);
+const landingPage = computed(() => Contena.Store.get('ctCategoryDetail').landingPage);
 const landingPageViewTabs = computed(() => [
     {
         label: t('ct-landing-page.view.general'),
@@ -76,7 +76,7 @@ const landingPageViewTabs = computed(() => [
     },
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     landingPage,
     landingPageViewTabs,
 });

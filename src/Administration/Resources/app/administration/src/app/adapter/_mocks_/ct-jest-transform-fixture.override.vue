@@ -1,10 +1,10 @@
 <script setup>
 import { computed } from 'vue';
 
-const previousState = useSwPreviousState();
+const previousState = useCtPreviousState();
 const count = computed(() => previousState.count.value + 1);
 
-swDefineOverride({
+ctDefineOverride({
     count,
 });
 </script>

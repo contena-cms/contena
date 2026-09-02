@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_profile_index">
+    <ct-block name="ct_profile_index">
         <ct-page class="ct-profile-index">
             <template #smart-bar-back>
-                <ct-block name="sw_profile_index_smart_bar_back">
+                <ct-block name="ct_profile_index_smart_bar_back">
                     <span></span>
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_profile_index_headline">
+                <ct-block name="ct_profile_index_headline">
                     <h2>{{ $t('ct-profile.general.headlineProfile') }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_profile_index_actions">
+                <ct-block name="ct_profile_index_actions">
                     <ct-button-process
                         size="default"
                         class="ct-profile__save-action"
@@ -32,13 +32,13 @@
 
             <template #content>
                 <ct-card-view>
-                    <ct-block name="sw_profile_index_tabs">
+                    <ct-block name="ct_profile_index_tabs">
                         <div position-identifier="ct-profile-index">
                             <mt-tabs :items="profileTabItems" :default-item="$route.name" @new-item-active="onTabChange" />
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_profile_index_router_view">
+                    <ct-block name="ct_profile_index_router_view">
                         <template v-if="isUserLoading">
                             <ct-skeleton />
                             <ct-skeleton />
@@ -71,7 +71,7 @@
                     </ct-block>
                 </ct-card-view>
 
-                <ct-block name="sw_profile_index_media_upload_actions_media_modal">
+                <ct-block name="ct_profile_index_media_upload_actions_media_modal">
                     <ct-media-modal-v2
                         v-if="showMediaModal"
                         :allow-multi-select="false"
@@ -131,10 +131,10 @@ const timezoneOptions = ref([]);
 const userPromise = ref(Promise.resolve(null));
 
 const minSearchTermLength = computed(() => {
-    return Store.get('swProfile').minSearchTermLength;
+    return Store.get('ctProfile').minSearchTermLength;
 });
 const searchPreferences = computed(() => {
-    return Store.get('swProfile').searchPreferences;
+    return Store.get('ctProfile').searchPreferences;
 });
 const userEmailError = computed(() => {
     const entity = user.value;
@@ -158,10 +158,10 @@ const userTimeZoneError = computed(() => {
 });
 const userSearchPreferences = computed({
     get: () => {
-        return Store.get('swProfile').userSearchPreferences;
+        return Store.get('ctProfile').userSearchPreferences;
     },
     set: (userSearchPreferences) => {
-        Store.get('swProfile').userSearchPreferences = userSearchPreferences;
+        Store.get('ctProfile').userSearchPreferences = userSearchPreferences;
     },
 });
 const isDisabled = computed(() => {
@@ -515,7 +515,7 @@ watch(
 void createdComponent();
 onBeforeMount(() => beforeMountComponent());
 
-swDefinePublic({
+ctDefinePublic({
     userService,
     loginService,
     mediaDefaultFolderService,

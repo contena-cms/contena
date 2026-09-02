@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_meteor_page">
+    <ct-block name="ct_meteor_page">
         <div class="ct-meteor-page" :class="pageClasses">
             <div ref="pageBody" class="ct-meteor-page__body">
                 <header ref="pageHeader" class="ct-meteor-page__head-area">
                     <div class="ct-meteor-page__head-area-top-bar-content">
                         <slot name="search-bar">
-                            <ct-block name="sw_meteor_page_search_bar">
+                            <ct-block name="ct_meteor_page_search_bar">
                                 <ct-search-bar />
                             </ct-block>
                         </slot>
@@ -13,7 +13,7 @@
 
                     <div class="ct-meteor-page__head-area-global-actions">
                         <ct-help-center-v2 />
-                        <ct-block name="sw_meteor_page_notification_center">
+                        <ct-block name="ct_meteor_page_notification_center">
                             <ct-notification-center />
                         </ct-block>
                     </div>
@@ -21,7 +21,7 @@
                     <div v-if="!hideSmartBar" class="ct-meteor-page__smart-bar">
                         <div class="ct-meteor-page__smart-bar-navigation">
                             <slot name="smart-bar-back">
-                                <ct-block name="sw_meteor_page_navigation">
+                                <ct-block name="ct_meteor_page_navigation">
                                     <ct-meteor-navigation :from-link="fromLink" />
                                 </ct-block>
                             </slot>
@@ -31,7 +31,7 @@
                             <div class="ct-meteor-page__smart-bar-module-info">
                                 <div v-if="!hideIcon && hasIconOrIconSlot" class="ct-meteor-page__smart-bar-module-icon">
                                     <slot name="smart-bar-icon">
-                                        <ct-block name="sw_meteor_page_smart_bar_icon">
+                                        <ct-block name="ct_meteor_page_smart_bar_icon">
                                             <mt-icon v-if="hasIcon" :name="module.icon" :color="pageColor" />
                                         </ct-block>
                                     </slot>
@@ -40,7 +40,7 @@
                                 <div class="ct-meteor-page__smart-bar-header">
                                     <h2 class="ct-meteor-page__smart-bar-title">
                                         <slot name="smart-bar-header">
-                                            <ct-block name="sw_meteor_page_smart_bar_title">
+                                            <ct-block name="ct_meteor_page_smart_bar_title">
                                                 <template v-if="module && module.title">
                                                     {{ $t(module.title) }}
                                                 </template>
@@ -49,27 +49,27 @@
                                     </h2>
 
                                     <div class="ct-meteor-page__smart-bar-meta">
-                                        <ct-block name="sw_meteor_page_smart_bar_meta">
+                                        <ct-block name="ct_meteor_page_smart_bar_meta">
                                             <slot name="smart-bar-header-meta"></slot>
                                         </ct-block>
                                     </div>
                                 </div>
 
                                 <div class="ct-meteor-page__smart-bar-description">
-                                    <ct-block name="sw_meteor_page_smart_bar_description">
+                                    <ct-block name="ct_meteor_page_smart_bar_description">
                                         <slot name="smart-bar-description"></slot>
                                     </ct-block>
                                 </div>
                             </div>
 
                             <div class="ct-meteor-page__smart-bar-actions">
-                                <ct-block name="sw_meteor_page_smart_bar_actions">
+                                <ct-block name="ct_meteor_page_smart_bar_actions">
                                     <slot name="smart-bar-actions"></slot>
                                 </ct-block>
                             </div>
 
                             <div class="ct-meteor-page__smart-bar-context-buttons">
-                                <ct-block name="sw_meteor_page_smart_bar_context_buttons">
+                                <ct-block name="ct_meteor_page_smart_bar_context_buttons">
                                     <slot name="smart-bar-context-buttons"></slot>
                                 </ct-block>
                             </div>
@@ -77,7 +77,7 @@
                     </div>
 
                     <div v-if="hasTabs" class="ct-meteor-page__smart-bar-tabs">
-                        <ct-block name="sw_meteor_page_smart_bar_tabs">
+                        <ct-block name="ct_meteor_page_smart_bar_tabs">
                             <mt-tabs
                                 position-identifier="ct-meteor-page"
                                 :default-item="defaultTab"
@@ -89,7 +89,7 @@
                     </div>
                 </header>
                 <main class="ct-meteor-page__content">
-                    <ct-block name="sw_meteor_page_content">
+                    <ct-block name="ct_meteor_page_content">
                         <div v-if="fullWidth" class="ct-meteor-page__scrollable-content">
                             <slot></slot>
                         </div>
@@ -112,7 +112,7 @@ import type { ModuleManifest } from 'src/core/factory/module.factory';
 import { getTabItemsFromSlotContent, getTextFromSlotItem, triggerTabItemClick } from '../tab-slot-parser';
 import './ct-meteor-page.scss';
 
-type SwTabsItemProps = {
+type CtTabsItemProps = {
     disabled?: boolean;
     hasError?: boolean;
     hasWarning?: boolean;
@@ -215,7 +215,7 @@ function getTabItemsFromSlot(): TabItem[] {
     });
 }
 function createTabItem(item: VNode): TabItem {
-    const tabProps = (item.props ?? {}) as SwTabsItemProps;
+    const tabProps = (item.props ?? {}) as CtTabsItemProps;
     const routeName = getRouteName(tabProps.route);
     const slotText = getTabItemDefaultSlotText(item);
     const label = slotText ?? tabProps.title ?? tabProps.name ?? routeName ?? '';
@@ -260,7 +260,7 @@ function getRouteName(tabRoute: RouteLocationRaw | undefined): string | undefine
     return typeof tabRoute.name === 'string' ? tabRoute.name : undefined;
 }
 function isTabItem(item: VNode): boolean {
-    const tabProps = item.props as SwTabsItemProps | null;
+    const tabProps = item.props as CtTabsItemProps | null;
     const children = item.children as VNodeChildrenWithDefaultSlot | undefined;
     return (
         (item.type as VNodeTypeWithName | undefined)?.name === 'ct-tabs-item' ||
@@ -285,7 +285,7 @@ onMounted(() => {
     mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     module,
     parentRoute,
     pageClasses,

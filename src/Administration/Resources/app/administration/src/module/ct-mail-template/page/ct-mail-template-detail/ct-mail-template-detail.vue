@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_mail_template_detail">
+    <ct-block name="ct_mail_template_detail">
         <ct-page class="ct-mail-template-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_mail_template_detail_header">
+                <ct-block name="ct_mail_template_detail_header">
                     <h2>{{ headline }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_mail_template_detail_actions">
-                    <ct-block name="sw_mail_template_detail_actions_abort">
+                <ct-block name="ct_mail_template_detail_actions">
+                    <ct-block name="ct_mail_template_detail_actions_abort">
                         <mt-button variant="secondary" :disabled="isLoading" @click="onCancel">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
-                    <ct-block name="sw_mail_template_detail_actions_save">
+                    <ct-block name="ct_mail_template_detail_actions_save">
                         <ct-button-process
                             variant="primary"
                             :is-loading="isLoading"
@@ -30,13 +30,13 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_mail_template_detail_language_switch">
+                <ct-block name="ct_mail_template_detail_language_switch">
                     <ct-language-switch :disabled="mailTemplate?.isNew()" @on-change="load" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_mail_template_detail_content">
+                <ct-block name="ct_mail_template_detail_content">
                     <ct-card-view sidebar>
                         <template v-if="isLoading && !mailTemplate">
                             <ct-skeleton />
@@ -44,11 +44,11 @@
                         </template>
 
                         <template v-else-if="mailTemplate">
-                            <ct-block name="sw_mail_template_detail_content_language_info">
+                            <ct-block name="ct_mail_template_detail_content_language_info">
                                 <ct-language-info :entity-description="headline" />
                             </ct-block>
 
-                            <ct-block name="sw_mail_template_detail_basic_info">
+                            <ct-block name="ct_mail_template_detail_basic_info">
                                 <mt-card
                                     position-identifier="ct-mail-template-detail-basic-info"
                                     :title="$t('ct-mail-template.detail.basic.titleCard')"
@@ -69,7 +69,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_template_detail_options_info">
+                            <ct-block name="ct_mail_template_detail_options_info">
                                 <mt-card
                                     position-identifier="ct-mail-template-detail-options-info"
                                     :title="$t('ct-mail-template.detail.options.titleCard')"
@@ -92,7 +92,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_template_detail_attachments_info">
+                            <ct-block name="ct_mail_template_detail_attachments_info">
                                 <mt-card
                                     v-if="!mailTemplate.isNew()"
                                     position-identifier="ct-mail-template-detail-attachments-info"
@@ -158,7 +158,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_template_detail_mail_text_info">
+                            <ct-block name="ct_mail_template_detail_mail_text_info">
                                 <mt-card
                                     position-identifier="ct-mail-template-detail-mail-text-info"
                                     :title="$t('ct-mail-template.detail.mailText.titleCard')"
@@ -186,7 +186,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_template_detail_preview_modal">
+                            <ct-block name="ct_mail_template_detail_preview_modal">
                                 <ct-mail-template-preview-modal
                                     v-if="mailPreview"
                                     :mail-preview="mailPreview"
@@ -200,9 +200,9 @@
             </template>
 
             <template #sidebar>
-                <ct-block name="sw_mail_template_detail_sidebar">
+                <ct-block name="ct_mail_template_detail_sidebar">
                     <ct-sidebar>
-                        <ct-block name="sw_mail_template_detail_sidebar_inner_test_mail">
+                        <ct-block name="ct_mail_template_detail_sidebar_inner_test_mail">
                             <ct-sidebar-item
                                 icon="regular-paper-plane"
                                 :title="$t('ct-mail-template.detail.sidebar.titleTestMail')"
@@ -240,7 +240,7 @@
                             </ct-sidebar-item>
                         </ct-block>
 
-                        <ct-block name="sw_mail_template_detail_sidebar_inner_variables">
+                        <ct-block name="ct_mail_template_detail_sidebar_inner_variables">
                             <ct-sidebar-item
                                 icon="regular-code"
                                 :title="$t('ct-mail-template.detail.sidebar.titleShowAvailableVariables')"
@@ -304,7 +304,7 @@
                             </ct-sidebar-item>
                         </ct-block>
 
-                        <ct-block name="sw_mail_template_detail_sidebar_inner_preview">
+                        <ct-block name="ct_mail_template_detail_sidebar_inner_preview">
                             <ct-sidebar-item
                                 icon="regular-eye"
                                 :title="$t('ct-mail-template.detail.sidebar.titleShowPreview')"
@@ -821,7 +821,7 @@ void Promise.all([
     loadTriggerEvents(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     mailTemplate,
     attachedMedia,
     isLoading,

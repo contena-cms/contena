@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_custom_field_type_base">
+    <ct-block name="ct_custom_field_type_base">
         <div class="ct-custom-field-type-base">
-            <ct-block name="sw_custom_field_type_base_content">
-                <ct-block name="sw_custom_field_type_base_labels">
+            <ct-block name="ct_custom_field_type_base_content">
+                <ct-block name="ct_custom_field_type_base_labels">
                     <ct-custom-field-translated-labels
                         v-model:config="currentCustomField.config"
                         :disabled="!acl.can('custom_field.editor')"
@@ -11,9 +11,9 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_date_container">
+                <ct-block name="ct_custom_field_type_date_container">
                     <div class="ct-custom-field-type-date__container">
-                        <ct-block name="sw_custom_field_type_date_container_type">
+                        <ct-block name="ct_custom_field_type_date_container_type">
                             <mt-select
                                 v-model="currentCustomField.config.dateType"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelDateType')"
@@ -21,7 +21,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_date_container_time_format">
+                        <ct-block name="ct_custom_field_type_date_container_time_format">
                             <mt-select
                                 v-if="['time', 'datetime'].includes(currentCustomField.config.dateType ?? '')"
                                 v-model="currentCustomField.config.config.time_24hr"
@@ -102,7 +102,7 @@ if (currentCustomField.value.config.config === undefined) {
     };
 }
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     locales,
     propertyNames,

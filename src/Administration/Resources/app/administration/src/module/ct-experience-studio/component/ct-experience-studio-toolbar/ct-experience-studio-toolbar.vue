@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_experience_studio_toolbar">
+    <ct-block name="ct_experience_studio_toolbar">
         <div class="ct-experience-studio-toolbar">
-            <ct-block name="sw_experience_studio_toolbar_left">
+            <ct-block name="ct_experience_studio_toolbar_left">
                 <div class="ct-experience-studio-toolbar__left">
                     <div class="ct-experience-studio-toolbar__page-info">
-                        <ct-block name="sw_experience_studio_toolbar_back_button">
+                        <ct-block name="ct_experience_studio_toolbar_back_button">
                             <a
                                 class="ct-experience-studio-toolbar__back-btn"
                                 role="link"
@@ -17,7 +17,7 @@
                             </a>
                         </ct-block>
 
-                        <ct-block name="sw_experience_studio_toolbar_page_name">
+                        <ct-block name="ct_experience_studio_toolbar_page_name">
                             <h2 class="ct-experience-studio-toolbar__page-name">
                                 {{ layoutName }}
                             </h2>
@@ -48,10 +48,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_experience_studio_toolbar_center">
+            <ct-block name="ct_experience_studio_toolbar_center">
                 <div class="ct-experience-studio-toolbar__center">
                     <div class="ct-experience-studio-toolbar__device-actions">
-                        <ct-block name="sw_experience_studio_toolbar_device_actions_mobile">
+                        <ct-block name="ct_experience_studio_toolbar_device_actions_mobile">
                             <mt-icon
                                 name="regular-mobile"
                                 :class="{ 'is--active': currentViewport === 'mobile' }"
@@ -59,7 +59,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_experience_studio_toolbar_device_actions_tablet_landscape">
+                        <ct-block name="ct_experience_studio_toolbar_device_actions_tablet_landscape">
                             <mt-icon
                                 name="regular-tablet"
                                 :class="{ 'is--active': currentViewport === 'tablet-landscape' }"
@@ -67,7 +67,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_experience_studio_toolbar_device_actions_desktop">
+                        <ct-block name="ct_experience_studio_toolbar_device_actions_desktop">
                             <mt-icon
                                 name="regular-desktop"
                                 :class="{ 'is--active': currentViewport === 'desktop' }"
@@ -78,9 +78,9 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_experience_studio_toolbar_right">
+            <ct-block name="ct_experience_studio_toolbar_right">
                 <div class="ct-experience-studio-toolbar__right">
-                    <ct-block name="sw_experience_studio_toolbar_entity_select">
+                    <ct-block name="ct_experience_studio_toolbar_entity_select">
                         <div v-if="showPreviewEntitySelect" class="ct-experience-studio-toolbar__entity-field">
                             <label class="ct-experience-studio-toolbar__field-label">
                                 {{ $t('ct-experience-studio.detail.toolbar.previewEntity') }}
@@ -108,7 +108,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_experience_studio_toolbar_channel_select">
+                    <ct-block name="ct_experience_studio_toolbar_channel_select">
                         <div class="ct-experience-studio-toolbar__channel-field">
                             <label class="ct-experience-studio-toolbar__field-label">
                                 {{ $t('ct-experience-studio.detail.toolbar.previewChannel') }}
@@ -127,7 +127,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_experience_studio_toolbar_assignment_actions">
+                    <ct-block name="ct_experience_studio_toolbar_assignment_actions">
                         <mt-button
                             variant="secondary"
                             :disabled="!allowAssign || isLoading || isAssignmentLoading || undefined"
@@ -313,7 +313,7 @@ const onUnassign = () => {
     emit('unassign');
 };
 
-swDefinePublic({
+ctDefinePublic({
     layoutName,
     channelCriteria,
     frontendChannelRepositoryFactory,

@@ -1,19 +1,19 @@
 <template>
-    <ct-block name="sw_sidebar_item">
+    <ct-block name="ct_sidebar_item">
         <div v-if="showContent" class="ct-sidebar-item">
-            <ct-block name="sw_sidebar_item_headline">
+            <ct-block name="ct_sidebar_item_headline">
                 <div class="ct-sidebar-item__headline">
-                    <ct-block name="sw_sidebar_item_title">
+                    <ct-block name="ct_sidebar_item_title">
                         <h3 class="ct-sidebar-item__title">
                             {{ title }}
                         </h3>
                     </ct-block>
 
                     <slot name="headline-content">
-                        <ct-block name="sw_sidebar_item_headline_slot"></ct-block>
+                        <ct-block name="ct_sidebar_item_headline_slot"></ct-block>
                     </slot>
 
-                    <ct-block name="sw_sidebar_item_close_button">
+                    <ct-block name="ct_sidebar_item_close_button">
                         <button
                             class="ct-sidebar-item__close-button"
                             :aria-label="$t('ct-sidebar.ariaLabelButtonClose')"
@@ -25,11 +25,11 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_sidebar_item_content">
+            <ct-block name="ct_sidebar_item_content">
                 <div class="ct-sidebar-item__content">
                     <div class="ct-sidebar-item__scrollable-container">
                         <slot>
-                            <ct-block name="sw_sidebar_item_default_slot"></ct-block>
+                            <ct-block name="ct_sidebar_item_default_slot"></ct-block>
                         </slot>
                     </div>
                 </div>
@@ -205,7 +205,7 @@ watch(
 
 registerSidebarItem?.(sidebarItem);
 
-swDefinePublic({
+ctDefinePublic({
     registerSidebarItem,
     isActive,
     toggleActiveListener,

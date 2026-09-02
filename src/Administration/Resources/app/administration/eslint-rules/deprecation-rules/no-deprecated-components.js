@@ -209,8 +209,8 @@ module.exports = {
                     }
 
                     // Handle special ct-data-grid component
-                    const swDatagridName = 'ct-data-grid';
-                    if (node.name === swDatagridName && activatedComponents.includes(swDatagridName)) {
+                    const ctDatagridName = 'ct-data-grid';
+                    if (node.name === ctDatagridName && activatedComponents.includes(ctDatagridName)) {
                         // Check if comment a line before the ct-data-grid component exists
                         const commentBeforeNode = context.getSourceCode().getText().split('\n')[node.loc.start.line - 2];
 
@@ -222,14 +222,14 @@ module.exports = {
                         // Add comment a line before the ct-data-grid component
                         context.report({
                             loc: node.loc,
-                            message: `"${swDatagridName}" is deprecated. Please use "mt-data-table" instead.`,
+                            message: `"${ctDatagridName}" is deprecated. Please use "mt-data-table" instead.`,
                             *fix(fixer) {
                                 if (!enableFix) return;
 
                                 const isSelfClosing = node.startTag.selfClosing;
 
                                 // Get the range of the start tag
-                                const startTagRange = [node.startTag.range[0], swDatagridName.length + node.startTag.range[0] + 1];
+                                const startTagRange = [node.startTag.range[0], ctDatagridName.length + node.startTag.range[0] + 1];
 
                                 // Save indentation of the old component
                                 const indentation = node.loc.start.column;

@@ -30,7 +30,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
             }
 
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -45,7 +45,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
         const source = stripIndent`
             <script setup>
             const props = defineProps();
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -60,7 +60,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
             const props = withDefaults(defineProps<{ label?: string }>(), {
                 label: 'fallback',
             });
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -73,7 +73,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
         const source = stripIndent`
             <script setup lang="ts">
             const emit = defineEmits(['save']);
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -86,7 +86,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
         const source = stripIndent`
             <script setup lang="ts">
             defineExpose({});
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -99,7 +99,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
         const source = stripIndent`
             <script setup lang="ts">
             const slots = defineSlots();
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -112,7 +112,7 @@ describe('build/vue-setup-transform unsupported macros', () => {
         const source = stripIndent`
             <script setup lang="ts">
             defineOptions({ inheritAttrs: false });
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 

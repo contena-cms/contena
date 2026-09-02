@@ -7,7 +7,7 @@ import { proxyRefs, reactive, toRef, toRefs } from 'vue';
  *
  * Keeps script-setup override-local state available to component templates and block slots.
  *
- * The composition extension system stores override-file-owned `__swOverride` data outside Vue's public instance
+ * The composition extension system stores override-file-owned `__ctOverride` data outside Vue's public instance
  * internals, then exposes a proxy-compatible data scope for consumers such as `ct-block`.
  *
  * @example
@@ -25,10 +25,10 @@ import { proxyRefs, reactive, toRef, toRefs } from 'vue';
  * Use this key for generated override return values so multiple override files can contribute isolated fields.
  *
  * @example
- * const __swSetupNamespace = Symbol('ct-thing.override');   // module root, one per override file
- * return { __swOverride: { [__swSetupNamespace]: { message: 'Hello' } } };
+ * const __ctSetupNamespace = Symbol('ct-thing.override');   // module root, one per override file
+ * return { __ctOverride: { [__ctSetupNamespace]: { message: 'Hello' } } };
  */
-export const OVERRIDE_LOCAL_STATE_KEY = '__swOverride' as const;
+export const OVERRIDE_LOCAL_STATE_KEY = '__ctOverride' as const;
 
 /**
  * @private
@@ -58,7 +58,7 @@ type ScriptSetupDataScope = ShallowUnwrapRef<ToRefs<Reactive<object>>>;
  *
  * Describes the `createExtendableSetup(...)` return value after the override-local state ref is attached.
  *
- * The `__swOverride` ref is intentionally non-enumerable so extension helpers can access it without exposing it as
+ * The `__ctOverride` ref is intentionally non-enumerable so extension helpers can access it without exposing it as
  * ordinary public setup state.
  *
  * @example
@@ -71,7 +71,7 @@ export type ExtendableSetupState<TState extends object> = ToRefs<Reactive<TState
 /**
  * Marks reactive setup state that already carries the hidden override-local state object.
  *
- * Use this shape at the data-scope boundary where `toRef(...)` needs the concrete `__swOverride` property.
+ * Use this shape at the data-scope boundary where `toRef(...)` needs the concrete `__ctOverride` property.
  *
  * @example
  * createOverrideLocalStateRef(reactiveSetupState as ReactiveSetupStateWithOverrideLocalState<State>);
@@ -115,7 +115,7 @@ export const createOverrideLocalState = (): Reactive<OverrideLocalState> => {
  *
  * Attaches override-local state to setup state without making it enumerable.
  *
- * Use this before creating the data scope so templates can resolve `__swOverride` while normal state iteration stays
+ * Use this before creating the data scope so templates can resolve `__ctOverride` while normal state iteration stays
  * unchanged.
  *
  * @example
@@ -147,10 +147,10 @@ const createOverrideLocalStateRef = <TState extends object>(
  *
  * Reads the hidden override-local state from reactive setup state.
  *
- * Use this when an override returns a `__swOverride` payload that should be merged into the existing namespace.
+ * Use this when an override returns a `__ctOverride` payload that should be merged into the existing namespace.
  *
  * @example
- * mergeOverrideState(getOverrideLocalState(reactiveSetupState), overrideResult.__swOverride);
+ * mergeOverrideState(getOverrideLocalState(reactiveSetupState), overrideResult.__ctOverride);
  */
 export const getOverrideLocalState = (state: object): OverrideLocalState => {
     return (state as Record<typeof OVERRIDE_LOCAL_STATE_KEY, OverrideLocalState>)[OVERRIDE_LOCAL_STATE_KEY];
@@ -189,7 +189,7 @@ export const mergeOverrideState = (targetState: OverrideLocalState, overrideStat
  *
  * Converts reactive setup state into the return shape expected from `createExtendableSetup(...)`.
  *
- * Use this after all setup state was made reactive so Vue ref unwrapping and the hidden `__swOverride` ref stay in sync.
+ * Use this after all setup state was made reactive so Vue ref unwrapping and the hidden `__ctOverride` ref stay in sync.
  *
  * @example
  * const dataScope = createDataScope(reactiveSetupState);

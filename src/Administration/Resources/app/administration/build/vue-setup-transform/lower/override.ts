@@ -36,7 +36,7 @@ function buildOverrideReturn(analysis: OverrideSetupScriptAnalysis, overridePriv
 
     if (privateBindings.length > 0) {
         lines.push(
-            '    __swOverride: {',
+            '    __ctOverride: {',
             `        [${OVERRIDE_NAMESPACE_BINDING}]: {`,
             ...privateBindings.map((localName) => `            ${localName},`),
             '        },',
@@ -61,7 +61,7 @@ function buildOverrideReturn(analysis: OverrideSetupScriptAnalysis, overridePriv
 function toSlotScopeEdit(scope: OverrideSlotScope): SourceEdit {
     const mappings = [
         ...(scope.privateNames.length > 0
-            ? [`__swOverride: { [${OVERRIDE_NAMESPACE_BINDING}]: { ${scope.privateNames.join(', ')} } }`]
+            ? [`__ctOverride: { [${OVERRIDE_NAMESPACE_BINDING}]: { ${scope.privateNames.join(', ')} } }`]
             : []),
         ...scope.publicNames,
     ];
@@ -86,11 +86,11 @@ function buildOverrideScript(
     analysis: OverrideSetupScriptAnalysis,
     templateAnalysis: TemplateAnalysis,
 ): SourceEdit[] {
-    // Generated bindings use the reserved `__swSetup` prefix (rejected as user bindings), so they are
+    // Generated bindings use the reserved `__ctSetup` prefix (rejected as user bindings), so they are
     // deterministic and never collide.
-    const previousStateName = '__swSetupPreviousState';
-    const propsName = '__swSetupProps';
-    const contextName = '__swSetupContext';
+    const previousStateName = '__ctSetupPreviousState';
+    const propsName = '__ctSetupProps';
+    const contextName = '__ctSetupContext';
     // The author body moves into a callback, so everything that cannot live in a function body leaves it:
     // imports are illegal there, an ambient `declare` describes a value from elsewhere, and the markers
     // are compile-time only. Imports and type declarations are re-emitted at the script root below.
@@ -111,9 +111,9 @@ function buildOverrideScript(
     }
 
     const body = [
-        generated(`const useSwPreviousState = () => ${previousStateName};\n`),
-        generated(`const useSwProps = () => ${propsName};\n`),
-        generated(`const useSwContext = () => ${contextName};\n\n`),
+        generated(`const useCtPreviousState = () => ${previousStateName};\n`),
+        generated(`const useCtProps = () => ${propsName};\n`),
+        generated(`const useCtContext = () => ${contextName};\n\n`),
         ...callbackBody,
         generated(`\n\n${buildOverrideReturn(analysis, templateAnalysis.privateBindings)}`),
     ];

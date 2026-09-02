@@ -1,21 +1,21 @@
 <template>
-    <ct-block name="sw_settings_logging_entry_info">
+    <ct-block name="ct_settings_logging_entry_info">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="$t('ct-settings-logging.entryInfo.title')">
-                <ct-block name="sw_settings_logging_entry_info_tabs">
+                <ct-block name="ct_settings_logging_entry_info_tabs">
                     <div>
                         <mt-tabs :items="tabItems" :default-item="activeTab" @new-item-active="onTabChange" />
 
                         <div class="ct-settings-logging-entry-info__content">
-                            <ct-block name="sw_settings_logging_entry_info_content">
-                                <ct-block name="sw_settings_logging_entry_info_raw_content">
+                            <ct-block name="ct_settings_logging_entry_info_content">
+                                <ct-block name="ct_settings_logging_entry_info_raw_content">
                                     <mt-textarea v-if="activeTab === 'raw'" :model-value="displayString" />
                                 </ct-block>
 
                                 <template v-if="activeTab === 'html' || activeTab === 'plain'">
-                                    <ct-block name="sw_settings_logging_mail_sent_content_recipients">
+                                    <ct-block name="ct_settings_logging_mail_sent_content_recipients">
                                         <div class="ct-settings-logging-mail-sent-info__recipients">
-                                            <ct-block name="sw_settings_logging_mail_sent_content_recipients_title">
+                                            <ct-block name="ct_settings_logging_mail_sent_content_recipients_title">
                                                 <span>
                                                     {{ $t('ct-settings-logging.mailInfo.recipientsTitle') }}:
                                                     {{ recipientString }}
@@ -24,13 +24,13 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_logging_mail_sent_content_mailbody">
+                                    <ct-block name="ct_settings_logging_mail_sent_content_mailbody">
                                         <div>
-                                            <ct-block name="sw_settings_logging_mail_sent_content_mailbody_title">
+                                            <ct-block name="ct_settings_logging_mail_sent_content_mailbody_title">
                                                 <span>{{ $t('ct-settings-logging.mailInfo.contentsTitle') }}:</span>
                                             </ct-block>
 
-                                            <ct-block name="sw_settings_logging_mail_sent_content_mailbody_html">
+                                            <ct-block name="ct_settings_logging_mail_sent_content_mailbody_html">
                                                 <div
                                                     v-if="activeTab === 'html'"
                                                     class="ct-settings-logging-mail-sent-info__mail-content"
@@ -38,7 +38,7 @@
                                                 ></div>
                                             </ct-block>
 
-                                            <ct-block name="sw_settings_logging_mail_sent_content_mailbody_plain">
+                                            <ct-block name="ct_settings_logging_mail_sent_content_mailbody_plain">
                                                 <div
                                                     v-if="activeTab === 'plain'"
                                                     class="ct-settings-logging-mail-sent-info__mail-content"
@@ -55,8 +55,8 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_settings_logging_entry_info_footer">
-                        <ct-block name="sw_settings_logging_entry_info_close_button">
+                    <ct-block name="ct_settings_logging_entry_info_footer">
+                        <ct-block name="ct_settings_logging_entry_info_close_button">
                             <mt-button size="small" variant="secondary" @click="onClose">
                                 {{ $t('global.default.close') }}
                             </mt-button>
@@ -122,7 +122,7 @@ const onClose = (): void => {
     emit('close');
 };
 
-swDefinePublic({
+ctDefinePublic({
     activeTab,
     tabItems,
     displayString,

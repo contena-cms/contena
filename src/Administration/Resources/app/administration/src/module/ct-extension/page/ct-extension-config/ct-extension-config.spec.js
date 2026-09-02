@@ -2,10 +2,10 @@ import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 
 describe('src/module/ct-extension/page/ct-extension-config.spec', () => {
-    let SwExtensionConfig;
+    let CtExtensionConfig;
 
     async function createWrapper(props = {}) {
-        return mount(SwExtensionConfig, {
+        return mount(CtExtensionConfig, {
             global: {
                 mocks: {
                     $route: {
@@ -60,7 +60,7 @@ describe('src/module/ct-extension/page/ct-extension-config.spec', () => {
     }
 
     beforeAll(async () => {
-        SwExtensionConfig = await wrapTestComponent('ct-extension-config', {
+        CtExtensionConfig = await wrapTestComponent('ct-extension-config', {
             sync: true,
         });
     });

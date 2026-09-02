@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_settings_snippet_filter_switch">
+    <ct-block name="ct_settings_snippet_filter_switch">
         <div class="ct-settings-snippet-filter-switch" :class="fieldClasses">
-            <ct-block name="sw_settings_snippet_filter_switch_field">
+            <ct-block name="ct_settings_snippet_filter_switch_field">
                 <mt-switch :name="name" :model-value="value" :label="label" @update:model-value="onChange" />
             </ct-block>
         </div>
@@ -46,7 +46,7 @@ const onChange = (value: boolean): void => {
     emit('update:value', { value, name: props.name, group: props.group });
 };
 
-swDefinePublic({
+ctDefinePublic({
     fieldClasses,
     onChange,
 });

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_admin_menu_item">
+    <ct-block name="ct_admin_menu_item">
         <mt-collapsible
             v-if="showMenuItem && hasCollapsibleSubtree"
             as="li"
@@ -23,7 +23,7 @@
                         v-bind="collapsedFlyoutAria"
                         @click="onNavigationLinkClick"
                     >
-                        <ct-block name="sw_admin_menu_item_icon">
+                        <ct-block name="ct_admin_menu_item_icon">
                             <mt-icon
                                 v-if="displayIcon"
                                 :size="iconSize"
@@ -32,7 +32,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_admin_menu_item_text">
+                        <ct-block name="ct_admin_menu_item_text">
                             <span
                                 class="ct-admin-menu__navigation-link-label"
                                 :class="collapsibleText ? 'collapsible-text hide-on-collapse' : ''"
@@ -44,7 +44,7 @@
 
                         <slot name="additional-text"></slot>
 
-                        <ct-block name="sw_admin_menu_item_expand_indicator_linked">
+                        <ct-block name="ct_admin_menu_item_expand_indicator_linked">
                             <span class="ct-admin-menu__navigation-link-expand-icon-box">
                                 <mt-icon
                                     :name="expandIcon"
@@ -64,7 +64,7 @@
                     :aria-label="collapsedAriaLabel"
                     v-bind="collapsedFlyoutAria"
                 >
-                    <ct-block name="sw_admin_menu_item_navigation_icon">
+                    <ct-block name="ct_admin_menu_item_navigation_icon">
                         <mt-icon
                             v-if="displayIcon"
                             :size="iconSize"
@@ -73,7 +73,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_admin_menu_item_navigation_text">
+                    <ct-block name="ct_admin_menu_item_navigation_text">
                         <span
                             class="ct-admin-menu__navigation-link-label"
                             :class="collapsibleText ? 'collapsible-text hide-on-collapse' : ''"
@@ -85,7 +85,7 @@
 
                     <slot name="additional-text"></slot>
 
-                    <ct-block name="sw_admin_menu_item_expand_indicator_fold">
+                    <ct-block name="ct_admin_menu_item_expand_indicator_fold">
                         <span class="ct-admin-menu__navigation-link-expand-icon-box">
                             <mt-icon
                                 :name="expandIcon"
@@ -97,7 +97,7 @@
                 </mt-collapsible-trigger>
             </div>
 
-            <ct-block name="sw_sidebar_sub_items_list">
+            <ct-block name="ct_sidebar_sub_items_list">
                 <mt-collapsible-content as="ul" class="ct-admin-menu__sub-navigation-list">
                     <ct-admin-menu-item
                         v-for="(childEntry, subMenuIndex) in children"
@@ -125,7 +125,7 @@
             <mt-tooltip :content="getEntryLabel" placement="right">
                 <template #default="tooltipProps">
                     <div class="ct-admin-menu__navigation-item-row" v-bind="collapsedTooltipTriggerProps(tooltipProps)">
-                        <ct-block name="sw_admin_menu_item_router_link">
+                        <ct-block name="ct_admin_menu_item_router_link">
                             <router-link
                                 v-if="entryPath"
                                 class="ct-admin-menu__navigation-link"
@@ -155,7 +155,7 @@
                             </router-link>
                         </ct-block>
 
-                        <ct-block name="sw_admin_menu_item_external_link">
+                        <ct-block name="ct_admin_menu_item_external_link">
                             <a
                                 v-if="!entryPath && entry.link"
                                 :href="entry.link"
@@ -183,7 +183,7 @@
                             </a>
                         </ct-block>
 
-                        <ct-block name="sw_admin_menu_item_navigation_link">
+                        <ct-block name="ct_admin_menu_item_navigation_link">
                             <span
                                 v-if="!entryPath && !entry.link"
                                 class="ct-admin-menu__navigation-link"
@@ -580,7 +580,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     suppressRouteKeepsFolderOpen,
     manualNestedOpen,

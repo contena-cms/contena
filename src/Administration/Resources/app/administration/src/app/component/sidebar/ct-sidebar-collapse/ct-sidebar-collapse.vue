@@ -1,19 +1,19 @@
 <template>
-    <ct-block name="sw_collapse_panel">
+    <ct-block name="ct_collapse_panel">
         <div class="ct-collapse">
-            <ct-block name="sw_collapse_panel_header">
-                <ct-block name="sw_collapse_panel_header_slot">
+            <ct-block name="ct_collapse_panel_header">
+                <ct-block name="ct_collapse_panel_header_slot">
                     <div class="ct-sidebar-collapse__header">
-                        <ct-block name="sw_sidebar_collapse_title">
+                        <ct-block name="ct_sidebar_collapse_title">
                             <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                             <h4 class="ct-sidebar-collapse__title" aria-level="4" @click="collapseItem">
                                 <slot name="header" :expanded="expanded">
-                                    <ct-block name="sw_sidebar_collapse_panel_header_slot"></ct-block>
+                                    <ct-block name="ct_sidebar_collapse_panel_header_slot"></ct-block>
                                 </slot>
                             </h4>
                         </ct-block>
 
-                        <ct-block name="sw_sidebar_collapse_buttons">
+                        <ct-block name="ct_sidebar_collapse_buttons">
                             <div class="ct-sidebar-collapse__actions">
                                 <slot name="actions"></slot>
                             </div>
@@ -44,10 +44,10 @@
                 </ct-block>
             </ct-block>
 
-            <ct-block name="sw_collapse_panel_content">
+            <ct-block name="ct_collapse_panel_content">
                 <div v-if="expanded" class="ct-collapse__content">
                     <slot name="content">
-                        <ct-block name="sw_collapse_panel_content_slot"></ct-block>
+                        <ct-block name="ct_collapse_panel_content_slot"></ct-block>
                     </slot>
                 </div>
             </ct-block>
@@ -88,7 +88,7 @@ const collapseItem = () => {
     emit('change-expanded', { isExpanded: expanded.value });
 };
 
-swDefinePublic({
+ctDefinePublic({
     expandButtonClass,
     collapseButtonClass,
     collapseItem,

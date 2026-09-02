@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_ai_copilot_badge">
+    <ct-block name="ct_ai_copilot_badge">
         <!-- Information: the text should be harcoded and non translatable -->
         <div class="ct-ai-copilot-badge">
             <mt-icon
@@ -31,5 +31,5 @@ defineProps({
     },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

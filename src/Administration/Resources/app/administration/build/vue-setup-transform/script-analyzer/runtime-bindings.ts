@@ -68,7 +68,7 @@ class RuntimeBindingCollector {
     /** Always exactly the names in `bindings`; kept as a Set for duplicate and rename lookups. */
     readonly names = new Set<string>();
 
-    /** Names that alias a runtime input (`useSwProps()`), usable locally but never returned as state. */
+    /** Names that alias a runtime input (`useCtProps()`), usable locally but never returned as state. */
     readonly aliasNames = new Set<string>();
 
     #scriptOffset: number;
@@ -110,7 +110,7 @@ class RuntimeBindingCollector {
 /**
  * Allows setup input helper aliases without returning them as component state.
  *
- * e.g. `const context = useSwContext();` - the alias is usable locally but is not setup state.
+ * e.g. `const context = useCtContext();` - the alias is usable locally but is not setup state.
  */
 function isRuntimeInputAlias(declaration: VariableDeclarator, mode: ContenaSetupMode): boolean {
     return (
@@ -138,7 +138,7 @@ function isPropsMacroDeclaration(declaration: VariableDeclarator): boolean {
 /**
  * Checks whether a variable declaration reads setup input through a supported helper/macro.
  *
- * e.g. `const props = defineProps<Props>();` or `const props = useSwProps();`
+ * e.g. `const props = defineProps<Props>();` or `const props = useCtProps();`
  */
 function isSetupInputDeclaration(declaration: VariableDeclarator): boolean {
     const init = unwrapTransparentMacroExpression(declaration.init);
@@ -169,7 +169,7 @@ function isExposableSetupMacroDeclaration(declaration: VariableDeclarator): bool
 /**
  * Classifies top-level declarations that become private/base or override state.
  *
- * Runtime input aliases (`useSwPreviousState()`, `useSwProps()`, `useSwContext()`) are not returned as
+ * Runtime input aliases (`useCtPreviousState()`, `useCtProps()`, `useCtContext()`) are not returned as
  * independent setup state, but their names are recorded so template analysis can still forward them to
  * an override slot scope when the override template references them.
  */
@@ -196,10 +196,10 @@ function collectRuntimeBinding(
                 if (mode === 'base' && isExposableSetupMacroDeclaration(declaration)) {
                     collector.add(declaration.id.name, declaration.id);
                 } else if (isRuntimeInputAlias(declaration, mode)) {
-                    // e.g. override `const props = useSwProps()`: useSwProps is both a setup input and a
+                    // e.g. override `const props = useCtProps()`: useCtProps is both a setup input and a
                     // runtime input alias, so it is not returned as state, but its name is recorded so an
                     // override template referencing it is forwarded to the generated <ct-block extends>
-                    // slot scope like useSwPreviousState()/useSwContext().
+                    // slot scope like useCtPreviousState()/useCtContext().
                     collector.aliasNames.add(declaration.id.name);
                 }
 

@@ -97,7 +97,7 @@ async function createWrapper({ getValues, saveValues }: WrapperOptions = {}) {
             },
             stubs: {
                 'ct-page': {
-                    name: 'SwPageStub',
+                    name: 'CtPageStub',
                     props: { showSearchBar: Boolean },
                     template:
                         '<div><slot name="smart-bar-header" /><slot name="smart-bar-actions" /><slot name="content" /></div>',

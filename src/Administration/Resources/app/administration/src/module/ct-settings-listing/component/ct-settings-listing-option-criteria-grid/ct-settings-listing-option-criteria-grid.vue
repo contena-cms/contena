@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_settings_listing_option_criteria_card">
+    <ct-block name="ct_settings_listing_option_criteria_card">
         <mt-card
             class="ct-settings-listing-option-criteria-grid"
             :title="$t('ct-settings-listing.base.criteria.title')"
             position-identifier="ct-settings-listing-option-criteria-grid"
         >
             <template #toolbar>
-                <ct-block name="sw_settings_listing_option_criteria_card_toolbar_select">
+                <ct-block name="ct_settings_listing_option_criteria_card_toolbar_select">
                     <mt-select
                         class="ct-settings-listing-option-criteria-grid__criteria-select"
                         :model-value="selectedCriteria"
@@ -19,7 +19,7 @@
                 </ct-block>
             </template>
 
-            <ct-block name="sw_settings_listing_option_criteria_card_grid">
+            <ct-block name="ct_settings_listing_option_criteria_card_grid">
                 <mt-data-table
                     v-if="sortingFields.length > 0"
                     :data-source="sortingFields"
@@ -278,7 +278,7 @@ const getCriteriaLabel = (field: string): string => {
 
 void fetchCustomFieldSetIds().then(fetchCustomFields);
 
-swDefinePublic({
+ctDefinePublic({
     selectedCriteria,
     customFields,
     customFieldSetIds,

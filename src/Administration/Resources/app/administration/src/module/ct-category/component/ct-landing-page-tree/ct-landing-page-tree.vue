@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_landing_page_tree">
+    <ct-block name="ct_landing_page_tree">
         <div class="ct-landing-page-tree">
-            <ct-block name="sw_landing_page_tree_inner">
+            <ct-block name="ct_landing_page_tree_inner">
                 <ct-tree
                     v-if="!isLoadingInitialData"
                     ref="landingPageTree"
@@ -36,7 +36,7 @@
                             disableContextMenu,
                         }"
                     >
-                        <ct-block name="sw_landing_page_tree_items">
+                        <ct-block name="ct_landing_page_tree_items">
                             <ct-tree-item
                                 v-for="item in treeItems"
                                 :key="item.id"
@@ -62,19 +62,19 @@
                                 </template>
 
                                 <template #actions="{ onDuplicate, onChangeRoute, deleteElement, toolTip }">
-                                    <ct-block name="sw_landing_page_tree_items_actions">
+                                    <ct-block name="ct_landing_page_tree_items_actions">
                                         <ct-context-button
                                             v-tooltip="toolTip"
                                             class="ct-tree-item__context_button"
                                             :disabled="disableContextMenu || undefined"
                                         >
-                                            <ct-block name="sw_landing_page_tree_items_actions_edit">
+                                            <ct-block name="ct_landing_page_tree_items_actions_edit">
                                                 <ct-context-menu-item @click="onChangeRoute(item)">
                                                     {{ $t('global.default.edit') }}
                                                 </ct-context-menu-item>
                                             </ct-block>
 
-                                            <ct-block name="sw_landing_page_tree_items_actions_duplicate">
+                                            <ct-block name="ct_landing_page_tree_items_actions_duplicate">
                                                 <ct-context-menu-item
                                                     class="ct-context-menu__duplicate-action"
                                                     @click="onDuplicate(item)"
@@ -83,7 +83,7 @@
                                                 </ct-context-menu-item>
                                             </ct-block>
 
-                                            <ct-block name="sw_landing_page_tree_items_actions_delete">
+                                            <ct-block name="ct_landing_page_tree_items_actions_delete">
                                                 <ct-context-menu-item
                                                     class="ct-context-menu__group-button-delete"
                                                     variant="danger"
@@ -112,7 +112,7 @@
                 <ct-skeleton variant="tree-item" />
             </div>
 
-            <ct-block name="sw_landing_page_tree_load_more">
+            <ct-block name="ct_landing_page_tree_load_more">
                 <div v-if="hasMoreLandingPages" class="ct-landing-page-tree__load-more">
                     <mt-button
                         class="ct-landing-page-tree__load-more-button"
@@ -127,7 +127,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_landing_page_tree_action">
+            <ct-block name="ct_landing_page_tree_action">
                 <div class="ct-landing-page-tree__add-button">
                     <mt-button
                         class="ct-landing-page-tree__add-button-button"
@@ -222,11 +222,11 @@ const page = ref(1);
 const total = ref(0);
 
 const landingPagesToDelete = computed(() => {
-    return Contena.Store.get('swCategoryDetail').landingPagesToDelete;
+    return Contena.Store.get('ctCategoryDetail').landingPagesToDelete;
 });
 const landingPageCriteria = computed(() => createLandingPageCriteria(page.value));
 const landingPage = computed(() => {
-    return Contena.Store.get('swCategoryDetail').landingPage;
+    return Contena.Store.get('ctCategoryDetail').landingPage;
 });
 const landingPageRepository = computed(() => {
     return repositoryFactory.create('landing_page');
@@ -474,7 +474,7 @@ watch(
 
         landingPageTree.value.onDeleteElements(value);
 
-        Contena.Store.get('swCategoryDetail').landingPagesToDelete = undefined;
+        Contena.Store.get('ctCategoryDetail').landingPagesToDelete = undefined;
     },
 );
 watch(
@@ -513,7 +513,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     syncService,
     acl,

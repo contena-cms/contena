@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="mt_tabs">
+    <ct-block name="ct_mt_tabs">
         <MtTabs v-bind="$attrs" ref="mtTabsOriginal" :items="items" />
     </ct-block>
 </template>
@@ -22,5 +22,5 @@ defineProps({
     },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

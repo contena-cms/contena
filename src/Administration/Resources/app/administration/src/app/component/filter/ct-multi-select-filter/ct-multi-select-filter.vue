@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_multi_select_filter">
+    <ct-block name="ct_multi_select_filter">
         <ct-base-filter
             :title="filter.label"
             :show-reset-button="!!values.length"
             :active="active"
             @filter-reset="resetFilter"
         >
-            <ct-block name="sw_multi_select_filter_content">
-                <ct-block name="sw_multi_select_filter_content_entity_select">
+            <ct-block name="ct_multi_select_filter_content">
+                <ct-block name="ct_multi_select_filter_content_entity_select">
                     <ct-entity-multi-select
                         v-if="isEntityMultiSelect"
                         :label-property="labelProperty"
@@ -19,20 +19,20 @@
                         @update:entity-collection="changeValue"
                     >
                         <template #selection-label-property="{ item, index }">
-                            <ct-block name="sw_multi_select_filter_content_slot_selection_label_property">
+                            <ct-block name="ct_multi_select_filter_content_slot_selection_label_property">
                                 <slot name="selection-label-property" v-bind="{ item, index }"></slot>
                             </ct-block>
                         </template>
 
                         <template #result-item="{ item, index }">
-                            <ct-block name="sw_multi_select_filter_content_slot_result_item">
+                            <ct-block name="ct_multi_select_filter_content_slot_result_item">
                                 <slot name="result-item" v-bind="{ item, index }"></slot>
                             </ct-block>
                         </template>
                     </ct-entity-multi-select>
                 </ct-block>
 
-                <ct-block name="sw_multi_select_filter_content_option_select">
+                <ct-block name="ct_multi_select_filter_content_option_select">
                     <mt-select
                         v-if="filter.options"
                         :label-property="filter.labelProperty"
@@ -153,7 +153,7 @@ function resetFilter() {
     emit('filter-reset', props.filter.name);
 }
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     isEntityMultiSelect,
     labelProperty,

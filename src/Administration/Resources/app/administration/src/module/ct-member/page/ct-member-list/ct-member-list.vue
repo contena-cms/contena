@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_member_list">
+    <ct-block name="ct_member_list">
         <ct-page class="ct-member-list">
             <template #search-bar>
-                <ct-block name="sw_member_list_search">
+                <ct-block name="ct_member_list_search">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_member_list_header">
+                <ct-block name="ct_member_list_header">
                     <h2>
                         {{ t('ct-member.list.textHeadline') }}
                         <span v-if="!isLoading" class="ct-page__smart-bar-amount">({{ total }})</span>
@@ -17,7 +17,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_member_list_actions">
+                <ct-block name="ct_member_list_actions">
                     <mt-button
                         v-tooltip="createTooltip"
                         variant="primary"
@@ -30,7 +30,7 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_member_list_filters">
+                <ct-block name="ct_member_list_filters">
                     <div class="ct-member-list__filters">
                         <mt-entity-select
                             v-model="groupFilter"
@@ -51,7 +51,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_member_list_content">
+                <ct-block name="ct_member_list_content">
                     <mt-data-table
                         layout="full"
                         :caption="t('ct-member.list.textHeadline')"
@@ -263,7 +263,7 @@ watch(
 );
 void loadMembers();
 
-swDefinePublic({
+ctDefinePublic({
     members,
     columns,
     isLoading,

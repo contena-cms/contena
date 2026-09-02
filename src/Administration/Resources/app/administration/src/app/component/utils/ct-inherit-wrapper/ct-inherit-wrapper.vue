@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_inherit_wrapper">
+    <ct-block name="ct_inherit_wrapper">
         <div
             class="ct-inherit-wrapper"
             :class="{ 'is--inherited': isInherited, 'is--required': required, 'has--parent': hasParent }"
         >
-            <ct-block name="sw_inherit_wrapper_toggle">
+            <ct-block name="ct_inherit_wrapper_toggle">
                 <template v-if="label">
-                    <ct-block name="sw_inherit_wrapper_toggle_wrapper">
+                    <ct-block name="ct_inherit_wrapper_toggle_wrapper">
                         <div class="ct-inherit-wrapper__toggle-wrapper">
-                            <ct-block name="sw_inherit_wrapper_toggle_wrapper_field">
+                            <ct-block name="ct_inherit_wrapper_toggle_wrapper_field">
                                 <ct-inheritance-switch
                                     v-if="isInheritField"
                                     :disabled="disabled"
@@ -19,14 +19,14 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_inherit_wrapper_toggle_wrapper_label">
+                            <ct-block name="ct_inherit_wrapper_toggle_wrapper_label">
                                 <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                                 <label class="ct-inherit-wrapper__inheritance-label" :class="labelClasses">
                                     {{ label }}
                                 </label>
                             </ct-block>
 
-                            <ct-block name="sw_inherit_wrapper_toggle_wrapper_help_text">
+                            <ct-block name="ct_inherit_wrapper_toggle_wrapper_help_text">
                                 <ct-help-text v-if="helpText" class="ct-inherit-wrapper__help-text" :text="helpText" />
                             </ct-block>
                         </div>
@@ -34,7 +34,7 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_inherit_wrapper_content">
+            <ct-block name="ct_inherit_wrapper_content">
                 <slot
                     name="content"
                     v-bind="{
@@ -263,7 +263,7 @@ function removeInheritance(newValue = currentValue.value) {
     emit('update:value', newValue);
 }
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     forceInheritanceRemove,
     currentValue,

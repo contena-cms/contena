@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_settings_search_excluded_search_terms">
+    <ct-block name="ct_settings_search_excluded_search_terms">
         <mt-card
             class="ct-settings-search-excluded-search-terms"
             position-identifier="ct-settings-search-excluded-search-terms"
@@ -286,7 +286,7 @@ const onResetExcludedSearchTermDefault = async (): Promise<void> => {
 };
 watch(() => props.searchConfigs, createdComponent, { immediate: true });
 
-swDefinePublic({
+ctDefinePublic({
     items,
     originalItems,
     showEmptyState,

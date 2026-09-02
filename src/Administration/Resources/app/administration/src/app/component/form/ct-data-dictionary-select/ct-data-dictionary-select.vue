@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_data_dictionary_select">
-        <ct-block name="sw_data_dictionary_select_input">
+    <ct-block name="ct_data_dictionary_select">
+        <ct-block name="ct_data_dictionary_select_input">
             <mt-select
                 v-bind="$attrs"
                 :model-value="modelValue"
@@ -63,7 +63,7 @@ watch(
     load,
 );
 
-swDefinePublic({
+ctDefinePublic({
     service,
     options,
     isLoading,

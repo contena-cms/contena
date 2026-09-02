@@ -1,6 +1,6 @@
 <template>
     <!-- eslint-disable vue/no-unused-vars -->
-    <ct-block name="sw_channel_detail_domains">
+    <ct-block name="ct_channel_detail_domains">
         <mt-card class="ct-channel-detail-domains" :title="t('ct-channel.detail.titleDomains')" :is-loading="isLoading">
             <template #toolbar>
                 <mt-button variant="secondary" size="small" :disabled="disabled || undefined" @click="openCreateModal">
@@ -239,7 +239,7 @@ const deleteDomain = (): void => {
     domainToDelete.value = null;
 };
 
-swDefinePublic({
+ctDefinePublic({
     domains,
     columns,
     currentDomain,

@@ -1,20 +1,20 @@
 <template>
     <!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
-    <ct-block name="sw_search_preferences_modal">
+    <ct-block name="ct_search_preferences_modal">
         <ct-modal
             class="ct-search-preferences-modal"
             :title="$t('global.ct-search-preferences-modal.title')"
             :is-loading="isLoading"
             @modal-close="onClose"
         >
-            <ct-block name="sw_search_preferences_modal_description">
+            <ct-block name="ct_search_preferences_modal_description">
                 <p
                     class="ct-search-preferences-modal__description"
                     v-html="$t('global.ct-search-preferences-modal.description')"
                 ></p>
             </ct-block>
 
-            <ct-block name="sw_search_preferences_modal_grid">
+            <ct-block name="ct_search_preferences_modal_grid">
                 <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
                 <ct-data-grid
                     :show-selection="false"
@@ -24,7 +24,7 @@
                     :columns="searchPreferencesColumns"
                 >
                     <template #column-active="{ item }">
-                        <ct-block name="sw_search_preferences_modal_grid_column_active">
+                        <ct-block name="ct_search_preferences_modal_grid_column_active">
                             <mt-checkbox
                                 v-model:checked="item._searchable"
                                 @update:checked="onChangeSearchPreference(item)"
@@ -33,7 +33,7 @@
                     </template>
 
                     <template #column-moduleName="{ item }">
-                        <ct-block name="sw_search_preferences_modal_grid_column_module_name">
+                        <ct-block name="ct_search_preferences_modal_grid_column_module_name">
                             <span>{{ getModuleName(item.entityName) }}</span>
                         </ct-block>
                     </template>
@@ -41,7 +41,7 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_search_preferences_modal_button_cancel">
+                <ct-block name="ct_search_preferences_modal_button_cancel">
                     <mt-button
                         size="small"
                         class="ct-search-preferences-modal__button-cancel"
@@ -52,7 +52,7 @@
                     </mt-button>
                 </ct-block>
 
-                <ct-block name="sw_search_preferences_modal_button_save">
+                <ct-block name="ct_search_preferences_modal_button_save">
                     <mt-button
                         variant="primary"
                         size="small"
@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     searchPreferencesService,
     searchRankingService,
     userConfigService,

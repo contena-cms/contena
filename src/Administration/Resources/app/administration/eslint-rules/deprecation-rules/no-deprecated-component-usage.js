@@ -20,7 +20,7 @@ const { handleMtPasswordField } = require("./no-deprecated-component-usage-check
 const { handleMtUrlField } = require("./no-deprecated-component-usage-checks/mt-url-field.check");
 const { handleMtProgressBar } = require("./no-deprecated-component-usage-checks/mt-progress-bar.check");
 const { handleMtFloatingUi } = require("./no-deprecated-component-usage-checks/mt-floating-ui.check");
-const { handleSwEntityListing } = require("./no-deprecated-component-usage-checks/ct-entity-listing.check");
+const { handleCtEntityListing } = require("./no-deprecated-component-usage-checks/ct-entity-listing.check");
 
 /* eslint-disable max-len */
 
@@ -89,7 +89,7 @@ module.exports = {
                     // Handle mt-floating-ui
                     handleMtFloatingUi(context, node);
                     // Handle ct-entity-listing
-                    handleSwEntityListing(context, node);
+                    handleCtEntityListing(context, node);
                 },
             }
         )

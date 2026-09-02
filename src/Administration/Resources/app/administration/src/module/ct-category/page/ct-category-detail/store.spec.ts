@@ -44,20 +44,20 @@ describe('ct-category.store', () => {
     });
 
     it('should have the initial state', () => {
-        const swCategoryDetailStore = Contena.Store.get('swCategoryDetail');
+        const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
-        expect(swCategoryDetailStore.landingPage).toBeNull();
-        expect(swCategoryDetailStore.category).toBeNull();
-        expect(swCategoryDetailStore.isCategoryColumn).toBe(false);
-        expect(swCategoryDetailStore.customFieldSets).toEqual([]);
-        expect(swCategoryDetailStore.landingPagesToDelete).toBeUndefined();
-        expect(swCategoryDetailStore.categoriesToDelete).toBeUndefined();
+        expect(ctCategoryDetailStore.landingPage).toBeNull();
+        expect(ctCategoryDetailStore.category).toBeNull();
+        expect(ctCategoryDetailStore.isCategoryColumn).toBe(false);
+        expect(ctCategoryDetailStore.customFieldSets).toEqual([]);
+        expect(ctCategoryDetailStore.landingPagesToDelete).toBeUndefined();
+        expect(ctCategoryDetailStore.categoriesToDelete).toBeUndefined();
     });
 
     it('loads an active landing page creating a new one', async () => {
-        const swCategoryDetailStore = Contena.Store.get('swCategoryDetail');
+        const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
-        await swCategoryDetailStore.loadActiveLandingPage({
+        await ctCategoryDetailStore.loadActiveLandingPage({
             id: 'create',
             repository: landingPageRepositoryMock,
             apiContext: apiContextMock,
@@ -65,13 +65,13 @@ describe('ct-category.store', () => {
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(landingPageRepositoryMock.create).toHaveBeenCalledWith(apiContextMock);
-        expect(swCategoryDetailStore.landingPage).toStrictEqual(newLandingPageMock);
+        expect(ctCategoryDetailStore.landingPage).toStrictEqual(newLandingPageMock);
     });
 
     it('loads an active landing page loading an existing one', async () => {
-        const swCategoryDetailStore = Contena.Store.get('swCategoryDetail');
+        const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
-        await swCategoryDetailStore.loadActiveLandingPage({
+        await ctCategoryDetailStore.loadActiveLandingPage({
             id: '67890',
             repository: landingPageRepositoryMock,
             apiContext: apiContextMock,
@@ -79,13 +79,13 @@ describe('ct-category.store', () => {
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(landingPageRepositoryMock.get).toHaveBeenCalledWith('67890', apiContextMock, expect.anything());
-        expect(swCategoryDetailStore.landingPage).toStrictEqual(existingLandingPageMock);
+        expect(ctCategoryDetailStore.landingPage).toStrictEqual(existingLandingPageMock);
     });
 
     it('loads an active category', async () => {
-        const swCategoryDetailStore = Contena.Store.get('swCategoryDetail');
+        const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
-        await swCategoryDetailStore.loadActiveCategory({
+        await ctCategoryDetailStore.loadActiveCategory({
             id: 'without-parent',
             repository: categoryRepositoryMock,
             apiContext: apiContextMock,
@@ -93,14 +93,14 @@ describe('ct-category.store', () => {
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(categoryRepositoryMock.get).toHaveBeenCalledWith('without-parent', apiContextMock, expect.anything());
-        expect(swCategoryDetailStore.isCategoryColumn).toBe(false);
-        expect(swCategoryDetailStore.category).toStrictEqual(categoriesMock['without-parent']);
+        expect(ctCategoryDetailStore.isCategoryColumn).toBe(false);
+        expect(ctCategoryDetailStore.category).toStrictEqual(categoriesMock['without-parent']);
     });
 
     it('loads an active category with parent', async () => {
-        const swCategoryDetailStore = Contena.Store.get('swCategoryDetail');
+        const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
-        await swCategoryDetailStore.loadActiveCategory({
+        await ctCategoryDetailStore.loadActiveCategory({
             id: 'with-parent',
             repository: categoryRepositoryMock,
             apiContext: apiContextMock,
@@ -108,8 +108,8 @@ describe('ct-category.store', () => {
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(categoryRepositoryMock.get).toHaveBeenCalledWith('with-parent', apiContextMock, expect.anything());
-        expect(swCategoryDetailStore.isCategoryColumn).toBe(true);
-        expect(swCategoryDetailStore.category).toStrictEqual({
+        expect(ctCategoryDetailStore.isCategoryColumn).toBe(true);
+        expect(ctCategoryDetailStore.category).toStrictEqual({
             ...categoriesMock['with-parent'],
             parent: categoriesMock.parent,
         });

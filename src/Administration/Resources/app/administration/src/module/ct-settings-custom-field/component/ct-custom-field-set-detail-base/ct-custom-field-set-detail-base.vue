@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_custom_field_set_detail_base">
+    <ct-block name="ct_settings_custom_field_set_detail_base">
         <mt-card
             class="ct-settings-custom-field-set-detail-base"
             position-identifier="ct-custom-field-detail-base"
             :title="$t('ct-settings-custom-field.set.detail.titleCardInformation')"
         >
-            <ct-block name="sw_settings_custom_field_set_detail_base_technical_name">
+            <ct-block name="ct_settings_custom_field_set_detail_base_technical_name">
                 <mt-text-field
                     v-model="set.name"
                     name="ct-field--set-name"
@@ -19,7 +19,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_custom_field_set_detail_base_position">
+            <ct-block name="ct_settings_custom_field_set_detail_base_position">
                 <mt-number-field
                     v-model="set.position"
                     name="ct-field--set-position"
@@ -30,7 +30,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_custom_field_set_detail_base_translated">
+            <ct-block name="ct_settings_custom_field_set_detail_base_translated">
                 <mt-switch
                     v-if="set.config"
                     v-model="set.config.translated"
@@ -41,7 +41,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_custom_field_set_detail_base_labels">
+            <ct-block name="ct_settings_custom_field_set_detail_base_labels">
                 <ct-custom-field-translated-labels
                     v-if="set.config"
                     v-model:config="set.config"
@@ -51,7 +51,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_custom_field_set_detail_base_multi_select">
+            <ct-block name="ct_settings_custom_field_set_detail_base_multi_select">
                 <mt-select
                     id="entities"
                     class="ct-settings-custom-field-set-detail-base__label-entities"
@@ -78,7 +78,7 @@
                 </mt-select>
             </ct-block>
 
-            <ct-block name="sw_settings_custom_field_set_detail_base_entities" />
+            <ct-block name="ct_settings_custom_field_set_detail_base_entities" />
         </mt-card>
     </ct-block>
 </template>
@@ -237,7 +237,7 @@ function onTechnicalNameChange(): void {
     emit('reset-errors');
 }
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     propertyNames,
     locales,

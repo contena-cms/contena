@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_blog_detail_base">
+    <ct-block name="ct_blog_detail_base">
         <div class="ct-blog-detail-base">
             <template v-if="isLoading">
                 <ct-skeleton variant="detail-bold" />
@@ -7,7 +7,7 @@
             </template>
 
             <template v-else>
-                <ct-block name="sw_blog_detail_base_basic_info_card">
+                <ct-block name="ct_blog_detail_base_basic_info_card">
                     <mt-card
                         class="ct-blog-detail-base__info"
                         position-identifier="ct-blog-detail-base-info"
@@ -17,7 +17,7 @@
                     </mt-card>
                 </ct-block>
 
-                <ct-block name="sw_blog_detail_base_category_card">
+                <ct-block name="ct_blog_detail_base_category_card">
                     <mt-card
                         class="ct-blog-detail-base__visibility-structure"
                         position-identifier="ct-blog-detail-base-visibility-structure"
@@ -27,7 +27,7 @@
                     </mt-card>
                 </ct-block>
 
-                <ct-block name="sw_blog_detail_base_media_card">
+                <ct-block name="ct_blog_detail_base_media_card">
                     <mt-card
                         class="ct-blog-detail-base__media"
                         position-identifier="ct-blog-detail-base-media"
@@ -37,7 +37,7 @@
                     </mt-card>
                 </ct-block>
 
-                <ct-block name="sw_blog_detail_base_media_modal">
+                <ct-block name="ct_blog_detail_base_media_modal">
                     <ct-media-modal-v2
                         v-if="showMediaModal"
                         :initial-folder-id="mediaDefaultFolderId"
@@ -68,8 +68,8 @@ const { createNotificationError } = useNotification();
 
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory')!;
 const acl = inject<AclService>('acl')!;
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
-const isLoading = computed(() => Contena.Store.get('swBlogDetail').isLoading);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
+const isLoading = computed(() => Contena.Store.get('ctBlogDetail').isLoading);
 const allowEdit = computed(() => acl.can('blog.editor'));
 const showMediaModal = ref(false);
 const mediaDefaultFolderId = ref<string | null>(null);
@@ -149,7 +149,7 @@ void getMediaDefaultFolderId().then((folderId) => {
     mediaDefaultFolderId.value = folderId;
 });
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     isLoading,
     allowEdit,

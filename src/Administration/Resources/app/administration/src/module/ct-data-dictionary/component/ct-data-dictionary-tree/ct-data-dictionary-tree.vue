@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_data_dictionary_tree">
+    <ct-block name="ct_data_dictionary_tree">
         <div class="ct-data-dictionary-tree">
             <ct-tree
                 v-if="!isLoading"
@@ -40,7 +40,7 @@
                         :active-item-ids="[...checkedItemIds, ...(activeItemId ? [activeItemId] : [])]"
                     >
                         <template #content="{ item: currentTreeItem }">
-                            <ct-block name="sw_data_dictionary_tree_item_content">
+                            <ct-block name="ct_data_dictionary_tree_item_content">
                                 <button
                                     class="ct-data-dictionary-tree__item"
                                     type="button"
@@ -59,39 +59,39 @@
                         </template>
 
                         <template #actions="{ item: currentTreeItem }">
-                            <ct-block name="sw_data_dictionary_tree_item_actions">
+                            <ct-block name="ct_data_dictionary_tree_item_actions">
                                 <ct-context-button>
-                                    <ct-block name="sw_data_dictionary_tree_item_add_child">
+                                    <ct-block name="ct_data_dictionary_tree_item_add_child">
                                         <ct-context-menu-item
                                             :disabled="!canCreate || undefined"
                                             @click="onAddChildTreeItem(currentTreeItem)"
                                         >
-                                            <ct-block name="sw_data_dictionary_tree_item_add_child_label">
+                                            <ct-block name="ct_data_dictionary_tree_item_add_child_label">
                                                 {{ $t('ct-data-dictionary.detail.addChildItem') }}
                                             </ct-block>
                                         </ct-context-menu-item>
                                     </ct-block>
-                                    <ct-block name="sw_data_dictionary_tree_item_edit">
+                                    <ct-block name="ct_data_dictionary_tree_item_edit">
                                         <template v-if="!currentTreeItem.data.isDictionaryRoot">
                                             <ct-context-menu-item
                                                 :disabled="!canEdit || undefined"
                                                 @click="onSelect(currentTreeItem.data.entity)"
                                             >
-                                                <ct-block name="sw_data_dictionary_tree_item_edit_label">
+                                                <ct-block name="ct_data_dictionary_tree_item_edit_label">
                                                     {{ $t('global.default.edit') }}
                                                 </ct-block>
                                             </ct-context-menu-item>
                                         </template>
                                     </ct-block>
 
-                                    <ct-block name="sw_data_dictionary_tree_item_delete">
+                                    <ct-block name="ct_data_dictionary_tree_item_delete">
                                         <template v-if="!currentTreeItem.data.isDictionaryRoot">
                                             <ct-context-menu-item
                                                 variant="danger"
                                                 :disabled="!canDelete || undefined"
                                                 @click="onDelete(currentTreeItem.data.entity)"
                                             >
-                                                <ct-block name="sw_data_dictionary_tree_item_delete_label">
+                                                <ct-block name="ct_data_dictionary_tree_item_delete_label">
                                                     {{ $t('global.default.delete') }}
                                                 </ct-block>
                                             </ct-context-menu-item>
@@ -239,7 +239,7 @@ const onDragEnd = (payload: unknown): void => {
     emit('drag-end', payload);
 };
 
-swDefinePublic({
+ctDefinePublic({
     onSelect,
     onAddChild,
     onAddChildTreeItem,

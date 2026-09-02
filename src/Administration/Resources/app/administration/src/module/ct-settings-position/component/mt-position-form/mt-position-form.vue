@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_position_form">
+    <ct-block name="ct_position_form">
         <div class="mt-position-form">
-            <ct-block name="sw_position_form_fields">
+            <ct-block name="ct_position_form_fields">
                 <div class="mt-position-form__grid">
                     <mt-text-field
                         :model-value="positionEntity.name"
@@ -52,7 +52,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_position_form_custom_fields">
+            <ct-block name="ct_position_form_custom_fields">
                 <div v-if="customFieldSets.length > 0" class="mt-position-form__custom-fields">
                     <h3>{{ translate('ct-settings-position.detail.customFieldsTitle') }}</h3>
                     <ct-custom-field-set-renderer :entity="positionEntity" :sets="customFieldSets" :disabled="disabled" />
@@ -94,7 +94,7 @@ const translate = t;
 const { placeholder } = usePlaceholder();
 const onUpdatePosition = (path: string, value: unknown): void => emit('update:position', path, value);
 
-swDefinePublic({
+ctDefinePublic({
     placeholder,
     onUpdatePosition,
 });

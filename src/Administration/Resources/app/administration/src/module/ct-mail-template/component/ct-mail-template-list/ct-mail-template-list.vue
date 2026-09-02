@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_mail_template_list_grid">
+    <ct-block name="ct_mail_template_list_grid">
         <mt-card
             position-identifier="ct-mail-template-list"
             :title="$t('ct-mail-template.list.titleMailTemplateList')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_mail_template_list_grid_empty_state">
+            <ct-block name="ct_mail_template_list_grid_empty_state">
                 <ct-empty-state
                     v-if="!isLoading && !showListing"
                     :title="$t('ct-mail-template.list.emptyStateTitle')"
@@ -150,7 +150,7 @@ function updateRecords(result: EntityCollection<'mail_template'>): void {
 
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repository,
     templates,

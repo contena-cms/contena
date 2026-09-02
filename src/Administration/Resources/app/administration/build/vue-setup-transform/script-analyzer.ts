@@ -50,7 +50,7 @@ type AnalyzerOptions = {
  */
 type SharedScriptAnalysis = {
     source: string;
-    // Where the compile-time `swDefine*` markers sit. Both modes drop them, but *that* they are dropped
+    // Where the compile-time `ctDefine*` markers sit. Both modes drop them, but *that* they are dropped
     // is each lowerer's call, so this reports the locations and stays out of the decision.
     //
     // Holds exactly one range in practice - the mode's own marker, which `assertMacroRules` has already
@@ -205,7 +205,7 @@ function classifyTopLevelStatements(ast: BabelFile, mode: ContenaSetupMode, scri
         // the statement's single macro, unlike the multi-declaration case above.
         const statementMacroName = statementEntries.find((entry) => entry.form === 'statement')?.name;
 
-        if (statementMacroName === 'swDefinePublic' || statementMacroName === 'swDefineOverride') {
+        if (statementMacroName === 'ctDefinePublic' || statementMacroName === 'ctDefineOverride') {
             return;
         }
 
@@ -218,8 +218,8 @@ function classifyTopLevelStatements(ast: BabelFile, mode: ContenaSetupMode, scri
         importedBindings,
         bindings,
         macroEntries,
-        publicMarkerEntry: getMacroEntry(macroEntries, 'swDefinePublic', 'statement'),
-        overrideMarkerEntry: getMacroEntry(macroEntries, 'swDefineOverride', 'statement'),
+        publicMarkerEntry: getMacroEntry(macroEntries, 'ctDefinePublic', 'statement'),
+        overrideMarkerEntry: getMacroEntry(macroEntries, 'ctDefineOverride', 'statement'),
     };
 }
 
@@ -254,10 +254,10 @@ function extractMarkerEntries(
     scriptOffset: number,
 ): { publicEntries: string[]; overrideEntries: string[] } {
     const publicEntries = classified.publicMarkerEntry
-        ? extractStaticObjectMarker(classified.publicMarkerEntry.call, scriptOffset, 'swDefinePublic', 'public')
+        ? extractStaticObjectMarker(classified.publicMarkerEntry.call, scriptOffset, 'ctDefinePublic', 'public')
         : [];
     const overrideEntries = classified.overrideMarkerEntry
-        ? extractStaticObjectMarker(classified.overrideMarkerEntry.call, scriptOffset, 'swDefineOverride', 'override')
+        ? extractStaticObjectMarker(classified.overrideMarkerEntry.call, scriptOffset, 'ctDefineOverride', 'override')
         : [];
 
     const importedBindingNames = new Set(classified.importedBindings.map((binding) => binding.name));
@@ -266,14 +266,14 @@ function extractMarkerEntries(
         classified.bindings.names,
         importedBindingNames,
         scriptOffset,
-        'swDefinePublic',
+        'ctDefinePublic',
     );
     assertStaticObjectEntries(
         overrideEntries,
         classified.bindings.names,
         importedBindingNames,
         scriptOffset,
-        'swDefineOverride',
+        'ctDefineOverride',
     );
 
     return { publicEntries, overrideEntries };

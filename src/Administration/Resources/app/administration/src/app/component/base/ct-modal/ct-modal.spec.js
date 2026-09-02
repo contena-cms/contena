@@ -55,8 +55,8 @@ describe('src/app/component/base/ct-modal/index.js', () => {
     });
 
     it('should show console error when using invalid variant', async () => {
-        const swModal = await wrapTestComponent('ct-modal', { sync: true });
-        const validator = swModal.props.variant.validator;
+        const ctModal = await wrapTestComponent('ct-modal', { sync: true });
+        const validator = ctModal.props.variant.validator;
 
         expect(validator('default')).toBe(true);
         expect(validator('small')).toBe(true);

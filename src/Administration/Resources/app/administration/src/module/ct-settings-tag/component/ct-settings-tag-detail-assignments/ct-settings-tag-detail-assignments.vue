@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_settings_tag_detail_assignments">
+    <ct-block name="ct_settings_tag_detail_assignments">
         <div class="ct-settings-tag-detail-assignments">
-            <ct-block name="sw_settings_tag_detail_assignments_card">
+            <ct-block name="ct_settings_tag_detail_assignments_card">
                 <mt-card
                     class="ct-settings-tag-detail-assignments__card"
                     position-identifier="ct-settings-tag-detail-assignments-card"
                     large
                 >
                     <template #toolbar>
-                        <ct-block name="sw_settings_tag_detail_assignments_toolbar">
+                        <ct-block name="ct_settings_tag_detail_assignments_toolbar">
                             <ct-card-filter
                                 :placeholder="$t('ct-settings-tag.detail.assignments.searchPlaceholder')"
                                 @ct-card-filter-term-change="onTermChange"
@@ -16,9 +16,9 @@
                         </ct-block>
                     </template>
 
-                    <ct-block name="sw_settings_tag_detail_assignments_header">
+                    <ct-block name="ct_settings_tag_detail_assignments_header">
                         <ct-container columns="1fr 1fr">
-                            <ct-block name="sw_settings_tag_detail_assignments_header_selected_filter">
+                            <ct-block name="ct_settings_tag_detail_assignments_header_selected_filter">
                                 <ct-card-section
                                     class="ct-settings-tag-detail-assignments__filter-selected"
                                     divider="bottom"
@@ -30,7 +30,7 @@
                                     />
                                 </ct-card-section>
                             </ct-block>
-                            <ct-block name="sw_settings_tag_detail_assignments_header_total_selected">
+                            <ct-block name="ct_settings_tag_detail_assignments_header_total_selected">
                                 <ct-card-section class="ct-settings-tag-detail-assignments__total-selected" divider="bottom">
                                     {{ totalAssignments }} {{ $t('ct-settings-tag.detail.assignments.selected') }}
                                 </ct-card-section>
@@ -39,10 +39,10 @@
                     </ct-block>
 
                     <template #grid>
-                        <ct-block name="sw_settings_tag_detail_assignments_grid">
+                        <ct-block name="ct_settings_tag_detail_assignments_grid">
                             <ct-container columns="300px 1fr">
                                 <ct-card-section divider="right">
-                                    <ct-block name="sw_settings_tag_detail_assignments_associations_grid">
+                                    <ct-block name="ct_settings_tag_detail_assignments_associations_grid">
                                         <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
                                         <ct-data-grid
                                             class="ct-settings-tag-detail-assignments__associations-grid"
@@ -58,7 +58,7 @@
                                         >
                                             <template #column-name="{ item }">
                                                 <ct-block
-                                                    name="sw_settings_tag_detail_assignments_associations_grid_column_name"
+                                                    name="ct_settings_tag_detail_assignments_associations_grid_column_name"
                                                 >
                                                     <mt-button
                                                         class="associations-grid__row"
@@ -98,7 +98,7 @@
                                     </ct-block>
                                 </ct-card-section>
                                 <ct-card-section>
-                                    <ct-block name="sw_settings_tag_detail_assignments_entities_grid">
+                                    <ct-block name="ct_settings_tag_detail_assignments_entities_grid">
                                         <ct-entity-listing
                                             :key="entitiesGridKey"
                                             class="ct-settings-tag-detail-assignments__entities-grid"
@@ -122,11 +122,11 @@
                                                 #selection-content="{ item, isSelected, selectItem, itemIdentifierProperty }"
                                             >
                                                 <ct-block
-                                                    name="sw_settings_tag_detail_assignments_entities_grid_selection_content"
+                                                    name="ct_settings_tag_detail_assignments_entities_grid_selection_content"
                                                 >
                                                     <div class="ct-data-grid__cell-content">
                                                         <ct-block
-                                                            name="sw_settings_tag_detail_assignments_entities_grid_select_item_checkbox"
+                                                            name="ct_settings_tag_detail_assignments_entities_grid_select_item_checkbox"
                                                         >
                                                             <mt-checkbox
                                                                 v-if="isInherited(item.id, item.parentId)"
@@ -147,7 +147,7 @@
 
                                             <template #column-name="{ item, selectItem }">
                                                 <ct-block
-                                                    name="sw_settings_tag_detail_assignments_entities_grid_column_inheritance_switch"
+                                                    name="ct_settings_tag_detail_assignments_entities_grid_column_inheritance_switch"
                                                 >
                                                     <ct-inheritance-switch
                                                         v-if="
@@ -161,7 +161,7 @@
                                                     />
                                                 </ct-block>
                                                 <ct-block
-                                                    name="sw_settings_tag_detail_assignments_entities_grid_column_name_media"
+                                                    name="ct_settings_tag_detail_assignments_entities_grid_column_name_media"
                                                 >
                                                     <template v-if="selectedEntity === 'media'">
                                                         <ct-media-preview-v2
@@ -175,7 +175,7 @@
                                                     </template>
                                                 </ct-block>
                                                 <ct-block
-                                                    name="sw_settings_tag_detail_assignments_entities_grid_column_name_default"
+                                                    name="ct_settings_tag_detail_assignments_entities_grid_column_name_default"
                                                 >
                                                     <template v-if="selectedEntity === 'media'"
                                                         ><!-- Keeps the conditional chain connected across ct-block. --></template
@@ -673,7 +673,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     selectedEntity,
     selectedAssignment,

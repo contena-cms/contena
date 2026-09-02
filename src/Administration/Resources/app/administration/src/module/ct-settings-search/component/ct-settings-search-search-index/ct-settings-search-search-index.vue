@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_search_search_index">
+    <ct-block name="ct_settings_search_search_index">
         <mt-card
             position-identifier="ct-settings-search-search-index"
             :title="t('ct-settings-search.generalTab.labelSearchIndex')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_settings_search_search_index_description">
+            <ct-block name="ct_settings_search_search_index_description">
                 <mt-banner
                     v-if="isRebuildInProgress"
                     class="ct-settings-search__search-index-warning-text"
@@ -15,7 +15,7 @@
                     {{ t('ct-settings-search.generalTab.textRebuildSearchIndexDescription') }}
                 </mt-banner>
             </ct-block>
-            <ct-block name="sw_settings_search_search_index_rebuild_button">
+            <ct-block name="ct_settings_search_search_index_rebuild_button">
                 <div class="ct-settings-search__search-index-actions">
                     <mt-button
                         class="ct-settings-search__search-index-rebuild-button"
@@ -38,7 +38,7 @@
                     </span>
                 </div>
             </ct-block>
-            <ct-block name="sw_settings_search_search_index_rebuild_progress">
+            <ct-block name="ct_settings_search_search_index_rebuild_progress">
                 <mt-progress-bar
                     v-if="progressBarValue"
                     class="ct-settings-search__search-index-rebuilding-progress"
@@ -164,7 +164,7 @@ const createdComponent = (): void => {
 createdComponent();
 onBeforeUnmount(clearPolling);
 
-swDefinePublic({
+ctDefinePublic({
     internalLoading,
     isRebuildSuccess,
     isRebuildInProgress,

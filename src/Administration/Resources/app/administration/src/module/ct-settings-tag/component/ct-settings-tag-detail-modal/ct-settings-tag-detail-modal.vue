@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_tag_detail_modal">
+    <ct-block name="ct_settings_tag_detail_modal">
         <mt-modal-root :is-open="true" @change="$emit('close')">
             <mt-modal
                 class="ct-settings-tag-detail-modal"
@@ -7,7 +7,7 @@
                 :title="title"
                 width="full"
             >
-                <ct-block name="sw_settings_tag_detail_modal_tabs">
+                <ct-block name="ct_settings_tag_detail_modal_tabs">
                     <div class="ct-settings-tag-detail-modal__tabs">
                         <mt-tabs
                             position-identifier="ct-settings-tag-detail-modal"
@@ -19,7 +19,7 @@
 
                         <div class="ct-settings-tag-detail-modal__tabs-content">
                             <template v-if="initialTab === 'general'">
-                                <ct-block name="sw_settings_tag_detail_modal_tabs_general_tab">
+                                <ct-block name="ct_settings_tag_detail_modal_tabs_general_tab">
                                     <p class="ct-settings-tag-detail-modal__tag-name">
                                         <mt-text-field
                                             id="ct-field--tag-name"
@@ -36,7 +36,7 @@
                             </template>
 
                             <template v-if="initialTab === 'assignments'">
-                                <ct-block name="sw_settings_tag_detail_modal_tabs_assignments_tab">
+                                <ct-block name="ct_settings_tag_detail_modal_tabs_assignments_tab">
                                     <ct-settings-tag-detail-assignments
                                         :tag="tag"
                                         :initial-counts="computedCounts"
@@ -55,14 +55,14 @@
 
                 <template #footer>
                     <div class="ct-settings-tag-detail-modal__footer">
-                        <ct-block name="sw_settings_tag_detail_modal_footer">
-                            <ct-block name="sw_settings_tag_detail_modal_cancel">
+                        <ct-block name="ct_settings_tag_detail_modal_footer">
+                            <ct-block name="ct_settings_tag_detail_modal_cancel">
                                 <mt-modal-close as="mt-button" size="small" variant="secondary">
                                     {{ translate('global.default.cancel') }}
                                 </mt-modal-close>
                             </ct-block>
 
-                            <ct-block name="sw_settings_tag_detail_modal_confirm">
+                            <ct-block name="ct_settings_tag_detail_modal_confirm">
                                 <mt-modal-action
                                     as="mt-button"
                                     variant="primary"
@@ -307,7 +307,7 @@ const removeAssignment = (assignment, id, item) => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     syncService,
     acl,

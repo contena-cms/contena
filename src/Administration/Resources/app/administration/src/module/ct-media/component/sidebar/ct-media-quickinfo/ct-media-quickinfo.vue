@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_quickinfo">
+    <ct-block name="ct_media_quickinfo">
         <div class="ct-media-quickinfo">
-            <ct-block name="sw_media_quickinfo_broken_file">
+            <ct-block name="ct_media_quickinfo_broken_file">
                 <mt-banner
                     v-if="!item.hasFile"
                     class="ct-media-quickinfo__alert-file-missing"
@@ -12,7 +12,7 @@
                 </mt-banner>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_quickactions">
+            <ct-block name="ct_media_quickinfo_quickactions">
                 <ct-media-collapse
                     v-if="editable"
                     class="ct-media-quickinfo__section ct-media-quickinfo__section--actions"
@@ -20,9 +20,9 @@
                     :expand-on-loading="true"
                 >
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_quickactions_content">
+                        <ct-block name="ct_media_quickinfo_quickactions_content">
                             <ul :key="item.id" class="ct-media-sidebar__quickactions-list">
-                                <ct-block name="sw_media_quickinfo_quickactions_replace">
+                                <ct-block name="ct_media_quickinfo_quickactions_replace">
                                     <li
                                         v-if="!item.private"
                                         v-tooltip="editorTooltip"
@@ -42,7 +42,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_quickactions_download">
+                                <ct-block name="ct_media_quickinfo_quickactions_download">
                                     <template v-if="item.hasFile">
                                         <li
                                             v-if="item.private"
@@ -72,7 +72,7 @@
                                         </li>
                                     </template>
                                 </ct-block>
-                                <ct-block name="sw_media_quickinfo_quickactions_move">
+                                <ct-block name="ct_media_quickinfo_quickactions_move">
                                     <li
                                         v-tooltip="editorTooltip"
                                         class="quickaction--move"
@@ -91,7 +91,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_quickactions_set_cover">
+                                <ct-block name="ct_media_quickinfo_quickactions_set_cover">
                                     <li
                                         v-if="canManageVideoCover"
                                         v-tooltip="editorTooltip"
@@ -111,7 +111,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_quickactions_remove_cover">
+                                <ct-block name="ct_media_quickinfo_quickactions_remove_cover">
                                     <li
                                         v-if="canManageVideoCover && hasVideoCover"
                                         v-tooltip="editorTooltip"
@@ -131,7 +131,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_quickactions_copy_link">
+                                <ct-block name="ct_media_quickinfo_quickactions_copy_link">
                                     <li
                                         v-if="item.hasFile"
                                         class="ct-media-sidebar__quickaction quickaction--copy-link"
@@ -149,7 +149,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_quickactions_delete">
+                                <ct-block name="ct_media_quickinfo_quickactions_delete">
                                     <li
                                         v-if="!item.private"
                                         v-tooltip="deleterTooltip"
@@ -174,7 +174,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_spatial_configuration">
+            <ct-block name="ct_media_quickinfo_spatial_configuration">
                 <ct-media-collapse
                     v-if="isSpatial"
                     :title="translate('ct-media.sidebar.sections.configuration')"
@@ -227,7 +227,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_preview">
+            <ct-block name="ct_media_quickinfo_preview">
                 <ct-media-collapse
                     v-if="item.hasFile"
                     class="ct-media-quickinfo__section ct-media-quickinfo__section--preview"
@@ -235,9 +235,9 @@
                     :title="translate('ct-media.sidebar.sections.preview')"
                 >
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_preview_content">
+                        <ct-block name="ct_media_quickinfo_preview_content">
                             <div>
-                                <ct-block name="sw_media_quickinfo_unsupported_format_banner">
+                                <ct-block name="ct_media_quickinfo_unsupported_format_banner">
                                     <mt-banner
                                         v-if="showUnsupportedFormatWarning"
                                         variant="attention"
@@ -251,7 +251,7 @@
                                     </mt-banner>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_preview_item">
+                                <ct-block name="ct_media_quickinfo_preview_item">
                                     <ct-media-preview-v2
                                         class="ct-media-quickinfo__media-preview"
                                         :source="item.id"
@@ -265,7 +265,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_metadata">
+            <ct-block name="ct_media_quickinfo_metadata">
                 <ct-media-collapse
                     v-if="item.hasFile"
                     class="ct-media-quickinfo__section ct-media-quickinfo__section--metadata"
@@ -273,9 +273,9 @@
                     :title="translate('ct-media.sidebar.sections.metadata')"
                 >
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_metadata_content">
+                        <ct-block name="ct_media_quickinfo_metadata_content">
                             <dl class="ct-media-sidebar__metadata-list">
-                                <ct-block name="sw_media_quickinfo_metadata_content_base">
+                                <ct-block name="ct_media_quickinfo_metadata_content_base">
                                     <ct-media-quickinfo-metadata-item
                                         class="ct-media-quickinfo-metadata-name"
                                         :class="fileNameClasses"
@@ -369,9 +369,9 @@
                                 </ct-block>
 
                                 <template v-if="item.metaData">
-                                    <ct-block name="sw_media_quickinfo_metadata_specific_meta_data">
+                                    <ct-block name="ct_media_quickinfo_metadata_specific_meta_data">
                                         <template v-if="item.mediaType.name === 'IMAGE'">
-                                            <ct-block name="sw_media_quickinfo_metadata_content_image">
+                                            <ct-block name="ct_media_quickinfo_metadata_content_image">
                                                 <ct-media-quickinfo-metadata-item
                                                     v-if="item.metaData.width"
                                                     class="ct-media-quickinfo-metadata-width"
@@ -397,11 +397,11 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_tags">
+            <ct-block name="ct_media_quickinfo_tags">
                 <ct-media-tag :disabled="!acl.can('media.editor')" :media="item" />
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_usage">
+            <ct-block name="ct_media_quickinfo_usage">
                 <ct-media-collapse
                     v-if="editable && item.hasFile"
                     :expand-on-loading="true"
@@ -413,7 +413,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_modal_replace">
+            <ct-block name="ct_media_quickinfo_modal_replace">
                 <ct-media-modal-replace
                     v-if="showModalReplace"
                     :item-to-replace="item"
@@ -422,7 +422,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_modal_delete">
+            <ct-block name="ct_media_quickinfo_modal_delete">
                 <ct-media-modal-delete
                     v-if="showModalDelete"
                     :items-to-delete="[item]"
@@ -431,7 +431,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_move_modal">
+            <ct-block name="ct_media_quickinfo_move_modal">
                 <ct-media-modal-move
                     v-if="showModalMove"
                     :items-to-move="[item]"
@@ -440,7 +440,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_cover_modal">
+            <ct-block name="ct_media_quickinfo_cover_modal">
                 <ct-media-modal-v2
                     v-if="showCoverSelectionModal"
                     :allow-multi-select="false"
@@ -450,7 +450,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_custom_field_sets">
+            <ct-block name="ct_media_quickinfo_custom_field_sets">
                 <ct-custom-field-set-renderer
                     :key="item.id"
                     :disabled="!acl.can('media.editor')"
@@ -853,7 +853,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     mediaService,
     repositoryFactory,
     acl,

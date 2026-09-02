@@ -47,7 +47,7 @@ export default function viteOverridePlugin(options: Options): Plugin {
                     const importPath = relativePath.split(path.sep).join('/');
 
                     // Numbered, not path-derived: `foo-bar/ct-x` and `foo_bar/ct-x` sanitize to one name.
-                    const componentName = `_swOverride${index}`;
+                    const componentName = `_ctOverride${index}`;
                     componentNames.push(componentName);
 
                     return `import ${componentName} from './${importPath}';`;

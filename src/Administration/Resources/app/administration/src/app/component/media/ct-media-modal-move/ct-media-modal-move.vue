@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_modal_move">
+    <ct-block name="ct_media_modal_move">
         <ct-modal
             variant="default"
             class="ct-media-modal-move"
@@ -11,8 +11,8 @@
             "
             @modal-close="closeMoveModal"
         >
-            <ct-block name="sw_media_modal_body">
-                <ct-block name="sw_media_modal_move_breadcrumbs">
+            <ct-block name="ct_media_modal_body">
+                <ct-block name="ct_media_modal_move_breadcrumbs">
                     <div class="ct-media-modal-move-folder-breadcrumbs">
                         <img
                             :src="assetFilter('/administration/administration/static/img/media/folder-thumbnail.svg')"
@@ -68,14 +68,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_media_modal_footer">
-                    <ct-block name="sw_media_modal_move_cancel_button">
+                <ct-block name="ct_media_modal_footer">
+                    <ct-block name="ct_media_modal_move_cancel_button">
                         <mt-button size="small" variant="secondary" @click="closeMoveModal">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_move_confirm_button">
+                    <ct-block name="ct_media_modal_move_confirm_button">
                         <mt-button
                             class="ct-media-modal-move__confirm"
                             size="small"
@@ -297,7 +297,7 @@ onMounted(() => {
     void mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     targetFolder,
     parentFolder,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_inheritance_switch">
+    <ct-block name="ct_inheritance_switch">
         <div
             class="ct-inheritance-switch"
             :class="{
@@ -11,7 +11,7 @@
                 isInherited ? $t('global.ct-field.ariaUnlinkInheritance') : $t('global.ct-field.ariaLinkInheritance')
             "
         >
-            <ct-block name="sw_inheritance_switch_inherit_icon">
+            <ct-block name="ct_inheritance_switch_inherit_icon">
                 <mt-icon
                     v-if="isInherited"
                     key="inherit-icon"
@@ -21,7 +21,7 @@
                     @click="onClickRemoveInheritance"
                 />
             </ct-block>
-            <ct-block name="sw_inheritance_switch_uninherit_icon">
+            <ct-block name="ct_inheritance_switch_uninherit_icon">
                 <template v-if="isInherited"><!-- Keeps the conditional chain connected across ct-block. --></template>
                 <mt-icon
                     v-else
@@ -88,7 +88,7 @@ const onClickRemoveInheritance = () => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     restoreInheritanceHandler,
     removeInheritanceHandler,
     unInheritClasses,

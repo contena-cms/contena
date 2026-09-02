@@ -1,18 +1,18 @@
 <template>
-    <ct-block name="sw_media_modal_v2">
+    <ct-block name="ct_media_modal_v2">
         <ct-modal
-            ref="swMediaModal"
+            ref="ctMediaModal"
             class="ct-media-save-modal"
             variant="full"
             :title="$t('ct-media.ct-media-save-modal.titleModal')"
             :closable="!isLoading"
             @modal-close="onEmitModalClosed"
         >
-            <ct-block name="sw_media_save_modal_content">
+            <ct-block name="ct_media_save_modal_content">
                 <div class="ct-media-save-modal__content">
-                    <ct-block name="sw_media_save_modal_navigation_and_search">
+                    <ct-block name="ct_media_save_modal_navigation_and_search">
                         <div class="ct-media-save-modal__breadcrumbs-and-search">
-                            <ct-block name="sw_media_save_modal_folder_breadcrumbs">
+                            <ct-block name="ct_media_save_modal_folder_breadcrumbs">
                                 <ct-media-breadcrumbs
                                     v-model:current-folder-id="folderId"
                                     :small="compact"
@@ -22,7 +22,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_media_save_modal_media_library">
+                    <ct-block name="ct_media_save_modal_media_library">
                         <ct-media-library
                             ref="mediaLibrary"
                             :selection="[]"
@@ -38,8 +38,8 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_media_save_modal_modal_footer">
-                    <ct-block name="sw_media_save_modal_input_file_name">
+                <ct-block name="ct_media_save_modal_modal_footer">
+                    <ct-block name="ct_media_save_modal_input_file_name">
                         <mt-text-field
                             v-model="fileName"
                             class="ct-media-save-modal__input-file-name"
@@ -50,7 +50,7 @@
                         </mt-text-field>
                     </ct-block>
 
-                    <ct-block name="sw_media_save_modal_button_cancel">
+                    <ct-block name="ct_media_save_modal_button_cancel">
                         <mt-button
                             variant="secondary"
                             class="ct-media-save-modal__button-cancel"
@@ -61,7 +61,7 @@
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_save_modal_button_save">
+                    <ct-block name="ct_media_save_modal_button_save">
                         <mt-button
                             variant="primary"
                             class="ct-media-save-modal__button-save"
@@ -107,7 +107,7 @@ const emit = defineEmits([
 
 import { ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue';
 
-const swMediaModal = ref(null);
+const ctMediaModal = ref(null);
 
 const repositoryFactory = inject('repositoryFactory');
 
@@ -142,7 +142,7 @@ const removeOnResizeListener = () => {
     window.removeEventListener('resize', getComponentWidth);
 };
 const getComponentWidth = () => {
-    const componentWidth = swMediaModal.value?.$el?.getBoundingClientRect().width;
+    const componentWidth = ctMediaModal.value?.$el?.getBoundingClientRect().width;
     compact.value = componentWidth <= 900;
 };
 const fetchCurrentFolder = async () => {
@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     fileName,
     folderId,

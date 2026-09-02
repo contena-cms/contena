@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_media_grid">
+    <ct-block name="ct_media_grid">
         <div ref="componentRef" class="ct-media-grid">
             <slot name="content">
-                <ct-block name="sw_media_grid_slot_content">
+                <ct-block name="ct_media_grid_slot_content">
                     <div class="ct-media-grid__content" :class="presentationClass">
                         <slot>
-                            <ct-block name="sw_media_grid_default_slot"></ct-block>
+                            <ct-block name="ct_media_grid_default_slot"></ct-block>
                         </slot>
                     </div>
                 </ct-block>
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     presentationClass,
     nonDeselectingComponents,
     createdComponent,

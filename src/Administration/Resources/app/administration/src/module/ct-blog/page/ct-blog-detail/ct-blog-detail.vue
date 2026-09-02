@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_blog_detail">
+    <ct-block name="ct_blog_detail">
         <ct-page class="ct-blog-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_blog_detail_header">
+                <ct-block name="ct_blog_detail_header">
                     <h2>{{ blogTitle }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_blog_detail_actions">
+                <ct-block name="ct_blog_detail_actions">
                     <mt-button variant="secondary" :disabled="isLoading || undefined" @click="onCancel">
                         {{ $t('global.default.cancel') }}
                     </mt-button>
@@ -36,11 +36,11 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_blog_detail_content">
+                <ct-block name="ct_blog_detail_content">
                     <ct-card-view>
                         <ct-language-info :entity-description="blogTitle" :is-new-entity="!blogId" />
 
-                        <ct-block name="sw_blog_detail_tabs">
+                        <ct-block name="ct_blog_detail_tabs">
                             <mt-tabs
                                 v-if="blogId"
                                 class="ct-blog-detail__tabs"
@@ -51,7 +51,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_blog_detail_view">
+                        <ct-block name="ct_blog_detail_view">
                             <router-view v-slot="{ Component }">
                                 <component :is="Component" />
                             </router-view>
@@ -101,9 +101,9 @@ const { createNotificationError, createNotificationSuccess } = useNotification()
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory')!;
 const acl = inject<AclService>('acl')!;
 const isSaveSuccessful = ref(false);
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const blogId = computed(() => (typeof route.params.id === 'string' ? route.params.id : null));
-const isLoading = computed(() => Contena.Store.get('swBlogDetail').isLoading);
+const isLoading = computed(() => Contena.Store.get('ctBlogDetail').isLoading);
 const blogRepository = computed(() => repositoryFactory.create('blog'));
 const blogCriteria = computed(() => {
     const criteria = new Contena.Data.Criteria(1, 1);
@@ -143,8 +143,8 @@ const blogDetailTabs = computed<TabItem[]>(() => [
 const allowEdit = computed(() => acl.can(props.createMode ? 'blog.creator' : 'blog.editor'));
 
 const createState = (): void => {
-    Contena.Store.get('swBlogDetail').blog = blogRepository.value.create(Contena.Context.api);
-    Contena.Store.get('swBlogDetail').creationType = props.creationType;
+    Contena.Store.get('ctBlogDetail').blog = blogRepository.value.create(Contena.Context.api);
+    Contena.Store.get('ctBlogDetail').creationType = props.creationType;
     blog.value.active = true;
     blog.value.type = props.creationType;
     blog.value.metaTitle = '';
@@ -156,13 +156,13 @@ const loadBlog = async (): Promise<void> => {
         return;
     }
 
-    Contena.Store.get('swBlogDetail').setLoading([
+    Contena.Store.get('ctBlogDetail').setLoading([
         'blog',
         true,
     ]);
 
     try {
-        Contena.Store.get('swBlogDetail').blog = await blogRepository.value.get(
+        Contena.Store.get('ctBlogDetail').blog = await blogRepository.value.get(
             blogId.value,
             Contena.Context.api,
             blogCriteria.value,
@@ -171,14 +171,14 @@ const loadBlog = async (): Promise<void> => {
         createNotificationError({ message: t('ct-blog.detail.loadError') });
         await router.push({ name: 'ct.blog.index' });
     } finally {
-        Contena.Store.get('swBlogDetail').setLoading([
+        Contena.Store.get('ctBlogDetail').setLoading([
             'blog',
             false,
         ]);
     }
 };
 const saveBlog = async (): Promise<void> => {
-    Contena.Store.get('swBlogDetail').setLoading([
+    Contena.Store.get('ctBlogDetail').setLoading([
         'blog',
         true,
     ]);
@@ -188,7 +188,7 @@ const saveBlog = async (): Promise<void> => {
             await blogRepository.value.save(blog.value, Contena.Context.api);
         }
     } finally {
-        Contena.Store.get('swBlogDetail').setLoading([
+        Contena.Store.get('ctBlogDetail').setLoading([
             'blog',
             false,
         ]);
@@ -229,7 +229,7 @@ const onChangeLanguage = (languageId: string): void => {
 watch(blogId, () => void loadBlog());
 void loadBlog();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     blog,
     blogId,

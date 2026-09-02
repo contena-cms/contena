@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_settings_mailer">
+    <ct-block name="ct_settings_mailer">
         <ct-page class="ct-settings-mailer">
             <template #smart-bar-header>
                 <h2>{{ $t('ct-settings-mailer.general.title') }}</h2>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_mailer_actions">
+                <ct-block name="ct_settings_mailer_actions">
                     <ct-button-process
                         variant="primary"
                         :is-loading="isLoading"
@@ -22,9 +22,9 @@
 
             <template #content>
                 <ct-card-view>
-                    <ct-block name="sw_settings_mailer_config">
+                    <ct-block name="ct_settings_mailer_config">
                         <mt-card position-identifier="ct-settings-mailer-configuration" :is-loading="isLoading">
-                            <ct-block name="sw_settings_mailer_agent">
+                            <ct-block name="ct_settings_mailer_agent">
                                 <mt-select
                                     v-model="mailerSettings['core.mailerSettings.emailAgent']"
                                     class="ct-settings-mailer__agent"
@@ -34,7 +34,7 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_settings_mailer_local_settings">
+                            <ct-block name="ct_settings_mailer_local_settings">
                                 <mt-select
                                     v-if="mailerSettings['core.mailerSettings.emailAgent'] === 'local'"
                                     v-model="mailerSettings['core.mailerSettings.sendMailOptions']"
@@ -44,7 +44,7 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_settings_mailer_smtp_settings">
+                            <ct-block name="ct_settings_mailer_smtp_settings">
                                 <div v-if="isSmtpMode" class="ct-settings-mailer__smtp-grid">
                                     <mt-text-field
                                         v-model="mailerSettings['core.mailerSettings.host']"
@@ -132,7 +132,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_settings_mailer_delivery">
+                            <ct-block name="ct_settings_mailer_delivery">
                                 <mt-switch
                                     v-if="hasSelectedAgent"
                                     v-model="mailerSettings['core.mailerSettings.disableDelivery']"
@@ -285,7 +285,7 @@ function validateSmtpConfiguration(): boolean {
 
 onMounted(loadMailerSettings);
 
-swDefinePublic({
+ctDefinePublic({
     mailerSettings,
     isLoading,
     isSaveSuccessful,

@@ -1,4 +1,4 @@
-const swProfileStore = Contena.Store.register('swProfile', {
+const ctProfileStore = Contena.Store.register('ctProfile', {
     state() {
         return {
             minSearchTermLength: 2,
@@ -17,9 +17,9 @@ const swProfileStore = Contena.Store.register('swProfile', {
 /**
  * @private
  */
-export default swProfileStore;
+export default ctProfileStore;
 
 /**
  * @private
  */
-export type SwProfileStore = ReturnType<typeof swProfileStore>;
+export type CtProfileStore = ReturnType<typeof ctProfileStore>;

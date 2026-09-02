@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_member_detail">
+    <ct-block name="ct_member_detail">
         <ct-page class="ct-member-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_member_detail_header">
+                <ct-block name="ct_member_detail_header">
                     <h2>{{ fullName }}</h2>
                     <mt-badge v-if="member?.createdById" class="ct-member-detail__created-by-admin">
                         {{ t('ct-member.detail.labelCreatedByAdmin') }}
@@ -11,7 +11,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_member_detail_actions">
+                <ct-block name="ct_member_detail_actions">
                     <template v-if="!editMode">
                         <mt-button
                             v-tooltip="editTooltip"
@@ -41,7 +41,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_member_detail_content">
+                <ct-block name="ct_member_detail_content">
                     <ct-card-view>
                         <mt-banner v-if="member?.requestedGroup" variant="info">
                             <div class="ct-member-detail__registration-request">
@@ -66,7 +66,7 @@
                             </div>
                         </mt-banner>
 
-                        <ct-block name="sw_member_detail_tabs">
+                        <ct-block name="ct_member_detail_tabs">
                             <mt-tabs
                                 position-identifier="ct-member-detail-tabs"
                                 :default-item="$route.name"
@@ -75,7 +75,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_member_detail_view">
+                        <ct-block name="ct_member_detail_view">
                             <mt-loader v-if="isLoading && !member" />
                             <router-view v-else-if="member" v-slot="{ Component }">
                                 <component
@@ -224,7 +224,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     member,
     isLoading,
     isSaveSuccessful,

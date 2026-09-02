@@ -26,10 +26,10 @@ type ContenaSetupTransformResult = {
     mode: 'base' | 'override';
     componentName: string;
     filename: string;
-    // Static names of the base `<ct-block name="...">` blocks this component owns (empty for overrides).
+    // Static names of the base `<ct-block name="ct_...">` blocks this component owns (empty for overrides).
     // Emitted for a later branch to build a cross-file block-ownership registry.
     ownedBlockNames: string[];
-    // Static names of the blocks this override `<ct-block extends="...">` extends (empty for base).
+    // Static names of the blocks this override `<ct-block extends="ct_...">` extends (empty for base).
     // The registry's other half, for a later branch to cross-check against the emitted ownership.
     extendedBlockNames: string[];
 };

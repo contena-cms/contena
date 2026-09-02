@@ -102,7 +102,7 @@ describe('build/vite-plugins/contena-setup', () => {
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
         const vueFile = await createVueFile(source, 'ct-my-component.vue');
 
@@ -125,7 +125,7 @@ swDefinePublic({ count });
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
         const vueFile = await createVueFile(source, 'ct-cached-component.vue');
         const nodeRequire = createRequire(path.join(process.cwd(), 'package.json'));
@@ -147,7 +147,7 @@ swDefinePublic({ count });
     it('serves current file content when the source changed after resolveId stashed its transform', async () => {
         const plugin = createPlugin();
         const vueFile = await createVueFile(
-            `<script setup>\nconst count = 1;\nswDefinePublic({ count });\n</script>`,
+            `<script setup>\nconst count = 1;\nctDefinePublic({ count });\n</script>`,
             'ct-stale-stash-component.vue',
         );
         const context = { resolve: jest.fn().mockResolvedValue({ id: vueFile }) };
@@ -157,7 +157,7 @@ swDefinePublic({ count });
             path.join(path.dirname(vueFile), 'entry.js'),
         );
 
-        await fs.writeFile(vueFile, `<script setup>\nconst countEdited = 2;\nswDefinePublic({ countEdited });\n</script>`);
+        await fs.writeFile(vueFile, `<script setup>\nconst countEdited = 2;\nctDefinePublic({ countEdited });\n</script>`);
 
         const loaded = await plugin.load.call({ addWatchFile: jest.fn() }, resolvedId as string);
 
@@ -223,7 +223,7 @@ swDefinePublic({ count });
         const source = `<script setup>
 const count = 1;
 
-swDefineOverride({});
+ctDefineOverride({});
 </script>`;
         const vueFile = await createVueFile(source, 'ct-my-component.override.vue');
 
@@ -237,7 +237,7 @@ swDefineOverride({});
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         const result = await plugin.transform(source, '/example/component.vue');
@@ -251,7 +251,7 @@ swDefinePublic({ count });
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         await plugin.transform(source, '/a/ct-my-component.vue');
@@ -267,7 +267,7 @@ swDefinePublic({ count });
         await plugin.transform(
             `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
             '/base/ct-my-component.vue',
         );
@@ -277,7 +277,7 @@ swDefinePublic({ count });
                 `<script setup>
 const count = 1;
 
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
                 '/override/ct-my-component.override.vue',
             ),
@@ -288,7 +288,7 @@ swDefineOverride({});
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         await plugin.transform(source, '/example/ct-my-component.vue');
@@ -300,7 +300,7 @@ swDefinePublic({ count });
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         await plugin.transform(source, '/old/ct-my-component.vue');
@@ -317,7 +317,7 @@ swDefinePublic({ count });
         const plugin = createPlugin();
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         await plugin.transform(source, '/a/ct-my-component.vue');
@@ -366,7 +366,7 @@ swDefinePublic({ count });
         expect(sources.filter((source) => source.includes('.contena-setup.vue'))).toEqual([]);
         expect(sources.filter((source) => source.startsWith('/'))).toEqual([]);
 
-        // Content has to be the author's code; embedding the transform output would show `__swSetupAuthor_`
+        // Content has to be the author's code; embedding the transform output would show `__ctSetupAuthor_`
         // aliases and the generated footer in the debugger.
         expect(loweredSourceCount).toBe(0);
 
@@ -422,7 +422,7 @@ swDefinePublic({ count });
         const plugin = createPlugin({ administrationRoot: path.join(process.cwd(), 'src') });
         const source = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
         // A bad `administrationRoot` is a config error, not a per-file one: the loader fails on the same

@@ -1,6 +1,6 @@
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter, routeLocationKey, routerKey } from 'vue-router';
-import swChannelDetailTheme from './index';
+import ctChannelDetailTheme from './index';
 
 type Theme = { id: string; name?: string };
 type Channel = { id: string; extensions: { themes: Theme[] } };
@@ -64,7 +64,7 @@ describe('ct-channel-detail-theme', () => {
         });
         await router.push({ name: 'ct.theme.manager.index' });
 
-        const wrapper = shallowMount(swChannelDetailTheme, {
+        const wrapper = shallowMount(ctChannelDetailTheme, {
             props: { channel: channelEntity },
             global: {
                 stubs: {

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_theme_modal">
+    <ct-block name="ct_theme_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal
                 class="ct-theme-modal"
@@ -7,7 +7,7 @@
                 :title="t('ct-theme-manager.themeModal.modalTitle')"
                 :subtitle="t('ct-theme-manager.themeModal.modalSubtitle')"
             >
-                <ct-block name="sw_theme_modal_header">
+                <ct-block name="ct_theme_modal_header">
                     <div class="ct-theme-modal__header">
                         <mt-search
                             v-model="searchTerm"
@@ -18,14 +18,14 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_theme_modal_content">
+                <ct-block name="ct_theme_modal_content">
                     <div class="ct-theme-modal__content">
-                        <ct-block name="sw_theme_modal_loader">
+                        <ct-block name="ct_theme_modal_loader">
                             <mt-loader v-if="isLoading" />
                         </ct-block>
 
                         <div v-if="!isLoading" class="ct-theme-modal__content-grid">
-                            <ct-block name="sw_theme_modal_content_listing">
+                            <ct-block name="ct_theme_modal_content_listing">
                                 <div
                                     v-for="theme in themes"
                                     :key="theme.id"
@@ -34,15 +34,15 @@
                                         'is--selected': theme.id === selected,
                                     }"
                                 >
-                                    <ct-block name="sw_theme_modal_content_listing_item">
-                                        <ct-block name="sw_theme_modal_content_listing_item_checkbox">
+                                    <ct-block name="ct_theme_modal_content_listing_item">
+                                        <ct-block name="ct_theme_modal_content_listing_item_checkbox">
                                             <mt-checkbox
                                                 :checked="theme.id === selected"
                                                 @update:checked="onSelection(theme.id)"
                                             />
                                         </ct-block>
 
-                                        <ct-block name="sw_theme_modal_content_listing_item_inner">
+                                        <ct-block name="ct_theme_modal_content_listing_item_inner">
                                             <ct-theme-list-item
                                                 :key="theme.id"
                                                 :theme="theme"
@@ -57,7 +57,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_theme_modal_footer">
+                    <ct-block name="ct_theme_modal_footer">
                         <mt-button variant="secondary" @click="closeModal">
                             {{ t('global.default.cancel') }}
                         </mt-button>
@@ -174,7 +174,7 @@ listing.initializeListing({
     getList,
 });
 
-swDefinePublic({
+ctDefinePublic({
     selected,
     isLoading,
     sortBy,

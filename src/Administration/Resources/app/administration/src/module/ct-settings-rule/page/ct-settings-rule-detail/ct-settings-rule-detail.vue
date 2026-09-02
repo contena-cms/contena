@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_rule_detail">
+    <ct-block name="ct_settings_rule_detail">
         <ct-page class="ct-settings-rule-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_rule_detail_header">
+                <ct-block name="ct_settings_rule_detail_header">
                     <h2>
                         {{
                             rule?.isNew()
@@ -14,7 +14,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_rule_detail_actions">
+                <ct-block name="ct_settings_rule_detail_actions">
                     <mt-button variant="secondary" @click="onCancel">{{ $t('global.default.cancel') }}</mt-button>
                     <ct-button-process
                         v-model:process-success="isSaveSuccessful"
@@ -29,7 +29,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_rule_detail_content">
+                <ct-block name="ct_settings_rule_detail_content">
                     <ct-card-view>
                         <mt-card
                             position-identifier="ct-settings-rule-detail-general"
@@ -282,7 +282,7 @@ onMounted(() => {
     void load();
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     rule,
     conditions,

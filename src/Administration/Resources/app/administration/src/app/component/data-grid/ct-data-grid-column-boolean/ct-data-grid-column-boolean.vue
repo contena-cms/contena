@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_data_grid_column_boolean">
+    <ct-block name="ct_data_grid_column_boolean">
         <div class="ct-data-grid-column-boolean">
             <mt-checkbox v-if="isInlineEdit" v-model:checked="currentValue" :disabled="disabled" />
 
@@ -42,7 +42,7 @@ const currentValue = computed({
     },
 });
 
-swDefinePublic({
+ctDefinePublic({
     currentValue,
 });
 

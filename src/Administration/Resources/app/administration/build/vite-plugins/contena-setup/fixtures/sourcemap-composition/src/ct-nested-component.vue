@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_example_card">
+    <ct-block name="ct_example_card">
         <p>{{ headline }}</p>
     </ct-block>
 </template>
@@ -8,7 +8,7 @@ import { computed } from 'vue';
 
 const headline = computed(() => 'Hello from source');
 
-swDefinePublic({
+ctDefinePublic({
     headline,
 });
 </script>

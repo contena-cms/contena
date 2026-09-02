@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_category_entry_point_card">
+    <ct-block name="ct_category_entry_point_card">
         <mt-card
             class="ct-category-entry-point-card"
             position-identifier="ct-category-entry-point"
             :title="$t('ct-category.base.entry-point-card.cardTitle')"
         >
-            <ct-block name="sw_category_entry_point_card_selection">
+            <ct-block name="ct_category_entry_point_card_selection">
                 <ct-single-select
                     v-model:value="selectedEntryPoint"
                     class="ct-category-entry-point-card__entry-point-selection"
@@ -19,13 +19,13 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_entry_point_card_navigation_headline">
+            <ct-block name="ct_category_entry_point_card_navigation_headline">
                 <p v-if="hasExistingNavigation">
                     {{ $t('ct-category.base.entry-point-card.existingNavigationDescription') }}
                 </p>
             </ct-block>
 
-            <ct-block name="sw_category_entry_point_card_navigation_list">
+            <ct-block name="ct_category_entry_point_card_navigation_list">
                 <div v-if="hasExistingNavigation" class="ct-category-entry-point-card__navigation-list">
                     <router-link
                         v-for="channel in initialNavigationChannels"
@@ -38,7 +38,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_category_entry_point_card_channel_selection">
+            <ct-block name="ct_category_entry_point_card_channel_selection">
                 <ct-category-channel-multi-select
                     v-if="associatedCollection"
                     class="ct-category-entry-point-card__channel-selection"
@@ -51,7 +51,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_entry_point_card_button_configure_home">
+            <ct-block name="ct_category_entry_point_card_button_configure_home">
                 <mt-button
                     v-if="selectedEntryPoint === 'navigationChannels' && category.navigationChannels.length > 0"
                     class="ct-category-entry-point-card__button-configure-home"
@@ -63,7 +63,7 @@
                 </mt-button>
             </ct-block>
 
-            <ct-block name="sw_category_entry_point_card_configure_home_modal">
+            <ct-block name="ct_category_entry_point_card_configure_home_modal">
                 <ct-category-entry-point-modal
                     v-if="configureHomeModalVisible"
                     :category-id="category.id"
@@ -211,7 +211,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     selectedEntryPoint,
     initialNavigationChannels,

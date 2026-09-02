@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_entity_advanced_selection_modal">
+    <ct-block name="ct_entity_advanced_selection_modal">
         <ct-modal
             class="ct-entity-advanced-selection-modal"
             v-bind="$attrs"
@@ -7,7 +7,7 @@
             :title="modalTitle"
             @modal-close="$emit('modal-close')"
         >
-            <ct-block name="sw_entity_advanced_selection_modal_content_card">
+            <ct-block name="ct_entity_advanced_selection_modal_content_card">
                 <mt-card
                     class="ct-entity-advanced-selection-modal__content"
                     position-identifier="ct-entity-advanced-selection-modal-content"
@@ -15,7 +15,7 @@
                     :is-loading="isLoading"
                 >
                     <template #toolbar>
-                        <ct-block name="sw_entity_advanced_selection_modal_toolbar">
+                        <ct-block name="ct_entity_advanced_selection_modal_toolbar">
                             <ct-card-filter
                                 class="ct-entity-advanced-selection-modal__card-filter"
                                 :placeholder="$t('global.ct-entity-advanced-selection-modal.searchPlaceholder')"
@@ -24,7 +24,7 @@
                             >
                                 <template #filter>
                                     <div class="ct-entity-advanced-selection-modal__filter-list-button">
-                                        <ct-block name="sw_entity_advanced_selection_modal_toolbar_filter_button">
+                                        <ct-block name="ct_entity_advanced_selection_modal_toolbar_filter_button">
                                             <mt-button
                                                 size="small"
                                                 variant="secondary"
@@ -45,10 +45,10 @@
                                             </mt-button>
                                         </ct-block>
 
-                                        <ct-block name="sw_entity_advanced_selection_modal_toolbar_filter_panel">
+                                        <ct-block name="ct_entity_advanced_selection_modal_toolbar_filter_panel">
                                             <ct-context-menu v-show="filterWindowOpen">
                                                 <ct-block
-                                                    name="sw_entity_advanced_selection_modal_toolbar_filter_panel_headline"
+                                                    name="ct_entity_advanced_selection_modal_toolbar_filter_panel_headline"
                                                 >
                                                     <h3 class="ct-entity-advanced-selection-modal__filter-headline">
                                                         {{ $t('global.ct-entity-advanced-selection-modal.filter') }}
@@ -56,7 +56,7 @@
                                                 </ct-block>
 
                                                 <ct-block
-                                                    name="sw_entity_advanced_selection_modal_toolbar_filter_panel_filters"
+                                                    name="ct_entity_advanced_selection_modal_toolbar_filter_panel_filters"
                                                 >
                                                     <div class="ct-entity-advanced-selection-modal__filter-panel">
                                                         <ct-filter-panel
@@ -73,7 +73,7 @@
                                                 </ct-block>
 
                                                 <ct-block
-                                                    name="sw_entity_advanced_selection_modal_toolbar_filter_panel_footer"
+                                                    name="ct_entity_advanced_selection_modal_toolbar_filter_panel_footer"
                                                 >
                                                     <div class="ct-entity-advanced-selection-modal__filter-footer">
                                                         <!-- eslint-disable-next-line vuejs-accessibility/interactive-supports-focus vuejs-accessibility/click-events-have-key-events -->
@@ -97,7 +97,7 @@
                     </template>
 
                     <template #grid>
-                        <ct-block name="sw_entity_advanced_selection_modal_list_grid">
+                        <ct-block name="ct_entity_advanced_selection_modal_list_grid">
                             <ct-entity-advanced-selection-modal-grid
                                 v-if="entities && entities.length"
                                 class="ct-entity-advanced-selection-modal__grid"
@@ -137,7 +137,7 @@
                             </ct-entity-advanced-selection-modal-grid>
                         </ct-block>
 
-                        <ct-block name="sw_entity_advanced_selection_modal_list_empty_state">
+                        <ct-block name="ct_entity_advanced_selection_modal_list_empty_state">
                             <template v-if="entities && entities.length"
                                 ><!-- Keeps the conditional chain connected across ct-block. --></template
                             >
@@ -154,7 +154,7 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_entity_advanced_selection_modal_button_cancel">
+                <ct-block name="ct_entity_advanced_selection_modal_button_cancel">
                     <mt-button
                         size="small"
                         class="ct-entity-advanced-selection-modal__button-cancel"
@@ -165,7 +165,7 @@
                     </mt-button>
                 </ct-block>
 
-                <ct-block name="sw_entity_advanced_selection_modal_button_apply">
+                <ct-block name="ct_entity_advanced_selection_modal_button_apply">
                     <mt-button
                         variant="primary"
                         size="small"
@@ -505,7 +505,7 @@ initializeListing({
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repositoryFactory,
     filterFactory,

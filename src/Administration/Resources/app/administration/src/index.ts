@@ -7,8 +7,8 @@ void (async () => {
     window.Contena = ContenaInstance;
     ContenaInstance.Component.registerOverrideComponent(profileMenuOverride);
 
-    if (window._swLoginOverrides) {
-        window._swLoginOverrides.forEach((script) => {
+    if (window._ctLoginOverrides) {
+        window._ctLoginOverrides.forEach((script) => {
             script();
         });
     }

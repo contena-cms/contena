@@ -29,7 +29,7 @@ const ruleTester = new RuleTester({
 
 const setupBlock = `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`;
 
 ruleTester.run('native-setup-filename', rule, {
@@ -41,7 +41,7 @@ ruleTester.run('native-setup-filename', rule, {
         {
             filename: 'ct-my-widget.override.vue',
             code: `<script setup>
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
         },
         {
@@ -80,29 +80,29 @@ swDefineOverride({});
             ],
         },
         {
-            filename: 'sw_thing.vue',
+            filename: 'ct_thing.vue',
             code: setupBlock,
             errors: [
                 {
                     messageId: 'invalidName',
-                    data: { componentName: 'sw_thing' },
+                    data: { componentName: 'ct_thing' },
                 },
             ],
         },
         {
-            filename: 'SwThing.vue',
+            filename: 'CtThing.vue',
             code: setupBlock,
             errors: [
                 {
                     messageId: 'invalidName',
-                    data: { componentName: 'SwThing' },
+                    data: { componentName: 'CtThing' },
                 },
             ],
         },
         {
             filename: 'sw thing.override.vue',
             code: `<script setup>
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {

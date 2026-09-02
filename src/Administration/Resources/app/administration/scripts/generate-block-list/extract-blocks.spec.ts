@@ -43,7 +43,7 @@ describe('extract-blocks', () => {
     it.each([
         [
             'ct-block-field, whose bound name is not a block name',
-            '<ct-block-field v-model:value="value" :name="formFieldName">Content</ct-block-field>',
+            '<ct-block-field v-model:value="value" :name="ct_formFieldName">Content</ct-block-field>',
         ],
         [
             'ct-block-parent',
@@ -51,11 +51,11 @@ describe('extract-blocks', () => {
         ],
         [
             'a bound name on ct-block',
-            '<ct-block :name="blockName">Content</ct-block>',
+            '<ct-block :name="ct_blockName">Content</ct-block>',
         ],
         [
             'a v-bind name on ct-block',
-            '<ct-block v-bind:name="blockName">Content</ct-block>',
+            '<ct-block v-bind:name="ct_blockName">Content</ct-block>',
         ],
         [
             'a closing tag',

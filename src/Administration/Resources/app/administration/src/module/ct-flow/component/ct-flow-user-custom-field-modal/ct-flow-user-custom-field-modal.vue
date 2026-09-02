@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_user_custom_field_modal">
+    <ct-block name="ct_flow_user_custom_field_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="$t('ct-flow.customField.title')" width="s">
-                <ct-block name="sw_flow_user_custom_field_modal_content">
+                <ct-block name="ct_flow_user_custom_field_modal_content">
                     <div class="ct-flow-user-custom-field-modal__content">
                         <mt-entity-select
                             v-model="customFieldId"
@@ -22,7 +22,7 @@
                     </div>
                 </ct-block>
                 <template #footer>
-                    <ct-block name="sw_flow_user_custom_field_modal_footer">
+                    <ct-block name="ct_flow_user_custom_field_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onCancel">{{ $t('global.default.cancel') }}</mt-button>
                             <mt-button variant="primary" :disabled="!canSave || undefined" @click="onSave">
@@ -94,7 +94,7 @@ const onModalChange = (isOpen: boolean): void => {
     if (!isOpen) onCancel();
 };
 
-swDefinePublic({
+ctDefinePublic({
     customFieldId,
     customFieldValue,
     option,

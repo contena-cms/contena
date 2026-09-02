@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_profile_index_general">
+    <ct-block name="ct_profile_index_general">
         <div class="ct-profile-index-general">
-            <ct-block name="sw_profile_index_general_information">
+            <ct-block name="ct_profile_index_general_information">
                 <mt-card
                     position-identifier="ct-profile-index-general"
                     :title="$t('ct-profile.index.titleInfoCard')"
                     :is-loading="isUserLoading || !languageId"
                 >
                     <ct-container v-bind="{ columns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0 30px' }">
-                        <ct-block name="sw_profile_index_general_information_name">
+                        <ct-block name="ct_profile_index_general_information_name">
                             <mt-text-field
                                 v-model="user.name"
                                 name="ct-field--user-name"
@@ -17,7 +17,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_profile_index_general_information_phone_number">
+                        <ct-block name="ct_profile_index_general_information_phone_number">
                             <mt-text-field
                                 v-model="user.phoneNumber"
                                 name="ct-field--user-phoneNumber"
@@ -28,7 +28,7 @@
                     </ct-container>
 
                     <ct-container v-bind="{ columns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0 30px' }">
-                        <ct-block name="sw_profile_index_general_information_username">
+                        <ct-block name="ct_profile_index_general_information_username">
                             <mt-text-field
                                 v-model="user.username"
                                 name="ct-field--user-username"
@@ -37,7 +37,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_profile_index_general_information_language">
+                        <ct-block name="ct_profile_index_general_information_language">
                             <mt-select
                                 v-model="user.localeId"
                                 name="ct-field--user-localeId"
@@ -51,7 +51,7 @@
 
                     <ct-container v-bind="{ columns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0 30px' }">
                         <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks,vue/no-duplicate-attributes,vue/no-parsing-error -->
-                        <ct-block name="sw_profile_index_general_information_email">
+                        <ct-block name="ct_profile_index_general_information_email">
                             <mt-text-field
                                 v-model="user.email"
                                 name="ct-field--user-email"
@@ -62,7 +62,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_profile_index_general_information_timezone">
+                        <ct-block name="ct_profile_index_general_information_timezone">
                             <mt-select
                                 v-model="user.timeZone"
                                 name="ct-field--user-timeZone"
@@ -78,14 +78,14 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_profile_index_general_image">
+            <ct-block name="ct_profile_index_general_image">
                 <mt-card
                     v-if="acl.can('media.creator')"
                     position-identifier="ct-profile-index-general-image"
                     :title="$t('ct-profile.index.titleImageCard')"
                     :is-loading="isUserLoading || !languageId"
                 >
-                    <ct-block name="sw_profile_index_general_image_content">
+                    <ct-block name="ct_profile_index_general_image_content">
                         <ct-upload-listener
                             auto-upload
                             upload-tag="ct-profile-upload-tag"
@@ -107,13 +107,13 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_profile_index_general_password">
+            <ct-block name="ct_profile_index_general_password">
                 <mt-card
                     position-identifier="ct-profile-index-general-password"
                     :title="$t('ct-profile.index.titlePasswordCard')"
                     :is-loading="isUserLoading || !languageId"
                 >
-                    <ct-block name="sw_profile_index_general_password_new_password">
+                    <ct-block name="ct_profile_index_general_password_new_password">
                         <mt-password-field
                             v-model="computedNewPassword"
                             name="ct-field--computedNewPassword"
@@ -125,7 +125,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_profile_index_general_password_new_password_confirm">
+                    <ct-block name="ct_profile_index_general_password_new_password_confirm">
                         <mt-password-field
                             v-model="computedNewPasswordConfirm"
                             name="ct-field--computedNewPasswordConfirm"
@@ -252,7 +252,7 @@ const onOpenMedia = () => {
     emit('media-open');
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     userPasswordError,
     computedNewPassword,

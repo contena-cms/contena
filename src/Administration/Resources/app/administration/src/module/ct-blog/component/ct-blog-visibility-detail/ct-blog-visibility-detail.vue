@@ -1,16 +1,16 @@
 <template>
-    <ct-block name="sw_blog_visibility_detail">
+    <ct-block name="ct_blog_visibility_detail">
         <ct-grid class="ct-blog-visibility-detail" table :items="items" :selectable="false">
             <template #columns="{ item }">
-                <ct-block name="sw_blog_visibility_detail_columns">
-                    <ct-block name="sw_blog_visibility_detail_columns_channel">
+                <ct-block name="ct_blog_visibility_detail_columns">
+                    <ct-block name="ct_blog_visibility_detail_columns_channel">
                         <ct-grid-column
                             :label="$t('ct-blog.visibility.columnChannel')"
                             class="ct-blog-visibility-detail__column-channel"
                             flex="0.5fr"
                             align="left"
                         >
-                            <ct-block name="sw_blog_visibility_detail_columns_channel_label">
+                            <ct-block name="ct_blog_visibility_detail_columns_channel_label">
                                 <span
                                     v-tooltip="{
                                         message: names[item.id],
@@ -24,7 +24,7 @@
                         </ct-grid-column>
                     </ct-block>
 
-                    <ct-block name="sw_blog_visibility_detail_columns_all">
+                    <ct-block name="ct_blog_visibility_detail_columns_all">
                         <ct-grid-column
                             :label="$t('ct-blog.visibility.columnAll')"
                             class="ct-blog-visibility-detail__column-all"
@@ -41,7 +41,7 @@
                         </ct-grid-column>
                     </ct-block>
 
-                    <ct-block name="sw_blog_visibility_detail_columns_search_only">
+                    <ct-block name="ct_blog_visibility_detail_columns_search_only">
                         <ct-grid-column
                             :label="$t('ct-blog.visibility.columnSearchOnly')"
                             class="ct-blog-visibility-detail__search-only"
@@ -58,7 +58,7 @@
                         </ct-grid-column>
                     </ct-block>
 
-                    <ct-block name="sw_blog_visibility_detail_columns_link_only">
+                    <ct-block name="ct_blog_visibility_detail_columns_link_only">
                         <ct-grid-column
                             :label="$t('ct-blog.visibility.columnLinkOnly')"
                             class="ct-blog-visibility-detail__link-only"
@@ -78,7 +78,7 @@
             </template>
 
             <template #pagination>
-                <ct-block name="sw_blog_visibility_detail_pagination">
+                <ct-block name="ct_blog_visibility_detail_pagination">
                     <ct-pagination
                         :page="page"
                         :limit="limit"
@@ -115,7 +115,7 @@ const page = ref(1);
 const limit = ref(10);
 const total = ref(0);
 
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const truncateFilter = computed(() => Filter.getByName('truncate'));
 const filteredItems = computed(() => blog.value.visibilities.filter((item: Entity<'blog_visibility'>) => !item.isDeleted));
 const names = computed<Record<string, string>>(() => {
@@ -143,7 +143,7 @@ const changeVisibilityValue = (event: string | number, item: Entity<'blog_visibi
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     items,
     page,
     limit,

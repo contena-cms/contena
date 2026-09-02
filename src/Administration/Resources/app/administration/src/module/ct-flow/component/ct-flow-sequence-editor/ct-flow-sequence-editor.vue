@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_flow_sequence_editor">
+    <ct-block name="ct_flow_sequence_editor">
         <div class="ct-flow-sequence-editor">
-            <ct-block name="sw_flow_sequence_editor_diagram">
+            <ct-block name="ct_flow_sequence_editor_diagram">
                 <div class="ct-flow-sequence-editor__diagram">
                     <div class="ct-flow-sequence-editor__oval" aria-hidden="true"></div>
 
@@ -75,7 +75,7 @@ const removeRootSequence = (index: number): void =>
         else draft.splice(index, 1);
     });
 
-swDefinePublic({
+ctDefinePublic({
     addRootSequence,
     setRootSequence,
     removeRootSequence,

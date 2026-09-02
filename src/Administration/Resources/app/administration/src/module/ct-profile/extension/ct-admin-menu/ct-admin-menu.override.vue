@@ -1,5 +1,5 @@
 <template>
-    <ct-block extends="sw_admin_menu_user_actions_items">
+    <ct-block extends="ct_admin_menu_user_actions_items">
         <router-link v-if="acl.can('user.update_profile')" v-slot="{ navigate }" :to="{ name: 'ct.profile.index' }" custom>
             <mt-action-menu-item class="ct-profile-menu__profile" icon="regular-user" @click="navigate">
                 {{ $t('ct-profile.general.headlineProfile') }}
@@ -38,5 +38,5 @@ async function toggleTheme(): Promise<void> {
     await saveUserTheme(resolvedTheme.value === 'dark' ? 'light' : 'dark');
 }
 
-swDefineOverride({});
+ctDefineOverride({});
 </script>

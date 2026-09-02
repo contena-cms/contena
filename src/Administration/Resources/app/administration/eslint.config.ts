@@ -17,12 +17,12 @@ import listeners from 'eslint-plugin-listeners';
 import json from '@eslint/json';
 import vueParser from 'vue-eslint-parser';
 
-import swTestRules from 'eslint-plugin-ct-test-rules';
+import ctTestRules from 'eslint-plugin-ct-test-rules';
 // The factory is the single source of the base lint setup for admin AND
-// extensions. pluginVue/swDeprecationRules must be the factory's own objects:
+// extensions. pluginVue/ctDeprecationRules must be the factory's own objects:
 // ESLint refuses to redefine a plugin key with a different object reference,
 // and the factory blocks register these plugins for overlapping files.
-import contenaAdminExtension, { pluginVue, swCoreRules, swDeprecationRules } from './extension-tooling/eslint.mjs';
+import contenaAdminExtension, { pluginVue, ctCoreRules, ctDeprecationRules } from './extension-tooling/eslint.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -233,9 +233,9 @@ export default [
             'filename-rules': fixupPluginRules(filenameRulesPatched),
             // Deliberately not fixup-wrapped: the wrapper would be a second
             // object under the key the factory already registers.
-            'ct-core-rules': swCoreRules,
-            'ct-deprecation-rules': swDeprecationRules,
-            'ct-test-rules': fixupPluginRules(swTestRules),
+            'ct-core-rules': ctCoreRules,
+            'ct-deprecation-rules': ctDeprecationRules,
+            'ct-test-rules': fixupPluginRules(ctTestRules),
             listeners: fixupPluginRules(listeners),
         },
         languageOptions: {
@@ -554,7 +554,7 @@ export default [
         language: 'json/json',
         plugins: {
             json,
-            'ct-core-rules': swCoreRules,
+            'ct-core-rules': ctCoreRules,
         },
         rules: {
             'ct-core-rules/require-global-default-use': 'error',

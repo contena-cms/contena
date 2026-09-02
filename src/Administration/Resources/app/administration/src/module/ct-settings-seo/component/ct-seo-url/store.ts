@@ -1,5 +1,5 @@
-const swSeoUrlStore = Contena.Store.register({
-    id: 'swSeoUrl',
+const ctSeoUrlStore = Contena.Store.register({
+    id: 'ctSeoUrl',
 
     state() {
         return {
@@ -41,9 +41,9 @@ const swSeoUrlStore = Contena.Store.register({
 /**
  * @private
  */
-export type SwSeoUrlStore = ReturnType<typeof swSeoUrlStore>;
+export type CtSeoUrlStore = ReturnType<typeof ctSeoUrlStore>;
 
 /**
  * @private
  */
-export default swSeoUrlStore;
+export default ctSeoUrlStore;

@@ -1,6 +1,6 @@
 describe('src/app/store/ct-bulk-edit.store', () => {
     it('stores and resets selected entity identifiers', () => {
-        const store = Contena.Store.get('swBulkEdit');
+        const store = Contena.Store.get('ctBulkEdit');
 
         store.setSelectedIds([
             'first-id',

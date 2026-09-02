@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_tree_item">
+    <ct-block name="ct_tree_item">
         <div
             ref="treeItemRoot"
             class="ct-tree-item"
@@ -13,17 +13,17 @@
             :aria-owns="item.id"
             :aria-selected="checked"
         >
-            <ct-block name="sw_tree_item_element">
+            <ct-block name="ct_tree_item_element">
                 <div
                     v-droppable="{ dragGroup: 'ct-tree-item', data: item }"
                     v-draggable="dragConf"
                     class="ct-tree-item__element"
                 >
-                    <ct-block name="sw_tree_item_element_leaf_icon">
+                    <ct-block name="ct_tree_item_element_leaf_icon">
                         <div v-if="item.childCount <= 0" class="ct-tree-item__leaf"></div>
                     </ct-block>
 
-                    <ct-block name="sw_tree_item_element_toggle">
+                    <ct-block name="ct_tree_item_element_toggle">
                         <template v-if="item.childCount <= 0"
                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                         >
@@ -43,7 +43,7 @@
                                 getTreeItemChildren(item);
                             "
                         >
-                            <ct-block name="sw_tree_item_element_toggle_icon">
+                            <ct-block name="ct_tree_item_element_toggle_icon">
                                 <mt-icon
                                     size="24px"
                                     :name="opened ? 'regular-chevron-down-xxs' : 'regular-chevron-right-xxs'"
@@ -52,7 +52,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_tree_item_element_selection">
+                    <ct-block name="ct_tree_item_element_selection">
                         <div class="ct-tree-item__selection">
                             <mt-checkbox
                                 v-if="displayCheckbox"
@@ -65,7 +65,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_tree_item_element_grip">
+                    <ct-block name="ct_tree_item_element_grip">
                         <slot name="grip">
                             <div v-if="item.childCount > 0" class="ct-tree-item__icon">
                                 <mt-icon v-if="opened" name="regular-folder-open" size="16px" />
@@ -79,7 +79,7 @@
                         </slot>
                     </ct-block>
 
-                    <ct-block name="sw_tree_item_element_content">
+                    <ct-block name="ct_tree_item_element_content">
                         <div
                             ref="item"
                             v-tooltip="{
@@ -89,7 +89,7 @@
                             class="ct-tree-item__content"
                         >
                             <slot name="content" v-bind="{ item, openTreeItem, getName }">
-                                <ct-block name="sw_tree_items_item_content_edit">
+                                <ct-block name="ct_tree_items_item_content_edit">
                                     <template v-if="currentEditElement === item.data.id">
                                         <ct-confirm-field
                                             v-model="editItemName"
@@ -103,7 +103,7 @@
                                     </template>
                                 </ct-block>
 
-                                <ct-block name="sw_tree_items_item_content_default">
+                                <ct-block name="ct_tree_items_item_content_default">
                                     <template v-if="currentEditElement === item.data.id"
                                         ><!-- Keeps the conditional chain connected across ct-block. --></template
                                     >
@@ -128,9 +128,9 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_tree_item_element_actions">
+                    <ct-block name="ct_tree_item_element_actions">
                         <div class="ct-tree-item__actions">
-                            <ct-block name="sw_tree_items_active_state">
+                            <ct-block name="ct_tree_items_active_state">
                                 <mt-icon
                                     v-if="shouldShowActiveState"
                                     size="6px"
@@ -156,7 +156,7 @@
                                     class="ct-tree-item__context_button"
                                     :disabled="isDisabled || undefined"
                                 >
-                                    <ct-block name="sw_tree_items_actions_without_position">
+                                    <ct-block name="ct_tree_items_actions_without_position">
                                         <ct-context-menu-item
                                             v-if="allowCreateWithoutPosition"
                                             class="ct-tree-item__without-position-action"
@@ -166,7 +166,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_tree_items_actions_before">
+                                    <ct-block name="ct_tree_items_actions_before">
                                         <ct-context-menu-item
                                             v-if="!allowCreateWithoutPosition"
                                             :disabled="!allowNewCategories || undefined"
@@ -177,7 +177,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_tree_items_actions_after">
+                                    <ct-block name="ct_tree_items_actions_after">
                                         <ct-context-menu-item
                                             v-if="!allowCreateWithoutPosition"
                                             :disabled="!allowNewCategories || undefined"
@@ -188,7 +188,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_tree_items_actions_sub">
+                                    <ct-block name="ct_tree_items_actions_sub">
                                         <ct-context-menu-item
                                             v-if="!allowCreateWithoutPosition"
                                             :disabled="!allowNewCategories || undefined"
@@ -202,7 +202,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_tree_items_actions_duplicate">
+                                    <ct-block name="ct_tree_items_actions_duplicate">
                                         <ct-context-menu-item
                                             v-if="allowDuplicate"
                                             class="ct-context-menu__duplicate-action"
@@ -212,15 +212,15 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_tree_items_actions_group">
+                                    <ct-block name="ct_tree_items_actions_group">
                                         <div class="ct-context-menu__group">
-                                            <ct-block name="sw_tree_items_actions_edit">
+                                            <ct-block name="ct_tree_items_actions_edit">
                                                 <ct-context-menu-item @click="onChangeRoute(item)">
                                                     {{ translate('global.default.edit') }}
                                                 </ct-context-menu-item>
                                             </ct-block>
 
-                                            <ct-block name="sw_tree_items_actions_delete">
+                                            <ct-block name="ct_tree_items_actions_delete">
                                                 <ct-context-menu-item
                                                     class="ct-context-menu__group-button-delete"
                                                     :disabled="!allowDeleteCategories || undefined"
@@ -240,17 +240,17 @@
             </ct-block>
 
             <!-- ToDo: Repeat instead of duplicated Content -->
-            <ct-block name="sw_tree_item_children_transition">
+            <ct-block name="ct_tree_item_children_transition">
                 <transition name="fade">
                     <template v-if="isOpened && item.children.length > 0">
-                        <ct-block name="sw_tree_item_children_content">
+                        <ct-block name="ct_tree_item_children_content">
                             <div
                                 :id="item.id"
                                 class="ct-tree-item__children"
                                 role="group"
                                 :aria-label="translate(`ct-tree-item.childrenLabel`, { name: getName(item) })"
                             >
-                                <ct-block name="sw_tree_item_children_items">
+                                <ct-block name="ct_tree_item_children_items">
                                     <ct-tree-item
                                         v-for="child in item.children"
                                         :key="child.id"
@@ -271,7 +271,7 @@
                                         @check-item="emitCheckedItem"
                                     >
                                         <template #content="{ item, openTreeItem, getName: innerGetName }">
-                                            <ct-block name="sw_tree_item_children_items_slot_content">
+                                            <ct-block name="ct_tree_item_children_items_slot_content">
                                                 <ct-vnode-renderer
                                                     v-if="contentSlot"
                                                     :node="
@@ -279,12 +279,12 @@
                                                     "
                                                 />
 
-                                                <ct-block name="sw_tree_item_children_items_slot_content_default_block">
+                                                <ct-block name="ct_tree_item_children_items_slot_content_default_block">
                                                     <template v-if="contentSlot"
                                                         ><!-- Keeps the conditional chain connected across ct-block. --></template
                                                     >
                                                     <template v-else>
-                                                        <ct-block name="sw_tree_item_children_items_slot_content_edit">
+                                                        <ct-block name="ct_tree_item_children_items_slot_content_edit">
                                                             <template v-if="currentEditElement === item.data.id">
                                                                 <ct-confirm-field
                                                                     v-model="item.data.name"
@@ -302,7 +302,7 @@
                                                             </template>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_item_children_items_slot_content_default">
+                                                        <ct-block name="ct_tree_item_children_items_slot_content_default">
                                                             <template v-if="currentEditElement === item.data.id"
                                                                 ><!-- Keeps the conditional chain connected across ct-block. --></template
                                                             >
@@ -329,8 +329,8 @@
                                         </template>
 
                                         <template #actions="{ item, openTreeItem }">
-                                            <ct-block name="sw_tree_item_children_items_slot_actions">
-                                                <ct-block name="sw_tree_items_transition_active_state">
+                                            <ct-block name="ct_tree_item_children_items_slot_actions">
+                                                <ct-block name="ct_tree_items_transition_active_state">
                                                     <mt-icon
                                                         v-if="shouldShowActiveState"
                                                         size="6px"
@@ -345,7 +345,7 @@
                                                 />
                                                 <template v-else>
                                                     <ct-context-button v-tooltip="toolTip" :disabled="isDisabled">
-                                                        <ct-block name="sw_tree_items_transition_actions_without_position">
+                                                        <ct-block name="ct_tree_items_transition_actions_without_position">
                                                             <ct-context-menu-item
                                                                 v-if="allowCreateWithoutPosition"
                                                                 class="ct-tree-item__without-position-action"
@@ -359,7 +359,7 @@
                                                             </ct-context-menu-item>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_items_transition_actions_before">
+                                                        <ct-block name="ct_tree_items_transition_actions_before">
                                                             <ct-context-menu-item
                                                                 v-if="!allowCreateWithoutPosition"
                                                                 :disabled="!allowNewCategories || undefined"
@@ -374,7 +374,7 @@
                                                             </ct-context-menu-item>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_items_transition_actions_after">
+                                                        <ct-block name="ct_tree_items_transition_actions_after">
                                                             <ct-context-menu-item
                                                                 v-if="!allowCreateWithoutPosition"
                                                                 :disabled="!allowNewCategories"
@@ -389,7 +389,7 @@
                                                             </ct-context-menu-item>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_items_transition_actions_sub">
+                                                        <ct-block name="ct_tree_items_transition_actions_sub">
                                                             <ct-context-menu-item
                                                                 v-if="!allowCreateWithoutPosition"
                                                                 :disabled="!allowNewCategories"
@@ -407,7 +407,7 @@
                                                             </ct-context-menu-item>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_items_transition_actions_duplicate">
+                                                        <ct-block name="ct_tree_items_transition_actions_duplicate">
                                                             <ct-context-menu-item
                                                                 v-if="allowDuplicate"
                                                                 class="ct-context-menu__duplicate-action"
@@ -417,15 +417,15 @@
                                                             </ct-context-menu-item>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_tree_items_transition_actions_group">
+                                                        <ct-block name="ct_tree_items_transition_actions_group">
                                                             <div class="ct-context-menu__group">
-                                                                <ct-block name="sw_tree_items_transition_actions_edit">
+                                                                <ct-block name="ct_tree_items_transition_actions_edit">
                                                                     <ct-context-menu-item @click="onChangeRoute(item)">
                                                                         {{ translate('global.default.edit') }}
                                                                     </ct-context-menu-item>
                                                                 </ct-block>
 
-                                                                <ct-block name="sw_tree_items_transition_actions_delete">
+                                                                <ct-block name="ct_tree_items_transition_actions_delete">
                                                                     <ct-context-menu-item
                                                                         class="ct-context-menu__group-button-delete"
                                                                         :disabled="!allowDeleteCategories || undefined"
@@ -977,7 +977,7 @@ onBeforeUnmount(() => {
     beforeUnmountComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     getItems,
     treeStartDrag,
     treeEndDrag,

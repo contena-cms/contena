@@ -16,7 +16,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template v-if="condition">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -40,7 +40,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template v-if="condition">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -51,7 +51,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             /* eslint-disable */
             output: `
                 <template>
-                    <ct-block name="block-name" v-if="condition" >
+                    <ct-block name="ct_block-name" v-if="condition" >
                         <template >
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -69,7 +69,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template v-else-if="condition">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -80,7 +80,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             /* eslint-disable */
             output: `
                 <template>
-                    <ct-block name="block-name" v-else-if="condition" >
+                    <ct-block name="ct_block-name" v-else-if="condition" >
                         <template >
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -98,7 +98,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template v-else>
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -109,7 +109,7 @@ tester.run('move-v-if-conditions-to-blocks', rule, {
             /* eslint-disable */
             output: `
                 <template>
-                    <ct-block name="block-name" v-else >
+                    <ct-block name="ct_block-name" v-else >
                         <template >
                             <h1>Title</h1>
                             <p>{{ message }}</p>

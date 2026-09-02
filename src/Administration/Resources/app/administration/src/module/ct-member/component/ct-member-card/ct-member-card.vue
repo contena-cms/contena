@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_member_card">
+    <ct-block name="ct_member_card">
         <mt-card :title="title" :is-loading="isLoading" position-identifier="ct-member-card">
             <slot />
         </mt-card>
@@ -17,5 +17,5 @@ defineProps({
     editMode: { type: Boolean, default: false },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

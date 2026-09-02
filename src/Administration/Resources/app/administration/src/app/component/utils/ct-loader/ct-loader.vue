@@ -1,7 +1,7 @@
 <template>
     <!-- v-on="$listeners" needed becaues vue/compat removes them from $attrs -->
     <!-- New mt-loader component -->
-    <ct-block name="sw_loader">
+    <ct-block name="ct_loader">
         <mt-loader v-bind="$attrs">
             <template v-for="(index, name) in getSlots()" #[name]="data">
                 <slot :name="name" v-bind="data"> </slot>
@@ -22,7 +22,7 @@ const getSlots = () => {
     return slots;
 };
 
-swDefinePublic({
+ctDefinePublic({
     getSlots,
 });
 

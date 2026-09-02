@@ -1,18 +1,18 @@
 <template>
-    <ct-block name="sw_extension_store_landing_page">
+    <ct-block name="ct_extension_store_landing_page">
         <ct-page>
             <template #smart-bar-header>
-                <ct-block name="sw_extension_store_landing_page_smart_bar_header">
+                <ct-block name="ct_extension_store_landing_page_smart_bar_header">
                     <h2>{{ $t('ct-extension.mainMenu.store') }}</h2>
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_extension_store_landing_page_content">
+                <ct-block name="ct_extension_store_landing_page_content">
                     <div class="ct-extension-store-landing-page">
-                        <ct-block name="sw_extension_store_landing_page_wrapper">
+                        <ct-block name="ct_extension_store_landing_page_wrapper">
                             <div class="ct-extension-store-landing-page__wrapper">
-                                <ct-block name="sw_extension_store_landing_page_loading">
+                                <ct-block name="ct_extension_store_landing_page_loading">
                                     <template v-if="isLoading">
                                         <div class="ct-extension-store-landing-page__loading">
                                             <mt-loader />
@@ -24,11 +24,11 @@
                                     </template>
                                 </ct-block>
 
-                                <ct-block name="sw_extension_store_landing_page_status">
+                                <ct-block name="ct_extension_store_landing_page_status">
                                     <template v-if="!isLoading && activationStatus !== null">
                                         <div class="ct-extension-store-landing-page__status">
                                             <template v-if="activationStatus === 'error'">
-                                                <ct-block name="sw_extension_store_landing_page_status_error">
+                                                <ct-block name="ct_extension_store_landing_page_status_error">
                                                     <div
                                                         class="ct-extension-store-landing-page__status-icon ct-extension-store-landing-page__status-icon--error"
                                                     >
@@ -55,7 +55,7 @@
                                             </template>
 
                                             <template v-else>
-                                                <ct-block name="sw_extension_store_landing_page_status_success">
+                                                <ct-block name="ct_extension_store_landing_page_status_success">
                                                     <div
                                                         class="ct-extension-store-landing-page__status-icon ct-extension-store-landing-page__status-icon--success"
                                                     >
@@ -70,10 +70,10 @@
                                     </template>
                                 </ct-block>
 
-                                <ct-block name="sw_extension_store_landing_page_activation">
+                                <ct-block name="ct_extension_store_landing_page_activation">
                                     <template v-if="!isLoading && activationStatus === null">
                                         <div class="ct-extension-store-landing-page__content">
-                                            <ct-block name="sw_extension_store_landing_page_illustration">
+                                            <ct-block name="ct_extension_store_landing_page_illustration">
                                                 <div
                                                     class="ct-extension-store-landing-page__illustration"
                                                     aria-hidden="true"
@@ -86,23 +86,23 @@
                                                 </div>
                                             </ct-block>
 
-                                            <ct-block name="sw_extension_store_landing_page_label">
+                                            <ct-block name="ct_extension_store_landing_page_label">
                                                 <span class="ct-extension-store-landing-page__label">
                                                     {{ $t('ct-extension.store.landingLabel') }}
                                                 </span>
                                             </ct-block>
 
-                                            <ct-block name="sw_extension_store_landing_page_title">
+                                            <ct-block name="ct_extension_store_landing_page_title">
                                                 <h2>
                                                     <span>{{ $t('ct-extension.store.landingTitle') }}</span>
                                                 </h2>
                                             </ct-block>
 
-                                            <ct-block name="sw_extension_store_landing_page_description">
+                                            <ct-block name="ct_extension_store_landing_page_description">
                                                 <p>{{ $t('ct-extension.store.landingDescription') }}</p>
                                             </ct-block>
 
-                                            <ct-block name="sw_extension_store_landing_page_action">
+                                            <ct-block name="ct_extension_store_landing_page_action">
                                                 <mt-button variant="primary" @click="installStore">
                                                     {{ $t('ct-extension.store.install') }}
                                                 </mt-button>
@@ -203,7 +203,7 @@ const installStore = async (): Promise<void> => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     extensionService,
     isLoading,
     activationStatus,

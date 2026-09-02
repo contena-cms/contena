@@ -2,7 +2,7 @@ import { flushPromises, shallowMount, type VueWrapper } from '@vue/test-utils';
 import component from './index';
 
 const channelSwitchStub = {
-    name: 'SwChannelSwitchStub',
+    name: 'CtChannelSwitchStub',
     props: ['disabled'],
     template: '<div class="ct-channel-switch-stub" />',
 };
@@ -12,7 +12,7 @@ type SeoUrlVm = {
 };
 
 function setCurrentSeoPathInfo(seoPathInfo: string | null): void {
-    Contena.Store.get('swSeoUrl').currentSeoUrl = {
+    Contena.Store.get('ctSeoUrl').currentSeoUrl = {
         createdAt: '2026-08-17T00:00:00.000+00:00',
         id: 'default-seo-url',
         languageId: Contena.Defaults.systemLanguageId,
@@ -66,7 +66,7 @@ function createWrapper(props: Record<string, unknown> = {}): VueWrapper<SeoUrlVm
 
 describe('module/ct-settings-seo/component/ct-seo-url', () => {
     afterEach(() => {
-        const seoStore = Contena.Store.get('swSeoUrl');
+        const seoStore = Contena.Store.get('ctSeoUrl');
         seoStore.currentSeoUrl = null;
     });
 

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_data_dictionary_list">
+    <ct-block name="ct_data_dictionary_list">
         <ct-page class="ct-data-dictionary-list">
             <template #search-bar>
                 <mt-search
@@ -10,7 +10,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_data_dictionary_list_smart_bar_header">
+                <ct-block name="ct_data_dictionary_list_smart_bar_header">
                     <h2>
                         {{ translate('ct-settings.index.title') }}
                         <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -21,7 +21,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_data_dictionary_list_smart_bar_actions">
+                <ct-block name="ct_data_dictionary_list_smart_bar_actions">
                     <mt-button
                         variant="primary"
                         :disabled="!acl.can('data_dictionary.creator') || undefined"
@@ -33,13 +33,13 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_data_dictionary_list_language_switch">
+                <ct-block name="ct_data_dictionary_list_language_switch">
                     <ct-language-switch @on-change="onChangeLanguage" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_data_dictionary_list_content">
+                <ct-block name="ct_data_dictionary_list_content">
                     <mt-data-table
                         layout="full"
                         :caption="translate('ct-data-dictionary.general.mainMenuItemGeneral')"
@@ -80,7 +80,7 @@
                         </template>
                     </mt-data-table>
 
-                    <ct-block name="sw_data_dictionary_list_detail_modal">
+                    <ct-block name="ct_data_dictionary_list_detail_modal">
                         <ct-data-dictionary-detail
                             v-if="isDetailModalOpen"
                             :dictionary-id="editingDictionaryId"
@@ -239,7 +239,7 @@ const onContextSelect = ({ key, data }): void => {
 
 void load();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     repository,

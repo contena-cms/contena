@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_notification_center">
+    <ct-block name="ct_notification_center">
         <mt-floating-ui class="ct-notification-center__popover" :is-opened="isOpened" :offset="8" @close="onPanelClose">
             <template #trigger>
-                <ct-block name="sw_notification_center_context_button_button_slot">
+                <ct-block name="ct_notification_center_context_button_button_slot">
                     <mt-button
                         class="ct-notification-center__context-button"
                         :class="[additionalContextButtonClass, { 'is--active': isOpened }]"
@@ -19,14 +19,14 @@
 
             <template #default>
                 <div class="ct-notification-center__content">
-                    <ct-block name="sw_notification_center_content">
-                        <ct-block name="sw_notification_center_content_header">
+                    <ct-block name="ct_notification_center_content">
+                        <ct-block name="ct_notification_center_content_header">
                             <div class="ct-notification-center__header">
                                 <h3 class="ct-notification-center__title">
                                     {{ $t('global.notification-center.title') }}
                                 </h3>
 
-                                <ct-block name="sw_notification_center_content_context_menu">
+                                <ct-block name="ct_notification_center_content_context_menu">
                                     <mt-dropdown-menu-root :open="optionsMenuOpen" @update:open="optionsMenuOpen = $event">
                                         <mt-dropdown-menu-trigger as-child>
                                             <mt-button
@@ -56,7 +56,7 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_notification_center_content_notification_container">
+                        <ct-block name="ct_notification_center_content_notification_container">
                             <div class="ct-notification-center__notification-container">
                                 <div v-show="notifications.length > 0">
                                     <ct-notification-center-item
@@ -97,28 +97,28 @@
             </template>
         </mt-floating-ui>
 
-        <ct-block name="sw_notification_center_delete_modal">
+        <ct-block name="ct_notification_center_delete_modal">
             <ct-modal
                 v-if="showDeleteModal"
                 :title="$t('global.notification-center.deleteModal.title')"
                 variant="small"
                 @modal-close="onCloseDeleteModal"
             >
-                <ct-block name="sw_notification_center_delete_modal_confirm_delete_text">
-                    <p class="sw_notification_center__confirm-delete-text">
+                <ct-block name="ct_notification_center_delete_modal_confirm_delete_text">
+                    <p class="ct_notification_center__confirm-delete-text">
                         {{ $t('global.notification-center.deleteModal.textConfirm') }}
                     </p>
                 </ct-block>
 
                 <template #modal-footer>
-                    <ct-block name="sw_notification_center_delete_modal_footer">
-                        <ct-block name="sw_notification_center_delete_modal_cancel">
+                    <ct-block name="ct_notification_center_delete_modal_footer">
+                        <ct-block name="ct_notification_center_delete_modal_cancel">
                             <mt-button size="small" variant="secondary" @click="onCloseDeleteModal">
                                 {{ $t('global.default.cancel') }}
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_notification_center_delete_modal_confirm">
+                        <ct-block name="ct_notification_center_delete_modal_confirm">
                             <mt-button variant="critical" size="small" @click="onConfirmDelete">
                                 {{ $t('global.default.delete') }}
                             </mt-button>
@@ -226,7 +226,7 @@ onBeforeUnmount(() => {
     Contena.Utils.EventBus.off('on-change-notification-center-visibility', changeVisibility);
 });
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     isOpened,
     optionsMenuOpen,

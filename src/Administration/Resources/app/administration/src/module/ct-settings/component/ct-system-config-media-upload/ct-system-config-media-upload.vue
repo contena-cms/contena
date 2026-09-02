@@ -54,7 +54,7 @@ const removeMedia = () => {
     emit('update:value', null);
 };
 
-swDefinePublic({
+ctDefinePublic({
     uploadTag,
     successfulUpload,
     setMedia,

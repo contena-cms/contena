@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_blog_visibility_select">
+    <ct-block name="ct_blog_visibility_select">
         <mt-entity-select
             class="ct-blog-visibility-select"
             entity="channel"
@@ -47,7 +47,7 @@ const emit = defineEmits<{
 }>();
 
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory')!;
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const defaultVisibility = 30;
 const associationRepository = computed(() => repositoryFactory.create('blog_visibility'));
 const channelCriteria = computed(() => {
@@ -102,7 +102,7 @@ const updateSelectedChannels = (channelIds: string[]): void => {
     emitCollection();
 };
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     defaultVisibility,
     associationRepository,

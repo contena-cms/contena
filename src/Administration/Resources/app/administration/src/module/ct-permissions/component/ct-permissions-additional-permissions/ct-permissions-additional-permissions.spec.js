@@ -133,20 +133,20 @@ describe('module/ct-permissions/component/ct-permissions-additional-permissions'
         await flushPromises();
 
         const clearCacheField = wrapper.findAllComponents('.mt-switch').find((field) => {
-            return field.classes().includes('sw_permissions_additional_permissions_system_clear_cache');
+            return field.classes().includes('ct_permissions_additional_permissions_system_clear_cache');
         });
         expect(clearCacheField.props().modelValue).toBeTruthy();
     });
 
     it('should contain the a false value in a field when the privilege is not in roles', async () => {
-        const clearCacheField = wrapper.findComponent('.sw_permissions_additional_permissions_system_clear_cache');
+        const clearCacheField = wrapper.findComponent('.ct_permissions_additional_permissions_system_clear_cache');
 
         expect(clearCacheField.props().modelValue).toBeFalsy();
     });
 
     it('should add the checked value to the role privileges', async () => {
         const clearCacheField = wrapper.findAllComponents('.mt-switch').find((field) => {
-            return field.classes().includes('sw_permissions_additional_permissions_system_clear_cache');
+            return field.classes().includes('ct_permissions_additional_permissions_system_clear_cache');
         });
 
         expect(clearCacheField.props().modelValue).toBeFalsy();
@@ -166,7 +166,7 @@ describe('module/ct-permissions/component/ct-permissions-additional-permissions'
         });
 
         const clearCacheField = wrapper.findAllComponents('.mt-switch').find((field) => {
-            return field.classes().includes('sw_permissions_additional_permissions_system_clear_cache');
+            return field.classes().includes('ct_permissions_additional_permissions_system_clear_cache');
         });
 
         expect(clearCacheField.props().modelValue).toBeTruthy();

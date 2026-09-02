@@ -18,7 +18,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-media-colle
     let wrapper: VueWrapper | undefined;
 
     beforeAll(() => {
-        (globalThis as unknown as { swDefinePublic: (bindings: unknown) => void }).swDefinePublic = () => undefined;
+        (globalThis as unknown as { ctDefinePublic: (bindings: unknown) => void }).ctDefinePublic = () => undefined;
     });
 
     afterEach(() => {
@@ -26,7 +26,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-media-colle
     });
 
     afterAll(() => {
-        Reflect.deleteProperty(globalThis, 'swDefinePublic');
+        Reflect.deleteProperty(globalThis, 'ctDefinePublic');
     });
 
     function createWrapper(value: string[] | null = null, disabled = false): VueWrapper {

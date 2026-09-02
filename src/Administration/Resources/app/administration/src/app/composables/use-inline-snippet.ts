@@ -5,7 +5,7 @@
  * the same global sources, so the composable is fully self-contained.
  *
  * The mixin is kept for legacy Options API components (and for any that read the
- * `swInlineSnippetLocale` computed directly — those keep the Options-API backoff
+ * `ctInlineSnippetLocale` computed directly — those keep the Options-API backoff
  * in the codemod).
  *
  * @private

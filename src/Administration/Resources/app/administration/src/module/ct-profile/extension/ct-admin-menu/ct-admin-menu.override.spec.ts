@@ -38,13 +38,13 @@ function createWrapper(canUpdateProfile: boolean) {
     }
 
     const overrideResult = wrapper.vm.$.appContext.app.runWithContext(() => override({ _private: {} }, {}, {})) as {
-        __swOverride: Record<symbol, ProfileOverrideState>;
+        __ctOverride: Record<symbol, ProfileOverrideState>;
     };
-    const namespace = Reflect.ownKeys(overrideResult.__swOverride)[0] as symbol;
+    const namespace = Reflect.ownKeys(overrideResult.__ctOverride)[0] as symbol;
 
     return {
         wrapper,
-        state: overrideResult.__swOverride[namespace],
+        state: overrideResult.__ctOverride[namespace],
     };
 }
 

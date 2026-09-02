@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_list_selection_v2">
+    <ct-block name="ct_media_list_selection_v2">
         <div class="ct-media-list-selection-v2">
-            <ct-block name="sw_media_list_selection_v2_upload">
+            <ct-block name="ct_media_list_selection_v2_upload">
                 <ct-media-upload-v2
                     :upload-tag="uploadId"
                     variant="regular"
@@ -11,11 +11,11 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_list_selection_v2_grid">
+            <ct-block name="ct_media_list_selection_v2_grid">
                 <div ref="grid" class="ct-media-list-selection-v2__grid" :style="gridAutoRows">
                     <mt-loader v-if="entity.isLoading" />
 
-                    <ct-block name="sw_media_list_selection_v2_grid_items">
+                    <ct-block name="ct_media_list_selection_v2_grid_items">
                         <ct-media-list-selection-item-v2
                             v-for="(mediaItem, index) in mediaItems"
                             :key="mediaItem.url"
@@ -199,7 +199,7 @@ const removeItem = (mediaItem: MediaListItem, index?: number) => {
 
 onMounted(mountedComponent);
 
-swDefinePublic({
+ctDefinePublic({
     columnCount,
     columnWidth,
     mediaRepository,

@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_category_detail_base">
+    <ct-block name="ct_category_detail_base">
         <div class="ct-category-detail-base">
-            <ct-block name="sw_category_detail_information">
+            <ct-block name="ct_category_detail_information">
                 <mt-card
                     position-identifier="ct-category-detail-base"
                     :title="$t('ct-category.base.general.headlineInformationCard')"
                     :is-loading="isLoading"
                 >
                     <ct-container columns="repeat(auto-fit, minmax(150px, 1fr))" gap="0px 30px">
-                        <ct-block name="sw_category_detail_information_name">
+                        <ct-block name="ct_category_detail_information_name">
                             <mt-text-field
                                 v-model="category.name"
                                 required
@@ -21,7 +21,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_detail_information_active">
+                        <ct-block name="ct_category_detail_information_active">
                             <mt-switch
                                 v-model="category.active"
                                 :disabled="!acl.can('category.editor')"
@@ -33,7 +33,7 @@
                         </ct-block>
                     </ct-container>
 
-                    <ct-block name="sw_category_detail_information_tags">
+                    <ct-block name="ct_category_detail_information_tags">
                         <ct-entity-tag-select
                             v-if="category && !isLoading"
                             v-model:entity-collection="category.tags"
@@ -44,9 +44,9 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_category_detail_information_type">
+                    <ct-block name="ct_category_detail_information_type">
                         <div class="ct-category-detail-base__type-container">
-                            <ct-block name="sw_category_detail_information_type_select">
+                            <ct-block name="ct_category_detail_information_type_select">
                                 <ct-single-select
                                     v-model:value="category.type"
                                     class="ct-category-detail-base__type-selection"
@@ -63,24 +63,24 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_category_detail_entry_point">
+            <ct-block name="ct_category_detail_entry_point">
                 <ct-category-entry-point-card
                     v-if="(category.type === 'folder' || category.type === 'page') && !isCategoryColumn"
                     v-bind="{ category, isLoading }"
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_link">
+            <ct-block name="ct_category_detail_link">
                 <ct-category-link-settings v-if="category.type === 'link'" v-bind="{ category, isLoading }" />
             </ct-block>
 
             <template v-if="category.type !== 'link'">
-                <ct-block name="sw_category_detail_menu">
+                <ct-block name="ct_category_detail_menu">
                     <ct-category-detail-menu v-bind="{ category, isLoading }" />
                 </ct-block>
             </template>
 
-            <ct-block name="sw_category_detail_attribute_sets">
+            <ct-block name="ct_category_detail_attribute_sets">
                 <mt-card
                     v-if="customFieldSetsArray.length > 0"
                     position-identifier="ct-category-detail-attribute-sets"
@@ -122,7 +122,7 @@ const repositoryFactory = inject('repositoryFactory');
 const acl = inject('acl');
 
 const customFieldSetsArray = computed(() => {
-    return Contena.Store.get('swCategoryDetail').customFieldSets ?? [];
+    return Contena.Store.get('ctCategoryDetail').customFieldSets ?? [];
 });
 const categoryNameError = computed(() => {
     const entity = category.value;
@@ -189,13 +189,13 @@ const isChannelEntryPoint = computed(() => {
     );
 });
 const category = computed(() => {
-    return Contena.Store.get('swCategoryDetail').category;
+    return Contena.Store.get('ctCategoryDetail').category;
 });
 const isCategoryColumn = computed(() => {
-    return Contena.Store.get('swCategoryDetail').isCategoryColumn;
+    return Contena.Store.get('ctCategoryDetail').isCategoryColumn;
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     customFieldSetsArray,

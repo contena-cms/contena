@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_simple_search_field">
+    <ct-block name="ct_simple_search_field">
         <div class="ct-simple-search-field">
-            <ct-block name="sw_simple_search_field_input">
+            <ct-block name="ct_simple_search_field_input">
                 <mt-text-field
                     class="ct-simple-search-field__input"
                     :class="fieldClasses"
@@ -13,9 +13,9 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_simple_search_field_search_icon">
+            <ct-block name="ct_simple_search_field_search_icon">
                 <slot name="ct-simple-search-field-icon">
-                    <ct-block name="sw_simple_search_field_slot_search_icon">
+                    <ct-block name="ct_simple_search_field_slot_search_icon">
                         <mt-icon v-if="icon" class="ct-simple-search-field__search-icon" :name="icon" size="16px" />
                     </ct-block>
                 </slot>
@@ -107,7 +107,7 @@ const onInput = (input) => {
     onSearchTermChanged.value(input);
 };
 
-swDefinePublic({
+ctDefinePublic({
     onSearchTermChanged,
     fieldClasses,
     placeholder,

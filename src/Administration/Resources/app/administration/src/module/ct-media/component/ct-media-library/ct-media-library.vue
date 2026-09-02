@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_library">
+    <ct-block name="ct_media_library">
         <div class="ct-media-library" :class="{ 'ct-media-library--without-toolbar': !showToolbar }">
-            <ct-block name="sw_media_library_display_options">
+            <ct-block name="ct_media_library_display_options">
                 <div
                     v-if="showToolbar"
                     class="ct-media-library__options-container"
@@ -11,7 +11,7 @@
                         'ct-media-library__options-container--inline': inlineDisplayOptions,
                     }"
                 >
-                    <ct-block name="sw_media_library_search">
+                    <ct-block name="ct_media_library_search">
                         <mt-text-field
                             v-if="!hideSearch"
                             class="ct-media-library__search"
@@ -27,7 +27,7 @@
                         </mt-text-field>
                     </ct-block>
 
-                    <ct-block name="sw_media_library_type_filter">
+                    <ct-block name="ct_media_library_type_filter">
                         <mt-select
                             v-if="showTypeFilter"
                             v-model="mediaType"
@@ -53,7 +53,7 @@
                         @media-sorting-change="sorting = $event"
                     />
 
-                    <ct-block name="sw_media_index_create_folder">
+                    <ct-block name="ct_media_index_create_folder">
                         <mt-button
                             v-if="!hideCreateFolder && (editable || allowCreateFolder)"
                             v-tooltip="{
@@ -73,10 +73,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_library_scroll_container">
+            <ct-block name="ct_media_library_scroll_container">
                 <div ref="scrollContainer" class="ct-media-library__scroll-container">
                     <div class="ct-media-library__scroll-content">
-                        <ct-block name="sw_media_library_folder_section">
+                        <ct-block name="ct_media_library_folder_section">
                             <section
                                 v-if="(parentFolder && !hideParentFolder) || subFolders.length > 0"
                                 class="ct-media-library__section ct-media-library__folder-section"
@@ -92,7 +92,7 @@
                                     presentation="list-preview"
                                     @media-grid-selection-clear="clearSelection"
                                 >
-                                    <ct-block name="sw_media_library_back_to_parent_item">
+                                    <ct-block name="ct_media_library_back_to_parent_item">
                                         <ct-media-folder-item
                                             v-if="
                                                 parentFolder &&
@@ -113,7 +113,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_media_library_folder_item_list">
+                                    <ct-block name="ct_media_library_folder_item_list">
                                         <ct-media-entity-mapper
                                             v-for="(folder, index) in subFolders"
                                             :key="'media_folder_' + folder.id"
@@ -143,7 +143,7 @@
                             </section>
                         </ct-block>
 
-                        <ct-block name="sw_media_library_media_grid">
+                        <ct-block name="ct_media_library_media_grid">
                             <section
                                 v-if="
                                     pendingUploads.length > 0 ||
@@ -164,7 +164,7 @@
                                     :presentation="gridPresentation"
                                     @media-grid-selection-clear="clearSelection"
                                 >
-                                    <ct-block name="sw_media_library_media_item_list">
+                                    <ct-block name="ct_media_library_media_item_list">
                                         <ct-media-entity-mapper
                                             v-for="(gridItem, index) in mediaItems"
                                             :key="gridItem.getEntityName() + '_' + gridItem.id"
@@ -196,12 +196,12 @@
                                         <ct-skeleton variant="media" />
                                     </template>
 
-                                    <ct-block name="sw_media_library_load_buttons">
+                                    <ct-block name="ct_media_library_load_buttons">
                                         <div
                                             v-if="showLoadMoreButton || showLoadAllButton"
                                             class="ct-media-library__load-buttons"
                                         >
-                                            <ct-block name="sw_media_library_load_more_button">
+                                            <ct-block name="ct_media_library_load_more_button">
                                                 <mt-button
                                                     v-if="showLoadMoreButton"
                                                     class="ct-media-library__load-more-button"
@@ -212,7 +212,7 @@
                                                 </mt-button>
                                             </ct-block>
 
-                                            <ct-block name="sw_media_library_load_all_button">
+                                            <ct-block name="ct_media_library_load_all_button">
                                                 <mt-button
                                                     v-if="showLoadAllButton"
                                                     class="ct-media-library__load-all-button"
@@ -228,7 +228,7 @@
                             </section>
                         </ct-block>
 
-                        <ct-block name="sw_media_library_empty_state">
+                        <ct-block name="ct_media_library_empty_state">
                             <mt-empty-state
                                 v-if="shouldDisplayEmptyState"
                                 class="ct-media-library__empty-state"
@@ -829,7 +829,7 @@ onBeforeUnmount(() => {
     beforeUnmountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     searchRankingService,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_form_field_renderer">
+    <ct-block name="ct_form_field_renderer">
         <mt-radio-group-root
             v-if="isRadioGroup"
             v-bind="radioGroupBind"
@@ -39,9 +39,9 @@
                 <slot :name="slotName" v-bind="slotData"> </slot>
             </template>
 
-            <ct-block name="sw_form_field_renderer_inner">
+            <ct-block name="ct_form_field_renderer_inner">
                 <slot>
-                    <ct-block name="sw_form_field_renderer_inner_slot"></ct-block>
+                    <ct-block name="ct_form_field_renderer_inner_slot"></ct-block>
                 </slot>
             </ct-block>
         </component>
@@ -88,7 +88,7 @@ const slots = useSlots();
 const attrs = useAttrs();
 const { getInlineSnippet } = useInlineSnippet();
 
-const swFieldConfig = ref({});
+const ctFieldConfig = ref({});
 const currentValue = ref(props.value);
 
 const bind = computed(() => {
@@ -104,7 +104,7 @@ const bind = computed(() => {
     bind = {
         ...bind,
         ...props.config,
-        ...swFieldType.value,
+        ...ctFieldType.value,
         ...translations.value,
         ...optionTranslations.value,
     };
@@ -133,7 +133,7 @@ const componentName = computed(() => {
     }
     return getComponentFromType();
 });
-const swFieldType = computed(() => {
+const ctFieldType = computed(() => {
     if (hasConfig.value && props.config.hasOwnProperty('type')) {
         return {};
     }
@@ -296,13 +296,13 @@ watch(
     },
 );
 
-swDefinePublic({
-    swFieldConfig,
+ctDefinePublic({
+    ctFieldConfig,
     currentValue,
     bind,
     hasConfig,
     componentName,
-    swFieldType,
+    ctFieldType,
     translations,
     optionTranslations,
     isRadioGroup,
@@ -316,12 +316,12 @@ swDefinePublic({
 });
 
 defineExpose({
-    swFieldConfig,
+    ctFieldConfig,
     currentValue,
     bind,
     hasConfig,
     componentName,
-    swFieldType,
+    ctFieldType,
     translations,
     optionTranslations,
     isRadioGroup,

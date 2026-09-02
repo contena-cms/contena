@@ -23,11 +23,11 @@ type MacroName =
     | 'defineExpose'
     | 'defineOptions'
     | 'defineModel'
-    | 'swDefinePublic'
-    | 'swDefineOverride'
-    | 'useSwContext'
-    | 'useSwProps'
-    | 'useSwPreviousState';
+    | 'ctDefinePublic'
+    | 'ctDefineOverride'
+    | 'useCtContext'
+    | 'useCtProps'
+    | 'useCtPreviousState';
 
 /**
  * One top-level macro/helper call found in a Contena setup block.
@@ -50,7 +50,7 @@ type MacroRule = {
     /** Error for the second top-level call of this name. Omit for no multiplicity limit. */
     duplicateMessage?: string;
     /**
-     * Rejects a declaration initializer of this name (`const x = swDefinePublic({})`), with this error.
+     * Rejects a declaration initializer of this name (`const x = ctDefinePublic({})`), with this error.
      *
      * Only the compile-time markers set it. Their statement is removed from the output, so a declaration
      * form would leave the call behind as a reference to a name that does not exist at runtime - and its
@@ -115,17 +115,17 @@ const MACRO_RULES: Record<MacroName, MacroRule> = {
         modes: [],
         wrongModeMessage: 'Vue macro defineModel() is not supported inside Contena setup blocks.',
     },
-    swDefinePublic: {
+    ctDefinePublic: {
         modes: ['base'],
         wrongModeMessage: [
-            'swDefinePublic() is a Contena setup compile-time macro for base components.',
+            'ctDefinePublic() is a Contena setup compile-time macro for base components.',
             'It declares which setup bindings are public and may be replaced by overrides.',
-            'Override components must use swDefineOverride() to declare replacement bindings instead.',
+            'Override components must use ctDefineOverride() to declare replacement bindings instead.',
         ].join(' '),
-        duplicateMessage: 'Only one swDefinePublic() call is allowed in a base Contena setup block.',
+        duplicateMessage: 'Only one ctDefinePublic() call is allowed in a base Contena setup block.',
         statementOnly: {
             message:
-                'swDefinePublic() is a compile-time marker and returns nothing. Call it as a statement at the ' +
+                'ctDefinePublic() is a compile-time marker and returns nothing. Call it as a statement at the ' +
                 'top level instead of assigning its result.',
         },
         // Required even when nothing is public. A transformed base component is an extension point: its
@@ -135,49 +135,49 @@ const MACRO_RULES: Record<MacroName, MacroRule> = {
         required: {
             modes: ['base'],
             message:
-                'A base Contena setup component must declare its extension surface. Add swDefinePublic({ ... }) ' +
+                'A base Contena setup component must declare its extension surface. Add ctDefinePublic({ ... }) ' +
                 'at the top level - pass an empty object if no binding is public.',
         },
     },
-    swDefineOverride: {
+    ctDefineOverride: {
         modes: ['override'],
         wrongModeMessage: [
-            'swDefineOverride() is a Contena setup compile-time macro for override components.',
+            'ctDefineOverride() is a Contena setup compile-time macro for override components.',
             'It declares which base component bindings this override replaces.',
-            'Base components must use swDefinePublic() to expose overrideable setup bindings instead.',
+            'Base components must use ctDefinePublic() to expose overrideable setup bindings instead.',
         ].join(' '),
-        duplicateMessage: 'Only one swDefineOverride() call is allowed in an override Contena setup block.',
+        duplicateMessage: 'Only one ctDefineOverride() call is allowed in an override Contena setup block.',
         statementOnly: {
             message:
-                'swDefineOverride() is a compile-time marker and returns nothing. Call it as a statement at the ' +
+                'ctDefineOverride() is a compile-time marker and returns nothing. Call it as a statement at the ' +
                 'top level instead of assigning its result.',
         },
         required: {
             modes: ['override'],
-            message: 'swDefineOverride() must be called exactly once at the top level of an override Contena setup block.',
+            message: 'ctDefineOverride() must be called exactly once at the top level of an override Contena setup block.',
         },
     },
-    useSwContext: {
+    useCtContext: {
         modes: ['override'],
         // Base bodies run as plain `<script setup>`, so there is nothing to bridge: Vue's own composables
         // already give an author the setup context. Only overrides need a helper, because their body runs
         // inside a generated callback that receives the context as a parameter.
         wrongModeMessage:
-            "useSwContext() is only supported in override Contena setup blocks. A base component runs as a native <script setup>, so use Vue's own APIs instead - useAttrs(), useSlots(), useTemplateRef(), or defineEmits() for the emitter.",
+            "useCtContext() is only supported in override Contena setup blocks. A base component runs as a native <script setup>, so use Vue's own APIs instead - useAttrs(), useSlots(), useTemplateRef(), or defineEmits() for the emitter.",
         rejectAnywhereInWrongMode: true,
         alias: true,
     },
-    useSwProps: {
+    useCtProps: {
         modes: ['override'],
         wrongModeMessage:
-            "useSwProps() is only supported in override Contena setup blocks. Base components must use Vue's defineProps() macro instead.",
+            "useCtProps() is only supported in override Contena setup blocks. Base components must use Vue's defineProps() macro instead.",
         rejectAnywhereInWrongMode: true,
         setupInput: true,
         alias: true,
     },
-    useSwPreviousState: {
+    useCtPreviousState: {
         modes: ['override'],
-        wrongModeMessage: 'useSwPreviousState() is only supported in override Contena setup blocks.',
+        wrongModeMessage: 'useCtPreviousState() is only supported in override Contena setup blocks.',
         rejectAnywhereInWrongMode: true,
         alias: true,
     },
@@ -216,7 +216,7 @@ function getMacroCall(node: unknown): { name: MacroName; call: CallExpression } 
  * shadows the macro.
  */
 function collectMacroCallEntries(statement: Statement): MacroCallEntry[] {
-    // e.g. `defineEmits(['save']);` or `swDefinePublic({ count });`
+    // e.g. `defineEmits(['save']);` or `ctDefinePublic({ count });`
     if (statement.type === 'ExpressionStatement') {
         const macro = getMacroCall(statement.expression);
 
@@ -257,7 +257,7 @@ function collectMacroCallEntries(statement: Statement): MacroCallEntry[] {
  * The rule kinds run as separate passes over every macro, not interleaved per macro, so the most
  * specific complaint always wins: a macro used in the wrong mode is reported before any duplicate or
  * misused form, and all of those before a missing required marker. Otherwise a base file that mistakenly
- * calls swDefineOverride() would be told to add swDefinePublic() - technically true, but useless.
+ * calls ctDefineOverride() would be told to add ctDefinePublic() - technically true, but useless.
  */
 function assertMacroRules(entries: MacroCallEntry[], mode: ContenaSetupMode, scriptOffset: number): void {
     const entriesFor = (name: MacroName): MacroCallEntry[] => entries.filter((entry) => entry.name === name);
@@ -276,7 +276,7 @@ function assertMacroRules(entries: MacroCallEntry[], mode: ContenaSetupMode, scr
         const named = entriesFor(name);
 
         // Multiplicity is per name, not per `group`: the only macros with a duplicate limit are the
-        // swDefine* markers, which have no group, and the grouped props macros deliberately leave
+        // ctDefine* markers, which have no group, and the grouped props macros deliberately leave
         // multiplicity to Vue's own "duplicate defineProps() call" error.
         if (rule.duplicateMessage && named.length > 1) {
             throw new ContenaSetupTransformError(rule.duplicateMessage, absoluteRange(named[1].call, scriptOffset));
@@ -304,7 +304,7 @@ function assertMacroRules(entries: MacroCallEntry[], mode: ContenaSetupMode, scr
 /**
  * Returns the first entry for one macro name, optionally restricted to one form.
  *
- * Singular because the only callers are the `swDefine*` markers, which are capped at one call by
+ * Singular because the only callers are the `ctDefine*` markers, which are capped at one call by
  * `assertMacroRules`. That check counts off the full entry list, so it still sees a duplicate even
  * though nothing downstream carries more than the first.
  */

@@ -1,12 +1,12 @@
 <template>
     <!-- eslint-disable vue/no-mutating-props -->
-    <ct-block name="sw_channel_detail_hreflang">
+    <ct-block name="ct_channel_detail_hreflang">
         <mt-card
             :title="t('ct-channel.detail.hreflang.title')"
             class="ct-channel-detail-hreflang"
             position-identifier="ct-channel-detail-hreflang"
         >
-            <ct-block name="sw_channel_detail_hreflang_title">
+            <ct-block name="ct_channel_detail_hreflang_title">
                 <h4>
                     <span class="ct-channel-detail-domains__headline-text ct-channel-detail-base__headline-text">
                         {{ t('ct-channel.detail.hreflang.titleCard') }}
@@ -14,7 +14,7 @@
                 </h4>
             </ct-block>
 
-            <ct-block name="sw_channel_detail_hreflang_content">
+            <ct-block name="ct_channel_detail_hreflang_content">
                 <div class="ct-channel-detail-base__description-text">
                     {{ t('ct-channel.detail.hreflang.titleDescription') }}
                 </div>
@@ -82,7 +82,7 @@ const domainRepositoryFactory = () => {
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     domainCriteria,
     domainRepositoryFactory,
 });

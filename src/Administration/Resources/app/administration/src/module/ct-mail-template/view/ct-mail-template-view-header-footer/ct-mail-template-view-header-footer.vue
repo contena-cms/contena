@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_mail_template_view_header_footer">
+    <ct-block name="ct_mail_template_view_header_footer">
         <div class="ct-mail-template-view-header-footer">
-            <ct-block name="sw_mail_template_view_header_footer_list">
+            <ct-block name="ct_mail_template_view_header_footer_list">
                 <ct-mail-header-footer-list ref="mailHeaderFooterList" />
             </ct-block>
         </div>
@@ -17,7 +17,7 @@ function getList(): void {
     void mailHeaderFooterList.value?.getList?.();
 }
 
-swDefinePublic({
+ctDefinePublic({
     getList,
 });
 

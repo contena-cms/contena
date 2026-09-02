@@ -34,7 +34,7 @@ describe('module/ct-mail-template/component/ct-mail-header-footer-list', () => {
         };
         const router = { push: jest.fn(() => Promise.resolve()) };
         const entityListing = defineComponent({
-            name: 'SwEntityListing',
+            name: 'CtEntityListing',
             props: [
                 'allowEdit',
                 'allowDelete',

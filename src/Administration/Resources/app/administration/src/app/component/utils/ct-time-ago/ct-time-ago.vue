@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_time_ago">
+    <ct-block name="ct_time_ago">
         <span
             v-tooltip="{
                 message: fullDatetime,
@@ -139,7 +139,7 @@ onMounted(() => {
     });
 });
 
-swDefinePublic({
+ctDefinePublic({
     formattedRelativeTime,
     interval,
     now,

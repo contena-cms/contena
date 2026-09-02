@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_theme_manager_list">
+    <ct-block name="ct_theme_manager_list">
         <ct-page class="ct-theme-list">
             <template #search-bar>
-                <ct-block name="sw_theme_manager_list_search_bar">
+                <ct-block name="ct_theme_manager_list_search_bar">
                     <mt-search
                         v-model="searchTerm"
                         :placeholder="t('ct-theme-manager.general.placeholderSearchBar')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_theme_manager_list_toolbar">
+                <ct-block name="ct_theme_manager_list_toolbar">
                     <h2>
                         {{ t('ct-theme-manager.general.mainMenuItemGeneral') }}
                     </h2>
@@ -20,19 +20,19 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_theme_list_card_view">
+                <ct-block name="ct_theme_list_card_view">
                     <ct-card-view>
-                        <ct-block name="sw_themes_list_listing">
+                        <ct-block name="ct_themes_list_listing">
                             <div class="ct-theme-list__content">
-                                <ct-block name="sw_theme_list_listing_actions">
+                                <ct-block name="ct_theme_list_listing_actions">
                                     <div class="ct-theme-list__actions">
-                                        <ct-block name="sw_theme_list_listing_title">
+                                        <ct-block name="ct_theme_list_listing_title">
                                             <h3>
                                                 {{ t('ct-theme-manager.general.mainMenuHeader') }}
                                             </h3>
                                         </ct-block>
 
-                                        <ct-block name="sw_theme_list_listing_actions_sorting">
+                                        <ct-block name="ct_theme_list_listing_actions_sorting">
                                             <div class="ct-theme-list__actions-sorting">
                                                 <mt-select
                                                     :model-value="sortingConCat"
@@ -43,7 +43,7 @@
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_theme_list_listing_actions_mode">
+                                        <ct-block name="ct_theme_list_listing_actions_mode">
                                             <mt-button
                                                 class="ct-theme-list__actions-mode"
                                                 variant="secondary"
@@ -57,12 +57,12 @@
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_theme_list_listing_list">
+                                <ct-block name="ct_theme_list_listing_list">
                                     <div class="ct-theme-list__list">
-                                        <ct-block name="sw_theme_list_listing_list_card">
+                                        <ct-block name="ct_theme_list_listing_list_card">
                                             <mt-card v-if="listMode === 'list'" class="ct-theme-list__list-card">
                                                 <template #grid>
-                                                    <ct-block name="sw_theme_list_listing_list_data_grid">
+                                                    <ct-block name="ct_theme_list_listing_list_data_grid">
                                                         <mt-data-table
                                                             class="ct-theme-list__list-data-grid"
                                                             :is-loading="isLoading"
@@ -86,7 +86,7 @@
                                                         >
                                                             <template #column-name="{ data }">
                                                                 <ct-block
-                                                                    name="sw_theme_list_listing_list_data_grid_column_name"
+                                                                    name="ct_theme_list_listing_list_data_grid_column_name"
                                                                 >
                                                                     <mt-icon
                                                                         v-if="data.technicalName"
@@ -110,7 +110,7 @@
 
                                                             <template #column-assignment="slotProps">
                                                                 <ct-block
-                                                                    name="sw_theme_list_listing_list_data_grid_column_assignment"
+                                                                    name="ct_theme_list_listing_list_data_grid_column_assignment"
                                                                 >
                                                                     <span v-text="slotProps.data.channels.length"></span>
                                                                 </ct-block>
@@ -118,7 +118,7 @@
 
                                                             <template #column-createdAt="slotProps">
                                                                 <ct-block
-                                                                    name="sw_theme_list_listing_list_data_grid_column_created"
+                                                                    name="ct_theme_list_listing_list_data_grid_column_created"
                                                                 >
                                                                     <span
                                                                         v-text="
@@ -133,11 +133,11 @@
 
                                                             <template #column-actions="{ data }">
                                                                 <ct-block
-                                                                    name="sw_theme_list_listing_list_data_grid_actions"
+                                                                    name="ct_theme_list_listing_list_data_grid_actions"
                                                                 >
                                                                     <mt-context-button>
                                                                         <ct-block
-                                                                            name="sw_theme_list_listing_list_data_grid_actions_edit"
+                                                                            name="ct_theme_list_listing_list_data_grid_actions_edit"
                                                                         >
                                                                             <mt-context-menu-item
                                                                                 class="ct-theme-list-item__option-edit"
@@ -147,7 +147,7 @@
                                                                         </ct-block>
 
                                                                         <ct-block
-                                                                            name="sw_theme_list_listing_list_data_grid_actions_rename"
+                                                                            name="ct_theme_list_listing_list_data_grid_actions_rename"
                                                                         >
                                                                             <mt-context-menu-item
                                                                                 class="ct-theme-list-item__option-rename"
@@ -162,7 +162,7 @@
                                                                         </ct-block>
 
                                                                         <ct-block
-                                                                            name="sw_theme_list_listing_list_data_grid_actions_delete"
+                                                                            name="ct_theme_list_listing_list_data_grid_actions_delete"
                                                                         >
                                                                             <mt-context-menu-item
                                                                                 v-if="!data.technicalName"
@@ -179,7 +179,7 @@
                                                                         </ct-block>
 
                                                                         <ct-block
-                                                                            name="sw_theme_list_listing_list_data_grid_actions_create"
+                                                                            name="ct_theme_list_listing_list_data_grid_actions_create"
                                                                         >
                                                                             <mt-context-menu-item
                                                                                 v-if="data.technicalName"
@@ -193,17 +193,17 @@
                                                                 </ct-block>
                                                             </template>
                                                         </mt-data-table>
-                                                        <ct-block name="sw_theme_list_listing_list_data_grid_pagination" />
+                                                        <ct-block name="ct_theme_list_listing_list_data_grid_pagination" />
                                                     </ct-block>
                                                 </template>
                                             </mt-card>
                                         </ct-block>
 
-                                        <ct-block name="sw_theme_list_listing_list_grid">
+                                        <ct-block name="ct_theme_list_listing_list_grid">
                                             <div v-if="listMode === 'grid'" class="ct-theme-list__list-grid">
-                                                <ct-block name="sw_theme_list_listing_list_grid_content">
+                                                <ct-block name="ct_theme_list_listing_list_grid_content">
                                                     <div class="ct-theme-list__list-grid-content">
-                                                        <ct-block name="sw_theme_list_listing_list_item">
+                                                        <ct-block name="ct_theme_list_listing_list_item">
                                                             <template v-if="!isLoading">
                                                                 <ct-theme-list-item
                                                                     v-for="theme in themes"
@@ -217,7 +217,7 @@
                                                                             class="ct-theme-list-item__options"
                                                                         >
                                                                             <ct-block
-                                                                                name="sw_theme_list_listing_list_item_option_add_preview"
+                                                                                name="ct_theme_list_listing_list_item_option_add_preview"
                                                                             >
                                                                                 <mt-context-menu-item
                                                                                     class="ct-theme-list-item__option-preview"
@@ -232,7 +232,7 @@
                                                                             </ct-block>
 
                                                                             <ct-block
-                                                                                name="sw_theme_list_listing_list_item_option_remove_preview"
+                                                                                name="ct_theme_list_listing_list_item_option_remove_preview"
                                                                             >
                                                                                 <mt-context-menu-item
                                                                                     v-if="theme.previewMediaId"
@@ -249,7 +249,7 @@
                                                                             </ct-block>
 
                                                                             <ct-block
-                                                                                name="sw_theme_list_listing_list_item_option_rename"
+                                                                                name="ct_theme_list_listing_list_item_option_rename"
                                                                             >
                                                                                 <mt-context-menu-item
                                                                                     class="ct-theme-list-item__option-rename"
@@ -264,7 +264,7 @@
                                                                             </ct-block>
 
                                                                             <ct-block
-                                                                                name="sw_theme_list_listing_list_item_option_create"
+                                                                                name="ct_theme_list_listing_list_item_option_create"
                                                                             >
                                                                                 <mt-context-menu-item
                                                                                     v-if="theme.technicalName"
@@ -276,7 +276,7 @@
                                                                             </ct-block>
 
                                                                             <ct-block
-                                                                                name="sw_theme_list_listing_list_item_option_delete"
+                                                                                name="ct_theme_list_listing_list_item_option_delete"
                                                                             >
                                                                                 <mt-context-menu-item
                                                                                     v-if="!theme.technicalName"
@@ -311,7 +311,7 @@
                                                     </div>
                                                 </ct-block>
 
-                                                <ct-block name="sw_theme_list_listing_pagination">
+                                                <ct-block name="ct_theme_list_listing_pagination">
                                                     <mt-pagination
                                                         v-if="!isLoading"
                                                         class="ct-theme-list__list-pagination"
@@ -328,7 +328,7 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_theme_list_media_modal">
+                        <ct-block name="ct_theme_list_media_modal">
                             <ct-media-modal-v2
                                 v-if="showMediaModal"
                                 :caption="t('ct-theme-manager.general.captionMediaUpload')"
@@ -339,11 +339,11 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_theme_list_delete_modal">
+                        <ct-block name="ct_theme_list_delete_modal">
                             <mt-modal-root v-if="showDeleteModal" :is-open="showDeleteModal" @change="onDeleteModalChange">
                                 <mt-modal :title="t('global.default.warning')" width="s">
-                                    <ct-block name="sw_theme_list_delete_modal_info">
-                                        <div class="sw_theme_manager__confirm-delete-text">
+                                    <ct-block name="ct_theme_list_delete_modal_info">
+                                        <div class="ct_theme_manager__confirm-delete-text">
                                             {{
                                                 t('ct-theme-manager.modal.textDeleteInfo', {
                                                     themeName: modalTheme?.name,
@@ -353,14 +353,14 @@
                                     </ct-block>
 
                                     <template #footer>
-                                        <ct-block name="sw_theme_list_delete_modal_footer">
-                                            <ct-block name="sw_theme_list_delete_modal_cancel">
+                                        <ct-block name="ct_theme_list_delete_modal_footer">
+                                            <ct-block name="ct_theme_list_delete_modal_cancel">
                                                 <mt-button variant="secondary" size="small" @click="onCloseDeleteModal">
                                                     {{ t('global.default.cancel') }}
                                                 </mt-button>
                                             </ct-block>
 
-                                            <ct-block name="sw_theme_list_delete_modal_confirm">
+                                            <ct-block name="ct_theme_list_delete_modal_confirm">
                                                 <mt-button variant="critical" size="small" @click="onConfirmThemeDelete">
                                                     {{ t('global.default.delete') }}
                                                 </mt-button>
@@ -371,19 +371,19 @@
                             </mt-modal-root>
                         </ct-block>
 
-                        <ct-block name="sw_theme_list_duplicate_modal">
+                        <ct-block name="ct_theme_list_duplicate_modal">
                             <mt-modal-root
                                 v-if="showDuplicateModal"
                                 :is-open="showDuplicateModal"
                                 @change="onDuplicateModalChange"
                             >
                                 <mt-modal
-                                    class="sw_theme_manager__duplicate-modal"
+                                    class="ct_theme_manager__duplicate-modal"
                                     :title="t('ct-theme-manager.modal.modalTitleDuplicate')"
                                     width="s"
                                 >
-                                    <ct-block name="sw_theme_list_duplicate__modal_name_input">
-                                        <div class="sw_theme_manager__duplicate-info">
+                                    <ct-block name="ct_theme_list_duplicate__modal_name_input">
+                                        <div class="ct_theme_manager__duplicate-info">
                                             {{ t('ct-theme-manager.modal.textDuplicateInfo') }}
                                         </div>
 
@@ -396,14 +396,14 @@
                                     </ct-block>
 
                                     <template #footer>
-                                        <ct-block name="sw_theme_list_duplicate_modal_footer">
-                                            <ct-block name="sw_theme_list_duplicate_modal_cancel">
+                                        <ct-block name="ct_theme_list_duplicate_modal_footer">
+                                            <ct-block name="ct_theme_list_duplicate_modal_cancel">
                                                 <mt-button variant="secondary" size="small" @click="onCloseDuplicateModal">
                                                     {{ t('global.default.cancel') }}
                                                 </mt-button>
                                             </ct-block>
 
-                                            <ct-block name="sw_theme_list_duplicate_modal_confirm">
+                                            <ct-block name="ct_theme_list_duplicate_modal_confirm">
                                                 <mt-button
                                                     variant="primary"
                                                     :disabled="newThemeName.length < 3"
@@ -419,15 +419,15 @@
                             </mt-modal-root>
                         </ct-block>
 
-                        <ct-block name="sw_theme_list_rename_modal">
+                        <ct-block name="ct_theme_list_rename_modal">
                             <mt-modal-root v-if="showRenameModal" :is-open="showRenameModal" @change="onRenameModalChange">
                                 <mt-modal
-                                    class="sw_theme_manager__rename-modal"
+                                    class="ct_theme_manager__rename-modal"
                                     :title="t('ct-theme-manager.modal.modalTitleRename')"
                                     width="s"
                                 >
-                                    <ct-block name="sw_theme_list_rename__modal_name_input">
-                                        <div class="sw_theme_manager__rename-info">
+                                    <ct-block name="ct_theme_list_rename__modal_name_input">
+                                        <div class="ct_theme_manager__rename-info">
                                             {{ t('ct-theme-manager.modal.textRenameInfo') }}
                                         </div>
 
@@ -440,14 +440,14 @@
                                     </ct-block>
 
                                     <template #footer>
-                                        <ct-block name="sw_theme_list_rename_modal_footer">
-                                            <ct-block name="sw_theme_list_rename_modal_cancel">
+                                        <ct-block name="ct_theme_list_rename_modal_footer">
+                                            <ct-block name="ct_theme_list_rename_modal_cancel">
                                                 <mt-button variant="secondary" size="small" @click="onCloseRenameModal">
                                                     {{ t('global.default.cancel') }}
                                                 </mt-button>
                                             </ct-block>
 
-                                            <ct-block name="sw_theme_list_rename_modal_confirm">
+                                            <ct-block name="ct_theme_list_rename_modal_confirm">
                                                 <mt-button
                                                     variant="primary"
                                                     :disabled="newThemeName.length < 3"
@@ -782,7 +782,7 @@ const {
     RenameTheme,
 } = theme;
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     themes,
     isLoading,

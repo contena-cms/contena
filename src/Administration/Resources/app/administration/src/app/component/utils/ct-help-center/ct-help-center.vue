@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_help_center">
+    <ct-block name="ct_help_center">
         <div class="ct-help-center">
             <mt-dropdown-menu-root :open="showHelpSidebar" @update:open="onVisibilityChange">
                 <mt-dropdown-menu-trigger as-child>
@@ -17,11 +17,11 @@
                 </mt-dropdown-menu-trigger>
 
                 <mt-dropdown-menu-portal>
-                    <ct-block name="sw_help_sidebar">
+                    <ct-block name="ct_help_sidebar">
                         <mt-action-menu class="ct-help-center__menu" align="end">
-                            <ct-block name="sw_help_sidebar_support_content">
+                            <ct-block name="ct_help_sidebar_support_content">
                                 <mt-action-menu-group>
-                                    <ct-block name="sw_help_sidebar_support_documentation">
+                                    <ct-block name="ct_help_sidebar_support_documentation">
                                         <mt-action-menu-item
                                             icon="file-text"
                                             :link="$t('help-center.sidebar.support.documentation.href')"
@@ -30,7 +30,7 @@
                                         </mt-action-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_help_sidebar_support_create_support_request">
+                                    <ct-block name="ct_help_sidebar_support_create_support_request">
                                         <mt-action-menu-item
                                             icon="headset"
                                             :link="$t('help-center.sidebar.support.createSupportRequest.href')"
@@ -39,7 +39,7 @@
                                         </mt-action-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_help_sidebar_support_placeholder"> </ct-block>
+                                    <ct-block name="ct_help_sidebar_support_placeholder"> </ct-block>
                                 </mt-action-menu-group>
                             </ct-block>
                         </mt-action-menu>
@@ -64,7 +64,7 @@ const onVisibilityChange = (isOpened: boolean) => {
     Contena.Store.get('adminHelpCenter').showHelpSidebar = isOpened;
 };
 
-swDefinePublic({
+ctDefinePublic({
     showHelpSidebar,
     onVisibilityChange,
 });

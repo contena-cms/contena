@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_notifications">
+    <ct-block name="ct_notifications">
         <transition name="ct-notifications-slide-fade">
-            <ct-block name="sw_notifications_element">
+            <ct-block name="ct_notifications_element">
                 <div v-if="notifications.length" class="ct-notifications" :style="notificationsStyle">
-                    <ct-block name="sw_notifications_transition_group">
+                    <ct-block name="ct_notifications_transition_group">
                         <transition-group name="ct-notifications-slide-fade">
-                            <ct-block name="sw_notifications_item">
+                            <ct-block name="ct_notifications_item">
                                 <mt-banner
                                     v-for="(notification, index) in notifications"
                                     :key="notification.uuid"
@@ -16,7 +16,7 @@
                                     :closable="true"
                                     @close="onClose(notification)"
                                 >
-                                    <ct-block name="sw_notifications_item_content">
+                                    <ct-block name="ct_notifications_item_content">
                                         <div
                                             class="ct-notifications__message"
                                             v-html="getTranslatedMessage(notification)"
@@ -25,9 +25,9 @@
 
                                     <!-- TODO: Implement buttons and add tests for action buttons -->
                                     <div v-if="notification.actions.length" class="ct-notifications__actions">
-                                        <ct-block name="sw_notifications_item_actions">
+                                        <ct-block name="ct_notifications_item_actions">
                                             <template v-for="action in notification.actions" :key="action.label">
-                                                <ct-block name="sw_notifications_item_action_item">
+                                                <ct-block name="ct_notifications_item_action_item">
                                                     <mt-button
                                                         :disabled="action.disabled"
                                                         variant="secondary"
@@ -164,7 +164,7 @@ const getNotificationVariant = (notification) => {
     return 'neutral';
 };
 
-swDefinePublic({
+ctDefinePublic({
     notifications,
     notificationsStyle,
     onClose,

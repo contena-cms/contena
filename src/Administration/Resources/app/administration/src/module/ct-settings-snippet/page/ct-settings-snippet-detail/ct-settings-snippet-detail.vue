@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_snippet_detail">
+    <ct-block name="ct_settings_snippet_detail">
         <ct-page class="ct-settings-snippet-detail">
             <template #smart-bar-back>
                 <router-link v-slot="{ href, navigate }" :to="backPath" custom>
@@ -38,9 +38,9 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_snippet_detail_content">
+                <ct-block name="ct_settings_snippet_detail_content">
                     <div class="ct-settings-snippet-set-detail-card">
-                        <ct-block name="sw_settings_snippet_set_detail_card_information">
+                        <ct-block name="ct_settings_snippet_set_detail_card_information">
                             <mt-card
                                 position-identifier="ct-settings-snippet-detail-information"
                                 :title="t('ct-settings-snippet.detail.cardGeneralTitle')"
@@ -58,14 +58,14 @@
                             </mt-card>
                         </ct-block>
 
-                        <ct-block name="sw_settings_snippet_set_detail_card_snippets">
+                        <ct-block name="ct_settings_snippet_set_detail_card_snippets">
                             <mt-card
                                 position-identifier="ct-settings-snippet-detail-snippets"
                                 :title="t('ct-settings-snippet.detail.cardSnippetSetsTitle')"
                                 :is-loading="isLoading || isLoadingSnippets"
                             >
                                 <div class="snippet-overview-card">
-                                    <ct-block name="sw_settings_snippet_set_detail_card_snippets_fields">
+                                    <ct-block name="ct_settings_snippet_set_detail_card_snippets_fields">
                                         <mt-text-field
                                             v-for="(snippet, index) in snippets"
                                             :key="snippet.setId"
@@ -422,7 +422,7 @@ const onCancel = (): void => {
 
 void prepareContent();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     isLoading,
     isLoadingSnippets,

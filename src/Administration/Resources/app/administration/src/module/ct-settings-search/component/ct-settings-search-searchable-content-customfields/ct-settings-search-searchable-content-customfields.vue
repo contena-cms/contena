@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_searchable_content_customfields">
+    <ct-block name="ct_settings_search_searchable_content_customfields">
         <mt-empty-state
             v-if="isEmpty"
             icon="regular-search"
@@ -186,7 +186,7 @@ const onResetRanking = (field: SearchConfig): void => {
 const onRemove = (field: SearchConfig): void => (field.field ? emit('config-delete', field.id) : emit('data-load'));
 void loadCustomFields();
 
-swDefinePublic({
+ctDefinePublic({
     customFields,
     currentCustomFieldId,
     customFieldRepository,

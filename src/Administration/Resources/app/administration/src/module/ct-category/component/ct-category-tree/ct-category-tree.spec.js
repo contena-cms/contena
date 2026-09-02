@@ -233,7 +233,7 @@ async function createInteractiveWrapper({ props = {} } = {}) {
 
 describe('src/module/ct-category/component/ct-category-tree', () => {
     beforeEach(() => {
-        Contena.Store.get('swCategoryDetail').$reset();
+        Contena.Store.get('ctCategoryDetail').$reset();
     });
 
     it('should be able to sort the items', async () => {
@@ -434,7 +434,7 @@ describe('src/module/ct-category/component/ct-category-tree', () => {
     });
 
     it('should not initially expand root categories when a category is selected', async () => {
-        Contena.Store.get('swCategoryDetail').category = interactiveCategories.secondChild;
+        Contena.Store.get('ctCategoryDetail').category = interactiveCategories.secondChild;
 
         const wrapper = await createWrapper(interactiveCategories, {
             categoryId: 'second-child',
@@ -762,7 +762,7 @@ describe('src/module/ct-category/component/ct-category-tree', () => {
 
         wrapper.vm.$refs.categoryTree.openTreeById = jest.fn();
 
-        Contena.Store.get('swCategoryDetail').category = toLoadCategories[10];
+        Contena.Store.get('ctCategoryDetail').category = toLoadCategories[10];
 
         await flushPromises();
 

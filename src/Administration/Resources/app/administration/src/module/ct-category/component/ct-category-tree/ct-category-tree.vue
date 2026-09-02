@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_category_tree">
+    <ct-block name="ct_category_tree">
         <div class="ct-category-tree">
             <ct-tree
                 v-if="!isLoadingInitialData"
@@ -40,7 +40,7 @@
                         checkedItemIds,
                     }"
                 >
-                    <ct-block name="sw_category_tree_items">
+                    <ct-block name="ct_category_tree_items">
                         <ct-tree-item
                             v-for="item in treeItems"
                             :key="item.id"
@@ -142,13 +142,13 @@ const loadedParentIds = ref([]);
 const sortable = ref(props.allowEdit);
 
 const categoriesToDelete = computed(() => {
-    return Contena.Store.get('swCategoryDetail').categoriesToDelete;
+    return Contena.Store.get('ctCategoryDetail').categoriesToDelete;
 });
 const categoryRepository = computed(() => {
     return repositoryFactory.create('category');
 });
 const category = computed(() => {
-    return Contena.Store.get('swCategoryDetail').category;
+    return Contena.Store.get('ctCategoryDetail').category;
 });
 const categories = computed(() => {
     return Object.values(loadedCategories.value);
@@ -547,7 +547,7 @@ watch(
 
         categoryTree.value.onDeleteElements(value);
 
-        Contena.Store.get('swCategoryDetail').categoriesToDelete = undefined;
+        Contena.Store.get('ctCategoryDetail').categoriesToDelete = undefined;
     },
 );
 watch(
@@ -600,7 +600,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     createNotificationError,
     repositoryFactory,
     syncService,

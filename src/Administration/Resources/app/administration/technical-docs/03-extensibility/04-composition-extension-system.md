@@ -2,7 +2,7 @@
 
 > **Status:** Stable since 6.8.0
 
-This document describes the internal reactive runtime used by Contena's native setup transform. Component authors must not call `createExtendableSetup` or add `ComponentPublicApiMapping` entries. Author native `<script setup>` SFCs with `swDefinePublic` / `swDefineOverride` as documented in [Native Setup Authoring](07-native-setup-authoring.md); the build transform generates the runtime integration.
+This document describes the internal reactive runtime used by Contena's native setup transform. Component authors must not call `createExtendableSetup` or add `ComponentPublicApiMapping` entries. Author native `<script setup>` SFCs with `ctDefinePublic` / `ctDefineOverride` as documented in [Native Setup Authoring](07-native-setup-authoring.md); the build transform generates the runtime integration.
 
 `createExtendableSetup` remains an internal runtime primitive and a test seam for the generated integration. Its presence does not make the old wrapper pattern an author-facing compatibility API.
 

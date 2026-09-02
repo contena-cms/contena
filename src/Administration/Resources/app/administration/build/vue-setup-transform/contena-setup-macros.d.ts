@@ -9,9 +9,9 @@ declare global {
      * is removed by the Contena setup transform and is never called at runtime.
      *
      * This macro is rejected in override components. Overrides must use
-     * `swDefineOverride()` to declare replacement bindings instead.
+     * `ctDefineOverride()` to declare replacement bindings instead.
      */
-    function swDefinePublic<TPublic extends Record<PropertyKey, unknown>>(bindings: TPublic): void;
+    function ctDefinePublic<TPublic extends Record<PropertyKey, unknown>>(bindings: TPublic): void;
 
     /**
      * Contena setup compile-time macro for override components.
@@ -21,9 +21,9 @@ declare global {
      * the Contena setup transform and is never called at runtime.
      *
      * This macro is rejected in base components. Base components must use
-     * `swDefinePublic()` to expose overrideable setup bindings instead.
+     * `ctDefinePublic()` to expose overrideable setup bindings instead.
      */
-    function swDefineOverride<TOverride extends Record<PropertyKey, unknown>>(bindings: TOverride): void;
+    function ctDefineOverride<TOverride extends Record<PropertyKey, unknown>>(bindings: TOverride): void;
 
     /**
      * Contena setup helper for override components.
@@ -32,7 +32,7 @@ declare global {
      * `overrideComponentSetup()` callback. This helper is injected by the
      * transform and is only valid in override components.
      */
-    function useSwPreviousState<
+    function useCtPreviousState<
         TPreviousState extends Record<PropertyKey, any> = Record<PropertyKey, any>,
     >(): TPreviousState;
 
@@ -43,7 +43,7 @@ declare global {
      * helper remains available for existing Contena setup code and is replaced
      * by the transform with the generated setup props object.
      */
-    function useSwProps<TProps extends Record<PropertyKey, any> = Record<PropertyKey, any>>(): TProps;
+    function useCtProps<TProps extends Record<PropertyKey, any> = Record<PropertyKey, any>>(): TProps;
 
     /**
      * Contena setup helper for the current Vue setup context.
@@ -51,7 +51,7 @@ declare global {
      * The helper is injected by the transform and resolves to the generated
      * setup context object.
      */
-    function useSwContext<TContext = SetupContext>(): TContext;
+    function useCtContext<TContext = SetupContext>(): TContext;
 }
 
 export {};

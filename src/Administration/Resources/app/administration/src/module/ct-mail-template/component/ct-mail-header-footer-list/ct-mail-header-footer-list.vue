@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_mail_header_footer_list_grid">
+    <ct-block name="ct_mail_header_footer_list_grid">
         <mt-card
             position-identifier="ct-mail-header-footer-list"
             :title="$t('ct-mail-header-footer.list.textMailHeaderFooterOverview')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_mail_header_footer_list_grid_empty_state">
+            <ct-block name="ct_mail_header_footer_list_grid_empty_state">
                 <ct-empty-state
                     v-if="!isLoading && !showListing"
                     :title="$t('ct-mail-header-footer.list.emptyStateTitle')"
@@ -147,7 +147,7 @@ function updateRecords(result: EntityCollection<'mail_header_footer'>): void {
 
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repository,
     items,

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_notification_modal">
+    <ct-block name="ct_flow_notification_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="$t('ct-flow.notification.title')" width="s">
-                <ct-block name="sw_flow_notification_modal_content">
+                <ct-block name="ct_flow_notification_modal_content">
                     <div class="ct-flow-notification-modal__content">
                         <mt-select
                             v-model="draft.status"
@@ -26,7 +26,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_flow_notification_modal_footer">
+                    <ct-block name="ct_flow_notification_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onCancel">
                                 {{ $t('global.default.cancel') }}
@@ -96,7 +96,7 @@ const onModalChange = (isOpen: boolean): void => {
     if (!isOpen) onCancel();
 };
 
-swDefinePublic({
+ctDefinePublic({
     draft,
     requiredPrivileges,
     statusOptions,

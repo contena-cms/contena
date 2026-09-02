@@ -14,8 +14,8 @@ async function createWrapper({
     isLoading = false,
     canEdit = true,
 } = {}) {
-    Contena.Store.get('swCategoryDetail').$reset();
-    Contena.Store.get('swCategoryDetail').landingPage = { id: landingPageIdMock };
+    Contena.Store.get('ctCategoryDetail').$reset();
+    Contena.Store.get('ctCategoryDetail').landingPage = { id: landingPageIdMock };
 
     return mount(await wrapTestComponent('ct-landing-page-view', { sync: true }), {
         global: {

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_custom_field_set_detail">
+    <ct-block name="ct_settings_custom_field_set_detail">
         <ct-page class="ct-settings-custom-field-set-detail ct-settings-set-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_customField_set_detail_header">
+                <ct-block name="ct_settings_customField_set_detail_header">
                     <h2 v-if="set && set.config && getInlineSnippet(set.config.label)">
                         {{ getInlineSnippet(set.config.label) }}
                     </h2>
@@ -13,14 +13,14 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_custom_field_set_detail_actions">
-                    <ct-block name="sw_settings_custom_field_set_detail_actions_abort">
+                <ct-block name="ct_settings_custom_field_set_detail_actions">
+                    <ct-block name="ct_settings_custom_field_set_detail_actions_abort">
                         <mt-button :disabled="set.isLoading" variant="secondary" size="default" @click="onCancel">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_settings_custom_field_set_detail_actions_save">
+                    <ct-block name="ct_settings_custom_field_set_detail_actions_save">
                         <ct-button-process
                             size="default"
                             class="ct-settings-set-detail__save-action"
@@ -38,7 +38,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_custom_field_set_detail_content">
+                <ct-block name="ct_settings_custom_field_set_detail_content">
                     <ct-card-view>
                         <template v-if="isLoading">
                             <ct-skeleton />
@@ -47,7 +47,7 @@
 
                         <!-- v-show is used here as underlying components influence the loading state and v-if would destroy this behaviour -->
                         <div v-show="!isLoading">
-                            <ct-block name="sw_settings_custom_field_set_detail_content_detail_base">
+                            <ct-block name="ct_settings_custom_field_set_detail_content_detail_base">
                                 <ct-custom-field-set-detail-base
                                     :set="set"
                                     :technical-name-error="technicalNameError"
@@ -55,7 +55,7 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_settings_custom_field_set_detail_content_detail_custom_field_list">
+                            <ct-block name="ct_settings_custom_field_set_detail_content_detail_custom_field_list">
                                 <ct-custom-field-list
                                     v-if="set.id"
                                     ref="customFieldList"
@@ -186,7 +186,7 @@ const saveOnLanguageChange = () => onSave();
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     set,

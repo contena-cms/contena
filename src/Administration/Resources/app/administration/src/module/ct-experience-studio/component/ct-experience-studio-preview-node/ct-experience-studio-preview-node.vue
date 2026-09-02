@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_preview_node">
+    <ct-block name="ct_experience_studio_preview_node">
         <article class="ct-experience-studio-preview-node">
             <header class="ct-experience-studio-preview-node__header">
                 <h4 class="ct-experience-studio-preview-node__title">
@@ -113,7 +113,7 @@ const formatPrimitiveValue = (value: PreviewPrimitive) => {
     return value ? 'true' : 'false';
 };
 
-swDefinePublic({
+ctDefinePublic({
     primitiveProperties,
     slotEntries,
     isPreviewPrimitive,

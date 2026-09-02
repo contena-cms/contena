@@ -115,8 +115,8 @@ Button IDs should stay close to the related CSS classes and follow this conventi
 
 Examples:
 
-* `sw_product.detail.product_save`
-* `sw_product.detail.product_duplicate`
+* `ct_product.detail.product_save`
+* `ct_product.detail.product_duplicate`
 
 ### Custom events
 
@@ -126,7 +126,7 @@ Custom event names should follow this convention:
 
 Examples:
 
-* `sw_extension.my_extensions_listing.extension_installed`
+* `ct_extension.my_extensions_listing.extension_installed`
 
 ### General guidelines
 

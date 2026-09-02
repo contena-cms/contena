@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_blog_category_form">
+    <ct-block name="ct_blog_category_form">
         <div class="ct-blog-category-form">
-            <ct-block name="sw_blog_category_form_visibility">
+            <ct-block name="ct_blog_category_form_visibility">
                 <ct-container class="ct-blog-category-form__description">
                     <span class="ct-blog-category-form__visibility-title">
                         {{ $t('ct-blog.visibility.labelVisibility') }}
@@ -20,7 +20,7 @@
                 </ct-container>
             </ct-block>
 
-            <ct-block name="sw_blog_category_form_advanced_visibility">
+            <ct-block name="ct_blog_category_form_advanced_visibility">
                 <mt-link
                     v-if="hasSelectedVisibilities"
                     as="button"
@@ -33,7 +33,7 @@
                 </mt-link>
             </ct-block>
 
-            <ct-block name="sw_blog_category_form_categories">
+            <ct-block name="ct_blog_category_form_categories">
                 <ct-category-tree-field
                     v-if="blog.categories"
                     class="ct-blog-detail__select-category"
@@ -44,7 +44,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_category_form_tags">
+            <ct-block name="ct_blog_category_form_tags">
                 <ct-entity-tag-select
                     v-if="blog.tags"
                     class="ct-blog-category-form__tag-field"
@@ -56,7 +56,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_category_form_search_keywords">
+            <ct-block name="ct_blog_category_form_search_keywords">
                 <ct-multi-tag-select
                     :value="blog.customSearchKeywords ?? []"
                     class="ct-blog-category-form__search-keyword-field"
@@ -108,7 +108,7 @@ defineProps({
     },
 });
 
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const displayVisibilityDetail = ref(false);
 const hasSelectedVisibilities = computed(() => Boolean(blog.value.visibilities?.length));
 const blogTagsError = computed(() => Contena.Store.get('error').getApiError(blog.value, 'tags'));
@@ -128,7 +128,7 @@ const updateSearchKeywords = (keywords: string[]): void => {
     blog.value.customSearchKeywords = keywords;
 };
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     displayVisibilityDetail,
     hasSelectedVisibilities,

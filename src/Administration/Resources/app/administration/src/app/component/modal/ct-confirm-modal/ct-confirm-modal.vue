@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_confirm_modal">
+    <ct-block name="ct_confirm_modal">
         <ct-modal
             class="ct-confirm-modal"
             v-bind="$attrs"
@@ -7,9 +7,9 @@
             :title="titleText"
             @modal-close="$emit('close')"
         >
-            <ct-block name="sw_confirm_modal_text">
+            <ct-block name="ct_confirm_modal_text">
                 <slot>
-                    <ct-block name="sw_confirm_modal_text_default">
+                    <ct-block name="ct_confirm_modal_text_default">
                         <p class="ct-confirm-modal__text">
                             {{ descriptionText }}
                         </p>
@@ -18,8 +18,8 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_confirm_modal_footer">
-                    <ct-block name="sw_confirm_modal_footer_cancel">
+                <ct-block name="ct_confirm_modal_footer">
+                    <ct-block name="ct_confirm_modal_footer_cancel">
                         <mt-button
                             class="ct-confirm-modal__button-cancel"
                             size="small"
@@ -30,7 +30,7 @@
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_confirm_modal_footer_confirm">
+                    <ct-block name="ct_confirm_modal_footer_confirm">
                         <mt-button
                             class="ct-confirm-modal__button-confirm"
                             :variant="confirmButtonVariant"
@@ -170,7 +170,7 @@ const confirmButtonVariant = computed(() => {
     }
 });
 
-swDefinePublic({
+ctDefinePublic({
     titleText,
     descriptionText,
     confirmText,

@@ -12,7 +12,7 @@ interface BlogSeoFormVm {
 }
 
 async function createWrapper(openGraphMedia: Entity<'media'> | null = null) {
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     store.blog = {
         id: 'blog-1',

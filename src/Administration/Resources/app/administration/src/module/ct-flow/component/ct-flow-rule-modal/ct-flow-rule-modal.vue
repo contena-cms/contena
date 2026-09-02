@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_rule_modal">
+    <ct-block name="ct_flow_rule_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="modalTitle" width="l">
-                <ct-block name="sw_flow_rule_modal_tabs">
+                <ct-block name="ct_flow_rule_modal_tabs">
                     <mt-tabs
                         position-identifier="ct-flow-rule-modal"
                         :default-item="activeTab"
@@ -13,10 +13,10 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_flow_rule_modal_content">
+                <ct-block name="ct_flow_rule_modal_content">
                     <div class="ct-flow-rule-modal__content">
                         <template v-if="activeTab === 'detail' && rule">
-                            <ct-block name="sw_flow_rule_modal_detail">
+                            <ct-block name="ct_flow_rule_modal_detail">
                                 <ct-container columns="2fr 1fr" gap="0 32px">
                                     <mt-text-field
                                         v-model="rule.name"
@@ -44,7 +44,7 @@
                             </ct-block>
                         </template>
 
-                        <ct-block name="sw_flow_rule_modal_conditions">
+                        <ct-block name="ct_flow_rule_modal_conditions">
                             <template v-if="activeTab !== 'detail' || !rule">
                                 <ct-rule-condition-editor
                                     v-model:mode="matchMode"
@@ -58,7 +58,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_flow_rule_modal_footer">
+                    <ct-block name="ct_flow_rule_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onClose">
                                 {{ $t('global.default.cancel') }}
@@ -278,7 +278,7 @@ const onModalChange = (isOpen: boolean): void => {
 };
 onMounted(() => void load());
 
-swDefinePublic({
+ctDefinePublic({
     rule,
     conditions,
     matchMode,

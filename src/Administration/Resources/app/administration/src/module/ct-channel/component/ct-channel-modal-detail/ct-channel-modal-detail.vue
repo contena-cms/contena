@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_channel_modal_detail">
+    <ct-block name="ct_channel_modal_detail">
         <div class="ct-channel-modal-detail">
             <div class="ct-channel-modal-detail__header">
                 <span class="ct-channel-modal-detail__icon">
@@ -31,5 +31,5 @@ defineProps({
     detailType: { type: Object as PropType<Entity<'channel_type'>>, required: true },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

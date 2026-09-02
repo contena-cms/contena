@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_channel_modal">
+    <ct-block name="ct_channel_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal class="ct-channel-modal" :title="modalTitle" width="l">
                 <ct-channel-modal-grid
@@ -10,7 +10,7 @@
                 <ct-channel-modal-detail v-else :detail-type="detailType" />
 
                 <template #footer>
-                    <ct-block name="sw_channel_modal_footer">
+                    <ct-block name="ct_channel_modal_footer">
                         <mt-button
                             v-if="detailType"
                             class="ct-channel-modal__footer-left"
@@ -65,7 +65,7 @@ const onAddChannel = (typeId: string): void => {
     void router.push({ name: 'ct.channel.create', params: { typeId } });
 };
 
-swDefinePublic({
+ctDefinePublic({
     detailType,
     modalTitle,
     onGridOpenDetails,

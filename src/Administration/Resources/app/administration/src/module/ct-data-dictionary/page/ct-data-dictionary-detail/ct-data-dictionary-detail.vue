@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_data_dictionary_detail">
+    <ct-block name="ct_data_dictionary_detail">
         <ct-modal
             class="ct-data-dictionary-detail"
             :title="dictionary?.label || translate('ct-data-dictionary.detail.newTitle')"
@@ -7,9 +7,9 @@
             :is-loading="isLoading && !dictionary"
             @modal-close="onCancel"
         >
-            <ct-block name="sw_data_dictionary_detail_content">
+            <ct-block name="ct_data_dictionary_detail_content">
                 <ct-card-view>
-                    <ct-block name="sw_data_dictionary_detail_settings_card">
+                    <ct-block name="ct_data_dictionary_detail_settings_card">
                         <template v-if="dictionary">
                             <mt-card
                                 position-identifier="ct-data-dictionary-detail-settings"
@@ -17,7 +17,7 @@
                                 :subtitle="translate('ct-data-dictionary.detail.settingsSubtitle')"
                                 :is-loading="isLoading && !dictionary"
                             >
-                                <ct-block name="sw_data_dictionary_detail_settings_fields">
+                                <ct-block name="ct_data_dictionary_detail_settings_fields">
                                     <template v-if="dictionary">
                                         <ct-container
                                             class="ct-data-dictionary-detail__settings-fields"
@@ -25,7 +25,7 @@
                                             gap="0 24px"
                                             :breakpoints="{ 960: { columns: '1fr' } }"
                                         >
-                                            <ct-block name="sw_data_dictionary_detail_settings_technical_name">
+                                            <ct-block name="ct_data_dictionary_detail_settings_technical_name">
                                                 <mt-text-field
                                                     v-model="dictionary.technicalName"
                                                     :label="translate('ct-data-dictionary.detail.technicalName')"
@@ -34,7 +34,7 @@
                                                 />
                                             </ct-block>
 
-                                            <ct-block name="sw_data_dictionary_detail_settings_label">
+                                            <ct-block name="ct_data_dictionary_detail_settings_label">
                                                 <mt-text-field
                                                     v-model="dictionary.label"
                                                     :label="translate('ct-data-dictionary.detail.label')"
@@ -43,7 +43,7 @@
                                                 />
                                             </ct-block>
 
-                                            <ct-block name="sw_data_dictionary_detail_settings_description">
+                                            <ct-block name="ct_data_dictionary_detail_settings_description">
                                                 <mt-textarea
                                                     v-model="dictionary.description"
                                                     class="ct-data-dictionary-detail__settings-description"
@@ -52,7 +52,7 @@
                                                 />
                                             </ct-block>
 
-                                            <ct-block name="sw_data_dictionary_detail_settings_active">
+                                            <ct-block name="ct_data_dictionary_detail_settings_active">
                                                 <mt-switch
                                                     v-model="dictionary.active"
                                                     :label="translate('ct-data-dictionary.detail.active')"
@@ -66,7 +66,7 @@
                         </template>
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_detail_items_workspace">
+                    <ct-block name="ct_data_dictionary_detail_items_workspace">
                         <template v-if="dictionary && !dictionary.isNew()">
                             <mt-card
                                 class="ct-data-dictionary-detail__tree-card"
@@ -76,14 +76,14 @@
                                 :is-loading="isLoading"
                             >
                                 <template #headerRight>
-                                    <ct-block name="sw_data_dictionary_detail_tree_count">
+                                    <ct-block name="ct_data_dictionary_detail_tree_count">
                                         <span class="ct-data-dictionary-detail__tree-count">
                                             {{ translate('ct-data-dictionary.detail.itemCount', { count: items.length }) }}
                                         </span>
                                     </ct-block>
                                 </template>
 
-                                <ct-block name="sw_data_dictionary_detail_tree">
+                                <ct-block name="ct_data_dictionary_detail_tree">
                                     <ct-data-dictionary-tree
                                         v-if="dictionary"
                                         :items="treeSourceItems"
@@ -104,7 +104,7 @@
                         </template>
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_detail_item_editor_modal">
+                    <ct-block name="ct_data_dictionary_detail_item_editor_modal">
                         <ct-data-dictionary-item-modal
                             v-if="isItemEditorOpen && selectedItem"
                             :item="selectedItem"
@@ -122,14 +122,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_data_dictionary_detail_modal_footer">
-                    <ct-block name="sw_data_dictionary_detail_modal_cancel">
+                <ct-block name="ct_data_dictionary_detail_modal_footer">
+                    <ct-block name="ct_data_dictionary_detail_modal_cancel">
                         <mt-button size="small" variant="secondary" @click="onCancel">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_detail_modal_save">
+                    <ct-block name="ct_data_dictionary_detail_modal_save">
                         <ct-button-process
                             variant="primary"
                             size="small"
@@ -436,7 +436,7 @@ watch(
 
 void load();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     repository,

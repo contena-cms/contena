@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_settings_cache_modal">
+    <ct-block name="ct_settings_cache_modal">
         <mt-modal-root :is-open="open" @change="onModalChange">
             <mt-modal :title="$t('ct-settings-cache.modal.title')" width="s">
-                <ct-block name="sw_settings_cache_modal_content">
+                <ct-block name="ct_settings_cache_modal_content">
                     {{ $t('ct-settings-cache.modal.message') }}
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_settings_cache_modal_footer">
+                    <ct-block name="ct_settings_cache_modal_footer">
                         <div class="ct-settings-cache-modal__actions">
                             <mt-button size="small" variant="secondary" @click="closeModal">
                                 {{ $t('global.default.cancel') }}
@@ -99,7 +99,7 @@ const onModalChange = (isOpen: boolean): void => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     open,
     keydownEventListener,
     openModal,

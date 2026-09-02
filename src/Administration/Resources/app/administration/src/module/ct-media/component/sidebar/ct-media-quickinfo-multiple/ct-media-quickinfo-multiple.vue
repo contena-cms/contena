@@ -1,16 +1,16 @@
 <template>
-    <ct-block name="sw_media_quickinfo_multiple">
+    <ct-block name="ct_media_quickinfo_multiple">
         <div class="ct-media-quickinfo-multiple">
-            <ct-block name="sw_media_quickinfo_multiple_quickactions">
+            <ct-block name="ct_media_quickinfo_multiple_quickactions">
                 <ct-media-collapse
                     v-if="editable"
                     :title="translate('ct-media.sidebar.sections.actions')"
                     :expand-on-loading="true"
                 >
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_multiple_quickactions_content">
+                        <ct-block name="ct_media_quickinfo_multiple_quickactions_content">
                             <ul class="ct-media-sidebar__quickactions-list">
-                                <ct-block name="sw_media_quickinfo_multiple_quickactions_move">
+                                <ct-block name="ct_media_quickinfo_multiple_quickactions_move">
                                     <li
                                         class="quickaction--move"
                                         :class="quickActionClasses(!acl.can('media.editor'))"
@@ -28,7 +28,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_multiple_quickactions_delete">
+                                <ct-block name="ct_media_quickinfo_multiple_quickactions_delete">
                                     <li
                                         v-if="!isPrivate"
                                         class="is--danger"
@@ -47,7 +47,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_folder_quickactions_dissolve">
+                                <ct-block name="ct_media_quickinfo_folder_quickactions_dissolve">
                                     <li
                                         v-if="!hasMedia"
                                         class="quickaction--dissolve"
@@ -71,10 +71,10 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_multiple_file_names">
+            <ct-block name="ct_media_quickinfo_multiple_file_names">
                 <ct-media-collapse :expand-on-loading="true" :title="translate('ct-media.sidebar.sections.selectedFiles')">
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_multiple_file_names_content">
+                        <ct-block name="ct_media_quickinfo_multiple_file_names_content">
                             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                             <label class="ct-media-quickinfo-multiple__second-headline">{{ getFileSizeLabel }}</label>
                             <ct-media-entity-mapper
@@ -92,7 +92,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_sidebar_modal_delete">
+            <ct-block name="ct_media_sidebar_modal_delete">
                 <ct-media-modal-delete
                     v-if="showModalDelete"
                     :items-to-delete="items"
@@ -101,7 +101,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_sidebar_folder_dissolve_modal">
+            <ct-block name="ct_media_sidebar_folder_dissolve_modal">
                 <ct-media-modal-folder-dissolve
                     v-if="!hasMedia && showFolderDissolve"
                     :items-to-dissolve="items"
@@ -110,7 +110,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_sidebar_folder_move_modal">
+            <ct-block name="ct_media_sidebar_folder_move_modal">
                 <ct-media-modal-move
                     v-if="showModalMove"
                     :items-to-move="items"
@@ -221,7 +221,7 @@ const {
     onItemsMove: (ids) => emit('media-sidebar-items-move', ids),
 });
 
-swDefinePublic({
+ctDefinePublic({
     itemsIsAvailable,
     getFileSize,
     getFileSizeLabel,

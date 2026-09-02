@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_settings_logging_entry_info">
+    <ct-block name="ct_settings_logging_entry_info">
         <ct-modal :title="$t('ct-settings-logging.entryInfo.title')" @modal-close="onClose">
-            <ct-block name="sw_settings_logging_entry_info_tabs">
+            <ct-block name="ct_settings_logging_entry_info_tabs">
                 <div>
                     <mt-tabs :items="tabItems" :default-item="activeTab" @new-item-active="onTabChange" />
 
                     <div class="ct-settings-logging-entry-info__content">
-                        <ct-block name="sw_settings_logging_entry_info_content">
-                            <ct-block name="sw_settings_logging_entry_info_raw_content">
+                        <ct-block name="ct_settings_logging_entry_info_content">
+                            <ct-block name="ct_settings_logging_entry_info_raw_content">
                                 <mt-textarea v-if="activeTab === 'raw'" :model-value="displayString" />
                             </ct-block>
                         </ct-block>
@@ -16,8 +16,8 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_settings_logging_entry_info_footer">
-                    <ct-block name="sw_settings_logging_entry_info_close_button">
+                <ct-block name="ct_settings_logging_entry_info_footer">
+                    <ct-block name="ct_settings_logging_entry_info_close_button">
                         <mt-button size="small" variant="secondary" @click="onClose">
                             {{ $t('global.default.close') }}
                         </mt-button>
@@ -63,7 +63,7 @@ const onClose = () => {
     emit('close');
 };
 
-swDefinePublic({
+ctDefinePublic({
     activeTab,
     tabItems,
     displayString,

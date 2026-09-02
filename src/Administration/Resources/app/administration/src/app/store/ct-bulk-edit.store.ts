@@ -1,4 +1,4 @@
-const swBulkStore = Contena.Store.register('swBulkEdit', {
+const ctBulkStore = Contena.Store.register('ctBulkEdit', {
     state: () => ({
         selectedIds: [] as string[],
     }),
@@ -17,9 +17,9 @@ const swBulkStore = Contena.Store.register('swBulkEdit', {
 /**
  * @private
  */
-export default swBulkStore;
+export default ctBulkStore;
 
 /**
  * @private
  */
-export type SwBulkStore = ReturnType<typeof swBulkStore>;
+export type CtBulkStore = ReturnType<typeof ctBulkStore>;

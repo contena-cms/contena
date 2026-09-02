@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_skip_link">
+    <ct-block name="ct_skip_link">
         <a
             href="#main"
             tabindex="0"
@@ -36,7 +36,7 @@ const focusElement = () => {
     element.focus();
 };
 
-swDefinePublic({
+ctDefinePublic({
     focussed,
     setFocus,
     focusElement,

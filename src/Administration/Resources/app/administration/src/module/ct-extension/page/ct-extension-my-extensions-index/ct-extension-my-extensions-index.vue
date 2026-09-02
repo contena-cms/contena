@@ -1,15 +1,15 @@
 <template>
-    <ct-block name="sw_extension_my_extensions_index">
+    <ct-block name="ct_extension_my_extensions_index">
         <ct-meteor-page class="ct-extension-my-extensions-index" hide-icon>
             <template #smart-bar-header>
-                <ct-block name="sw_extension_my_extensions_index_smart_bar_header">
+                <ct-block name="ct_extension_my_extensions_index_smart_bar_header">
                     {{ $t('ct-extension.mainMenu.plugins') }}
                 </ct-block>
             </template>
 
             <template #search-bar>
-                <ct-block name="sw_extension_my_extensions_index_smart_bar_search_slot">
-                    <ct-block name="sw_extension_my_extensions_index_smart_bar_search_slot_search_bar">
+                <ct-block name="ct_extension_my_extensions_index_smart_bar_search_slot">
+                    <ct-block name="ct_extension_my_extensions_index_smart_bar_search_slot_search_bar">
                         <mt-search
                             :model-value="searchValue"
                             :placeholder="$t('ct-extension.my-extensions.listing.placeholderSearchBar')"
@@ -20,15 +20,15 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_extension_my_extensions_index_smart_bar_actions">
-                    <ct-block name="sw_extension_my_extensions_index_smart_bar_actions_file_upload">
+                <ct-block name="ct_extension_my_extensions_index_smart_bar_actions">
+                    <ct-block name="ct_extension_my_extensions_index_smart_bar_actions_file_upload">
                         <ct-extension-file-upload v-if="acl.can('system.plugin_upload') && !extensionManagementDisabled" />
                     </ct-block>
                 </ct-block>
             </template>
 
             <template #default>
-                <ct-block name="sw_extension_my_extensions_index_body">
+                <ct-block name="ct_extension_my_extensions_index_body">
                     <router-view />
                 </ct-block>
             </template>
@@ -93,7 +93,7 @@ const updateRouteQueryTerm = (term) => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     searchValue,
     queryParams,

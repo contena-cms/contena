@@ -18,7 +18,7 @@ type SourceReplacement = SourceRange & {
  * for untouched source slices.
  *
  * Ranges fully contained in an already-consumed range are skipped by design: a rename edit inside a
- * removed marker statement is moot, e.g. the `count` in `swDefinePublic({ count })`. A range that
+ * removed marker statement is moot, e.g. the `count` in `ctDefinePublic({ count })`. A range that
  * only *partially* overlaps has no coherent meaning, so it is rejected rather than silently dropped.
  */
 function transformRanges(

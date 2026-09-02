@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_rule_condition_editor">
+    <ct-block name="ct_rule_condition_editor">
         <div class="ct-rule-condition-editor" :class="{ 'is--nested': nested }">
             <div class="ct-rule-condition-editor__container">
                 <div class="ct-rule-condition-editor__toolbar">
@@ -291,7 +291,7 @@ const updateGroupMode = (index: number, mode: 'all' | 'any'): void =>
         conditions[index].type = mode === 'all' ? 'andContainer' : 'orContainer';
     });
 
-swDefinePublic({
+ctDefinePublic({
     conditionTypes,
     modeOptions,
     weekdayOptions,

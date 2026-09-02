@@ -36,7 +36,7 @@ import { inject } from 'vue';
 
 const acl = inject('acl');
 
-swDefinePublic({
+ctDefinePublic({
     acl,
 });
 

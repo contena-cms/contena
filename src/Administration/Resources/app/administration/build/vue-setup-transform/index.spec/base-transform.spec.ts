@@ -32,14 +32,14 @@ describe('build/vue-setup-transform base transforms', () => {
     ])('rejects a direct non-default named slot %s on a base ct-block', (slotDirective) => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_example_component_body">
+            <ct-block name="ct_example_component_body">
                 <template ${slotDirective}>content</template>
             </ct-block>
             </template>
             <script setup>
             const slotName = 'footer';
 
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 
@@ -52,26 +52,26 @@ describe('build/vue-setup-transform base transforms', () => {
     it('allows a named slot that belongs to a deeper child component', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_example_component_body">
+            <ct-block name="ct_example_component_body">
                 <ChildComponent>
                     <template #footer>content</template>
                 </ChildComponent>
             </ct-block>
             </template>
             <script setup>
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 
         const result = transformOrFail(source, 'base-deeper-child-named-slot.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="sw_example_component_body">');
+        expect(result).toContain('<ct-block :data="$dataScope" name="ct_example_component_body">');
     });
 
     it('pins the whole generated output for a base component with props, private state and an <ct-block>', () => {
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_headline">
+                <ct-block name="ct_example_headline">
                     <h1>{{ title }}</h1>
                     <p>{{ doubled }}</p>
                 </ct-block>
@@ -93,7 +93,7 @@ describe('build/vue-setup-transform base transforms', () => {
             const doubled = computed(() => count.value * 2);
             const internalNote = ref('secret');
 
-            swDefinePublic({
+            ctDefinePublic({
                 title,
                 count,
                 doubled,
@@ -102,7 +102,7 @@ describe('build/vue-setup-transform base transforms', () => {
         `;
 
         // The one end-to-end assertion for base lowering: the author body stays native (macros in place,
-        // `declare global` untouched, every binding renamed to its __swSetupAuthor_ alias), the template
+        // `declare global` untouched, every binding renamed to its __ctSetupAuthor_ alias), the template
         // keeps its content with a generated `:data="$dataScope"` added to the <ct-block>, and a single
         // footer re-declares the original names by destructuring attachOverrides().
         //
@@ -110,7 +110,7 @@ describe('build/vue-setup-transform base transforms', () => {
         // Vue round-trip below is what guarantees the result is still valid code.
         const expected = stripWhitespace`
             <template>
-                <ct-block :data="$dataScope" name="sw_example_headline">
+                <ct-block :data="$dataScope" name="ct_example_headline">
                     <h1>{{ title }}</h1>
                     <p>{{ doubled }}</p>
                 </ct-block>
@@ -124,13 +124,13 @@ describe('build/vue-setup-transform base transforms', () => {
                 }
             }
 
-            const __swSetupAuthor_props = defineProps<{
+            const __ctSetupAuthor_props = defineProps<{
                 initialCount?: number;
             }>();
-            const __swSetupAuthor_title = ref('Hello');
-            const __swSetupAuthor_count = ref(__swSetupAuthor_props.initialCount ?? 0);
-            const __swSetupAuthor_doubled = computed(() => __swSetupAuthor_count.value * 2);
-            const __swSetupAuthor_internalNote = ref('secret');
+            const __ctSetupAuthor_title = ref('Hello');
+            const __ctSetupAuthor_count = ref(__ctSetupAuthor_props.initialCount ?? 0);
+            const __ctSetupAuthor_doubled = computed(() => __ctSetupAuthor_count.value * 2);
+            const __ctSetupAuthor_internalNote = ref('secret');
 
             const {
                 props,
@@ -141,13 +141,13 @@ describe('build/vue-setup-transform base transforms', () => {
             } = Contena.Component.attachOverrides({
                 name: 'ct-example',
                 public: {
-                    title: __swSetupAuthor_title,
-                    count: __swSetupAuthor_count,
-                    doubled: __swSetupAuthor_doubled,
+                    title: __ctSetupAuthor_title,
+                    count: __ctSetupAuthor_count,
+                    doubled: __ctSetupAuthor_doubled,
                 },
                 private: {
-                    props: __swSetupAuthor_props,
-                    internalNote: __swSetupAuthor_internalNote,
+                    props: __ctSetupAuthor_props,
+                    internalNote: __ctSetupAuthor_internalNote,
                 },
             });
             </script>
@@ -165,7 +165,7 @@ describe('build/vue-setup-transform base transforms', () => {
             <script setup>
             import ChildComponent from './child.vue';
 
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 
@@ -183,7 +183,7 @@ describe('build/vue-setup-transform base transforms', () => {
             defineOptions({ inheritAttrs: false });
             defineEmits(['save']);
 
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 
@@ -199,7 +199,7 @@ describe('build/vue-setup-transform base transforms', () => {
         const source = stripIndent`
             <template>
             <article>
-                <ct-block name="sw_example_component_headline">
+                <ct-block name="ct_example_component_headline">
                     <h2>{{ headline }}</h2>
                 </ct-block>
             </article>
@@ -207,7 +207,7 @@ describe('build/vue-setup-transform base transforms', () => {
             <script setup>
             const headline = 'Headline';
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -215,7 +215,7 @@ describe('build/vue-setup-transform base transforms', () => {
 
         const result = transformOrFail(source, 'base-ct-block-data.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="sw_example_component_headline">');
+        expect(result).toContain('<ct-block :data="$dataScope" name="ct_example_component_headline">');
     });
 
     it('returns destructured runtime declarations as setup bindings', () => {
@@ -243,7 +243,7 @@ describe('build/vue-setup-transform base transforms', () => {
             } = source;
             const [firstItem] = items;
 
-            swDefinePublic({
+            ctDefinePublic({
                 publicTitle,
             });
             </script>
@@ -256,25 +256,25 @@ describe('build/vue-setup-transform base transforms', () => {
         expect(collapsed).toContain(
             stripWhitespace`
                 const {
-                    title: __swSetupAuthor_publicTitle,
+                    title: __ctSetupAuthor_publicTitle,
                     nested: {
-                        label: __swSetupAuthor_localLabel = __swSetupAuthor_fallbackLabel,
+                        label: __ctSetupAuthor_localLabel = __ctSetupAuthor_fallbackLabel,
                     },
-                    ...__swSetupAuthor_rest
-                } = __swSetupAuthor_source;
+                    ...__ctSetupAuthor_rest
+                } = __ctSetupAuthor_source;
             `,
         );
-        expect(collapsed).toContain('const [__swSetupAuthor_firstItem] = __swSetupAuthor_items;');
-        expect(collapsed).toContain('publicTitle: __swSetupAuthor_publicTitle');
+        expect(collapsed).toContain('const [__ctSetupAuthor_firstItem] = __ctSetupAuthor_items;');
+        expect(collapsed).toContain('publicTitle: __ctSetupAuthor_publicTitle');
         expect(collapsed).toContain(
             stripWhitespace`
                 private: {
-                    source: __swSetupAuthor_source,
-                    items: __swSetupAuthor_items,
-                    fallbackLabel: __swSetupAuthor_fallbackLabel,
-                    localLabel: __swSetupAuthor_localLabel,
-                    rest: __swSetupAuthor_rest,
-                    firstItem: __swSetupAuthor_firstItem,
+                    source: __ctSetupAuthor_source,
+                    items: __ctSetupAuthor_items,
+                    fallbackLabel: __ctSetupAuthor_fallbackLabel,
+                    localLabel: __ctSetupAuthor_localLabel,
+                    rest: __ctSetupAuthor_rest,
+                    firstItem: __ctSetupAuthor_firstItem,
                 }
             `,
         );
@@ -283,14 +283,14 @@ describe('build/vue-setup-transform base transforms', () => {
     it('adds the generated data scope to nested and self-closing base ct-block declarations', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="outer">
-                <ct-block name="inner" />
+            <ct-block name="ct_outer">
+                <ct-block name="ct_inner" />
             </ct-block>
             </template>
             <script setup>
             const count = 1;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -298,8 +298,29 @@ describe('build/vue-setup-transform base transforms', () => {
 
         const result = transformOrFail(source, 'base-nested-ct-block-data.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="outer">');
-        expect(result).toContain('<ct-block :data="$dataScope" name="inner" />');
+        expect(result).toContain('<ct-block :data="$dataScope" name="ct_outer">');
+        expect(result).toContain('<ct-block :data="$dataScope" name="ct_inner" />');
+    });
+
+    it.each(['name', 'extends'])('requires the static %s of ct-block to use the ct_ prefix', (identity) => {
+        const mode = identity === 'name' ? 'base' : 'override';
+        const marker = mode === 'base' ? 'ctDefinePublic({ body });' : 'ctDefineOverride({ body });';
+        const source = stripIndent`
+            <template>
+            <ct-block ${identity}="legacy_block">
+                <p>{{ body }}</p>
+            </ct-block>
+            </template>
+            <script setup>
+            const body = 'Body';
+
+            ${marker}
+            </script>
+        `;
+
+        expect(() => transformContenaSetupSfc(source, `${mode}-invalid-${identity}.vue`)).toThrow(
+            `The static ${identity} of <ct-block> must start with "ct_".`,
+        );
     });
 
     it.each([
@@ -309,7 +330,7 @@ describe('build/vue-setup-transform base transforms', () => {
     ])('rejects the authored data binding %s on base ct-block declarations', (dataBinding) => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_example_component_body" ${dataBinding}>
+            <ct-block name="ct_example_component_body" ${dataBinding}>
                 <p>{{ body }}</p>
             </ct-block>
             </template>
@@ -317,7 +338,7 @@ describe('build/vue-setup-transform base transforms', () => {
             const scope = {};
             const body = 'Body';
 
-            swDefinePublic({
+            ctDefinePublic({
                 body,
             });
             </script>
@@ -331,35 +352,35 @@ describe('build/vue-setup-transform base transforms', () => {
     it('rejects a <ct-block extends> in a base component', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p>{{ body }}</p>
             </ct-block>
             </template>
             <script setup>
             const body = 'Body';
 
-            swDefinePublic({
+            ctDefinePublic({
                 body,
             });
             </script>
         `;
 
         expect(() => transformContenaSetupSfc(source, 'base-extends.vue')).toThrow(
-            '<ct-block extends="..."> is only valid in an override component.',
+            '<ct-block extends="ct_..."> is only valid in an override component.',
         );
     });
 
     it('emits the owned base block names for the ownership registry', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_outer">
-                <ct-block name="sw_inner" />
+            <ct-block name="ct_outer">
+                <ct-block name="ct_inner" />
             </ct-block>
             </template>
             <script setup>
             const count = 1;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -368,15 +389,15 @@ describe('build/vue-setup-transform base transforms', () => {
         const result = transformOrFail(source, 'base-owned-blocks.vue');
 
         expect(result.ownedBlockNames).toEqual([
-            'sw_outer',
-            'sw_inner',
+            'ct_outer',
+            'ct_inner',
         ]);
     });
 
     it('rejects v-bind objects on base ct-block declarations', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_example_component_body" v-bind="attrs">
+            <ct-block name="ct_example_component_body" v-bind="attrs">
                 <p>{{ body }}</p>
             </ct-block>
             </template>
@@ -384,7 +405,7 @@ describe('build/vue-setup-transform base transforms', () => {
             const attrs = {};
             const body = 'Body';
 
-            swDefinePublic({
+            ctDefinePublic({
                 body,
             });
             </script>
@@ -396,14 +417,14 @@ describe('build/vue-setup-transform base transforms', () => {
     it('rejects non-identity attributes on base ct-block declarations', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_example_component_body" class="highlight">
+            <ct-block name="ct_example_component_body" class="highlight">
                 <p>{{ body }}</p>
             </ct-block>
             </template>
             <script setup>
             const body = 'Body';
 
-            swDefinePublic({
+            ctDefinePublic({
                 body,
             });
             </script>

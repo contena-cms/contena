@@ -1,18 +1,18 @@
 <template>
-    <ct-block name="sw_grid_column">
+    <ct-block name="ct_grid_column">
         <div class="ct-grid-column ct-grid__cell" :class="'ct-grid-column--' + align">
-            <ct-block name="sw_grid_column_content">
+            <ct-block name="ct_grid_column_content">
                 <div class="ct-grid__cell-content" :class="{ 'is--truncate': truncate }">
                     <slot>
-                        <ct-block name="sw_grid_column_slot_default"></ct-block>
+                        <ct-block name="ct_grid_column_slot_default"></ct-block>
                     </slot>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_grid_column_editing">
+            <ct-block name="ct_grid_column_editing">
                 <div class="ct-grid__cell-inline-editing">
                     <slot name="inline-edit">
-                        <ct-block name="sw_grid_column_slot_inline_edit"></ct-block>
+                        <ct-block name="ct_grid_column_slot_inline_edit"></ct-block>
                     </slot>
                 </div>
             </ct-block>
@@ -67,7 +67,7 @@ const props = defineProps({
 import { computed, inject, watch } from 'vue';
 
 const feature = inject('feature', null);
-const swGridColumns = inject('swGridColumns', null);
+const ctGridColumns = inject('ctGridColumns', null);
 
 const parentGrid = computed(() => {
     return undefined;
@@ -77,7 +77,7 @@ const createdComponent = () => {
     registerColumn();
 };
 function registerColumn() {
-    const parentGridColumns = swGridColumns;
+    const parentGridColumns = ctGridColumns;
     const hasColumn = parentGridColumns.some((column) => {
         return column.label === props.label;
     });
@@ -98,7 +98,7 @@ function registerColumn() {
 watch(
     () => props.label,
     (newLabel, oldLabel) => {
-        const parentGridColumns = swGridColumns;
+        const parentGridColumns = ctGridColumns;
 
         const index = parentGridColumns.findIndex((col) => col.label === oldLabel);
 
@@ -114,9 +114,9 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     feature,
-    swGridColumns,
+    ctGridColumns,
     parentGrid,
     createdComponent,
     registerColumn,
@@ -124,7 +124,7 @@ swDefinePublic({
 
 defineExpose({
     feature,
-    swGridColumns,
+    ctGridColumns,
     parentGrid,
     createdComponent,
     registerColumn,

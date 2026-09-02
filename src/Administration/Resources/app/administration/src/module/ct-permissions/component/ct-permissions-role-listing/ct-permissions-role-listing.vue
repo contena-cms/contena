@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_permissions_role_listing">
+    <ct-block name="ct_permissions_role_listing">
         <mt-card class="ct-permissions-role-listing" position-identifier="ct-permissions-role-listing">
-            <ct-block name="sw_permissions_role_listing_grid">
+            <ct-block name="ct_permissions_role_listing_grid">
                 <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
                 <ct-data-grid
                     v-if="showListingResults || isLoading"
@@ -14,7 +14,7 @@
                     @column-sort="onSortColumn"
                 >
                     <template #column-name="{ item }">
-                        <ct-block name="sw_permissions_role_listing_grid_column_name">
+                        <ct-block name="ct_permissions_role_listing_grid_column_name">
                             <mt-link as="a" @click.prevent="openEditRole(item.id)">
                                 {{ item.name }}
                             </mt-link>
@@ -22,7 +22,7 @@
                     </template>
 
                     <template #column-createdAt="{ item }">
-                        <ct-block name="sw_permissions_role_listing_grid_column_created_at">
+                        <ct-block name="ct_permissions_role_listing_grid_column_created_at">
                             <ct-time-ago v-if="item.createdAt" :date="item.createdAt" />
                             <span v-else>—</span>
                         </ct-block>
@@ -30,7 +30,7 @@
 
                     <!-- eslint-disable-next-line vue/no-unused-vars -->
                     <template #column-createdBy="{ item }">
-                        <ct-block name="sw_permissions_role_listing_grid_column_created_by">
+                        <ct-block name="ct_permissions_role_listing_grid_column_created_by">
                             <span class="ct-permissions-role-listing__created-by">
                                 {{ item.createdBy ? formatUserName(item.createdBy) : '' }}
                             </span>
@@ -39,7 +39,7 @@
 
                     <!-- eslint-disable-next-line vue/no-unused-vars -->
                     <template #column-users="{ item }">
-                        <ct-block name="sw_permissions_role_listing_grid_column_users">
+                        <ct-block name="ct_permissions_role_listing_grid_column_users">
                             <mt-badge class="ct-permissions-role-listing__user-count" variant="neutral">
                                 {{ item.users?.length ?? 0 }}
                             </mt-badge>
@@ -47,7 +47,7 @@
                     </template>
 
                     <template #actions="{ item }">
-                        <ct-block name="sw_permissions_role_listing_grid_actions">
+                        <ct-block name="ct_permissions_role_listing_grid_actions">
                             <ct-context-menu-item
                                 class="ct-permissions-role-listing__context-menu-permissions"
                                 :disabled="!acl.can('users_and_permissions.viewer') || undefined"
@@ -76,7 +76,7 @@
                     </template>
 
                     <template #pagination>
-                        <ct-block name="sw_permissions_role_listing_grid_pagination">
+                        <ct-block name="ct_permissions_role_listing_grid_pagination">
                             <ct-pagination
                                 :page="page"
                                 :limit="limit"
@@ -89,7 +89,7 @@
                 </ct-data-grid>
             </ct-block>
 
-            <ct-block name="sw_permissions_role_listing_empty_state">
+            <ct-block name="ct_permissions_role_listing_empty_state">
                 <template v-if="showListingResults || isLoading"
                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                 >
@@ -102,7 +102,7 @@
             </ct-block>
         </mt-card>
 
-        <ct-block name="sw_permissions_role_listing_modals">
+        <ct-block name="ct_permissions_role_listing_modals">
             <ct-permissions-role-form-modal
                 v-if="isRoleFormModalOpen"
                 :role-id="roleFormRoleId"
@@ -316,7 +316,7 @@ const deleteRole = async (context) => {
 initializeListing({ getList, disableRouteParams: ref(true) });
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     roles,
     isLoading,

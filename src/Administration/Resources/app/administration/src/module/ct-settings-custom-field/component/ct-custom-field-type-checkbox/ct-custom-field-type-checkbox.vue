@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_custom_field_type_base">
+    <ct-block name="ct_custom_field_type_base">
         <div class="ct-custom-field-type-base">
-            <ct-block name="sw_custom_field_type_base_content">
-                <ct-block name="sw_custom_field_type_base_labels">
+            <ct-block name="ct_custom_field_type_base_content">
+                <ct-block name="ct_custom_field_type_base_labels">
                     <ct-custom-field-translated-labels
                         v-model:config="currentCustomField.config"
                         :disabled="!acl.can('custom_field.editor')"
@@ -46,7 +46,7 @@ const { acl, propertyNames, locales } = useCustomFieldType(props, [
     ],
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     propertyNames,
     locales,

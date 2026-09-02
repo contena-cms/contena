@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_context_button">
+    <ct-block name="ct_context_button">
         <button
-            ref="swContextButton"
+            ref="ctContextButton"
             class="ct-context-button"
             :class="contextClass"
             :aria-label="ariaLabel && $t(ariaLabel)"
             @click="onClickButton"
             @keydown.enter="onClickButton"
         >
-            <ct-block name="sw_context_button_button">
+            <ct-block name="ct_context_button_button">
                 <slot name="button">
                     <div class="ct-context-button__button" :class="contextButtonClass" tabindex="-1">
                         <mt-icon :name="icon" :size="iconSize" decorative />
@@ -16,19 +16,19 @@
                 </slot>
             </ct-block>
 
-            <ct-block name="sw_context_button_menu">
+            <ct-block name="ct_context_button_menu">
                 <mt-floating-ui
                     v-if="showMenu"
                     class="ct-context-button__menu-popover"
                     :is-opened="true"
-                    :anchor-element="$refs.swContextButton"
+                    :anchor-element="$refs.ctContextButton"
                     :floating-ui-options="floatingUiOptions"
                     :offset="8"
                     detached
                 >
-                    <ct-context-menu ref="swContextMenuRef" :class="contextMenuClass" :style="menuStyles">
+                    <ct-context-menu ref="ctContextMenuRef" :class="contextMenuClass" :style="menuStyles">
                         <slot>
-                            <ct-block name="sw_context_button_menu_slot_default"></ct-block>
+                            <ct-block name="ct_context_button_menu_slot_default"></ct-block>
                         </slot>
                     </ct-context-menu>
                 </mt-floating-ui>
@@ -137,8 +137,8 @@ const emit = defineEmits(['on-open-change']);
 
 import { ref, computed, inject, onBeforeUnmount } from 'vue';
 
-const swContextButton = ref(null);
-const swContextMenuRef = ref(null);
+const ctContextButton = ref(null);
+const ctContextMenuRef = ref(null);
 
 const feature = inject('feature');
 
@@ -202,7 +202,7 @@ function handleOutsideClickEvent(event) {
     if (!showMenu.value) {
         return;
     }
-    const clickedInsideButton = swContextButton.value?.contains(event.target) ?? false;
+    const clickedInsideButton = ctContextButton.value?.contains(event.target) ?? false;
     const clickedInsideMenu = event.target instanceof Element && event.target.closest('.ct-context-menu') !== null;
     if (!clickedInsideButton && !clickedInsideMenu) {
         closeMenu();
@@ -216,7 +216,7 @@ function handleClickEvent(event) {
     }
 
     // close menu when no context button exists (when component gets destroyed)
-    const contextButton = swContextButton.value;
+    const contextButton = ctContextButton.value;
     if (!contextButton) {
         return closeMenu();
     }
@@ -224,7 +224,7 @@ function handleClickEvent(event) {
     // check if the user clicked inside the context menu
     const clickedInside = contextButton ? contextButton.contains(event.target) : false;
     if (props.autoCloseOutsideClick && showMenu.value && !clickedInside) {
-        const contextMenu = swContextMenuRef.value.$el;
+        const contextMenu = ctContextMenuRef.value.$el;
         const clickedOutside = contextMenu?.contains(event.target) ?? false;
         if (!event?.target || !clickedOutside) {
             return closeMenu();
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
     beforeUnmountComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     showMenu,
     menuStyles,

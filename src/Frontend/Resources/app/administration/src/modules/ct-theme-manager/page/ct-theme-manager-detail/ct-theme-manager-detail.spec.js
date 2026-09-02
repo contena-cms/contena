@@ -3,9 +3,9 @@
 import { config, shallowMount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { createMemoryHistory, createRouter, routeLocationKey, routerKey } from 'vue-router';
-import swThemeManagerDetail from './index';
+import ctThemeManagerDetail from './index';
 
-Contena.Component.register('ct-theme-manager-detail', swThemeManagerDetail);
+Contena.Component.register('ct-theme-manager-detail', ctThemeManagerDetail);
 
 describe('ct-theme-manager-detail', () => {
     async function createWrapper({ aclCan = true, themeServiceOverrides = {}, themeOverrides = {} } = {}) {

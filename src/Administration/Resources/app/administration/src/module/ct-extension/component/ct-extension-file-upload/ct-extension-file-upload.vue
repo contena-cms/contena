@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_extension_file_upload">
+    <ct-block name="ct_extension_file_upload">
         <div class="ct-extension-file-upload">
-            <ct-block name="sw_extension_file_upload_content">
+            <ct-block name="ct_extension_file_upload_content">
                 <div class="ct-extension-file-upload__content">
-                    <ct-block name="sw_extension_file_upload_button">
+                    <ct-block name="ct_extension_file_upload_button">
                         <mt-button
                             class="ct-extension-file-upload__button"
                             :is-loading="isLoading"
@@ -14,7 +14,7 @@
                             {{ $t('ct-extension.my-extensions.fileUpload.buttonFileUpload') }}
                         </mt-button>
                     </ct-block>
-                    <ct-block name="sw_extension_file_upload_form">
+                    <ct-block name="ct_extension_file_upload_form">
                         <form ref="fileForm" class="ct-extension-file-upload__form">
                             <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                             <input
@@ -29,7 +29,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_extension_file_upload_confirm_modal">
+            <ct-block name="ct_extension_file_upload_confirm_modal">
                 <ct-modal
                     v-if="confirmModalVisible"
                     class="ct-extension-file-upload-confirm-modal"
@@ -38,24 +38,24 @@
                     @modal-close="closeConfirmModal"
                 >
                     <template #default>
-                        <ct-block name="sw_extension_file_upload_confirm_modal_body">
+                        <ct-block name="ct_extension_file_upload_confirm_modal_body">
                             <p>
                                 {{ $t('ct-extension.my-extensions.fileUpload.descriptionWarningModal') }}
                             </p>
                         </ct-block>
                     </template>
                     <template #modal-footer>
-                        <ct-block name="sw_extension_file_upload_confirm_modal_footer">
-                            <ct-block name="sw_extension_file_upload_confirm_modal_footer_checkbox">
+                        <ct-block name="ct_extension_file_upload_confirm_modal_footer">
+                            <ct-block name="ct_extension_file_upload_confirm_modal_footer_checkbox">
                                 <mt-checkbox
                                     v-model:checked="shouldHideConfirmModal"
                                     :label="$t('ct-extension.my-extensions.fileUpload.textHideWarning')"
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_extension_file_upload_confirm_modal_footer_buttons">
+                            <ct-block name="ct_extension_file_upload_confirm_modal_footer_buttons">
                                 <div class="ct-extension-file-upload-confirm-modal__actions">
-                                    <ct-block name="sw_extension_file_upload_confirm_modal_footer_cancel">
+                                    <ct-block name="ct_extension_file_upload_confirm_modal_footer_cancel">
                                         <mt-button
                                             size="small"
                                             :disabled="isLoading"
@@ -66,7 +66,7 @@
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_extension_file_upload_confirm_modal_footer_continue">
+                                    <ct-block name="ct_extension_file_upload_confirm_modal_footer_continue">
                                         <mt-button
                                             variant="primary"
                                             size="small"
@@ -216,7 +216,7 @@ const saveConfig = (value) => {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     extensionStoreActionService,
     repositoryFactory,
     isLoading,

@@ -90,8 +90,8 @@ async function createWrapper(privileges = [], customStubs = {}) {
                         },
                     },
 
-                    setSwPageSidebarOffset: () => {},
-                    removeSwPageSidebarOffset: () => {},
+                    setCtPageSidebarOffset: () => {},
+                    removeCtPageSidebarOffset: () => {},
                 },
                 stubs: {
                     'ct-page': {

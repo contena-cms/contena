@@ -21,7 +21,7 @@ function createWrapper(channelName = 'Web') {
             translated: { name: channelName },
         } as Entity<'channel'>,
     } as Entity<'blog_visibility'>;
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     store.blog = {
         id: 'blog-1',

@@ -18,7 +18,7 @@ function createWrapper() {
             },
             stubs: {
                 'ct-page': {
-                    name: 'SwPageStub',
+                    name: 'CtPageStub',
                     props: {
                         showSearchBar: Boolean,
                     },
@@ -30,7 +30,7 @@ function createWrapper() {
                 },
                 'ct-skeleton': true,
                 'ct-system-config': {
-                    name: 'SwSystemConfigStub',
+                    name: 'CtSystemConfigStub',
                     props: {
                         channelSwitchable: Boolean,
                         domain: String,
@@ -53,8 +53,8 @@ describe('module/ct-settings-basic-information/page/ct-settings-basic-informatio
 
     it('loads the channel-aware basic information configuration', () => {
         const wrapper = createWrapper();
-        const systemConfig = wrapper.findComponent({ name: 'SwSystemConfigStub' });
-        const page = wrapper.findComponent({ name: 'SwPageStub' });
+        const systemConfig = wrapper.findComponent({ name: 'CtSystemConfigStub' });
+        const page = wrapper.findComponent({ name: 'CtPageStub' });
 
         expect(systemConfig.props('domain')).toBe('core.basicInformation');
         expect(systemConfig.props('channelSwitchable')).toBe(true);

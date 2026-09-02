@@ -270,9 +270,9 @@ function collectTemplateReferences(children: TemplateChildNode[], initialScope: 
  * Checks whether an element is a `<ct-block>` carrying the given identity attribute.
  *
  * Accepts the static form (`name="x"`) and the bound form (`:name="x"`); the bound form is rejected
- * later by `assertSwBlockAttributes`, but has to be recognised here so it reaches that check.
+ * later by `assertCtBlockAttributes`, but has to be recognised here so it reaches that check.
  */
-function isSwBlockWithIdentity(node: TemplateChildNode, attribute: 'name' | 'extends'): node is ElementNode {
+function isCtBlockWithIdentity(node: TemplateChildNode, attribute: 'name' | 'extends'): node is ElementNode {
     if (node.type !== NodeTypes.ELEMENT || node.tag !== 'ct-block') {
         return false;
     }
@@ -289,24 +289,24 @@ function isSwBlockWithIdentity(node: TemplateChildNode, attribute: 'name' | 'ext
 }
 
 /**
- * Checks whether an element is an override block declaration (`<ct-block extends="...">`).
+ * Checks whether an element is an override block declaration (`<ct-block extends="ct_...">`).
  */
-function isSwBlockExtends(node: TemplateChildNode): node is ElementNode {
-    return isSwBlockWithIdentity(node, 'extends');
+function isCtBlockExtends(node: TemplateChildNode): node is ElementNode {
+    return isCtBlockWithIdentity(node, 'extends');
 }
 
 /**
- * Checks whether an element is a base block declaration (`<ct-block name="...">`).
+ * Checks whether an element is a base block declaration (`<ct-block name="ct_...">`).
  */
-function isSwBlockName(node: TemplateChildNode): node is ElementNode {
-    return isSwBlockWithIdentity(node, 'name');
+function isCtBlockName(node: TemplateChildNode): node is ElementNode {
+    return isCtBlockWithIdentity(node, 'name');
 }
 
 /**
  * Returns the static value of a `<ct-block>` identity attribute (`name` or `extends`), or null.
  *
  */
-function getStaticSwBlockAttribute(node: ElementNode, attribute: 'name' | 'extends'): string | null {
+function getStaticCtBlockAttribute(node: ElementNode, attribute: 'name' | 'extends'): string | null {
     const identityAttribute = node.props.find(
         (prop): prop is Extract<ElementNode['props'][number], { type: NodeTypes.ATTRIBUTE }> =>
             prop.type === NodeTypes.ATTRIBUTE && prop.name === attribute,
@@ -316,17 +316,17 @@ function getStaticSwBlockAttribute(node: ElementNode, attribute: 'name' | 'exten
 }
 
 /**
- * Returns the static `name` of a base `<ct-block name="...">`, or null.
+ * Returns the static `name` of a base `<ct-block name="ct_...">`, or null.
  */
-function getStaticSwBlockName(node: ElementNode): string | null {
-    return getStaticSwBlockAttribute(node, 'name');
+function getStaticCtBlockName(node: ElementNode): string | null {
+    return getStaticCtBlockAttribute(node, 'name');
 }
 
 /**
- * Returns the static `extends` of an override `<ct-block extends="...">`, or null.
+ * Returns the static `extends` of an override `<ct-block extends="ct_...">`, or null.
  */
-function getStaticSwBlockExtends(node: ElementNode): string | null {
-    return getStaticSwBlockAttribute(node, 'extends');
+function getStaticCtBlockExtends(node: ElementNode): string | null {
+    return getStaticCtBlockAttribute(node, 'extends');
 }
 
 /**
@@ -338,8 +338,8 @@ export {
     type TemplateReferences,
     collectTemplateReferences,
     getDefaultSlotDirective,
-    getStaticSwBlockExtends,
-    getStaticSwBlockName,
-    isSwBlockExtends,
-    isSwBlockName,
+    getStaticCtBlockExtends,
+    getStaticCtBlockName,
+    isCtBlockExtends,
+    isCtBlockName,
 };

@@ -4,7 +4,7 @@
  *
  * The author's code runs as plain `<script setup>` - all Vue macros stay in place, nothing is
  * hoisted, nothing is wrapped. Every top-level runtime binding is renamed to a reserved
- * `__swSetupAuthor_<name>` alias, and the footer re-declares the original names by destructuring the
+ * `__ctSetupAuthor_<name>` alias, and the footer re-declares the original names by destructuring the
  * override wrapper, so templates read overrideable state exactly like before while the body text
  * itself never moves.
  */
@@ -20,9 +20,9 @@ import { escapeSingleQuoted, formatObjectProperties } from './shared';
 
 /**
  * The one place the base alias scheme is spelled out: an author binding `count` becomes
- * `__swSetupAuthor_count`, which the footer then re-declares under the original name.
+ * `__ctSetupAuthor_count`, which the footer then re-declares under the original name.
  *
- * It builds on the reserved `__swSetup` prefix that `validation.ts` rejects for author bindings, which
+ * It builds on the reserved `__ctSetup` prefix that `validation.ts` rejects for author bindings, which
  * is what makes an alias collision impossible.
  */
 function toAuthorAlias(localName: string): string {
@@ -32,8 +32,8 @@ function toAuthorAlias(localName: string): string {
 /**
  * Renders one rename occurrence, reproducing the syntax the analyzer flagged.
  *
- * `count` -> `__swSetupAuthor_count`, `{ count }` -> `{ count: __swSetupAuthor_count }`,
- * `export type { C }` -> `export type { __swSetupAuthor_C as C }`. The two expanded forms exist because
+ * `count` -> `__ctSetupAuthor_count`, `{ count }` -> `{ count: __ctSetupAuthor_count }`,
+ * `export type { C }` -> `export type { __ctSetupAuthor_C as C }`. The two expanded forms exist because
  * the name that must survive shares its source range with the occurrence being replaced.
  */
 function toRenameReplacement(target: BaseSetupScriptAnalysis['renameTargets'][number]): string {
@@ -86,7 +86,7 @@ function buildBaseScript(
     const privateNames = analysis.runtimeBindings
         .filter((binding) => !publicLocalNames.has(binding.name))
         .map((binding) => binding.name);
-    // Only the author's own runtime bindings are re-declared. Override-local `__swOverride` is not
+    // Only the author's own runtime bindings are re-declared. Override-local `__ctOverride` is not
     // destructured here: a base component reaches its block data scope through the scope
     // `attachOverrides` registers (getScriptSetupDataScope), never through a setup-return binding.
     const destructureEntries = analysis.runtimeBindings.map((binding) => binding.name);

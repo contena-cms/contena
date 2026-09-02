@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter } from 'vue-router';
-import swExperienceStudioList from './index';
+import ctExperienceStudioList from './index';
 
 describe('module/ct-experience-studio/page/ct-experience-studio-list', () => {
     it('renders semantic layout versions as text', async () => {
@@ -25,7 +25,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-list', () => {
             ],
         });
         await router.push('/');
-        const wrapper = shallowMount(swExperienceStudioList, {
+        const wrapper = shallowMount(ctExperienceStudioList, {
             global: {
                 plugins: [router],
                 provide: {

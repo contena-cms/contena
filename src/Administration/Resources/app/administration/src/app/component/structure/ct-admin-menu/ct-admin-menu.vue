@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_admin_menu">
-        <ct-block name="sw_admin_menu_off_canvas_backdrop">
+    <ct-block name="ct_admin_menu">
+        <ct-block name="ct_admin_menu_off_canvas_backdrop">
             <transition name="ct-admin-menu__backdrop">
                 <div
                     v-if="isMobileViewport && isOffCanvasShown"
@@ -12,15 +12,15 @@
 
         <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <aside
-            ref="swAdminMenu"
+            ref="ctAdminMenu"
             class="ct-admin-menu"
             :class="adminMenuClasses"
             :aria-expanded="isExpanded ? 'true' : 'false'"
             :inert="isMobileViewport && !isOffCanvasShown"
         >
-            <ct-block name="sw_admin_menu_header">
+            <ct-block name="ct_admin_menu_header">
                 <div class="ct-admin-menu__header">
-                    <ct-block name="sw_admin_menu_header_logo">
+                    <ct-block name="ct_admin_menu_header_logo">
                         <div class="ct-admin-menu__header-logo-wrapper">
                             <div class="ct-admin-menu__header-logo-box">
                                 <img
@@ -42,9 +42,9 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_admin_menu_header_identity">
+                    <ct-block name="ct_admin_menu_header_identity">
                         <div class="collapsible-text hide-on-collapse ct-admin-menu__version">
-                            <ct-block name="sw_admin_menu_header_shop_name">
+                            <ct-block name="ct_admin_menu_header_shop_name">
                                 <mt-text
                                     as="div"
                                     class="ct-admin-menu__shop-name"
@@ -55,7 +55,7 @@
                                     {{ shopName }}
                                 </mt-text>
                             </ct-block>
-                            <ct-block name="sw_admin_menu_header_title">
+                            <ct-block name="ct_admin_menu_header_title">
                                 <mt-text
                                     as="div"
                                     class="ct-admin-menu__title"
@@ -63,13 +63,13 @@
                                     color="color-text-secondary-default"
                                 >
                                     {{ translate('global.ct-admin-menu.textProjectName') }}
-                                    <ct-block name="sw_admin_menu_header_title_status"></ct-block>
+                                    <ct-block name="ct_admin_menu_header_title_status"></ct-block>
                                 </mt-text>
                             </ct-block>
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_admin_menu_header_toggle_sidebar">
+                    <ct-block name="ct_admin_menu_header_toggle_sidebar">
                         <mt-button
                             v-if="isMobileViewport"
                             class="ct-admin-menu__off-canvas-close"
@@ -96,22 +96,22 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_admin_menu_body_container">
+            <ct-block name="ct_admin_menu_body_container">
                 <div class="ct-admin-menu__body-container">
-                    <ct-block name="sw_admin_menu_body">
+                    <ct-block name="ct_admin_menu_body">
                         <div
-                            ref="swAdminMenuBody"
+                            ref="ctAdminMenuBody"
                             class="ct-admin-menu__body"
                             :style="scrollbarOffsetStyle"
                             @keydown="onNavigationKeydown"
                         >
-                            <ct-block name="sw_admin_menu_navigation_main">
+                            <ct-block name="ct_admin_menu_navigation_main">
                                 <nav class="ct-admin-menu__navigation" aria-labelledby="mainmenulabel">
                                     <h2 id="mainmenulabel" class="visually-hidden">
                                         {{ translate('global.ct-admin-menu.navigation.label') }}
                                     </h2>
 
-                                    <ct-block name="sw_admin_menu_navigation_main_list">
+                                    <ct-block name="ct_admin_menu_navigation_main_list">
                                         <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
                                         <ul
                                             class="ct-admin-menu__navigation-list"
@@ -121,7 +121,7 @@
                                             @focusout="onNavigationListMouseLeave"
                                         >
                                             <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks -->
-                                            <ct-block name="sw_admin_menu_navigation_main_items">
+                                            <ct-block name="ct_admin_menu_navigation_main_items">
                                                 <ct-admin-menu-item
                                                     v-for="entry in mainMenuEntries"
                                                     :key="entry.id || entry.path"
@@ -146,9 +146,9 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_admin_menu_footer">
+            <ct-block name="ct_admin_menu_footer">
                 <div class="ct-admin-menu__footer">
-                    <ct-block name="sw_admin_menu_user_actions_toggle">
+                    <ct-block name="ct_admin_menu_user_actions_toggle">
                         <mt-dropdown-menu-root
                             :open="isUserActionsActive"
                             class="ct-admin-menu__user-actions-menu"
@@ -163,11 +163,11 @@
                                 >
                                     <mt-loader v-if="isUserLoading" size="32px" />
 
-                                    <ct-block name="sw_admin_menu_user_actions_avatar">
+                                    <ct-block name="ct_admin_menu_user_actions_avatar">
                                         <mt-avatar class="ct-admin-menu__avatar" :image-url="avatarUrl" :name="userName" />
                                     </ct-block>
 
-                                    <ct-block name="sw_admin_menu_user_actions_custom_fields">
+                                    <ct-block name="ct_admin_menu_user_actions_custom_fields">
                                         <div class="ct-admin-menu__user-custom-fields collapsible-text hide-on-collapse">
                                             <mt-text as="div" class="ct-admin-menu__user-name" size="xs" weight="semibold">
                                                 {{ userName }}
@@ -183,7 +183,7 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_admin_menu_user_actions_toggle_icon">
+                                    <ct-block name="ct_admin_menu_user_actions_toggle_icon">
                                         <div class="ct-admin-menu__user-actions-toggle-icon-wrapper">
                                             <mt-icon class="hide-on-collapse" name="regular-chevron-up-xs" size="8" />
                                             <mt-icon class="hide-on-collapse" name="regular-chevron-down-xs" size="8" />
@@ -199,9 +199,9 @@
                                     :side-offset="4"
                                     side="top"
                                 >
-                                    <ct-block name="sw_admin_menu_user_actions_items">
+                                    <ct-block name="ct_admin_menu_user_actions_items">
                                         <mt-action-menu-group>
-                                            <ct-block name="sw_admin_menu_user_actions_items_logout_user">
+                                            <ct-block name="ct_admin_menu_user_actions_items_logout_user">
                                                 <mt-action-menu-item
                                                     icon="regular-sign-out"
                                                     variant="critical"
@@ -212,7 +212,7 @@
                                             </ct-block>
                                         </mt-action-menu-group>
                                     </ct-block>
-                                    <ct-block name="sw_admin_menu_user_actions_version">
+                                    <ct-block name="ct_admin_menu_user_actions_version">
                                         <mt-action-menu-group>
                                             <mt-text
                                                 as="div"
@@ -232,7 +232,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_admin_menu_flyout_transition">
+            <ct-block name="ct_admin_menu_flyout_transition">
                 <mt-floating-ui
                     :is-opened="flyoutEnabled && flyoutEntries.length > 0"
                     :anchor-element="flyoutReferenceElement"
@@ -244,7 +244,7 @@
                     <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
                     <div
                         id="ct-admin-menu-flyout"
-                        ref="swAdminMenuFlyout"
+                        ref="ctAdminMenuFlyout"
                         class="ct-admin-menu__flyout-content"
                         :class="{ 'is--closing': isFlyoutClosing }"
                         tabindex="-1"
@@ -304,9 +304,9 @@ const router = useRouter();
 const { t } = useI18n();
 
 const translate = t;
-const swAdminMenu = ref(null);
-const swAdminMenuBody = ref(null);
-const swAdminMenuFlyout = ref(null);
+const ctAdminMenu = ref(null);
+const ctAdminMenuBody = ref(null);
+const ctAdminMenuFlyout = ref(null);
 
 const instance = getCurrentInstance();
 const device = instance?.proxy?.$device;
@@ -546,7 +546,7 @@ const dismissOffCanvas = () => {
 };
 const activateOffCanvasFocusTrap = () => {
     void nextTick(() => {
-        const panelElement = swAdminMenu.value;
+        const panelElement = ctAdminMenu.value;
 
         if (!panelElement || !isOffCanvasShown.value || offCanvasFocusTrap.value) {
             return;
@@ -588,7 +588,7 @@ function syncMenuDropdownFocusOwner() {
     if (!offCanvasFocusTrap.value) {
         return;
     }
-    const openTrigger = swAdminMenu.value?.querySelector('[aria-haspopup="menu"][data-state="open"]');
+    const openTrigger = ctAdminMenu.value?.querySelector('[aria-haspopup="menu"][data-state="open"]');
     if (openTrigger && !openMenuDropdownTrigger.value) {
         openMenuDropdownTrigger.value = openTrigger;
         offCanvasFocusTrap.value.pause();
@@ -677,10 +677,10 @@ const onLogoutUser = async () => {
     Contena.Store.get('notification').clearNotificationsForCurrentUser();
 };
 function addScrollbarOffset() {
-    if (!(swAdminMenuBody.value instanceof HTMLElement)) {
+    if (!(ctAdminMenuBody.value instanceof HTMLElement)) {
         return;
     }
-    const scrollbarWidthPx = dom.getScrollbarWidth(swAdminMenuBody.value);
+    const scrollbarWidthPx = dom.getScrollbarWidth(ctAdminMenuBody.value);
     scrollbarOffset.value = `-${scrollbarWidthPx}px`;
 }
 const onMenuBranchToggle = ({ entry, open }) => {
@@ -826,7 +826,7 @@ const isFlyoutEntryActive = (entry) => {
 };
 const onFlyoutFocusRequest = () => {
     void nextTick(() => {
-        const flyoutElement = swAdminMenuFlyout.value;
+        const flyoutElement = ctAdminMenuFlyout.value;
 
         if (!flyoutElement || flyoutEntries.value.length === 0) {
             return;
@@ -892,11 +892,11 @@ const moveListFocus = (links, event) => {
     links[nextIndex]?.focus();
 };
 const onNavigationKeydown = (event) => {
-    if (!swAdminMenuBody.value) {
+    if (!ctAdminMenuBody.value) {
         return;
     }
 
-    moveListFocus(getNavigationLinks(swAdminMenuBody.value), event);
+    moveListFocus(getNavigationLinks(ctAdminMenuBody.value), event);
 };
 const onFlyoutKeydown = (event) => {
     if (event.key === 'ArrowLeft') {
@@ -906,11 +906,11 @@ const onFlyoutKeydown = (event) => {
         return;
     }
 
-    if (!swAdminMenuFlyout.value) {
+    if (!ctAdminMenuFlyout.value) {
         return;
     }
 
-    moveListFocus(getNavigationLinks(swAdminMenuFlyout.value), event);
+    moveListFocus(getNavigationLinks(ctAdminMenuFlyout.value), event);
 };
 function onFlyoutLeave() {
     deactivateFlyoutFocusTrap();
@@ -1006,7 +1006,7 @@ onBeforeUnmount(() => {
     beforeUnmountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     menuService,
     loginService,
     userService,

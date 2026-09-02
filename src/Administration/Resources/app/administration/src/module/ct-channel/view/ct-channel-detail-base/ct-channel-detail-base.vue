@@ -1,14 +1,14 @@
 <template>
     <!-- eslint-disable vue/no-mutating-props -->
-    <ct-block name="sw_channel_detail_base">
+    <ct-block name="ct_channel_detail_base">
         <div class="ct-channel-detail-base">
-            <ct-block name="sw_channel_detail_base_general">
+            <ct-block name="ct_channel_detail_base_general">
                 <mt-card
                     position-identifier="ct-channel-detail-base-general"
                     :title="t('ct-channel.detail.titleGeneral')"
                     :is-loading="isLoading"
                 >
-                    <ct-block name="sw_channel_detail_base_general_input_name">
+                    <ct-block name="ct_channel_detail_base_general_input_name">
                         <mt-text-field
                             v-model="channel.name"
                             validation="required"
@@ -19,7 +19,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_favorite">
+                    <ct-block name="ct_channel_detail_base_general_input_favorite">
                         <mt-switch
                             :disabled="!canManageFavorites || channel._isNew || undefined"
                             :label="t('ct-channel.detail.favouriteLabel')"
@@ -28,7 +28,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_navigation_category_container">
+                    <ct-block name="ct_channel_detail_base_general_input_navigation_category_container">
                         <div class="ct-channel-detail-base__navigation-category">
                             <ct-category-tree-field
                                 id="navigationCategoryId"
@@ -54,7 +54,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_footer_category">
+                    <ct-block name="ct_channel_detail_base_general_input_footer_category">
                         <ct-category-tree-field
                             :categories-collection="footerCategories"
                             :placeholder="footerCategoryPlaceholder"
@@ -67,7 +67,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_service_category">
+                    <ct-block name="ct_channel_detail_base_general_input_service_category">
                         <ct-category-tree-field
                             :categories-collection="serviceCategories"
                             :placeholder="serviceCategoryPlaceholder"
@@ -80,7 +80,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_member_group">
+                    <ct-block name="ct_channel_detail_base_general_input_member_group">
                         <mt-entity-select
                             v-model="channel.memberGroupId"
                             entity="member_group"
@@ -90,7 +90,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_countries">
+                    <ct-block name="ct_channel_detail_base_general_input_countries">
                         <ct-channel-defaults-select
                             :channel="channel"
                             :criteria="countryCriteria"
@@ -128,7 +128,7 @@
                         </div>
                     </mt-banner>
 
-                    <ct-block name="sw_channel_detail_base_general_input_languages">
+                    <ct-block name="ct_channel_detail_base_general_input_languages">
                         <ct-channel-defaults-select
                             :channel="channel"
                             :criteria="languageCriteria"
@@ -141,7 +141,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_channel_detail_base_general_input_business_time_zone">
+                    <ct-block name="ct_channel_detail_base_general_input_business_time_zone">
                         <mt-select
                             v-model="channel.businessTimeZone"
                             :options="timezoneOptions"
@@ -153,7 +153,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_channel_detail_base_options_api">
+            <ct-block name="ct_channel_detail_base_options_api">
                 <mt-card
                     position-identifier="ct-channel-detail-base-options-api"
                     :title="t('ct-channel.detail.titleOptionsApiKey')"
@@ -192,7 +192,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_channel_detail_base_options_status">
+            <ct-block name="ct_channel_detail_base_options_status">
                 <mt-card
                     position-identifier="ct-channel-detail-base-options-status"
                     :title="t('ct-channel.detail.titleStatus')"
@@ -238,7 +238,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_channel_detail_base_options_hreflang">
+            <ct-block name="ct_channel_detail_base_options_hreflang">
                 <ct-channel-detail-hreflang
                     v-if="isWebChannel"
                     :channel="channel"
@@ -247,7 +247,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_channel_detail_base_options_domains">
+            <ct-block name="ct_channel_detail_base_options_domains">
                 <ct-channel-detail-domains
                     v-if="isDomainAware && channel.domains"
                     ref="channelDomains"
@@ -430,7 +430,7 @@ onMounted(() => {
     });
 });
 
-swDefinePublic({
+ctDefinePublic({
     disableEdit,
     canManageFavorites,
     channelFavoritesService,

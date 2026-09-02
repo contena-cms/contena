@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_help_text">
+    <ct-block name="ct_help_text">
         <span
             v-tooltip="{
                 message: text,
@@ -10,7 +10,7 @@
             }"
             class="ct-help-text"
         >
-            <ct-block name="sw_help_text_icon">
+            <ct-block name="ct_help_text_icon">
                 <mt-icon name="solid-question-circle-s" />
             </ct-block>
         </span>
@@ -62,5 +62,5 @@ defineProps({
     },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

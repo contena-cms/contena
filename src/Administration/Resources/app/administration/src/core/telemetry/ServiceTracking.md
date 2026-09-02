@@ -34,16 +34,16 @@ The SDK also ships pre-built helpers for common cases:
 ```ts
 // page navigation
 await telemetry.trackPageView({
-    sw_route_from_href: previousUrl,
-    sw_route_from_name: previousRouteName,
-    sw_route_to_href: currentUrl,
-    sw_route_to_name: currentRouteName,
+    ct_route_from_href: previousUrl,
+    ct_route_from_name: previousRouteName,
+    ct_route_to_href: currentUrl,
+    ct_route_to_name: currentRouteName,
 });
 
 // outbound or internal link clicks
 await telemetry.trackLinkVisited({
-    sw_link_href: href,
-    sw_link_type: 'external',
+    ct_link_href: href,
+    ct_link_type: 'external',
 });
 ```
 

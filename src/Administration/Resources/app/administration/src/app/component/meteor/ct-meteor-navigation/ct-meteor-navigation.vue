@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_meteor_navigation">
+    <ct-block name="ct_meteor_navigation">
         <div v-if="hasParentRoute" class="ct-meteor-navigation">
-            <ct-block name="sw_meteor_navigation_link">
+            <ct-block name="ct_meteor_navigation_link">
                 <router-link :to="parentRoute" class="ct-meteor-navigation__link">
-                    <ct-block name="sw_meteor_navigation_link_icon">
+                    <ct-block name="ct_meteor_navigation_link_icon">
                         <mt-icon class="ct-meteor-navigation__back-arrow" name="solid-long-arrow-left" size="12px" />
                     </ct-block>
 
-                    <ct-block name="sw_meteor_navigation_link_label">
+                    <ct-block name="ct_meteor_navigation_link_label">
                         {{ $t('global.default.back') }}
                     </ct-block>
                 </router-link>
@@ -50,7 +50,7 @@ const parentRoute = computed(() => {
     return null;
 });
 
-swDefinePublic({
+ctDefinePublic({
     hasParentRoute,
     parentRoute,
 });

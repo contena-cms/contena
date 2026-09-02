@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_experience_studio_list">
+    <ct-block name="ct_experience_studio_list">
         <ct-page class="ct-experience-studio-list">
             <template #search-bar>
-                <ct-block name="sw_experience_studio_list_search_bar">
+                <ct-block name="ct_experience_studio_list_search_bar">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
@@ -27,7 +27,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_experience_studio_list_content">
+                <ct-block name="ct_experience_studio_list_content">
                     <div class="ct-experience-studio-list__content">
                         <mt-data-table
                             v-if="layouts && layouts.length > 0"
@@ -182,7 +182,7 @@ initializeListing({
 
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     layouts,

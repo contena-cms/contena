@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_permissions_role_permissions_modal">
+    <ct-block name="ct_permissions_role_permissions_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal
                 class="ct-permissions-role-permissions-modal"
                 width="full"
                 :title="t('ct-permissions.roles.modal.permissionsTitle', { name: role?.name ?? '' })"
             >
-                <ct-block name="sw_permissions_role_permissions_modal_tabs">
+                <ct-block name="ct_permissions_role_permissions_modal_tabs">
                     <mt-tabs
                         class="ct-permissions-role-permissions-modal__tabs"
                         :items="tabItems"
@@ -15,7 +15,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_permissions_role_permissions_modal_content">
+                <ct-block name="ct_permissions_role_permissions_modal_content">
                     <div v-if="role" class="ct-permissions-role-permissions-modal__content">
                         <template v-if="activeTab === 'permissions'">
                             <ct-permissions-role-access
@@ -51,7 +51,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_permissions_role_permissions_modal_footer">
+                    <ct-block name="ct_permissions_role_permissions_modal_footer">
                         <div class="ct-permissions-role-permissions-modal__footer-actions">
                             <mt-button variant="secondary" size="small" @click="closeModal">
                                 {{ t('global.default.cancel') }}
@@ -190,7 +190,7 @@ const onModalChange = (isOpen: boolean) => {
 
 void loadRole();
 
-swDefinePublic({
+ctDefinePublic({
     role,
     detailedPrivileges,
     isLoading,

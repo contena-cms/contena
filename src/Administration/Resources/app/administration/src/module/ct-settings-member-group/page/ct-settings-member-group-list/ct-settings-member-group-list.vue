@@ -1,25 +1,25 @@
 <template>
-    <ct-block name="sw_settings_member_group_list">
+    <ct-block name="ct_settings_member_group_list">
         <ct-page class="ct-settings-member-group-list">
             <template #search-bar>
-                <ct-block name="sw_settings_member_group_list_search">
+                <ct-block name="ct_settings_member_group_list_search">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
             <template #smart-bar-header>
-                <ct-block name="sw_settings_member_group_list_header">
+                <ct-block name="ct_settings_member_group_list_header">
                     <h2>{{ t('ct-settings-member-group.list.title') }} ({{ total }})</h2>
                 </ct-block>
             </template>
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_member_group_list_actions">
+                <ct-block name="ct_settings_member_group_list_actions">
                     <mt-button variant="primary" :disabled="!canCreate || undefined" @click="onCreate">
                         {{ t('ct-settings-member-group.list.buttonAdd') }}
                     </mt-button>
                 </ct-block>
             </template>
             <template #content>
-                <ct-block name="sw_settings_member_group_list_content">
+                <ct-block name="ct_settings_member_group_list_content">
                     <mt-data-table
                         :caption="t('ct-settings-member-group.list.title')"
                         :data-source="memberGroups"
@@ -199,7 +199,7 @@ const deleteMemberGroup = async (): Promise<void> => {
 };
 void loadMemberGroups();
 
-swDefinePublic({
+ctDefinePublic({
     memberGroups,
     isLoading,
     isDeleting,

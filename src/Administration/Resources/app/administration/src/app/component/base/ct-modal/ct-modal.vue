@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_modal">
-        <ct-block name="sw_modal_element">
+    <ct-block name="ct_modal">
+        <ct-block name="ct_modal_element">
             <transition name="ct-modal-fade" v-bind="$attrs" appear>
                 <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
                 <div
@@ -10,7 +10,7 @@
                     @mousedown="closeModalOnClickOutside"
                     @keyup.esc="closeModalOnEscapeKey"
                 >
-                    <ct-block name="sw_modal_dialog">
+                    <ct-block name="ct_modal_dialog">
                         <div
                             ref="dialog"
                             class="ct-modal__dialog"
@@ -20,13 +20,13 @@
                             aria-labelledby="modalTitleEl"
                             tabindex="-1"
                         >
-                            <ct-block name="sw_modal_header">
+                            <ct-block name="ct_modal_header">
                                 <header v-if="showHeader" class="ct-modal__header">
                                     <slot name="modal-header">
-                                        <ct-block name="sw_modal_slot_header">
+                                        <ct-block name="ct_modal_slot_header">
                                             <div class="ct-modal__titles">
                                                 <slot name="modal-title">
-                                                    <ct-block name="sw_modal_close">
+                                                    <ct-block name="ct_modal_close">
                                                         <h4 id="modalTitleEl" class="ct-modal__title">
                                                             {{ title }}
                                                         </h4>
@@ -38,7 +38,7 @@
                                                 </h5>
                                             </div>
 
-                                            <ct-block name="sw_modal_close_button">
+                                            <ct-block name="ct_modal_close_button">
                                                 <button
                                                     v-if="closable"
                                                     class="ct-modal__close"
@@ -46,7 +46,7 @@
                                                     :aria-label="$t('global.default.close')"
                                                     @click.prevent="closeModal"
                                                 >
-                                                    <ct-block name="sw_modal_close_icon">
+                                                    <ct-block name="ct_modal_close_icon">
                                                         <mt-icon name="regular-times-s" />
                                                     </ct-block>
                                                 </button>
@@ -56,26 +56,26 @@
                                 </header>
                             </ct-block>
 
-                            <ct-block name="sw_modal_body">
+                            <ct-block name="ct_modal_body">
                                 <slot name="body">
                                     <div class="ct-modal__body" :class="modalBodyClasses">
-                                        <ct-block name="sw_modal_loader">
+                                        <ct-block name="ct_modal_loader">
                                             <slot name="modal-loader">
                                                 <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                                                 <mt-loader v-if="isLoading" />
                                             </slot>
                                         </ct-block>
                                         <slot>
-                                            <ct-block name="sw_modal_slot_default"></ct-block>
+                                            <ct-block name="ct_modal_slot_default"></ct-block>
                                         </slot>
                                     </div>
                                 </slot>
                             </ct-block>
 
-                            <ct-block name="sw_modal_footer">
+                            <ct-block name="ct_modal_footer">
                                 <footer v-if="showFooter && hasFooterSlot" class="ct-modal__footer">
                                     <slot name="modal-footer">
-                                        <ct-block name="sw_modal_slot_footer"></ct-block>
+                                        <ct-block name="ct_modal_slot_footer"></ct-block>
                                     </slot>
                                 </footer>
                             </ct-block>
@@ -247,7 +247,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     id,
     modalClasses,
     modalDialogClasses,

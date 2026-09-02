@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_context_menu_item">
-        <ct-block name="sw_context_menu_item_router_link">
+    <ct-block name="ct_context_menu_item">
+        <ct-block name="ct_context_menu_item_router_link">
             <router-link
                 v-if="routerLink"
                 :to="routerLink"
@@ -11,25 +11,25 @@
                 :target="disabled ? null : target"
                 v-bind="$attrs"
             >
-                <ct-block name="sw_context_menu_item_icon">
+                <ct-block name="ct_context_menu_item_icon">
                     <slot name="icon">
-                        <ct-block name="sw_context_menu_item_slot_icon">
+                        <ct-block name="ct_context_menu_item_slot_icon">
                             <mt-icon v-if="icon" :name="icon" size="16px" />
                         </ct-block>
                     </slot>
                 </ct-block>
 
-                <ct-block name="sw_context_menu_item_text">
+                <ct-block name="ct_context_menu_item_text">
                     <span class="ct-context-menu-item__text" :class="{ 'is--disabled': disabled }">
                         <slot>
-                            <ct-block name="sw_context_menu_item_slot_default"></ct-block>
+                            <ct-block name="ct_context_menu_item_slot_default"></ct-block>
                         </slot>
                     </span>
                 </ct-block>
             </router-link>
         </ct-block>
 
-        <ct-block name="sw_context_menu_item_entry">
+        <ct-block name="ct_context_menu_item_entry">
             <template v-if="routerLink"><!-- Keeps the conditional chain connected across ct-block. --></template>
             <button
                 v-else
@@ -38,18 +38,18 @@
                 v-bind="$attrs"
                 @click.capture="handleClick"
             >
-                <ct-block name="sw_context_menu_item_entry_icon">
+                <ct-block name="ct_context_menu_item_entry_icon">
                     <slot name="icon">
-                        <ct-block name="sw_context_menu_item_entry_slot_icon">
+                        <ct-block name="ct_context_menu_item_entry_slot_icon">
                             <mt-icon v-if="icon" :name="icon" size="16px" />
                         </ct-block>
                     </slot>
                 </ct-block>
 
-                <ct-block name="sw_context_menu_item_entry_text">
+                <ct-block name="ct_context_menu_item_entry_text">
                     <span class="ct-context-menu-item__text" :class="{ 'is--disabled': disabled }">
                         <slot>
-                            <ct-block name="sw_context_menu_item_entry_slot_default"></ct-block>
+                            <ct-block name="ct_context_menu_item_entry_slot_default"></ct-block>
                         </slot>
                     </span>
                 </ct-block>
@@ -120,7 +120,7 @@ const handleClick = (event) => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     contextMenuItemStyles,
     handleClick,
 });

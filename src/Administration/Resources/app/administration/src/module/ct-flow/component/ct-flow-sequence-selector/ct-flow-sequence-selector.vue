@@ -1,19 +1,19 @@
 <template>
-    <ct-block name="sw_flow_sequence_selector">
+    <ct-block name="ct_flow_sequence_selector">
         <div class="ct-flow-sequence-selector">
-            <ct-block name="sw_flow_sequence_selector_title">
+            <ct-block name="ct_flow_sequence_selector_title">
                 <div class="ct-flow-sequence-selector__title">
                     <h4>{{ title }}</h4>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_selector_help_text">
+            <ct-block name="ct_flow_sequence_selector_help_text">
                 <div class="ct-flow-sequence-selector__help-text">
                     <p>{{ helpText }}</p>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_selector_actions">
+            <ct-block name="ct_flow_sequence_selector_actions">
                 <div class="ct-flow-sequence-selector__actions">
                     <mt-button
                         class="ct-flow-sequence-selector__add-condition"
@@ -74,7 +74,7 @@ const helpText = computed(() => {
 const chooseCondition = (): void => emit('choose', 'condition');
 const chooseAction = (): void => emit('choose', 'action');
 
-swDefinePublic({
+ctDefinePublic({
     title,
     helpText,
     chooseCondition,

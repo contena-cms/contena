@@ -1,7 +1,7 @@
 /**
  * Locates every identifier occurrence of a set of top-level setup names, for the base-mode rename pass.
  *
- * Base lowering renames each top-level runtime binding to its `__swSetupAuthor_<name>` alias so the
+ * Base lowering renames each top-level runtime binding to its `__ctSetupAuthor_<name>` alias so the
  * generated footer can re-declare the original name. That means finding *all* occurrences of those
  * names - reads, writes, declaration ids, `typeof` queries, and type references to runtime bindings such
  * as an `enum` - while leaving alone the places where the same text is not that binding: shadowed
@@ -249,7 +249,7 @@ function collectSetupRenameTargets(root: BabelNode | null | undefined, names: Se
 
         // A type reference naming a *runtime* binding must be renamed with it. Only enums (and classes)
         // land in `names` while also being usable as a type, so `defineProps<{ kind: Kind }>()` next to
-        // `enum Kind` has to follow the declaration to `__swSetupAuthor_Kind` - otherwise the alias is
+        // `enum Kind` has to follow the declaration to `__ctSetupAuthor_Kind` - otherwise the alias is
         // declared and the type reference is left dangling. Purely type-level names (interfaces, type
         // aliases) are never runtime bindings, so they are never in `names` and stay untouched.
         if (node.type === 'TSTypeReference') {

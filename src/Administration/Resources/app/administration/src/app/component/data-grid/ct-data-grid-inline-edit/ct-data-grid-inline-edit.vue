@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_data_grid_inline_edit">
+    <ct-block name="ct_data_grid_inline_edit">
         <div class="ct-data-grid-inline-edit" :class="classes">
-            <ct-block name="sw_data_grid_inline_edit_type_string">
+            <ct-block name="ct_data_grid_inline_edit_type_string">
                 <mt-text-field
                     v-if="column.inlineEdit === 'string'"
                     key="string"
@@ -12,7 +12,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_data_grid_inline_edit_type_number">
+            <ct-block name="ct_data_grid_inline_edit_type_number">
                 <template v-if="column.inlineEdit === 'string'"
                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                 >
@@ -27,7 +27,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_data_grid_inline_edit_type_boolean">
+            <ct-block name="ct_data_grid_inline_edit_type_boolean">
                 <template v-if="column.inlineEdit === 'string' || column.inlineEdit === 'number'"
                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                 >
@@ -40,7 +40,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_data_grid_inline_edit_type_unknown">
+            <ct-block name="ct_data_grid_inline_edit_type_unknown">
                 <template
                     v-if="
                         column.inlineEdit === 'string' || column.inlineEdit === 'number' || column.inlineEdit === 'boolean'
@@ -101,7 +101,7 @@ const emitInput = () => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     currentValue,
     classes,

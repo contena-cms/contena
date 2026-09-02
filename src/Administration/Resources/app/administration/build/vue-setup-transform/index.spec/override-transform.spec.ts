@@ -1,6 +1,6 @@
 /**
  * Covers the end-to-end override lowering with no template involved: how an override `<script setup>`
- * becomes a hidden component that registers the setup override, the `swDefineOverride` return payload,
+ * becomes a hidden component that registers the setup override, the `ctDefineOverride` return payload,
  * and how imports and type declarations are preserved in the generated component.
  *
  * Template-driven forwarding lives in override-template.spec.ts; the destructuring-pattern edge cases
@@ -13,18 +13,18 @@ describe('build/vue-setup-transform override transforms', () => {
     it('pins the whole generated output for an override with an <ct-block extends> and forwarded locals', () => {
         const source = stripIndent`
             <template>
-                <ct-block extends="sw_example_headline">
+                <ct-block extends="ct_example_headline">
                     <h1>{{ headline }} - {{ suffix }}</h1>
                 </ct-block>
             </template>
             <script setup lang="ts">
             import { computed } from 'vue';
 
-            const previousState = useSwPreviousState();
+            const previousState = useCtPreviousState();
             const suffix = computed(() => '!');
             const headline = computed(() => previousState.title.value);
 
-            swDefineOverride({
+            ctDefineOverride({
                 headline,
             });
             </script>
@@ -32,7 +32,7 @@ describe('build/vue-setup-transform override transforms', () => {
 
         // The one end-to-end assertion for override lowering, covering the three generated constructs that
         // only co-occur on the <ct-block extends> path: the module-root Symbol() namespace, the
-        // `__swOverride` payload keyed by it, and the `#default` slot scope that forwards the
+        // `__ctOverride` payload keyed by it, and the `#default` slot scope that forwards the
         // override-local `suffix` into the block content. Imports are lifted out of the callback; the
         // author body is preserved inside it.
         //
@@ -40,28 +40,28 @@ describe('build/vue-setup-transform override transforms', () => {
         // blank-line residue is not behaviour. The Vue round-trip below guards the token sequence.
         const expected = stripWhitespace`
             <template>
-                <ct-block extends="sw_example_headline" #default="{ __swOverride: { [__swSetupNamespace]: { suffix } }, headline }">
+                <ct-block extends="ct_example_headline" #default="{ __ctOverride: { [__ctSetupNamespace]: { suffix } }, headline }">
                     <h1>{{ headline }} - {{ suffix }}</h1>
                 </ct-block>
             </template>
             <script setup lang="ts">
             import { computed } from 'vue';
 
-            const __swSetupNamespace = Symbol('ct-example.override');
+            const __ctSetupNamespace = Symbol('ct-example.override');
 
-            Contena.Component.overrideComponentSetup()('ct-example', (__swSetupPreviousState, __swSetupProps, __swSetupContext) => {
-            const useSwPreviousState = () => __swSetupPreviousState;
-            const useSwProps = () => __swSetupProps;
-            const useSwContext = () => __swSetupContext;
+            Contena.Component.overrideComponentSetup()('ct-example', (__ctSetupPreviousState, __ctSetupProps, __ctSetupContext) => {
+            const useCtPreviousState = () => __ctSetupPreviousState;
+            const useCtProps = () => __ctSetupProps;
+            const useCtContext = () => __ctSetupContext;
 
-            const previousState = useSwPreviousState();
+            const previousState = useCtPreviousState();
             const suffix = computed(() => '!');
             const headline = computed(() => previousState.title.value);
 
             return {
                 headline,
-                __swOverride: {
-                    [__swSetupNamespace]: {
+                __ctOverride: {
+                    [__ctSetupNamespace]: {
                         suffix,
                     },
                 },
@@ -79,11 +79,11 @@ describe('build/vue-setup-transform override transforms', () => {
     it('generates a registration template for an override without one', () => {
         const source = stripIndent`
             <script setup>
-            const previousState = useSwPreviousState();
-            const props = useSwProps();
-            const context = useSwContext();
+            const previousState = useCtPreviousState();
+            const props = useCtProps();
+            const context = useCtContext();
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -93,11 +93,11 @@ describe('build/vue-setup-transform override transforms', () => {
         // once it mounts, and Vue warns about a component with neither template nor render function.
         expect(result).toContain('<template><!-- Contena override registration component --></template>');
         expect(result).toContain(
-            "Contena.Component.overrideComponentSetup()('ct-my-component', (__swSetupPreviousState, __swSetupProps, __swSetupContext) => {",
+            "Contena.Component.overrideComponentSetup()('ct-my-component', (__ctSetupPreviousState, __ctSetupProps, __ctSetupContext) => {",
         );
-        expect(result).toContain('const useSwPreviousState = () => __swSetupPreviousState;');
-        expect(result).toContain('const useSwProps = () => __swSetupProps;');
-        expect(result).toContain('const useSwContext = () => __swSetupContext;');
+        expect(result).toContain('const useCtPreviousState = () => __ctSetupPreviousState;');
+        expect(result).toContain('const useCtProps = () => __ctSetupProps;');
+        expect(result).toContain('const useCtContext = () => __ctSetupContext;');
         expect(result).toContain('return {};');
         expectVueCompilerScriptToCompile(result, 'ct-my-component.override.vue');
     });
@@ -106,7 +106,7 @@ describe('build/vue-setup-transform override transforms', () => {
         const source = stripIndent`
             <script setup>
             const count = 1;
-            swDefineOverride({ count });
+            ctDefineOverride({ count });
             </script>
         `;
 
@@ -124,7 +124,7 @@ describe('build/vue-setup-transform override transforms', () => {
 
             const doubled = computed(() => 2);
 
-            swDefineOverride({
+            ctDefineOverride({
                 doubled,
             });
             </script>
@@ -146,10 +146,10 @@ describe('build/vue-setup-transform override transforms', () => {
             type Inner = { a: string };
             export type Outer = Inner;
 
-            const props = useSwProps<Inner>();
+            const props = useCtProps<Inner>();
             const label = props.a;
 
-            swDefineOverride({ label });
+            ctDefineOverride({ label });
             </script>
         `;
 
@@ -162,23 +162,23 @@ describe('build/vue-setup-transform override transforms', () => {
         // dangle if that one were left behind in the callback.
         expect(result.indexOf('type Inner = { a: string };')).toBeLessThan(callbackStart);
         expect(result.indexOf('export type Outer = Inner;')).toBeLessThan(callbackStart);
-        expect(result).toContain('const props = useSwProps<Inner>();');
+        expect(result).toContain('const props = useCtProps<Inner>();');
         expect(result.match(/type Inner/g)).toHaveLength(1);
         expectVueCompilerScriptToCompile(result, 'typed.override.vue');
     });
 
-    it('uses swDefineOverride() as the explicit override payload and keeps unused local state private', () => {
+    it('uses ctDefineOverride() as the explicit override payload and keeps unused local state private', () => {
         const source = stripIndent`
             <script setup>
             import { computed, ref } from 'vue';
 
-            const previousState = useSwPreviousState();
+            const previousState = useCtPreviousState();
             const body = computed(() => previousState.body.value);
             const localInfo = ref('only for script logic');
             const localHeadline = computed(() => localInfo.value);
             const localFooter = computed(() => localInfo.value);
 
-            swDefineOverride({
+            ctDefineOverride({
                 body,
                 localHeadline,
                 localFooter,
@@ -195,7 +195,7 @@ describe('build/vue-setup-transform override transforms', () => {
                 localFooter,
             };
         `);
-        expect(result).not.toContain('__swOverride');
+        expect(result).not.toContain('__ctOverride');
         expect(result).not.toContain('localInfo,');
     });
 });

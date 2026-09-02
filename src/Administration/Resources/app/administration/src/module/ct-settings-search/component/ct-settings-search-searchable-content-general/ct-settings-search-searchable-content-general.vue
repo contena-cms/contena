@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_searchable_content_general">
+    <ct-block name="ct_settings_search_searchable_content_general">
         <mt-empty-state
             v-if="isEmpty"
             icon="regular-search"
@@ -124,7 +124,7 @@ const onResetRanking = (currentField: SearchConfig): void => {
     emit('config-save');
 };
 
-swDefinePublic({
+ctDefinePublic({
     getMatchingFields,
     onSelectField,
     onConfigChanged,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_permissions_detailed_permissions_grid">
+    <ct-block name="ct_permissions_detailed_permissions_grid">
         <mt-card
             class="ct-permissions-detailed-permissions-grid"
             position-identifier="ct-permissions-detailed-permissions-grid"
@@ -7,21 +7,21 @@
             :title="$t('ct-permissions.roles.grid.title')"
         >
             <div v-if="role" class="ct-permissions-detailed-permissions-grid__grid">
-                <ct-block name="sw_permissions_detailed_permissions_grid_header">
+                <ct-block name="ct_permissions_detailed_permissions_grid_header">
                     <div
                         class="ct-permissions-detailed-permissions-grid__entry ct-permissions-detailed-permissions-grid__entry-header"
                     >
-                        <ct-block name="sw_permissions_detailed_permissions_grid_header_title">
+                        <ct-block name="ct_permissions_detailed_permissions_grid_header_title">
                             <div class="ct-permissions-detailed-permissions-grid__title"></div>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_detailed_permissions_grid_header_roles">
+                        <ct-block name="ct_permissions_detailed_permissions_grid_header_roles">
                             <div
                                 v-for="permissionType in permissionTypes"
                                 :key="permissionType"
                                 class="ct-permissions-detailed-permissions-grid__checkbox-wrapper"
                             >
-                                <ct-block name="sw_permissions_detailed_permissions_grid_header_roles_name">
+                                <ct-block name="ct_permissions_detailed_permissions_grid_header_roles_name">
                                     {{ $t('ct-privileges.permissionType.' + permissionType) }}
                                 </ct-block>
                             </div>
@@ -29,20 +29,20 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_permissions_detailed_permissions_grid_permissions">
+                <ct-block name="ct_permissions_detailed_permissions_grid_permissions">
                     <div
                         v-for="entity in allEntities"
                         :key="entity"
                         :class="'ct-permissions-detailed-permissions-grid__entry_' + entity"
                         class="ct-permissions-detailed-permissions-grid__entry"
                     >
-                        <ct-block name="sw_permissions_detailed_permissions_grid_permissions_title">
+                        <ct-block name="ct_permissions_detailed_permissions_grid_permissions_title">
                             <div class="ct-permissions-detailed-permissions-grid__title">
                                 {{ entity }}
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_detailed_permissions_grid_permissions_roles">
+                        <ct-block name="ct_permissions_detailed_permissions_grid_permissions_roles">
                             <div
                                 v-for="permissionType in permissionTypes"
                                 :key="permissionType"
@@ -50,7 +50,7 @@
                                 :data-privilege="`${entity}:${permissionType}`"
                                 class="ct-permissions-detailed-permissions-grid__checkbox-wrapper"
                             >
-                                <ct-block name="sw_permissions_detailed_permissions_grid_permissions_roles_field">
+                                <ct-block name="ct_permissions_detailed_permissions_grid_permissions_roles_field">
                                     <mt-checkbox
                                         v-tooltip="{
                                             message:
@@ -165,7 +165,7 @@ const changePermissionForEntity = (entity, role) => {
     selectedDetailedPrivileges.value.push(identifier);
 };
 
-swDefinePublic({
+ctDefinePublic({
     privileges,
     allEntities,
     allGeneralSelectedPrivileges,

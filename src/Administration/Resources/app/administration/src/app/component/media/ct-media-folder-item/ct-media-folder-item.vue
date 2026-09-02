@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_folder_item">
+    <ct-block name="ct_media_folder_item">
         <ct-media-base-item
             class="ct-media-folder-item"
             v-bind="$attrs"
@@ -7,7 +7,7 @@
             :allow-multi-select="!isParent"
         >
             <template #preview="{ item }">
-                <ct-block name="sw_media_folder_item_preview">
+                <ct-block name="ct_media_folder_item_preview">
                     <span
                         class="ct-media-folder-item__folder-symbol"
                         :class="{ 'is--parent': isParent, 'is--default': !!item.defaultFolderId }"
@@ -19,8 +19,8 @@
             </template>
 
             <template #name="{ item, isInlineEdit, endInlineEdit }">
-                <ct-block name="sw_media_folder_name">
-                    <ct-block name="sw_media_base_item_name">
+                <ct-block name="ct_media_folder_name">
+                    <ct-block name="ct_media_base_item_name">
                         <mt-text-field
                             v-if="!isParent && (isInlineEdit || item.isNew())"
                             v-autofocus
@@ -40,7 +40,7 @@
             </template>
 
             <template #metadata="{ item }">
-                <ct-block name="sw_media_folder_meta_data">
+                <ct-block name="ct_media_folder_meta_data">
                     <div class="ct-media-folder-item__metadata">
                         <ct-time-ago :date="item.createdAt" :date-time-format="{ month: '2-digit', day: '2-digit' }" />
                     </div>
@@ -48,8 +48,8 @@
             </template>
 
             <template #context-menu="{ item, startInlineEdit, allowEdit, allowDelete }">
-                <ct-block name="sw_media_folder_item_context_menu">
-                    <ct-block name="sw_media_folder_item_context_item_show_media">
+                <ct-block name="ct_media_folder_item_context_menu">
+                    <ct-block name="ct_media_folder_item_context_item_show_media">
                         <ct-context-menu-item
                             class="ct-media-context-item__show-media-action"
                             @click="navigateToFolder(item.id)"
@@ -59,12 +59,12 @@
                     </ct-block>
 
                     <slot>
-                        <ct-block name="sw_media_folder_item_additional_context_menu_slot"></ct-block>
+                        <ct-block name="ct_media_folder_item_additional_context_menu_slot"></ct-block>
                     </slot>
 
-                    <ct-block name="sw_media_folder_item_context_group_quick_actions">
+                    <ct-block name="ct_media_folder_item_context_group_quick_actions">
                         <div class="ct-context-menu__group">
-                            <ct-block name="sw_media_folder_item_context_item_show_settings">
+                            <ct-block name="ct_media_folder_item_context_item_show_settings">
                                 <ct-context-menu-item
                                     class="ct-media-context-item__open-settings-action"
                                     @click="openSettings"
@@ -73,7 +73,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_folder_item_context_item_move">
+                            <ct-block name="ct_media_folder_item_context_item_move">
                                 <ct-context-menu-item
                                     :disabled="!allowEdit"
                                     class="ct-media-context-item__move-folder-action"
@@ -83,7 +83,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_folder_item_context_item_dissolve">
+                            <ct-block name="ct_media_folder_item_context_item_dissolve">
                                 <ct-context-menu-item
                                     :disabled="!allowEdit"
                                     class="ct-media-context-item__dissolve-folder-action"
@@ -93,7 +93,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_folder_item_context_item_rename_item">
+                            <ct-block name="ct_media_folder_item_context_item_rename_item">
                                 <ct-context-menu-item
                                     :disabled="!allowEdit"
                                     class="ct-media-context-item__rename-folder-action"
@@ -103,7 +103,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_folder_item_context_item_delete">
+                            <ct-block name="ct_media_folder_item_context_item_delete">
                                 <ct-context-menu-item
                                     :disabled="!allowDelete"
                                     class="ct-media-context-item__delete-folder-action"
@@ -119,8 +119,8 @@
             </template>
 
             <template #modal-windows="{ item, allowEdit }">
-                <ct-block name="sw_media_folder_modal_windows">
-                    <ct-block name="sw_media_folder_settings_modal">
+                <ct-block name="ct_media_folder_modal_windows">
+                    <ct-block name="ct_media_folder_settings_modal">
                         <ct-media-modal-folder-settings
                             v-if="showSettings"
                             :disabled="!allowEdit"
@@ -130,7 +130,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_media_folder_dissolve_modal">
+                    <ct-block name="ct_media_folder_dissolve_modal">
                         <ct-media-modal-folder-dissolve
                             v-if="showDissolveModal"
                             :items-to-dissolve="[item]"
@@ -139,7 +139,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_media_folder_move_modal">
+                    <ct-block name="ct_media_folder_move_modal">
                         <ct-media-modal-move
                             v-if="showMoveModal"
                             :items-to-move="[item]"
@@ -148,7 +148,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_media_folder_delete_modal">
+                    <ct-block name="ct_media_folder_delete_modal">
                         <ct-media-modal-delete
                             v-if="showDeleteModal"
                             :items-to-delete="[item]"
@@ -388,7 +388,7 @@ const refreshIconConfig = async () => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     showSettings,
     showDissolveModal,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_admin">
+    <ct-block name="ct_admin">
         <mt-theme-provider :future="{ removeCardWidth: true }">
             <ct-skip-link />
 
@@ -52,7 +52,7 @@ const overrideComponents = computed(() => {
     return Component.getOverrideComponents();
 });
 
-swDefinePublic({
+ctDefinePublic({
     loginService,
     isLoggedIn,
     overrideComponents,

@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_image_slider">
+    <ct-block name="ct_image_slider">
         <div v-if="images.length > 0" class="ct-image-slider" :style="wrapperStyles">
-            <ct-block name="sw_image_slider_image_container">
+            <ct-block name="ct_image_slider_image_container">
                 <div class="ct-image-slider__image-container" :style="containerStyles">
-                    <ct-block name="sw_image_slider_image_container_scrollable">
+                    <ct-block name="ct_image_slider_image_container_scrollable">
                         <div class="ct-image-slider__image-scrollable" :style="scrollableContainerStyles">
-                            <ct-block name="sw_image_slider_images">
+                            <ct-block name="ct_image_slider_images">
                                 <div
                                     v-for="(image, index) in images"
                                     :key="index"
@@ -13,7 +13,7 @@
                                     :aria-hidden="isHiddenItem(index) || undefined"
                                     :style="componentStyles"
                                 >
-                                    <ct-block name="sw_image_slider_image_images_container">
+                                    <ct-block name="ct_image_slider_image_images_container">
                                         <div
                                             class="ct-image-slider__element-container"
                                             :class="elementClasses(index)"
@@ -23,7 +23,7 @@
                                             @click="onSetCurrentItem(index)"
                                             @keydown.enter="onSetCurrentItem(index)"
                                         >
-                                            <ct-block name="sw_image_slider_image">
+                                            <ct-block name="ct_image_slider_image">
                                                 <img
                                                     class="ct-image-slider__element-image"
                                                     :class="imageClasses(index)"
@@ -35,7 +35,7 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_image_slider_element_description">
+                                    <ct-block name="ct_image_slider_element_description">
                                         <div
                                             v-if="hasValidDescription(image)"
                                             class="ct-image-slider__element-description"
@@ -49,9 +49,9 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_image_slider_image_container_arrows">
+                    <ct-block name="ct_image_slider_image_container_arrows">
                         <template v-if="showArrows">
-                            <ct-block name="sw_image_slider_image_container_arrow_left">
+                            <ct-block name="ct_image_slider_image_container_arrow_left">
                                 <div
                                     class="ct-image-slider__arrow arrow-left"
                                     role="button"
@@ -63,7 +63,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_image_slider_image_container_arrow_right">
+                            <ct-block name="ct_image_slider_image_container_arrow_right">
                                 <div
                                     class="ct-image-slider__arrow arrow-right"
                                     role="button"
@@ -79,9 +79,9 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_image_slider_button_container">
+            <ct-block name="ct_image_slider_button_container">
                 <div v-if="showButtons" class="ct-image-slider__buttons" :class="buttonClasses">
-                    <ct-block name="sw_image_slider_buttons">
+                    <ct-block name="ct_image_slider_buttons">
                         <button
                             v-for="(item, index) in buttonList"
                             :key="index"
@@ -460,7 +460,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     currentPageNumber,
     currentItemIndex,
     totalPage,

@@ -183,7 +183,7 @@ describe('module/ct-data-dictionary/page/ct-data-dictionary-detail', () => {
     it('shows editable dictionary settings directly for an existing dictionary', async () => {
         const result = await createWrapper({ existing: true });
 
-        expect(result.wrapper.find('[name="sw_data_dictionary_detail_settings_card"]').exists()).toBe(true);
+        expect(result.wrapper.find('[name="ct_data_dictionary_detail_settings_card"]').exists()).toBe(true);
         expect(result.wrapper.find('.ct-data-dictionary-detail__tree-card').exists()).toBe(true);
     });
 

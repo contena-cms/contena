@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_breadcrumbs">
-        <nav class="ct-media-breadcrumbs" :class="swMediaBreadcrumbsClasses">
-            <ct-block name="sw_media_breadcrumbs_root_folder">
+    <ct-block name="ct_media_breadcrumbs">
+        <nav class="ct-media-breadcrumbs" :class="ctMediaBreadcrumbsClasses">
+            <ct-block name="ct_media_breadcrumbs_root_folder">
                 <!-- eslint-disable-next-line vuejs-accessibility/anchor-has-content -->
                 <a
                     class="ct-media-breadcrumbs__button-back-to-root"
@@ -29,7 +29,7 @@
                 </a>
             </ct-block>
 
-            <ct-block name="sw_media_breadcrumbs_parent_folder">
+            <ct-block name="ct_media_breadcrumbs_parent_folder">
                 <a
                     v-if="parentFolder"
                     class="ct-media-breadcrumbs__entry ct-media-breadcrumbs__parent-folder"
@@ -43,7 +43,7 @@
                 </a>
             </ct-block>
 
-            <ct-block name="sw_media_breadcrumbs_current_folder">
+            <ct-block name="ct_media_breadcrumbs_current_folder">
                 <span v-if="currentFolder" class="ct-media-breadcrumbs__entry ct-media-breadcrumbs__current-folder">
                     <mt-icon class="ct-media-breadcrumbs__arrow-separator" name="regular-chevron-right-xxs" />
                     {{ currentFolder.name }}
@@ -98,7 +98,7 @@ const rootFolder = computed(() => {
     root.id = null;
     return root;
 });
-const swMediaBreadcrumbsClasses = computed(() => {
+const ctMediaBreadcrumbsClasses = computed(() => {
     return {
         'is--small': props.small,
     };
@@ -141,14 +141,14 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     feature,
     currentFolder,
     parentFolder,
     mediaFolderRepository,
     rootFolder,
-    swMediaBreadcrumbsClasses,
+    ctMediaBreadcrumbsClasses,
     assetFilter,
     createdComponent,
     updateFolder,
@@ -162,7 +162,7 @@ defineExpose({
     parentFolder,
     mediaFolderRepository,
     rootFolder,
-    swMediaBreadcrumbsClasses,
+    ctMediaBreadcrumbsClasses,
     assetFilter,
     createdComponent,
     updateFolder,

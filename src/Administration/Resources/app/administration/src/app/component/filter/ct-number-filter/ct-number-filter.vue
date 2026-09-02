@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_number_filter">
+    <ct-block name="ct_number_filter">
         <ct-range-filter
             class="ct-number-filter"
             :title="filter.label"
@@ -12,7 +12,7 @@
             @filter-reset="resetFilter"
         >
             <template #from-field>
-                <ct-block name="sw_number_filter_from_field">
+                <ct-block name="ct_number_filter_from_field">
                     <mt-number-field
                         v-model="numberValue.from"
                         v-bind="$attrs"
@@ -24,7 +24,7 @@
             </template>
 
             <template #to-field>
-                <ct-block name="sw_number_filter_to_field">
+                <ct-block name="ct_number_filter_to_field">
                     <mt-number-field
                         v-model="numberValue.to"
                         v-bind="$attrs"
@@ -109,7 +109,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     numberValue,
     fromToFieldLabel,
     updateFilter,

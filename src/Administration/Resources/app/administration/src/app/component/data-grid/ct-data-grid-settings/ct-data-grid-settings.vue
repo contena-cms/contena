@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_data_grid_settings">
+    <ct-block name="ct_data_grid_settings">
         <ct-context-button
             v-tooltip="{ message: $t('global.ct-data-grid.tooltipListSettings') }"
             :disabled="disabled"
@@ -9,7 +9,7 @@
             :additional-context-menu-classes="contextMenuClasses"
         >
             <template #button>
-                <ct-block name="sw_data_grid_settings_trigger">
+                <ct-block name="ct_data_grid_settings_trigger">
                     <mt-button
                         class="ct-data-grid-settings__trigger"
                         :disabled="disabled"
@@ -18,17 +18,17 @@
                         square
                         variant="secondary"
                     >
-                        <ct-block name="sw_data_grid_settings_trigger_icon">
+                        <ct-block name="ct_data_grid_settings_trigger_icon">
                             <mt-icon name="regular-bars-s" size="14px" />
                         </ct-block>
                     </mt-button>
                 </ct-block>
             </template>
 
-            <ct-block name="sw_data_grid_settings_content">
-                <ct-block name="sw_data_grid_settings_general">
+            <ct-block name="ct_data_grid_settings_content">
+                <ct-block name="ct_data_grid_settings_general">
                     <div class="ct-data-grid__settings-container">
-                        <ct-block name="sw_data_grid_settings_compact_switch">
+                        <ct-block name="ct_data_grid_settings_compact_switch">
                             <mt-switch
                                 :model-value="currentCompact"
                                 remove-top-margin
@@ -37,7 +37,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_data_grid_settings_preview_switch">
+                        <ct-block name="ct_data_grid_settings_preview_switch">
                             <mt-switch
                                 v-if="enablePreviews"
                                 :model-value="currentPreviews"
@@ -47,31 +47,31 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_data_grid_settings_additional_settings">
+                        <ct-block name="ct_data_grid_settings_additional_settings">
                             <slot name="additionalSettings">
-                                <ct-block name="sw_data_grid_settings_additional_settings_slot"></ct-block>
+                                <ct-block name="ct_data_grid_settings_additional_settings_slot"></ct-block>
                             </slot>
                         </ct-block>
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_data_grid_settings_devider">
+                <ct-block name="ct_data_grid_settings_devider">
                     <ct-context-menu-divider />
                 </ct-block>
 
-                <ct-block name="sw_data_grid_settings_columns">
+                <ct-block name="ct_data_grid_settings_columns">
                     <transition-group
                         name="columns-list"
                         tag="div"
                         class="ct-data-grid__settings-container ct-data-grid__settings-column-list"
                     >
-                        <ct-block name="sw_data_grid_settings_column_element">
+                        <ct-block name="ct_data_grid_settings_column_element">
                             <div
                                 v-for="(column, index) in currentColumns"
                                 :key="column.property"
                                 :class="['ct-data-grid__settings-column-item', 'ct-data-grid__settings-item--' + index]"
                             >
-                                <ct-block name="sw_data_grid_settings_column_visibility_checkbox">
+                                <ct-block name="ct_data_grid_settings_column_visibility_checkbox">
                                     <mt-checkbox
                                         :disabled="column.primary"
                                         :label="getColumnLabel(column)"
@@ -80,12 +80,12 @@
                                     />
                                 </ct-block>
 
-                                <ct-block name="sw_data_grid_settings_column_item_conrols">
+                                <ct-block name="ct_data_grid_settings_column_item_conrols">
                                     <ct-button-group
                                         v-if="currentColumns.length >= 2"
                                         class="ct-data-grid__settings-column-item-controls"
                                     >
-                                        <ct-block name="sw_data_grid_settings_column_control_up">
+                                        <ct-block name="ct_data_grid_settings_column_control_up">
                                             <mt-button
                                                 size="x-small"
                                                 square
@@ -93,13 +93,13 @@
                                                 variant="secondary"
                                                 @click="onClickChangeColumnOrderUp(column)"
                                             >
-                                                <ct-block name="sw_data_grid_settings_column_control_up_icon">
+                                                <ct-block name="ct_data_grid_settings_column_control_up_icon">
                                                     <mt-icon name="regular-chevron-up-xxs" size="14px" />
                                                 </ct-block>
                                             </mt-button>
                                         </ct-block>
 
-                                        <ct-block name="sw_data_grid_settings_column_control_down">
+                                        <ct-block name="ct_data_grid_settings_column_control_down">
                                             <mt-button
                                                 size="x-small"
                                                 square
@@ -108,7 +108,7 @@
                                                 variant="secondary"
                                                 @click="onClickChangeColumnOrderDown(column)"
                                             >
-                                                <ct-block name="sw_data_grid_settings_column_control_down_icon">
+                                                <ct-block name="ct_data_grid_settings_column_control_down_icon">
                                                     <mt-icon name="regular-chevron-down-xxs" size="14px" />
                                                 </ct-block>
                                             </mt-button>
@@ -222,7 +222,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     currentCompact,
     currentPreviews,
     currentColumns,

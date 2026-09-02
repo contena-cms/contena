@@ -86,7 +86,7 @@ To add a new skill (interactive or unattended), follow the checklist in [`coding
 
 - PHP/server code: use the `contena-php-code` skill when the task touches PHP architecture, API schema, migrations, deprecations, or BC-sensitive code.
 - Administration JS/TS/Vue code: detailed guidance starts at `src/Administration/Resources/app/administration/AGENTS.md`; use the `contena-admin-js` skill for Admin coding rules.
-- Administration Vue components: every component must remain a native `.vue` SFC using `<script setup>`. Base components declare their public extension API with `swDefinePublic`, override components use the `.override.vue` convention and `swDefineOverride`, and the build transform injects block data scopes. Expose stable UI extension points with named `ct-block` components and use `ct-block-parent` in plugin overrides when retaining the original content; do not introduce runtime `.html.twig` templates, Options API components, or author-facing `createExtendableSetup` wrappers.
+- Administration Vue components: every component must remain a native `.vue` SFC using `<script setup>`. Base components declare their public extension API with `ctDefinePublic`, override components use the `.override.vue` convention and `ctDefineOverride`, and the build transform injects block data scopes. Expose stable UI extension points with named `ct-block` components and use `ct-block-parent` in plugin overrides when retaining the original content; do not introduce runtime `.html.twig` templates, Options API components, or author-facing `createExtendableSetup` wrappers.
 - PHPUnit tests: use the `contena-phpunit-tests` skill.
 - More specific nested `AGENTS.md` files add local rules for their subtree.
 

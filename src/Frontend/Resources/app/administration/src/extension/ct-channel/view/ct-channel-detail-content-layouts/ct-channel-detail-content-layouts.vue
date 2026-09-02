@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_channel_detail_content_layouts">
+    <ct-block name="ct_channel_detail_content_layouts">
         <div class="ct-channel-detail-content-layouts">
-            <ct-block name="sw_channel_detail_content_layouts_header">
+            <ct-block name="ct_channel_detail_content_layouts_header">
                 <mt-card :title="t('ct-frontend-content-layout.header.title')" :is-loading="loadingSections.header">
                     <div class="ct-channel-detail-content-layouts__card-header">
                         <p>
@@ -54,7 +54,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_channel_detail_content_layouts_footer">
+            <ct-block name="ct_channel_detail_content_layouts_footer">
                 <mt-card :title="t('ct-frontend-content-layout.footer.title')" :is-loading="loadingSections.footer">
                     <div class="ct-channel-detail-content-layouts__card-header">
                         <p>
@@ -310,7 +310,7 @@ onMounted(() => {
     void loadAssignments();
 });
 
-swDefinePublic({
+ctDefinePublic({
     assignments,
     loadingSections,
     savingAssignments,

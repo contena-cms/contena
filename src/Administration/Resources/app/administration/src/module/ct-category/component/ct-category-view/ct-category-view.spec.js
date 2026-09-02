@@ -13,9 +13,9 @@ async function createWrapper(
     categoryType = 'page',
     { routeName = 'ct.category.detail.base', routerPush = jest.fn(), isLoading = false } = {},
 ) {
-    Contena.Store.get('swCategoryDetail').$reset();
-    Contena.Store.get('swCategoryDetail').category = { id: categoryIdMock };
-    Contena.Store.get('swCategoryDetail').isCategoryColumn = true;
+    Contena.Store.get('ctCategoryDetail').$reset();
+    Contena.Store.get('ctCategoryDetail').category = { id: categoryIdMock };
+    Contena.Store.get('ctCategoryDetail').isCategoryColumn = true;
 
     return mount(await wrapTestComponent('ct-category-view', { sync: true }), {
         global: {

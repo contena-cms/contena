@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_select_result">
+    <ct-block name="ct_select_result">
         <!--  eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <li
             ref="resultElement"
@@ -12,23 +12,23 @@
             @mouseenter="onMouseEnter"
             @click.stop="onClickResult"
         >
-            <ct-block name="sw_select_result_item_preview">
+            <ct-block name="ct_select_result_item_preview">
                 <span class="ct-select-result__result-item-preview">
                     <slot name="preview"></slot>
                 </span>
             </ct-block>
 
-            <ct-block name="sw_select_result_item_text_holder">
+            <ct-block name="ct_select_result_item_text_holder">
                 <span class="ct-select-result__result-item-text">
-                    <ct-block name="sw_select_result_item_text">
+                    <ct-block name="ct_select_result_item_text">
                         <slot></slot>
                     </ct-block>
                 </span>
             </ct-block>
 
-            <ct-block name="sw_select_result_item_icon_transition">
+            <ct-block name="ct_select_result_item_icon_transition">
                 <transition name="ct-select-result-appear">
-                    <ct-block name="sw_select_result_item_icon">
+                    <ct-block name="ct_select_result_item_icon">
                         <mt-icon
                             v-if="selected"
                             class="ct-select-result__result-item-checkmark"
@@ -38,9 +38,9 @@
                 </transition>
             </ct-block>
 
-            <ct-block name="sw_select_result_item_description_holder">
+            <ct-block name="ct_select_result_item_description_holder">
                 <span v-if="hasDescriptionSlot" class="ct-select-result__result-item-description">
-                    <ct-block name="sw_select_result_item_description">
+                    <ct-block name="ct_select_result_item_description">
                         <slot name="description"></slot>
                     </ct-block>
                 </span>
@@ -163,7 +163,7 @@ onUnmounted(() => {
     destroyedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     setActiveItemIndex,
     feature,
     active,

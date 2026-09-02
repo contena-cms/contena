@@ -1,25 +1,25 @@
 <template>
-    <ct-block name="sw_login">
+    <ct-block name="ct_login">
         <div class="ct-login-index">
-            <ct-block name="sw_login_container">
-                <ct-block name="sw_login_badge">
+            <ct-block name="ct_login_container">
+                <ct-block name="ct_login_badge">
                     <div class="ct-login-index__brand">
-                        <ct-block name="sw_login_badge_image">
+                        <ct-block name="ct_login_badge_image">
                             <img
                                 class="ct-login-index__logo-image"
                                 :src="assetFilter('/administration/administration/static/img/contena-logo-v4.svg')"
                                 alt="Contena"
                             />
                         </ct-block>
-                        <ct-block name="sw_login_brand_name">
+                        <ct-block name="ct_login_brand_name">
                             <span class="ct-login-index__brand-name">{{ $t('ct-login.index.brandName') }}</span>
                         </ct-block>
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_login_form">
+                <ct-block name="ct_login_form">
                     <section class="ct-login-index__card" aria-live="polite">
-                        <ct-block name="sw_login_back_link">
+                        <ct-block name="ct_login_back_link">
                             <router-link
                                 v-if="$route.meta.backToLogin"
                                 class="ct-login-index__back-to-login"
@@ -31,7 +31,7 @@
                             </router-link>
                         </ct-block>
 
-                        <ct-block name="sw_login_view">
+                        <ct-block name="ct_login_view">
                             <router-view v-slot="{ Component }">
                                 <component :is="Component" />
                             </router-view>
@@ -40,7 +40,7 @@
                 </ct-block>
             </ct-block>
 
-            <ct-block name="sw_login_footer">
+            <ct-block name="ct_login_footer">
                 <footer class="ct-login-index__footer">© {{ copyrightYear }} Contena</footer>
             </ct-block>
         </div>
@@ -64,7 +64,7 @@ const backToLogin = async (): Promise<void> => {
 };
 const copyrightYear = new Date().getFullYear();
 
-swDefinePublic({
+ctDefinePublic({
     assetFilter,
     backToLogin,
     copyrightYear,

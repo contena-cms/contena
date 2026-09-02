@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_field_error">
+    <ct-block name="ct_field_error">
         <div v-if="!!error" class="ct-field__error">
             <mt-icon name="solid-exclamation-circle" size="12" />
             {{ errorMessage }}
@@ -51,7 +51,7 @@ function formatParameters(parameters) {
     return formattedParameters;
 }
 
-swDefinePublic({
+ctDefinePublic({
     errorMessage,
     formatParameters,
 });

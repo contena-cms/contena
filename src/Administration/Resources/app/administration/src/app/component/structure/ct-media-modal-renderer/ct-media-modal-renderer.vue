@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_modal_renderer">
+    <ct-block name="ct_media_modal_renderer">
         <ct-media-modal-v2
             v-if="mediaModal"
             :initial-folder-id="mediaModal.initialFolderId"
@@ -109,7 +109,7 @@ const onSaveMedia = (params: { fileName: string; folderId: string; mediaId?: str
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     mediaModal,
     saveMediaModal,
     closeModal,

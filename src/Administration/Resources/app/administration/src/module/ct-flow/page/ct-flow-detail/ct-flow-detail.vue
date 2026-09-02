@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_detail">
+    <ct-block name="ct_flow_detail">
         <ct-page class="ct-flow-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_flow_detail_header">
+                <ct-block name="ct_flow_detail_header">
                     <h2>
                         {{ flow?.isNew() ? $t('ct-flow.detail.createTitle') : flow?.name || $t('ct-flow.detail.editTitle') }}
                     </h2>
@@ -10,7 +10,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_flow_detail_actions">
+                <ct-block name="ct_flow_detail_actions">
                     <mt-button variant="secondary" @click="onCancel">
                         {{ $t('global.default.cancel') }}
                     </mt-button>
@@ -21,9 +21,9 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_flow_detail_content">
+                <ct-block name="ct_flow_detail_content">
                     <div class="ct-flow-detail__card-view">
-                        <ct-block name="sw_flow_detail_tabs">
+                        <ct-block name="ct_flow_detail_tabs">
                             <mt-tabs
                                 class="ct-flow-detail__tabs"
                                 position-identifier="ct-flow-detail"
@@ -34,7 +34,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_flow_detail_general">
+                        <ct-block name="ct_flow_detail_general">
                             <template v-if="activeTab === 'general'">
                                 <mt-card position-identifier="ct-flow-detail-general" :is-loading="isLoading">
                                     <div v-if="flow" class="ct-flow-detail__general-grid">
@@ -67,7 +67,7 @@
                             </template>
                         </ct-block>
 
-                        <ct-block name="sw_flow_detail_builder">
+                        <ct-block name="ct_flow_detail_builder">
                             <template v-if="activeTab !== 'general'">
                                 <div class="ct-flow-detail__builder" position-identifier="ct-flow-detail-builder">
                                     <div class="ct-flow-detail__trigger-row">
@@ -502,7 +502,7 @@ function onTabChange(tab: string): void {
 
 onMounted(load);
 
-swDefinePublic({
+ctDefinePublic({
     flow,
     sequences,
     triggerEvents,

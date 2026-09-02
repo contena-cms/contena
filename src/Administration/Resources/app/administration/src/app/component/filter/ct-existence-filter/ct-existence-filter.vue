@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_existence_filter">
+    <ct-block name="ct_existence_filter">
         <div class="ct-existence-filter">
             <ct-base-filter :title="filter.label" :show-reset-button="!!value" :active="active" @filter-reset="resetFilter">
-                <ct-block name="sw_existence_filter_content">
+                <ct-block name="ct_existence_filter_content">
                     <mt-select
                         :model-value="value"
                         :placeholder="filter.placeholder"
@@ -71,7 +71,7 @@ function resetFilter() {
     emit('filter-reset', props.filter.name);
 }
 
-swDefinePublic({
+ctDefinePublic({
     value,
     filterOptions,
     changeValue,

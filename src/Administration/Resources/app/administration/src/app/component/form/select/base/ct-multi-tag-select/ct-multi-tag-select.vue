@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_multi_tag_select">
+    <ct-block name="ct_multi_tag_select">
         <ct-select-base
             class="ct-multi-tag-select"
             :is-loading="isLoading"
@@ -10,9 +10,9 @@
             @select-collapsed="setDropDown(false)"
         >
             <template #ct-select-selection="{ size }">
-                <ct-block name="sw_multi_tag_select_base">
-                    <ct-block name="sw_multi_tag_select_base_selection">
-                        <ct-block name="sw_multi_tag_select_base_selection_slot">
+                <ct-block name="ct_multi_tag_select_base">
+                    <ct-block name="ct_multi_tag_select_base_selection">
+                        <ct-block name="ct_multi_tag_select_base_selection_slot">
                             <ct-select-selection-list
                                 ref="selectionList"
                                 :selections="visibleValues"
@@ -28,9 +28,9 @@
                                 @key-down-enter="onSelectionListKeyDownEnter"
                             >
                                 <template #label-property="{ item, index, labelProperty, valueProperty }">
-                                    <ct-block name="sw_multi_tag_select_base_selection_list">
-                                        <ct-block name="sw_multi_tag_select_base_selection_list_label">
-                                            <ct-block name="sw_multi_tag_select_base_selection_list_label_inner">
+                                    <ct-block name="ct_multi_tag_select_base_selection_list">
+                                        <ct-block name="ct_multi_tag_select_base_selection_list_label">
+                                            <ct-block name="ct_multi_tag_select_base_selection_list_label_inner">
                                                 <slot
                                                     name="selection-label-property"
                                                     v-bind="{ item, index, labelProperty, valueProperty }"
@@ -48,7 +48,7 @@
             </template>
 
             <template #results-list>
-                <ct-block name="sw_multi_tag_select_validation">
+                <ct-block name="ct_multi_tag_select_validation">
                     <div v-if="hasFocus" class="ct-multi-tag-select-validation ct-select-result-list">
                         <mt-floating-ui
                             class="ct-select-result-list-popover ct-multi-tag-select-validation-popover"
@@ -56,10 +56,10 @@
                             :match-reference-width="true"
                         >
                             <div class="ct-select-result-list__content">
-                                <ct-block name="sw_multi_tag_select_validation_valid">
+                                <ct-block name="ct_multi_tag_select_validation_valid">
                                     <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                                     <div v-if="inputIsValid" class="ct-multi-tag-select-valid" @click="addItem">
-                                        <ct-block name="sw_multi_tag_select_validation_valid_message">
+                                        <ct-block name="ct_multi_tag_select_validation_valid_message">
                                             <slot name="message-add-data">
                                                 <span>{{ $t('global.ct-multi-tag-select.addData') }}</span>
                                             </slot>
@@ -67,12 +67,12 @@
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_multi_tag_select_validation_invalid">
+                                <ct-block name="ct_multi_tag_select_validation_invalid">
                                     <template v-if="inputIsValid"
                                         ><!-- Keeps the conditional chain connected across ct-block. --></template
                                     >
                                     <div v-else class="ct-multi-tag-select-invalid">
-                                        <ct-block name="sw_multi_tag_select_validation_invalid_message">
+                                        <ct-block name="ct_multi_tag_select_validation_invalid_message">
                                             <slot name="message-enter-valid-data">
                                                 <span>{{ $t('global.ct-multi-tag-select.enterValidData') }}</span>
                                             </slot>
@@ -257,7 +257,7 @@ function expandValueLimit() {
 }
 const getKey = (item, property, fallback = null) => get(item, property, fallback);
 
-swDefinePublic({
+ctDefinePublic({
     getKey,
     searchTerm,
     hasFocus,

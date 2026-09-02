@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_language_info">
+    <ct-block name="ct_language_info">
         <p v-if="infoText" class="ct-language-info">
-            <ct-block name="sw_language_info_text">
-                <span class="sw_language-info__info" v-html="$sanitize(infoText)"></span>
+            <ct-block name="ct_language_info_text">
+                <span class="ct_language-info__info" v-html="$sanitize(infoText)"></span>
                 <span
                     v-if="infoParent"
                     class="ct-language-info__link-parent"
@@ -139,7 +139,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     parentLanguage,
     languageId,

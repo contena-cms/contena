@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_search_bar">
+    <ct-block name="ct_search_bar">
         <div class="ct-search-bar">
-            <ct-block name="sw_search_bar_button_off_canvas_toggle">
+            <ct-block name="ct_search_bar_button_off_canvas_toggle">
                 <mt-button
                     class="ct-search-bar__off-canvas-toggle"
                     variant="tertiary"
@@ -18,11 +18,11 @@
                 </mt-button>
             </ct-block>
 
-            <ct-block name="sw_search_bar_container">
+            <ct-block name="ct_search_bar_container">
                 <div class="ct-search-bar__container">
-                    <ct-block name="sw_search_bar_mobile_controls">
+                    <ct-block name="ct_search_bar_mobile_controls">
                         <div v-if="!isSearchBarShown" class="ct-search-bar__mobile-controls">
-                            <ct-block name="sw_search_bar_button_search">
+                            <ct-block name="ct_search_bar_button_search">
                                 <mt-button
                                     class="ct-search-bar__button"
                                     variant="tertiary"
@@ -37,10 +37,10 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_search_bar_field">
+                    <ct-block name="ct_search_bar_field">
                         <div v-if="isSearchBarShown" class="ct-search-bar__field-wrapper" @click="setFocus">
                             <div ref="searchBarField" class="ct-search-bar__field" :class="searchBarFieldClasses">
-                                <ct-block name="sw_search_bar_type">
+                                <ct-block name="ct_search_bar_type">
                                     <span
                                         class="ct-search-bar__type--v2"
                                         role="button"
@@ -53,9 +53,9 @@
                                     </span>
                                 </ct-block>
 
-                                <ct-block name="sw_search_bar_input">
+                                <ct-block name="ct_search_bar_input">
                                     <slot name="search-input">
-                                        <ct-block name="sw_search_bar_slot_input">
+                                        <ct-block name="ct_search_bar_slot_input">
                                             <div
                                                 class="ct-search-bar__input-wrapper"
                                                 @focusin="onFocusInput"
@@ -102,16 +102,16 @@
                         @close="closeSearchOverlays"
                     >
                         <div class="ct-search-bar__floating-content ct-search-bar">
-                            <ct-block name="sw_search_bar_results">
+                            <ct-block name="ct_search_bar_results">
                                 <div
                                     v-if="showResultsContainer"
                                     ref="resultsContainer"
                                     class="ct-search-bar__results ct-search-bar__results--v2"
                                     :class="{ 'is-empty-state': isResultEmpty() }"
                                 >
-                                    <ct-block name="sw_search_bar_results_content">
+                                    <ct-block name="ct_search_bar_results_content">
                                         <div class="ct-search-bar__results-wrapper-content">
-                                            <ct-block name="sw_search_bar_results_empty_state">
+                                            <ct-block name="ct_search_bar_results_empty_state">
                                                 <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                                                 <mt-loader v-if="isLoading" />
                                             </ct-block>
@@ -125,13 +125,13 @@
                                                 v-else-if="!isResultEmpty()"
                                                 :key="entity.entity"
                                             >
-                                                <ct-block name="sw_search_bar_results_list">
+                                                <ct-block name="ct_search_bar_results_list">
                                                     <div class="ct-search-bar__results-column">
-                                                        <ct-block name="sw_search_bar_results_list_column">
-                                                            <ct-block name="sw_search_bar_results_list_column_header">
+                                                        <ct-block name="ct_search_bar_results_list_column">
+                                                            <ct-block name="ct_search_bar_results_list_column_header">
                                                                 <div class="ct-search-bar__results-column-header">
                                                                     <ct-block
-                                                                        name="sw_search_bar_results_list_column_header_title"
+                                                                        name="ct_search_bar_results_list_column_header_title"
                                                                     >
                                                                         <span class="ct-search-bar__types-header-entity">
                                                                             {{
@@ -162,13 +162,13 @@
                                                                     :entity-icon-name="getEntityIconName(entity.entity)"
                                                                 />
 
-                                                                <ct-block name="sw_search_bar_results_list_bar_item">
+                                                                <ct-block name="ct_search_bar_results_list_bar_item">
                                                                     <li
                                                                         v-if="entity.entity !== 'module'"
                                                                         class="ct-search-bar-item ct-search-bar-item--v2"
                                                                     >
                                                                         <ct-block
-                                                                            name="sw_search_bar_results_list_bar_item_icon"
+                                                                            name="ct_search_bar_results_list_bar_item_icon"
                                                                         >
                                                                             <mt-icon
                                                                                 name="regular-double-chevron-right-s"
@@ -177,7 +177,7 @@
                                                                         </ct-block>
 
                                                                         <ct-block
-                                                                            name="sw_search_bar_results_list_bar_item_more_results"
+                                                                            name="ct_search_bar_results_list_bar_item_more_results"
                                                                         >
                                                                             <ct-search-more-results
                                                                                 :entity="entity.entity"
@@ -192,7 +192,7 @@
                                                 </ct-block>
                                             </template>
 
-                                            <ct-block name="sw_search_bar_results_empty">
+                                            <ct-block name="ct_search_bar_results_empty">
                                                 <template v-if="isLoading || !isResultEmpty()"
                                                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                                                 >
@@ -200,8 +200,8 @@
                                                     v-else
                                                     class="ct-search-bar__results-empty-message ct-search-bar__results-empty-message--v2"
                                                 >
-                                                    <ct-block name="sw_search_bar_results_empty_content">
-                                                        <ct-block name="sw_search_bar_results_empty_text">
+                                                    <ct-block name="ct_search_bar_results_empty_content">
+                                                        <ct-block name="ct_search_bar_results_empty_text">
                                                             <div class="ct-search-bar__results-empty-text">
                                                                 {{
                                                                     $t(
@@ -213,7 +213,7 @@
                                                             </div>
                                                         </ct-block>
 
-                                                        <ct-block name="sw_search_bar_results_empty_detail">
+                                                        <ct-block name="ct_search_bar_results_empty_detail">
                                                             <div class="ct-search-bar__results-empty-detail">
                                                                 {{ $t('global.ct-search-bar.messageNoResultsDetailV2') }}
                                                             </div>
@@ -224,7 +224,7 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_search_bar_results_footer">
+                                    <ct-block name="ct_search_bar_results_footer">
                                         <div class="ct-search-bar__footer">
                                             <mt-icon
                                                 name="regular-cog"
@@ -238,9 +238,9 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_types_container">
+                            <ct-block name="ct_search_bar_types_container">
                                 <div v-if="showTypeSelectContainer" class="ct-search-bar__types_container--v2">
-                                    <ct-block name="sw_search_bar_types_container_header">
+                                    <ct-block name="ct_search_bar_types_container_header">
                                         <div class="ct-search-bar__header">
                                             <p class="ct-search-bar__header-title">
                                                 {{ $t('global.ct-search-bar.moduleFiltersHeadline') }}
@@ -279,18 +279,18 @@
                                         </p>
                                     </div>
 
-                                    <ct-block name="sw_search_bar_types_container_empty">
+                                    <ct-block name="ct_search_bar_types_container_empty">
                                         <div
                                             v-if="typeSelectResults.length < 1"
                                             class="ct-search-bar__type-results-empty-message"
                                         >
-                                            <ct-block name="sw_search_bar_types_container_empty_text">
+                                            <ct-block name="ct_search_bar_types_container_empty_text">
                                                 {{ $t('global.ct-search-bar.messageNoTypeResults') }}
                                             </ct-block>
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_search_bar_types_container_footer">
+                                    <ct-block name="ct_search_bar_types_container_footer">
                                         <div class="ct-search-bar__footer">
                                             <mt-icon
                                                 name="regular-cog"
@@ -304,7 +304,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_types_module_filters_container">
+                            <ct-block name="ct_search_bar_types_module_filters_container">
                                 <div
                                     v-if="showModuleFiltersContainer"
                                     class="ct-search-bar__types_module-filters-container ct-search-bar__types_container--v2"
@@ -336,38 +336,38 @@
                                         </span>
                                     </div>
 
-                                    <ct-block name="sw_search_bar_types_module_filters_container_empty">
+                                    <ct-block name="ct_search_bar_types_module_filters_container_empty">
                                         <div
                                             v-if="typeSelectResults.length < 1"
                                             class="ct-search-bar__type-results-empty-message"
                                         >
-                                            <ct-block name="sw_search_bar_types_module_filters_container_empty_text">
+                                            <ct-block name="ct_search_bar_types_module_filters_container_empty_text">
                                                 {{ $t('global.ct-search-bar.messageNoTypeResults') }}
                                             </ct-block>
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_search_bar_types_module_filters_container_footer">
+                                    <ct-block name="ct_search_bar_types_module_filters_container_footer">
                                         <div class="ct-search-bar__footer"></div>
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_search_bar_trends_results">
+                            <ct-block name="ct_search_bar_trends_results">
                                 <div
                                     v-if="showResultsSearchTrends && !showResultsContainer"
                                     class="ct-search-bar__results ct-search-bar__results--v2"
                                 >
-                                    <ct-block name="sw_search_bar_trends_results_content">
+                                    <ct-block name="ct_search_bar_trends_results_content">
                                         <div class="ct-search-bar__results-wrapper-content">
                                             <template v-for="(entity, column) in resultsSearchTrends" :key="entity.entity">
-                                                <ct-block name="sw_search_bar_trends_results_list">
+                                                <ct-block name="ct_search_bar_trends_results_list">
                                                     <div class="ct-search-bar__results-column">
-                                                        <ct-block name="sw_search_bar_trends_results_list_column">
-                                                            <ct-block name="sw_search_bar_trends_results_list_column_header">
+                                                        <ct-block name="ct_search_bar_trends_results_list_column">
+                                                            <ct-block name="ct_search_bar_trends_results_list_column_header">
                                                                 <div class="ct-search-bar__results-column-header">
                                                                     <ct-block
-                                                                        name="sw_search_bar_trends_results_list_column_header_title"
+                                                                        name="ct_search_bar_trends_results_list_column_header_title"
                                                                     >
                                                                         <span class="ct-search-bar__types-header-entity">
                                                                             {{
@@ -408,9 +408,9 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_search_bar_trends_results_empty_content"></ct-block>
+                                    <ct-block name="ct_search_bar_trends_results_empty_content"></ct-block>
 
-                                    <ct-block name="sw_search_bar_trends_results_footer">
+                                    <ct-block name="ct_search_bar_trends_results_footer">
                                         <div class="ct-search-bar__footer">
                                             <mt-icon
                                                 name="regular-cog"
@@ -428,7 +428,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_search_bar_search_preferences_modal">
+            <ct-block name="ct_search_bar_search_preferences_modal">
                 <ct-search-preferences-modal v-if="showSearchPreferencesModal" @modal-close="toggleSearchPreferencesModal" />
             </ct-block>
         </div>
@@ -1343,7 +1343,7 @@ provide('searchBarUnregisterKeyupEnterHandler', unregisterKeyupEnterHandler);
 void createdComponent();
 onBeforeUnmount(destroyedComponent);
 
-swDefinePublic({
+ctDefinePublic({
     searchService,
     searchTypeService,
     repositoryFactory,

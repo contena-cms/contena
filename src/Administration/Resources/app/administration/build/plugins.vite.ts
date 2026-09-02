@@ -162,7 +162,7 @@ const main = async () => {
         const extensionPorts = getViteServerPorts();
 
         // Create ct-plugin-dev.json for development mode
-        const swPluginDevJsonData = {
+        const ctPluginDevJsonData = {
             metadata: 'contena',
         } as {
             metadata: string;
@@ -178,17 +178,17 @@ const main = async () => {
         extensionEntries.forEach((extension, index) => {
             const fileName = extension.filePath.split('/').pop();
 
-            if (!swPluginDevJsonData[extension.technicalName]) {
-                swPluginDevJsonData[extension.technicalName] = {};
+            if (!ctPluginDevJsonData[extension.technicalName]) {
+                ctPluginDevJsonData[extension.technicalName] = {};
             }
 
             if (extension.isApp) {
-                swPluginDevJsonData[extension.technicalName].html = `/_internal_ext/${extension.technicalName}/index.html`;
+                ctPluginDevJsonData[extension.technicalName].html = `/_internal_ext/${extension.technicalName}/index.html`;
             }
 
             if (extension.isPlugin) {
-                swPluginDevJsonData[extension.technicalName].js = `/_internal_ext/${extension.technicalName}/${fileName}`;
-                swPluginDevJsonData[extension.technicalName].hmrSrc =
+                ctPluginDevJsonData[extension.technicalName].js = `/_internal_ext/${extension.technicalName}/${fileName}`;
+                ctPluginDevJsonData[extension.technicalName].hmrSrc =
                     `/_internal_ext/${extension.technicalName}/@vite/client`;
             }
         });
@@ -196,7 +196,7 @@ const main = async () => {
         // Write outside of public/administration on purpose: a parallel production
         // build empties that directory (emptyOutDir), which would delete this file
         // out from under the running watcher.
-        fs.writeFileSync(path.resolve(__dirname, '../../../ct-plugin-dev.json'), JSON.stringify(swPluginDevJsonData));
+        fs.writeFileSync(path.resolve(__dirname, '../../../ct-plugin-dev.json'), JSON.stringify(ctPluginDevJsonData));
 
         // Start dev servers
         for (let i = 0; i < extensionEntries.length; i++) {

@@ -1,14 +1,14 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_media_sidebar">
+    <ct-block name="ct_media_sidebar">
         <div class="ct-media-sidebar" :class="mediaSidebarClasses">
-            <ct-block name="sw_media_sidebar_headline">
+            <ct-block name="ct_media_sidebar_headline">
                 <div v-if="headLine" class="ct-media-sidebar__header">
                     <h3 class="ct-media-sidebar__headline">
                         {{ headLine }}
                     </h3>
 
-                    <ct-block name="sw_media_sidebar_close">
+                    <ct-block name="ct_media_sidebar_close">
                         <mt-button
                             class="ct-media-sidebar__close"
                             variant="tertiary"
@@ -23,7 +23,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_sidebar_item_quickinfo_content">
+            <ct-block name="ct_media_sidebar_item_quickinfo_content">
                 <div class="ct-media-sidebar__quickinfo-scroll-container">
                     <ct-media-quickinfo
                         v-if="isSingleFile && firstEntity.getEntityName() === 'media'"
@@ -225,7 +225,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     currentFolder,
     mediaRepository,

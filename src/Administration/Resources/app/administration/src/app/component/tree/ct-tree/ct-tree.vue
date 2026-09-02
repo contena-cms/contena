@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_tree">
+    <ct-block name="ct_tree">
         <div ref="treeRoot" class="ct-tree" role="tree" :aria-label="$t(`${translationContext}.general.treeHeadline`)">
-            <ct-block name="sw_tree_search">
+            <ct-block name="ct_tree_search">
                 <slot name="search">
                     <div v-if="searchable" class="ct-tree__search">
                         <mt-text-field
@@ -19,7 +19,7 @@
                 </slot>
             </ct-block>
 
-            <ct-block name="sw_tree_actions_headline">
+            <ct-block name="ct_tree_actions_headline">
                 <slot name="headline">
                     <div v-if="checkedElementsCount > 0" class="ct-tree-actions__headline">
                         <span>
@@ -45,10 +45,10 @@
                 </slot>
             </ct-block>
 
-            <ct-block name="sw_tree_content">
+            <ct-block name="ct_tree_content">
                 <div class="ct-tree__content">
                     <div class="tree-items">
-                        <ct-block name="sw_tree_items">
+                        <ct-block name="ct_tree_items">
                             <ct-tree-input-field
                                 v-if="hasNoItems && allowCreateItems"
                                 :disabled="disableContextMenu"
@@ -68,7 +68,7 @@
                                 :selected-items-path-ids="selectedItemsPathIds"
                                 :checked-item-ids="checkedItemIds"
                             >
-                                <ct-block name="sw_tree_slot_items">
+                                <ct-block name="ct_tree_slot_items">
                                     <ct-tree-item
                                         v-for="item in treeItems"
                                         :key="item.id"
@@ -86,16 +86,16 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_tree_delete_modal">
+            <ct-block name="ct_tree_delete_modal">
                 <ct-modal
                     v-if="showDeleteModal"
                     :title="$t('global.default.warning')"
                     variant="small"
                     @modal-close="onCloseDeleteModal"
                 >
-                    <ct-block name="sw_tree_delete_modal_confirm_delete_text">
+                    <ct-block name="ct_tree_delete_modal_confirm_delete_text">
                         <div v-if="toDeleteItem">
-                            <p v-if="toDeleteItem.childCount > 0" class="sw_tree__confirm-delete-text">
+                            <p v-if="toDeleteItem.childCount > 0" class="ct_tree__confirm-delete-text">
                                 {{
                                     $t(`${translationContext}.modal.textDeleteConfirm`, {
                                         name: toDeleteItem.data.name || toDeleteItem.data.translated.name,
@@ -104,7 +104,7 @@
                                 <b>{{ $t(`${translationContext}.modal.textDeleteChildrenConfirm`) }}</b>
                             </p>
 
-                            <p v-else class="sw_tree__confirm-delete-text">
+                            <p v-else class="ct_tree__confirm-delete-text">
                                 {{
                                     $t(`${translationContext}.modal.textDeleteConfirm`, {
                                         name: toDeleteItem.data.name || toDeleteItem.data.translated.name,
@@ -114,7 +114,7 @@
                         </div>
 
                         <div v-else>
-                            <p v-if="checkedElementsChildCount > 0" class="sw_tree__confirm-delete-text">
+                            <p v-if="checkedElementsChildCount > 0" class="ct_tree__confirm-delete-text">
                                 {{
                                     $t(`${translationContext}.modal.textDeleteMultipleConfirm`, {
                                         count: checkedElementsCount,
@@ -123,7 +123,7 @@
                                 <b>{{ $t(`${translationContext}.modal.textDeleteChildrenConfirm`) }}</b>
                             </p>
 
-                            <p v-else class="sw_tree__confirm-delete-text">
+                            <p v-else class="ct_tree__confirm-delete-text">
                                 {{
                                     $t(`${translationContext}.modal.textDeleteMultipleConfirm`, {
                                         count: checkedElementsCount,
@@ -134,14 +134,14 @@
                     </ct-block>
 
                     <template #modal-footer>
-                        <ct-block name="sw_tree_delete_modal_footer">
-                            <ct-block name="sw_tree_delete_modal_cancel">
+                        <ct-block name="ct_tree_delete_modal_footer">
+                            <ct-block name="ct_tree_delete_modal_cancel">
                                 <mt-button size="small" variant="secondary" @click="onCloseDeleteModal">
                                     {{ $t('global.default.cancel') }}
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_tree_delete_modal_confirm">
+                            <ct-block name="ct_tree_delete_modal_confirm">
                                 <mt-button variant="critical" size="small" @click="onConfirmDelete()">
                                     {{ $t('global.default.delete') }}
                                 </mt-button>
@@ -999,7 +999,7 @@ onBeforeUnmount(() => {
     beforeUnmountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     treeItems,
     draggedItem,
     droppedItem,

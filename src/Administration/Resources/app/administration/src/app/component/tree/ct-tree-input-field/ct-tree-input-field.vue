@@ -1,18 +1,18 @@
 <template>
-    <ct-block name="sw_tree_input_field">
+    <ct-block name="ct_tree_input_field">
         <div class="ct-tree-item ct-tree-input-field is--no-children" :class="classes">
-            <ct-block name="sw_tree_input_fieldelement">
+            <ct-block name="ct_tree_input_fieldelement">
                 <div class="ct-tree-item__element">
-                    <ct-block name="sw_tree_input_fieldelement_grip">
+                    <ct-block name="ct_tree_input_fieldelement_grip">
                         <div class="ct-tree-item__icon">
                             <mt-icon v-if="!disabled" name="regular-circle-xxs" size="18" />
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_tree_input_fieldelement_content">
+                    <ct-block name="ct_tree_input_fieldelement_content">
                         <div class="ct-tree-item__content">
                             <slot name="content">
-                                <ct-block name="sw_tree_input_fieldslot_content">
+                                <ct-block name="ct_tree_input_fieldslot_content">
                                     <ct-confirm-field
                                         :value="currentValue"
                                         :disabled="disabled"
@@ -61,7 +61,7 @@ const createNewItem = (itemName) => {
     emit('new-item-create', itemName);
 };
 
-swDefinePublic({
+ctDefinePublic({
     classes,
     createNewItem,
 });

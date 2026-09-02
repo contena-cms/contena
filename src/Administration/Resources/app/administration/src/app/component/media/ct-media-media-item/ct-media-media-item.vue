@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_media_item">
+    <ct-block name="ct_media_media_item">
         <ct-media-base-item
             class="ct-media-media-item"
             :item="item"
@@ -9,7 +9,7 @@
             @media-item-selection-remove="emit('media-item-selection-remove', $event)"
         >
             <template #preview="{ item }">
-                <ct-block name="sw_media_media_item_preview">
+                <ct-block name="ct_media_media_item_preview">
                     <div class="ct-media-media-item__preview-hit-area" @click.stop="emitItemClick($event, item)">
                         <ct-media-preview-v2
                             :source="item"
@@ -21,7 +21,7 @@
             </template>
 
             <template #name="{ item, isInlineEdit, startInlineEdit, endInlineEdit }">
-                <ct-block name="sw_media_media_item_name_container">
+                <ct-block name="ct_media_media_item_name_container">
                     <mt-text-field
                         v-if="isInlineEdit"
                         v-autofocus
@@ -51,7 +51,7 @@
             </template>
 
             <template #metadata="{ item }">
-                <ct-block name="sw_media_media_item_metadata">
+                <ct-block name="ct_media_media_item_metadata">
                     <div class="ct-media-media-item__metadata">
                         <span v-if="item.uploadedAt"
                             ><ct-time-ago
@@ -64,14 +64,14 @@
             </template>
 
             <template #context-menu="{ item, startInlineEdit, allowEdit, allowDelete }">
-                <ct-block name="sw_media_media_item_context_menu">
+                <ct-block name="ct_media_media_item_context_menu">
                     <slot>
-                        <ct-block name="sw_media_media_item_additional_context_menu_slot"></ct-block>
+                        <ct-block name="ct_media_media_item_additional_context_menu_slot"></ct-block>
                     </slot>
 
-                    <ct-block name="sw_media_media_item_context_group_quick_actions">
+                    <ct-block name="ct_media_media_item_context_group_quick_actions">
                         <div :class="defaultContextMenuClass">
-                            <ct-block name="sw_media_media_item_context_item_rename_item">
+                            <ct-block name="ct_media_media_item_context_item_rename_item">
                                 <ct-context-menu-item
                                     :disabled="!item.hasFile || item.private || !allowEdit"
                                     @click="startInlineEdit"
@@ -80,13 +80,13 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_copy_item_link">
+                            <ct-block name="ct_media_media_item_context_item_copy_item_link">
                                 <ct-context-menu-item v-if="item.hasFile" @click="copyItemLink(item)">
                                     {{ translate('global.ct-media-media-item.labelContextMenuCopyLink') }}
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_replace">
+                            <ct-block name="ct_media_media_item_context_item_replace">
                                 <ct-context-menu-item
                                     :disabled="item.private || !allowEdit"
                                     class="ct-media-context-item__replace-media-action"
@@ -96,7 +96,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_move">
+                            <ct-block name="ct_media_media_item_context_item_move">
                                 <ct-context-menu-item
                                     :disabled="!allowEdit"
                                     class="ct-media-context-item__move-media-action"
@@ -106,7 +106,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_set_cover">
+                            <ct-block name="ct_media_media_item_context_item_set_cover">
                                 <ct-context-menu-item
                                     v-if="isVideoMedia"
                                     :disabled="!allowEdit"
@@ -117,7 +117,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_remove_cover">
+                            <ct-block name="ct_media_media_item_context_item_remove_cover">
                                 <ct-context-menu-item
                                     v-if="isVideoMedia && hasVideoCover"
                                     :disabled="!allowEdit"
@@ -128,7 +128,7 @@
                                 </ct-context-menu-item>
                             </ct-block>
 
-                            <ct-block name="sw_media_media_item_context_item_delete">
+                            <ct-block name="ct_media_media_item_context_item_delete">
                                 <ct-context-menu-item
                                     :disabled="item.private || !allowDelete"
                                     variant="danger"
@@ -143,7 +143,7 @@
             </template>
 
             <template #modal-windows="{ item, allowEdit, allowDelete }">
-                <ct-block name="sw_media_media_item_modal_replace">
+                <ct-block name="ct_media_media_item_modal_replace">
                     <ct-media-modal-replace
                         v-if="showModalReplace && allowEdit"
                         :item-to-replace="item"
@@ -152,7 +152,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_media_media_item_delete_modal">
+                <ct-block name="ct_media_media_item_delete_modal">
                     <ct-media-modal-delete
                         v-if="showModalDelete && allowDelete"
                         :items-to-delete="[item]"
@@ -161,7 +161,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_media_media_item_move_modal">
+                <ct-block name="ct_media_media_item_move_modal">
                     <ct-media-modal-move
                         v-if="showModalMove && allowEdit"
                         :items-to-move="[item]"
@@ -170,7 +170,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_media_media_item_cover_modal">
+                <ct-block name="ct_media_media_item_cover_modal">
                     <ct-media-modal-v2
                         v-if="showCoverSelectionModal && allowEdit && isVideoMedia"
                         :allow-multi-select="false"
@@ -378,7 +378,7 @@ const {
     item: () => props.item,
 });
 
-swDefinePublic({
+ctDefinePublic({
     mediaService,
     acl,
     showModalReplace,

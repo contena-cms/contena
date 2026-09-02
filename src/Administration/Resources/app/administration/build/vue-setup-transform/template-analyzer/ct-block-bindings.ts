@@ -9,7 +9,7 @@
 import { NodeTypes, type TemplateChildNode } from '@vue/compiler-dom';
 import type { ContenaSetupMode } from '../utils/contena-setup-block';
 import { ContenaSetupTransformError } from '../utils/transform-error';
-import { type DirectiveNode, type ElementNode, getDefaultSlotDirective, isSwBlockExtends } from './template-references';
+import { type DirectiveNode, type ElementNode, getDefaultSlotDirective, isCtBlockExtends } from './template-references';
 
 function getDirectNamedSlot(node: ElementNode): ElementNode | undefined {
     for (const child of node.children) {
@@ -45,7 +45,7 @@ function getDirectNamedSlot(node: ElementNode): ElementNode | undefined {
  * bindings and the wrong-mode identity get targeted messages; everything else (other attributes,
  * directives, bound identity, `v-bind` objects) is rejected as unsupported.
  */
-function assertSwBlockAttributes(node: ElementNode, mode: ContenaSetupMode, templateOffset: number): void {
+function assertCtBlockAttributes(node: ElementNode, mode: ContenaSetupMode, templateOffset: number): void {
     const identityAttr = mode === 'base' ? 'name' : 'extends';
     const wrongIdentityAttr = mode === 'base' ? 'extends' : 'name';
 
@@ -85,6 +85,15 @@ function assertSwBlockAttributes(node: ElementNode, mode: ContenaSetupMode, temp
 
         // The one allowed attribute: a static identity for this mode.
         if (attributeName === identityAttr) {
+            const identityValue = prop.type === NodeTypes.ATTRIBUTE ? (prop.value?.content ?? '') : '';
+
+            if (!identityValue.startsWith('ct_')) {
+                throw new ContenaSetupTransformError(
+                    `The static ${identityAttr} of <ct-block> must start with "ct_".`,
+                    templateOffset + prop.loc.start.offset,
+                );
+            }
+
             return;
         }
 
@@ -92,10 +101,10 @@ function assertSwBlockAttributes(node: ElementNode, mode: ContenaSetupMode, temp
         if (attributeName === wrongIdentityAttr || boundArg === wrongIdentityAttr) {
             throw new ContenaSetupTransformError(
                 mode === 'base'
-                    ? '<ct-block extends="..."> is only valid in an override component. A base component declares ' +
-                      'blocks with <ct-block name="...">.'
-                    : '<ct-block name="..."> is only valid in a base component. An override contributes into an ' +
-                      'existing block with <ct-block extends="...">.',
+                    ? '<ct-block extends="ct_..."> is only valid in an override component. A base component declares ' +
+                      'blocks with <ct-block name="ct_...">.'
+                    : '<ct-block name="ct_..."> is only valid in a base component. An override contributes into an ' +
+                      'existing block with <ct-block extends="ct_...">.',
                 templateOffset + prop.loc.start.offset,
             );
         }
@@ -166,12 +175,12 @@ function assertOverrideTemplateTopLevel(children: TemplateChildNode[], templateO
             return;
         }
 
-        if (isSwBlockExtends(node)) {
+        if (isCtBlockExtends(node)) {
             return;
         }
 
         throw new ContenaSetupTransformError(
-            'An override template may only contain <ct-block extends="..."> blocks at its top level. An override ' +
+            'An override template may only contain <ct-block extends="ct_..."> blocks at its top level. An override ' +
                 'component renders only inside the blocks it extends, so any other top-level markup would never render ' +
                 'and its setup references would resolve against the hidden override component. Move it into a ' +
                 '<ct-block extends> block.',
@@ -233,7 +242,7 @@ function findOpeningTagNameEnd(template: string, elementStart: number): number {
 export {
     assertNoWritesToForwardedBindings,
     assertOverrideTemplateTopLevel,
-    assertSwBlockAttributes,
+    assertCtBlockAttributes,
     findOpeningTagAttributeEnd,
     findOpeningTagNameEnd,
 };

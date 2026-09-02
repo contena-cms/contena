@@ -58,7 +58,7 @@ describe('module/ct-mail-template/page/ct-mail-header-footer-detail', () => {
             template: '<textarea class="textarea" :disabled="disabled" />',
         });
         const codeEditor = defineComponent({
-            name: 'SwCodeEditor',
+            name: 'CtCodeEditor',
             props: [
                 'value',
                 'disabled',

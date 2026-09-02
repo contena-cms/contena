@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_multi_tag_ip_select">
+    <ct-block name="ct_multi_tag_ip_select">
         <ct-multi-tag-select
             :value="value"
             :validate="validate"
@@ -79,7 +79,7 @@ const getKnownIp = (ip: string): KnownIp | null => {
 };
 const translateKnownIpName = (name: string): string => (te(name) ? t(name) : name);
 
-swDefinePublic({
+ctDefinePublic({
     validKnownIps,
     validUnselectedKnownIps,
     addSpecific,

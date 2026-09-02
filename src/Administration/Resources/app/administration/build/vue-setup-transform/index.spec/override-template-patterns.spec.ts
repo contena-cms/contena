@@ -5,7 +5,7 @@
  * genuine setup reference and must not mistake a pattern-local alias for one.
  *
  * The plain reference-detection, slot-scope generation, and rejected ct-block bindings live in
- * override-template.spec.ts; the script-to-hidden-component lowering and `swDefineOverride` return
+ * override-template.spec.ts; the script-to-hidden-component lowering and `ctDefineOverride` return
  * payload in override-transform.spec.ts.
  */
 
@@ -15,7 +15,7 @@ describe('build/vue-setup-transform override template pattern references', () =>
     it('detects override-local references in v-for alias default values', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p v-for="{ label = fallbackLabel } in rows">{{ label }}</p>
             </ct-block>
             </template>
@@ -23,19 +23,19 @@ describe('build/vue-setup-transform override template pattern references', () =>
             const rows = [];
             const fallbackLabel = 'fallback';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
         const result = transformOrFail(source, 'v-for-default-reference.override.vue').code;
 
-        expect(result).toContain(`#default="{ __swOverride: { [__swSetupNamespace]: { rows, fallbackLabel } } }"`);
+        expect(result).toContain(`#default="{ __ctOverride: { [__ctSetupNamespace]: { rows, fallbackLabel } } }"`);
     });
 
     it('detects override-local references in v-for alias computed keys', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p v-for="{ [dynamicKey]: value } in rows">{{ value }}</p>
             </ct-block>
             </template>
@@ -43,19 +43,19 @@ describe('build/vue-setup-transform override template pattern references', () =>
             const rows = [];
             const dynamicKey = 'label';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
         const result = transformOrFail(source, 'v-for-computed-key-reference.override.vue').code;
 
-        expect(result).toContain(`#default="{ __swOverride: { [__swSetupNamespace]: { rows, dynamicKey } } }"`);
+        expect(result).toContain(`#default="{ __ctOverride: { [__ctSetupNamespace]: { rows, dynamicKey } } }"`);
     });
 
     it('does not let child component slot scopes shadow same-element directive references', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <Child #default="{ eventName }" @[eventName]="track" :title="title" />
             </ct-block>
             </template>
@@ -64,7 +64,7 @@ describe('build/vue-setup-transform override template pattern references', () =>
             const title = 'Title';
             const track = () => {};
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -74,13 +74,13 @@ describe('build/vue-setup-transform override template pattern references', () =>
         // The `@[eventName]`, `:title` and `track` references sit on <Child> itself, outside that
         // scope, so they still resolve to the override's setup bindings and are forwarded through
         // the ct-block rather than being shadowed by the same-element alias.
-        expect(result).toContain(`#default="{ __swOverride: { [__swSetupNamespace]: { eventName, title, track } } }"`);
+        expect(result).toContain(`#default="{ __ctOverride: { [__ctSetupNamespace]: { eventName, title, track } } }"`);
     });
 
     it('does not expose setup state for v-for defaults that reference earlier object aliases', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p v-for="{ info, label = info } in rows">{{ label }}</p>
             </ct-block>
             </template>
@@ -88,7 +88,7 @@ describe('build/vue-setup-transform override template pattern references', () =>
             const info = 'setup info';
             const rows = [];
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -101,7 +101,7 @@ describe('build/vue-setup-transform override template pattern references', () =>
     it('does not expose setup state for v-for defaults that reference earlier array aliases', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p v-for="[info, label = info] in rows">{{ label }}</p>
             </ct-block>
             </template>
@@ -109,7 +109,7 @@ describe('build/vue-setup-transform override template pattern references', () =>
             const info = 'setup info';
             const rows = [];
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 

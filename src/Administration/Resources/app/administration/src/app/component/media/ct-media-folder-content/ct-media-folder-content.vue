@@ -1,15 +1,15 @@
 <template>
-    <ct-block name="sw_media_folder_content">
+    <ct-block name="ct_media_folder_content">
         <div class="ct-media-folder-content">
-            <ct-block name="sw_media_folder_content_folder_listing">
+            <ct-block name="ct_media_folder_content_folder_listing">
                 <ul v-if="subFolders.length > 0 || parentFolder !== null" class="ct-media-folder-content__folder-listing">
-                    <ct-block name="sw_media_folder_content_list_item">
+                    <ct-block name="ct_media_folder_content_list_item">
                         <li v-if="parentFolder !== null" class="ct-media-folder-content__list-item">
                             <button
                                 class="ct-media-folder-content__button ct-media-folder-content__parent-folder"
                                 @click="emitInput(parentFolder)"
                             >
-                                <ct-block name="sw_media_folder_content_folder_icon">
+                                <ct-block name="ct_media_folder_content_folder_icon">
                                     <img
                                         :src="
                                             assetFilter(
@@ -38,10 +38,10 @@
                             @click="emitInput(folder)"
                             @keydown.enter="emitInput(folder)"
                         >
-                            <ct-block name="sw_media_folder_content_button_folder">
-                                <ct-block name="sw_media_folder_content_button_folder_button">
+                            <ct-block name="ct_media_folder_content_button_folder">
+                                <ct-block name="ct_media_folder_content_button_folder_button">
                                     <button class="ct-media-folder-content__button ct-media-folder-content__folder-button">
-                                        <ct-block name="sw_media_folder_content_folder_button_icon">
+                                        <ct-block name="ct_media_folder_content_folder_button_icon">
                                             <img
                                                 :src="
                                                     assetFilter(
@@ -55,7 +55,7 @@
                                         {{ folder.name }}
                                     </button>
                                 </ct-block>
-                                <ct-block name="sw_media_folder_content_switch_button">
+                                <ct-block name="ct_media_folder_content_switch_button">
                                     <mt-icon
                                         v-if="getChildCount(folder) > 0"
                                         class="ct-media-folder-content__switch-button"
@@ -161,7 +161,7 @@ onMounted(() => {
     mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     filterItems,
     repositoryFactory,
     subFolders,

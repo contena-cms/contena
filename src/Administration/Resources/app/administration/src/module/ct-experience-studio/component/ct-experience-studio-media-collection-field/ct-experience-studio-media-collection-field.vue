@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_experience_studio_media_collection_field">
+    <ct-block name="ct_experience_studio_media_collection_field">
         <div class="ct-experience-studio-media-collection-field">
-            <ct-block name="sw_experience_studio_media_collection_field_label">
+            <ct-block name="ct_experience_studio_media_collection_field_label">
                 <label v-if="label" class="ct-experience-studio-media-collection-field__label">
                     {{ label }}
                 </label>
             </ct-block>
 
-            <ct-block name="sw_experience_studio_media_collection_field_selection">
+            <ct-block name="ct_experience_studio_media_collection_field_selection">
                 <ct-media-list-selection-v2
                     :entity="listEntity"
                     :entity-media-items="entityMediaItems"
@@ -20,11 +20,11 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_experience_studio_media_collection_field_upload_listener">
+            <ct-block name="ct_experience_studio_media_collection_field_upload_listener">
                 <ct-upload-listener :upload-tag="uploadTag" auto-upload @media-upload-finish="onUploadFinish" />
             </ct-block>
 
-            <ct-block name="sw_experience_studio_media_collection_field_modal">
+            <ct-block name="ct_experience_studio_media_collection_field_modal">
                 <ct-media-modal-v2
                     v-if="showMediaModal"
                     variant="full"
@@ -138,7 +138,7 @@ function emitValue(ids: string[]): void {
     emit('update:value', ids.length > 0 ? ids : null);
 }
 
-swDefinePublic({
+ctDefinePublic({
     showMediaModal,
     uploadTag,
     mediaIds,

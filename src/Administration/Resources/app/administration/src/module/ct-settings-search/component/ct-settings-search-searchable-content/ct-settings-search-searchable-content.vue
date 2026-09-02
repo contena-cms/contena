@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_settings_search_searchable_content">
+    <ct-block name="ct_settings_search_searchable_content">
         <mt-card
             class="ct-settings-search-searchable-content"
             position-identifier="ct-settings-search-searchable-content"
             :title="t('ct-settings-search.generalTab.labelSearchableContent')"
         >
-            <ct-block name="sw_settings_search_searchable_content_title">
+            <ct-block name="ct_settings_search_searchable_content_title">
                 <p class="ct-settings-search-searchable-content__title">
                     {{ t('ct-settings-search.generalTab.textDescriptionSearchableContent') }}
                 </p>
             </ct-block>
 
-            <ct-block name="sw_settings_search_searchable_actions">
+            <ct-block name="ct_settings_search_searchable_actions">
                 <div class="ct-settings-search-searchable-content__actions">
                     <div class="ct-settings-search-searchable-content__button-group">
-                        <ct-block name="sw_settings_search_searchable_add_item">
+                        <ct-block name="ct_settings_search_searchable_add_item">
                             <mt-button
                                 v-if="defaultTab === tabNames.customTab"
                                 class="ct-settings-search__searchable-content-add-button"
@@ -26,7 +26,7 @@
                                 {{ t('ct-settings-search.generalTab.buttonAddContent') }}
                             </mt-button>
                         </ct-block>
-                        <ct-block name="sw_settings_search_searchable_reset_default">
+                        <ct-block name="ct_settings_search_searchable_reset_default">
                             <mt-button
                                 v-if="defaultTab === tabNames.generalTab"
                                 class="ct-settings-search__searchable-content-reset-button"
@@ -38,7 +38,7 @@
                                 {{ t('ct-settings-search.generalTab.buttonResetDefault') }}
                             </mt-button>
                         </ct-block>
-                        <ct-block name="sw_settings_search_searchable_show_example">
+                        <ct-block name="ct_settings_search_searchable_show_example">
                             <mt-button
                                 class="ct-settings-search__searchable-content-show-example-link"
                                 size="small"
@@ -57,7 +57,7 @@
                 <ct-settings-search-example-modal v-if="showExampleModal" @modal-close="onCloseExampleModal" />
             </ct-block>
 
-            <ct-block name="sw_settings_search_searchable_content_tabs">
+            <ct-block name="ct_settings_search_searchable_content_tabs">
                 <mt-tabs
                     class="ct-settings-search-searchable-content__tabs"
                     position-identifier="ct-settings-search-searchable-content"
@@ -67,7 +67,7 @@
                     @new-item-active="onChangeTab"
                 />
                 <div class="ct-settings-search-searchable-content__tab-content">
-                    <ct-block name="sw_settings_search_searchable_content_general_tab_item">
+                    <ct-block name="ct_settings_search_searchable_content_general_tab_item">
                         <ct-settings-search-searchable-content-general
                             v-if="defaultTab === tabNames.generalTab"
                             :is-empty="isListEmpty"
@@ -79,7 +79,7 @@
                             @config-save="saveConfig"
                         />
                     </ct-block>
-                    <ct-block name="sw_settings_search_searchable_content_customfields_tab_item">
+                    <ct-block name="ct_settings_search_searchable_content_customfields_tab_item">
                         <ct-settings-search-searchable-content-customfields
                             v-if="defaultTab === tabNames.customTab"
                             :is-empty="isListEmpty"
@@ -302,7 +302,7 @@ watch(() => props.searchConfigId, loadData);
 watch(() => props.blogSearchConfigs, loadData);
 loadData();
 
-swDefinePublic({
+ctDefinePublic({
     showExampleModal,
     defaultTab,
     tabNames,

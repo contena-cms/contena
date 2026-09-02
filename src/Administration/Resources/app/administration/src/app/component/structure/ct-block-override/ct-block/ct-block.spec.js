@@ -17,7 +17,7 @@ async function createWrapper({
         {
             template: `
             <div class="component-root">
-                <ct-block name="test-extension-point" :data="$dataScope">
+                <ct-block name="ct_test-extension-point" :data="$dataScope">
                     ${defaultContent}
                 </ct-block>
             </div>
@@ -72,7 +72,7 @@ describe('ct-block', () => {
         const wrapper = mount(
             {
                 template: `
-                    <ct-block name="test-attributes" id="settings-item" class="external-class">
+                    <ct-block name="ct_test-attributes" id="settings-item" class="external-class">
                         <a class="default-class"></a>
                     </ct-block>
                 `,
@@ -111,7 +111,7 @@ describe('ct-block', () => {
     it('renders the `block` overridden content without default content', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <div class="extension-content"></div>
                 </ct-block>
             `,
@@ -124,10 +124,10 @@ describe('ct-block', () => {
     it('renders content from last `block` override when there are multiple overrides and not `block-parent` is used', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <div class="extension-content-1"></div>
                 </ct-block>
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <div class="extension-content-2"></div>
                 </ct-block>
             `,
@@ -141,7 +141,7 @@ describe('ct-block', () => {
     it('renders content from the parent before the `block` override', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content"></div>
                 </ct-block>
@@ -154,7 +154,7 @@ describe('ct-block', () => {
     it('renders content from the parent after the `block` override', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <div class="extension-content"></div>
                     <ct-block-parent/>
                 </ct-block>
@@ -167,12 +167,12 @@ describe('ct-block', () => {
     it('renders parent content from multiple `block`s', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content-1"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content-2"></div>
                 </ct-block>
@@ -189,7 +189,7 @@ describe('ct-block', () => {
         const { wrapper } = await createWrapper({
             renderExtensions: false,
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <div class="extension-content"></div>
                 </ct-block>
             `,
@@ -203,7 +203,7 @@ describe('ct-block', () => {
         const { wrapper, toggleExtensions } = await createWrapper({
             renderExtensions: false,
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content"></div>
                 </ct-block>
@@ -234,28 +234,28 @@ describe('ct-block', () => {
         const { wrapper } = await createWrapper({
             moreBlockExtensions: `
                 <div class="component-root-2">
-                    <ct-block  name="test-extension-point-2">
+                    <ct-block  name="ct_test-extension-point-2">
                         <div class="default-content-2"></div>
                     </ct-block >
                 </div>
             `,
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content-1"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content-2"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point-2">
+                <ct-block extends="ct_test-extension-point-2">
                     <ct-block-parent/>
                     <div class="extension-content-3"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point-2">
+                <ct-block extends="ct_test-extension-point-2">
                     <ct-block-parent/>
                     <div class="extension-content-4"></div>
                 </ct-block>
@@ -276,7 +276,7 @@ describe('ct-block', () => {
     it('does not render anything if the `block` name to extend does not exist', async () => {
         const { wrapper } = await createWrapper({
             extensions: `
-                <ct-block extends="NOT-EXISTING-extension-point">
+                <ct-block extends="ct_NOT-EXISTING-extension-point">
                      <ct-block-parent/>
                      <div class="extension-content"></div>
                 </ct-block>
@@ -291,26 +291,26 @@ describe('ct-block', () => {
         const { wrapper } = await createWrapper({
             defaultContent: `
                     <div class="default-content"></div>
-                    <ct-block name="test-extension-point-2">
+                    <ct-block name="ct_test-extension-point-2">
                         <div class="default-content-2"></div>
 
-                        <ct-block name="test-extension-point-3">
+                        <ct-block name="ct_test-extension-point-3">
                             <div class="default-content-3"></div>
                         </ct-block>
                     </ct-block>
             `,
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content-1"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point-2">
+                <ct-block extends="ct_test-extension-point-2">
                     <ct-block-parent/>
                     <div class="extension-content-2"></div>
                 </ct-block>
 
-                <ct-block extends="test-extension-point-3">
+                <ct-block extends="ct_test-extension-point-3">
                     <ct-block-parent/>
                     <div class="extension-content-3"></div>
                 </ct-block>
@@ -342,7 +342,7 @@ describe('ct-block', () => {
             extraData: { label: 'initial' },
             defaultContent: '<div class="default-content">{{ label }}</div>',
             extensions: `
-                <ct-block extends="test-extension-point">
+                <ct-block extends="ct_test-extension-point">
                     <ct-block-parent/>
                     <div class="extension-content"></div>
                 </ct-block>
@@ -402,7 +402,7 @@ describe('ct-block', () => {
                 },
             },
             extensions: `
-                <ct-block extends="test-extension-point" #default="{testData, testMethod, testComputed}">
+                <ct-block extends="ct_test-extension-point" #default="{testData, testMethod, testComputed}">
                     <ct-block-parent/>
                     <div class="extension-content-1">{{testData}}</div>
                     <div class="extension-content-2">{{testMethod('param')}}</div>

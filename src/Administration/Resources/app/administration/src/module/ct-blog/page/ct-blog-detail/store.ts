@@ -4,8 +4,8 @@ type BlogDetailBlog = EntitySchema.blog & {
     isNew: () => boolean;
 };
 
-const swBlogDetail = Contena.Store.register({
-    id: 'swBlogDetail',
+const ctBlogDetail = Contena.Store.register({
+    id: 'ctBlogDetail',
 
     state() {
         return {
@@ -51,7 +51,7 @@ const swBlogDetail = Contena.Store.register({
 });
 
 /** @private */
-export default swBlogDetail;
+export default ctBlogDetail;
 
 /** @private */
-export type SwBlogDetailStore = ReturnType<typeof swBlogDetail>;
+export type CtBlogDetailStore = ReturnType<typeof ctBlogDetail>;

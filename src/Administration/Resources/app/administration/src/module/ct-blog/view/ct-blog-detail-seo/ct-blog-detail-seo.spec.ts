@@ -27,7 +27,7 @@ function getCollection<EntityName extends keyof EntitySchema.Entities>(
 }
 
 function createWrapper() {
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     store.blog = {
         id: 'blog1',

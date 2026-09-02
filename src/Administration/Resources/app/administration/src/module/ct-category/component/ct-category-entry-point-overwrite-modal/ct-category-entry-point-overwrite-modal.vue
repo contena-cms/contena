@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_category_entry_point_overwrite_modal">
+    <ct-block name="ct_category_entry_point_overwrite_modal">
         <ct-confirm-modal
             class="ct-category-entry-point-overwrite-modal"
             @cancel="onCancel"
@@ -47,7 +47,7 @@ const onConfirm = () => {
     emit('confirm');
 };
 
-swDefinePublic({
+ctDefinePublic({
     onCancel,
     onConfirm,
 });

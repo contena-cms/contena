@@ -14,7 +14,7 @@ describe('components/ct-sidebar-filter-panel', () => {
                 stubs: {
                     'ct-sidebar-item': await wrapTestComponent('ct-sidebar-item', { sync: true }),
                     'ct-filter-panel': defineComponent({
-                        name: 'SwFilterPanel',
+                        name: 'CtFilterPanel',
                         setup(_, { expose }) {
                             expose({ resetAll });
 

@@ -603,7 +603,7 @@ const mtTabsInvalidTests = [
                     <ct-tabs-item
                         class="ct-product-detail__tab-general"
                         route="ct.product.detail.base"
-                        :has-error="swProductDetailBaseError"
+                        :has-error="ctProductDetailBaseError"
                         :title="$tc('ct-product.detail.tabGeneral')"
                     >
                         {{ $tc('ct-product.detail.tabGeneral') }}
@@ -637,7 +637,7 @@ const mtTabsInvalidTests = [
                     <ct-tabs-item
                         class="ct-product-detail__tab-general"
                         route="ct.product.detail.base"
-                        :has-error="swProductDetailBaseError"
+                        :has-error="ctProductDetailBaseError"
                         :title="$tc('ct-product.detail.tabGeneral')"
                     >
                         {{ $tc('ct-product.detail.tabGeneral') }}

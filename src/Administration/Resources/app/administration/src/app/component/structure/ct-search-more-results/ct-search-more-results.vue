@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_search_more_results">
+    <ct-block name="ct_search_more_results">
         <router-link
             v-if="searchTypeRoute"
             :to="{ name: searchTypeRoute, query: { term: term } }"
             class="ct-search-more-results__link ct-search-more-results__link--v2"
         >
-            <ct-block name="sw_search_more_results_content">
+            <ct-block name="ct_search_more_results_content">
                 <slot name="content">
-                    <ct-block name="sw_search_more_results_slot_content">
+                    <ct-block name="ct_search_more_results_slot_content">
                         {{ searchContent }}
                     </ct-block>
                 </slot>
@@ -76,7 +76,7 @@ const searchContent = computed(() => {
     );
 });
 
-swDefinePublic({
+ctDefinePublic({
     searchTypeService,
     moduleFactory,
     searchTypeRoute,

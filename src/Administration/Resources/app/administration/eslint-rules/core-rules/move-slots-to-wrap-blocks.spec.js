@@ -16,7 +16,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template #default>
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -40,7 +40,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template #default>
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -52,7 +52,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             output: `
                 <template>
                     <template #default>
-                        <ct-block name="block-name">
+                        <ct-block name="ct_block-name">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
                         </ct-block>
@@ -69,7 +69,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template v-slot:default>
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -81,7 +81,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             output: `
                 <template>
                     <template v-slot:default>
-                        <ct-block name="block-name">
+                        <ct-block name="ct_block-name">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
                         </ct-block>
@@ -98,7 +98,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-name">
+                    <ct-block name="ct_block-name">
                         <template #body="{prop1, prop2}">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
@@ -110,7 +110,7 @@ tester.run('move-slots-to-wrap-blocks', rule, {
             output: `
                 <template>
                     <template #body="{prop1, prop2}">
-                        <ct-block name="block-name">
+                        <ct-block name="ct_block-name">
                             <h1>Title</h1>
                             <p>{{ message }}</p>
                         </ct-block>

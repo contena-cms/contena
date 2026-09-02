@@ -330,7 +330,7 @@ const onSelectFieldChange = (selectedLinkType: LinkCategories) => {
     linkHref.value = '';
 };
 
-swDefinePublic({
+ctDefinePublic({
     isLoading,
     showLinkModal,
     linkHref,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_contextual_field">
+    <ct-block name="ct_contextual_field">
         <ct-block-field class="ct-contextual-field" v-bind="$attrs">
             <template #ct-field-input="{ identification, error, disabled, size, setFocusClass, removeFocusClass }">
                 <div v-if="hasPrefix" class="ct-field__addition is--prefix">
@@ -45,7 +45,7 @@ const hasSuffix = computed(() => {
     return slots.hasOwnProperty('ct-contextual-field-suffix') && slots['ct-contextual-field-suffix']({}) !== undefined;
 });
 
-swDefinePublic({
+ctDefinePublic({
     hasPrefix,
     hasSuffix,
 });

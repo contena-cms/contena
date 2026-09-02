@@ -19,7 +19,7 @@ const emit = defineEmits<{
 const displayedLabel = computed(() => props.label);
 const count = ref(1);
 
-swDefinePublic({
+ctDefinePublic({
     count,
 });
 </script>

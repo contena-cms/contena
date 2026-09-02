@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_settings_snippet_grid_sidebar">
+    <ct-block name="ct_settings_snippet_grid_sidebar">
         <aside class="ct-snippet-settings__sidebar">
-            <ct-block name="sw_settings_snippet_grid_sidebar_header">
+            <ct-block name="ct_settings_snippet_grid_sidebar_header">
                 <div class="ct-snippet-settings__sidebar-header">
                     <strong>{{ t('ct-settings-snippet.list.titleSidebarItemFilter') }}</strong>
                     <mt-badge v-if="activeFilterNumber" variant="info">{{ activeFilterNumber }}</mt-badge>
@@ -16,7 +16,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_snippet_grid_sidebar_filter_actions">
+            <ct-block name="ct_settings_snippet_grid_sidebar_filter_actions">
                 <mt-button
                     v-if="activeFilterNumber"
                     class="ct-snippet-settings__sidebar-reset-all"
@@ -51,7 +51,7 @@
                     @update:value="onChange"
                 />
 
-                <ct-block name="sw_settings_snippet_grid_sidebar_filter_author">
+                <ct-block name="ct_settings_snippet_grid_sidebar_filter_author">
                     <section v-if="authorFilters.length" class="ct-snippet-settings__filter-group">
                         <h3>{{ t('ct-settings-snippet.filter.author') }}</h3>
                         <ct-settings-snippet-filter-switch
@@ -66,7 +66,7 @@
                     </section>
                 </ct-block>
 
-                <ct-block name="sw_settings_snippet_grid_sidebar_filter_more">
+                <ct-block name="ct_settings_snippet_grid_sidebar_filter_more">
                     <section v-if="filterItems.length" class="ct-snippet-settings__filter-group">
                         <h3>{{ t('ct-settings-snippet.filter.more') }}</h3>
                         <ct-settings-snippet-filter-switch
@@ -146,7 +146,7 @@ const onChange = (field: FilterChange): void => emit('change', field);
 const onRefresh = (): void => emit('ct-sidebar-collaps-refresh-grid');
 const resetAll = (): void => emit('sidebar-reset-all');
 
-swDefinePublic({
+ctDefinePublic({
     filterSidebarItem,
     activeFilterNumber,
     isExpandedAuthorFilters,

@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_media_upload_v2">
+    <ct-block name="ct_media_upload_v2">
         <div class="ct-media-upload-v2">
-            <ct-block name="sw_media_upload_v2_compact">
+            <ct-block name="ct_media_upload_v2_compact">
                 <div v-if="variant == 'compact'" class="ct-media-upload-v2__content">
                     <ct-button-group split-button>
-                        <ct-block name="sw_media_upload_v2_compact_button_file_upload">
+                        <ct-block name="ct_media_upload_v2_compact_button_file_upload">
                             <mt-button
                                 class="ct-media-upload-v2__button-compact-upload"
                                 :disabled="disabled"
@@ -16,7 +16,7 @@
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_media_upload_v2_compact_button_context_menu">
+                        <ct-block name="ct_media_upload_v2_compact_button_context_menu">
                             <ct-context-button
                                 v-if="uploadUrlFeatureEnabled"
                                 :disabled="disabled"
@@ -34,7 +34,7 @@
                                     </mt-button>
                                 </template>
 
-                                <ct-block name="sw_media_upload_v2_compact_button_context_menu_actions">
+                                <ct-block name="ct_media_upload_v2_compact_button_context_menu_actions">
                                     <ct-context-menu-item
                                         class="ct-media-upload-v2__button-url-upload"
                                         @click="useUrlUpload"
@@ -46,7 +46,7 @@
                         </ct-block>
                     </ct-button-group>
 
-                    <ct-block name="sw_media_upload_v2_compact_url_form">
+                    <ct-block name="ct_media_upload_v2_compact_url_form">
                         <ct-media-url-form
                             v-if="isUrlUpload"
                             variant="modal"
@@ -57,29 +57,29 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_upload_v2_regular">
+            <ct-block name="ct_media_upload_v2_regular">
                 <div v-if="variant == 'regular' || variant == 'small'" class="ct-media-upload-v2__content">
-                    <ct-block name="sw_media_upload_v2_regular_header">
+                    <ct-block name="ct_media_upload_v2_regular_header">
                         <div class="ct-media-upload-v2__header">
-                            <ct-block name="sw_media_upload_v2_regular_header_label">
+                            <ct-block name="ct_media_upload_v2_regular_header_label">
                                 <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-                                <label v-if="label" class="ct-media-upload-v2__label" :class="swFieldLabelClasses">
+                                <label v-if="label" class="ct-media-upload-v2__label" :class="ctFieldLabelClasses">
                                     {{ label }}
                                 </label>
                             </ct-block>
 
-                            <ct-block name="sw_media_upload_v2_regular_header_helptext">
+                            <ct-block name="ct_media_upload_v2_regular_header_helptext">
                                 <ct-help-text v-if="helpText" class="ct-media-upload-v2__help-text" :text="helpText" />
                             </ct-block>
 
-                            <ct-block name="sw_media_upload_v2_regular_header_switch">
+                            <ct-block name="ct_media_upload_v2_regular_header_switch">
                                 <ct-context-button
                                     v-if="!source && uploadUrlFeatureEnabled"
                                     class="ct-media-upload-v2__switch-mode"
                                     :disabled="disabled"
                                     aria-label="global.ct-media-upload-v2.switchMode"
                                 >
-                                    <ct-block name="sw_media_upload_v2_regular_header_switch_file_upload">
+                                    <ct-block name="ct_media_upload_v2_regular_header_switch_file_upload">
                                         <ct-context-menu-item
                                             v-if="!isFileUpload"
                                             :disabled="disabled"
@@ -90,7 +90,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_media_upload_v2_regular_header_switch_url_upload">
+                                    <ct-block name="ct_media_upload_v2_regular_header_switch_url_upload">
                                         <ct-context-menu-item
                                             v-if="!isUrlUpload"
                                             class="ct-media-upload-v2__button-url-upload"
@@ -104,23 +104,23 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_media_upload_v2_regular_drop_zone">
+                    <ct-block name="ct_media_upload_v2_regular_drop_zone">
                         <div
                             ref="dropzone"
                             v-droppable="{ dragGroup: 'media', onDrop: onDropMedia, validDropCls: 'is--active' }"
                             class="ct-media-upload-v2__dropzone"
                             :class="isDragActiveClass"
                         >
-                            <ct-block name="sw_media_upload_v2_preview">
+                            <ct-block name="ct_media_upload_v2_preview">
                                 <template v-if="variant === 'regular'">
-                                    <ct-block name="sw_media_upload_v2_regular_preview_file">
+                                    <ct-block name="ct_media_upload_v2_regular_preview_file">
                                         <ct-media-preview-v2
                                             v-if="showPreview && (source || preview)"
                                             class="ct-media-upload-v2__preview"
                                             :source="source || preview"
                                         />
                                     </ct-block>
-                                    <ct-block name="sw_media_upload_v2_regular_preview_fallback">
+                                    <ct-block name="ct_media_upload_v2_regular_preview_fallback">
                                         <template v-if="showPreview && (source || preview)"
                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                                         >
@@ -131,7 +131,7 @@
                                 </template>
 
                                 <template v-if="!showPreview && variant === 'regular'">
-                                    <ct-block name="sw_media_upload_v2_regular_caption">
+                                    <ct-block name="ct_media_upload_v2_regular_caption">
                                         <div class="ct-media-upload-v2__upload-caption">
                                             <mt-icon name="regular-cloud-upload" />
                                             {{ $t('global.ct-media-upload-v2.caption') }}
@@ -140,7 +140,7 @@
                                 </template>
                             </ct-block>
 
-                            <ct-block name="sw_media_upload_v2_actions">
+                            <ct-block name="ct_media_upload_v2_actions">
                                 <div
                                     class="ct-media-upload-v2__actions"
                                     :class="{ 'has--source': source, 'is--small': variant === 'small' }"
@@ -158,7 +158,7 @@
                                     </div>
 
                                     <template v-else>
-                                        <ct-block name="sw_media_upload_v2_regular_actions_url">
+                                        <ct-block name="ct_media_upload_v2_regular_actions_url">
                                             <ct-media-url-form
                                                 v-if="isUrlUpload"
                                                 class="ct-media-upload-v2__url-form"
@@ -167,9 +167,9 @@
                                             />
                                         </ct-block>
 
-                                        <ct-block name="sw_media_upload_v2_regular_actions_add">
+                                        <ct-block name="ct_media_upload_v2_regular_actions_add">
                                             <template v-if="isFileUpload">
-                                                <ct-block name="sw_media_upload_v2_regular_media_sidebar_button">
+                                                <ct-block name="ct_media_upload_v2_regular_media_sidebar_button">
                                                     <mt-button
                                                         v-if="hasOpenMediaButtonListener"
                                                         class="ct-media-upload-v2__button open-media-sidebar"
@@ -191,7 +191,7 @@
                                                     </mt-button>
                                                 </ct-block>
 
-                                                <ct-block name="sw_media_upload_v2_regular_upload_button">
+                                                <ct-block name="ct_media_upload_v2_regular_upload_button">
                                                     <mt-button
                                                         class="ct-media-upload-v2__button upload"
                                                         :class="{ 'is--small': variant === 'small' }"
@@ -213,7 +213,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_upload_v2_file_input">
+            <ct-block name="ct_media_upload_v2_file_input">
                 <form ref="fileForm" class="ct-media-upload-v2__form">
                     <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                     <input
@@ -444,7 +444,7 @@ const isFileUpload = computed(() => {
 const uploadUrlFeatureEnabled = computed(() => {
     return isUploadUrlFeatureEnabled.value;
 });
-const swFieldLabelClasses = computed(() => {
+const ctFieldLabelClasses = computed(() => {
     return {
         'is--required': props.required,
     };
@@ -813,7 +813,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mediaService,
     mediaPresignedUploadService,
@@ -836,7 +836,7 @@ swDefinePublic({
     isUrlUpload,
     isFileUpload,
     uploadUrlFeatureEnabled,
-    swFieldLabelClasses,
+    ctFieldLabelClasses,
     buttonFileUploadLabel,
     mediaNameFilter,
     presignedUploadSupported,
@@ -889,7 +889,7 @@ defineExpose({
     isUrlUpload,
     isFileUpload,
     uploadUrlFeatureEnabled,
-    swFieldLabelClasses,
+    ctFieldLabelClasses,
     buttonFileUploadLabel,
     mediaNameFilter,
     presignedUploadSupported,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_ai_copilot_warning">
+    <ct-block name="ct_ai_copilot_warning">
         <div class="ct-ai-copilot-warning">
             <mt-icon name="solid-exclamation-triangle" size="14px" />
             {{ warningText }}
@@ -27,7 +27,7 @@ const warningText = computed(() => {
     return props.text || t('ct-ai-copilot-warning.text');
 });
 
-swDefinePublic({
+ctDefinePublic({
     warningText,
 });
 

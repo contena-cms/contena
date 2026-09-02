@@ -23,7 +23,7 @@ describe('test/transformer/contenaSetupVueTransformer integration', () => {
             }>();
             const count = ref(1);
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -42,6 +42,6 @@ describe('test/transformer/contenaSetupVueTransformer integration', () => {
         expect(code).toContain('props: {');
         expect(code).toContain('emits: ["save"]');
         expect(code).toContain('exports.default');
-        expect(code).not.toContain('swDefinePublic');
+        expect(code).not.toContain('ctDefinePublic');
     });
 });

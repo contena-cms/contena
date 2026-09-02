@@ -1,6 +1,6 @@
 /**
  * Covers constraints on the `<script setup>` body itself, independent of any specific macro:
- * top-level await, ES module exports, the reserved `__swSetup` binding prefix, and ambient
+ * top-level await, ES module exports, the reserved `__ctSetup` binding prefix, and ambient
  * `declare` hoisting.
  */
 
@@ -37,7 +37,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             import { defineProps } from 'vue';
             const props = defineProps({ count: Number });
             const doubled = props.count * 2;
-            swDefinePublic({ doubled });
+            ctDefinePublic({ doubled });
             </script>
         `;
 
@@ -46,7 +46,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
         // The import is legal (Vue itself drops it again during compilation) and the call stays a props
         // macro in place; only the binding is renamed to its author alias.
         expect(result).toContain("import { defineProps } from 'vue';");
-        expect(result).toContain('const __swSetupAuthor_props = defineProps({ count: Number });');
+        expect(result).toContain('const __ctSetupAuthor_props = defineProps({ count: Number });');
     });
 
     it('rejects importing a Vue macro name from anywhere but vue', () => {
@@ -54,7 +54,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <script setup>
             import { defineProps } from './my-utils';
             const props = defineProps({ count: Number });
-            swDefinePublic({ props });
+            ctDefinePublic({ props });
             </script>
         `;
 
@@ -70,7 +70,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <script setup>
             const defineProps = () => ({});
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -79,17 +79,17 @@ describe('build/vue-setup-transform script setup constraints', () => {
         );
     });
 
-    it('rejects top-level bindings using the reserved __swSetup prefix', () => {
+    it('rejects top-level bindings using the reserved __ctSetup prefix', () => {
         const source = stripIndent`
             <script setup>
-            const __swSetupProps = 1;
-            const count = __swSetupProps;
-            swDefinePublic({ count });
+            const __ctSetupProps = 1;
+            const count = __ctSetupProps;
+            ctDefinePublic({ count });
             </script>
         `;
 
         expect(() => transformContenaSetupSfc(source, 'reserved-prefix.vue')).toThrow(
-            '"__swSetupProps" uses the reserved "__swSetup" prefix of the Contena setup transform and must not be declared or imported.',
+            '"__ctSetupProps" uses the reserved "__ctSetup" prefix of the Contena setup transform and must not be declared or imported.',
         );
     });
 
@@ -97,7 +97,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
         const source = stripIndent`
             <script setup>
             const __proto__ = 7;
-            swDefinePublic({ __proto__ });
+            ctDefinePublic({ __proto__ });
             </script>
         `;
 
@@ -111,7 +111,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <script setup lang="ts">
             declare const injected: number;
             const count = injected + 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -121,7 +121,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
         // bindings, so they are neither renamed nor collected as returned setup state.
         expect(result).toContain('declare const injected: number;');
         expect(result.indexOf('declare const injected')).toBeLessThan(result.indexOf('attachOverrides('));
-        expect(result).toContain('const __swSetupAuthor_count = injected + 1;');
+        expect(result).toContain('const __ctSetupAuthor_count = injected + 1;');
         expect(result).not.toMatch(/\n\s*injected,/);
     });
 
@@ -133,7 +133,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
                 count: number;
             }
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -157,7 +157,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
                 }
             }
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -171,7 +171,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
         const source = stripIndent`
             <script setup lang="ts">
             export const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -185,7 +185,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <script setup>
             const Contena = { custom: true };
             const count = Contena.custom;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -210,7 +210,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
         const source = stripIndent`
             <script setup lang="tsx">
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -224,7 +224,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <template><div /></template>
             <script setup>
             const value = await loadValue();
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 
@@ -252,7 +252,7 @@ describe('build/vue-setup-transform script setup constraints', () => {
             <template><div /></template>
             <script setup>
             const Contena = { custom: true };
-            swDefinePublic({});
+            ctDefinePublic({});
             </script>
         `;
 

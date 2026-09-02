@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_context_menu_divider">
-        <hr class="sw_context_menu_divider" />
+    <ct-block name="ct_context_menu_divider">
+        <hr class="ct_context_menu_divider" />
     </ct-block>
 </template>
 
@@ -9,5 +9,5 @@ import './ct-context-menu-divider.scss';
 
 defineProps({});
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_channel_modal_grid">
+    <ct-block name="ct_channel_modal_grid">
         <mt-loader v-if="isLoading" />
         <div v-else class="ct-channel-modal-grid">
             <button
@@ -73,7 +73,7 @@ const onOpenDetail = (id: string): void => {
 
 void loadChannelTypes();
 
-swDefinePublic({
+ctDefinePublic({
     channelTypes,
     isLoading,
     loadChannelTypes,

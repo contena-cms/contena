@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_permissions_role_form_modal">
+    <ct-block name="ct_permissions_role_form_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal class="ct-permissions-role-form-modal" width="m" :title="modalTitle">
-                <ct-block name="sw_permissions_role_form_modal_content">
+                <ct-block name="ct_permissions_role_form_modal_content">
                     <div v-if="role" class="ct-permissions-role-form-modal__form">
                         <mt-text-field
                             v-model="role.name"
@@ -25,7 +25,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_permissions_role_form_modal_footer">
+                    <ct-block name="ct_permissions_role_form_modal_footer">
                         <div class="ct-permissions-role-form-modal__footer-actions">
                             <mt-button variant="secondary" size="small" @click="closeModal">
                                 {{ t('global.default.cancel') }}
@@ -149,7 +149,7 @@ const onModalChange = (isOpen: boolean) => {
 
 void loadRole();
 
-swDefinePublic({
+ctDefinePublic({
     role,
     isLoading,
     modalTitle,

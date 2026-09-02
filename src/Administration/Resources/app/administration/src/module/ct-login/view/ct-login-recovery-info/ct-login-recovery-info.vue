@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_login_recovery_info">
+    <ct-block name="ct_login_recovery_info">
         <div class="ct-login-request-sent">
             <div class="ct-login-request-sent__icon">
                 <mt-icon
@@ -11,13 +11,13 @@
             </div>
 
             <div class="ct-login-request-sent__content">
-                <ct-block name="sw_login_recovery_info_headline">
+                <ct-block name="ct_login_recovery_info_headline">
                     <h1 class="ct-login-request-sent__title">
                         {{ $t('ct-login.requestSent.title') }}
                     </h1>
                 </ct-block>
 
-                <ct-block name="sw_login_recovery_info_info">
+                <ct-block name="ct_login_recovery_info_info">
                     <i18n-t
                         v-if="email"
                         keypath="ct-login.requestSent.description"
@@ -65,7 +65,7 @@ const waitTime = computed(() => {
     return Number.isNaN(seconds) || seconds < 1 ? null : seconds;
 });
 
-swDefinePublic({
+ctDefinePublic({
     email,
     waitTime,
 });

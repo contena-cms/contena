@@ -392,7 +392,7 @@ describe('ASYNC app/adapter/view/vue.adapter.js', () => {
     });
 
     it('should extend mixins', async () => {
-        Contena.Mixin.register('swFoo', {
+        Contena.Mixin.register('ctFoo', {
             methods: {
                 fooBar() {
                     return this.title;
@@ -400,7 +400,7 @@ describe('ASYNC app/adapter/view/vue.adapter.js', () => {
             },
         });
 
-        Contena.Mixin.register('swBar', {
+        Contena.Mixin.register('ctBar', {
             methods: {
                 biz() {
                     return this.title;
@@ -420,7 +420,7 @@ describe('ASYNC app/adapter/view/vue.adapter.js', () => {
                 };
             },
             mixins: [
-                'swFoo',
+                'ctFoo',
             ],
             methods: {
                 bar() {},
@@ -430,7 +430,7 @@ describe('ASYNC app/adapter/view/vue.adapter.js', () => {
         Contena.Component.extend('ct-test-component-extended', 'extendable-component', {
             template: '{% block foo %}<div>bbbbb</div>{% endblock %}',
             mixins: [
-                'swBar',
+                'ctBar',
             ],
             data() {
                 return {

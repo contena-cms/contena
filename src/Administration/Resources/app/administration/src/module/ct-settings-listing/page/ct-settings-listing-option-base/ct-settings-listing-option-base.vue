@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_settings_listing_option_base">
+    <ct-block name="ct_settings_listing_option_base">
         <ct-page class="ct-settings-listing-base">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_listing_option_base_smart_bar_heading">
+                <ct-block name="ct_settings_listing_option_base_smart_bar_heading">
                     <h2>{{ smartBarHeading }}</h2>
                 </ct-block>
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_listing_option_base_language_switch">
+                <ct-block name="ct_settings_listing_option_base_language_switch">
                     <ct-language-switch @on-change="onChangeLanguage" />
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_listing_option_base_smart_bar_actions">
+                <ct-block name="ct_settings_listing_option_base_smart_bar_actions">
                     <mt-button
                         variant="primary"
                         :is-loading="isLoading"
@@ -27,12 +27,12 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_listing_option_base_content">
+                <ct-block name="ct_settings_listing_option_base_content">
                     <ct-card-view>
                         <mt-loader v-if="isLoading && !blogSortingEntity" />
 
                         <template v-if="blogSortingEntity">
-                            <ct-block name="sw_settings_listing_option_base_content_locked_info">
+                            <ct-block name="ct_settings_listing_option_base_content_locked_info">
                                 <mt-banner
                                     v-if="blogSortingEntity.locked"
                                     class="ct-settings-listing-base__locked-info"
@@ -43,7 +43,7 @@
                                 </mt-banner>
                             </ct-block>
 
-                            <ct-block name="sw_settings_listing_option_base_content_general_info">
+                            <ct-block name="ct_settings_listing_option_base_content_general_info">
                                 <ct-settings-listing-option-general-info
                                     :sorting-option="blogSortingEntity"
                                     :is-default-sorting="isDefaultSorting"
@@ -52,7 +52,7 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_settings_listing_option_base_content_criteria_grid">
+                            <ct-block name="ct_settings_listing_option_base_content_criteria_grid">
                                 <ct-settings-listing-option-criteria-grid
                                     :blog-sorting-entity="blogSortingEntity"
                                     @changed="clearValidationErrors"
@@ -62,7 +62,7 @@
                         </template>
                     </ct-card-view>
 
-                    <ct-block name="sw_settings_listing_option_base_content_delete_modal">
+                    <ct-block name="ct_settings_listing_option_base_content_delete_modal">
                         <ct-settings-listing-delete-modal
                             v-if="toBeDeletedCriteriaIndex !== null"
                             :title="t('ct-settings-listing.base.delete.modalTitle')"
@@ -258,7 +258,7 @@ void Promise.all([
     fetchDefaultSorting(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     blogSortingEntity,
     defaultSortingId,
     toBeDeletedCriteriaIndex,

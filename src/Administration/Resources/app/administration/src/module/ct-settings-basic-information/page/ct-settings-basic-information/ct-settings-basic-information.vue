@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_basic_information_index">
+    <ct-block name="ct_settings_basic_information_index">
         <ct-page class="ct-settings-basic-information" show-search-bar>
             <template #smart-bar-header>
-                <ct-block name="sw_settings_basic_information_smart_bar_header">
-                    <ct-block name="sw_settings_basic_information_smart_bar_header_title">
+                <ct-block name="ct_settings_basic_information_smart_bar_header">
+                    <ct-block name="ct_settings_basic_information_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_settings_basic_information_smart_bar_header_title_text">
+                            <ct-block name="ct_settings_basic_information_smart_bar_header_title_text">
                                 {{ $t('ct-settings.index.title') }}
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
                                 {{ $t('ct-settings-basic-information.general.textHeadline') }}
@@ -16,8 +16,8 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_basic_information_smart_bar_actions">
-                    <ct-block name="sw_settings_basic_information_actions_save">
+                <ct-block name="ct_settings_basic_information_smart_bar_actions">
+                    <ct-block name="ct_settings_basic_information_actions_save">
                         <mt-button
                             class="ct-settings-basic-information__save-action"
                             :is-loading="isLoading"
@@ -32,7 +32,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_basic_information_content">
+                <ct-block name="ct_settings_basic_information_content">
                     <ct-card-view>
                         <template v-if="isLoading">
                             <ct-skeleton />
@@ -100,7 +100,7 @@ const onLoadingChanged = (loading: boolean): void => {
     isLoading.value = loading;
 };
 
-swDefinePublic({
+ctDefinePublic({
     isLoading,
     isSaveSuccessful,
     saveFinish,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="mt_text_editor_original">
+    <ct-block name="ct_mt_text_editor_original">
         <MtTextEditorOriginal
             ref="mtTextEditorOriginal"
             v-bind="$attrs"
@@ -97,7 +97,7 @@ const validate = () => {
     return original.validate();
 };
 
-swDefinePublic({
+ctDefinePublic({
     compatValue,
     mergedCustomButtons,
     mergedExcludedButtons,

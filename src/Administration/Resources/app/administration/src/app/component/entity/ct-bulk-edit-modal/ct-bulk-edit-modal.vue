@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_bulk_edit_modal">
+    <ct-block name="ct_bulk_edit_modal">
         <ct-modal
             class="ct-bulk-edit-modal"
             :title="$t('global.ct-bulk-edit-modal.bulkEditModalTitle', { count: itemCount }, itemCount)"
@@ -7,7 +7,7 @@
             @modal-close="$emit('modal-close')"
             @edit-items="$emit('edit-items')"
         >
-            <ct-block name="sw_bulk_edit_modal_grid">
+            <ct-block name="ct_bulk_edit_modal_grid">
                 <!-- TODO Codemod: This component need to be manually replaced with mt-data-table -->
                 <ct-data-grid
                     ref="bulkEditGrid"
@@ -21,13 +21,13 @@
                     @selection-change="updateBulkEditSelection"
                 >
                     <template v-for="(_, slot) in getSlots" #[slot]="slotProps" :key="slot">
-                        <ct-block name="sw_bulk_edit_modal_grid_custom_slot">
+                        <ct-block name="ct_bulk_edit_modal_grid_custom_slot">
                             <slot :name="slot" v-bind="slotProps"></slot>
                         </ct-block>
                     </template>
 
                     <template #pagination>
-                        <ct-block name="sw_bulk_edit_modal_list_pagination">
+                        <ct-block name="ct_bulk_edit_modal_list_pagination">
                             <ct-pagination
                                 v-bind="{ page, limit, steps }"
                                 :total="records.length"
@@ -41,7 +41,7 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_bulk_edit_modal_grid_footer">
+                <ct-block name="ct_bulk_edit_modal_grid_footer">
                     <slot name="ct-bulk-edit-modal-cancel">
                         <mt-button size="small" variant="secondary" @click="$emit('modal-close')">
                             {{ $t('global.default.cancel') }}
@@ -132,14 +132,14 @@ const editItems = () => {
     emit('modal-close');
 
     if (itemCount.value > 0) {
-        Contena.Store.get('swBulkEdit').selectedIds = Object.keys(bulkEditSelection.value);
+        Contena.Store.get('ctBulkEdit').selectedIds = Object.keys(bulkEditSelection.value);
         emit('edit-items');
     }
 };
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     records,
     bulkEditSelection,
     limit,

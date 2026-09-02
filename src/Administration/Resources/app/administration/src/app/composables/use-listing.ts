@@ -350,7 +350,7 @@ export function useListing() {
 
         if (matchedRoute?.value) {
             onBeforeRouteLeave(() => {
-                Contena.Store.get('swBulkEdit').selectedIds = [];
+                Contena.Store.get('ctBulkEdit').selectedIds = [];
             });
         }
 
@@ -392,7 +392,7 @@ export function useListing() {
         );
 
         watch(selection, (value) => {
-            Contena.Store.get('swBulkEdit').selectedIds = Object.keys(value);
+            Contena.Store.get('ctBulkEdit').selectedIds = Object.keys(value);
         });
         watch(term, (value) => {
             freshSearchTerm.value = !!value?.length;

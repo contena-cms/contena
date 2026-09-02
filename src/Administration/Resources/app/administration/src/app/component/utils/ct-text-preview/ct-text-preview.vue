@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_text_preview">
+    <ct-block name="ct_text_preview">
         <div class="ct-text-preview">
-            <ct-block name="sw_text_preview_shortened_content">
+            <ct-block name="ct_text_preview_shortened_content">
                 <span v-html="shortenedText"></span>
             </ct-block>
 
-            <ct-block name="sw_text_preview_expand_button">
+            <ct-block name="ct_text_preview_expand_button">
                 <mt-button
                     v-if="shortened"
                     class="ct-text-preview__expand-button"
@@ -17,14 +17,14 @@
                 </mt-button>
             </ct-block>
 
-            <ct-block name="sw_text_preview_modal">
+            <ct-block name="ct_text_preview_modal">
                 <ct-modal v-if="showModal" :title="modalTitle" @modal-close="closeModal">
-                    <ct-block name="sw_text_preview_modal_content">
+                    <ct-block name="ct_text_preview_modal_content">
                         <div v-html="fullText"></div>
                     </ct-block>
 
                     <template #modal-footer>
-                        <ct-block name="sw_text_preview_modal_footer">
+                        <ct-block name="ct_text_preview_modal_footer">
                             <mt-button size="small" variant="secondary" @click="closeModal">
                                 {{ $t('global.default.close') }}
                             </mt-button>
@@ -99,7 +99,7 @@ const openModal = () => {
     showModal.value = true;
 };
 
-swDefinePublic({
+ctDefinePublic({
     shortened,
     showModal,
     shortenedText,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_view_general">
+    <ct-block name="ct_settings_search_view_general">
         <div class="ct-settings-search__view-general">
             <ct-settings-search-search-behaviour
                 :is-loading="isLoading"
@@ -32,7 +32,7 @@ const emit = defineEmits<{ 'excluded-search-terms-load': []; 'edit-change': [edi
 const searchConfigId = computed(() => props.blogSearchConfigs?.id ?? '');
 const loadData = (): void => emit('excluded-search-terms-load');
 
-swDefinePublic({
+ctDefinePublic({
     searchConfigId,
     loadData,
 });

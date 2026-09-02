@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_seo_url">
+    <ct-block name="ct_seo_url">
         <div class="ct-seo-url">
             <mt-card
                 class="ct-seo-url__card"
@@ -12,7 +12,7 @@
                 </template>
 
                 <template v-else>
-                    <ct-block name="sw_seo_url_card_seo_path">
+                    <ct-block name="ct_seo_url_card_seo_path">
                         <ct-inherit-wrapper
                             v-model:value="currentSeoUrl.seoPathInfo"
                             :has-parent="currentChannelId !== null && !isHeadlessChannel && hasDefaultTemplate"
@@ -21,7 +21,7 @@
                             "
                         >
                             <template #content="inheritanceProps">
-                                <ct-block name="sw_seo_url_card_seo_path_edit">
+                                <ct-block name="ct_seo_url_card_seo_path_edit">
                                     <mt-text-field
                                         :is-inheritance-field="inheritanceProps.isInheritField"
                                         :is-inherited="inheritanceProps.isInherited"
@@ -42,7 +42,7 @@
                 </template>
 
                 <template v-if="!showEmptySeoUrlError" #toolbar>
-                    <ct-block name="sw_seo_url_card_toolbar">
+                    <ct-block name="ct_seo_url_card_toolbar">
                         <ct-channel-switch
                             ref="channelSwitch"
                             :disabled="disabled || undefined"
@@ -54,7 +54,7 @@
 
                 <div v-if="hasAdditionalSeoSlot" class="ct-seo-url__card-seo-additional">
                     <slot name="seo-additional" v-bind="{ currentChannelId }">
-                        <ct-block name="sw_seo_url_additional"></ct-block>
+                        <ct-block name="ct_seo_url_additional"></ct-block>
                     </slot>
                 </div>
             </mt-card>
@@ -132,13 +132,13 @@ const currentChannelId = ref<string | null>(props.channelId);
 const showEmptySeoUrlError = ref(false);
 
 const seoUrlCollection = computed(() => {
-    return Contena.Store.get('swSeoUrl').seoUrlCollection;
+    return Contena.Store.get('ctSeoUrl').seoUrlCollection;
 });
 const currentSeoUrl = computed(() => {
-    return Contena.Store.get('swSeoUrl').currentSeoUrl;
+    return Contena.Store.get('ctSeoUrl').currentSeoUrl;
 });
 const defaultSeoUrl = computed(() => {
-    return Contena.Store.get('swSeoUrl').defaultSeoUrl;
+    return Contena.Store.get('ctSeoUrl').defaultSeoUrl;
 });
 const seoUrlRepository = computed(() => {
     return repositoryFactory.create('seo_url');
@@ -147,15 +147,15 @@ const channelRepository = computed(() => {
     return repositoryFactory.create('channel');
 });
 const isHeadlessChannel = computed(() => {
-    if (!Contena.Store.get('swSeoUrl')) {
+    if (!Contena.Store.get('ctSeoUrl')) {
         return true;
     }
 
-    if (Contena.Store.get('swSeoUrl').channelCollection === null) {
+    if (Contena.Store.get('ctSeoUrl').channelCollection === null) {
         return true;
     }
 
-    const channel = Contena.Store.get('swSeoUrl').channelCollection.find((entry) => {
+    const channel = Contena.Store.get('ctSeoUrl').channelCollection.find((entry) => {
         return entry.id === currentChannelId.value;
     });
 
@@ -199,7 +199,7 @@ const initChannelCollection = (): void => {
     channelCriteria.addAssociation('type');
 
     void channelRepository.value.search(channelCriteria).then((channelCollection) => {
-        Contena.Store.get('swSeoUrl').channelCollection = channelCollection;
+        Contena.Store.get('ctSeoUrl').channelCollection = channelCollection;
     });
 };
 const initSeoUrlCollection = (): void => {
@@ -222,7 +222,7 @@ const initSeoUrlCollection = (): void => {
     const defaultSeoUrlEntity = seoUrlRepository.value.create();
     Object.assign(defaultSeoUrlEntity, defaultSeoUrlData);
     seoUrlCollection.add(defaultSeoUrlEntity);
-    Contena.Store.get('swSeoUrl').defaultSeoUrl = defaultSeoUrlEntity;
+    Contena.Store.get('ctSeoUrl').defaultSeoUrl = defaultSeoUrlEntity;
 
     props.urls.forEach((entityData) => {
         const entity = seoUrlRepository.value.create();
@@ -231,12 +231,12 @@ const initSeoUrlCollection = (): void => {
         seoUrlCollection.add(entity);
     });
 
-    if (!Contena.Store.get('swSeoUrl').defaultSeoUrl) {
+    if (!Contena.Store.get('ctSeoUrl').defaultSeoUrl) {
         showEmptySeoUrlError.value = true;
     }
 
-    Contena.Store.get('swSeoUrl').seoUrlCollection = seoUrlCollection;
-    Contena.Store.get('swSeoUrl').originalSeoUrls = props.urls;
+    Contena.Store.get('ctSeoUrl').seoUrlCollection = seoUrlCollection;
+    Contena.Store.get('ctSeoUrl').originalSeoUrls = props.urls;
     clearDefaultSeoUrls();
 };
 const clearDefaultSeoUrls = (): void => {
@@ -275,12 +275,12 @@ const refreshCurrentSeoUrl = (): void => {
 
         seoUrlCollection.value?.add(entity);
 
-        Contena.Store.get('swSeoUrl').currentSeoUrl = entity;
+        Contena.Store.get('ctSeoUrl').currentSeoUrl = entity;
 
         return;
     }
 
-    Contena.Store.get('swSeoUrl').currentSeoUrl = currentSeoUrl;
+    Contena.Store.get('ctSeoUrl').currentSeoUrl = currentSeoUrl;
 };
 const onChannelChanged = (channelId: string | null): void => {
     currentChannelId.value = channelId;
@@ -304,7 +304,7 @@ onBeforeUnmount(() => {
     Contena.Utils.EventBus.off('ct-blog-detail-save-finish', clearDefaultSeoUrls);
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     currentChannelId,
     showEmptySeoUrlError,

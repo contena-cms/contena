@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_media_list_selection_item_v2">
+    <ct-block name="ct_media_list_selection_item_v2">
         <div class="ct-media-list-selection-item-v2" :class="itemClasses">
-            <ct-block name="sw_media_list_selection_item_v2_preview">
+            <ct-block name="ct_media_list_selection_item_v2_preview">
                 <template v-if="!isPlaceholder">
-                    <ct-block name="sw_media_list_selection_item_v2_preview_media">
+                    <ct-block name="ct_media_list_selection_item_v2_preview_media">
                         <ct-media-preview-v2
                             class="ct-media-list-selection-item-v2__image"
                             :source="sourceId"
@@ -12,13 +12,13 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_media_list_selection_item_v2_preview_actions">
+                    <ct-block name="ct_media_list_selection_item_v2_preview_actions">
                         <ct-context-button
                             v-if="!disabled && !hideActions"
                             class="ct-media-list-selection-item-v2__context-button"
                         >
-                            <ct-block name="sw_media_list_selection_item_v2_context">
-                                <ct-block name="sw_media_list_selection_item_v2_context_delete_action">
+                            <ct-block name="ct_media_list_selection_item_v2_context">
+                                <ct-block name="ct_media_list_selection_item_v2_context_delete_action">
                                     <ct-context-menu-item variant="danger" @click="$emit('item-remove')">
                                         {{ $t('global.default.remove') }}
                                     </ct-context-menu-item>
@@ -29,10 +29,10 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_media_list_selection_item_v2_placeholder">
+            <ct-block name="ct_media_list_selection_item_v2_placeholder">
                 <template v-if="!isPlaceholder"><!-- Keeps the conditional chain connected across ct-block. --></template>
                 <template v-else>
-                    <ct-block name="sw_media_list_selection_item_v2_placeholder_icon">
+                    <ct-block name="ct_media_list_selection_item_v2_placeholder_icon">
                         <mt-icon
                             class="ct-media-list-selection-item-v2__placeholder-icon"
                             name="regular-image"
@@ -90,7 +90,7 @@ const sourceId = computed(() => {
     return props.item.mediaId || props.item.targetId || props.item.id;
 });
 
-swDefinePublic({
+ctDefinePublic({
     isPlaceholder,
     itemClasses,
     sourceId,

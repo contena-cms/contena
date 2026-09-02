@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_flow_trigger">
+    <ct-block name="ct_flow_trigger">
         <div ref="rootElement" class="ct-flow-trigger overlay">
-            <ct-block name="sw_flow_trigger_select_field">
+            <ct-block name="ct_flow_trigger_select_field">
                 <mt-text-field
                     id="ct-flow-trigger-input"
                     v-model="searchTerm"
@@ -21,7 +21,7 @@
             </ct-block>
 
             <transition name="ct-flow-trigger__fade-down">
-                <ct-block name="sw_flow_trigger_event_selection">
+                <ct-block name="ct_flow_trigger_event_selection">
                     <template v-if="isExpanded">
                         <div class="ct-flow-trigger__event-selection">
                             <div v-if="!isSearching" class="ct-flow-trigger__tree">
@@ -360,7 +360,7 @@ watch(searchResults, () => {
 onMounted(() => document.addEventListener('click', handleDocumentClick));
 onBeforeUnmount(() => document.removeEventListener('click', handleDocumentClick));
 
-swDefinePublic({
+ctDefinePublic({
     searchTerm,
     isExpanded,
     expandedIds,

@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_settings_listing_index">
+    <ct-block name="ct_settings_listing_index">
         <ct-page class="ct-settings-listing-index">
             <template #language-switch>
-                <ct-block name="sw_settings_listing_language_switch">
+                <ct-block name="ct_settings_listing_language_switch">
                     <ct-language-switch @on-change="loadSortings" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_listing_smart_bar_header">
+                <ct-block name="ct_settings_listing_smart_bar_header">
                     <h2>
                         {{ t('ct-settings.index.title') }}
                         <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -18,7 +18,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_listing_smart_bar_actions">
+                <ct-block name="ct_settings_listing_smart_bar_actions">
                     <mt-button variant="primary" :is-loading="isLoading" @click="onSave">
                         {{ t('global.default.save') }}
                     </mt-button>
@@ -26,9 +26,9 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_listing_content">
+                <ct-block name="ct_settings_listing_content">
                     <ct-card-view>
-                        <ct-block name="sw_settings_listing_content_system_config">
+                        <ct-block name="ct_settings_listing_content_system_config">
                             <ct-system-config
                                 ref="systemConfig"
                                 channel-switchable
@@ -37,7 +37,7 @@
                             >
                                 <template #afterElements="{ config, index, isNotDefaultChannel, inheritance }">
                                     <template v-if="config && index === 0">
-                                        <ct-block name="sw_settings_listing_default_sorting">
+                                        <ct-block name="ct_settings_listing_default_sorting">
                                             <ct-inherit-wrapper
                                                 v-model:value="config['core.listing.defaultSorting']"
                                                 :label="t('ct-settings-listing.general.labelDefaultSorting')"
@@ -60,7 +60,7 @@
                                             </ct-inherit-wrapper>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_listing_default_search_sorting">
+                                        <ct-block name="ct_settings_listing_default_search_sorting">
                                             <ct-inherit-wrapper
                                                 v-model:value="config['core.listing.defaultSearchResultSorting']"
                                                 :label="t('ct-settings-listing.general.labelDefaultSearchResultSorting')"
@@ -89,7 +89,7 @@
                             </ct-system-config>
                         </ct-block>
 
-                        <ct-block name="sw_settings_listing_content_sorting_options">
+                        <ct-block name="ct_settings_listing_content_sorting_options">
                             <mt-data-table
                                 layout="full"
                                 :caption="t('ct-settings-listing.index.blogSorting.title')"
@@ -114,7 +114,7 @@
                                 @item-delete="onRequestDelete"
                             >
                                 <template #toolbar>
-                                    <ct-block name="sw_settings_listing_add_sorting">
+                                    <ct-block name="ct_settings_listing_add_sorting">
                                         <mt-button variant="primary" @click="onCreate">
                                             {{ t('ct-settings-listing.index.blogSorting.addButton') }}
                                         </mt-button>
@@ -456,7 +456,7 @@ void Promise.all([
     loadCustomFields(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     blogSortingOptions,
     sortingToDelete,
     isSortingLoading,

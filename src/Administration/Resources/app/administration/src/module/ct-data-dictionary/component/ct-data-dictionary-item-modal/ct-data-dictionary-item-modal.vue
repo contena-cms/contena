@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_data_dictionary_item_modal">
+    <ct-block name="ct_data_dictionary_item_modal">
         <ct-modal
             class="ct-data-dictionary-item-modal"
             :title="translate('ct-data-dictionary.detail.editorTitle')"
             variant="small"
             @modal-close="onCancel"
         >
-            <ct-block name="sw_data_dictionary_item_modal_content">
-                <ct-block name="sw_data_dictionary_item_modal_parent">
+            <ct-block name="ct_data_dictionary_item_modal_content">
+                <ct-block name="ct_data_dictionary_item_modal_parent">
                     <mt-text-field
                         :model-value="parentLabel"
                         :label="translate('ct-data-dictionary.detail.itemParent')"
@@ -16,7 +16,7 @@
                 </ct-block>
 
                 <ct-container columns="1fr 1fr" gap="0 16px">
-                    <ct-block name="sw_data_dictionary_item_modal_code">
+                    <ct-block name="ct_data_dictionary_item_modal_code">
                         <mt-text-field
                             v-model="item.code"
                             :label="translate('ct-data-dictionary.detail.itemCode')"
@@ -25,7 +25,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_item_modal_label">
+                    <ct-block name="ct_data_dictionary_item_modal_label">
                         <mt-text-field
                             v-model="item.label"
                             :label="translate('ct-data-dictionary.detail.itemLabel')"
@@ -35,7 +35,7 @@
                     </ct-block>
                 </ct-container>
 
-                <ct-block name="sw_data_dictionary_item_modal_description">
+                <ct-block name="ct_data_dictionary_item_modal_description">
                     <mt-textarea
                         v-model="item.description"
                         :label="translate('ct-data-dictionary.detail.itemDescription')"
@@ -44,7 +44,7 @@
                 </ct-block>
 
                 <ct-container columns="1fr 1fr" gap="0 16px">
-                    <ct-block name="sw_data_dictionary_item_modal_position">
+                    <ct-block name="ct_data_dictionary_item_modal_position">
                         <mt-number-field
                             v-model="item.position"
                             :label="translate('ct-data-dictionary.detail.itemPosition')"
@@ -53,7 +53,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_item_modal_active">
+                    <ct-block name="ct_data_dictionary_item_modal_active">
                         <mt-switch
                             v-model="item.active"
                             :label="translate('ct-data-dictionary.detail.itemActive')"
@@ -64,14 +64,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_data_dictionary_item_modal_footer">
-                    <ct-block name="sw_data_dictionary_item_modal_footer_cancel">
+                <ct-block name="ct_data_dictionary_item_modal_footer">
+                    <ct-block name="ct_data_dictionary_item_modal_footer_cancel">
                         <mt-button size="small" variant="secondary" @click="onCancel">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_data_dictionary_item_modal_footer_actions">
+                    <ct-block name="ct_data_dictionary_item_modal_footer_actions">
                         <mt-button v-if="canCreate" size="small" variant="secondary" @click="onAddChild">
                             {{ translate('ct-data-dictionary.detail.addChildItem') }}
                         </mt-button>
@@ -144,7 +144,7 @@ const onSave = (): void => {
 const onAddChild = (): void => emit('add-child', item.value);
 const onDelete = (): void => emit('delete-item', item.value);
 
-swDefinePublic({
+ctDefinePublic({
     onCancel,
     onSave,
     onAddChild,

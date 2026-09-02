@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_base_filter">
+    <ct-block name="ct_base_filter">
         <div class="ct-base-filter">
-            <ct-block name="sw_base_filter_headline">
+            <ct-block name="ct_base_filter_headline">
                 <div class="ct-base-filter__headline">
                     <h4 class="ct-base-filter__title">
                         {{ title }}
@@ -18,7 +18,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_base_filter_content">
+            <ct-block name="ct_base_filter_content">
                 <slot></slot>
             </ct-block>
         </div>
@@ -59,7 +59,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     resetFilter,
 });
 

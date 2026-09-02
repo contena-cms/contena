@@ -1,22 +1,22 @@
 <template>
-    <ct-block name="sw_range_filter">
+    <ct-block name="ct_range_filter">
         <ct-base-filter v-bind="$attrs" class="ct-range-filter">
-            <ct-block name="sw_range_filter_content">
+            <ct-block name="ct_range_filter_content">
                 <ct-container :class="{ 'ct-container--has-divider': isShowDivider }">
                     <slot></slot>
 
                     <slot name="from-field">
-                        <ct-block name="sw_range_filter_from_field"></ct-block>
+                        <ct-block name="ct_range_filter_from_field"></ct-block>
                     </slot>
 
                     <slot name="divider">
-                        <ct-block name="sw_range_filter_divider">
+                        <ct-block name="ct_range_filter_divider">
                             <span v-if="isShowDivider" class="ct-range-filter__divider"></span>
                         </ct-block>
                     </slot>
 
                     <slot name="to-field">
-                        <ct-block name="sw_range_filter_to_field"></ct-block>
+                        <ct-block name="ct_range_filter_to_field"></ct-block>
                     </slot>
                 </ct-container>
             </ct-block>
@@ -69,7 +69,7 @@ watch(
     { deep: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     updateFilter,
 });

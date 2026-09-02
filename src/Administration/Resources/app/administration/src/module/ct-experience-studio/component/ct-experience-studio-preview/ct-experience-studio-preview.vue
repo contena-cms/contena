@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_preview">
+    <ct-block name="ct_experience_studio_preview">
         <div class="ct-experience-studio-preview">
             <div class="ct-experience-studio-preview__frame-wrapper">
                 <div class="ct-experience-studio-preview__frame" :class="viewportClass">
@@ -563,7 +563,7 @@ onBeforeUnmount(() => {
     }
 });
 
-swDefinePublic({
+ctDefinePublic({
     isPreviewLoading,
     previewLoadError,
     iframeAUrl,

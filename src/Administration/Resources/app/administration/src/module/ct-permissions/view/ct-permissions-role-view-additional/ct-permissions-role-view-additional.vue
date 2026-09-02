@@ -1,12 +1,12 @@
 <template>
     <div class="ct-permissions-role-view-additional">
-        <ct-block name="sw_permissions_role_view_additional_information">
+        <ct-block name="ct_permissions_role_view_additional_information">
             <mt-banner variant="info">
                 {{ $t('ct-permissions.roles.view.additional.alertText') }}
             </mt-banner>
         </ct-block>
 
-        <ct-block name="sw_permissions_role_view_additional_permissions">
+        <ct-block name="ct_permissions_role_view_additional_permissions">
             <ct-permissions-additional-permissions
                 v-if="role || isLoading"
                 :role="role"
@@ -15,7 +15,7 @@
             />
         </ct-block>
 
-        <ct-block name="sw_permissions_role_view_additional_routes">
+        <ct-block name="ct_permissions_role_view_additional_routes">
             <ct-permissions-detailed-additional-permissions
                 v-if="role || isLoading"
                 :role="role"
@@ -55,7 +55,7 @@ if (!acl) {
     throw new Error('The additional permissions view requires the ACL service.');
 }
 
-swDefinePublic({
+ctDefinePublic({
     acl,
 });
 

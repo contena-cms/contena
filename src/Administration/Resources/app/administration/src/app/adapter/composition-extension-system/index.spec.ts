@@ -3227,7 +3227,7 @@ describe('src/app/adapter/composition-extension-system', () => {
     });
 
     describe('Script setup override-local state:', () => {
-        it('should merge __swOverride fields from multiple overrides', async () => {
+        it('should merge __ctOverride fields from multiple overrides', async () => {
             type OverrideState = {
                 firstPlugin?: {
                     pluginMessage: string;
@@ -3259,7 +3259,7 @@ describe('src/app/adapter/composition-extension-system', () => {
             const wrapper = mount(originalComponent);
 
             overrideComponentSetup()('originalComponent', () => ({
-                __swOverride: {
+                __ctOverride: {
                     firstPlugin: {
                         pluginMessage: 'First plugin message',
                     },
@@ -3271,16 +3271,16 @@ describe('src/app/adapter/composition-extension-system', () => {
             const overrideState = (
                 wrapper.vm.$ as unknown as {
                     setupState: {
-                        __swOverride: OverrideState;
+                        __ctOverride: OverrideState;
                     };
                 }
-            ).setupState.__swOverride;
+            ).setupState.__ctOverride;
 
             expect(overrideState.firstPlugin?.pluginMessage).toBe('First plugin message');
             expect(overrideState.secondPlugin).toBeUndefined();
 
             overrideComponentSetup()('originalComponent', () => ({
-                __swOverride: {
+                __ctOverride: {
                     secondPlugin: {
                         pluginMessage: 'Second plugin message',
                     },

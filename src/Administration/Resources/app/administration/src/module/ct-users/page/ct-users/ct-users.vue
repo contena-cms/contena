@@ -59,10 +59,10 @@ import { computed, inject, ref } from 'vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
 import type AclService from 'src/app/service/acl.service';
 import { useI18n } from 'vue-i18n';
-import SwUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
+import CtUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
 
 const { t } = useI18n();
-const userListing = ref<ComponentExposed<typeof SwUsersUserListing>>();
+const userListing = ref<ComponentExposed<typeof CtUsersUserListing>>();
 const statusFilter = ref('all');
 
 const acl = inject<AclService>('acl');
@@ -133,7 +133,7 @@ const onSaveUserForm = async () => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     userTotal,
     userListingLoading,

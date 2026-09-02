@@ -150,7 +150,7 @@ Contena.Component.override('ct-product-detail', {
 
 ```vue
 <template>
-    <ct-block extends="product-detail-tabs">
+    <ct-block extends="ct_product-detail-tabs">
         <ct-block-parent />
         <mt-card title="Custom Configuration" />
     </ct-block>
@@ -170,23 +170,23 @@ Contena.Component.override('ct-product-detail', {
 
 ```html
 <!-- In component template -->
-<ct-block name="product-detail-tabs">
+<ct-block name="ct_product-detail-tabs">
     <ct-tabs>
-        <ct-block name="product-detail-tab-basic">
+        <ct-block name="ct_product-detail-tab-basic">
             <ct-tabs-item>Basic Information</ct-tabs-item>
         </ct-block>
 
-        <ct-block name="product-detail-tab-advanced">
+        <ct-block name="ct_product-detail-tab-advanced">
             <ct-tabs-item>Advanced Settings</ct-tabs-item>
         </ct-block>
     </ct-tabs>
 </ct-block>
 
 <!-- In plugin override -->
-<ct-block name="product-detail-tabs" extends="product-detail-tabs">
+<ct-block name="ct_product-detail-tabs" extends="ct_product-detail-tabs">
     <ct-block-parent />
 
-    <ct-block name="product-detail-tab-custom">
+    <ct-block name="ct_product-detail-tab-custom">
         <ct-tabs-item>Custom Configuration</ct-tabs-item>
     </ct-block>
 </ct-block>

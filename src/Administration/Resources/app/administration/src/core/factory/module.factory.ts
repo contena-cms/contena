@@ -24,7 +24,7 @@ export default {
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
 export type ModuleTypes = 'plugin' | 'core';
 
-interface SwRouteConfig {
+interface CtRouteConfig {
     path: string;
     name?: string;
     component?: string | App<Element>;
@@ -35,7 +35,7 @@ interface SwRouteConfig {
           };
     redirect?: RouteRecordRedirectOption;
     alias?: string | string[];
-    children?: SwRouteConfig[] | Record<string, SwRouteConfig>;
+    children?: CtRouteConfig[] | Record<string, CtRouteConfig>;
     meta?: $TSFixMe;
     beforeEnter?: NavigationGuard;
     props?: boolean | object | RouterLinkProps;
@@ -47,7 +47,7 @@ interface SwRouteConfig {
     isChildren?: boolean;
 }
 
-type ModuleRoutes = Map<string, SwRouteConfig>;
+type ModuleRoutes = Map<string, CtRouteConfig>;
 
 interface Navigation {
     moduleType?: ModuleTypes;
@@ -68,7 +68,7 @@ interface ModuleSearchResult {
     color?: string;
     label?: string;
     entity?: string;
-    route?: SwRouteConfig;
+    route?: CtRouteConfig;
     privilege?: string;
     action?: boolean;
 }
@@ -98,7 +98,7 @@ export interface ModuleManifest {
     type: ModuleTypes;
     routeMiddleware?: (next: () => void, currentRoute: RouteLocationNamedRaw) => void;
     routes: {
-        [key: string]: SwRouteConfig;
+        [key: string]: CtRouteConfig;
     };
     routePrefixName?: string;
     routePrefixPath?: string;
@@ -354,7 +354,7 @@ function registerModule(moduleId: string, module: ModuleManifest): false | Modul
 /**
  * Registers the route children in the module routes map recursively.
  */
-function registerChildRoutes(routeDefinition: SwRouteConfig, moduleRoutes: ModuleRoutes): ModuleRoutes {
+function registerChildRoutes(routeDefinition: CtRouteConfig, moduleRoutes: ModuleRoutes): ModuleRoutes {
     Object.values(routeDefinition.children ?? {}).map((child) => {
         if (hasOwnProperty(child, 'children') && Object.keys(child.children ?? {}).length) {
             moduleRoutes = registerChildRoutes(child, moduleRoutes);
@@ -369,7 +369,7 @@ function registerChildRoutes(routeDefinition: SwRouteConfig, moduleRoutes: Modul
 /**
  * Recursively iterates over the route children definitions and converts the format to the vue-router route definition.
  */
-function iterateChildRoutes(routeDefinition: SwRouteConfig): SwRouteConfig {
+function iterateChildRoutes(routeDefinition: CtRouteConfig): CtRouteConfig {
     const routeDefinitionChildren = routeDefinition.children;
 
     if (!routeDefinitionChildren) {
@@ -382,7 +382,7 @@ function iterateChildRoutes(routeDefinition: SwRouteConfig): SwRouteConfig {
             child,
         ]: [
             string,
-            SwRouteConfig,
+            CtRouteConfig,
         ]) => {
             if (child.path && child.path.length === 0) {
                 child.path = '';
@@ -408,7 +408,7 @@ function iterateChildRoutes(routeDefinition: SwRouteConfig): SwRouteConfig {
  * Generates the route component list e.g. adds supports for multiple components per route as well as validating
  * the developer input.
  */
-function createRouteComponentList(route: SwRouteConfig, moduleId: string, module: ModuleManifest): SwRouteConfig {
+function createRouteComponentList(route: CtRouteConfig, moduleId: string, module: ModuleManifest): CtRouteConfig {
     if (hasOwnProperty(module, 'flag')) {
         route.flag = module.flag;
     }
@@ -453,8 +453,8 @@ function createRouteComponentList(route: SwRouteConfig, moduleId: string, module
  * Returns the defined module routes which will be registered in the router and therefore will be accessible in the
  * application.
  */
-function getModuleRoutes(): SwRouteConfig[] {
-    const moduleRoutes: SwRouteConfig[] = [];
+function getModuleRoutes(): CtRouteConfig[] {
+    const moduleRoutes: CtRouteConfig[] = [];
 
     modules.forEach((module) => {
         module.routes.forEach((route) => {

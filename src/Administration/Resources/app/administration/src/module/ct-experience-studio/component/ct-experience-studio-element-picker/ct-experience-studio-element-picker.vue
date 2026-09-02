@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_element_picker">
+    <ct-block name="ct_experience_studio_element_picker">
         <div
             v-if="open"
             v-click-outside="() => $emit('close')"
@@ -168,7 +168,7 @@ const onSelect = (component: string) => {
     emit('select', component);
 };
 
-swDefinePublic({
+ctDefinePublic({
     categoryOrder,
     fallbackCategoryKey,
     groupedElements,

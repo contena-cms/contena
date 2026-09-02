@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_list">
+    <ct-block name="ct_settings_list">
         <ct-page class="ct-settings-logging-list">
             <template #search-bar>
-                <ct-block name="sw_settings_logging_list_search_bar">
+                <ct-block name="ct_settings_logging_list_search_bar">
                     <mt-search
                         :placeholder="translate('ct-settings-logging.general.placeholderSearchBar')"
                         :model-value="term"
@@ -12,10 +12,10 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_logging_list_smart_bar_header">
-                    <ct-block name="sw_settings_logging_list_smart_bar_header_title">
+                <ct-block name="ct_settings_logging_list_smart_bar_header">
+                    <ct-block name="ct_settings_logging_list_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_settings_logging_list_smart_bar_header_title_text">
+                            <ct-block name="ct_settings_logging_list_smart_bar_header_title_text">
                                 {{ translate('ct-settings.index.title') }}
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
                                 {{ translate('ct-settings-logging.list.title') }}
@@ -26,7 +26,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_logging_list_smart_bar_actions">
+                <ct-block name="ct_settings_logging_list_smart_bar_actions">
                     <mt-button variant="secondary" size="default" @click="onRefresh">
                         <mt-icon name="regular-undo" size="16" />
                         {{ translate('ct-settings-logging.list.titleSidebarItemRefresh') }}
@@ -35,8 +35,8 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_logging_list_content">
-                    <ct-block name="sw_settings_logging_list_content_listing">
+                <ct-block name="ct_settings_logging_list_content">
+                    <ct-block name="ct_settings_logging_list_content_listing">
                         <mt-data-table
                             layout="full"
                             :data-source="logs"
@@ -59,7 +59,7 @@
                             @context-select="onContextSelect"
                         >
                             <template #column-createdAt="{ data: item }">
-                                <ct-block name="sw_settings_logging_list_column_created_at">
+                                <ct-block name="ct_settings_logging_list_column_created_at">
                                     <ct-time-ago :date="item.createdAt" />
                                 </ct-block>
                             </template>
@@ -67,14 +67,14 @@
                             <!-- ct-block preserves this slot variable at runtime. -->
                             <!-- eslint-disable vue/no-unused-vars -->
                             <template #column-level="{ data: item }">
-                                <ct-block name="sw_settings_logging_list_column_level">
+                                <ct-block name="ct_settings_logging_list_column_level">
                                     {{ logLevelToString(item.level) }} ({{ item.level }})
                                 </ct-block>
                             </template>
                             <!-- eslint-enable vue/no-unused-vars -->
 
                             <template #column-context="{ data: item }">
-                                <ct-block name="sw_settings_logging_list_column_context">
+                                <ct-block name="ct_settings_logging_list_column_context">
                                     <a
                                         role="button"
                                         tabindex="0"
@@ -88,7 +88,7 @@
                         </mt-data-table>
                     </ct-block>
 
-                    <ct-block name="sw_settings_logging_list_content_info_modal">
+                    <ct-block name="ct_settings_logging_list_content_info_modal">
                         <component
                             :is="modalNameFromLogEntry"
                             v-if="displayedLog !== null"
@@ -257,7 +257,7 @@ initializeSettingsListing({
     isLoading,
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     entityName,
     sortBy,

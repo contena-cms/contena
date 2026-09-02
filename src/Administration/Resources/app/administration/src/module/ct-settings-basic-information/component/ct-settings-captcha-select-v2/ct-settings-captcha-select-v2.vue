@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_settings_captcha_select_v2">
+    <ct-block name="ct_settings_captcha_select_v2">
         <div class="ct-settings-captcha-select-v2">
-            <ct-block name="sw_settings_captcha_select_v2_multi_select">
+            <ct-block name="ct_settings_captcha_select_v2_multi_select">
                 <mt-select
                     v-model="activeCaptchaSelect"
                     v-bind="attributes"
@@ -10,12 +10,12 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v2">
+            <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v2">
                 <div
                     v-if="currentValue.googleReCaptchaV2.isActive"
                     class="ct-settings-captcha-select-v2__google-recaptcha-v2"
                 >
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v2_description">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v2_description">
                         <p
                             class="ct-settings-captcha-select-v2__description ct-settings-captcha-select-v2__google-recaptcha-v2-description"
                         >
@@ -29,7 +29,7 @@
                         </p>
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v2_site_key">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v2_site_key">
                         <mt-text-field
                             v-model="currentValue.googleReCaptchaV2.config.siteKey"
                             name="googleReCaptchaV2SiteKey"
@@ -37,7 +37,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v2_secret_key">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v2_secret_key">
                         <mt-text-field
                             v-model="currentValue.googleReCaptchaV2.config.secretKey"
                             name="googleReCaptchaV2SecretKey"
@@ -45,7 +45,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v2_invisible">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v2_invisible">
                         <mt-switch
                             v-model="currentValue.googleReCaptchaV2.config.invisible"
                             bordered
@@ -56,12 +56,12 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v3">
+            <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v3">
                 <div
                     v-if="currentValue.googleReCaptchaV3.isActive"
                     class="ct-settings-captcha-select-v2__google-recaptcha-v3"
                 >
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v3_description">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v3_description">
                         <p
                             class="ct-settings-captcha-select-v2__description ct-settings-captcha-select-v2__google-recaptcha-v3-description"
                         >
@@ -69,7 +69,7 @@
                         </p>
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v3_site_key">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v3_site_key">
                         <mt-text-field
                             v-model="currentValue.googleReCaptchaV3.config.siteKey"
                             name="googleReCaptchaV3SiteKey"
@@ -77,7 +77,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v3_secret_key">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v3_secret_key">
                         <mt-text-field
                             v-model="currentValue.googleReCaptchaV3.config.secretKey"
                             name="googleReCaptchaV3SecretKey"
@@ -85,7 +85,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_settings_captcha_select_v2_google_recaptcha_v3_threshold_score">
+                    <ct-block name="ct_settings_captcha_select_v2_google_recaptcha_v3_threshold_score">
                         <mt-number-field
                             v-model="currentValue.googleReCaptchaV3.config.thresholdScore"
                             name="googleReCaptchaV3ThresholdScore"
@@ -102,7 +102,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_captcha_select_v2_basic_captcha_notice">
+            <ct-block name="ct_settings_captcha_select_v2_basic_captcha_notice">
                 <div v-if="currentValue.basicCaptcha.isActive">
                     <mt-banner
                         variant="neutral"
@@ -242,7 +242,7 @@ const createdComponent = (): void => {
 watch(currentValue, (value) => emit('update:value', value), { deep: true });
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     availableCaptchas,
     attributes,
     currentValue,

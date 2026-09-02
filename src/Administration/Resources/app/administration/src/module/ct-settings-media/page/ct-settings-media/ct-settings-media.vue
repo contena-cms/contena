@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_media_index">
+    <ct-block name="ct_settings_media_index">
         <ct-page class="ct-settings-media">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_media_header">
+                <ct-block name="ct_settings_media_header">
                     <h2>
                         {{ $t('ct-settings.index.title') }} <mt-icon name="regular-chevron-right-xs" size="12px" />
                         {{ $t('ct-settings-media.general.title') }}
@@ -11,8 +11,8 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_media_smart_bar_actions">
-                    <ct-block name="sw_settings_media_actions_save">
+                <ct-block name="ct_settings_media_smart_bar_actions">
+                    <ct-block name="ct_settings_media_actions_save">
                         <ct-button-process
                             size="default"
                             class="ct-settings-media__save-action"
@@ -30,7 +30,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_media_content">
+                <ct-block name="ct_settings_media_content">
                     <ct-card-view>
                         <template v-if="isLoading">
                             <ct-skeleton />
@@ -104,7 +104,7 @@ const onLoadingChanged = (loading) => {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     systemConfigApiService,
     isLoading,
     isSaveSuccessful,

@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_blog_list">
+    <ct-block name="ct_blog_list">
         <ct-page class="ct-blog-list">
             <template #search-bar>
-                <ct-block name="sw_blog_list_search">
+                <ct-block name="ct_blog_list_search">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_blog_list_header">
+                <ct-block name="ct_blog_list_header">
                     <h2>
                         {{ $t('ct-blog.list.textHeadline') }}
                         <span v-if="!isLoading" class="ct-page__smart-bar-amount">({{ total }})</span>
@@ -17,7 +17,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_blog_list_actions">
+                <ct-block name="ct_blog_list_actions">
                     <div
                         v-tooltip="{
                             message: $t('ct-privileges.tooltip.warning'),
@@ -26,7 +26,7 @@
                         }"
                         class="ct-blog-list__add-button-group"
                     >
-                        <ct-block name="sw_blog_list_actions_add_post">
+                        <ct-block name="ct_blog_list_actions_add_post">
                             <mt-button
                                 class="ct-blog-list__add-post-button"
                                 variant="primary"
@@ -51,7 +51,7 @@
                             </mt-dropdown-menu-trigger>
                             <mt-dropdown-menu-portal>
                                 <mt-action-menu>
-                                    <ct-block name="sw_blog_list_actions_add_media">
+                                    <ct-block name="ct_blog_list_actions_add_media">
                                         <mt-action-menu-item @select="onCreateBlog('media')">
                                             {{ $t('ct-blog.list.buttonAddMediaBlog') }}
                                         </mt-action-menu-item>
@@ -68,7 +68,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_blog_list_content">
+                <ct-block name="ct_blog_list_content">
                     <div class="ct-blog-list__content">
                         <mt-data-table
                             v-if="blogs?.length"
@@ -264,7 +264,7 @@ const onTableSortChange = (property: string, direction: 'ASC' | 'DESC'): void =>
 initializeListing({ getList, sortBy, sortDirection });
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     blogs,
     isLoading,

@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_mail_template_preview_modal">
+    <ct-block name="ct_mail_template_preview_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal
                 class="ct-mail-template-preview-modal"
                 :title="$t('ct-mail-template.detail.previewModalTitle')"
                 width="xl"
             >
-                <ct-block name="sw_mail_template_preview_modal_content">
+                <ct-block name="ct_mail_template_preview_modal_content">
                     <template v-if="!isLoading">
                         <div class="ct-mail-template-preview-modal__subject">
                             <h3 class="ct-mail-template-preview-modal__subject-title">
@@ -85,8 +85,8 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_mail_template_detail_preview_modal_footer">
-                        <ct-block name="sw_mail_template_detail_preview_modal_footer_cancel">
+                    <ct-block name="ct_mail_template_detail_preview_modal_footer">
+                        <ct-block name="ct_mail_template_detail_preview_modal_footer_cancel">
                             <mt-button size="small" variant="secondary" @click="onClose">
                                 {{ $t('global.default.close') }}
                             </mt-button>
@@ -170,7 +170,7 @@ function onModalChange(isOpen: boolean): void {
     }
 }
 
-swDefinePublic({
+ctDefinePublic({
     plainParts,
     htmlParts,
     onClose,

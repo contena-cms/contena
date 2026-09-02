@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_category_detail_menu">
+    <ct-block name="ct_category_detail_menu">
         <mt-card
             class="ct-category-detail-base__menu"
             position-identifier="ct-category-detail-menu"
             :title="$t('ct-category.base.menu.title')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_category_detail_information_visible">
+            <ct-block name="ct_category_detail_information_visible">
                 <mt-switch
                     v-model="reversedVisibility"
                     bordered
@@ -16,7 +16,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_menu_media">
+            <ct-block name="ct_category_detail_menu_media">
                 <ct-upload-listener
                     :key="category.id + 'uploadListener'"
                     :upload-tag="category.id"
@@ -38,7 +38,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_menu_media_modal">
+            <ct-block name="ct_category_detail_menu_media_modal">
                 <ct-media-modal-v2
                     v-if="showMediaModal"
                     :allow-multi-select="false"
@@ -48,7 +48,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_detail_menu_description">
+            <ct-block name="ct_category_detail_menu_description">
                 <mt-text-editor
                     :key="category.id + 'description-meteor'"
                     v-model="category.description"
@@ -128,7 +128,7 @@ const onMediaDropped = (dropItem) => {
     onSetMediaItem({ targetId: dropItem.id });
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repositoryFactory,
     showMediaModal,

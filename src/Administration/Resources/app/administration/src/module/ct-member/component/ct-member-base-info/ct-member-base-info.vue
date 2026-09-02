@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_member_base_info">
+    <ct-block name="ct_member_base_info">
         <ct-member-base-form v-if="memberEditMode" :member="member" />
         <dl v-else class="ct-member-base-info">
             <div>
@@ -43,7 +43,7 @@ const props = defineProps({
 });
 const mailTo = computed(() => `mailto:${props.member.email}`);
 
-swDefinePublic({
+ctDefinePublic({
     mailTo,
 });
 

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_entity_multi_select">
+    <ct-block name="ct_entity_multi_select">
         <ct-select-base
             ref="selectBase"
             class="ct-entity-multi-select"
@@ -12,8 +12,8 @@
             @clear="clearSelection"
         >
             <template #ct-select-selection="{ disabled, size }">
-                <ct-block name="sw_entity_multi_select_base_selection">
-                    <ct-block name="sw_entity_multi_select_advanced_selection_modal">
+                <ct-block name="ct_entity_multi_select_base_selection">
+                    <ct-block name="ct_entity_multi_select_advanced_selection_modal">
                         <component
                             :is="advancedSelectionComponent"
                             v-if="isAdvancedSelectionActive && isAdvancedSelectionModalVisible"
@@ -25,7 +25,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_entity_multi_select_base_selection_slot">
+                    <ct-block name="ct_entity_multi_select_base_selection_slot">
                         <ct-select-selection-list
                             ref="selectionList"
                             :selections="visibleValues"
@@ -49,9 +49,9 @@
                             @search-term-change="onSearchTermChange"
                         >
                             <template #label-property="{ item, index, labelProperty, valueProperty, getKey }">
-                                <ct-block name="sw_entity_multi_select_base_selection_list">
-                                    <ct-block name="sw_entity_multi_select_base_selection_list_label">
-                                        <ct-block name="sw_entity_multi_select_base_selection_list_label_inner">
+                                <ct-block name="ct_entity_multi_select_base_selection_list">
+                                    <ct-block name="ct_entity_multi_select_base_selection_list_label">
+                                        <ct-block name="ct_entity_multi_select_base_selection_list_label_inner">
                                             <slot
                                                 name="selection-label-property"
                                                 v-bind="{ item, index, labelProperty, valueProperty, getKey }"
@@ -68,10 +68,10 @@
             </template>
 
             <template #results-list>
-                <ct-block name="sw_entity_multi_select_base_results">
-                    <ct-block name="sw_entity_multi_select_base_results_slot">
+                <ct-block name="ct_entity_multi_select_base_results">
+                    <ct-block name="ct_entity_multi_select_base_results_slot">
                         <ct-select-result-list
-                            ref="swSelectResultListRef"
+                            ref="ctSelectResultListRef"
                             :options="resultCollection"
                             :is-loading="isLoading"
                             :empty-message="$t('global.ct-entity-multi-select.messageNoResults', { term: searchTerm }, 0)"
@@ -80,8 +80,8 @@
                             @item-select="addItem"
                         >
                             <template #before-item-list>
-                                <ct-block name="sw_entity_multi_select_base_results_list_before">
-                                    <ct-block name="sw_entity_multi_select_base_results_list_before_advanced_selection">
+                                <ct-block name="ct_entity_multi_select_base_results_list_before">
+                                    <ct-block name="ct_entity_multi_select_base_results_list_before_advanced_selection">
                                         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                                         <div
                                             v-if="isAdvancedSelectionActive"
@@ -92,14 +92,14 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_entity_multi_select_base_results_list_before_slot">
+                                    <ct-block name="ct_entity_multi_select_base_results_list_before_slot">
                                         <slot name="before-item-list"></slot>
                                     </ct-block>
                                 </ct-block>
                             </template>
 
                             <template #result-item="{ item, index }">
-                                <ct-block name="sw_entity_multi_select_base_results_list_result">
+                                <ct-block name="ct_entity_multi_select_base_results_list_result">
                                     <slot
                                         name="result-item"
                                         v-bind="{
@@ -125,7 +125,7 @@
                                             @item-select="addItem"
                                         >
                                             <template #preview>
-                                                <ct-block name="sw_entity_multi_select_base_results_list_result_preview">
+                                                <ct-block name="ct_entity_multi_select_base_results_list_result_preview">
                                                     <slot
                                                         name="result-label-preview"
                                                         v-bind="{
@@ -140,7 +140,7 @@
                                                     ></slot>
                                                 </ct-block>
                                             </template>
-                                            <ct-block name="sw_entity_multi_select_base_results_list_result_label">
+                                            <ct-block name="ct_entity_multi_select_base_results_list_result_label">
                                                 <slot
                                                     name="result-label-property"
                                                     v-bind="{
@@ -164,7 +164,7 @@
                                                 </slot>
                                             </ct-block>
                                             <template #description>
-                                                <ct-block name="sw_entity_multi_select_base_results_list_result_description">
+                                                <ct-block name="ct_entity_multi_select_base_results_list_result_description">
                                                     <slot
                                                         name="result-description-property"
                                                         v-bind="{ item, searchTerm, highlightSearchTerm }"
@@ -177,7 +177,7 @@
                             </template>
 
                             <template #after-item-list>
-                                <ct-block name="sw_entity_multi_select_base_results_list_after">
+                                <ct-block name="ct_entity_multi_select_base_results_list_after">
                                     <slot name="after-item-list"></slot>
                                 </ct-block>
                             </template>
@@ -344,7 +344,7 @@ const emit = defineEmits([
 
 import { ref, computed, inject, watch } from 'vue';
 
-const swSelectResultListRef = ref(null);
+const ctSelectResultListRef = ref(null);
 const selectionList = ref(null);
 const selectBase = ref(null);
 
@@ -462,8 +462,8 @@ const displayLabelProperty = (item) => {
         .join(' ');
 };
 function resetActiveItem() {
-    if (swSelectResultListRef.value) {
-        swSelectResultListRef.value.setActiveItemIndex(0);
+    if (ctSelectResultListRef.value) {
+        ctSelectResultListRef.value.setActiveItemIndex(0);
     }
 }
 function resetCriteria() {
@@ -593,7 +593,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     searchTerm,
     limit,

@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_channel_detail">
+    <ct-block name="ct_channel_detail">
         <ct-page class="ct-channel-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_channel_detail_header">
+                <ct-block name="ct_channel_detail_header">
                     <h2>{{ pageTitle }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_channel_detail_actions">
+                <ct-block name="ct_channel_detail_actions">
                     <mt-button
                         v-tooltip.bottom="saveTooltip"
                         variant="primary"
@@ -22,7 +22,7 @@
             </template>
 
             <template v-if="!createMode" #language-switch>
-                <ct-block name="sw_channel_detail_language_switch">
+                <ct-block name="ct_channel_detail_language_switch">
                     <ct-language-switch
                         :save-changes-function="saveOnLanguageChange"
                         :abort-change-function="abortOnLanguageChange"
@@ -32,15 +32,15 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_channel_detail_content">
+                <ct-block name="ct_channel_detail_content">
                     <ct-card-view position-identifier="ct-channel-detail">
-                        <ct-block name="sw_channel_detail_language_info">
+                        <ct-block name="ct_channel_detail_language_info">
                             <template v-if="channel && !createMode">
                                 <ct-language-info :entity-description="pageTitle" />
                             </template>
                         </ct-block>
 
-                        <ct-block name="sw_channel_detail_content_tabs">
+                        <ct-block name="ct_channel_detail_content_tabs">
                             <template v-if="!createMode">
                                 <mt-tabs
                                     v-if="channel"
@@ -53,7 +53,7 @@
                             </template>
                         </ct-block>
 
-                        <ct-block name="sw_channel_detail_content_view">
+                        <ct-block name="ct_channel_detail_content_view">
                             <template v-if="isLoading && !channel">
                                 <ct-skeleton />
                                 <ct-skeleton />
@@ -249,7 +249,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     channel,
     isLoading,
     pageTitle,

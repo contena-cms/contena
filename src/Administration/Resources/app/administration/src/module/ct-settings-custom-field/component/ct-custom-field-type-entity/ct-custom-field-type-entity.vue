@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_custom_field_type_base">
+    <ct-block name="ct_custom_field_type_base">
         <div class="ct-custom-field-type-base">
-            <ct-block name="sw_custom_field_type_base_content">
-                <ct-block name="sw_custom_field_type_select_options" />
-                <ct-block name="sw_custom_field_type_select_add_option" />
-                <ct-block name="sw_custom_field_type_select_multi" />
+            <ct-block name="ct_custom_field_type_base_content">
+                <ct-block name="ct_custom_field_type_select_options" />
+                <ct-block name="ct_custom_field_type_select_add_option" />
+                <ct-block name="ct_custom_field_type_select_multi" />
 
-                <ct-block name="sw_custom_field_type_base_labels">
+                <ct-block name="ct_custom_field_type_base_labels">
                     <ct-custom-field-translated-labels
                         v-model:config="currentCustomField.config"
                         :disabled="!acl.can('custom_field.editor')"
@@ -15,7 +15,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_entity_type">
+                <ct-block name="ct_custom_field_type_entity_type">
                     <mt-select
                         v-model="currentCustomField.config.entity"
                         :disabled="!currentCustomField._isNew || undefined"
@@ -26,7 +26,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_entity_multi">
+                <ct-block name="ct_custom_field_type_entity_multi">
                     <mt-switch
                         v-model="multiSelectSwitch"
                         class="ct-custom-field-detail__switch"
@@ -136,7 +136,7 @@ function onChangeMultiSelectSwitch(state: boolean): void {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     locales,
     propertyNames,

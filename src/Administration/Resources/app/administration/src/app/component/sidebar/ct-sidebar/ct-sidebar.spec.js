@@ -36,8 +36,8 @@ async function createWrapper() {
                     $device: deviceMock,
                 },
                 provide: {
-                    setSwPageSidebarOffset: () => {},
-                    removeSwPageSidebarOffset: () => {},
+                    setCtPageSidebarOffset: () => {},
+                    removeCtPageSidebarOffset: () => {},
                 },
             },
         },

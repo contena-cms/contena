@@ -1,16 +1,16 @@
 <template>
-    <ct-block name="sw_media_folder_info">
+    <ct-block name="ct_media_folder_info">
         <div class="ct-media-folder-info">
-            <ct-block name="sw_media_quickinfo_folder_quickactions">
+            <ct-block name="ct_media_quickinfo_folder_quickactions">
                 <ct-media-collapse
                     v-if="editable"
                     :title="$t('ct-media.sidebar.sections.actions')"
                     :expand-on-loading="true"
                 >
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_folder_quickactions_content">
+                        <ct-block name="ct_media_quickinfo_folder_quickactions_content">
                             <ul class="ct-media-sidebar__quickactions-list">
-                                <ct-block name="sw_media_quickinfo_folder_quickactions_move">
+                                <ct-block name="ct_media_quickinfo_folder_quickactions_move">
                                     <li
                                         v-tooltip="{
                                             message: $t('ct-privileges.tooltip.warning'),
@@ -33,7 +33,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_folder_quickactions_settings">
+                                <ct-block name="ct_media_quickinfo_folder_quickactions_settings">
                                     <li
                                         class="ct-media-sidebar__quickaction quickaction--settings"
                                         role="button"
@@ -50,7 +50,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_folder_quickactions_dissolve">
+                                <ct-block name="ct_media_quickinfo_folder_quickactions_dissolve">
                                     <li
                                         v-tooltip="{
                                             message: $t('ct-privileges.tooltip.warning'),
@@ -73,7 +73,7 @@
                                     </li>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_folder_quickactions_delete">
+                                <ct-block name="ct_media_quickinfo_folder_quickactions_delete">
                                     <li
                                         v-tooltip="{
                                             message: $t('ct-privileges.tooltip.warning'),
@@ -101,12 +101,12 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_folder_metadata">
+            <ct-block name="ct_media_quickinfo_folder_metadata">
                 <ct-media-collapse :expand-on-loading="true" :title="$t('ct-media.sidebar.sections.metadata')">
                     <template #content>
-                        <ct-block name="sw_media_quickinfo_folder_metadata_content">
+                        <ct-block name="ct_media_quickinfo_folder_metadata_content">
                             <dl class="ct-media-sidebar__metadata-list">
-                                <ct-block name="sw_media_quickinfo_folder_metadata_content_base">
+                                <ct-block name="ct_media_quickinfo_folder_metadata_content_base">
                                     <ct-media-quickinfo-metadata-item
                                         class="ct-media-quickinfo-metadata-name"
                                         :class="nameItemClasses"
@@ -140,7 +140,7 @@
                 </ct-media-collapse>
             </ct-block>
 
-            <ct-block name="sw_media_folder_info_settings_modal">
+            <ct-block name="ct_media_folder_info_settings_modal">
                 <ct-media-modal-folder-settings
                     v-if="showFolderSettings"
                     :disabled="!acl.can('media.editor')"
@@ -150,7 +150,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_folder_info_dissolve_modal">
+            <ct-block name="ct_media_folder_info_dissolve_modal">
                 <ct-media-modal-folder-dissolve
                     v-if="showFolderDissolve"
                     :items-to-dissolve="[mediaFolder]"
@@ -159,7 +159,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_folder_info_move_modal">
+            <ct-block name="ct_media_folder_info_move_modal">
                 <ct-media-modal-move
                     v-if="showModalMove"
                     :items-to-move="[mediaFolder]"
@@ -168,7 +168,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_folder_info_modal_delete">
+            <ct-block name="ct_media_folder_info_modal_delete">
                 <ct-media-modal-delete
                     v-if="showModalDelete"
                     :items-to-delete="[mediaFolder]"
@@ -270,7 +270,7 @@ const {
     onItemsMove: (ids) => emit('media-sidebar-items-move', ids),
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     mediaFolderRepository,

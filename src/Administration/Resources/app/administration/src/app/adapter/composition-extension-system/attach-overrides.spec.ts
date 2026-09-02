@@ -48,7 +48,7 @@ describe('src/app/adapter/composition-extension-system attachOverrides', () => {
 
     /**
      * Simulates the transform's ACTUAL base output: every top-level author binding renamed to its
-     * `__swSetupAuthor_` alias, and the original names re-declared by destructuring the generated
+     * `__ctSetupAuthor_` alias, and the original names re-declared by destructuring the generated
      * `attachOverrides(...)` footer. The template binds the footer's names, not the author's refs.
      *
      * This is the shape `build/vue-setup-transform` emits for `ct-thing.vue`, so it is the shape the
@@ -59,15 +59,15 @@ describe('src/app/adapter/composition-extension-system attachOverrides', () => {
             template: '<div>{{ count }}|{{ doubled }}</div>',
             setup(props, { expose }) {
                 // -- author code, native, renamed by the transform --
-                const __swSetupAuthor_count = ref(1);
-                const __swSetupAuthor_doubled = computed(() => __swSetupAuthor_count.value * 2);
+                const __ctSetupAuthor_count = ref(1);
+                const __ctSetupAuthor_doubled = computed(() => __ctSetupAuthor_count.value * 2);
 
                 // -- generated footer --
                 const { count, doubled } = attachOverrides({
                     name,
                     public: {
-                        count: __swSetupAuthor_count,
-                        doubled: __swSetupAuthor_doubled,
+                        count: __ctSetupAuthor_count,
+                        doubled: __ctSetupAuthor_doubled,
                     },
                     private: {},
                 }) as unknown as { count: unknown; doubled: unknown };
@@ -116,11 +116,11 @@ describe('src/app/adapter/composition-extension-system attachOverrides', () => {
             },
             template: '<button @click="user.timeZone = \'UTC\'">{{ user.name }}</button>',
             setup(props) {
-                const __swSetupAuthor_user = computed(() => props.user);
+                const __ctSetupAuthor_user = computed(() => props.user);
                 const { user } = attachOverrides({
                     name: 'loweredPropNamedState',
                     public: {},
-                    private: { user: __swSetupAuthor_user },
+                    private: { user: __ctSetupAuthor_user },
                 }) as unknown as { user: unknown };
 
                 return { user };
@@ -186,11 +186,11 @@ describe('src/app/adapter/composition-extension-system attachOverrides', () => {
 
         mount(base);
         overrideComponentSetup()('extendableLocal', () => {
-            return { __swOverride: { 'plugin/a': { msg: 'local' } } } as never;
+            return { __ctOverride: { 'plugin/a': { msg: 'local' } } } as never;
         });
         await flushPromises();
 
-        expect((scope!.__swOverride as { value: unknown }).value).toEqual({ 'plugin/a': { msg: 'local' } });
+        expect((scope!.__ctOverride as { value: unknown }).value).toEqual({ 'plugin/a': { msg: 'local' } });
     });
 
     it('un-renamed shape: a computed replacement does NOT reach a template binding the raw author computed', async () => {

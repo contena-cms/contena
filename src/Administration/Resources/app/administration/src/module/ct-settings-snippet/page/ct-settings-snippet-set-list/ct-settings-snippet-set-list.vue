@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_snippet_set_list">
+    <ct-block name="ct_settings_snippet_set_list">
         <ct-page class="ct-settings-snippet-set-list">
             <template #search-bar>
                 <mt-search
@@ -30,7 +30,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_snippet_set_list_content">
+                <ct-block name="ct_settings_snippet_set_list_content">
                     <mt-data-table
                         class="ct-settings-snippet-set-list__table"
                         layout="full"
@@ -400,7 +400,7 @@ const formatDate = (value: string | null): string => (value ? d(new Date(value),
 
 void getList();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     isLoading,
     term,

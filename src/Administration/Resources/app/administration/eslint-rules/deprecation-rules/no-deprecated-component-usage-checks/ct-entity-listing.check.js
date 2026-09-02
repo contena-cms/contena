@@ -1,11 +1,11 @@
 /** @param {RuleContext} context
  *  @param {VElement} node
  */
-const handleSwEntityListing = (context, node) => {
-    const swEntityListingComponentName = 'ct-entity-listing';
+const handleCtEntityListing = (context, node) => {
+    const ctEntityListingComponentName = 'ct-entity-listing';
 
     // Check for deprecated usage of items prop in ct-entity-listing
-    if (node.name !== swEntityListingComponentName) {
+    if (node.name !== ctEntityListingComponentName) {
         return;
     }
 
@@ -53,7 +53,7 @@ const handleSwEntityListing = (context, node) => {
     }
 }
 
-const swEntityListingValidChecks = [
+const ctEntityListingValidChecks = [
     {
         name: '"ct-entity-listing" with data-source prop is allowed',
         filename: 'test.html.twig',
@@ -79,7 +79,7 @@ const swEntityListingValidChecks = [
     },
 ]
 
-const swEntityListingInvalidChecks = [
+const ctEntityListingInvalidChecks = [
     {
         name: '"ct-entity-listing" with deprecated items prop',
         filename: 'test.html.twig',
@@ -140,7 +140,7 @@ const swEntityListingInvalidChecks = [
         code: `
             <template>
                 <ct-entity-listing
-                    ref="swSettingsTaxGrid"
+                    ref="ctSettingsTaxGrid"
                     class="ct-settings-tax-list-grid"
                     detail-route="ct.settings.tax.detail"
                     :items="tax"
@@ -153,7 +153,7 @@ const swEntityListingInvalidChecks = [
         output: `
             <template>
                 <ct-entity-listing
-                    ref="swSettingsTaxGrid"
+                    ref="ctSettingsTaxGrid"
                     class="ct-settings-tax-list-grid"
                     detail-route="ct.settings.tax.detail"
                     :data-source="tax"
@@ -170,7 +170,7 @@ const swEntityListingInvalidChecks = [
 ];
 
 module.exports = {
-    swEntityListingValidChecks,
-    swEntityListingInvalidChecks,
-    handleSwEntityListing
+    ctEntityListingValidChecks,
+    ctEntityListingInvalidChecks,
+    handleCtEntityListing
 };

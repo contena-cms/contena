@@ -18,7 +18,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             }>();
             const count = ref(props.initialCount ?? 0);
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -26,13 +26,13 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
         const result = transformOrFail(source, 'ct-my-component.vue').code;
 
-        expect(result).toContain(`const __swSetupAuthor_props = defineProps<{
+        expect(result).toContain(`const __ctSetupAuthor_props = defineProps<{
     initialCount?: number;
 }>();`);
         expect(result).toContain('Contena.Component.attachOverrides(');
         expect(result).toContain("name: 'ct-my-component'");
-        expect(result).toContain('props: __swSetupAuthor_props,');
-        expect(result).toContain('const __swSetupAuthor_count = ref(__swSetupAuthor_props.initialCount ?? 0);');
+        expect(result).toContain('props: __ctSetupAuthor_props,');
+        expect(result).toContain('const __ctSetupAuthor_count = ref(__ctSetupAuthor_props.initialCount ?? 0);');
     });
 
     it('keeps a local prop type declaration in place for defineProps()', () => {
@@ -45,7 +45,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             const props = defineProps<Props>();
             const count = props.initialCount ?? 0;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -54,7 +54,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         const result = transformOrFail(source, 'base-props-local-type.vue').code;
 
         expect(result.indexOf('interface Props')).toBeLessThan(
-            result.indexOf('const __swSetupAuthor_props = defineProps<Props>()'),
+            result.indexOf('const __ctSetupAuthor_props = defineProps<Props>()'),
         );
         expectVueCompilerScriptToCompile(result, 'base-props-local-type.vue');
     });
@@ -70,7 +70,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const count = props.initialCount;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -83,7 +83,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
         // The macro and its argument are left exactly as written (only the binding is aliased).
         expect(result).toContain('defineProps({');
-        expect(result).toContain('default: __swSetupAuthor_defaultCount,');
+        expect(result).toContain('default: __ctSetupAuthor_defaultCount,');
         expectVueCompilerScriptToCompile(result, 'base-props-local-runtime-value.vue');
     });
 
@@ -98,7 +98,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const count = props.initialCount ?? defaultCount;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -110,7 +110,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         // outer binding is renamed.
         expect(result).toContain('validator: (defaultCount: number) => defaultCount > 0');
         expect(result).toContain(
-            'const __swSetupAuthor_count = __swSetupAuthor_props.initialCount ?? __swSetupAuthor_defaultCount;',
+            'const __ctSetupAuthor_count = __ctSetupAuthor_props.initialCount ?? __ctSetupAuthor_defaultCount;',
         );
     });
 
@@ -128,7 +128,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const total = props.initial + count;
 
-            swDefinePublic({
+            ctDefinePublic({
                 total,
             });
             </script>
@@ -139,7 +139,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         const result = transformOrFail(source, 'base-props-body-local-shadow.vue').code;
 
         expect(result).toContain('const count = 2;');
-        expect(result).toContain('const __swSetupAuthor_total = __swSetupAuthor_props.initial + __swSetupAuthor_count;');
+        expect(result).toContain('const __ctSetupAuthor_total = __ctSetupAuthor_props.initial + __ctSetupAuthor_count;');
     });
 
     it('supports destructured defineProps() by leaving it for Vue 3.5 reactive-props-destructure', () => {
@@ -150,7 +150,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             }>();
             const doubled = computed(() => initialCount * 2);
 
-            swDefinePublic({
+            ctDefinePublic({
                 doubled,
             });
             </script>
@@ -162,8 +162,8 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         // rewrites `initialCount` into a reactive `props.initialCount` read - including inside the
         // renamed `doubled` computed.
         expect(result).toContain('const { initialCount = 0 } = defineProps<{');
-        expect(result).toContain('const __swSetupAuthor_doubled = computed(() => initialCount * 2);');
-        expect(result).not.toContain('__swSetupAuthor_initialCount');
+        expect(result).toContain('const __ctSetupAuthor_doubled = computed(() => initialCount * 2);');
+        expect(result).not.toContain('__ctSetupAuthor_initialCount');
         // Vue's own compiler accepts the output and applies the reactive-props-destructure rewrite.
         expectVueCompilerScriptToCompile(result, 'base-destructured-props.vue');
     });
@@ -174,7 +174,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             const { initialCount = 0 } = defineProps();
             const doubled = computed(() => initialCount * 2);
 
-            swDefinePublic({
+            ctDefinePublic({
                 doubled,
             });
             </script>
@@ -183,7 +183,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         const result = transformOrFail(source, 'base-destructured-bare-props.vue').code;
 
         expect(result).toContain('const { initialCount = 0 } = defineProps();');
-        expect(result).not.toContain('__swSetupAuthor_initialCount');
+        expect(result).not.toContain('__ctSetupAuthor_initialCount');
     });
 
     it('keeps a bare defineProps() statement in place', () => {
@@ -193,7 +193,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
             const count = 1;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -201,8 +201,8 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
         const result = transformOrFail(source, 'base-bare-props.vue').code;
 
-        expect(result).toContain('const __swSetupAuthor_props = defineProps();');
-        expect(result).toContain('props: __swSetupAuthor_props,');
+        expect(result).toContain('const __ctSetupAuthor_props = defineProps();');
+        expect(result).toContain('props: __ctSetupAuthor_props,');
     });
 
     it('keeps base withDefaults(defineProps()) in place', () => {
@@ -217,7 +217,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const count = props.initialCount;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -225,7 +225,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
         const result = transformOrFail(source, 'ct-my-component.vue').code;
 
-        expect(result).toContain(`const __swSetupAuthor_props = withDefaults(defineProps<{
+        expect(result).toContain(`const __ctSetupAuthor_props = withDefaults(defineProps<{
     initialCount?: number;
     labels?: string[];
 }>(), {
@@ -233,8 +233,8 @@ describe('build/vue-setup-transform base defineProps macro', () => {
     labels: () => ['main'],
 });`);
         expect(result).toContain("name: 'ct-my-component'");
-        expect(result).toContain('props: __swSetupAuthor_props,');
-        expect(result).toContain('const __swSetupAuthor_count = __swSetupAuthor_props.initialCount;');
+        expect(result).toContain('props: __ctSetupAuthor_props,');
+        expect(result).toContain('const __ctSetupAuthor_count = __ctSetupAuthor_props.initialCount;');
         expect(result.match(/defineProps/g)).toHaveLength(1);
         expect(result.match(/withDefaults/g)).toHaveLength(1);
     });
@@ -251,7 +251,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const count = props.label.length;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -281,7 +281,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             });
             const doubled = computed(() => initialCount * 2);
 
-            swDefinePublic({
+            ctDefinePublic({
                 doubled,
             });
             </script>
@@ -292,7 +292,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         // We do not reject this: Vue's own compiler accepts it (with a "reactive destructure disabled"
         // warning) - that is Vue's concern, not ours. The destructure is left untouched.
         expect(result).toContain('const { initialCount = 0 } = withDefaults(defineProps<{');
-        expect(result).not.toContain('__swSetupAuthor_initialCount');
+        expect(result).not.toContain('__ctSetupAuthor_initialCount');
     });
 
     it('keeps defineProps() wrapped in a TypeScript as expression', () => {
@@ -301,7 +301,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             const props = defineProps<{ initialCount?: number }>() as { initialCount?: number };
             const count = props.initialCount ?? 0;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -310,9 +310,9 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         const result = transformOrFail(source, 'ct-my-component.vue').code;
 
         expect(result).toContain(
-            'const __swSetupAuthor_props = defineProps<{ initialCount?: number }>() as { initialCount?: number };',
+            'const __ctSetupAuthor_props = defineProps<{ initialCount?: number }>() as { initialCount?: number };',
         );
-        expect(result).toContain('props: __swSetupAuthor_props,');
+        expect(result).toContain('props: __ctSetupAuthor_props,');
         expect(result.match(/defineProps/g)).toHaveLength(1);
     });
 
@@ -326,7 +326,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             }) satisfies { initialCount: number };
             const count = props.initialCount;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -334,7 +334,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
         const result = transformOrFail(source, 'base-props-satisfies.vue').code;
 
-        expect(result).toContain(`const __swSetupAuthor_props = withDefaults(defineProps<{
+        expect(result).toContain(`const __ctSetupAuthor_props = withDefaults(defineProps<{
     initialCount?: number;
 }>(), {
     initialCount: 3,
@@ -358,7 +358,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
 
             const count = 1;
 
-            swDefinePublic({
+            ctDefinePublic({
                 count,
             });
             </script>
@@ -372,7 +372,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         expect(result).toContain(`return withDefaults(defineProps<{ label?: string }>(), {
         label: 'fallback',
     });`);
-        expect(result).not.toContain('props: __swSetupAuthor_props');
+        expect(result).not.toContain('props: __ctSetupAuthor_props');
     });
 
     it('does not reject a setup binding that shares a declared prop name', () => {
@@ -380,7 +380,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             <script setup>
             const props = defineProps({ title: String });
             const title = props.title;
-            swDefinePublic({ title });
+            ctDefinePublic({ title });
             </script>
         `;
 
@@ -397,7 +397,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
             enum Kind { A, B }
             const props = defineProps<{ kind: Kind }>();
             const kindLabel = props.kind;
-            swDefinePublic({ kindLabel });
+            ctDefinePublic({ kindLabel });
             </script>
         `;
 
@@ -406,7 +406,7 @@ describe('build/vue-setup-transform base defineProps macro', () => {
         const result = transformOrFail(source, 'base-props-type-enum.vue').code;
 
         // The type argument is untouched; Vue narrows it to a runtime type on its own.
-        expect(result).toContain('defineProps<{ kind: __swSetupAuthor_Kind }>()');
+        expect(result).toContain('defineProps<{ kind: __ctSetupAuthor_Kind }>()');
         expectVueCompilerScriptToCompile(result, 'base-props-type-enum.vue');
     });
 });

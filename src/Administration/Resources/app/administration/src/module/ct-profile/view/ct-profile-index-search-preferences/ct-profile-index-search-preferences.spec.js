@@ -68,7 +68,7 @@ async function createWrapper() {
 
 describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () => {
     beforeAll(() => {
-        Contena.Store.get('swProfile').$reset();
+        Contena.Store.get('ctProfile').$reset();
     });
 
     beforeEach(() => {
@@ -139,7 +139,7 @@ describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () =>
         const wrapper = await createWrapper();
         await flushPromises();
 
-        Contena.Store.get('swProfile').searchPreferences = [
+        Contena.Store.get('ctProfile').searchPreferences = [
             {
                 entityName: 'product',
                 _searchable: false,
@@ -177,7 +177,7 @@ describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () =>
         const wrapper = await createWrapper();
         await flushPromises();
 
-        Contena.Store.get('swProfile').searchPreferences = [
+        Contena.Store.get('ctProfile').searchPreferences = [
             {
                 entityName: 'product',
                 _searchable: true,
@@ -215,7 +215,7 @@ describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () =>
         const wrapper = await createWrapper();
         await flushPromises();
 
-        Contena.Store.get('swProfile').searchPreferences = [
+        Contena.Store.get('ctProfile').searchPreferences = [
             {
                 entityName: 'product',
                 _searchable: false,
@@ -259,7 +259,7 @@ describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () =>
         const wrapper = await createWrapper();
         await flushPromises();
 
-        Contena.Store.get('swProfile').searchPreferences = [
+        Contena.Store.get('ctProfile').searchPreferences = [
             {
                 entityName: 'product',
                 _searchable: false,
@@ -334,7 +334,7 @@ describe('src/module/ct-profile/view/ct-profile-index-search-preferences', () =>
             ]),
         );
 
-        Contena.Store.get('swProfile').userSearchPreferences = [
+        Contena.Store.get('ctProfile').userSearchPreferences = [
             {
                 order: {
                     documents: {

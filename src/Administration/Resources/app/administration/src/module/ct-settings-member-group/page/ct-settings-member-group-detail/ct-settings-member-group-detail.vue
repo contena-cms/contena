@@ -1,15 +1,15 @@
 <template>
     <!-- DAL entities are intentionally edited in place before the repository save. -->
     <!-- eslint-disable vue/no-mutating-props -->
-    <ct-block name="sw_settings_member_group_detail">
+    <ct-block name="ct_settings_member_group_detail">
         <ct-page class="ct-settings-member-group-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_member_group_detail_header">
+                <ct-block name="ct_settings_member_group_detail_header">
                     <h2>{{ pageTitle }}</h2>
                 </ct-block>
             </template>
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_member_group_detail_actions">
+                <ct-block name="ct_settings_member_group_detail_actions">
                     <mt-button variant="secondary" @click="onCancel">{{ t('global.default.cancel') }}</mt-button>
                     <ct-button-process
                         variant="primary"
@@ -27,7 +27,7 @@
                 <ct-language-switch :disabled="createMode || undefined" @on-change="onChangeLanguage" />
             </template>
             <template #content>
-                <ct-block name="sw_settings_member_group_detail_content">
+                <ct-block name="ct_settings_member_group_detail_content">
                     <ct-card-view v-if="memberGroup">
                         <mt-card
                             position-identifier="ct-settings-member-group-detail-general"
@@ -44,7 +44,7 @@
                             />
                         </mt-card>
 
-                        <ct-block name="sw_settings_member_group_detail_registration">
+                        <ct-block name="ct_settings_member_group_detail_registration">
                             <mt-card
                                 position-identifier="ct-settings-member-group-detail-registration"
                                 :title="t('ct-settings-member-group.detail.titleRegistration')"
@@ -89,7 +89,7 @@
                             </mt-card>
                         </ct-block>
 
-                        <ct-block name="sw_settings_member_group_detail_custom_fields">
+                        <ct-block name="ct_settings_member_group_detail_custom_fields">
                             <mt-card
                                 v-if="customFieldSets.length > 0"
                                 position-identifier="ct-settings-member-group-detail-custom-fields"
@@ -223,7 +223,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     memberGroup,
     isLoading,
     isSaveSuccessful,

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_profile_index_search_preferences">
+    <ct-block name="ct_profile_index_search_preferences">
         <div class="ct-profile-index-search-preferences">
-            <ct-block name="sw_profile_index_search_preferences_search_behavior">
+            <ct-block name="ct_profile_index_search_preferences_search_behavior">
                 <mt-card
                     class="ct-profile-index-search-preferences-search-behavior"
                     position-identifier="ct-profile-index-search-preferences-search-behavior"
@@ -22,7 +22,7 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_profile_index_search_preferences_searchable_elements">
+            <ct-block name="ct_profile_index_search_preferences_searchable_elements">
                 <mt-card
                     class="ct-profile-index-search-preferences-searchable-elements"
                     position-identifier="ct-profile-index-search-preferences"
@@ -30,11 +30,11 @@
                     :subtitle="$t('ct-profile.tabSearchPreferences.cardSearchContent.subtitle')"
                     :is-loading="isLoading"
                 >
-                    <ct-block name="sw_profile_index_search_preferences_searchable_elements_content">
+                    <ct-block name="ct_profile_index_search_preferences_searchable_elements_content">
                         <ct-container v-if="searchPreferences.length > 0" rows="auto auto auto" gap="24px">
-                            <ct-block name="sw_profile_index_search_preferences_searchable_elements_header">
+                            <ct-block name="ct_profile_index_search_preferences_searchable_elements_header">
                                 <ct-container columns="auto auto auto 1fr" gap="8px">
-                                    <ct-block name="sw_profile_index_search_preferences_searchable_elements_button_select">
+                                    <ct-block name="ct_profile_index_search_preferences_searchable_elements_button_select">
                                         <mt-button
                                             class="ct-profile-index-search-preferences-searchable-elements__button-select-all"
                                             variant="secondary"
@@ -44,7 +44,7 @@
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_profile_index_search_preferences_searchable_elements_button_deselect">
+                                    <ct-block name="ct_profile_index_search_preferences_searchable_elements_button_deselect">
                                         <mt-button
                                             class="ct-profile-index-search-preferences-searchable-elements__button-deselect-all"
                                             variant="secondary"
@@ -54,7 +54,7 @@
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_profile_index_search_preferences_searchable_elements_button_reset">
+                                    <ct-block name="ct_profile_index_search_preferences_searchable_elements_button_reset">
                                         <mt-button
                                             class="ct-profile-index-search-preferences-searchable-elements__button-reset-to-default"
                                             variant="secondary"
@@ -66,7 +66,7 @@
                                 </ct-container>
                             </ct-block>
 
-                            <ct-block name="sw_profile_index_search_preferences_searchable_elements_body">
+                            <ct-block name="ct_profile_index_search_preferences_searchable_elements_body">
                                 <div class="ct-profile-index-search-preferences-searchable-elements__entity-container">
                                     <ul
                                         v-for="searchPreference in searchPreferences"
@@ -130,26 +130,26 @@ const isLoading = ref(false);
 
 const minSearchTermLength = computed({
     get: () => {
-        return Store.get('swProfile').minSearchTermLength;
+        return Store.get('ctProfile').minSearchTermLength;
     },
     set: (minSearchTermLength) => {
-        Store.get('swProfile').setMinSearchTermLength(minSearchTermLength);
+        Store.get('ctProfile').setMinSearchTermLength(minSearchTermLength);
     },
 });
 const searchPreferences = computed({
     get: () => {
-        return Store.get('swProfile').searchPreferences;
+        return Store.get('ctProfile').searchPreferences;
     },
     set: (searchPreferences) => {
-        Store.get('swProfile').searchPreferences = searchPreferences;
+        Store.get('ctProfile').searchPreferences = searchPreferences;
     },
 });
 const userSearchPreferences = computed({
     get: () => {
-        return Store.get('swProfile').userSearchPreferences;
+        return Store.get('ctProfile').userSearchPreferences;
     },
     set: (userSearchPreferences) => {
-        Store.get('swProfile').userSearchPreferences = userSearchPreferences;
+        Store.get('ctProfile').userSearchPreferences = userSearchPreferences;
     },
 });
 const defaultSearchPreferences = computed(() => {
@@ -209,7 +209,7 @@ const getMinSearchTermLength = async () => {
 
     try {
         const minSearchTermLength = await searchRankingService.getMinSearchTermLength();
-        Contena.Store.get('swProfile').setMinSearchTermLength(minSearchTermLength);
+        Contena.Store.get('ctProfile').setMinSearchTermLength(minSearchTermLength);
     } catch (error) {
         createNotificationError({ message: error.message });
     } finally {
@@ -286,7 +286,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     searchPreferencesService,
     searchRankingService,
     isLoading,

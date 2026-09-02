@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_media_quickinfo_usage">
+    <ct-block name="ct_media_quickinfo_usage">
         <div class="ct-media-quickinfo-usage">
-            <ct-block name="sw_media_quickinfo_usage_loader"> </ct-block>
+            <ct-block name="ct_media_quickinfo_usage_loader"> </ct-block>
 
-            <ct-block name="sw_media_quickinfo_usage_empty_state">
+            <ct-block name="ct_media_quickinfo_usage_empty_state">
                 <mt-banner
                     v-if="isNotUsed"
                     class="ct-media-quickinfo-usage__info-not-used"
@@ -14,10 +14,10 @@
                 </mt-banner>
             </ct-block>
 
-            <ct-block name="sw_media_quickinfo_usage_list">
+            <ct-block name="ct_media_quickinfo_usage_list">
                 <template v-if="isNotUsed"><!-- Keeps the conditional chain connected across ct-block. --></template>
                 <ul v-else class="ct-media-quickinfo-usage__list">
-                    <ct-block name="sw_media_quickinfo_usage_item">
+                    <ct-block name="ct_media_quickinfo_usage_item">
                         <router-link
                             v-for="usage in getUsages"
                             :key="usage.link.id"
@@ -32,13 +32,13 @@
                                 }"
                                 class="ct-media-quickinfo-usage__item"
                             >
-                                <ct-block name="sw_media_quickinfo_usage_item_icon">
+                                <ct-block name="ct_media_quickinfo_usage_item_icon">
                                     <div class="ct-media-quickinfo-usage__label">
                                         <mt-icon :name="usage.icon.name" :color="usage.icon.color" size="16px" />
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_media_quickinfo_usage_item_label">
+                                <ct-block name="ct_media_quickinfo_usage_item_label">
                                     <div class="ct-media-quickinfo-usage__label">
                                         {{ usage.name }}
                                     </div>
@@ -105,7 +105,7 @@ const getIconForModule = (name) => {
     };
 };
 
-swDefinePublic({
+ctDefinePublic({
     moduleFactory,
     getUsages,
     isNotUsed,

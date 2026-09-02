@@ -524,7 +524,7 @@ const saveUser = async (context) => {
 
 void loadUser();
 
-swDefinePublic({
+ctDefinePublic({
     isSaveSuccessful,
     userPasswordError,
     loadUser,

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_organization_tree">
+    <ct-block name="ct_organization_tree">
         <div class="mt-organization-tree">
-            <ct-block name="sw_organization_tree_toolbar">
+            <ct-block name="ct_organization_tree_toolbar">
                 <div v-if="checkedCount > 0" class="mt-organization-tree__toolbar">
                     <span>{{ translate('ct-settings-organization.tree.selected', { count: checkedCount }) }}</span>
                     <mt-button variant="critical" size="small" @click="onBatchDelete">
@@ -10,7 +10,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_organization_tree_items">
+            <ct-block name="ct_organization_tree_items">
                 <div class="mt-organization-tree__items" role="tree">
                     <div
                         v-for="item in visibleItems"
@@ -205,7 +205,7 @@ const onBatchDelete = (): void => {
     checkedIds.value = new Set<string>();
 };
 
-swDefinePublic({
+ctDefinePublic({
     expandedIds,
     checkedIds,
     visibleItems,

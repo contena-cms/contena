@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_seo_main_category">
+    <ct-block name="ct_seo_main_category">
         <div class="ct-seo-main-category">
-            <ct-block name="sw_seo_main_category_select">
+            <ct-block name="ct_seo_main_category_select">
                 <mt-select
                     :options="categories"
                     label-property="translated.name"
@@ -69,11 +69,11 @@ const mainCategoryRepository = computed(() => {
     return repositoryFactory.create('blog_main_category');
 });
 const isHeadlessChannel = computed(() => {
-    if (Contena.Store.get('swSeoUrl').channelCollection === null) {
+    if (Contena.Store.get('ctSeoUrl').channelCollection === null) {
         return true;
     }
 
-    const channel = Contena.Store.get('swSeoUrl').channelCollection.find((entry) => {
+    const channel = Contena.Store.get('ctSeoUrl').channelCollection.find((entry) => {
         return entry.id === props.currentChannelId;
     });
 
@@ -144,7 +144,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mainCategoryForChannel,
     mainCategoryRepository,

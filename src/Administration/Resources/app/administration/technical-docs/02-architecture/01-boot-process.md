@@ -70,7 +70,7 @@ The Twig template injects critical runtime configuration into the HTML:
 window._features_ = {{ features|json_encode|raw }};
 
 // Global asset configuration
-window.__sw__ = {
+window.__ct__ = {
     assetPath: '{{ asset('', 'asset') }}',
 };
 
@@ -112,8 +112,8 @@ void import('src/core/contena').then(async ({ ContenaInstance }) => {
     window.Contena = ContenaInstance;
 
     // Handle login overrides if present
-    if (window._swLoginOverrides) {
-        window._swLoginOverrides.forEach((script) => script());
+    if (window._ctLoginOverrides) {
+        window._ctLoginOverrides.forEach((script) => script());
     }
 
     // Import main application configuration

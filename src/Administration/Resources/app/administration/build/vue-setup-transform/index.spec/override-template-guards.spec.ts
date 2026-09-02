@@ -36,14 +36,14 @@ describe('build/vue-setup-transform override template guards', () => {
     ])('rejects a direct non-default named slot %s on an override ct-block', (slotDirective) => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <template ${slotDirective}>content</template>
             </ct-block>
             </template>
             <script setup>
             const slotName = 'footer';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -56,7 +56,7 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects authored data bindings on extended ct-blocks', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body" :data="scope">
+            <ct-block extends="ct_example_component_body" :data="scope">
                 <p>{{ info }}</p>
             </ct-block>
             </template>
@@ -64,7 +64,7 @@ describe('build/vue-setup-transform override template guards', () => {
             const scope = {};
             const info = 'local';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -76,7 +76,7 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects v-bind objects on extended ct-blocks', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body" v-bind="attrs">
+            <ct-block extends="ct_example_component_body" v-bind="attrs">
                 <p>{{ info }}</p>
             </ct-block>
             </template>
@@ -84,7 +84,7 @@ describe('build/vue-setup-transform override template guards', () => {
             const attrs = {};
             const info = 'local';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -94,7 +94,7 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects writing to a forwarded binding from ct-block extends content', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <button @click="count = count + 1">inc</button>
             </ct-block>
             </template>
@@ -103,7 +103,7 @@ describe('build/vue-setup-transform override template guards', () => {
 
             const count = ref(0);
 
-            swDefineOverride({ count });
+            ctDefineOverride({ count });
             </script>
         `;
 
@@ -117,7 +117,7 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects an update expression (count++) on a forwarded binding', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <button @click="count++">inc</button>
             </ct-block>
             </template>
@@ -126,7 +126,7 @@ describe('build/vue-setup-transform override template guards', () => {
 
             const count = ref(0);
 
-            swDefineOverride({ count });
+            ctDefineOverride({ count });
             </script>
         `;
 
@@ -138,15 +138,15 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects a bound :extends on ct-block (only a static extends is allowed)', () => {
         const source = stripIndent`
             <template>
-            <ct-block :extends="blockName">
+            <ct-block :extends="ct_blockName">
                 <p>{{ body }}</p>
             </ct-block>
             </template>
             <script setup>
-            const blockName = 'sw_example_component_body';
+            const blockName = 'ct_example_component_body';
             const body = 'local';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -158,14 +158,14 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects an authored #default supplied through a child <template>', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <template #default="{ body }">
                     <p>{{ body }}</p>
                 </template>
             </ct-block>
             </template>
             <script setup>
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
@@ -179,7 +179,7 @@ describe('build/vue-setup-transform override template guards', () => {
     it('rejects top-level override content that is not a ct-block extends block', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
+            <ct-block extends="ct_example_component_body">
                 <p>{{ body }}</p>
             </ct-block>
             <div>{{ stray }}</div>
@@ -188,56 +188,56 @@ describe('build/vue-setup-transform override template guards', () => {
             const body = 'x';
             const stray = 'y';
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
         // An override renders only inside the blocks it extends; a top-level <div> would never render.
         expect(() => transformOrFail(source, 'stray-top-level.override.vue')).toThrow(
-            'An override template may only contain <ct-block extends="..."> blocks at its top level.',
+            'An override template may only contain <ct-block extends="ct_..."> blocks at its top level.',
         );
     });
 
     it('rejects a base-style named ct-block nested inside an override extends block', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body">
-                <ct-block name="sw_new_block">
+            <ct-block extends="ct_example_component_body">
+                <ct-block name="ct_new_block">
                     <p>content</p>
                 </ct-block>
             </ct-block>
             </template>
             <script setup>
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
         expect(() => transformOrFail(source, 'nested-named-block.override.vue')).toThrow(
-            '<ct-block name="..."> is only valid in a base component.',
+            '<ct-block name="ct_..."> is only valid in a base component.',
         );
     });
 
     it('rejects a base-style named ct-block at the top level of an override', () => {
         const source = stripIndent`
             <template>
-            <ct-block name="sw_new_block">
+            <ct-block name="ct_new_block">
                 <p>content</p>
             </ct-block>
             </template>
             <script setup>
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 
         expect(() => transformOrFail(source, 'top-level-named-block.override.vue')).toThrow(
-            'An override template may only contain <ct-block extends="..."> blocks at its top level.',
+            'An override template may only contain <ct-block extends="ct_..."> blocks at its top level.',
         );
     });
 
     it('rejects directives on the ct-block extends element itself', () => {
         const source = stripIndent`
             <template>
-            <ct-block extends="sw_example_component_body" v-if="showOverride">
+            <ct-block extends="ct_example_component_body" v-if="showOverride">
                 <p>text</p>
             </ct-block>
             </template>
@@ -246,7 +246,7 @@ describe('build/vue-setup-transform override template guards', () => {
 
             const showOverride = ref(true);
 
-            swDefineOverride({});
+            ctDefineOverride({});
             </script>
         `;
 

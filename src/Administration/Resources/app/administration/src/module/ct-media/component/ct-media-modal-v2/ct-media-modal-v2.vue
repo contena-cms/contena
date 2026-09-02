@@ -1,40 +1,40 @@
 <template>
-    <ct-block name="sw_media_modal_v2">
+    <ct-block name="ct_media_modal_v2">
         <mt-modal-root :is-open="isOpen" @change="onModalRootChange">
             <mt-modal
-                ref="swMediaModal"
+                ref="ctMediaModal"
                 class="ct-media-modal-v2"
                 width="full"
                 :title="translate('ct-media.ct-media-modal-v2.titleModal')"
             >
-                <ct-block name="sw_media_modal_v2_content">
+                <ct-block name="ct_media_modal_v2_content">
                     <div class="ct-media-modal-v2__content">
-                        <ct-block name="sw_media_modal_v2_tabs">
+                        <ct-block name="ct_media_modal_v2_tabs">
                             <div position-identifier="ct-media-modal" class="ct-media-modal-v2__tabs">
                                 <mt-tabs :items="tabItems" :default-item="defaultTab" @new-item-active="onTabChange" />
 
-                                <ct-block name="sw_media_modal_v2_tab_content">
+                                <ct-block name="ct_media_modal_v2_tab_content">
                                     <div class="ct-media-modal-v2__tab-content">
-                                        <ct-block name="sw_media_modal_v2_tab_content_library">
+                                        <ct-block name="ct_media_modal_v2_tab_content_library">
                                             <div
                                                 v-show="activeTab === tabNameLibrary"
                                                 class="ct-media-modal-v2__library-content"
                                             >
-                                                <ct-block name="sw_media_modal_v2_navigation_and_search">
+                                                <ct-block name="ct_media_modal_v2_navigation_and_search">
                                                     <div
                                                         class="ct-media-modal-v2__breadcrumbs-and-search"
                                                         :class="{
                                                             'ct-media-modal-v2__breadcrumbs-and-search--compact': compact,
                                                         }"
                                                     >
-                                                        <ct-block name="sw_media_modal_v2_folder_breadcrumbs">
+                                                        <ct-block name="ct_media_modal_v2_folder_breadcrumbs">
                                                             <ct-media-breadcrumbs
                                                                 v-model:current-folder-id="folderId"
                                                                 :small="compact"
                                                             />
                                                         </ct-block>
 
-                                                        <ct-block name="sw_media_modal_v2_search_field">
+                                                        <ct-block name="ct_media_modal_v2_search_field">
                                                             <mt-text-field
                                                                 class="ct-media-modal-v2__search-field"
                                                                 name="mediaModalSearch"
@@ -53,7 +53,7 @@
                                                     </div>
                                                 </ct-block>
 
-                                                <ct-block name="sw_media_modal_v2_media_library">
+                                                <ct-block name="ct_media_modal_v2_media_library">
                                                     <ct-media-library
                                                         ref="mediaLibrary"
                                                         :selection="selection"
@@ -70,12 +70,12 @@
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_media_modal_v2_tab_content_upload">
+                                        <ct-block name="ct_media_modal_v2_tab_content_upload">
                                             <div
                                                 v-show="activeTab === tabNameUpload"
                                                 class="ct-media-modal-v2__uploads-content"
                                             >
-                                                <ct-block name="sw_media_modal_v2_upload_component">
+                                                <ct-block name="ct_media_modal_v2_upload_component">
                                                     <ct-upload-listener
                                                         :upload-tag="uploadTag"
                                                         @media-upload-add="onUploadsAdded"
@@ -94,7 +94,7 @@
                                                     />
                                                 </ct-block>
 
-                                                <ct-block name="sw_media_modal_v2_uploaded_items">
+                                                <ct-block name="ct_media_modal_v2_uploaded_items">
                                                     <ct-media-grid
                                                         :presentation="compact ? 'list-preview' : 'medium-preview'"
                                                         :class="{ 'ct-media-modal-v2__upload-media-grid--compact': compact }"
@@ -122,7 +122,7 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_media_modal_v2_media_sidebar">
+                        <ct-block name="ct_media_modal_v2_media_sidebar">
                             <ct-media-sidebar
                                 v-if="selection.length > 0"
                                 :items="selection"
@@ -138,15 +138,15 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_media_modal_v2_modal_footer">
+                    <ct-block name="ct_media_modal_v2_modal_footer">
                         <div class="ct-media-modal-v2__footer">
-                            <ct-block name="sw_media_modal_v2_button_cancel">
+                            <ct-block name="ct_media_modal_v2_button_cancel">
                                 <mt-button variant="secondary" @click="onEmitModalClosed">
                                     {{ translate('global.default.cancel') }}
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_media_modal_v2_button_confirm_selection">
+                            <ct-block name="ct_media_modal_v2_button_confirm_selection">
                                 <mt-button variant="primary" :disabled="selection.length < 1" @click="onEmitSelection">
                                     {{ translate('ct-media.ct-media-modal-v2.labelButtonSaveSelection') }}
                                 </mt-button>
@@ -222,7 +222,7 @@ const { t } = useI18n();
 
 const translate = t;
 const mediaLibrary = ref(null);
-const swMediaModal = ref(null);
+const ctMediaModal = ref(null);
 
 const repositoryFactory = inject('repositoryFactory');
 const mediaService = inject('mediaService');
@@ -302,7 +302,7 @@ const removeOnResizeListener = () => {
 };
 const getComponentWidth = () => {
     // during teleportation the $el doesn't have a bounding client rect yet
-    const componentWidth = swMediaModal.value?.$el?.getBoundingClientRect?.().width;
+    const componentWidth = ctMediaModal.value?.$el?.getBoundingClientRect?.().width;
     if (!componentWidth) {
         return;
     }
@@ -439,7 +439,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mediaService,
     selection,

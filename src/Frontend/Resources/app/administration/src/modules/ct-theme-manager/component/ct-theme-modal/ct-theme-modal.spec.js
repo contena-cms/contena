@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter, routeLocationKey, routerKey } from 'vue-router';
-import swThemeModal from './index';
+import ctThemeModal from './index';
 
-Contena.Component.register('ct-theme-modal', swThemeModal);
+Contena.Component.register('ct-theme-modal', ctThemeModal);
 
 describe('ct-theme-modal', () => {
     async function createWrapper({ repositorySearch = null, selectedThemeId = null } = {}) {

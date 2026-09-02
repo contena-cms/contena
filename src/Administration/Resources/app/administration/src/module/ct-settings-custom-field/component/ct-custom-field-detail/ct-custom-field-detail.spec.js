@@ -68,7 +68,7 @@ async function createWrapper(props = defaultProps, privileges = []) {
                     customFieldDataProviderService: {
                         getTypes: () => getFieldTypes(),
                     },
-                    SwCustomFieldListIsCustomFieldNameUnique: () => Promise.resolve(true),
+                    CtCustomFieldListIsCustomFieldNameUnique: () => Promise.resolve(true),
                     validationService: {},
                 },
                 stubs: {

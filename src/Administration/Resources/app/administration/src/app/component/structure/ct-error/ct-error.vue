@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_error">
+    <ct-block name="ct_error">
         <div class="ct-error">
             <div class="ct-error__container">
-                <ct-block name="sw_error_illustration">
+                <ct-block name="ct_error_illustration">
                     <div class="ct-error__illustration">
                         <img :src="imagePath" alt="" />
                     </div>
@@ -10,24 +10,24 @@
 
                 <div class="ct-error__content">
                     <slot>
-                        <ct-block name="sw_error_contend">
-                            <ct-block name="sw_error_status_code">
+                        <ct-block name="ct_error_contend">
+                            <ct-block name="ct_error_status_code">
                                 <div class="ct-error__status-code">
                                     {{ statusCode }}
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_error_message">
+                            <ct-block name="ct_error_message">
                                 <div class="ct-error__message">
                                     {{ message }}
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_error_stack">
+                            <ct-block name="ct_error_stack">
                                 <code v-if="showStack" class="ct-error__stack">{{ error.stack }}</code>
                             </ct-block>
 
-                            <ct-block name="sw_error_link">
+                            <ct-block name="ct_error_link">
                                 <mt-button v-if="showLink" variant="primary" @click="$router.push(routerLink)">
                                     {{ displayLinkText }}
                                 </mt-button>
@@ -100,7 +100,7 @@ const showLink = computed(() => {
 });
 const displayLinkText = computed(() => props.linkText || t('global.default.back'));
 
-swDefinePublic({
+ctDefinePublic({
     error,
     imagePath,
     message,

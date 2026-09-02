@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_sitemap_index">
+    <ct-block name="ct_settings_sitemap_index">
         <ct-page class="ct-settings-sitemap" show-search-bar>
             <template #smart-bar-header>
-                <ct-block name="sw_settings_sitemap_smart_bar_header">
-                    <ct-block name="sw_settings_sitemap_smart_bar_header_title">
+                <ct-block name="ct_settings_sitemap_smart_bar_header">
+                    <ct-block name="ct_settings_sitemap_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_settings_sitemap_smart_bar_header_title_text">
+                            <ct-block name="ct_settings_sitemap_smart_bar_header_title_text">
                                 {{ $t('ct-settings.index.title') }}
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
                                 {{ $t('ct-settings-sitemap.general.textHeadline') }}
@@ -16,8 +16,8 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_sitemap_smart_bar_actions">
-                    <ct-block name="sw_settings_sitemap_actions_save">
+                <ct-block name="ct_settings_sitemap_smart_bar_actions">
+                    <ct-block name="ct_settings_sitemap_actions_save">
                         <mt-button
                             class="ct-settings-sitemap__save-action"
                             variant="primary"
@@ -32,7 +32,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_sitemap_content">
+                <ct-block name="ct_settings_sitemap_content">
                     <ct-card-view>
                         <ct-skeleton v-if="isLoading" />
 
@@ -97,7 +97,7 @@ const onLoadingChanged = (loading: boolean): void => {
     isLoading.value = loading;
 };
 
-swDefinePublic({
+ctDefinePublic({
     isLoading,
     isSaveSuccessful,
     saveFinish,

@@ -4,10 +4,10 @@ import 'src/app/component/utils/ct-error-boundary';
 describe('src/app/component/utils/ct-error-boundary', () => {
     /** @type Wrapper */
     let wrapper;
-    let swErrorBoundary;
+    let ctErrorBoundary;
 
     beforeAll(async () => {
-        swErrorBoundary = await wrapTestComponent('ct-error-boundary');
+        ctErrorBoundary = await wrapTestComponent('ct-error-boundary');
     });
 
     beforeEach(async () => {
@@ -24,7 +24,7 @@ describe('src/app/component/utils/ct-error-boundary', () => {
     it('should catch the error from siblings', async () => {
         expect(console.error).not.toHaveBeenCalled();
 
-        wrapper = shallowMount(swErrorBoundary, {
+        wrapper = shallowMount(ctErrorBoundary, {
             slots: {
                 default: '<ct-damaged-component></ct-damaged-component>',
             },
@@ -53,7 +53,7 @@ describe('src/app/component/utils/ct-error-boundary', () => {
             save: jest.fn(() => Promise.resolve()),
         };
 
-        wrapper = shallowMount(swErrorBoundary, {
+        wrapper = shallowMount(ctErrorBoundary, {
             slots: {
                 default: '<ct-damaged-component></ct-damaged-component>',
             },

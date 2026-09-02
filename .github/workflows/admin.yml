@@ -1,0 +1,57 @@
+name: Administration
+
+on:
+    push:
+        branches: [trunk]
+    pull_request:
+    workflow_dispatch:
+
+concurrency:
+    group: admin-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    admin:
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.5"
+                  extensions: mbstring, intl, pdo_mysql
+                  tools: composer:v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: src/Administration/Resources/app/administration/package-lock.json
+
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --prefer-dist
+
+            - name: Install Administration dependencies
+              working-directory: src/Administration/Resources/app/administration
+              run: npm ci
+
+            - name: Check Administration types
+              working-directory: src/Administration/Resources/app/administration
+              run: npm run lint:types
+
+            - name: Lint Administration
+              working-directory: src/Administration/Resources/app/administration
+              run: npm run lint -- --concurrency auto
+
+            - name: Prepare Administration tests
+              working-directory: src/Administration/Resources/app/administration
+              run: npm run unit-setup
+
+            - name: Test Administration
+              working-directory: src/Administration/Resources/app/administration
+              run: npm run unit -- --runInBand

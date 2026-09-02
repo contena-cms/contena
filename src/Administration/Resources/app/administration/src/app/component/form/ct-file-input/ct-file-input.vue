@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_file_input">
+    <ct-block name="ct_file_input">
         <div class="ct-file-input">
-            <ct-block name="sw_file_input_regular">
-                <ct-block name="sw_file_input_regular_header">
+            <ct-block name="ct_file_input_regular">
+                <ct-block name="ct_file_input_regular_header">
                     <div class="ct-file-input__header">
-                        <ct-block name="sw_file_input_regular_header_label">
+                        <ct-block name="ct_file_input_regular_header_label">
                             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                             <label v-if="label" :for="id" class="ct-file-input__label">
                                 {{ label }}
@@ -13,9 +13,9 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_file_input_regular_drop_zone">
+                <ct-block name="ct_file_input_regular_drop_zone">
                     <div ref="dropzone" class="ct-file-input__dropzone" :class="isDragActiveClass">
-                        <ct-block name="sw_file_input_caption">
+                        <ct-block name="ct_file_input_caption">
                             <div v-if="selectedFile === null" class="ct-file-input__upload-caption">
                                 <mt-icon name="regular-cloud-upload" size="18px" />
 
@@ -25,7 +25,7 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_file_input_actions">
+                        <ct-block name="ct_file_input_actions">
                             <div class="ct-file-input__actions" :class="{ 'has--source': selectedFile }">
                                 <div v-if="selectedFile" class="ct-file-input__file-info">
                                     <span class="ct-file-input__file-headline">
@@ -40,7 +40,7 @@
                                     />
                                 </div>
 
-                                <ct-block name="sw_file_input_regular_choose_button">
+                                <ct-block name="ct_file_input_regular_choose_button">
                                     <mt-button
                                         class="ct-file-input__button"
                                         size="small"
@@ -57,7 +57,7 @@
                 </ct-block>
             </ct-block>
 
-            <ct-block name="sw_file_input_hidden_form">
+            <ct-block name="ct_file_input_hidden_form">
                 <form ref="fileForm" class="ct-file-input__file-form">
                     <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                     <input
@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
     beforeUnmountComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     selectedFile,
     utilsId,

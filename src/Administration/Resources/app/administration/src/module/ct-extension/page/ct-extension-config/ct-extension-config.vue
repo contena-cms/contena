@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_extension_config">
+    <ct-block name="ct_extension_config">
         <ct-meteor-page class="ct-extension-config" :from-link="props.fromLink">
             <template #smart-bar-icon>
                 <ct-extension-icon
@@ -136,7 +136,7 @@ const onSave = async () => {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     contenaExtensionService,
     extension,
     domain,

@@ -15,9 +15,9 @@ const categoryMock = {
 };
 
 async function createWrapper({ customFieldSets = [] } = {}) {
-    Contena.Store.get('swCategoryDetail').$reset();
-    Contena.Store.get('swCategoryDetail').category = categoryMock;
-    Contena.Store.get('swCategoryDetail').customFieldSets = customFieldSets;
+    Contena.Store.get('ctCategoryDetail').$reset();
+    Contena.Store.get('ctCategoryDetail').category = categoryMock;
+    Contena.Store.get('ctCategoryDetail').customFieldSets = customFieldSets;
 
     return mount(await wrapTestComponent('ct-category-detail-base', { sync: true }), {
         global: {

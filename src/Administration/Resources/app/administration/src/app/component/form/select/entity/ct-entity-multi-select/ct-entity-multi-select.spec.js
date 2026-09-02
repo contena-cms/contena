@@ -109,7 +109,7 @@ const createWrapper = async (customOptions = {}) => {
 
 describe('components/ct-entity-multi-select', () => {
     it('should emit the correct search term', async () => {
-        const swEntityMultiSelect = await createWrapper({
+        const ctEntityMultiSelect = await createWrapper({
             props: {
                 entity: 'property_group_option',
                 entityCollection: getPropertyCollection(),
@@ -125,14 +125,14 @@ describe('components/ct-entity-multi-select', () => {
             },
         });
 
-        await swEntityMultiSelect.find('.ct-select__selection').trigger('click');
+        await ctEntityMultiSelect.find('.ct-select__selection').trigger('click');
         await flushPromises();
 
-        await swEntityMultiSelect.find('input').setValue('first');
-        await swEntityMultiSelect.find('input').trigger('change');
+        await ctEntityMultiSelect.find('input').setValue('first');
+        await ctEntityMultiSelect.find('input').trigger('change');
         await flushPromises();
 
-        expect(swEntityMultiSelect.emitted('search-term-change')[0]).toEqual([
+        expect(ctEntityMultiSelect.emitted('search-term-change')[0]).toEqual([
             'first',
         ]);
     });
@@ -176,7 +176,7 @@ describe('components/ct-entity-multi-select', () => {
     });
 
     it('should render select indicator', async () => {
-        const swEntityMultiSelect = await createWrapper({
+        const ctEntityMultiSelect = await createWrapper({
             props: {
                 entity: 'test',
                 entityCollection: new EntityCollection(
@@ -202,11 +202,11 @@ describe('components/ct-entity-multi-select', () => {
             },
         });
 
-        await swEntityMultiSelect.find('.ct-select__selection').trigger('click');
-        await swEntityMultiSelect.find('input').trigger('change');
+        await ctEntityMultiSelect.find('.ct-select__selection').trigger('click');
+        await ctEntityMultiSelect.find('input').trigger('change');
         await flushPromises();
 
-        expect(swEntityMultiSelect.find('.ct-select-result-list__item-list li .mt-icon')).toBeDefined();
+        expect(ctEntityMultiSelect.find('.ct-select-result-list__item-list li .mt-icon')).toBeDefined();
     });
 
     it('should be possible to clear the selection', async () => {

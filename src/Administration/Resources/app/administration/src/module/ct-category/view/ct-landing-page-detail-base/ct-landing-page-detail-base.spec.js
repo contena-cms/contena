@@ -10,8 +10,8 @@ async function createWrapper({
     },
     customFieldSets = [],
 } = {}) {
-    Contena.Store.get('swCategoryDetail').$reset();
-    Contena.Store.get('swCategoryDetail').category = {
+    Contena.Store.get('ctCategoryDetail').$reset();
+    Contena.Store.get('ctCategoryDetail').category = {
         media: [],
         name: 'Computer parts',
         footerChannels: [],
@@ -20,8 +20,8 @@ async function createWrapper({
         productAssignmentType: 'product',
         isNew: () => false,
     };
-    Contena.Store.get('swCategoryDetail').landingPage = landingPage;
-    Contena.Store.get('swCategoryDetail').customFieldSets = customFieldSets;
+    Contena.Store.get('ctCategoryDetail').landingPage = landingPage;
+    Contena.Store.get('ctCategoryDetail').customFieldSets = customFieldSets;
 
     return mount(await wrapTestComponent('ct-landing-page-detail-base', { sync: true }), {
         global: {
@@ -55,7 +55,7 @@ async function createWrapper({
             },
             computed: {
                 landingPage() {
-                    return Contena.Store.get('swCategoryDetail').landingPage;
+                    return Contena.Store.get('ctCategoryDetail').landingPage;
                 },
             },
         },

@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_permissions_role_detail">
+    <ct-block name="ct_permissions_role_detail">
         <ct-page class="ct-permissions-role-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_permissions_role_detail_smart_bar_header">
-                    <ct-block name="sw_permissions_role_detail_smart_bar_header_title">
+                <ct-block name="ct_permissions_role_detail_smart_bar_header">
+                    <ct-block name="ct_permissions_role_detail_smart_bar_header_title">
                         <h2 v-if="role && role.isNew() && role.name.length <= 0">
                             {{ t('ct-permissions.roles.general.labelCreateNewRole') }}
                         </h2>
@@ -20,14 +20,14 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_permissions_role_detail_smart_bar_actions">
-                    <ct-block name="sw_permissions_role_detail_smart_bar_actions_button_cancel">
+                <ct-block name="ct_permissions_role_detail_smart_bar_actions">
+                    <ct-block name="ct_permissions_role_detail_smart_bar_actions_button_cancel">
                         <mt-button variant="secondary" size="default" @click="onCancel">
                             {{ t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_permissions_role_detail_smart_bar_actions_button_save">
+                    <ct-block name="ct_permissions_role_detail_smart_bar_actions_button_save">
                         <ct-button-process
                             size="default"
                             class="ct-permissions-role-detail__button-save"
@@ -45,10 +45,10 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_permissions_role_detail_content">
-                    <ct-block name="sw_permissions_role_detail_content_card_view">
+                <ct-block name="ct_permissions_role_detail_content">
+                    <ct-block name="ct_permissions_role_detail_content_card_view">
                         <ct-card-view>
-                            <ct-block name="sw_permissions_role_detail_content_card_view_tabs">
+                            <ct-block name="ct_permissions_role_detail_content_card_view_tabs">
                                 <div position-identifier="ct-permissions-role-detail-content">
                                     <mt-tabs
                                         :items="roleTabItems"
@@ -58,7 +58,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_permissions_role_detail_content_router_view">
+                            <ct-block name="ct_permissions_role_detail_content_router_view">
                                 <div class="ct-permissions-role-detail__tab-content">
                                     <router-view v-slot="{ Component }">
                                         <component
@@ -241,7 +241,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     privileges,
     userService,

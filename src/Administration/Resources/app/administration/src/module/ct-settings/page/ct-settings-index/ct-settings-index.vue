@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_settings">
+    <ct-block name="ct_settings">
         <ct-page class="ct-settings-index" :show-smart-bar="false">
             <template #content>
-                <ct-block name="sw_settings_content">
+                <ct-block name="ct_settings_content">
                     <ct-card-view class="ct-settings-index__card-view">
-                        <ct-block name="sw_settings_content_card_view">
+                        <ct-block name="ct_settings_content_card_view">
                             <div class="ct-settings__card--hero">
-                                <ct-block name="sw_settings_content_card_view_header">
+                                <ct-block name="ct_settings_content_card_view_header">
                                     <div class="ct-settings__content-header">
                                         <h1 class="ct-settings__content-header-title">
                                             {{ $t('ct-settings.index.title') }}
@@ -21,7 +21,7 @@
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_settings_content_card_content_grid">
+                                <ct-block name="ct_settings_content_card_content_grid">
                                     <div class="ct-settings__content-grid" position-identifier="ct-settings-index-content">
                                         <div
                                             v-for="(settingsItems, settingsGroup) in settingsGroups"
@@ -231,7 +231,7 @@ const itemIsQueried = (label: string) => {
     return item.includes(query) || query.includes(item);
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     searchQuery,
     settingsGroups,

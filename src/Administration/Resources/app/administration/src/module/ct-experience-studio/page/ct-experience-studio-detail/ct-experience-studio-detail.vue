@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_experience_studio_detail">
+    <ct-block name="ct_experience_studio_detail">
         <ct-page class="ct-experience-studio-detail" :show-search-bar="false" :show-smart-bar="false">
             <template #content>
-                <ct-block name="sw_experience_studio_detail_content">
+                <ct-block name="ct_experience_studio_detail_content">
                     <div class="ct-experience-studio-detail__content">
                         <ct-experience-studio-create-wizard
                             v-if="showCreateWizard"
@@ -18,7 +18,7 @@
                         />
 
                         <template v-else>
-                            <ct-block name="sw_experience_studio_detail_toolbar">
+                            <ct-block name="ct_experience_studio_detail_toolbar">
                                 <ct-experience-studio-toolbar
                                     :layout="layout"
                                     :is-loading="isLoading"
@@ -45,9 +45,9 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_experience_studio_detail_workspace">
+                            <ct-block name="ct_experience_studio_detail_workspace">
                                 <div class="ct-experience-studio-detail__workspace">
-                                    <ct-block name="sw_experience_studio_detail_sidebar_tree">
+                                    <ct-block name="ct_experience_studio_detail_sidebar_tree">
                                         <ct-experience-studio-sidebar-tree
                                             class="ct-experience-studio-detail__sidebar-tree"
                                             :layout="layout"
@@ -61,7 +61,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_experience_studio_detail_preview">
+                                    <ct-block name="ct_experience_studio_detail_preview">
                                         <ct-experience-studio-preview
                                             class="ct-experience-studio-detail__preview"
                                             :layout="layout"
@@ -79,7 +79,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_experience_studio_detail_element_settings">
+                                    <ct-block name="ct_experience_studio_detail_element_settings">
                                         <ct-experience-studio-element-settings
                                             class="ct-experience-studio-detail__element-settings"
                                             :layout="layout"
@@ -1358,7 +1358,7 @@ onBeforeUnmount(() => {
     editorStore.value.reset();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     layout,

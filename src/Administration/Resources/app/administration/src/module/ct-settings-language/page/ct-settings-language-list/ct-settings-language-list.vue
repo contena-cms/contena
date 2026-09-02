@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_settings_list">
-        <ct-block name="sw_settings_language_index">
+    <ct-block name="ct_settings_list">
+        <ct-block name="ct_settings_language_index">
             <ct-page class="ct-settings-language-list">
                 <template #search-bar>
-                    <ct-block name="sw_settings_language_list_search_bar">
+                    <ct-block name="ct_settings_language_list_search_bar">
                         <mt-search
                             :placeholder="$t('ct-settings-language.general.placeholderSearchBar')"
                             :model-value="term"
@@ -13,10 +13,10 @@
                 </template>
 
                 <template #smart-bar-header>
-                    <ct-block name="sw_settings_language_list_smart_bar_header">
-                        <ct-block name="sw_settings_language_list_smart_bar_header_title">
+                    <ct-block name="ct_settings_language_list_smart_bar_header">
+                        <ct-block name="ct_settings_language_list_smart_bar_header_title">
                             <h2>
-                                <ct-block name="sw_settings_language_list_smart_bar_header_title_text">
+                                <ct-block name="ct_settings_language_list_smart_bar_header_title_text">
                                     <span>{{ $t('ct-settings.index.title') }}</span>
 
                                     <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -29,8 +29,8 @@
                 </template>
 
                 <template #smart-bar-actions>
-                    <ct-block name="sw_settings_language_list_smart_bar_actions">
-                        <ct-block name="sw_settings_language_list_smart_bar_actions_update_snippets">
+                    <ct-block name="ct_settings_language_list_smart_bar_actions">
+                        <ct-block name="ct_settings_language_list_smart_bar_actions_update_snippets">
                             <mt-button
                                 v-if="updatableLocales.length"
                                 class="ct-settings-language-list__button-update-snippets"
@@ -43,7 +43,7 @@
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_settings_language_list_smart_bar_actions_add">
+                        <ct-block name="ct_settings_language_list_smart_bar_actions_add">
                             <mt-button
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
@@ -63,7 +63,7 @@
                 </template>
 
                 <template #content>
-                    <ct-block name="sw_settings_language_list_content">
+                    <ct-block name="ct_settings_language_list_content">
                         <ct-card-view>
                             <div class="ct-settings-language-list__content">
                                 <div class="ct-settings-language-list__snippet-link-wrapper">
@@ -110,7 +110,7 @@
                                             <!-- ct-block preserves the complete listing slot scope for extensions. -->
                                             <!-- eslint-disable vue/no-unused-vars -->
                                             <template #column-name="{ item, column, compact, isInlineEdit }">
-                                                <ct-block name="sw_settings_language_list_content_list_column_name">
+                                                <ct-block name="ct_settings_language_list_content_list_column_name">
                                                     <mt-text-field
                                                         v-if="isInlineEdit"
                                                         v-model="item.name"
@@ -161,20 +161,20 @@
                                             </template>
 
                                             <template #column-locale="{ item, column, compact, isInlineEdit }">
-                                                <ct-block name="sw_settings_language_list_content_list_column_locale">
+                                                <ct-block name="ct_settings_language_list_content_list_column_locale">
                                                     {{ item.locale.translated.name }}, {{ item.locale.translated.territory }}
                                                 </ct-block>
                                             </template>
 
                                             <template #column-channels="{ item }">
-                                                <ct-block name="sw_settings_language_list_content_list_column_channels">
+                                                <ct-block name="ct_settings_language_list_content_list_column_channels">
                                                     {{ channelLabel(item) }}
                                                 </ct-block>
                                             </template>
 
                                             <template #column-snippetStatus="{ item }">
                                                 <ct-block
-                                                    name="sw_settings_language_list_content_list_column_snippet_status"
+                                                    name="ct_settings_language_list_content_list_column_snippet_status"
                                                 >
                                                     <mt-badge
                                                         v-if="getSnippetStatus(item)"
@@ -191,14 +191,14 @@
                                             </template>
 
                                             <template #column-parent="{ item, column, compact, isInlineEdit }">
-                                                <ct-block name="sw_settings_language_list_content_list_column_parent">
+                                                <ct-block name="ct_settings_language_list_content_list_column_parent">
                                                     {{ getParentName(item) }}
                                                 </ct-block>
                                             </template>
 
                                             <template #more-actions="{ item }">
                                                 <ct-block
-                                                    name="sw_settings_language_list_content_list_update_snippets_action"
+                                                    name="ct_settings_language_list_content_list_update_snippets_action"
                                                 >
                                                     <ct-context-menu-item
                                                         v-if="getSnippetStatus(item) === 'updateAvailable'"
@@ -212,7 +212,7 @@
                                             </template>
 
                                             <template #delete-action="{ item }">
-                                                <ct-block name="sw_settings_language_list_content_list_delete_action">
+                                                <ct-block name="ct_settings_language_list_content_list_delete_action">
                                                     <ct-context-menu-item
                                                         v-tooltip.bottom="tooltipDelete(item.id)"
                                                         class="ct-settings-language-list__delete-action"
@@ -226,7 +226,7 @@
                                             </template>
 
                                             <template #bulk-additional>
-                                                <ct-block name="sw_settings_language_list_content_list_bulk">
+                                                <ct-block name="ct_settings_language_list_content_list_bulk">
                                                     <a
                                                         v-if="selectedUpdatableLocales.length"
                                                         class="ct-settings-language-list__bulk-update-snippets link link-primary"
@@ -257,7 +257,7 @@
                             </div>
                         </ct-card-view>
 
-                        <ct-block name="sw_settings_language_list_add_modal">
+                        <ct-block name="ct_settings_language_list_add_modal">
                             <ct-settings-language-add-modal
                                 v-if="showAddLanguageModal"
                                 @language-added="onLanguageAdded"
@@ -265,7 +265,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_settings_language_list_delete_modal">
+                        <ct-block name="ct_settings_language_list_delete_modal">
                             <ct-modal
                                 v-if="showDeleteModal"
                                 class="ct-settings-language-list__delete-modal"
@@ -273,7 +273,7 @@
                                 variant="default"
                                 @modal-close="closeDeleteModal"
                             >
-                                <ct-block name="sw_settings_language_list_delete_modal_content">
+                                <ct-block name="ct_settings_language_list_delete_modal_content">
                                     <p class="ct-settings-language-list__delete-modal-intro">
                                         {{ $t('ct-settings-language.list.deleteModalIntro') }}
                                     </p>
@@ -299,7 +299,7 @@
                                 </ct-block>
 
                                 <template #modal-footer>
-                                    <ct-block name="sw_settings_language_list_delete_modal_footer">
+                                    <ct-block name="ct_settings_language_list_delete_modal_footer">
                                         <mt-button size="small" variant="secondary" @click="closeDeleteModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
@@ -320,9 +320,9 @@
                 </template>
 
                 <template #sidebar>
-                    <ct-block name="sw_settings_language_list_grid_sidebar">
+                    <ct-block name="ct_settings_language_list_grid_sidebar">
                         <ct-sidebar>
-                            <ct-block name="sw_settings_language_list_grid_sidebar_refresh">
+                            <ct-block name="ct_settings_language_list_grid_sidebar_refresh">
                                 <ct-sidebar-item
                                     icon="regular-undo"
                                     :title="$t('ct-settings-language.list.titleSidebarItemRefresh')"
@@ -783,7 +783,7 @@ initializeListing({
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     translationService,
     acl,

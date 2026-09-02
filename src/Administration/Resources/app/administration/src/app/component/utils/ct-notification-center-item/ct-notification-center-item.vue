@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_notification_center_item">
+    <ct-block name="ct_notification_center_item">
         <div class="ct-notification-center-item">
-            <ct-block name="sw_notification_center_item_header">
+            <ct-block name="ct_notification_center_item_header">
                 <div class="ct-notification-center-item__header" :class="itemHeaderClass">
                     <div class="ct-notification-center-item__header-left">
                         <div v-if="!notification.visited" class="ct-notification-center-item__header-dot"></div>
 
-                        <ct-block name="sw_notification_center_item_header_title">
+                        <ct-block name="ct_notification_center_item_header_title">
                             <p class="ct-notification-center-item__title">
                                 {{ getTranslatedTitle(notification) }}
                             </p>
@@ -14,7 +14,7 @@
                     </div>
 
                     <div class="ct-notification-center-item__header-right">
-                        <ct-block name="sw_notification_center_item_header_timestamp">
+                        <ct-block name="ct_notification_center_item_header_timestamp">
                             <p class="ct-notification-center-item__timestamp">
                                 <ct-time-ago
                                     :date="notification.timestamp"
@@ -23,7 +23,7 @@
                             </p>
                         </ct-block>
 
-                        <ct-block name="sw_notification_center_item_header_delete">
+                        <ct-block name="ct_notification_center_item_header_delete">
                             <mt-icon
                                 class="ct-notification-center-item__delete"
                                 name="regular-times-s"
@@ -35,27 +35,27 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_notification_center_item_content">
+            <ct-block name="ct_notification_center_item_content">
                 <div class="ct-notification-center-item__content">
-                    <ct-block name="sw_notification_center_item_content_message">
+                    <ct-block name="ct_notification_center_item_content_message">
                         <p class="ct-notification-center-item__message" v-html="getTranslatedMessage(notification)"></p>
                     </ct-block>
 
-                    <ct-block name="sw_notification_center_item_loader">
+                    <ct-block name="ct_notification_center_item_loader">
                         <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                         <mt-loader v-if="notification.isLoading" class="ct-notification-center-item__loader" size="12px" />
                     </ct-block>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_notification_center_item_actions">
+            <ct-block name="ct_notification_center_item_actions">
                 <div v-if="notification.actions" class="ct-notification-center-item__actions">
                     <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks -->
-                    <ct-block name="sw_notification_center_item_actions_inner">
+                    <ct-block name="ct_notification_center_item_actions_inner">
                         <template v-for="action in notificationActions" :key="action.label">
-                            <ct-block name="sw_notification_center_item_actions_item_container">
+                            <ct-block name="ct_notification_center_item_actions_item_container">
                                 <div class="ct-notification-center-item__actions-item-container">
-                                    <ct-block name="sw_notification_center_item_actions_item">
+                                    <ct-block name="ct_notification_center_item_actions_item">
                                         <mt-button block size="small" variant="secondary" @click="handleAction(action)">
                                             {{ action.label }}
                                         </mt-button>
@@ -122,7 +122,7 @@ const handleAction = (action) => {
     emit('center-close');
 };
 
-swDefinePublic({
+ctDefinePublic({
     itemHeaderClass,
     notificationActions,
     isNotificationFromSameDay,

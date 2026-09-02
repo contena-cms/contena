@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_data_grid">
+    <ct-block name="ct_data_grid">
         <div class="ct-data-grid" :class="classes">
-            <ct-block name="sw_data_grid_wrapper">
+            <ct-block name="ct_data_grid_wrapper">
                 <div ref="wrapper" class="ct-data-grid__wrapper">
-                    <ct-block name="sw_data_grid_bulk">
+                    <ct-block name="ct_data_grid_bulk">
                         <div v-if="selectionCount > 0" class="ct-data-grid__bulk">
-                            <ct-block name="sw_data_grid_bulk_selected_count">
+                            <ct-block name="ct_data_grid_bulk_selected_count">
                                 <span class="ct-data-grid__bulk-selected ct-data-grid__bulk-selected-label">{{
                                     $t('global.ct-data-grid.labelSelectionCount')
                                 }}</span>
@@ -14,7 +14,7 @@
                                 }}</span>
                             </ct-block>
 
-                            <ct-block name="sw_data_grid_bulk_selected_actions">
+                            <ct-block name="ct_data_grid_bulk_selected_actions">
                                 <span class="ct-data-grid__bulk-selected bulk-link">
                                     <a
                                         v-if="hasInvisibleSelection"
@@ -27,8 +27,8 @@
                                         {{ $t('global.ct-data-grid.labelDeSelectAll') }}
                                     </a>
                                     <slot name="bulk">
-                                        <ct-block name="sw_data_grid_bulk_selected_actions_content"
-                                            ><ct-block name="sw_data_grid_bulk_edit_content">
+                                        <ct-block name="ct_data_grid_bulk_selected_actions_content"
+                                            ><ct-block name="ct_data_grid_bulk_edit_content">
                                                 <a
                                                     v-if="allowBulkEdit"
                                                     class="link link-primary"
@@ -41,7 +41,7 @@
                                                 </a>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_bulk_delete_content">
+                                            <ct-block name="ct_data_grid_bulk_delete_content">
                                                 <a
                                                     v-if="allowDelete"
                                                     class="link link-danger"
@@ -62,12 +62,12 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_data_grid_bulk_modals">
+                    <ct-block name="ct_data_grid_bulk_modals">
                         <slot name="bulk-modals" v-bind="{ selection }">
-                            <ct-block name="sw_data_grid_slot_bulk_modals"
-                                ><ct-block name="sw_data_grid_bulk_edit_modal">
+                            <ct-block name="ct_data_grid_slot_bulk_modals"
+                                ><ct-block name="ct_data_grid_bulk_edit_modal">
                                     <slot name="bulk-edit-modal" v-bind="{ selection }">
-                                        <ct-block name="sw_data_grid_slot_bulk_edit_modal">
+                                        <ct-block name="ct_data_grid_slot_bulk_edit_modal">
                                             <ct-bulk-edit-modal
                                                 v-if="showBulkEditModal"
                                                 :selection="selection"
@@ -78,7 +78,7 @@
                                     </slot>
                                 </ct-block>
 
-                                <ct-block name="sw_data_grid_bulk_delete_modal">
+                                <ct-block name="ct_data_grid_bulk_delete_modal">
                                     <ct-modal
                                         v-if="showBulkDeleteModal"
                                         class="ct-entity-listing__confirm-bulk-delete-modal"
@@ -131,20 +131,20 @@
                         </slot>
                     </ct-block>
 
-                    <ct-block name="sw_data_grid_table">
+                    <ct-block name="ct_data_grid_table">
                         <table ref="tableRef" class="ct-data-grid__table">
-                            <ct-block name="sw_data_grid_header">
+                            <ct-block name="ct_data_grid_header">
                                 <thead v-if="showHeader" class="ct-data-grid__header">
-                                    <ct-block name="sw_data_grid_header_row">
+                                    <ct-block name="ct_data_grid_header_row">
                                         <tr class="ct-data-grid__row">
-                                            <ct-block name="sw_data_grid_header_cell_selection">
+                                            <ct-block name="ct_data_grid_header_cell_selection">
                                                 <th
                                                     v-if="showSelection"
                                                     class="ct-data-grid__cell ct-data-grid__cell--header ct-data-grid__cell--selection"
                                                 >
-                                                    <ct-block name="sw_data_grid_header_cell_selection_content">
+                                                    <ct-block name="ct_data_grid_header_cell_selection_content">
                                                         <div class="ct-data-grid__cell-content">
-                                                            <ct-block name="sw_data_grid_select_all_checkbox">
+                                                            <ct-block name="ct_data_grid_select_all_checkbox">
                                                                 <mt-checkbox
                                                                     v-if="records && records.length > 0"
                                                                     v-tooltip="{
@@ -172,7 +172,7 @@
                                                 </th>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_header_columns">
+                                            <ct-block name="ct_data_grid_header_columns">
                                                 <th
                                                     v-for="(column, columnIndex) in currentColumns"
                                                     v-show="column.visible"
@@ -183,13 +183,13 @@
                                                     :style="{ width: column.width, minWidth: column.width }"
                                                     @click="onClickHeaderCell($event, column)"
                                                 >
-                                                    <ct-block name="sw_data_grid_header_columns_content">
+                                                    <ct-block name="ct_data_grid_header_columns_content">
                                                         <div class="ct-data-grid__cell-content">
                                                             <slot
                                                                 :name="`column-label-${column.property}`"
                                                                 v-bind="{ column, columnIndex }"
                                                             >
-                                                                <ct-block name="sw_data_grid_header_columns_icon">
+                                                                <ct-block name="ct_data_grid_header_columns_icon">
                                                                     <mt-icon
                                                                         v-if="column.iconLabel && column.iconTooltip"
                                                                         v-tooltip="column.iconTooltip"
@@ -208,7 +208,7 @@
                                                                     </mt-icon>
                                                                 </ct-block>
 
-                                                                <ct-block name="sw_data_grid_header_columns_label">
+                                                                <ct-block name="ct_data_grid_header_columns_label">
                                                                     <template
                                                                         v-if="
                                                                             (column.iconLabel && column.iconTooltip) ||
@@ -222,13 +222,13 @@
                                                                 </ct-block>
                                                             </slot>
 
-                                                            <ct-block name="sw_data_grid_column_actions">
+                                                            <ct-block name="ct_data_grid_column_actions">
                                                                 <ct-context-button
                                                                     v-if="allowColumnEdit && !isInlineEditActive"
                                                                     class="ct-data-grid__action-edit-column"
                                                                     aria-label="global.ct-data-grid.columnsActions"
                                                                 >
-                                                                    <ct-block name="sw_data_grid_column_actions_hide">
+                                                                    <ct-block name="ct_data_grid_column_actions_hide">
                                                                         <ct-context-menu-item
                                                                             :disabled="column.primary"
                                                                             variant="danger"
@@ -240,18 +240,18 @@
                                                                 </ct-context-button>
                                                             </ct-block>
 
-                                                            <ct-block name="sw_data_grid_sort_indicator">
+                                                            <ct-block name="ct_data_grid_sort_indicator">
                                                                 <span
                                                                     v-if="
                                                                         column.sortable && currentSortBy === column.dataIndex
                                                                     "
                                                                     class="ct-data-grid__sort-indicator"
                                                                 >
-                                                                    <ct-block name="sw_data_grid_sort_indicator_transition">
+                                                                    <ct-block name="ct_data_grid_sort_indicator_transition">
                                                                         <transition name="sort-indicator" mode="out-in">
                                                                             <template v-if="currentSortDirection === 'ASC'">
                                                                                 <ct-block
-                                                                                    name="sw_data_grid_sort_indicator_icon_asc"
+                                                                                    name="ct_data_grid_sort_indicator_icon_asc"
                                                                                 >
                                                                                     <mt-icon
                                                                                         key="ASC"
@@ -262,7 +262,7 @@
                                                                             </template>
                                                                             <template v-else>
                                                                                 <ct-block
-                                                                                    name="sw_data_grid_sort_indicator_icon_desc"
+                                                                                    name="ct_data_grid_sort_indicator_icon_desc"
                                                                                 >
                                                                                     <mt-icon
                                                                                         key="DESC"
@@ -278,7 +278,7 @@
                                                         </div>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_data_grid_header_columns_resize">
+                                                    <ct-block name="ct_data_grid_header_columns_resize">
                                                         <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
                                                         <span
                                                             v-if="column.allowResize"
@@ -289,7 +289,7 @@
                                                 </th>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_header_cell_spacer">
+                                            <ct-block name="ct_data_grid_header_cell_spacer">
                                                 <th
                                                     v-if="hasResizeColumns"
                                                     aria-hidden="true"
@@ -299,15 +299,15 @@
                                                 </th>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_header_cell_actions">
+                                            <ct-block name="ct_data_grid_header_cell_actions">
                                                 <th
                                                     v-if="showActions"
                                                     class="ct-data-grid__cell ct-data-grid__cell--header ct-data-grid__cell--actions ct-data-grid__cell-settings"
                                                     :class="{ 'is--loading': loading }"
                                                 >
-                                                    <ct-block name="sw_data_grid_header_cell_actions_content">
+                                                    <ct-block name="ct_data_grid_header_cell_actions_content">
                                                         <div class="ct-data-grid__cell-content">
-                                                            <ct-block name="sw_data_grid_settings">
+                                                            <ct-block name="ct_data_grid_settings">
                                                                 <ct-data-grid-settings
                                                                     v-if="showSettings"
                                                                     :columns="currentColumns"
@@ -322,10 +322,10 @@
                                                                 >
                                                                     <template #additionalSettings>
                                                                         <ct-block
-                                                                            name="sw_data_grid_settings_additional_settings"
+                                                                            name="ct_data_grid_settings_additional_settings"
                                                                         >
                                                                             <ct-block
-                                                                                name="sw_data_grid_settings_additional_settings_inner"
+                                                                                name="ct_data_grid_settings_additional_settings_inner"
                                                                             >
                                                                                 <slot name="additionalSettings"></slot>
                                                                             </ct-block>
@@ -333,10 +333,10 @@
                                                                     </template>
                                                                 </ct-data-grid-settings>
 
-                                                                <ct-block name="sw_data_grid_settings_custom_settings">
+                                                                <ct-block name="ct_data_grid_settings_custom_settings">
                                                                     <slot name="customSettings">
                                                                         <ct-block
-                                                                            name="sw_data_grid_settings_custom_settings_slot"
+                                                                            name="ct_data_grid_settings_custom_settings_slot"
                                                                         ></ct-block>
                                                                     </slot>
                                                                 </ct-block>
@@ -350,9 +350,9 @@
                                 </thead>
                             </ct-block>
 
-                            <ct-block name="sw_data_grid_body">
+                            <ct-block name="ct_data_grid_body">
                                 <tbody v-if="!loading" class="ct-data-grid__body">
-                                    <ct-block name="sw_data_grid_body_row">
+                                    <ct-block name="ct_data_grid_body_row">
                                         <tr
                                             v-for="(item, itemIndex) in records"
                                             :key="item.id"
@@ -360,7 +360,7 @@
                                             :class="getRowClasses(item, itemIndex)"
                                             @click="onRowClick($event, item)"
                                         >
-                                            <ct-block name="sw_data_grid_body_cell_selection">
+                                            <ct-block name="ct_data_grid_body_cell_selection">
                                                 <td
                                                     v-if="showSelection"
                                                     class="ct-data-grid__cell ct-data-grid__cell--selection"
@@ -375,9 +375,9 @@
                                                             itemIdentifierProperty,
                                                         }"
                                                     >
-                                                        <ct-block name="sw_data_grid_body_cell_selection_content">
+                                                        <ct-block name="ct_data_grid_body_cell_selection_content">
                                                             <div class="ct-data-grid__cell-content">
-                                                                <ct-block name="sw_data_grid_select_item_checkbox">
+                                                                <ct-block name="ct_data_grid_select_item_checkbox">
                                                                     <mt-checkbox
                                                                         v-tooltip="getSelectableTooltip(item)"
                                                                         :disabled="!recordIsSelectable(item)"
@@ -391,7 +391,7 @@
                                                 </td>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_body_columns">
+                                            <ct-block name="ct_data_grid_body_columns">
                                                 <td
                                                     v-for="(column, columnIndex) in currentVisibleColumns"
                                                     :key="`${item.id}-${columnIndex}`"
@@ -401,9 +401,9 @@
                                                     @dblclick="onDbClickCell(item)"
                                                 >
                                                     <ct-provide :aria-label="column.label">
-                                                        <ct-block name="sw_data_grid_body_columns_content">
+                                                        <ct-block name="ct_data_grid_body_columns_content">
                                                             <div class="ct-data-grid__cell-content">
-                                                                <ct-block name="sw_data_grid_preview_slot">
+                                                                <ct-block name="ct_data_grid_preview_slot">
                                                                     <slot
                                                                         v-if="previews && !isInlineEdit(item)"
                                                                         :name="`preview-${column.property}`"
@@ -411,7 +411,7 @@
                                                                     ></slot>
                                                                 </ct-block>
 
-                                                                <ct-block name="sw_data_grid_columns_slot">
+                                                                <ct-block name="ct_data_grid_columns_slot">
                                                                     <slot
                                                                         :name="`column-${column.property}`"
                                                                         v-bind="{
@@ -427,7 +427,7 @@
                                                                         }"
                                                                     >
                                                                         <template v-if="column.inlineEdit === 'boolean'">
-                                                                            <ct-block name="sw_data_grid_columns_boolean">
+                                                                            <ct-block name="ct_data_grid_columns_boolean">
                                                                                 <ct-data-grid-column-boolean
                                                                                     v-model:value="item[column.property]"
                                                                                     :is-inline-edit="
@@ -439,7 +439,7 @@
                                                                         </template>
                                                                         <template v-else>
                                                                             <ct-block
-                                                                                name="sw_data_grid_columns_inline_edit"
+                                                                                name="ct_data_grid_columns_inline_edit"
                                                                             >
                                                                                 <template
                                                                                     v-if="
@@ -448,7 +448,7 @@
                                                                                     "
                                                                                 >
                                                                                     <ct-block
-                                                                                        name="sw_data_grid_columns_render_inline_edit"
+                                                                                        name="ct_data_grid_columns_render_inline_edit"
                                                                                     >
                                                                                         <ct-data-grid-inline-edit
                                                                                             v-model:value="
@@ -461,7 +461,7 @@
                                                                                 </template>
                                                                             </ct-block>
 
-                                                                            <ct-block name="sw_data_grid_columns_value">
+                                                                            <ct-block name="ct_data_grid_columns_value">
                                                                                 <template
                                                                                     v-if="
                                                                                         isInlineEdit(item) &&
@@ -471,7 +471,7 @@
                                                                                 >
                                                                                 <template v-else>
                                                                                     <ct-block
-                                                                                        name="sw_data_grid_columns_render_router_link"
+                                                                                        name="ct_data_grid_columns_render_router_link"
                                                                                     >
                                                                                         <router-link
                                                                                             v-if="column.routerLink"
@@ -485,7 +485,7 @@
                                                                                         </router-link>
                                                                                     </ct-block>
                                                                                     <ct-block
-                                                                                        name="sw_data_grid_columns_render_value"
+                                                                                        name="ct_data_grid_columns_render_value"
                                                                                     >
                                                                                         <template v-if="column.routerLink"
                                                                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
@@ -508,7 +508,7 @@
                                                 </td>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_body_cell_spacer">
+                                            <ct-block name="ct_data_grid_body_cell_spacer">
                                                 <td
                                                     v-if="hasResizeColumns"
                                                     aria-hidden="true"
@@ -519,21 +519,21 @@
                                                 </td>
                                             </ct-block>
 
-                                            <ct-block name="sw_data_grid_body_cell_actions">
+                                            <ct-block name="ct_data_grid_body_cell_actions">
                                                 <td
                                                     v-if="showActions"
                                                     class="ct-data-grid__cell ct-data-grid__cell--actions"
                                                 >
-                                                    <ct-block name="sw_data_grid_body_cell_actions_content">
+                                                    <ct-block name="ct_data_grid_body_cell_actions_content">
                                                         <div class="ct-data-grid__cell-content">
-                                                            <ct-block name="sw_data_grid_inline_edit_actions">
+                                                            <ct-block name="ct_data_grid_inline_edit_actions">
                                                                 <template
                                                                     v-if="
                                                                         isInlineEditActive &&
                                                                         currentInlineEditId === item[itemIdentifierProperty]
                                                                     "
                                                                 >
-                                                                    <ct-block name="sw_data_grid_inline_edit_actions_cancel">
+                                                                    <ct-block name="ct_data_grid_inline_edit_actions_cancel">
                                                                         <mt-button
                                                                             class="ct-data-grid__inline-edit-cancel"
                                                                             size="x-small"
@@ -544,7 +544,7 @@
                                                                             @click="onClickCancelInlineEdit(item)"
                                                                         >
                                                                             <ct-block
-                                                                                name="sw_data_grid_inline_edit_actions_cancel_icon"
+                                                                                name="ct_data_grid_inline_edit_actions_cancel_icon"
                                                                             >
                                                                                 <mt-icon
                                                                                     name="regular-times-xs"
@@ -554,7 +554,7 @@
                                                                         </mt-button>
                                                                     </ct-block>
 
-                                                                    <ct-block name="sw_data_grid_inline_edit_actions_save">
+                                                                    <ct-block name="ct_data_grid_inline_edit_actions_save">
                                                                         <mt-button
                                                                             class="ct-data-grid__inline-edit-save"
                                                                             variant="primary"
@@ -565,7 +565,7 @@
                                                                             @click="onClickSaveInlineEdit(item)"
                                                                         >
                                                                             <ct-block
-                                                                                name="sw_data_grid_inline_edit_actions_save_icon"
+                                                                                name="ct_data_grid_inline_edit_actions_save_icon"
                                                                             >
                                                                                 <mt-icon
                                                                                     name="regular-checkmark-xxs"
@@ -577,7 +577,7 @@
                                                                 </template>
                                                             </ct-block>
 
-                                                            <ct-block name="sw_data_grid_body_cell_actions_menu">
+                                                            <ct-block name="ct_data_grid_body_cell_actions_menu">
                                                                 <template
                                                                     v-if="
                                                                         isInlineEditActive &&
@@ -596,7 +596,7 @@
                                                                         :item="item"
                                                                         :item-index="itemIndex"
                                                                     >
-                                                                        <ct-block name="sw_data_grid_slot_actions"
+                                                                        <ct-block name="ct_data_grid_slot_actions"
                                                                             ><slot name="detail-action" v-bind="{ item }">
                                                                                 <ct-context-menu-item
                                                                                     v-if="detailRoute"
@@ -655,9 +655,9 @@
                                                                 </ct-context-button>
                                                             </ct-block>
 
-                                                            <ct-block name="sw_data_grid_body_cell_action_modals">
+                                                            <ct-block name="ct_data_grid_body_cell_action_modals">
                                                                 <slot name="action-modals" :item="item">
-                                                                    <ct-block name="sw_data_grid_slot_action_modals"
+                                                                    <ct-block name="ct_data_grid_slot_action_modals"
                                                                         ><ct-modal
                                                                             v-if="deleteId === item.id"
                                                                             :title="$t('global.default.warning')"
@@ -722,7 +722,7 @@
                                 </tbody>
                             </ct-block>
 
-                            <ct-block name="sw_data_grid_skeleton">
+                            <ct-block name="ct_data_grid_skeleton">
                                 <template v-if="!loading"
                                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                                 >
@@ -741,11 +741,11 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_data_grid_pagination">
+            <ct-block name="ct_data_grid_pagination">
                 <div class="ct-data-grid__pagination">
-                    <ct-block name="sw_data_grid_pagination_inner">
+                    <ct-block name="ct_data_grid_pagination_inner">
                         <slot name="pagination">
-                            <ct-block name="sw_data_grid_slot_pagination"
+                            <ct-block name="ct_data_grid_slot_pagination"
                                 ><ct-pagination
                                     v-bind="{ page, limit, total, steps }"
                                     :total-visible="7"
@@ -852,7 +852,7 @@ const getSelectableTooltip = (item) => {
     return callbackResult.tooltip;
 };
 
-swDefinePublic({
+ctDefinePublic({
     recordIsSelectable,
     isSelectAllDisabled,
     allSelectedChecked,

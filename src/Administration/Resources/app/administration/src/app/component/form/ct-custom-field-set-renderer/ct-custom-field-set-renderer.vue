@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_custom_field_set_renderer">
+    <ct-block name="ct_custom_field_set_renderer">
         <div class="ct-custom-field-set-renderer">
             <template v-if="visibleCustomFieldSets.length > 0">
-                <ct-block name="sw_custom_field_set_renderer_card">
+                <ct-block name="ct_custom_field_set_renderer_card">
                     <div
                         v-if="variant === 'tabs'"
                         class="ct-custom-field-set-renderer__card-tabs"
@@ -13,16 +13,16 @@
                             :default-item="visibleCustomFieldSets[0].id"
                             @new-item-active="onTabChange"
                         />
-                        <ct-block name="sw_custom_field_set_renderer_card_tabs"> </ct-block>
+                        <ct-block name="ct_custom_field_set_renderer_card_tabs"> </ct-block>
 
-                        <ct-block name="sw_custom_field_set_renderer_card_tabs_content">
+                        <ct-block name="ct_custom_field_set_renderer_card_tabs_content">
                             <div class="ct-custom-field-set-renderer__tab-content">
                                 <template v-for="set in visibleCustomFieldSets" :key="set.id">
                                     <div
                                         v-show="(activeCustomFieldSetId || visibleCustomFieldSets[0].id) === set.id"
                                         :class="'ct-custom-field-set-renderer-tab-content__' + set.name"
                                     >
-                                        <ct-block name="sw_custom_field_set_renderer_card_form_renderer">
+                                        <ct-block name="ct_custom_field_set_renderer_card_form_renderer">
                                             <ct-skeleton v-if="!set.customFields" style="width: 100%" />
                                             <template v-else>
                                                 <template v-for="customField in set.customFields" :key="customField.name">
@@ -59,7 +59,7 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_custom_field_set_renderer_media">
+                <ct-block name="ct_custom_field_set_renderer_media">
                     <template v-if="variant === 'tabs'"
                         ><!-- Keeps the conditional chain connected across ct-block. --></template
                     >
@@ -73,7 +73,7 @@
                             >
                                 <template #content>
                                     <template v-for="customField in set.customFields" :key="customField.name">
-                                        <ct-block name="sw_custom_field_set_renderer_media_form_renderer">
+                                        <ct-block name="ct_custom_field_set_renderer_media_form_renderer">
                                             <ct-form-field-renderer
                                                 v-bind="customField"
                                                 v-model:value="customFields[customField.name]"
@@ -82,7 +82,7 @@
                                             />
                                         </ct-block>
                                     </template>
-                                    <ct-block name="sw_custom_field_set_renderer_media_button_save">
+                                    <ct-block name="ct_custom_field_set_renderer_media_button_save">
                                         <ct-button-process
                                             :is-loading="isLoading"
                                             :process-success="isSaveSuccessful"
@@ -632,7 +632,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     customFields,
     activeCustomFieldSetId,

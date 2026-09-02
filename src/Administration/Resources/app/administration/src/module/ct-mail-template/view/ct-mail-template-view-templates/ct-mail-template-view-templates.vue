@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_mail_template_view_templates">
+    <ct-block name="ct_mail_template_view_templates">
         <div class="ct-mail-template-view-templates">
-            <ct-block name="sw_mail_template_view_templates_list">
+            <ct-block name="ct_mail_template_view_templates_list">
                 <ct-mail-template-list ref="mailTemplateList" />
             </ct-block>
         </div>
@@ -17,7 +17,7 @@ function getList(): void {
     void mailTemplateList.value?.getList?.();
 }
 
-swDefinePublic({
+ctDefinePublic({
     getList,
 });
 

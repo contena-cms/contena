@@ -95,9 +95,9 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
 
 ### Extendable SFC Requirement
 
-New pages and pages undergoing a substantive migration must use a native `.vue` SFC. Do not create a new `.html.twig` runtime template. Base pages declare their public extension surface with one top-level `swDefinePublic({ ... })`; other top-level bindings are private. Overrides live in `.override.vue` files, consume `useSwPreviousState()` when needed, and declare replacements with `swDefineOverride({ ... })`. Do not author `createExtendableSetup` wrappers or `ComponentPublicApiMapping` entries.
+New pages and pages undergoing a substantive migration must use a native `.vue` SFC. Do not create a new `.html.twig` runtime template. Base pages declare their public extension surface with one top-level `ctDefinePublic({ ... })`; other top-level bindings are private. Overrides live in `.override.vue` files, consume `useCtPreviousState()` when needed, and declare replacements with `ctDefineOverride({ ... })`. Do not author `createExtendableSetup` wrappers or `ComponentPublicApiMapping` entries.
 
-Expose page-level seams with named `<ct-block name="sw_...">` elements around content and actions. The build transform injects `:data="$dataScope"`; authors must not add it manually. Use `<ct-block extends="...">` plus `<ct-block-parent />` in extension components that add to existing output. Keep block names stable, snake_case, and prefixed with `sw_`; never register an override block inside a `v-for` loop. Structural `ct-page` and `ct-block` are extension infrastructure, while visible controls should use `mt-*` components.
+Expose page-level seams with named `<ct-block name="ct_...">` elements around content and actions. The build transform injects `:data="$dataScope"`; authors must not add it manually. Use `<ct-block extends="ct_...">` plus `<ct-block-parent />` in extension components that add to existing output. Keep block names stable, snake_case, and prefixed with `ct_`; never register an override block inside a `v-for` loop. Structural `ct-page` and `ct-block` are extension infrastructure, while visible controls should use `mt-*` components.
 
 The Options API examples below document existing legacy pages only; do not copy them for new work or SFC migrations.
 

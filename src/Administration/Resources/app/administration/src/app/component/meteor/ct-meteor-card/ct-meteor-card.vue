@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_meteor_card">
+    <ct-block name="ct_meteor_card">
         <div class="ct-meteor-card" :class="cardClasses">
-            <ct-block name="sw_meteor_card_header">
+            <ct-block name="ct_meteor_card_header">
                 <div v-if="hasHeader" class="ct-meteor-card__header">
-                    <ct-block name="sw_meteor_card_header_grid">
+                    <ct-block name="ct_meteor_card_header_grid">
                         <div v-if="!!title || !!$slots.action" class="ct-meteor-card__header-grid">
-                            <ct-block name="sw_meteor_card_title">
+                            <ct-block name="ct_meteor_card_title">
                                 <slot name="title">
                                     <div v-if="title" class="ct-meteor-card__title">
                                         {{ title }}
@@ -13,11 +13,11 @@
                                 </slot>
                             </ct-block>
 
-                            <ct-block name="sw_meteor_card_header_action">
+                            <ct-block name="ct_meteor_card_header_action">
                                 <div v-if="!!$slots.action" class="ct-meteor-card__header-action">
-                                    <ct-block name="sw_meteor_card_header_action_inner">
+                                    <ct-block name="ct_meteor_card_header_action_inner">
                                         <slot name="action">
-                                            <ct-block name="sw_meteor_card_slot_header_action"></ct-block>
+                                            <ct-block name="ct_meteor_card_slot_header_action"></ct-block>
                                         </slot>
                                     </ct-block>
                                 </div>
@@ -25,11 +25,11 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_meteor_card_toolbar">
+                    <ct-block name="ct_meteor_card_toolbar">
                         <div v-if="!!$slots.toolbar" class="ct-meteor-card__toolbar">
-                            <ct-block name="sw_meteor_card_toolbar_inner">
+                            <ct-block name="ct_meteor_card_toolbar_inner">
                                 <slot name="toolbar">
-                                    <ct-block name="sw_meteor_card_slot_toolbar"></ct-block>
+                                    <ct-block name="ct_meteor_card_slot_toolbar"></ct-block>
                                 </slot>
                             </ct-block>
                         </div>
@@ -37,34 +37,34 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_meteor_card_content">
+            <ct-block name="ct_meteor_card_content">
                 <div v-if="hasContent" class="ct-meteor-card__content">
-                    <ct-block name="sw_meteor_card_content_wrapper">
+                    <ct-block name="ct_meteor_card_content_wrapper">
                         <div v-if="hasDefaultSlot" class="ct-meteor-card__content-wrapper">
-                            <ct-block name="sw_meteor_card_default_inner">
+                            <ct-block name="ct_meteor_card_default_inner">
                                 <slot>
-                                    <ct-block name="sw_meteor_card_slot_default"></ct-block>
+                                    <ct-block name="ct_meteor_card_slot_default"></ct-block>
                                 </slot>
                             </ct-block>
                         </div>
                     </ct-block>
 
                     <slot name="grid" :title="title">
-                        <ct-block name="sw_meteor_card_slot_grid"></ct-block>
+                        <ct-block name="ct_meteor_card_slot_grid"></ct-block>
                     </slot>
 
-                    <ct-block name="sw_meteor_card_loader">
+                    <ct-block name="ct_meteor_card_loader">
                         <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                         <mt-loader v-if="isLoading" />
                     </ct-block>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_meteor_card_footer">
+            <ct-block name="ct_meteor_card_footer">
                 <div v-if="!!$slots.footer" class="ct-meteor-card__footer">
-                    <ct-block name="sw_meteor_card_footer_inner">
+                    <ct-block name="ct_meteor_card_footer_inner">
                         <slot name="footer">
-                            <ct-block name="sw_meteor_card_slot_footer"></ct-block>
+                            <ct-block name="ct_meteor_card_slot_footer"></ct-block>
                         </slot>
                     </ct-block>
                 </div>
@@ -127,7 +127,7 @@ const cardClasses = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     hasToolbar,
     hasContent,
     hasDefaultSlot,

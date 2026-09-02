@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_sidebar_media_item">
+    <ct-block name="ct_sidebar_media_item">
         <ct-sidebar-item
             ref="sidebarItem"
             class="ct-sidebar-media-item"
@@ -7,18 +7,18 @@
             :title="$t('global.ct-sidebar-media-item.title')"
             :disabled="disabled"
         >
-            <ct-block name="sw_sidebar_media_item_content">
+            <ct-block name="ct_sidebar_media_item_content">
                 <div class="ct-sidebar-media-item__content">
-                    <ct-block name="sw_sidebar_media_item_search_field">
+                    <ct-block name="ct_sidebar_media_item_search_field">
                         <mt-search v-model="term" size="small" @update:model-value="onSearchTermChange" />
                     </ct-block>
 
-                    <ct-block name="sw_sidebar_media_item_folder_navigation">
+                    <ct-block name="ct_sidebar_media_item_folder_navigation">
                         <ct-media-breadcrumbs v-if="!term.length" v-model:current-folder-id="mediaFolderId" small />
                     </ct-block>
 
-                    <ct-block name="sw_sidebar_media_item_media_item_list">
-                        <ct-block name="sw_sidebar_media_item_media_item_list_folder_item">
+                    <ct-block name="ct_sidebar_media_item_media_item_list">
+                        <ct-block name="ct_sidebar_media_item_media_item_list_folder_item">
                             <template v-if="!term.length">
                                 <ct-media-folder-item
                                     v-for="folder in subFolders"
@@ -34,7 +34,7 @@
                             </template>
                         </ct-block>
 
-                        <ct-block name="sw_sidebar_media_item_media_item_list_media_item">
+                        <ct-block name="ct_sidebar_media_item_media_item_list_media_item">
                             <ct-media-media-item
                                 v-for="mediaItem in mediaItems"
                                 :key="mediaItem.id"
@@ -46,13 +46,13 @@
                                 :is-list="true"
                                 @media-item-delete="handleMediaGridItemDelete"
                             >
-                                <ct-block name="sw_sidebar_media_item_context_items">
+                                <ct-block name="ct_sidebar_media_item_context_items">
                                     <slot name="context-menu-items" :media-item="mediaItem"></slot>
                                 </ct-block>
                             </ct-media-media-item>
                         </ct-block>
 
-                        <ct-block name="sw_sidebar_media_item_load_more_button">
+                        <ct-block name="ct_sidebar_media_item_load_more_button">
                             <mt-button
                                 v-if="showMore"
                                 size="small"
@@ -66,7 +66,7 @@
                         </ct-block>
                     </ct-block>
 
-                    <ct-block name="sw_sidebar_media_item_loader">
+                    <ct-block name="ct_sidebar_media_item_loader">
                         <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                         <mt-loader v-if="isLoading" />
                     </ct-block>
@@ -228,7 +228,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     isLoading,
     mediaFolderId,

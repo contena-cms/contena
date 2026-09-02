@@ -1,19 +1,19 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_settings_search_search_behaviour">
+    <ct-block name="ct_settings_search_search_behaviour">
         <mt-card
             class="ct-settings-search-search-behaviour"
             position-identifier="ct-settings-search-search-behaviour"
             :title="t('ct-settings-search.generalTab.labelSearchBehaviour')"
             :is-loading="isLoading"
         >
-            <ct-block name="sw_settings_search_search_behaviour_title">
+            <ct-block name="ct_settings_search_search_behaviour_title">
                 <p class="ct-settings-search-search-behaviour__title">
                     {{ t('ct-settings-search.generalTab.textTitleSearchBehaviour') }}
                 </p>
             </ct-block>
 
-            <ct-block name="sw_settings_search_search_behaviour_condition">
+            <ct-block name="ct_settings_search_search_behaviour_condition">
                 <mt-radio-group-root
                     :model-value="searchBehaviourConfigs.andLogic"
                     class="ct-settings-search-search-behaviour__condition"
@@ -38,7 +38,7 @@
                 </mt-radio-group-root>
             </ct-block>
 
-            <ct-block name="sw_settings_search_search_behaviour_search_term_length">
+            <ct-block name="ct_settings_search_search_behaviour_search_term_length">
                 <mt-number-field
                     :model-value="searchBehaviourConfigs.minSearchLength"
                     class="ct-settings-search-search-behaviour__minimum-length"
@@ -100,7 +100,7 @@ const updateMinSearchLength = (value: number | null): void => {
     if (typeof value === 'number') Object.assign(props.searchBehaviourConfigs, { minSearchLength: value });
 };
 
-swDefinePublic({
+ctDefinePublic({
     min,
     max,
     conditionsOptions,

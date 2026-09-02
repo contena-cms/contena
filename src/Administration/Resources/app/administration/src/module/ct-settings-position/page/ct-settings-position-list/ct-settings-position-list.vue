@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_position_list">
+    <ct-block name="ct_settings_position_list">
         <ct-page class="ct-settings-position-list">
             <template #search-bar>
-                <ct-block name="sw_settings_position_list_search_bar">
+                <ct-block name="ct_settings_position_list_search_bar">
                     <ct-search-bar
                         initial-search-type="position"
                         :placeholder="translate('ct-settings-position.list.searchPlaceholder')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_position_list_header">
+                <ct-block name="ct_settings_position_list_header">
                     <h2>
                         {{ translate('ct-settings-position.general.mainMenuItemGeneral') }}
                         <span v-if="!isLoading" class="ct-page__smart-bar-amount"> ({{ total }}) </span>
@@ -21,13 +21,13 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_position_list_language">
+                <ct-block name="ct_settings_position_list_language">
                     <ct-language-switch @on-change="onChangeLanguage" />
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_position_list_actions">
+                <ct-block name="ct_settings_position_list_actions">
                     <mt-button
                         v-tooltip.bottom="createTooltip"
                         class="ct-settings-position-list__button-create"
@@ -42,7 +42,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_position_list_content">
+                <ct-block name="ct_settings_position_list_content">
                     <ct-card-view>
                         <mt-data-table
                             class="ct-settings-position-list__content"
@@ -310,7 +310,7 @@ sortBy.value = 'position';
 sortDirection.value = 'ASC';
 initializeListing({ getList });
 
-swDefinePublic({
+ctDefinePublic({
     positionRepository,
     positions,
     isLoading,

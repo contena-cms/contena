@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_inheritance_warning">
+    <ct-block name="ct_inheritance_warning">
         <div class="ct-inheritance-warning">
-            <ct-block name="sw_inheritance_warning_icon">
+            <ct-block name="ct_inheritance_warning_icon">
                 <mt-icon size="16px" name="regular-link-horizontal" />
             </ct-block>
 
-            <ct-block name="sw_inheritance_warning_text">
+            <ct-block name="ct_inheritance_warning_text">
                 <p>
                     {{ $t('ct-inheritance-warning.infoTextInheritedField', { moduleName: name }) }}
                 </p>
@@ -24,5 +24,5 @@ defineProps({
     },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

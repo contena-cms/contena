@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_version">
+    <ct-block name="ct_version">
         <div class="ct-version">
-            <ct-block name="sw_version_info">
+            <ct-block name="ct_version_info">
                 <div class="ct-version__info">
-                    <ct-block name="sw_version_info_text">
+                    <ct-block name="ct_version_info_text">
                         {{ version }}
                     </ct-block>
                 </div>
@@ -77,7 +77,7 @@ function getHumanReadableText(text) {
     return text;
 }
 
-swDefinePublic({
+ctDefinePublic({
     version,
     getHumanReadableText,
 });

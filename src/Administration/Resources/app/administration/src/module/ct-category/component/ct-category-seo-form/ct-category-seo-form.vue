@@ -1,8 +1,8 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_category_seo_form">
+    <ct-block name="ct_category_seo_form">
         <div class="ct-category-seo-form">
-            <ct-block name="sw_category_seo_form_meta_title">
+            <ct-block name="ct_category_seo_form_meta_title">
                 <mt-text-field
                     v-model="category.metaTitle"
                     maxlength="255"
@@ -13,7 +13,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_seo_form_meta_description">
+            <ct-block name="ct_category_seo_form_meta_description">
                 <mt-textarea
                     v-model="category.metaDescription"
                     maxlength="255"
@@ -24,7 +24,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_category_seo_form_keywords">
+            <ct-block name="ct_category_seo_form_keywords">
                 <mt-text-field
                     v-model="category.keywords"
                     :disabled="!acl.can('category.editor')"
@@ -49,7 +49,7 @@ import { inject } from 'vue';
 
 const acl = inject('acl');
 
-swDefinePublic({
+ctDefinePublic({
     acl,
 });
 

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_custom_field_translated_labels">
+    <ct-block name="ct_custom_field_translated_labels">
         <div class="ct-custom-field-translated-labels">
-            <ct-block name="sw_custom_field_translated_labels_single">
+            <ct-block name="ct_custom_field_translated_labels_single">
                 <template v-if="localeCount === 1">
                     <div v-for="locale in locales" :key="locale" class="ct-custom-field-translated-labels__single">
                         <mt-text-field
@@ -16,7 +16,7 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_custom_field_translated_labels_translated">
+            <ct-block name="ct_custom_field_translated_labels_translated">
                 <div
                     v-if="localeCount !== 1"
                     position-identifier="ct-custom-field-translated-labels"
@@ -24,13 +24,13 @@
                 >
                     <mt-tabs :items="localeTabs" :default-item="fallbackLocale" @new-item-active="onTabChange" />
 
-                    <ct-block name="sw_custom_field_translated_labels_translated_tabs" />
+                    <ct-block name="ct_custom_field_translated_labels_translated_tabs" />
 
-                    <ct-block name="sw_custom_field_translated_labels_translated_content">
+                    <ct-block name="ct_custom_field_translated_labels_translated_content">
                         <div class="ct-custom-field-translated-labels__content">
                             <template v-for="locale in locales" :key="locale">
                                 <div v-if="(activeLocale || fallbackLocale) === locale">
-                                    <ct-block name="sw_custom_field_translated_labels_translated_content_field">
+                                    <ct-block name="ct_custom_field_translated_labels_translated_content_field">
                                         <mt-text-field
                                             v-for="(label, name) in propertyNames"
                                             :key="getInlineSnippetKey(name)"
@@ -140,7 +140,7 @@ activeLocale.value = fallbackLocale.value;
 
 watch(() => props.locales, initializeConfiguration);
 
-swDefinePublic({
+ctDefinePublic({
     activeLocale,
     fallbackLocale,
     localeCount,

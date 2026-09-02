@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_message_stats">
+    <ct-block name="ct_settings_message_stats">
         <ct-page class="ct-settings-message-stats">
             <template #smart-bar-header>
                 <h2>{{ $t('ct-settings-message-stats.general.mainMenuItemGeneral') }}</h2>
@@ -222,7 +222,7 @@ async function loadStats(): Promise<void> {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     messageStatsService,
     isLoading,
     statsResponse,

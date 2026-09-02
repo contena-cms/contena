@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_duplicated_media_v2">
+    <ct-block name="ct_duplicated_media_v2">
         <ct-modal
             v-if="showModal"
             class="ct-duplicated-media-v2"
             :title="translate('global.ct-duplicated-media-v2.titleModal')"
             @modal-close="skipAll"
         >
-            <ct-block name="sw_duplicated_media_v2_body">
-                <ct-block name="sw_duplicated_media_v2_body_description">
+            <ct-block name="ct_duplicated_media_v2_body">
+                <ct-block name="ct_duplicated_media_v2_body_description">
                     <p class="ct-duplicated-media-v2__description">
                         {{
                             translate(
@@ -19,14 +19,14 @@
                     </p>
                 </ct-block>
 
-                <ct-block name="sw_duplicated_media_v2_body_preview">
+                <ct-block name="ct_duplicated_media_v2_body_preview">
                     <ct-container
                         class="ct-duplicated-media-v2__preview"
                         rows="20px 1fr"
                         columns="1fr 100px 1fr"
                         align="center"
                     >
-                        <ct-block name="sw_duplicated_media_v2_body_preview_label_old_file">
+                        <ct-block name="ct_duplicated_media_v2_body_preview_label_old_file">
                             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                             <label class="ct-duplicated-media-v2__preview_label">
                                 {{ translate('global.ct-duplicated-media-v2.labelNewFile') }}
@@ -35,22 +35,22 @@
 
                         <div class="ct-duplicated-media-v2__spacer"></div>
 
-                        <ct-block name="sw_duplicated_media_v2_body_preview_label_new_file">
+                        <ct-block name="ct_duplicated_media_v2_body_preview_label_new_file">
                             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                             <label class="ct-duplicated-media-v2__preview_label">
                                 {{ translate('global.ct-duplicated-media-v2.labelOldFile') }}
                             </label>
                         </ct-block>
 
-                        <ct-block name="sw_duplicated_media_v2_body_preview_new_media">
+                        <ct-block name="ct_duplicated_media_v2_body_preview_new_media">
                             <div class="ct-duplicated-media-v2__target-upload">
-                                <ct-block name="sw_media_duplicated_media_target_preview">
+                                <ct-block name="ct_media_duplicated_media_target_preview">
                                     <div class="ct-duplicated-media-v2__target-preview">
                                         <ct-media-preview-v2 :source="currentTask.src" />
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_media_duplicated_media_target_name">
+                                <ct-block name="ct_media_duplicated_media_target_name">
                                     <span
                                         v-if="selectedOption !== 'Rename'"
                                         key="ct-duplicated-media-v2__target-label-fileName"
@@ -67,17 +67,17 @@
                                     </span>
                                 </ct-block>
 
-                                <ct-block name="sw_media_duplicated_media_target_details">
+                                <ct-block name="ct_media_duplicated_media_target_details">
                                     <span class="ct-duplicated-media-v2__target-details">{{ currentTaskDetails }}</span>
                                 </ct-block>
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_duplicated_media_v2_body_preview_separator">
+                        <ct-block name="ct_duplicated_media_v2_body_preview_separator">
                             <mt-icon class="ct-duplicated-media-v2__preview-separator" name="regular-long-arrow-right" />
                         </ct-block>
 
-                        <ct-block name="sw_duplicated_media_v2_body_preview_old_media">
+                        <ct-block name="ct_duplicated_media_v2_body_preview_old_media">
                             <ct-media-media-item
                                 v-if="existingMedia"
                                 :item="existingMedia"
@@ -91,7 +91,7 @@
                     </ct-container>
                 </ct-block>
 
-                <ct-block name="sw_duplicated_media_v2_body_options">
+                <ct-block name="ct_duplicated_media_v2_body_options">
                     <mt-radio-group-root v-model="selectedOption" class="ct-duplicated-media-v2__options">
                         <mt-radio-group-list>
                             <mt-radio-group-item
@@ -107,8 +107,8 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_duplicated_media_v2_footer">
-                    <ct-block name="sw_duplicated_media_v2_save_selection">
+                <ct-block name="ct_duplicated_media_v2_footer">
+                    <ct-block name="ct_duplicated_media_v2_save_selection">
                         <mt-checkbox
                             v-if="!isLoading && hasAdditionalErrors"
                             v-model:checked="shouldSaveSelection"
@@ -121,13 +121,13 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_duplicated_media_v2_cancel_button">
+                    <ct-block name="ct_duplicated_media_v2_cancel_button">
                         <mt-button size="small" :disabled="isLoading" variant="secondary" @click="skipCurrentFile">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_duplicated_media_v2_upload_button">
+                    <ct-block name="ct_duplicated_media_v2_upload_button">
                         <mt-button
                             class="ct-duplicated-media-v2__upload"
                             :disabled="isLoading"
@@ -501,7 +501,7 @@ onBeforeUnmount(() => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mediaService,
     mediaPresignedUploadService,

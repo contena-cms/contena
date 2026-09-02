@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_search_live_search">
+    <ct-block name="ct_settings_search_live_search">
         <mt-card
             class="ct-settings-search-live-search"
             position-identifier="ct-settings-search-live-search"
             :title="t('ct-settings-search.liveSearchTab.titleCard')"
         >
-            <ct-block name="sw_settings_search_live_search_description">
+            <ct-block name="ct_settings_search_live_search_description">
                 <div class="ct-settings-search-live-search__rebuild-index-row">
                     <span class="ct-settings-search-live-search__description">
                         {{ t('ct-settings-search.liveSearchTab.textDescription') }}
@@ -17,7 +17,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_search_live_search_channel">
+            <ct-block name="ct_settings_search_live_search_channel">
                 <mt-select
                     class="ct-settings-search-live-search__channel-select"
                     :model-value="channelId"
@@ -30,7 +30,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_search_live_search_input">
+            <ct-block name="ct_settings_search_live_search_input">
                 <div class="ct-settings-search-live-search__search-container">
                     <mt-search
                         v-model="liveSearchTerm"
@@ -51,7 +51,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_search_live_search_results">
+            <ct-block name="ct_settings_search_live_search_results">
                 <div class="ct-settings-search-live-search__search-results">
                     <mt-loader v-if="searchInProgress" />
                     <mt-data-table
@@ -288,7 +288,7 @@ const load = async (): Promise<void> => {
 };
 void load();
 
-swDefinePublic({
+ctDefinePublic({
     channels,
     blogSortings,
     resultItems,

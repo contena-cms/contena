@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter, routeLocationKey, routerKey } from 'vue-router';
-import swThemeManagerList from './index';
+import ctThemeManagerList from './index';
 
-Contena.Component.register('ct-theme-manager-list', swThemeManagerList);
+Contena.Component.register('ct-theme-manager-list', ctThemeManagerList);
 
 describe('ct-theme-manager-list', () => {
     async function createWrapper({ aclCan = true, searchResult = null } = {}) {

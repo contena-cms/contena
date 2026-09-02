@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_date_filter">
+    <ct-block name="ct_date_filter">
         <ct-range-filter
             :class="'ct-date-filter' + (filter.showTimeframe ? ' --has-timeframe' : '')"
             :value="dateValue"
@@ -11,7 +11,7 @@
             @filter-update="updateFilter"
             @filter-reset="resetFilter"
         >
-            <ct-block name="sw_date_filter_timeframe">
+            <ct-block name="ct_date_filter_timeframe">
                 <mt-select
                     v-if="filter.showTimeframe"
                     v-model="dateValue.timeframe"
@@ -23,7 +23,7 @@
             </ct-block>
 
             <template #from-field>
-                <ct-block name="sw_date_filter_from_field">
+                <ct-block name="ct_date_filter_from_field">
                     <mt-datepicker
                         v-model="dateValue.from"
                         v-bind="$attrs"
@@ -37,7 +37,7 @@
             </template>
 
             <template #to-field>
-                <ct-block name="sw_date_filter_to_field">
+                <ct-block name="ct_date_filter_to_field">
                     <mt-datepicker
                         v-model="dateValue.to"
                         v-bind="$attrs"
@@ -487,7 +487,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     dateValue,
     timeframeOptions,

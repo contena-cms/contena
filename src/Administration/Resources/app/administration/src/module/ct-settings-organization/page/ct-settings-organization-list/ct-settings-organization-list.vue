@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_organization_list">
+    <ct-block name="ct_settings_organization_list">
         <ct-page class="ct-settings-organization-list">
             <template #search-bar>
-                <ct-block name="sw_settings_organization_list_search_bar">
+                <ct-block name="ct_settings_organization_list_search_bar">
                     <mt-search
                         :model-value="term"
                         :placeholder="translate('ct-settings-organization.list.searchPlaceholder')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_organization_list_header">
+                <ct-block name="ct_settings_organization_list_header">
                     <h2>
                         {{ translate('ct-settings.index.title') }}
                         <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -22,13 +22,13 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_organization_list_language">
+                <ct-block name="ct_settings_organization_list_language">
                     <ct-language-switch @on-change="onChangeLanguage" />
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_organization_list_actions">
+                <ct-block name="ct_settings_organization_list_actions">
                     <mt-button
                         v-tooltip.bottom="createTooltip"
                         class="ct-settings-organization-list__add-action"
@@ -64,10 +64,10 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_organization_list_content">
+                <ct-block name="ct_settings_organization_list_content">
                     <ct-card-view>
                         <div class="ct-settings-organization-list__workspace">
-                            <ct-block name="sw_settings_organization_list_tree_panel">
+                            <ct-block name="ct_settings_organization_list_tree_panel">
                                 <mt-card
                                     class="ct-settings-organization-list__tree-panel"
                                     position-identifier="ct-settings-organization-list-tree"
@@ -99,7 +99,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_settings_organization_list_form_panel">
+                            <ct-block name="ct_settings_organization_list_form_panel">
                                 <mt-card
                                     class="ct-settings-organization-list__form-panel"
                                     position-identifier="ct-settings-organization-list-form"
@@ -376,7 +376,7 @@ void Promise.all([
     loadCustomFieldSets(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     organizationRepository,
     organizationUnitRepository,
     term,

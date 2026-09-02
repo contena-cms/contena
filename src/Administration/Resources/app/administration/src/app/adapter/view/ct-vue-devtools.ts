@@ -89,7 +89,7 @@ export default function setupContenaDevtools(app: App): void {
                         action: (): void => {
                             unhighlightElements();
 
-                            window._sw_extension_component_collection.forEach((component) => {
+                            window._ct_extension_component_collection.forEach((component) => {
                                 makeElementClickable(component, api);
                             });
                         },
@@ -105,7 +105,7 @@ export default function setupContenaDevtools(app: App): void {
 
                 payload.rootNodes = [];
 
-                window._sw_extension_component_collection.forEach((component) => {
+                window._ct_extension_component_collection.forEach((component) => {
                     const { property, positionId, view, entity } = getExtensionInformation(component);
 
                     // create new root node if none exists
@@ -136,7 +136,7 @@ export default function setupContenaDevtools(app: App): void {
                     return;
                 }
 
-                const matchingComponent = window._sw_extension_component_collection.find((component) => {
+                const matchingComponent = window._ct_extension_component_collection.find((component) => {
                     const { nodeId } = getExtensionInformation(component);
 
                     return nodeId === payload.nodeId;

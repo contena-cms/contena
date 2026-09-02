@@ -25,7 +25,7 @@ import repositoryFactory from '...';
 Contena.Component.register('ct-product-list', () => import('./page'));
 
 // ❌ Local imports break plugin system
-import SwProductList from './page';
+import CtProductList from './page';
 ```
 
 ## Directory Overview
@@ -76,11 +76,11 @@ import { ref } from 'vue';
 
 const name = ref('');
 
-swDefinePublic({ name });
+ctDefinePublic({ name });
 </script>
 ```
 
-All Administration components must be Vue SFCs. Base components use `swDefinePublic`, and `.override.vue` components use `swDefineOverride`; do not wrap author code in `createExtendableSetup` or add `ComponentPublicApiMapping`. Do not create or retain `.html.twig` component templates or TwigJS runtime dependencies. Preserve required extension points with the native extension system while converting legacy templates, then delete the Twig files in the same change.
+All Administration components must be Vue SFCs. Base components use `ctDefinePublic`, and `.override.vue` components use `ctDefineOverride`; do not wrap author code in `createExtendableSetup` or add `ComponentPublicApiMapping`. Do not create or retain `.html.twig` component templates or TwigJS runtime dependencies. Preserve required extension points with the native extension system while converting legacy templates, then delete the Twig files in the same change.
 
 ## State Management
 

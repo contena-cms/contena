@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_box_spacing_field">
+    <ct-block name="ct_experience_studio_box_spacing_field">
         <div
             class="ct-experience-studio-box-spacing-field mt-field"
             :class="{ 'is--compact': compact, 'is--disabled': disabled }"
@@ -255,7 +255,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     sides,
     isLinked,
     lastEmittedValue,

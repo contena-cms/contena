@@ -1,9 +1,9 @@
 <template>
     <!-- DAL entities are intentionally edited in place before the parent repository save. -->
     <!-- eslint-disable vue/no-mutating-props -->
-    <ct-block name="sw_member_base_form">
+    <ct-block name="ct_member_base_form">
         <div class="ct-member-base-form">
-            <ct-block name="sw_member_base_form_identity">
+            <ct-block name="ct_member_base_form_identity">
                 <div class="ct-member-base-form__grid">
                     <mt-text-field
                         v-model="member.title"
@@ -42,7 +42,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_member_base_form_assignment">
+            <ct-block name="ct_member_base_form_assignment">
                 <div class="ct-member-base-form__grid">
                     <mt-entity-select
                         v-model="member.groupId"
@@ -89,7 +89,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_member_base_form_password">
+            <ct-block name="ct_member_base_form_password">
                 <div class="ct-member-base-form__grid">
                     <mt-password-field
                         v-if="createMode"
@@ -120,7 +120,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_member_base_form_tags">
+            <ct-block name="ct_member_base_form_tags">
                 <mt-entity-select
                     v-model="member.tagIds"
                     entity="tag"
@@ -153,7 +153,7 @@ const { t } = useI18n();
 const getApiError = (property: string): unknown => Contena.Store.get('error').getApiError(props.member, property);
 const onChannelChange = (channelId: string): void => emit('channel-change', channelId);
 
-swDefinePublic({
+ctDefinePublic({
     getApiError,
     onChannelChange,
 });

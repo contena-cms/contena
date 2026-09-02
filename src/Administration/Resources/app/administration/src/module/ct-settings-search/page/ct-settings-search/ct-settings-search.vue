@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_search_index">
+    <ct-block name="ct_settings_search_index">
         <ct-page class="ct-settings-search">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_search_smart_bar_header">
+                <ct-block name="ct_settings_search_smart_bar_header">
                     <h2>
                         {{ t('ct-settings.index.title') }} <mt-icon name="regular-chevron-right-xs" size="12px" />
                         {{ t('ct-settings-search.general.mainMenuItemGeneral') }}
@@ -272,7 +272,7 @@ const createdComponent = (): void => {
 };
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     blogSearchConfigs,
     isLoading,
     currentChannelId,

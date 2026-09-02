@@ -39,10 +39,10 @@ import type UpdateApiService from './core/service/api/update.api.service';
 import type UserRecoveryApiService from './core/service/api/user-recovery.api.service';
 import type ConfigApiService from './core/service/api/config.api.service';
 import type NotificationMixin from './app/mixin/notification.mixin';
-import type SwInlineSnippetMixin from './app/mixin/ct-inline-snippet.mixin';
+import type CtInlineSnippetMixin from './app/mixin/ct-inline-snippet.mixin';
 import type TranslateWithFallbackMixin from './app/mixin/translate-with-fallback.mixin';
 import type PlaceholderMixin from './app/mixin/placeholder.mixin';
-import type SwExtensionErrorMixin from './module/ct-extension/mixin/ct-extension-error.mixin';
+import type CtExtensionErrorMixin from './module/ct-extension/mixin/ct-extension-error.mixin';
 import type PrivilegesService from './app/service/privileges.service';
 import type BusinessEventsApiService from './core/service/api/business-events.api.service';
 import type MailApiService from './core/service/api/mail.api.service';
@@ -63,12 +63,12 @@ import type { MediaModalStore } from './app/store/media-modal.store';
 import type { NotificationStore } from './app/store/notification.store';
 import type { SessionStore } from './app/store/session.store';
 import type { ContenaExtensionsStore } from './module/ct-extension/store/extensions.store';
-import type { SwCategoryDetailStore } from './module/ct-category/page/ct-category-detail/store';
-import type { SwBlogDetailStore } from './module/ct-blog/page/ct-blog-detail/store';
-import type { SwSeoUrlStore } from './module/ct-settings-seo/component/ct-seo-url/store';
+import type { CtCategoryDetailStore } from './module/ct-category/page/ct-category-detail/store';
+import type { CtBlogDetailStore } from './module/ct-blog/page/ct-blog-detail/store';
+import type { CtSeoUrlStore } from './module/ct-settings-seo/component/ct-seo-url/store';
 import type { ExperienceStudioEditorStore } from './module/ct-experience-studio/store/experience-studio-editor.store';
-import type { SwProfileStore } from './module/ct-profile/store/ct-profile.store';
-import type { SwBulkStore } from './app/store/ct-bulk-edit.store';
+import type { CtProfileStore } from './module/ct-profile/store/ct-profile.store';
+import type { CtBulkStore } from './app/store/ct-bulk-edit.store';
 import type SnippetApiService from './core/service/api/snippet.api.service';
 import type SnippetSetApiService from './core/service/api/snippet-set.api.service';
 import type ValidationApiService from './core/service/api/validation.api.service';
@@ -134,8 +134,8 @@ declare global {
         _features_: {
             [featureName: string]: boolean;
         };
-        _sw_extension_component_collection: DevtoolComponent[];
-        _swLoginOverrides?: Array<() => void>;
+        _ct_extension_component_collection: DevtoolComponent[];
+        _ctLoginOverrides?: Array<() => void>;
         startApplication: () => void;
         removePageLoadingIndicator: () => void;
     }
@@ -204,10 +204,10 @@ declare global {
 
     interface MixinContainer {
         notification: typeof NotificationMixin;
-        'ct-inline-snippet': typeof SwInlineSnippetMixin;
+        'ct-inline-snippet': typeof CtInlineSnippetMixin;
         'translate-with-fallback': typeof TranslateWithFallbackMixin;
         placeholder: typeof PlaceholderMixin;
-        'ct-extension-error': typeof SwExtensionErrorMixin;
+        'ct-extension-error': typeof CtExtensionErrorMixin;
     }
 
     interface InitContainer extends SubContainer<'init'> {
@@ -267,11 +267,11 @@ declare global {
         notification: NotificationStore;
         session: SessionStore;
         contenaExtensions: ContenaExtensionsStore;
-        swCategoryDetail: SwCategoryDetailStore;
-        swBlogDetail: SwBlogDetailStore;
-        swSeoUrl: SwSeoUrlStore;
-        swProfile: SwProfileStore;
-        swBulkEdit: SwBulkStore;
+        ctCategoryDetail: CtCategoryDetailStore;
+        ctBlogDetail: CtBlogDetailStore;
+        ctSeoUrl: CtSeoUrlStore;
+        ctProfile: CtProfileStore;
+        ctBulkEdit: CtBulkStore;
         mediaModal: MediaModalStore;
     }
 

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_settings_fields">
+    <ct-block name="ct_experience_studio_settings_fields">
         <div class="ct-experience-studio-settings-fields">
             <mt-collapsible
                 v-for="panel in fieldPanels"
@@ -1296,7 +1296,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     expandedResponsiveProperties,
     responsiveGlobalSnapshots,
     touchedBreakpointAwareProperties,

@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_snippet_list">
+    <ct-block name="ct_settings_snippet_list">
         <ct-page class="ct-settings-snippet-list">
             <template #search-bar>
                 <mt-search
@@ -28,7 +28,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_snippet_list_content">
+                <ct-block name="ct_settings_snippet_list_content">
                     <mt-data-table
                         class="ct-settings-snippet-list__grid"
                         layout="full"
@@ -587,7 +587,7 @@ onBeforeUnmount(() => {
 });
 void initialize();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     page,
     limit,

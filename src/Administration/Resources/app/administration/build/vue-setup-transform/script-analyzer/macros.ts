@@ -9,22 +9,22 @@ import type { CallExpression, Node as BabelNode, ObjectExpression } from '@babel
 import { ContenaSetupTransformError } from '../utils/transform-error';
 import { absoluteRange } from './utils';
 
-type ContenaSetupMacroName = 'swDefinePublic' | 'swDefineOverride';
+type ContenaSetupMacroName = 'ctDefinePublic' | 'ctDefineOverride';
 type ContenaSetupEntryType = 'public' | 'override';
 
-const RESERVED_OVERRIDE_STATE_NAME = '__swOverride';
+const RESERVED_OVERRIDE_STATE_NAME = '__ctOverride';
 
 // Every binding the transform generates is prefixed with this, so reserving it lets generated names
 // stay deterministic and collision-free without renaming user code.
-const CONTENA_SETUP_INTERNAL_PREFIX = '__swSetup';
+const CONTENA_SETUP_INTERNAL_PREFIX = '__ctSetup';
 
 // Module-root binding holding an override file's unique `Symbol()`, used as the computed key its
 // override-local state is filed under. One per override module, so the name can be fixed - the Symbol
 // value, not the name, is what makes it unique across overrides.
-const OVERRIDE_NAMESPACE_BINDING = '__swSetupNamespace';
+const OVERRIDE_NAMESPACE_BINDING = '__ctSetupNamespace';
 
 /**
- * Enforces the single object-literal shape of `swDefinePublic({...})`.
+ * Enforces the single object-literal shape of `ctDefinePublic({...})`.
  */
 function assertSingleArgument(
     callNode: CallExpression,
@@ -42,7 +42,7 @@ function assertSingleArgument(
 }
 
 /**
- * Extracts the exposed local binding names from the top-level `swDefinePublic()` marker call.
+ * Extracts the exposed local binding names from the top-level `ctDefinePublic()` marker call.
  */
 function extractStaticObjectMarker(
     callNode: CallExpression,

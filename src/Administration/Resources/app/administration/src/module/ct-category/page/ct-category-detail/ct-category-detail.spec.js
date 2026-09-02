@@ -117,31 +117,31 @@ describe('src/module/ct-category/page/ct-category-detail', () => {
     });
 
     it('loads the active category when the detail route is mounted', async () => {
-        Contena.Store.get('swCategoryDetail').landingPage = { id: 'previous-landing-page-id' };
+        Contena.Store.get('ctCategoryDetail').landingPage = { id: 'previous-landing-page-id' };
 
         await createWrapper({ categoryId: 'category-id' });
         await flushPromises();
 
         expect(getMock).toHaveBeenCalledWith('category', 'category-id', Contena.Context.api, expect.anything());
-        expect(Contena.Store.get('swCategoryDetail').category.id).toBe('category-id');
-        expect(Contena.Store.get('swCategoryDetail').landingPage).toBeNull();
+        expect(Contena.Store.get('ctCategoryDetail').category.id).toBe('category-id');
+        expect(Contena.Store.get('ctCategoryDetail').landingPage).toBeNull();
     });
 
     it('loads the active landing page when the detail route is mounted', async () => {
-        Contena.Store.get('swCategoryDetail').category = { id: 'previous-category-id' };
+        Contena.Store.get('ctCategoryDetail').category = { id: 'previous-category-id' };
 
         await createWrapper({ landingPageId: 'landing-page-id' });
         await flushPromises();
 
         expect(getMock).toHaveBeenCalledWith('landing_page', 'landing-page-id', Contena.Context.api, expect.anything());
-        expect(Contena.Store.get('swCategoryDetail').landingPage.id).toBe('landing-page-id');
-        expect(Contena.Store.get('swCategoryDetail').category).toBeNull();
+        expect(Contena.Store.get('ctCategoryDetail').landingPage.id).toBe('landing-page-id');
+        expect(Contena.Store.get('ctCategoryDetail').category).toBeNull();
     });
 
     it('should not allow to modify', async () => {
         const wrapper = await createWrapper();
 
-        Contena.Store.get('swCategoryDetail').category = {};
+        Contena.Store.get('ctCategoryDetail').category = {};
 
         await wrapper.vm.$nextTick();
 
@@ -161,7 +161,7 @@ describe('src/module/ct-category/page/ct-category-detail', () => {
 
         const wrapper = await createWrapper();
 
-        Contena.Store.get('swCategoryDetail').category = {};
+        Contena.Store.get('ctCategoryDetail').category = {};
 
         await wrapper.vm.$nextTick();
 
@@ -184,7 +184,7 @@ describe('src/module/ct-category/page/ct-category-detail', () => {
 
         const wrapper = await createWrapper();
 
-        Contena.Store.get('swCategoryDetail').category = {};
+        Contena.Store.get('ctCategoryDetail').category = {};
 
         await wrapper.vm.$nextTick();
 
@@ -208,7 +208,7 @@ describe('src/module/ct-category/page/ct-category-detail', () => {
 
         const wrapper = await createWrapper();
 
-        Contena.Store.get('swCategoryDetail').category = {};
+        Contena.Store.get('ctCategoryDetail').category = {};
 
         await wrapper.vm.$nextTick();
 

@@ -85,7 +85,7 @@ process.stdout.write(
     JSON.stringify({
         sources: map.sources,
         loweredSourceCount: (map.sourcesContent ?? []).filter((content: string | null) =>
-            (content ?? '').includes('__swSetupAuthor_'),
+            (content ?? '').includes('__ctSetupAuthor_'),
         ).length,
         ...results,
     }),

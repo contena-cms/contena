@@ -95,7 +95,7 @@ describe('src/module/ct-category/component/ct-landing-page-tree', () => {
             'landing_page.editor',
         ];
 
-        Contena.Store.get('swCategoryDetail').$reset();
+        Contena.Store.get('ctCategoryDetail').$reset();
 
         // this is normally set by the contena runtime
         // but needed for this unit tests because the component relies on this value.

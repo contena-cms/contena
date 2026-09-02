@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_button_process">
+    <ct-block name="ct_button_process">
         <mt-button class="ct-button-process" size="default" v-bind="$attrs" :variant="$attrs.variant || 'secondary'">
             <mt-icon v-if="processSuccess" class="ct-button-process__status-indicator" name="regular-checkmark-xs" />
             <span class="ct-button-process__content" :class="contentVisibilityClass">
@@ -51,7 +51,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     contentVisibilityClass,
 });

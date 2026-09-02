@@ -64,7 +64,7 @@ describe('extension tooling shared type surface (e2e)', () => {
                 // the extension program via admin-types.d.ts's import.
                 fs.appendFileSync(
                     path.join(administrationRoot, 'src', 'global.types.ts'),
-                    "\nexport const __swSurfaceProbe: number = 'not a number';\n",
+                    "\nexport const __ctSurfaceProbe: number = 'not a number';\n",
                 );
 
                 const check = await checkExtensions({ projectRoot, administrationRoot, only: 'Plug' });

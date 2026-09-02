@@ -1,0 +1,39 @@
+name: Frontend
+
+on:
+    push:
+        branches: [trunk]
+    pull_request:
+    workflow_dispatch:
+
+concurrency:
+    group: frontend-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    frontend:
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: src/Frontend/Resources/app/frontend/package-lock.json
+
+            - name: Install Frontend dependencies
+              working-directory: src/Frontend/Resources/app/frontend
+              run: npm ci
+
+            - name: Lint Frontend JavaScript and styles
+              working-directory: src/Frontend/Resources/app/frontend
+              run: npm run lint
+
+            - name: Test Frontend components
+              working-directory: src/Frontend/Resources/app/frontend
+              run: npm run unit:components

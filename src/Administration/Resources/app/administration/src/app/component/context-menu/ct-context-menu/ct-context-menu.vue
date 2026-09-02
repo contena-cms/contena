@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_context_menu">
+    <ct-block name="ct_context_menu">
         <div class="ct-context-menu">
-            <ct-block name="sw_context_menu_content">
+            <ct-block name="ct_context_menu_content">
                 <div class="ct-context-menu__content">
                     <slot>
-                        <ct-block name="sw_context_menu_slot_default"></ct-block>
+                        <ct-block name="ct_context_menu_slot_default"></ct-block>
                     </slot>
                 </div>
             </ct-block>
@@ -17,5 +17,5 @@ import './ct-context-menu.scss';
 
 defineProps({});
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

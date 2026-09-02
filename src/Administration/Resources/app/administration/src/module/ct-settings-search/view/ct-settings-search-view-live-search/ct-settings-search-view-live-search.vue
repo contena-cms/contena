@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_view_live_search">
+    <ct-block name="ct_settings_search_view_live_search">
         <div class="ct-settings-search__view-live-search">
             <ct-settings-search-search-index
                 v-if="!frontendEsEnable"
@@ -30,7 +30,7 @@ defineEmits<{
 }>();
 const frontendEsEnable = computed(() => Contena.Context.app.storefrontEsEnable ?? false);
 
-swDefinePublic({
+ctDefinePublic({
     frontendEsEnable,
 });
 

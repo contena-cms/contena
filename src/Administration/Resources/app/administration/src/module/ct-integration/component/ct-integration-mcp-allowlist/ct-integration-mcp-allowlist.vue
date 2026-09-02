@@ -1,15 +1,15 @@
 <template>
-    <ct-block name="sw_integration_mcp_allowlist">
+    <ct-block name="ct_integration_mcp_allowlist">
         <div class="ct-integration-mcp-allowlist">
-            <ct-block name="sw_integration_mcp_allowlist_sticky">
+            <ct-block name="ct_integration_mcp_allowlist_sticky">
                 <div class="ct-integration-mcp-allowlist__sticky">
-                    <ct-block name="sw_integration_mcp_allowlist_admin_banner">
+                    <ct-block name="ct_integration_mcp_allowlist_admin_banner">
                         <mt-banner v-if="isAdmin" variant="info" class="ct-integration-mcp-allowlist__admin-banner">
                             {{ $t('ct-integration.mcp.adminBanner') }}
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_integration_mcp_allowlist_coverage_warning">
+                    <ct-block name="ct_integration_mcp_allowlist_coverage_warning">
                         <mt-banner
                             v-if="!isAdmin && uncoveredTools.length > 0"
                             variant="attention"
@@ -30,7 +30,7 @@
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_integration_mcp_allowlist_capability_suggestions">
+                    <ct-block name="ct_integration_mcp_allowlist_capability_suggestions">
                         <mt-banner
                             v-if="missingCapabilitySuggestions.length > 0"
                             variant="attention"
@@ -50,7 +50,7 @@
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_integration_mcp_allowlist_denied_types">
+                    <ct-block name="ct_integration_mcp_allowlist_denied_types">
                         <mt-banner
                             v-if="deniedTypes.length > 0"
                             variant="attention"
@@ -60,7 +60,7 @@
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_integration_mcp_allowlist_stale">
+                    <ct-block name="ct_integration_mcp_allowlist_stale">
                         <mt-banner
                             v-if="staleEntries.length > 0"
                             variant="attention"
@@ -72,7 +72,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_integration_mcp_allowlist_all_toggle">
+            <ct-block name="ct_integration_mcp_allowlist_all_toggle">
                 <mt-switch
                     v-model="allCapabilitiesEnabled"
                     class="ct-integration-mcp-allowlist__all-tools-row"
@@ -83,7 +83,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_integration_mcp_allowlist_types">
+            <ct-block name="ct_integration_mcp_allowlist_types">
                 <div v-if="!allCapabilitiesEnabled" class="ct-integration-mcp-allowlist__type-list">
                     <template v-for="typeConfig in typeConfigs" :key="typeConfig.key">
                         <div
@@ -403,7 +403,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_integration_mcp_allowlist_empty">
+            <ct-block name="ct_integration_mcp_allowlist_empty">
                 <mt-empty-state
                     v-if="
                         !allCapabilitiesEnabled &&
@@ -947,7 +947,7 @@ const typeAllEnabled = (type) => {
 
 loadCapabilities();
 
-swDefinePublic({
+ctDefinePublic({
     mcpToolService,
     availableTools,
     availableResources,

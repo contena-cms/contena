@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_position_detail">
+    <ct-block name="ct_settings_position_detail">
         <ct-page class="ct-settings-position-detail">
             <template #smart-bar-back>
-                <ct-block name="sw_settings_position_detail_back">
+                <ct-block name="ct_settings_position_detail_back">
                     <mt-button variant="tertiary" size="small" @click="onCancel">
                         <mt-icon name="regular-chevron-left-s" size="16px" />
                         {{ translate('global.default.back') }}
@@ -11,19 +11,19 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_position_detail_header">
+                <ct-block name="ct_settings_position_detail_header">
                     <h2>{{ identifier }}</h2>
                 </ct-block>
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_position_detail_language">
+                <ct-block name="ct_settings_position_detail_language">
                     <ct-language-switch :disabled="createMode || undefined" @on-change="onChangeLanguage" />
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_position_detail_actions">
+                <ct-block name="ct_settings_position_detail_actions">
                     <mt-button variant="secondary" size="default" :disabled="isLoading || undefined" @click="onCancel">
                         {{ translate('global.default.cancel') }}
                     </mt-button>
@@ -42,7 +42,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_position_detail_content">
+                <ct-block name="ct_settings_position_detail_content">
                     <ct-card-view>
                         <div class="ct-settings-position-detail__content">
                             <ct-language-info
@@ -196,7 +196,7 @@ void Promise.all([
     loadCustomFieldSets(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     position,
     customFieldSets,
     positionRepository,

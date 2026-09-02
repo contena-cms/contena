@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_region_form">
-        <ct-block name="sw_region_form_fields">
+    <ct-block name="ct_region_form">
+        <ct-block name="ct_region_form_fields">
             <div class="ct-region-form__grid">
                 <mt-text-field
                     :model-value="region.name"
@@ -58,7 +58,7 @@
             </div>
         </ct-block>
 
-        <ct-block name="sw_region_form_custom_fields">
+        <ct-block name="ct_region_form_custom_fields">
             <div v-if="customFieldSets.length > 0" class="ct-region-form__custom-fields">
                 <h3>{{ translate('ct-settings-region.detail.customFieldsTitle') }}</h3>
                 <ct-custom-field-set-renderer :entity="region" :sets="customFieldSets" :disabled="disabled" />
@@ -98,7 +98,7 @@ const translate = t;
 const { placeholder } = usePlaceholder();
 const onUpdateRegion = (path: string, value: unknown): void => emit('update:region', path, value);
 
-swDefinePublic({
+ctDefinePublic({
     placeholder,
     onUpdateRegion,
 });

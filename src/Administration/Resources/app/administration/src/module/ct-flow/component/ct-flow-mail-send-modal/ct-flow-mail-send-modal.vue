@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_mail_send_modal">
+    <ct-block name="ct_flow_mail_send_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="$t('ct-flow.mail.title')" width="s">
-                <ct-block name="sw_flow_mail_send_modal_content">
+                <ct-block name="ct_flow_mail_send_modal_content">
                     <div class="ct-flow-mail-send-modal__content">
                         <mt-entity-select
                             v-model="draft.mailTemplateId"
@@ -26,7 +26,7 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_flow_mail_send_modal_footer">
+                    <ct-block name="ct_flow_mail_send_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onCancel">
                                 {{ $t('global.default.cancel') }}
@@ -100,7 +100,7 @@ const onModalChange = (isOpen: boolean): void => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     draft,
     customRecipients,
     recipientOptions,

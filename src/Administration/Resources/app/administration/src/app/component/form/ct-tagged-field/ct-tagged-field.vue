@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_tagged_field">
+    <ct-block name="ct_tagged_field">
         <ct-block-field class="ct-tagged-field" :class="taggedFieldClasses" v-bind="$attrs">
             <template #ct-field-input="{ disabled: isFieldDisabled, size }">
-                <ct-block name="sw_tagged_field_inner">
+                <ct-block name="ct_tagged_field_inner">
                     <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                     <ul class="ct-tagged-field__tag-list" @click="setFocus(true)">
                         <li v-for="(tag, index) in value" :key="`ct-tagged-field-value--${index}`">
@@ -15,9 +15,9 @@
                                 {{ tag }}
                             </ct-label>
                         </li>
-                        <ct-block name="sw_tagged_field_item_input">
+                        <ct-block name="ct_tagged_field_item_input">
                             <li class="ct-tagged-field__input-list-entry">
-                                <ct-block name="sw_tagged_field_input">
+                                <ct-block name="ct_tagged_field_input">
                                     <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                                     <input
                                         ref="taggedFieldInput"
@@ -151,7 +151,7 @@ function noTriggerKey(event) {
     return false;
 }
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     newTagName,
     hasFocus,

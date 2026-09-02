@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_media_index">
+    <ct-block name="ct_media_index">
         <ct-page class="ct-media-index">
             <template #search-bar>
-                <ct-block name="sw_media_index_search_bar">
+                <ct-block name="ct_media_index_search_bar">
                     <mt-search
                         :model-value="term"
                         :placeholder="$t('ct-media.general.placeholderSearchBar')"
@@ -12,9 +12,9 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_media_index_smart_bar_header">
+                <ct-block name="ct_media_index_smart_bar_header">
                     <h2>
-                        <ct-block name="sw_media_index_smart_bar_heading">
+                        <ct-block name="ct_media_index_smart_bar_heading">
                             {{ $t('ct-media.index.titleLibrary') }}
                         </ct-block>
                     </h2>
@@ -22,7 +22,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_media_index_smart_bar_media_upload">
+                <ct-block name="ct_media_index_smart_bar_media_upload">
                     <ct-media-upload-v2
                         v-tooltip="{
                             message: $t('ct-privileges.tooltip.warning'),
@@ -39,18 +39,18 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_media_index_language_switch">
+                <ct-block name="ct_media_index_language_switch">
                     <ct-language-switch @on-change="reloadList" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_media_index_page_content">
+                <ct-block name="ct_media_index_page_content">
                     <div
                         class="ct-media-index__page-content"
                         :class="{ 'ct-media-index__page-content--has-selection': selectedItems.length > 0 }"
                     >
-                        <ct-block name="sw_media_index_folder_navigation">
+                        <ct-block name="ct_media_index_folder_navigation">
                             <aside class="ct-media-index__folder-navigation" :aria-label="$t('ct-media.index.labelFolders')">
                                 <div class="ct-media-index__folder-navigation-label">
                                     {{ $t('ct-media.index.labelFolders') }}
@@ -216,9 +216,9 @@
                             </aside>
                         </ct-block>
 
-                        <ct-block name="sw_media_index_listing_grid">
+                        <ct-block name="ct_media_index_listing_grid">
                             <main class="ct-media-index__workspace">
-                                <ct-block name="sw_media_index_workspace_header">
+                                <ct-block name="ct_media_index_workspace_header">
                                     <header class="ct-media-index__workspace-header">
                                         <nav
                                             class="ct-media-index__workspace-breadcrumb"
@@ -298,7 +298,7 @@
                             </main>
                         </ct-block>
 
-                        <ct-block name="sw_media_index_sidebar">
+                        <ct-block name="ct_media_index_sidebar">
                             <ct-media-sidebar
                                 v-if="selectedItems.length > 0"
                                 :items="selectedItems"
@@ -321,7 +321,7 @@
                             @media-delete-modal-close="treeFolderPendingDelete = null"
                         />
 
-                        <ct-block name="sw_media_index_list_grid_loader">
+                        <ct-block name="ct_media_index_list_grid_loader">
                             <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                             <mt-loader v-if="isLoading" />
                         </ct-block>
@@ -723,7 +723,7 @@ onUnmounted(() => {
     destroyedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mediaService,
     acl,

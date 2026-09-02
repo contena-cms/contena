@@ -270,7 +270,7 @@ describe('src/module/ct-profile/page/ct-profile-index', () => {
             'ct.profile.index.searchPreferences',
         );
         await flushPromises();
-        Contena.Store.get('swProfile').searchPreferences = [];
+        Contena.Store.get('ctProfile').searchPreferences = [];
         const minLengthSpy = jest.spyOn(wrapper.vm.searchRankingService, 'saveMinSearchTermLength');
         const preferencesSpy = jest.spyOn(wrapper.vm.userConfigService, 'upsert');
 

@@ -1,18 +1,18 @@
 <template>
-    <ct-block name="sw_blog_detail_seo">
+    <ct-block name="ct_blog_detail_seo">
         <div v-if="isLoading">
             <ct-skeleton variant="detail-bold" />
             <ct-skeleton />
         </div>
 
         <div v-else>
-            <ct-block name="sw_blog_detail_seo_general">
+            <ct-block name="ct_blog_detail_seo_general">
                 <mt-card position-identifier="ct-blog-detail-seo" :title="$t('ct-blog.seo.cardTitleSeo')">
                     <ct-blog-seo-form :allow-edit="allowEdit" />
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_blog_detail_seo_urls">
+            <ct-block name="ct_blog_detail_seo_urls">
                 <ct-seo-url
                     v-if="blog.seoUrls"
                     :has-default-template="false"
@@ -21,7 +21,7 @@
                     @on-change-channel="onChangeChannel"
                 >
                     <template #seo-additional="{ currentChannelId: selectedChannelId }">
-                        <ct-block name="sw_blog_detail_seo_urls_main_category">
+                        <ct-block name="ct_blog_detail_seo_urls_main_category">
                             <ct-seo-main-category
                                 v-if="blog.mainCategories"
                                 :current-channel-id="selectedChannelId"
@@ -50,8 +50,8 @@ defineProps({});
 
 const acl = inject<AclService>('acl')!;
 const currentChannelId = ref<string | null>(null);
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
-const isLoading = computed(() => Contena.Store.get('swBlogDetail').isLoading);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
+const isLoading = computed(() => Contena.Store.get('ctBlogDetail').isLoading);
 const allowEdit = computed(() => acl.can('blog.editor'));
 const categories = computed(() => [...blog.value.categories]);
 const onAddMainCategory = (mainCategory: Entity<'blog_main_category'>): void => {
@@ -66,7 +66,7 @@ const onChangeChannel = (channelId: string | null): void => {
     currentChannelId.value = channelId;
 };
 
-swDefinePublic({
+ctDefinePublic({
     currentChannelId,
     blog,
     isLoading,

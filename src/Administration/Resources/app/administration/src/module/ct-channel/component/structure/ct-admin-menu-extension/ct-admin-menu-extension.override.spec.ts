@@ -15,10 +15,10 @@ function createWrapper(canViewChannels: boolean) {
     });
     const override = _overridesMap['ct-admin-menu'][0];
     const overrideResult = wrapper.vm.$.appContext.app.runWithContext(() => override({ _private: {} }, {}, {})) as {
-        __swOverride: Record<symbol, { canViewChannels: { value: boolean } }>;
+        __ctOverride: Record<symbol, { canViewChannels: { value: boolean } }>;
     };
-    const namespace = Reflect.ownKeys(overrideResult.__swOverride)[0] as symbol;
-    const overrideState = overrideResult.__swOverride[namespace];
+    const namespace = Reflect.ownKeys(overrideResult.__ctOverride)[0] as symbol;
+    const overrideState = overrideResult.__ctOverride[namespace];
 
     return {
         wrapper,

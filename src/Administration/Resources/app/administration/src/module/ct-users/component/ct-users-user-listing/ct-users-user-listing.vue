@@ -542,7 +542,7 @@ initializeListing({
     disableRouteParams,
 });
 
-swDefinePublic({
+ctDefinePublic({
     userService,
     repositoryFactory,
     acl,

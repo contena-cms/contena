@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_error_summary">
+    <ct-block name="ct_error_summary">
         <mt-banner
             v-if="errorCount > 0"
             class="ct-error-summary"
@@ -95,7 +95,7 @@ const errorCount = computed(() => {
     }, 0);
 });
 
-swDefinePublic({
+ctDefinePublic({
     errors,
     errorEntries,
     errorCount,

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_media_url_form">
+    <ct-block name="ct_media_url_form">
         <mt-modal-root v-if="variant === 'modal'" :is-open="showModal" @change="onModalChange">
             <mt-modal class="ct-media-url-form" variant="small" :title="$t('global.ct-media-url-form.title')">
-                <ct-block name="sw_media_url_form_input">
+                <ct-block name="ct_media_url_form_input">
                     <mt-text-field
                         v-model="url"
                         class="ct-media-url-form__url-input"
@@ -24,14 +24,14 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_media_url_form_footer">
-                        <ct-block name="sw_media_url_form_cancel_button">
+                    <ct-block name="ct_media_url_form_footer">
+                        <ct-block name="ct_media_url_form_cancel_button">
                             <mt-button size="small" variant="secondary" @click="onModalChange(false)">
                                 {{ $t('global.default.cancel') }}
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_media_url_form_submit_button">
+                        <ct-block name="ct_media_url_form_submit_button">
                             <mt-button
                                 class="ct-media-url-form__submit-button"
                                 variant="primary"
@@ -48,7 +48,7 @@
         </mt-modal-root>
 
         <div v-else-if="variant === 'inline'">
-            <ct-block name="sw_media_url_form_input_inline">
+            <ct-block name="ct_media_url_form_input_inline">
                 <mt-text-field
                     v-model="url"
                     class="ct-media-url-form__url-input"
@@ -186,7 +186,7 @@ onMounted(() => {
     mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     url,
     extensionFromUrl,
     extensionFromInput,

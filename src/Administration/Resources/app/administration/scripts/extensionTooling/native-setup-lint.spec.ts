@@ -12,7 +12,7 @@ import { pathToFileURL } from 'url';
 const factoryUrl = pathToFileURL(path.resolve(__dirname, '../../extension-tooling/eslint.mjs')).href;
 
 const withMarker =
-    '<script setup>\nconst count = 1;\nswDefinePublic({ count });\n</script>\n<template><div>{{ count }}</div></template>\n';
+    '<script setup>\nconst count = 1;\nctDefinePublic({ count });\n</script>\n<template><div>{{ count }}</div></template>\n';
 const withoutMarker = '<script setup>\nconst count = 1;\n</script>\n<template><div>{{ count }}</div></template>\n';
 
 const probeScript = `

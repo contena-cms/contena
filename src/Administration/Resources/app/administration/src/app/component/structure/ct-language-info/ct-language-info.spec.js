@@ -79,7 +79,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             isNewEntity: true,
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextNewEntity|0|entityDescription:|',
         );
     });
@@ -90,7 +90,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             parentId: '123',
         };
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextChildLanguage|0|entityDescription:|language:undefined|',
         );
     });
@@ -104,7 +104,7 @@ describe('src/app/component/structure/ct-language-info', () => {
 
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextRootLanguage|0|entityDescription:|language:undefined|',
         );
     });
@@ -115,7 +115,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             entityDescription: 'My entity description',
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextNewEntity|0|entityDescription:My entity description|',
         );
     });
@@ -130,7 +130,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             entityDescription: 'My entity description',
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextChildLanguage|0|entityDescription:My entity description|language:undefined|',
         );
     });
@@ -146,7 +146,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             entityDescription: 'My entity description',
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextRootLanguage|0|entityDescription:My entity description|language:undefined|',
         );
     });
@@ -162,7 +162,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             entityDescription: 'My entity description',
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextChildLanguage|0|entityDescription:My entity description|language:demoLanguage|',
         );
     });
@@ -179,7 +179,7 @@ describe('src/app/component/structure/ct-language-info', () => {
             entityDescription: 'My entity description',
         });
 
-        expect(wrapper.find('.sw_language-info__info').text()).toBe(
+        expect(wrapper.find('.ct_language-info__info').text()).toBe(
             '|ct-language-info.infoTextRootLanguage|0|entityDescription:My entity description|language:demoLanguage|',
         );
     });

@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_mail_header_footer_detail">
+    <ct-block name="ct_mail_header_footer_detail">
         <ct-page class="ct-mail-header-footer-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_mail_header_footer_detail_header">
+                <ct-block name="ct_mail_header_footer_detail_header">
                     <h2>{{ headline }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_mail_header_footer_detail_actions">
-                    <ct-block name="sw_mail_header_footer_detail_actions_abort">
+                <ct-block name="ct_mail_header_footer_detail_actions">
+                    <ct-block name="ct_mail_header_footer_detail_actions_abort">
                         <mt-button variant="secondary" :disabled="isLoading" @click="onCancel">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
-                    <ct-block name="sw_mail_header_footer_detail_actions_save">
+                    <ct-block name="ct_mail_header_footer_detail_actions_save">
                         <ct-button-process
                             variant="primary"
                             :is-loading="isLoading"
@@ -30,13 +30,13 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_mail_header_footer_detail_language_switch">
+                <ct-block name="ct_mail_header_footer_detail_language_switch">
                     <ct-language-switch :disabled="item?.isNew()" @on-change="load" />
                 </ct-block>
             </template>
 
             <template #content>
-                <ct-block name="sw_mail_header_footer_detail_content">
+                <ct-block name="ct_mail_header_footer_detail_content">
                     <ct-card-view>
                         <template v-if="isLoading && !item">
                             <ct-skeleton />
@@ -44,11 +44,11 @@
                         </template>
 
                         <template v-else-if="item">
-                            <ct-block name="sw_mail_header_footer_detail_content_language_info">
+                            <ct-block name="ct_mail_header_footer_detail_content_language_info">
                                 <ct-language-info :entity-description="headline" />
                             </ct-block>
 
-                            <ct-block name="sw_mail_header_footer_detail_basic_info">
+                            <ct-block name="ct_mail_header_footer_detail_basic_info">
                                 <mt-card
                                     position-identifier="ct-mail-header-footer-detail-basic-info"
                                     :title="$t('ct-mail-header-footer.detail.basic.titleCard')"
@@ -69,7 +69,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_header_footer_detail_content_header">
+                            <ct-block name="ct_mail_header_footer_detail_content_header">
                                 <mt-card
                                     position-identifier="ct-mail-header-footer-detail-content-header"
                                     :title="$t('ct-mail-header-footer.detail.header.titleCard')"
@@ -93,7 +93,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_mail_header_footer_detail_content_footer">
+                            <ct-block name="ct_mail_header_footer_detail_content_footer">
                                 <mt-card
                                     position-identifier="ct-mail-header-footer-detail-content-footer"
                                     :title="$t('ct-mail-header-footer.detail.footer.titleCard')"
@@ -198,7 +198,7 @@ function onCancel(): void {
 
 void load();
 
-swDefinePublic({
+ctDefinePublic({
     item,
     isLoading,
     isSaveSuccessful,

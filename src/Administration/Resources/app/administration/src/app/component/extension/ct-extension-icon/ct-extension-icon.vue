@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_extension_icon">
+    <ct-block name="ct_extension_icon">
         <div class="ct-extension-icon">
             <img class="ct-extension-icon__icon" :draggable="false" :src="src" :alt="alt" />
         </div>
@@ -21,5 +21,5 @@ defineProps({
     },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>

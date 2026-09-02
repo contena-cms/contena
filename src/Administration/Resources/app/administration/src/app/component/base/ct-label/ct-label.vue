@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_label">
+    <ct-block name="ct_label">
         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <span class="ct-label" :class="labelClasses" @click.stop="$emit('selected')">
-            <ct-block name="sw_label_status_color_badge">
+            <ct-block name="ct_label_status_color_badge">
                 <ct-color-badge v-if="appearance === 'badged'" :variant="variant" :rounded="true" />
             </ct-block>
 
-            <ct-block name="sw_label_text_holder">
+            <ct-block name="ct_label_text_holder">
                 <span class="ct-label__caption">
                     <slot>
-                        <ct-block name="sw_label_slot_default"></ct-block>
+                        <ct-block name="ct_label_slot_default"></ct-block>
                     </slot>
                 </span>
             </ct-block>
 
-            <ct-block name="sw_label_dismiss">
+            <ct-block name="ct_label_dismiss">
                 <button
                     v-if="showDismissable"
                     class="ct-label__dismiss"
@@ -22,7 +22,7 @@
                     @mousedown.prevent
                     @click.prevent.stop="$emit('dismiss')"
                 >
-                    <ct-block name="sw_select_selection_dismiss_icon">
+                    <ct-block name="ct_select_selection_dismiss_icon">
                         <slot name="dismiss-icon">
                             <mt-icon name="regular-times-s" size="8" />
                         </slot>
@@ -151,7 +151,7 @@ const showDismissable = computed(() => {
     return !!props.onDismiss && props.dismissable;
 });
 
-swDefinePublic({
+ctDefinePublic({
     labelClasses,
     showDismissable,
 });

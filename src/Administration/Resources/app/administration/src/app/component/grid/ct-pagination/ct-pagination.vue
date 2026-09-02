@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_pagination">
+    <ct-block name="ct_pagination">
         <div v-if="shouldBeVisible" class="ct-pagination">
-            <ct-block name="sw_pagination_page_prev">
+            <ct-block name="ct_pagination_page_prev">
                 <button
                     :disabled="currentPage === 1"
                     :aria-label="$t('global.ct-pagination.previousPage')"
@@ -12,11 +12,11 @@
                 </button>
             </ct-block>
 
-            <ct-block name="sw_pagination_page_list">
+            <ct-block name="ct_pagination_page_list">
                 <ul class="ct-pagination__list">
-                    <ct-block name="sw_pagination_page_list_item">
+                    <ct-block name="ct_pagination_page_list_item">
                         <li v-for="(pageNum, index) in displayedPages" :key="index" class="ct-pagination__list-item">
-                            <ct-block name="sw_pagination_page_list_item_button">
+                            <ct-block name="ct_pagination_page_list_item_button">
                                 <button
                                     v-if="typeof pageNum === 'number'"
                                     :aria-label="$t('global.ct-pagination.page', { page: pageNum })"
@@ -28,7 +28,7 @@
                                 </button>
                             </ct-block>
 
-                            <ct-block name="sw_pagination_page_list_item_separator">
+                            <ct-block name="ct_pagination_page_list_item_separator">
                                 <template v-if="typeof pageNum === 'number'"
                                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                                 >
@@ -41,7 +41,7 @@
                 </ul>
             </ct-block>
 
-            <ct-block name="sw_pagination_page_next">
+            <ct-block name="ct_pagination_page_next">
                 <button
                     :disabled="currentPage === maxPage"
                     :aria-label="$t('global.ct-pagination.nextPage')"
@@ -52,7 +52,7 @@
                 </button>
             </ct-block>
 
-            <ct-block name="sw_pagination_per_page_selection">
+            <ct-block name="ct_pagination_per_page_selection">
                 <div v-if="steps.length > 1" class="ct-pagination__per-page">
                     <mt-select
                         size="small"
@@ -268,7 +268,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     currentPage,
     perPage,
     maxPage,

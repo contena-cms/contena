@@ -16,7 +16,7 @@
                 </div>
             </mt-banner>
 
-            <ct-block name="sw_extension_my_extensions_list_empty_state">
+            <ct-block name="ct_extension_my_extensions_list_empty_state">
                 <mt-empty-state
                     v-if="!extensionListPaginated.length && !filterByActiveState"
                     class="ct-extension-my-extensions-listing__empty-state"
@@ -250,7 +250,7 @@ onMounted(() => {
     mountedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     contenaExtensionService,
     filterByActiveState,
     sortingOption,

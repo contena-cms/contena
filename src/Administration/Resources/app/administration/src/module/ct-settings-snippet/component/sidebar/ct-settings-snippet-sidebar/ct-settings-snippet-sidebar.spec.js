@@ -19,8 +19,8 @@ async function createWrapper(props = {}) {
                     $device: deviceMock,
                 },
                 provide: {
-                    setSwPageSidebarOffset: () => {},
-                    removeSwPageSidebarOffset: () => {},
+                    setCtPageSidebarOffset: () => {},
+                    removeCtPageSidebarOffset: () => {},
                 },
             },
             props: {

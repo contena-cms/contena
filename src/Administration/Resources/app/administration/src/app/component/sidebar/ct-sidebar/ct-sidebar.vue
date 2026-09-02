@@ -1,17 +1,17 @@
 <template>
-    <ct-block name="sw_sidebar">
+    <ct-block name="ct_sidebar">
         <aside ref="sidebar" class="ct-sidebar" :class="sidebarClasses">
-            <ct-block name="sw_sidebar_navigation">
+            <ct-block name="ct_sidebar_navigation">
                 <nav class="ct-sidebar__navigation">
-                    <ct-block name="sw_sidebar_navigation_list">
+                    <ct-block name="ct_sidebar_navigation_list">
                         <ul
                             v-for="(section, index) in sections"
                             :key="`sidebar-section-${index}`"
-                            class="sw_sidebar__navigation-list"
+                            class="ct_sidebar__navigation-list"
                             :class="`is--${index}`"
                         >
                             <li v-for="item in section" :key="`${item.id ?? item.title}-${resizeNavigationKey}`">
-                                <ct-block name="sw_sidebar_navigation_item">
+                                <ct-block name="ct_sidebar_navigation_item">
                                     <ct-sidebar-navigation-item :sidebar-item="item" @item-click="setItemActive(item)" />
                                 </ct-block>
                             </li>
@@ -20,7 +20,7 @@
                 </nav>
             </ct-block>
 
-            <ct-block name="sw_sidebar_content">
+            <ct-block name="ct_sidebar_content">
                 <div class="ct-sidebar__content">
                     <slot> </slot>
                 </div>
@@ -50,8 +50,8 @@ const sidebar = ref(null);
 
 const instance = getCurrentInstance();
 const device = instance?.proxy?.$device;
-const setSwPageSidebarOffset = inject('setSwPageSidebarOffset');
-const removeSwPageSidebarOffset = inject('removeSwPageSidebarOffset');
+const setCtPageSidebarOffset = inject('setCtPageSidebarOffset');
+const removeCtPageSidebarOffset = inject('removeCtPageSidebarOffset');
 
 const items = ref([]);
 const isOpened = ref(false);
@@ -88,7 +88,7 @@ const destroyedComponent = () => {
     device?.removeResizeListener(instance?.proxy);
 
     if (props.propagateWidth) {
-        removeSwPageSidebarOffset?.();
+        removeCtPageSidebarOffset?.();
     }
 };
 const isItemRegistered = (itemToCheck) => {
@@ -117,7 +117,7 @@ function updateSidebarOffset() {
     if (!sidebarWidth) {
         return;
     }
-    setSwPageSidebarOffset?.(sidebarWidth);
+    setCtPageSidebarOffset?.(sidebarWidth);
 }
 const registerSidebarItem = (item) => {
     if (isItemRegistered(item)) {
@@ -148,9 +148,9 @@ provide('registerSidebarItem', unref(registerSidebarItem));
 onMounted(mountedComponent);
 onBeforeUnmount(destroyedComponent);
 
-swDefinePublic({
-    setSwPageSidebarOffset,
-    removeSwPageSidebarOffset,
+ctDefinePublic({
+    setCtPageSidebarOffset,
+    removeCtPageSidebarOffset,
     items,
     isOpened,
     resizeNavigationKey,
@@ -168,8 +168,8 @@ swDefinePublic({
 });
 
 defineExpose({
-    setSwPageSidebarOffset,
-    removeSwPageSidebarOffset,
+    setCtPageSidebarOffset,
+    removeCtPageSidebarOffset,
     items,
     isOpened,
     resizeNavigationKey,

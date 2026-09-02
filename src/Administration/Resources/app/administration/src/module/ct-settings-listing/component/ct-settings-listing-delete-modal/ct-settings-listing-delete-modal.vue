@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_settings_listing_delete_modal">
+    <ct-block name="ct_settings_listing_delete_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal class="ct-settings-listing-delete-modal" :title="title" width="s">
-                <ct-block name="sw_settings_listing_delete_modal_body_description">
+                <ct-block name="ct_settings_listing_delete_modal_body_description">
                     <p>{{ description }}</p>
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_settings_listing_delete_modal_footer">
+                    <ct-block name="ct_settings_listing_delete_modal_footer">
                         <div class="ct-settings-listing-delete-modal__actions">
                             <mt-button variant="secondary" @click="emitCancel">
                                 {{ $t('global.default.cancel') }}
@@ -39,7 +39,7 @@ const onModalChange = (isOpen: boolean): void => {
     if (!isOpen) emitCancel();
 };
 
-swDefinePublic({
+ctDefinePublic({
     emitCancel,
     emitDelete,
     onModalChange,

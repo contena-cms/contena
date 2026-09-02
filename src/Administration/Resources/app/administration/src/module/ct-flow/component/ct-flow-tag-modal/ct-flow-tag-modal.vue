@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_flow_tag_modal">
+    <ct-block name="ct_flow_tag_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="title" width="s">
-                <ct-block name="sw_flow_tag_modal_content">
+                <ct-block name="ct_flow_tag_modal_content">
                     <mt-entity-select v-model="tagId" entity="tag" required :label="$t('ct-flow.tag.tag')" />
                 </ct-block>
                 <template #footer>
-                    <ct-block name="sw_flow_tag_modal_footer">
+                    <ct-block name="ct_flow_tag_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onCancel">{{ $t('global.default.cancel') }}</mt-button>
                             <mt-button variant="primary" :disabled="!tagId || undefined" @click="onSave">
@@ -46,7 +46,7 @@ const onModalChange = (isOpen: boolean): void => {
     if (!isOpen) onCancel();
 };
 
-swDefinePublic({
+ctDefinePublic({
     tagId,
     title,
     onSave,

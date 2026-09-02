@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_blog_detail_layout">
+    <ct-block name="ct_blog_detail_layout">
         <mt-card
             class="ct-blog-detail-layout"
             position-identifier="ct-blog-detail-layout"
             :title="$t('ct-blog.layout.cardTitle')"
         >
-            <ct-block name="sw_blog_detail_layout_header">
+            <ct-block name="ct_blog_detail_layout_header">
                 <div class="ct-blog-detail-layout__header">
                     <p>{{ $t('ct-blog.layout.description') }}</p>
 
@@ -15,7 +15,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_blog_detail_layout_content">
+            <ct-block name="ct_blog_detail_layout_content">
                 <mt-loader v-if="isLoading" />
 
                 <div v-else-if="assignments?.length" class="ct-blog-detail-layout__assignments">
@@ -107,7 +107,7 @@ const onOpenLayout = (contentLayoutId: string): void => {
 
 watch(blogId, () => void loadAssignments(), { immediate: true });
 
-swDefinePublic({
+ctDefinePublic({
     assignments,
     isLoading,
     assignmentRepository,

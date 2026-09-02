@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_string_filter">
+    <ct-block name="ct_string_filter">
         <ct-base-filter
             :title="filter.label"
             :show-reset-button="!!filter.value"
             :active="active"
             @filter-reset="resetFilter"
         >
-            <ct-block name="sw_string_filter_content">
+            <ct-block name="ct_string_filter_content">
                 <mt-text-field :model-value="filter.value" :placeholder="filter.placeholder" @change="updateFilter" />
             </ct-block>
         </ct-base-filter>
@@ -76,7 +76,7 @@ function resetFilter() {
     emit('filter-reset', props.filter.name);
 }
 
-swDefinePublic({
+ctDefinePublic({
     updateFilter,
     resetFilter,
 });

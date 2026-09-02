@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_block_field">
-        <ct-base-field class="ct-block-field" :class="swBlockFieldClasses" v-bind="$attrs">
+    <ct-block name="ct_block_field">
+        <ct-base-field class="ct-block-field" :class="ctBlockFieldClasses" v-bind="$attrs">
             <template #ct-field-input="{ identification, error, disabled }">
                 <div class="ct-block-field__block">
                     <slot
@@ -50,15 +50,15 @@ import { ref, computed } from 'vue';
 
 const hasFocus = ref(false);
 
-const swBlockSize = computed(() => {
+const ctBlockSize = computed(() => {
     return `ct-field--${props.size}`;
 });
-const swBlockFieldClasses = computed(() => {
+const ctBlockFieldClasses = computed(() => {
     return [
         {
             'has--focus': hasFocus.value,
         },
-        swBlockSize.value,
+        ctBlockSize.value,
     ];
 });
 
@@ -69,18 +69,18 @@ const removeFocusClass = () => {
     hasFocus.value = false;
 };
 
-swDefinePublic({
+ctDefinePublic({
     hasFocus,
-    swBlockSize,
-    swBlockFieldClasses,
+    ctBlockSize,
+    ctBlockFieldClasses,
     setFocusClass,
     removeFocusClass,
 });
 
 defineExpose({
     hasFocus,
-    swBlockSize,
-    swBlockFieldClasses,
+    ctBlockSize,
+    ctBlockFieldClasses,
     setFocusClass,
     removeFocusClass,
 });

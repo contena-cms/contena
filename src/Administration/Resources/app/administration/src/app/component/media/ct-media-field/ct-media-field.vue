@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_field">
+    <ct-block name="ct_media_field">
         <div ref="mediaField" class="ct-media-field">
-            <ct-block name="sw_media_field_label">
+            <ct-block name="ct_media_field_label">
                 <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                 <label v-if="showLabel" class="ct-media-field__label">
                     <slot name="label">
@@ -10,9 +10,9 @@
                 </label>
             </ct-block>
 
-            <ct-block name="sw_media_field_input">
+            <ct-block name="ct_media_field_input">
                 <div class="ct-media-field__input-container" :class="mediaFieldClasses">
-                    <ct-block name="sw_media_field_preview">
+                    <ct-block name="ct_media_field_preview">
                         <ct-media-media-item
                             v-if="mediaEntity"
                             class="ct-media-field__media-list-item ct-media-field__input"
@@ -24,7 +24,7 @@
                         <div v-else class="ct-media-field__empty-preview ct-media-field__input"></div>
                     </ct-block>
 
-                    <ct-block name="sw_media_field_toggle_button">
+                    <ct-block name="ct_media_field_toggle_button">
                         <mt-button
                             ref="mediaToggleButton"
                             class="ct-media-field__toggle-button"
@@ -33,11 +33,11 @@
                             variant="secondary"
                             @click="onTogglePicker"
                         >
-                            <ct-block name="sw_media_field_media_icon">
+                            <ct-block name="ct_media_field_media_icon">
                                 <mt-icon name="regular-image" />
                             </ct-block>
 
-                            <ct-block name="sw_media_field_media_popover">
+                            <ct-block name="ct_media_field_media_popover">
                                 <mt-floating-ui
                                     v-if="showPicker"
                                     class="ct-media-field__popover ct-media-field__expanded-content"
@@ -49,9 +49,9 @@
                                     show-arrow
                                 >
                                     <div @click.stop>
-                                        <ct-block name="sw_media_field_action_bar">
+                                        <ct-block name="ct_media_field_action_bar">
                                             <div class="ct-media-field__actions_bar">
-                                                <ct-block name="sw_media_field_action_bar_button_toggle">
+                                                <ct-block name="ct_media_field_action_bar_button_toggle">
                                                     <mt-button
                                                         class="ct-media-field__action-button"
                                                         variant="secondary"
@@ -66,7 +66,7 @@
                                                     </mt-button>
                                                 </ct-block>
 
-                                                <ct-block name="sw_media_field_action_bar_button_unlink">
+                                                <ct-block name="ct_media_field_action_bar_button_unlink">
                                                     <mt-button
                                                         v-if="mediaId"
                                                         class="ct-media-field__action-button is--remove"
@@ -84,7 +84,7 @@
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_media_field_upload_component">
+                                        <ct-block name="ct_media_field_upload_component">
                                             <ct-upload-listener
                                                 :upload-tag="uploadTag"
                                                 auto-upload
@@ -105,14 +105,14 @@
                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                                         >
                                         <div v-else class="ct-media-field__media-selection">
-                                            <ct-block name="sw_media_field_search_field">
+                                            <ct-block name="ct_media_field_search_field">
                                                 <ct-simple-search-field
                                                     v-model:value="searchTerm"
                                                     @search-term-change="onSearchTermChange"
                                                 />
                                             </ct-block>
 
-                                            <ct-block name="sw_media_field_media_list">
+                                            <ct-block name="ct_media_field_media_list">
                                                 <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                                                 <mt-loader
                                                     v-if="isLoadingSuggestions"
@@ -125,7 +125,7 @@
                                                         :key="suggestion.id"
                                                         class="ct-media-field__suggestion-list-entry"
                                                     >
-                                                        <ct-block name="sw_media_field_suggestion_preview">
+                                                        <ct-block name="ct_media_field_suggestion_preview">
                                                             <ct-media-media-item
                                                                 class="ct-media-field__media-list-item"
                                                                 :item="suggestion"
@@ -350,7 +350,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     searchTerm,
     mediaEntity,

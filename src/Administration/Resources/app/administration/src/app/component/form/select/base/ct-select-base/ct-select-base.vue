@@ -1,6 +1,6 @@
 <template>
-    <ct-block name="sw_select_base">
-        <ct-block-field class="ct-select" :class="swFieldClasses" v-bind="$attrs" :disabled="disabled" :size="size">
+    <ct-block name="ct_select_base">
+        <ct-block-field class="ct-select" :class="ctFieldClasses" v-bind="$attrs" :disabled="disabled" :size="size">
             <template #ct-field-input="{ identification, error, disabled, size }">
                 <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
                 <div
@@ -120,7 +120,7 @@ provide('selectBaseRoot', selectBaseRoot);
 
 const expanded = ref(false);
 
-const swFieldClasses = computed(() => {
+const ctFieldClasses = computed(() => {
     return { 'has--focus': expanded.value };
 });
 const isClearable = computed(() => {
@@ -229,9 +229,9 @@ vueOnBeforeUnmount(() => {
     onBeforeUnmount();
 });
 
-swDefinePublic({
+ctDefinePublic({
     expanded,
-    swFieldClasses,
+    ctFieldClasses,
     isClearable,
     onMounted,
     onBeforeUnmount,
@@ -247,7 +247,7 @@ swDefinePublic({
 
 defineExpose({
     expanded,
-    swFieldClasses,
+    ctFieldClasses,
     isClearable,
     onMounted,
     onBeforeUnmount,

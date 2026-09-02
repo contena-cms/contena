@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_language_detail">
+    <ct-block name="ct_settings_language_detail">
         <ct-page class="ct-settings-language-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_language_detail_header">
+                <ct-block name="ct_settings_language_detail_header">
                     <h2 v-if="languageHasName">
                         {{ language.name }}
                     </h2>
@@ -14,14 +14,14 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_language_detail_actions">
-                    <ct-block name="sw_settings_language_detail_actions_abort">
+                <ct-block name="ct_settings_language_detail_actions">
+                    <ct-block name="ct_settings_language_detail_actions_abort">
                         <mt-button variant="secondary" size="default" @click="onCancel">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_settings_language_detail_actions_save">
+                    <ct-block name="ct_settings_language_detail_actions_save">
                         <ct-button-process
                             v-model:process-success="isSaveSuccessful"
                             v-tooltip.bottom="tooltipSave"
@@ -39,9 +39,9 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_language_detail_content">
+                <ct-block name="ct_settings_language_detail_content">
                     <ct-card-view>
-                        <ct-block name="sw_settings_language_detail_content_language_info">
+                        <ct-block name="ct_settings_language_detail_content_language_info">
                             <ct-language-info
                                 v-if="language"
                                 :entity-description="language.name"
@@ -49,7 +49,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_settings_language_detail_content_card">
+                        <ct-block name="ct_settings_language_detail_content_card">
                             <mt-card
                                 class="ct-settings-language-detail__content-card"
                                 :class="{ 'is--loading': isLoading || !language }"
@@ -58,7 +58,7 @@
                                 position-identifier="ct-settings-language-detail-content"
                             >
                                 <ct-container v-if="language" columns="repeat(auto-fit, minmax(250px, 1fr))" gap="0px 30px">
-                                    <ct-block name="sw_settings_language_detail_content_field_name">
+                                    <ct-block name="ct_settings_language_detail_content_field_name">
                                         <mt-text-field
                                             v-model="language.name"
                                             name="ct-field--language-name"
@@ -83,7 +83,7 @@
                                 </ct-container>
 
                                 <ct-container v-if="language" columns="repeat(auto-fit, minmax(250px, 1fr))" gap="0px 30px">
-                                    <ct-block name="sw_settings_language_detail_content_field_localeId">
+                                    <ct-block name="ct_settings_language_detail_content_field_localeId">
                                         <ct-entity-single-select
                                             id="locales"
                                             v-model:value="language.localeId"
@@ -121,7 +121,7 @@
                                         </ct-entity-single-select>
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_language_detail_content_field_iso_code">
+                                    <ct-block name="ct_settings_language_detail_content_field_iso_code">
                                         <ct-entity-single-select
                                             id="iso-codes"
                                             v-model:value="language.translationCodeId"
@@ -184,7 +184,7 @@
                                     </ct-block>
                                 </ct-container>
 
-                                <ct-block name="sw_settings_language_detail_content_field_parentId">
+                                <ct-block name="ct_settings_language_detail_content_field_parentId">
                                     <ct-entity-single-select
                                         v-if="language"
                                         id="inherit"
@@ -243,7 +243,7 @@
                                     </ct-entity-single-select>
                                 </ct-block>
 
-                                <ct-block name="sw_settings_language_detail_content_alert_change_parent">
+                                <ct-block name="ct_settings_language_detail_content_alert_change_parent">
                                     <mt-banner
                                         v-if="showAlertForChangeParentLanguage"
                                         class="ct-settings-language--alert-change-parent"
@@ -256,7 +256,7 @@
                             </mt-card>
                         </ct-block>
 
-                        <ct-block name="sw_settings_language_detail_snippet_updates">
+                        <ct-block name="ct_settings_language_detail_snippet_updates">
                             <mt-card
                                 v-if="language && !isNewLanguage"
                                 class="ct-settings-language-detail__snippet-updates"
@@ -302,7 +302,7 @@
                             </mt-card>
                         </ct-block>
 
-                        <ct-block name="sw_settings_language_detail_custom_field_sets">
+                        <ct-block name="ct_settings_language_detail_custom_field_sets">
                             <mt-card
                                 v-if="language && showCustomFields"
                                 position-identifier="ct-settings-language-detail-custom-field-sets"
@@ -664,7 +664,7 @@ watch(() => props.languageId, createdComponent);
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     customFieldDataProviderService,

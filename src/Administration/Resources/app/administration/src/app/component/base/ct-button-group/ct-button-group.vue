@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_button_group">
+    <ct-block name="ct_button_group">
         <span class="ct-button-group" :class="buttonGroupClasses">
             <slot>
-                <ct-block name="sw_button_group_slot_default"></ct-block>
+                <ct-block name="ct_button_group_slot_default"></ct-block>
             </slot>
         </span>
     </ct-block>
@@ -34,7 +34,7 @@ const buttonGroupClasses = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     buttonGroupClasses,
 });
 

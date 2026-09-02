@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_blog_media_form">
+    <ct-block name="ct_blog_media_form">
         <div class="ct-blog-media-form" :class="{ 'is--disabled': disabled }">
-            <ct-block name="sw_blog_media_form_upload">
+            <ct-block name="ct_blog_media_form_upload">
                 <ct-upload-listener
                     v-if="!isLoading"
                     :upload-tag="blog.id"
@@ -20,10 +20,10 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_media_form_grid">
+            <ct-block name="ct_blog_media_form_grid">
                 <div class="ct-blog-media-form__previews">
                     <div class="ct-blog-media-form__cover-container ct-blog-media-form__column">
-                        <ct-block name="sw_blog_media_form_cover_preview">
+                        <ct-block name="ct_blog_media_form_cover_preview">
                             <div v-if="cover" class="ct-blog-media-form__preview-cover">
                                 <div class="preview-cover">
                                     <ct-media-preview-v2 class="ct-blog-media-form__cover-image" :source="cover.mediaId" />
@@ -37,7 +37,7 @@
                     </div>
 
                     <div v-if="!isLoading" class="ct-blog-media-form__grid ct-blog-media-form__column">
-                        <ct-block name="sw_blog_media_form_grid_items">
+                        <ct-block name="ct_blog_media_form_grid_items">
                             <ct-blog-image
                                 v-for="mediaItem in mediaItems"
                                 :key="mediaItem.id"
@@ -104,9 +104,9 @@ const systemConfigApiService = inject<SystemConfigApiService>('systemConfigApiSe
 const showCoverLabel = ref(true);
 const isMediaLoading = ref(false);
 const globalIsArReady = ref(false);
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const allowEdit = computed(() => acl.can('blog.editor') && !props.disabled);
-const isLoading = computed(() => isMediaLoading.value || Contena.Store.get('swBlogDetail').isLoading);
+const isLoading = computed(() => isMediaLoading.value || Contena.Store.get('ctBlogDetail').isLoading);
 const blogMediaRepository = computed(() => repositoryFactory.create('blog_media'));
 const mediaRepository = computed(() => repositoryFactory.create('media'));
 const blogMedia = computed(() => blog.value.media);
@@ -267,7 +267,7 @@ void systemConfigApiService.getValues('core.media').then((config) => {
     globalIsArReady.value = Boolean(config['core.media.defaultEnableAugmentedReality']);
 });
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     allowEdit,
     showCoverLabel,

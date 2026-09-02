@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_login_login">
+    <ct-block name="ct_login_login">
         <form class="ct-login-credentials" @submit.prevent="onSubmit">
-            <ct-block name="sw_login_login_form_headline">
-                <ct-block name="sw_login_login_form_icon">
+            <ct-block name="ct_login_login_form_headline">
+                <ct-block name="ct_login_login_form_icon">
                     <div class="ct-login-credentials__icon" aria-hidden="true">
                         <img
                             class="ct-login-credentials__icon-logo"
@@ -24,7 +24,7 @@
                 {{ $t('ct-login.credentials.warningTooManyAttemptsCountdown', { time: countdownLabel }) }}
             </mt-banner>
 
-            <ct-block name="sw_login_login_user_field">
+            <ct-block name="ct_login_login_user_field">
                 <mt-text-field
                     v-model="username"
                     v-autofocus
@@ -37,7 +37,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_login_login_password_field">
+            <ct-block name="ct_login_login_password_field">
                 <mt-password-field
                     ref="passwordField"
                     v-model="password"
@@ -50,14 +50,14 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_login_login_alert">
+            <ct-block name="ct_login_login_alert">
                 <mt-banner v-if="error" class="ct-login-credentials__error" variant="critical">
                     {{ $t('ct-login.credentials.errorInvalidCredentials') }}
                 </mt-banner>
             </ct-block>
 
-            <ct-block name="sw_login_login_submit">
-                <ct-block name="sw_login_login_support">
+            <ct-block name="ct_login_login_submit">
+                <ct-block name="ct_login_login_support">
                     <div class="ct-login-credentials__support">
                         <mt-checkbox
                             v-model:checked="rememberMe"
@@ -66,7 +66,7 @@
                             :disabled="isDisabled"
                         />
 
-                        <ct-block name="sw_login_login_forgot_password">
+                        <ct-block name="ct_login_login_forgot_password">
                             <router-link
                                 class="ct-login-credentials__forgot-password"
                                 :to="{ name: 'ct.login.index.recovery' }"
@@ -77,7 +77,7 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_login_login_submit_button">
+                <ct-block name="ct_login_login_submit_button">
                     <mt-button
                         class="ct-login-credentials__login-button"
                         type="submit"
@@ -279,7 +279,7 @@ onBeforeUnmount(() => {
     stopRetryCountdown();
 });
 
-swDefinePublic({
+ctDefinePublic({
     loginService,
     assetFilter,
     username,

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_theme_manager_detail">
+    <ct-block name="ct_theme_manager_detail">
         <ct-page class="ct-theme-manager-detail">
             <template #search-bar>
-                <ct-block name="sw_theme_manager_detail_search_bar">
+                <ct-block name="ct_theme_manager_detail_search_bar">
                     <ct-search-bar
                         :placeholder="$t('ct-theme-manager.general.placeholderSearchBar')"
                         :entity-service="themeRepository"
@@ -12,16 +12,16 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_theme_manager_detail_smart_bar_header">
-                    <ct-block name="sw_theme_manager_detail_smart_bar_header_title">
+                <ct-block name="ct_theme_manager_detail_smart_bar_header">
+                    <ct-block name="ct_theme_manager_detail_smart_bar_header_title">
                         <h2 v-if="theme">
-                            <ct-block name="sw_theme_manager_detail_smart_bar_header_title_text">
+                            <ct-block name="ct_theme_manager_detail_smart_bar_header_title_text">
                                 {{ theme.name }}
                             </ct-block>
                         </h2>
 
                         <h2 v-else>
-                            <ct-block name="sw_theme_manager_detail_smart_bar_header_title_text_default">
+                            <ct-block name="ct_theme_manager_detail_smart_bar_header_title_text_default">
                                 {{ $t('ct-theme-manager.list.textThemeOverview') }}
                             </ct-block>
                         </h2>
@@ -30,7 +30,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_theme_manager_detail_smart_bar_actions">
+                <ct-block name="ct_theme_manager_detail_smart_bar_actions">
                     <ct-button-group
                         v-tooltip.bottom="{
                             message: $t('ct-privileges.tooltip.warning'),
@@ -40,14 +40,14 @@
                         class="ct-theme-manager-detail__save-button-group"
                         :split-button="true"
                     >
-                        <ct-block name="sw_theme_manager_detail_smart_bar_actions_save">
+                        <ct-block name="ct_theme_manager_detail_smart_bar_actions_save">
                             <ct-button-process
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
                                     disabled: acl.can('theme.editor'),
                                     showOnDisabledElements: true,
                                 }"
-                                class="sw_theme_manager_detail__save-action"
+                                class="ct_theme_manager_detail__save-action"
                                 :is-loading="isLoading"
                                 :process-success="isSaveSuccessful"
                                 variant="primary"
@@ -59,11 +59,11 @@
                             </ct-button-process>
                         </ct-block>
 
-                        <ct-block name="sw_theme_manager_detail_smart_bar_actions_save_context_menu">
+                        <ct-block name="ct_theme_manager_detail_smart_bar_actions_save_context_menu">
                             <ct-context-button>
                                 <template #button>
                                     <mt-button
-                                        class="sw_theme_manager_detail__button-context-menu"
+                                        class="ct_theme_manager_detail__button-context-menu"
                                         square
                                         variant="primary"
                                         :disabled="isLoading || !acl.can('theme.editor')"
@@ -73,15 +73,15 @@
                                     </mt-button>
                                 </template>
 
-                                <ct-block name="sw_theme_manager_detail_smart_bar_actions_save_context_menu_actions">
-                                    <ct-block name="sw_theme_manager_detail_smart_bar_actions_save_clean">
+                                <ct-block name="ct_theme_manager_detail_smart_bar_actions_save_context_menu_actions">
+                                    <ct-block name="ct_theme_manager_detail_smart_bar_actions_save_clean">
                                         <ct-context-menu-item
                                             v-tooltip.top="{
                                                 message: $t('ct-theme-manager.actions.saveCleanToolTip'),
                                                 disabled: !acl.can('theme.editor'),
                                                 showOnDisabledElements: true,
                                             }"
-                                            class="sw_theme_manager_detail__save-clean-action"
+                                            class="ct_theme_manager_detail__save-clean-action"
                                             :disabled="!acl.can('theme.editor')"
                                             @click="onSaveClean"
                                         >
@@ -89,14 +89,14 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_detail_smart_bar_actions_validate">
+                                    <ct-block name="ct_theme_manager_detail_smart_bar_actions_validate">
                                         <ct-context-menu-item
                                             v-tooltip.top="{
                                                 message: $t('ct-theme-manager.actions.validateToolTip'),
                                                 disabled: !acl.can('theme.editor'),
                                                 showOnDisabledElements: true,
                                             }"
-                                            class="sw_theme_manager_detail__validate-action"
+                                            class="ct_theme_manager_detail__validate-action"
                                             :disabled="!acl.can('theme.editor')"
                                             @click="onValidate"
                                         >
@@ -111,7 +111,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_theme_manager_detail_content">
+                <ct-block name="ct_theme_manager_detail_content">
                     <div v-if="!shouldShowContent" class="ct-theme-manager-detail__content-skeleton">
                         <ct-skeleton />
                         <ct-skeleton />
@@ -260,7 +260,7 @@
                                                             field.fullWidth,
                                                     }"
                                                 >
-                                                    <template v-if="mapSwFieldTypes(field.type) === 'select'">
+                                                    <template v-if="mapCtFieldTypes(field.type) === 'select'">
                                                         <ct-inherit-wrapper
                                                             :ref="`wrapper-${fieldName}`"
                                                             v-model:value="currentThemeConfig[fieldName].value"
@@ -391,7 +391,7 @@
                                                         </ct-inherit-wrapper>
                                                     </div>
 
-                                                    <template v-else-if="mapSwFieldTypes(field.type)">
+                                                    <template v-else-if="mapCtFieldTypes(field.type)">
                                                         <ct-inherit-wrapper
                                                             :ref="`wrapper-${fieldName}`"
                                                             v-model:value="currentThemeConfig[fieldName].value"
@@ -409,7 +409,7 @@
                                                                 #content="{ currentValue, updateCurrentValue, isInherited }"
                                                             >
                                                                 <mt-colorpicker
-                                                                    v-if="mapSwFieldTypes(field.type) === 'colorpicker'"
+                                                                    v-if="mapCtFieldTypes(field.type) === 'colorpicker'"
                                                                     :disabled="isInherited || !acl.can('theme.editor')"
                                                                     :model-value="currentValue"
                                                                     :error="themeConfigErrors[fieldName]"
@@ -419,8 +419,8 @@
 
                                                                 <mt-text-field
                                                                     v-else-if="
-                                                                        mapSwFieldTypes(field.type) === 'text' ||
-                                                                        mapSwFieldTypes(field.type) === null
+                                                                        mapCtFieldTypes(field.type) === 'text' ||
+                                                                        mapCtFieldTypes(field.type) === null
                                                                     "
                                                                     :disabled="isInherited || !acl.can('theme.editor')"
                                                                     :model-value="cssValue(currentValue)"
@@ -475,31 +475,31 @@
                         </template>
                     </div>
 
-                    <ct-block name="sw_theme_manager_reset_modal">
+                    <ct-block name="ct_theme_manager_reset_modal">
                         <ct-modal
                             v-if="showResetModal && theme"
                             variant="small"
                             :title="$t('ct-theme-manager.modal.modalTitleReset')"
                             @modal-close="onCloseResetModal"
                         >
-                            <ct-block name="sw_theme_manager_reset_modal_reset_text">
-                                <p class="sw_theme_manager__confirm-reset-text">
+                            <ct-block name="ct_theme_manager_reset_modal_reset_text">
+                                <p class="ct_theme_manager__confirm-reset-text">
                                     {{ $t('ct-theme-manager.modal.modalTextResetInfo') }}
                                 </p>
-                                <p v-if="theme.channels.length > 0" class="sw_theme_manager__confirm-reset-text">
+                                <p v-if="theme.channels.length > 0" class="ct_theme_manager__confirm-reset-text">
                                     {{ $t('ct-theme-manager.modal.modalTextResetAssigned') }}
                                 </p>
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_reset_modal_footer">
-                                    <ct-block name="sw_theme_manager_reset_modal_cancel">
+                                <ct-block name="ct_theme_manager_reset_modal_footer">
+                                    <ct-block name="ct_theme_manager_reset_modal_cancel">
                                         <mt-button size="small" variant="primary" @click="onCloseResetModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_reset_modal_confirm">
+                                    <ct-block name="ct_theme_manager_reset_modal_confirm">
                                         <mt-button size="small" variant="critical" @click="onConfirmThemeReset">
                                             {{ $t('ct-theme-manager.actions.buttonReset') }}
                                         </mt-button>
@@ -509,28 +509,28 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_delete_modal">
+                    <ct-block name="ct_theme_manager_detail_delete_modal">
                         <ct-modal
                             v-if="showDeleteModal && theme"
                             :title="$t('global.default.warning')"
                             variant="small"
                             @modal-close="onCloseDeleteModal"
                         >
-                            <ct-block name="sw_theme_manager_detail_delete_modal_info">
-                                <div class="sw_theme_manager__confirm-delete-text">
+                            <ct-block name="ct_theme_manager_detail_delete_modal_info">
+                                <div class="ct_theme_manager__confirm-delete-text">
                                     {{ $t('ct-theme-manager.modal.textDeleteInfo', { themeName: theme.name }) }}
                                 </div>
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_detail_delete_modal_footer">
-                                    <ct-block name="sw_theme_manager_detail_delete_modal_cancel">
+                                <ct-block name="ct_theme_manager_detail_delete_modal_footer">
+                                    <ct-block name="ct_theme_manager_detail_delete_modal_cancel">
                                         <mt-button variant="secondary" size="small" @click="onCloseDeleteModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_detail_delete_modal_confirm">
+                                    <ct-block name="ct_theme_manager_detail_delete_modal_confirm">
                                         <mt-button variant="critical" size="small" @click="onConfirmThemeDelete">
                                             {{ $t('global.default.delete') }}
                                         </mt-button>
@@ -540,7 +540,7 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_save_modal">
+                    <ct-block name="ct_theme_manager_detail_save_modal">
                         <ct-modal
                             v-if="showSaveModal && theme && defaultTheme"
                             class="ct-theme-manager-detail-modal"
@@ -548,13 +548,13 @@
                             :title="$t('ct-theme-manager.modal.modalTitleSave')"
                             @modal-close="onCloseSaveModal"
                         >
-                            <ct-block name="sw_theme_manager_detail_save_modal_info">
-                                <div class="sw_theme_manager__confirm-save-text">
+                            <ct-block name="ct_theme_manager_detail_save_modal_info">
+                                <div class="ct_theme_manager__confirm-save-text">
                                     {{ $t('ct-theme-manager.modal.textSaveInfo', { themeName: theme.name }) }}
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_theme_manager_detail_save_modal_already_assigned_warning">
+                            <ct-block name="ct_theme_manager_detail_save_modal_already_assigned_warning">
                                 <mt-banner v-if="overwrittenChannelAssignments.length > 0" variant="attention">
                                     <div
                                         v-if="overwrittenChannelAssignments.length === 1"
@@ -589,7 +589,7 @@
                                 </mt-banner>
                             </ct-block>
 
-                            <ct-block name="sw_theme_manager_detail_save_modal_removed_warning">
+                            <ct-block name="ct_theme_manager_detail_save_modal_removed_warning">
                                 <mt-banner v-if="removedChannels.length > 0" variant="attention">
                                     <div
                                         v-if="removedChannels.length === 1"
@@ -621,14 +621,14 @@
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_detail_save_modal_footer">
-                                    <ct-block name="sw_theme_manager_detail_save_modal_cancel">
+                                <ct-block name="ct_theme_manager_detail_save_modal_footer">
+                                    <ct-block name="ct_theme_manager_detail_save_modal_cancel">
                                         <mt-button variant="secondary" size="small" @click="onCloseSaveModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_detail_save_modal_confirm">
+                                    <ct-block name="ct_theme_manager_detail_save_modal_confirm">
                                         <mt-button variant="primary" size="small" @click="onConfirmThemeSave">
                                             {{ $t('global.default.save') }}
                                         </mt-button>
@@ -638,16 +638,16 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_duplicate_modal">
+                    <ct-block name="ct_theme_manager_detail_duplicate_modal">
                         <ct-modal
                             v-if="showDuplicateModal"
-                            class="sw_theme_manager__duplicate-modal"
+                            class="ct_theme_manager__duplicate-modal"
                             :title="$t('ct-theme-manager.modal.modalTitleDuplicate')"
                             variant="small"
                             @modal-close="onCloseDuplicateModal"
                         >
-                            <ct-block name="sw_theme_manager_detail_duplicate_modal_name_input">
-                                <div class="sw_theme_manager__duplicate-info">
+                            <ct-block name="ct_theme_manager_detail_duplicate_modal_name_input">
+                                <div class="ct_theme_manager__duplicate-info">
                                     {{ $t('ct-theme-manager.modal.textDuplicateInfo') }}
                                 </div>
 
@@ -660,14 +660,14 @@
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_detail_duplicate_modal_footer">
-                                    <ct-block name="sw_theme_manager_detail_duplicate_modal_cancel">
+                                <ct-block name="ct_theme_manager_detail_duplicate_modal_footer">
+                                    <ct-block name="ct_theme_manager_detail_duplicate_modal_cancel">
                                         <mt-button variant="primary" size="small" @click="onCloseDuplicateModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_detail_duplicate_modal_confirm">
+                                    <ct-block name="ct_theme_manager_detail_duplicate_modal_confirm">
                                         <mt-button
                                             variant="primary"
                                             :disabled="newThemeName.length < 3"
@@ -682,16 +682,16 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_rename_modal">
+                    <ct-block name="ct_theme_manager_detail_rename_modal">
                         <ct-modal
                             v-if="showRenameModal"
-                            class="sw_theme_manager__rename-modal"
+                            class="ct_theme_manager__rename-modal"
                             :title="$t('ct-theme-manager.modal.modalTitleRename')"
                             variant="small"
                             @modal-close="onCloseRenameModal"
                         >
-                            <ct-block name="sw_theme_manager_detail_rename_modal_name_input">
-                                <div class="sw_theme_manager__rename-info">
+                            <ct-block name="ct_theme_manager_detail_rename_modal_name_input">
+                                <div class="ct_theme_manager__rename-info">
                                     {{ $t('ct-theme-manager.modal.textRenameInfo') }}
                                 </div>
 
@@ -704,14 +704,14 @@
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_detail_rename_modal_footer">
-                                    <ct-block name="sw_theme_manager_detail_rename_modal_cancel">
+                                <ct-block name="ct_theme_manager_detail_rename_modal_footer">
+                                    <ct-block name="ct_theme_manager_detail_rename_modal_cancel">
                                         <mt-button variant="secondary" size="small" @click="onCloseRenameModal">
                                             {{ $t('global.default.cancel') }}
                                         </mt-button>
                                     </ct-block>
 
-                                    <ct-block name="sw_theme_manager_detail_rename_modal_confirm">
+                                    <ct-block name="ct_theme_manager_detail_rename_modal_confirm">
                                         <mt-button
                                             variant="primary"
                                             :disabled="newThemeName.length < 3"
@@ -726,20 +726,20 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_error_modal">
+                    <ct-block name="ct_theme_manager_detail_error_modal">
                         <ct-modal
                             v-if="errorModalMessage"
                             :title="$t('ct-theme-manager.modal.errorModalTitle')"
                             variant="large"
                             @modal-close="onCloseErrorModal"
                         >
-                            <ct-block name="sw_theme_manager_detail_error_modal_message">
+                            <ct-block name="ct_theme_manager_detail_error_modal_message">
                                 <pre style="white-space: pre-line">{{ errorModalMessage }}</pre>
                             </ct-block>
 
                             <template #modal-footer>
-                                <ct-block name="sw_theme_manager_detail_error_modal_footer">
-                                    <ct-block name="sw_theme_manager_detail_error_modal_close">
+                                <ct-block name="ct_theme_manager_detail_error_modal_footer">
+                                    <ct-block name="ct_theme_manager_detail_error_modal_close">
                                         <mt-button variant="secondary" size="small" @click="onCloseErrorModal">
                                             {{ $t('global.default.close') }}
                                         </mt-button>
@@ -749,7 +749,7 @@
                         </ct-modal>
                     </ct-block>
 
-                    <ct-block name="sw_theme_manager_detail_media_modal">
+                    <ct-block name="ct_theme_manager_detail_media_modal">
                         <ct-media-modal-v2
                             v-if="showMediaModal"
                             :initial-folder-id="defaultMediaFolderId"
@@ -1186,7 +1186,7 @@ const onChangeTab = (activeTabValue: string | null = null): void => {
         }
     }
 };
-const mapSwFieldTypes = (field: string): string | null => {
+const mapCtFieldTypes = (field: string): string | null => {
     return !mappedFields.value[field] ? null : mappedFields.value[field];
 };
 const getBind = (
@@ -1699,7 +1699,7 @@ const {
     RenameTheme,
 } = themeApi;
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     theme,
     parentTheme,
@@ -1782,7 +1782,7 @@ swDefinePublic({
     wrapperIsVisible,
     saveFinish,
     onChangeTab,
-    mapSwFieldTypes,
+    mapCtFieldTypes,
     getBind,
     getElementEventListeners,
     getSnippet,
@@ -1897,7 +1897,7 @@ defineExpose({
     wrapperIsVisible,
     saveFinish,
     onChangeTab,
-    mapSwFieldTypes,
+    mapCtFieldTypes,
     getBind,
     getElementEventListeners,
     getSnippet,

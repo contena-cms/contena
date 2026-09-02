@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_media_upload_v2">
+    <ct-block name="ct_media_upload_v2">
         <div class="ct-media-upload-v2 ct-media-compact-upload-v2">
-            <ct-block name="sw_media_upload_v2_compact">
-                <ct-block name="sw_media_upload_v2_compact_label">
+            <ct-block name="ct_media_upload_v2_compact">
+                <ct-block name="ct_media_upload_v2_compact_label">
                     <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
                     <label v-if="label" class="ct-media-compact-upload-v2__label">
                         {{ label }}
@@ -11,7 +11,7 @@
 
                 <div v-if="variant == 'compact'" class="ct-media-upload-v2__content">
                     <ct-button-group split-button>
-                        <ct-block name="sw_media_upload_v2_compact_button_file_upload">
+                        <ct-block name="ct_media_upload_v2_compact_button_file_upload">
                             <mt-button
                                 :disabled="disabled"
                                 class="ct-media-upload-v2__button-compact-upload"
@@ -22,7 +22,7 @@
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_media_upload_v2_compact_button_context_menu">
+                        <ct-block name="ct_media_upload_v2_compact_button_context_menu">
                             <ct-context-button v-if="uploadUrlFeatureEnabled" :disabled="disabled">
                                 <template #button>
                                     <mt-button
@@ -42,7 +42,7 @@
                         </ct-block>
                     </ct-button-group>
 
-                    <ct-block name="sw_media_upload_v2_compact_url_form">
+                    <ct-block name="ct_media_upload_v2_compact_url_form">
                         <ct-media-url-form
                             v-if="isUrlUpload"
                             variant="modal"
@@ -53,13 +53,13 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_upload_v2_regular">
+            <ct-block name="ct_media_upload_v2_regular">
                 <div v-if="variant == 'regular'" class="ct-media-upload-v2__content">
-                    <ct-block name="sw_media_upload_v2_regular_header"> </ct-block>
+                    <ct-block name="ct_media_upload_v2_regular_header"> </ct-block>
 
-                    <ct-block name="sw_media_upload_v2_regular_drop_zone">
+                    <ct-block name="ct_media_upload_v2_regular_drop_zone">
                         <div ref="dropzone" class="ct-media-upload-v2__dropzone" :class="isDragActiveClass">
-                            <ct-block name="sw_media_upload_v2_preview">
+                            <ct-block name="ct_media_upload_v2_preview">
                                 <div class="ct-media-compact-upload-v2__preview-wrapper">
                                     <template v-if="allowMultiSelect && mediaPreview">
                                         <div
@@ -99,7 +99,7 @@
                                     </template>
 
                                     <template v-else-if="!allowMultiSelect && (preview || source)">
-                                        <ct-block name="sw_media_upload_v2_regular_preview_file">
+                                        <ct-block name="ct_media_upload_v2_regular_preview_file">
                                             <ct-media-preview-v2
                                                 v-if="source || preview"
                                                 class="ct-media-upload-v2__preview"
@@ -109,7 +109,7 @@
                                         </ct-block>
                                     </template>
 
-                                    <ct-block name="sw_media_upload_v2_regular_preview_fallback">
+                                    <ct-block name="ct_media_upload_v2_regular_preview_fallback">
                                         <template
                                             v-if="
                                                 (allowMultiSelect && mediaPreview) ||
@@ -124,7 +124,7 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_media_upload_v2_actions">
+                            <ct-block name="ct_media_upload_v2_actions">
                                 <div class="ct-media-upload-v2__actions" :class="{ 'has--source': source }">
                                     <div v-if="source" class="ct-media-upload-v2__file-info">
                                         <div class="ct-media-upload-v2__file-headline">
@@ -138,7 +138,7 @@
                                     </div>
 
                                     <template v-else>
-                                        <ct-block name="sw_media_upload_v2_regular_actions_url">
+                                        <ct-block name="ct_media_upload_v2_regular_actions_url">
                                             <ct-media-url-form
                                                 v-if="isUrlUpload"
                                                 class="ct-media-upload-v2__url-form"
@@ -147,9 +147,9 @@
                                             />
                                         </ct-block>
 
-                                        <ct-block name="sw_media_upload_v2_regular_actions_add">
+                                        <ct-block name="ct_media_upload_v2_regular_actions_add">
                                             <template v-if="!isUrlUpload">
-                                                <ct-block name="sw_media_upload_v2_regular_upload_button">
+                                                <ct-block name="ct_media_upload_v2_regular_upload_button">
                                                     <mt-button
                                                         class="ct-media-upload-v2__button upload"
                                                         :disabled="isLoading || disabled"
@@ -182,7 +182,7 @@
                                                     />
                                                 </template>
 
-                                                <ct-block name="sw_media_upload_v2_regular_media_sidebar_button"></ct-block>
+                                                <ct-block name="ct_media_upload_v2_regular_media_sidebar_button"></ct-block>
                                             </template>
                                         </ct-block>
                                     </template>
@@ -193,7 +193,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_upload_v2_file_input">
+            <ct-block name="ct_media_upload_v2_file_input">
                 <form ref="fileForm" class="ct-media-upload-v2__form">
                     <input
                         id="files"
@@ -332,7 +332,7 @@ const getFileName = (item) => {
     return `${item.fileName}.${item.fileExtension}`;
 };
 
-swDefinePublic({
+ctDefinePublic({
     mediaModalIsOpen,
     mediaPreview,
     removeFileButtonLabel,

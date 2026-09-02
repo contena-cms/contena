@@ -1,27 +1,27 @@
 <template>
-    <ct-block name="sw_page">
+    <ct-block name="ct_page">
         <div class="ct-page" :class="pageClasses">
-            <ct-block name="sw_page_head_area">
+            <ct-block name="ct_page_head_area">
                 <div v-if="showHeadArea" class="ct-page__head-area">
-                    <ct-block name="sw_page_top_bar">
+                    <ct-block name="ct_page_top_bar">
                         <div class="ct-page__top-bar">
-                            <ct-block name="sw_page_search_bar">
+                            <ct-block name="ct_page_search_bar">
                                 <div v-if="showSearchBar" class="ct-page__search-bar">
                                     <slot name="search-bar">
-                                        <ct-block name="sw_page_slot_search_bar">
+                                        <ct-block name="ct_page_slot_search_bar">
                                             <ct-search-bar />
                                         </ct-block>
                                     </slot>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_page_top_bar_actions">
+                            <ct-block name="ct_page_top_bar_actions">
                                 <div class="ct-page__top-bar-actions">
                                     <div class="ct-page__sidebar-container">
                                         <ct-help-center-v2 />
                                     </div>
 
-                                    <ct-block name="sw_page_notification_center">
+                                    <ct-block name="ct_page_notification_center">
                                         <div class="ct-page__sidebar-container">
                                             <ct-notification-center />
                                         </div>
@@ -31,16 +31,16 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_page_smart_bar">
+                    <ct-block name="ct_page_smart_bar">
                         <div v-if="showSmartBar" class="ct-page__smart-bar">
-                            <ct-block name="sw_page_smart_bar_divider">
+                            <ct-block name="ct_page_smart_bar_divider">
                                 <div v-if="showSearchBar" class="ct-page__smart-bar-divider"></div>
                             </ct-block>
 
-                            <ct-block name="sw_page_smart_bar_back_btn">
+                            <ct-block name="ct_page_smart_bar_back_btn">
                                 <div class="ct-page__back-btn-container">
                                     <slot name="smart-bar-back">
-                                        <ct-block name="sw_page_slot_smart_bar_back">
+                                        <ct-block name="ct_page_slot_smart_bar_back">
                                             <router-link
                                                 v-if="parentRoute"
                                                 v-slot="{ href, navigate }"
@@ -66,12 +66,12 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_page_smart_bar_content">
+                            <ct-block name="ct_page_smart_bar_content">
                                 <div class="smart-bar__content">
-                                    <ct-block name="sw_page_smart_bar_content_header">
+                                    <ct-block name="ct_page_smart_bar_content_header">
                                         <div class="smart-bar__header">
                                             <slot name="smart-bar-header">
-                                                <ct-block name="sw_page_slot_smart_bar_header">
+                                                <ct-block name="ct_page_slot_smart_bar_header">
                                                     <h2 v-if="module && module.title">
                                                         {{ $t(module.title) }}
                                                     </h2>
@@ -80,18 +80,18 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_page_smart_bar_content_language_switch">
+                                    <ct-block name="ct_page_smart_bar_content_language_switch">
                                         <div class="smart-bar__language-switch">
                                             <slot name="language-switch">
-                                                <ct-block name="sw_page_slot_language_switch"></ct-block>
+                                                <ct-block name="ct_page_slot_language_switch"></ct-block>
                                             </slot>
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_page_smart_bar_content_actions">
+                                    <ct-block name="ct_page_smart_bar_content_actions">
                                         <div class="smart-bar__actions">
                                             <slot name="smart-bar-actions">
-                                                <ct-block name="sw_page_slot_smart_bar_actions"></ct-block>
+                                                <ct-block name="ct_page_slot_smart_bar_actions"></ct-block>
                                             </slot>
                                         </div>
                                     </ct-block>
@@ -102,12 +102,12 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_page_content">
-                <div ref="swPageContent" class="ct-page__content" :class="pageContentClasses">
+            <ct-block name="ct_page_content">
+                <div ref="ctPageContent" class="ct-page__content" :class="pageContentClasses">
                     <div v-if="hasSideContentSlot" class="ct-page__side-content">
                         <div class="ct-page__side-content-inner">
                             <slot name="side-content">
-                                <ct-block name="sw_page_slot_side_content"></ct-block>
+                                <ct-block name="ct_page_slot_side_content"></ct-block>
                             </slot>
                         </div>
                     </div>
@@ -115,15 +115,15 @@
                     <main id="main" class="ct-page__main-content" tabindex="-1">
                         <div class="ct-page__main-content-inner" v-bind="$attrs">
                             <slot name="content">
-                                <ct-block name="sw_page_slot_content"></ct-block>
+                                <ct-block name="ct_page_slot_content"></ct-block>
                             </slot>
                         </div>
                     </main>
 
-                    <ct-block name="sw_page_content_sidebar">
+                    <ct-block name="ct_page_content_sidebar">
                         <div v-if="hasSidebarSlot" class="ct-page__sidebar">
                             <slot name="sidebar">
-                                <ct-block name="sw_page_sidebar_slot"></ct-block>
+                                <ct-block name="ct_page_sidebar_slot"></ct-block>
                             </slot>
                         </div>
                     </ct-block>
@@ -291,7 +291,7 @@ onBeforeUnmount(() => {
     beforeDestroyComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     module,
     parentRoute,
     previousPath,
@@ -320,8 +320,8 @@ swDefinePublic({
     initPage,
 });
 
-provide('setSwPageSidebarOffset', setSidebarOffset);
-provide('removeSwPageSidebarOffset', removeSidebarOffset);
+provide('setCtPageSidebarOffset', setSidebarOffset);
+provide('removeCtPageSidebarOffset', removeSidebarOffset);
 
 defineExpose({
     module,

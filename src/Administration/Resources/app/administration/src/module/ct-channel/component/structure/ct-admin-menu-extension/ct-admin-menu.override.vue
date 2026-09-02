@@ -1,5 +1,5 @@
 <template>
-    <ct-block extends="sw_admin_menu_navigation_main">
+    <ct-block extends="ct_admin_menu_navigation_main">
         <ct-block-parent />
 
         <ct-channel-menu v-if="canViewChannels" />
@@ -17,5 +17,5 @@ if (!acl) {
 
 const canViewChannels = computed(() => acl.can('channel.viewer'));
 
-swDefineOverride({});
+ctDefineOverride({});
 </script>

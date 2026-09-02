@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_custom_field_type_base">
+    <ct-block name="ct_custom_field_type_base">
         <div class="ct-custom-field-type-base">
-            <ct-block name="sw_custom_field_type_base_content">
-                <ct-block name="sw_custom_field_type_base_labels">
+            <ct-block name="ct_custom_field_type_base_content">
+                <ct-block name="ct_custom_field_type_base_labels">
                     <ct-custom-field-translated-labels
                         v-model:config="currentCustomField.config"
                         :disabled="!acl.can('custom_field.editor')"
@@ -11,9 +11,9 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_number_container">
+                <ct-block name="ct_custom_field_type_number_container">
                     <div class="ct-custom-field-type-number__container">
-                        <ct-block name="sw_custom_field_type_number_container_numbertype">
+                        <ct-block name="ct_custom_field_type_number_container_numbertype">
                             <mt-select
                                 v-model="currentCustomField.config.numberType"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelNumberType')"
@@ -21,7 +21,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_number_container_step">
+                        <ct-block name="ct_custom_field_type_number_container_step">
                             <mt-number-field
                                 v-model="currentCustomField.config.step"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelStep')"
@@ -29,7 +29,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_number_container_min">
+                        <ct-block name="ct_custom_field_type_number_container_min">
                             <mt-number-field
                                 v-model="currentCustomField.config.min"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelMin')"
@@ -37,7 +37,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_number_container_max">
+                        <ct-block name="ct_custom_field_type_number_container_max">
                             <mt-number-field
                                 v-model="currentCustomField.config.max"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelMax')"
@@ -128,7 +128,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     locales,
     propertyNames,

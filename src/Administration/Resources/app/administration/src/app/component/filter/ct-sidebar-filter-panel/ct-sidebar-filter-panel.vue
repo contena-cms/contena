@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_sidebar_filter_panel">
+    <ct-block name="ct_sidebar_filter_panel">
         <ct-sidebar-item
             class="ct-sidebar-filter-panel"
             icon="regular-filter"
@@ -7,14 +7,14 @@
             :title="$t('ct-filter-panel.titleSidebarItemFilter')"
         >
             <template #headline-content>
-                <ct-block name="sw_sidebar_filter_panel_headline">
+                <ct-block name="ct_sidebar_filter_panel_headline">
                     <a v-if="activeFilterNumber" role="button" tabindex="0" @click="resetAll" @keydown.enter="resetAll">{{
                         $t('ct-sidebar-filter-panel.resetButton')
                     }}</a>
                 </ct-block>
             </template>
 
-            <ct-block name="sw_sidebar_filter_panel_content">
+            <ct-block name="ct_sidebar_filter_panel_content">
                 <ct-filter-panel ref="filterPanel" v-bind="$attrs" />
             </ct-block>
         </ct-sidebar-item>
@@ -54,7 +54,7 @@ const resetAll = () => {
     filterPanel.value.resetAll();
 };
 
-swDefinePublic({
+ctDefinePublic({
     parentRegisterSidebarItem,
     filterSidebarItem,
     registerSidebarItem,

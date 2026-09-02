@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_sidebar_navigation_item">
+    <ct-block name="ct_sidebar_navigation_item">
         <button
             v-tooltip.left="{ message: tooltipContent }"
             class="ct-sidebar-navigation-item"
@@ -8,7 +8,7 @@
             :disabled="sidebarItem.disabled"
             @click="emitButtonClicked"
         >
-            <ct-block name="sw_sidebar_navigation_item_content">
+            <ct-block name="ct_sidebar_navigation_item_content">
                 <mt-icon :name="sidebarItem.icon" size="20px" />
 
                 <i
@@ -53,7 +53,7 @@ const emitButtonClicked = () => {
     emit('item-click', props.sidebarItem);
 };
 
-swDefinePublic({
+ctDefinePublic({
     badgeTypeClasses,
     tooltipContent,
     emitButtonClicked,

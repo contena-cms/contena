@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_permissions_role_access">
+    <ct-block name="ct_permissions_role_access">
         <mt-card
             class="ct-permissions-role-access"
             position-identifier="ct-permissions-role-access"
@@ -7,7 +7,7 @@
             :title="t('ct-permissions.roles.grid.title')"
         >
             <template v-if="role">
-                <ct-block name="sw_permissions_role_access_toolbar">
+                <ct-block name="ct_permissions_role_access_toolbar">
                     <div class="ct-permissions-role-access__toolbar">
                         <mt-search
                             v-model="searchTerm"
@@ -59,9 +59,9 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_permissions_role_access_content">
+                <ct-block name="ct_permissions_role_access_content">
                     <div v-if="filteredCatalog.length > 0" class="ct-permissions-role-access__layout">
-                        <ct-block name="sw_permissions_role_access_navigation">
+                        <ct-block name="ct_permissions_role_access_navigation">
                             <nav
                                 class="ct-permissions-role-access__navigation"
                                 :aria-label="t('ct-permissions.roles.catalog.navigationLabel')"
@@ -84,7 +84,7 @@
                             </nav>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_role_access_resources">
+                        <ct-block name="ct_permissions_role_access_resources">
                             <section v-if="selectedGroup" class="ct-permissions-role-access__resources">
                                 <header class="ct-permissions-role-access__resources-header">
                                     <div>
@@ -268,7 +268,7 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_permissions_role_access_empty_state">
+                <ct-block name="ct_permissions_role_access_empty_state">
                     <mt-empty-state
                         v-if="filteredCatalog.length === 0"
                         icon="regular-search"
@@ -772,7 +772,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     privileges,
     menuService,
     acl,

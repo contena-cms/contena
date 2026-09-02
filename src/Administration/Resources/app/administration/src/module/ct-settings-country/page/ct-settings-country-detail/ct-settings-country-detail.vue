@@ -1,21 +1,21 @@
 <template>
-    <ct-block name="sw_settings_country_detail">
+    <ct-block name="ct_settings_country_detail">
         <ct-page class="ct-settings-country-detail">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_country_detail_header">
+                <ct-block name="ct_settings_country_detail_header">
                     <h2>{{ placeholder(country, 'name', translate('ct-settings-country.detail.textHeadline')) }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_country_detail_actions">
-                    <ct-block name="sw_settings_country_detail_actions_abort">
+                <ct-block name="ct_settings_country_detail_actions">
+                    <ct-block name="ct_settings_country_detail_actions_abort">
                         <mt-button :disabled="isLoading" variant="secondary" size="default" @click="onCancel">
                             {{ translate('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_settings_country_detail_actions_save">
+                    <ct-block name="ct_settings_country_detail_actions_save">
                         <ct-button-process
                             size="default"
                             class="ct-settings-country-detail__save-action"
@@ -33,7 +33,7 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_country_detail_language_switch">
+                <ct-block name="ct_settings_country_detail_language_switch">
                     <ct-language-switch
                         :save-changes-function="saveOnLanguageChange"
                         :abort-change-function="abortOnLanguageChange"
@@ -43,10 +43,10 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_country_detail_content">
+                <ct-block name="ct_settings_country_detail_content">
                     <ct-card-view>
                         <div class="ct-settings-country-detail__content-container">
-                            <ct-block name="sw_settings_country_detail_content_language_info">
+                            <ct-block name="ct_settings_country_detail_content_language_info">
                                 <ct-language-info
                                     :entity-description="
                                         placeholder(country, 'name', translate('ct-settings-country.detail.textHeadline'))
@@ -54,13 +54,13 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_settings_country_tabs_header">
+                            <ct-block name="ct_settings_country_tabs_header">
                                 <mt-tabs
                                     :items="countryTabItems"
                                     :default-item="$route.name"
                                     @new-item-active="onTabChange"
                                 />
-                                <ct-block name="sw_setting_country_tabs_extension"></ct-block>
+                                <ct-block name="ct_setting_country_tabs_extension"></ct-block>
                             </ct-block>
 
                             <div class="ct-settings-country-detail__tab-content">
@@ -70,7 +70,7 @@
                                 </template>
 
                                 <template v-else>
-                                    <ct-block name="sw_settings_country_tabs_content">
+                                    <ct-block name="ct_settings_country_tabs_content">
                                         <router-view v-slot="{ Component }">
                                             <component
                                                 :is="Component"
@@ -81,7 +81,7 @@
                                         </router-view>
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_country_detail_custom_field_sets">
+                                    <ct-block name="ct_settings_country_detail_custom_field_sets">
                                         <mt-card
                                             v-if="showCustomFields"
                                             position-identifier="ct-settings-country-detail-custom-field-sets"
@@ -244,7 +244,7 @@ const onUpdateCountry = (path, value) => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     customFieldDataProviderService,

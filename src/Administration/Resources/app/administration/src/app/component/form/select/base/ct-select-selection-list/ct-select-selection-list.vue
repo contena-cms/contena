@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_select_selection_list">
+    <ct-block name="ct_select_selection_list">
         <ul class="ct-select-selection-list">
-            <ct-block name="sw_select_selection_list_item">
+            <ct-block name="ct_select_selection_list_item">
                 <template v-if="!hideLabels">
                     <li
                         v-for="(selection, index) in selections"
@@ -10,7 +10,7 @@
                         :class="'ct-select-selection-list__item-holder--' + index"
                         :data-id="selection[valueProperty]"
                     >
-                        <ct-block name="sw_select_selection_list_item_inner">
+                        <ct-block name="ct_select_selection_list_item_inner">
                             <slot
                                 name="selected-option"
                                 v-bind="{ selection, defaultLabel: selection[labelProperty], disabled }"
@@ -20,7 +20,7 @@
                                     :size="size"
                                     @dismiss="onClickDismiss(selection)"
                                 >
-                                    <ct-block name="sw_select_selection_list_item_text">
+                                    <ct-block name="ct_select_selection_list_item_text">
                                         <span class="ct-select-selection-list__item">
                                             <slot
                                                 name="label-property"
@@ -37,10 +37,10 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_select_selection_list_load_more">
+            <ct-block name="ct_select_selection_list_load_more">
                 <li v-if="invisibleCount > 0 && !hideLabels" class="ct-select-selection-list__load-more">
                     <slot name="invisible-count" v-bind="{ invisibleCount, onClickInvisibleCount }">
-                        <ct-block name="sw_select_selection_list_load_more_item_button">
+                        <ct-block name="ct_select_selection_list_load_more_item_button">
                             <mt-button
                                 class="ct-select-selection-list__load-more-button"
                                 variant="secondary"
@@ -53,12 +53,12 @@
                 </li>
             </ct-block>
 
-            <ct-block name="sw_select_selection_list_input">
+            <ct-block name="ct_select_selection_list_input">
                 <li class="ct-select-selection-list__input-wrapper">
                     <slot name="input" v-bind="{ placeholder, searchTerm, onSearchTermChange, onKeyDownDelete }">
                         <!-- eslint-disable-next-line vuejs-accessibility/role-has-required-aria-props -->
                         <input
-                            ref="swSelectInput"
+                            ref="ctSelectInput"
                             class="ct-select-selection-list__input"
                             type="text"
                             role="combobox"
@@ -169,7 +169,7 @@ const emit = defineEmits([
 
 import { ref, computed, inject } from 'vue';
 
-const swSelectInput = ref(null);
+const ctSelectInput = ref(null);
 
 const feature = inject('feature');
 
@@ -202,19 +202,19 @@ const onClickDismiss = (item) => {
     emit('item-remove', item);
 };
 const focus = () => {
-    swSelectInput.value.focus();
+    ctSelectInput.value.focus();
 };
 const blur = () => {
-    swSelectInput.value.blur();
+    ctSelectInput.value.blur();
 };
 const select = () => {
-    swSelectInput.value.select();
+    ctSelectInput.value.select();
 };
 const getFocusEl = () => {
-    return swSelectInput.value;
+    return ctSelectInput.value;
 };
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     showPlaceholder,
     isSelectionDisabled,

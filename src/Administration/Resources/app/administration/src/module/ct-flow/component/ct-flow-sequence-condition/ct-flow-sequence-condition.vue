@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_flow_sequence_condition">
+    <ct-block name="ct_flow_sequence_condition">
         <div class="ct-flow-sequence-condition">
-            <ct-block name="sw_flow_sequence_condition_true_arrow">
+            <ct-block name="ct_flow_sequence_condition_true_arrow">
                 <template v-if="!showHelpElement">
                     <div class="ct-flow-sequence-condition__true-arrow" :class="{ 'has--selector': isSelector(true) }">
                         <div class="ct-flow-sequence-condition__true-line"></div>
@@ -38,7 +38,7 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_condition_false_arrow">
+            <ct-block name="ct_flow_sequence_condition_false_arrow">
                 <template v-if="!showHelpElement">
                     <div class="ct-flow-sequence-condition__false-arrow" :class="{ 'has--selector': isSelector(false) }">
                         <div class="ct-flow-sequence-condition__false-line"></div>
@@ -75,7 +75,7 @@
                 </template>
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_condition_container">
+            <ct-block name="ct_flow_sequence_condition_container">
                 <div class="ct-flow-sequence-condition__container">
                     <div class="ct-flow-sequence-condition__card">
                         <div class="ct-flow-sequence-condition__header">
@@ -523,7 +523,7 @@ const chooseBranch = (branch: 'true' | 'false', type: 'condition' | 'action'): v
 };
 const removeCondition = (): void => emit('remove');
 
-swDefinePublic({
+ctDefinePublic({
     showRuleSelection,
     showRuleModal,
     showAdvancedRuleSelection,

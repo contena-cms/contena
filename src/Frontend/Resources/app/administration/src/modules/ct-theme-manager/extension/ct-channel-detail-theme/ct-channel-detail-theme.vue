@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_channel_detail_theme">
+    <ct-block name="ct_channel_detail_theme">
         <mt-card :title="t('channel-theme.title')" :is-loading="isLoading">
             <div class="ct-channel-detail-theme">
-                <ct-block name="sw_channel_detail_theme_preview">
+                <ct-block name="ct_channel_detail_theme_preview">
                     <div class="ct-channel-detail-theme__preview">
-                        <ct-block name="sw_channel_detail_theme_preview_item">
+                        <ct-block name="ct_channel_detail_theme_preview_item">
                             <button
                                 class="ct-channel-detail-theme__preview-button"
                                 type="button"
@@ -19,7 +19,7 @@
                             </button>
                         </ct-block>
 
-                        <ct-block name="sw_channel_detail_theme_modal">
+                        <ct-block name="ct_channel_detail_theme_modal">
                             <ct-theme-modal
                                 v-if="showThemeSelectionModal"
                                 :selected-theme-id="theme?.id"
@@ -30,16 +30,16 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_channel_detail_theme_info">
+                <ct-block name="ct_channel_detail_theme_info">
                     <div class="ct-channel-detail-theme__info">
-                        <ct-block name="sw_channel_detail_theme_info_content">
+                        <ct-block name="ct_channel_detail_theme_info_content">
                             <div class="ct-channel-detail-theme__info-content">
-                                <ct-block name="sw_channel_detail_theme_info_name">
+                                <ct-block name="ct_channel_detail_theme_info_name">
                                     <div class="ct-channel-detail-theme__info-name" :class="{ 'is--empty': !theme }">
                                         <span class="ct-channel-detail-theme__info-name-text">
                                             {{ theme ? theme.name : t('channel-theme.defaultTitle') }}
                                         </span>
-                                        <ct-block name="sw_channel_detail_theme_info_name_pending">
+                                        <ct-block name="ct_channel_detail_theme_info_name_pending">
                                             <span
                                                 v-if="pendingTheme"
                                                 v-tooltip="{
@@ -53,12 +53,12 @@
                                         </ct-block>
                                     </div>
                                 </ct-block>
-                                <ct-block name="sw_channel_detail_theme_info_author">
+                                <ct-block name="ct_channel_detail_theme_info_author">
                                     <div v-if="theme" class="ct-channel-detail-theme__info-author">
                                         {{ theme.author }}
                                     </div>
                                 </ct-block>
-                                <ct-block name="sw_channel_detail_theme_info_description">
+                                <ct-block name="ct_channel_detail_theme_info_description">
                                     <div v-if="themeDescription" class="ct-channel-detail-theme__info-description">
                                         <p class="ct-channel-detail-theme__info-description-title">
                                             {{ t('ct-theme-manager.detail.description') }}:
@@ -69,7 +69,7 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_channel_detail_theme_info_actions">
+                        <ct-block name="ct_channel_detail_theme_info_actions">
                             <div class="ct-channel-detail-theme__info-actions">
                                 <mt-button
                                     size="small"
@@ -325,7 +325,7 @@ onBeforeUnmount(() => {
     clearPendingCheck();
 });
 
-swDefinePublic({
+ctDefinePublic({
     theme,
     themeDescription,
     pendingTheme,

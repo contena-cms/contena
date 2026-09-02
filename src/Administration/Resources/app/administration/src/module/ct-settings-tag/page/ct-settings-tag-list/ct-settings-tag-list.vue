@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_settings_list">
-        <ct-block name="sw_settings_tag_index">
+    <ct-block name="ct_settings_list">
+        <ct-block name="ct_settings_tag_index">
             <ct-page class="ct-settings-tag-list">
                 <template #search-bar>
-                    <ct-block name="sw_settings_tag_list_search_bar">
+                    <ct-block name="ct_settings_tag_list_search_bar">
                         <mt-search
                             :model-value="term"
                             :placeholder="$t('ct-settings-tag.general.placeholderSearchBar')"
@@ -13,16 +13,16 @@
                 </template>
 
                 <template #smart-bar-header>
-                    <ct-block name="sw_settings_tag_list_smart_bar_header">
-                        <ct-block name="sw_settings_tag_list_smart_bar_header_title">
+                    <ct-block name="ct_settings_tag_list_smart_bar_header">
+                        <ct-block name="ct_settings_tag_list_smart_bar_header_title">
                             <h2>
-                                <ct-block name="sw_settings_tag_list_smart_bar_header_title_text">
+                                <ct-block name="ct_settings_tag_list_smart_bar_header_title_text">
                                     {{ $t('ct-settings.index.title') }}
                                     <mt-icon name="regular-chevron-right-xs" size="12px" />
                                     {{ $t('ct-settings-tag.list.textHeadline') }}
                                 </ct-block>
 
-                                <ct-block name="sw_settings_tag_list_smart_bar_header_amount">
+                                <ct-block name="ct_settings_tag_list_smart_bar_header_amount">
                                     <span v-if="!isLoading" class="ct-page__smart-bar-amount"> ({{ total }}) </span>
                                 </ct-block>
                             </h2>
@@ -31,11 +31,11 @@
                 </template>
 
                 <template #smart-bar-actions>
-                    <ct-block name="sw_settings_tag_list_smart_bar_actions">
-                        <ct-block name="sw_settings_tag_list_grid_toolbar_filter">
+                    <ct-block name="ct_settings_tag_list_smart_bar_actions">
+                        <ct-block name="ct_settings_tag_list_grid_toolbar_filter">
                             <mt-popover width="medium" :title="$t('ct-settings-tag.list.filter')">
                                 <template #trigger="{ toggleFloatingUi }">
-                                    <ct-block name="sw_settings_tag_list_grid_toolbar_filter_menu_trigger">
+                                    <ct-block name="ct_settings_tag_list_grid_toolbar_filter_menu_trigger">
                                         <mt-button
                                             class="ct-settings-tag-list__filter-menu-trigger"
                                             variant="secondary"
@@ -52,7 +52,7 @@
                                 </template>
 
                                 <template #popover-items__base>
-                                    <ct-block name="sw_settings_tag_list_grid_toolbar_filter_duplicate">
+                                    <ct-block name="ct_settings_tag_list_grid_toolbar_filter_duplicate">
                                         <mt-popover-item
                                             show-switch
                                             :switch-value="duplicateFilter"
@@ -61,7 +61,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_tag_list_grid_toolbar_filter_empty">
+                                    <ct-block name="ct_settings_tag_list_grid_toolbar_filter_empty">
                                         <mt-popover-item
                                             show-switch
                                             :switch-value="emptyFilter"
@@ -70,7 +70,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_tag_list_grid_toolbar_filter_assignment">
+                                    <ct-block name="ct_settings_tag_list_grid_toolbar_filter_assignment">
                                         <mt-select
                                             :model-value="assignmentFilter"
                                             class="ct-settings-tag-list__filter-assignment-select"
@@ -83,7 +83,7 @@
                                         />
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_tag_list_grid_toolbar_filter_footer">
+                                    <ct-block name="ct_settings_tag_list_grid_toolbar_filter_footer">
                                         <mt-popover-item
                                             type="critical"
                                             icon="solid-undo"
@@ -95,7 +95,7 @@
                             </mt-popover>
                         </ct-block>
 
-                        <ct-block name="sw_settings_tag_list_smart_bar_actions_add">
+                        <ct-block name="ct_settings_tag_list_smart_bar_actions_add">
                             <mt-button
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
@@ -115,10 +115,10 @@
                 </template>
 
                 <template #content>
-                    <ct-block name="sw_settings_tag_list_content">
+                    <ct-block name="ct_settings_tag_list_content">
                         <ct-card-view>
-                            <ct-block name="sw_settings_tag_list_content_card">
-                                <ct-block name="sw_settings_tag_list_grid">
+                            <ct-block name="ct_settings_tag_list_content_card">
+                                <ct-block name="ct_settings_tag_list_grid">
                                     <mt-data-table
                                         class="ct-settings-tag-list__content ct-settings-tag-list__grid"
                                         layout="full"
@@ -160,7 +160,7 @@
                                             "
                                             #toolbar
                                         >
-                                            <ct-block name="sw_settings_tag_list_grid_bulk">
+                                            <ct-block name="ct_settings_tag_list_grid_bulk">
                                                 <mt-button variant="secondary" @click="showBulkMergeModal = true">
                                                     {{ $t('ct-settings-tag.list.bulkMerge') }}
                                                 </mt-button>
@@ -168,7 +168,7 @@
                                         </template>
 
                                         <template #column-name="{ data: item }">
-                                            <ct-block name="sw_settings_tag_list_grid_column_default_name">
+                                            <ct-block name="ct_settings_tag_list_grid_column_default_name">
                                                 <mt-badge v-tooltip="{ message: item.name }">
                                                     {{ item.name }}
                                                 </mt-badge>
@@ -182,7 +182,7 @@
                                             :key="index"
                                             #[`column-${propertyName}`]="assignmentData"
                                         >
-                                            <ct-block name="sw_settings_tag_list_grid_column_assignments">
+                                            <ct-block name="ct_settings_tag_list_grid_column_assignments">
                                                 <span class="ct-settings-tag-list__assignment-count">
                                                     {{ getPropertyCounting(propertyName, assignmentData.data.id) }}
                                                     {{
@@ -197,7 +197,7 @@
                                         <!-- eslint-enable vue/no-unused-vars -->
 
                                         <template #empty-state>
-                                            <ct-block name="sw_settings_tag_list_empty_state">
+                                            <ct-block name="ct_settings_tag_list_empty_state">
                                                 <mt-empty-state
                                                     :icon="$route.meta.$module.icon"
                                                     :headline="$t('ct-settings-tag.list.titleEmptyStateList')"
@@ -206,11 +206,11 @@
                                         </template>
                                     </mt-data-table>
 
-                                    <ct-block name="sw_settings_tag_list_grid_action_modals">
-                                        <ct-block name="sw_settings_tag_list_delete_modal">
+                                    <ct-block name="ct_settings_tag_list_grid_action_modals">
+                                        <ct-block name="ct_settings_tag_list_delete_modal">
                                             <mt-modal-root v-if="tagToDelete" :is-open="true" @change="onCloseDeleteModal">
                                                 <mt-modal :title="$t('global.default.warning')" width="s">
-                                                    <ct-block name="sw_settings_tag_list_delete_modal_confirm_delete_text">
+                                                    <ct-block name="ct_settings_tag_list_delete_modal_confirm_delete_text">
                                                         <p class="ct-settings-tag-list__confirm-delete-text">
                                                             {{
                                                                 $t(
@@ -224,8 +224,8 @@
 
                                                     <template #footer>
                                                         <div class="ct-settings-tag-list__modal-footer">
-                                                            <ct-block name="sw_settings_tag_list_delete_modal_footer">
-                                                                <ct-block name="sw_settings_tag_list_delete_modal_cancel">
+                                                            <ct-block name="ct_settings_tag_list_delete_modal_footer">
+                                                                <ct-block name="ct_settings_tag_list_delete_modal_cancel">
                                                                     <mt-modal-close
                                                                         as="mt-button"
                                                                         size="small"
@@ -235,7 +235,7 @@
                                                                     </mt-modal-close>
                                                                 </ct-block>
 
-                                                                <ct-block name="sw_settings_tag_list_delete_modal_confirm">
+                                                                <ct-block name="ct_settings_tag_list_delete_modal_confirm">
                                                                     <mt-modal-action
                                                                         as="mt-button"
                                                                         variant="critical"
@@ -254,7 +254,7 @@
                                             </mt-modal-root>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_tag_list_duplicate_modal">
+                                        <ct-block name="ct_settings_tag_list_duplicate_modal">
                                             <mt-modal-root
                                                 v-if="tagToDuplicate"
                                                 :is-open="true"
@@ -262,7 +262,7 @@
                                             >
                                                 <mt-modal :title="$t('global.default.duplicate')" width="s">
                                                     <ct-block
-                                                        name="sw_settings_tag_list_delete_modal_confirm_duplicate_input"
+                                                        name="ct_settings_tag_list_delete_modal_confirm_duplicate_input"
                                                     >
                                                         <p class="ct-settings-tag-list__confirm-duplicate-input">
                                                             <mt-text-field
@@ -277,8 +277,8 @@
 
                                                     <template #footer>
                                                         <div class="ct-settings-tag-list__modal-footer">
-                                                            <ct-block name="sw_settings_tag_list_duplicate_modal_footer">
-                                                                <ct-block name="sw_settings_tag_list_duplicate_modal_cancel">
+                                                            <ct-block name="ct_settings_tag_list_duplicate_modal_footer">
+                                                                <ct-block name="ct_settings_tag_list_duplicate_modal_cancel">
                                                                     <mt-modal-close
                                                                         as="mt-button"
                                                                         size="small"
@@ -289,7 +289,7 @@
                                                                 </ct-block>
 
                                                                 <ct-block
-                                                                    name="sw_settings_tag_list_duplicate_modal_confirm"
+                                                                    name="ct_settings_tag_list_duplicate_modal_confirm"
                                                                 >
                                                                     <mt-modal-action
                                                                         as="mt-button"
@@ -311,7 +311,7 @@
                                             </mt-modal-root>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_tag_list_detail_edit_modal">
+                                        <ct-block name="ct_settings_tag_list_detail_edit_modal">
                                             <ct-settings-tag-detail-modal
                                                 v-if="tagToEdit"
                                                 :edited-tag="tagToEdit"
@@ -324,7 +324,7 @@
                                         </ct-block>
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_tag_list_grid_bulk_merge_modal">
+                                    <ct-block name="ct_settings_tag_list_grid_bulk_merge_modal">
                                         <mt-modal-root
                                             v-if="showBulkMergeModal"
                                             :is-open="true"
@@ -372,7 +372,7 @@
                                                     </p>
                                                 </slot>
 
-                                                <ct-block name="sw_settings_tag_list_merge_modal_confirm_name_input">
+                                                <ct-block name="ct_settings_tag_list_merge_modal_confirm_name_input">
                                                     <slot name="bulk-modal-merge-confirm-name-input">
                                                         <p
                                                             v-if="!bulkMergeProgress.isRunning"
@@ -389,7 +389,7 @@
                                                     </slot>
                                                 </ct-block>
 
-                                                <ct-block name="sw_settings_tag_list_merge_modal_progress">
+                                                <ct-block name="ct_settings_tag_list_merge_modal_progress">
                                                     <slot name="bulk-modal-merge-progress">
                                                         <div
                                                             v-if="bulkMergeProgress.isRunning"
@@ -435,7 +435,7 @@
                                         </mt-modal-root>
                                     </ct-block>
 
-                                    <ct-block name="sw_settings_tag_list_detail_add_modal">
+                                    <ct-block name="ct_settings_tag_list_detail_add_modal">
                                         <ct-settings-tag-detail-modal
                                             v-if="showDetailModal === true"
                                             @finish="onSaveFinish"
@@ -992,7 +992,7 @@ initializeListing({
     sortDirection,
 });
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     tagApiService,

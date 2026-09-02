@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_channel_menu">
+    <ct-block name="ct_channel_menu">
         <div class="ct-channel-menu">
-            <ct-block name="sw_channel_menu_modal">
+            <ct-block name="ct_channel_menu_modal">
                 <ct-channel-modal v-if="showModal" @modal-close="showModal = false" />
             </ct-block>
 
-            <ct-block name="sw_channel_menu_headline">
+            <ct-block name="ct_channel_menu_headline">
                 <div class="ct-admin-menu__headline">
                     <div class="collapsible-text ct-admin-menu__headline_text hide-on-collapse">
                         <router-link :to="{ name: 'ct.channel.list' }">
@@ -57,10 +57,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_channel_menu_navigation">
+            <ct-block name="ct_channel_menu_navigation">
                 <nav class="ct-admin-menu__navigation">
                     <ul class="ct-admin-menu__navigation-list">
-                        <ct-block name="sw_channel_menu_navigation_main_items">
+                        <ct-block name="ct_channel_menu_navigation_main_items">
                             <ct-admin-menu-item
                                 v-for="(entry, index) in buildMenuTree"
                                 :key="entry.id || index"
@@ -93,7 +93,7 @@
                             </ct-admin-menu-item>
                         </ct-block>
 
-                        <ct-block name="sw_channel_menu_navigation_more_items">
+                        <ct-block name="ct_channel_menu_navigation_more_items">
                             <ct-admin-menu-item
                                 v-if="moreChannelsAvailable"
                                 :entry="moreItemsEntry"
@@ -104,7 +104,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_channel_menu_navigation_add_channel">
+                        <ct-block name="ct_channel_menu_navigation_add_channel">
                             <li
                                 v-if="showAddChannelMenuItem"
                                 class="ct-admin-menu__navigation-list-item ct-channel-menu__add-channel"
@@ -323,7 +323,7 @@ onBeforeUnmount(() => {
     unregisterListener();
 });
 
-swDefinePublic({
+ctDefinePublic({
     channels,
     channelsLoaded,
     showModal,

@@ -48,7 +48,7 @@ In a component SFC:
 </ct-block>
 ```
 
-- `name` — unique identifier for this block, scoped globally across the app. New block names use the `ct_` prefix and snake_case (e.g., `ct_product_detail_summary`). Existing `sw_` names remain valid legacy extension points.
+- `name` — unique identifier for this block, scoped globally across the app. New block names use the `ct_` prefix and snake_case (e.g., `ct_product_detail_summary`). Existing `ct_` names remain valid legacy extension points.
 - `:data="$dataScope"` — passes the component's entire data/computed/methods scope to any override that wants it (more on this below)
 
 ### Complete end-to-end example
@@ -360,7 +360,7 @@ export default Contena.Component.wrapComponentConfig({
 ### Data flow diagram
 
 ```
-Component with <ct-block name="foo" :data="$dataScope">
+Component with <ct-block name="ct_foo" :data="$dataScope">
 │
 │  Mount
 │
@@ -471,8 +471,8 @@ The native block system has these limitations:
 
 The `ct-block` system provides two Vue components:
 
-- `<ct-block name="...">` — declares an extension point with default content; reactively incorporates any registered overrides at render time
-- `<ct-block extends="...">` — registers override content for a named block; renders nothing itself, just adds its slot to the global registry
+- `<ct-block name="ct_...">` — declares an extension point with default content; reactively incorporates any registered overrides at render time
+- `<ct-block extends="ct_...">` — registers override content for a named block; renders nothing itself, just adds its slot to the global registry
 - `<ct-block-parent />` — renders the previous content in the chain (default or prior override), via Vue's provide/inject
 
 The global block registry (`useBlockContext`) is a reactive module-level map of block names to ordered slot arrays. The last registered override is always the outermost render layer; `<ct-block-parent />` walks backwards through the chain via Vue's `inject`.

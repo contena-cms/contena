@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_grid">
+    <ct-block name="ct_grid">
         <div ref="gridRoot" class="ct-grid" :class="gridClasses">
             <slot name="content">
-                <ct-block name="sw_grid_slot_content">
+                <ct-block name="ct_grid_slot_content">
                     <div class="ct-grid__content" :class="gridContentClasses">
                         <slot v-if="header" name="header">
-                            <ct-block name="sw_grid_slot_header">
+                            <ct-block name="ct_grid_slot_header">
                                 <div class="ct-grid__header" :style="[columnFlex, { paddingRight: `${scrollbarOffset}px` }]">
-                                    <ct-block name="sw_grid_slot_header_cell_selectable">
+                                    <ct-block name="ct_grid_slot_header_cell_selectable">
                                         <div v-if="selectable" class="ct-grid-column">
                                             <div class="ct-grid__cell-content">
                                                 <mt-checkbox
@@ -18,7 +18,7 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_grid_slot_header_cell">
+                                    <ct-block name="ct_grid_slot_header_cell">
                                         <div
                                             v-for="(column, columnIndex) in columns"
                                             :key="columnIndex"
@@ -35,15 +35,15 @@
                                             @click="onGridCellClick($event, column)"
                                             @keydown.enter="onGridCellClick($event, column)"
                                         >
-                                            <ct-block name="sw_grid_slot_header_cell_content">
+                                            <ct-block name="ct_grid_slot_header_cell_content">
                                                 <div class="ct-grid__cell-content">
-                                                    <ct-block name="sw_grid_slot_header_cell_icon_label">
+                                                    <ct-block name="ct_grid_slot_header_cell_icon_label">
                                                         <span v-if="column.iconLabel" class="ct-grid__cell-label">
                                                             <mt-icon :name="column.iconLabel" :title="column.label" />
                                                         </span>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_grid_slot_header_cell_label">
+                                                    <ct-block name="ct_grid_slot_header_cell_label">
                                                         <template v-if="column.iconLabel"
                                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                                                         >
@@ -52,7 +52,7 @@
                                                         }}</span>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_grid_slot_header_cell_sortable">
+                                                    <ct-block name="ct_grid_slot_header_cell_sortable">
                                                         <span
                                                             v-if="column.sortable && sort === column.dataIndex"
                                                             class="ct-grid_cell-sortable"
@@ -74,10 +74,10 @@
                         </slot>
 
                         <slot name="body">
-                            <ct-block name="sw_grid_slot_body">
-                                <div ref="swGridBody" class="ct-grid__body">
+                            <ct-block name="ct_grid_slot_body">
+                                <div ref="ctGridBody" class="ct-grid__body">
                                     <slot v-for="(item, index) in items" :key="getKey(item)" name="items">
-                                        <ct-block name="sw_grid_body_slot_items">
+                                        <ct-block name="ct_grid_body_slot_items">
                                             <ct-grid-row
                                                 ref="rowRefs"
                                                 :style="columnFlex"
@@ -95,7 +95,7 @@
                                                 @inline-edit-finish="onInlineEditFinish"
                                                 @inline-edit-start="onInlineEditStart"
                                             >
-                                                <ct-block name="sw_grid_body_item_selectable">
+                                                <ct-block name="ct_grid_body_item_selectable">
                                                     <div v-if="selectable" class="ct-grid-column">
                                                         <div class="ct-grid__cell-content">
                                                             <mt-checkbox
@@ -107,25 +107,25 @@
                                                 </ct-block>
 
                                                 <slot name="columns" :item="item">
-                                                    <ct-block name="sw_grid_slot_columns"></ct-block>
+                                                    <ct-block name="ct_grid_slot_columns"></ct-block>
                                                 </slot>
                                             </ct-grid-row>
                                         </ct-block>
                                     </slot>
 
-                                    <ct-block name="sw_grid_slot_empty_columns">
+                                    <ct-block name="ct_grid_slot_empty_columns">
                                         <slot v-if="!items.length" name="empty">
-                                            <ct-block name="sw_grid_slot_empty_columns_content"></ct-block>
+                                            <ct-block name="ct_grid_slot_empty_columns_content"></ct-block>
                                         </slot>
                                     </ct-block>
                                 </div>
                             </ct-block>
                         </slot>
 
-                        <ct-block name="sw_grid_pagination">
+                        <ct-block name="ct_grid_pagination">
                             <div v-if="hasPaginationSlot && items.length" class="ct-grid__pagination">
                                 <slot name="pagination">
-                                    <ct-block name="sw_grid_slot_pagination"></ct-block>
+                                    <ct-block name="ct_grid_slot_pagination"></ct-block>
                                 </slot>
                             </div>
                         </ct-block>
@@ -209,7 +209,7 @@ import { ref, computed, provide, useSlots, getCurrentInstance, onMounted, onUpda
 
 const slots = useSlots();
 
-const swGridBody = ref(null);
+const ctGridBody = ref(null);
 const gridRoot = ref(null);
 
 const columns = ref([]);
@@ -217,7 +217,7 @@ const selection = ref({});
 const scrollbarOffset = ref(0);
 const editing = ref(null);
 const allSelectedChecked = ref(false);
-const swGridDisableInlineEditListener = ref([]);
+const ctGridDisableInlineEditListener = ref([]);
 const rowRefs = ref([]);
 
 const sort = computed(() => {
@@ -274,10 +274,10 @@ const updatedComponent = () => {
     setScrollbarOffset();
 };
 const registerGridDisableInlineEditListener = (listener) => {
-    swGridDisableInlineEditListener.value.push(listener);
+    ctGridDisableInlineEditListener.value.push(listener);
 };
 const unregisterGridDisableInlineEditListener = (listener) => {
-    swGridDisableInlineEditListener.value = swGridDisableInlineEditListener.value.filter((l) => l !== listener);
+    ctGridDisableInlineEditListener.value = ctGridDisableInlineEditListener.value.filter((l) => l !== listener);
 };
 const onInlineEditFinish = (item) => {
     editing.value = null;
@@ -355,7 +355,7 @@ const onGridCellClick = (event, column) => {
     emit('sort-column', column);
 };
 function setScrollbarOffset() {
-    scrollbarOffset.value = dom.getScrollbarWidth(swGridBody.value);
+    scrollbarOffset.value = dom.getScrollbarWidth(ctGridBody.value);
 }
 const setColumns = (columnsValue) => {
     columns.value = columnsValue;
@@ -382,14 +382,14 @@ const startInlineEditing = () => {
     rowRefs.value.at(-1).startInlineEditing();
 };
 
-provide('swGridInlineEditStart', inlineEditingStart);
-provide('swGridInlineEditCancel', disableActiveInlineEditing);
-provide('swOnInlineEditStart', onInlineEditStart);
-provide('swRegisterGridDisableInlineEditListener', registerGridDisableInlineEditListener);
-provide('swUnregisterGridDisableInlineEditListener', unregisterGridDisableInlineEditListener);
-provide('swGridSetColumns', setColumns);
+provide('ctGridInlineEditStart', inlineEditingStart);
+provide('ctGridInlineEditCancel', disableActiveInlineEditing);
+provide('ctOnInlineEditStart', onInlineEditStart);
+provide('ctRegisterGridDisableInlineEditListener', registerGridDisableInlineEditListener);
+provide('ctUnregisterGridDisableInlineEditListener', unregisterGridDisableInlineEditListener);
+provide('ctGridSetColumns', setColumns);
 provide(
-    'swGridColumns',
+    'ctGridColumns',
     computed(() => columns.value),
 );
 
@@ -401,13 +401,13 @@ onUpdated(() => {
     updatedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     columns,
     selection,
     scrollbarOffset,
     editing,
     allSelectedChecked,
-    swGridDisableInlineEditListener,
+    ctGridDisableInlineEditListener,
     rowRefs,
     sort,
     sortDir,
@@ -444,7 +444,7 @@ defineExpose({
     scrollbarOffset,
     editing,
     allSelectedChecked,
-    swGridDisableInlineEditListener,
+    ctGridDisableInlineEditListener,
     rowRefs,
     sort,
     sortDir,

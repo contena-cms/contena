@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_rating_stars">
+    <ct-block name="ct_rating_stars">
         <div v-tooltip="ratingTooltip" class="ct-rating-stars" :style="dynamicWidthStyle">
-            <ct-block name="sw_rating_stars_placeholder">
+            <ct-block name="ct_rating_stars_placeholder">
                 <div class="ct-rating-stars__placeholder">
-                    <ct-block name="sw_rating_stars_placeholder_stars">
+                    <ct-block name="ct_rating_stars_placeholder_stars">
                         <mt-icon
                             v-for="currentStar in maxStars"
                             :key="`placeholder${currentStar}`"
@@ -15,10 +15,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_rating_stars_value">
+            <ct-block name="ct_rating_stars_value">
                 <div class="ct-rating-stars__value">
-                    <ct-block name="sw_rating_stars_value_stars">
-                        <ct-block name="sw_rating_stars_value_stars_full">
+                    <ct-block name="ct_rating_stars_value_stars">
+                        <ct-block name="ct_rating_stars_value_stars_full">
                             <mt-icon
                                 v-for="currentStar in Math.floor(cappedValue)"
                                 :key="`full${currentStar}`"
@@ -28,7 +28,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_rating_stars_value_stars_partial">
+                        <ct-block name="ct_rating_stars_value_stars_partial">
                             <mt-icon
                                 v-if="cappedValue % 1 > 0"
                                 class="ct-rating-stars__star star-partial"
@@ -113,7 +113,7 @@ const dynamicWidthStyle = computed(() => {
     return `width: ${props.maxStars * props.iconSize + props.maxStars - 1}px;`;
 });
 
-swDefinePublic({
+ctDefinePublic({
     ratingTooltip,
     cappedValue,
     partialStarCutStyle,

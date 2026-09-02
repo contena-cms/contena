@@ -74,7 +74,7 @@ describe('module/ct-blog/page/ct-blog-detail', () => {
         const { wrapper, create } = await createWrapper(creationType);
 
         expect(create).toHaveBeenCalledWith(Contena.Context.api);
-        expect(Contena.Store.get('swBlogDetail').creationType).toBe(expectedType);
+        expect(Contena.Store.get('ctBlogDetail').creationType).toBe(expectedType);
         expect(wrapper.vm.blog.type).toBe(expectedType);
     });
 });

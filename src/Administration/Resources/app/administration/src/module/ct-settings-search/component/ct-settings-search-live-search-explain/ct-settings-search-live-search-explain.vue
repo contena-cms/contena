@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_live_search_explain">
+    <ct-block name="ct_settings_search_live_search_explain">
         <section
             v-if="breakdown"
             id="ct-settings-search-live-search-explain"
@@ -317,7 +317,7 @@ const api = {
     fieldLabel,
 };
 
-swDefinePublic({
+ctDefinePublic({
     breakdown,
     explainName,
     getScoreValue,

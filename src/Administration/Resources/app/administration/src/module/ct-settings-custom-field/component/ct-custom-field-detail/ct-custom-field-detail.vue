@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_custom_field_detail">
+    <ct-block name="ct_custom_field_detail">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal class="ct-custom-field-detail" :title="modalTitle">
-                <ct-block name="sw_custom_field_detail_modal">
+                <ct-block name="ct_custom_field_detail_modal">
                     <div class="ct-custom-field-detail__grid">
-                        <ct-block name="sw_custom_field_detail_modal_type">
+                        <ct-block name="ct_custom_field_detail_modal_type">
                             <mt-select
                                 v-model="currentCustomField.config.customFieldType"
                                 :label="$t('ct-settings-custom-field.customField.detail.labelCustomFieldType')"
@@ -17,7 +17,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_detail_modal_technical_name">
+                        <ct-block name="ct_custom_field_detail_modal_technical_name">
                             <mt-text-field
                                 v-model="currentCustomField.name"
                                 class="ct-custom-field-detail__technical-name"
@@ -28,7 +28,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_detail_modal_position">
+                        <ct-block name="ct_custom_field_detail_modal_position">
                             <mt-number-field
                                 v-model="currentCustomField.config.customFieldPosition"
                                 class="ct-custom-field-detail__modal-position"
@@ -39,7 +39,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_detail_modal_allow_searchable">
+                        <ct-block name="ct_custom_field_detail_modal_allow_searchable">
                             <mt-switch
                                 v-model="currentCustomField.includeInSearch"
                                 bordered
@@ -51,7 +51,7 @@
                         </ct-block>
                     </div>
 
-                    <ct-block name="sw_custom_field_detail_modal_render_component">
+                    <ct-block name="ct_custom_field_detail_modal_render_component">
                         <div v-if="currentCustomField.config.customFieldType?.length > 0">
                             <component :is="renderComponentName" :current-custom-field="currentCustomField" :set="set" />
                         </div>
@@ -59,14 +59,14 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_custom_field_detail_modal_footer">
-                        <ct-block name="sw_custom_field_detail_modal_footer_cancel">
+                    <ct-block name="ct_custom_field_detail_modal_footer">
+                        <ct-block name="ct_custom_field_detail_modal_footer_cancel">
                             <mt-button size="small" variant="secondary" @click="onCancel">
                                 {{ $t('global.default.cancel') }}
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_detail_modal_footer_save">
+                        <ct-block name="ct_custom_field_detail_modal_footer_save">
                             <mt-button
                                 class="ct-custom-field-detail__footer-save"
                                 variant="primary"
@@ -148,11 +148,11 @@ const set = toRef(props, 'set');
 const { createNotificationError } = useNotification();
 
 const customFieldDataProviderService = inject<CustomFieldDataProviderService>('customFieldDataProviderService');
-const SwCustomFieldListIsCustomFieldNameUnique = inject<CustomFieldNameUnique>('SwCustomFieldListIsCustomFieldNameUnique');
+const CtCustomFieldListIsCustomFieldNameUnique = inject<CustomFieldNameUnique>('CtCustomFieldListIsCustomFieldNameUnique');
 const acl = inject<AclService>('acl');
 const i18n = useI18n();
 
-if (!customFieldDataProviderService || !SwCustomFieldListIsCustomFieldNameUnique || !acl) {
+if (!customFieldDataProviderService || !CtCustomFieldListIsCustomFieldNameUnique || !acl) {
     throw new Error('Custom Field detail services are unavailable.');
 }
 
@@ -260,7 +260,7 @@ function onSave(): void {
         return;
     }
 
-    void SwCustomFieldListIsCustomFieldNameUnique(currentCustomField.value).then((isUnique) => {
+    void CtCustomFieldListIsCustomFieldNameUnique(currentCustomField.value).then((isUnique) => {
         if (isUnique) {
             emit('custom-field-edit-save', currentCustomField.value);
 
@@ -306,9 +306,9 @@ function applyTypeConfiguration(): void {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     customFieldDataProviderService,
-    SwCustomFieldListIsCustomFieldNameUnique,
+    CtCustomFieldListIsCustomFieldNameUnique,
     acl,
     fieldTypes,
     locales,
@@ -329,7 +329,7 @@ swDefinePublic({
 
 defineExpose({
     customFieldDataProviderService,
-    SwCustomFieldListIsCustomFieldNameUnique,
+    CtCustomFieldListIsCustomFieldNameUnique,
     acl,
     fieldTypes,
     locales,

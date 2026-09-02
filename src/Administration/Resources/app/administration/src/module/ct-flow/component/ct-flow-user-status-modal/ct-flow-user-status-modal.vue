@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_flow_user_status_modal">
+    <ct-block name="ct_flow_user_status_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal :title="$t('ct-flow.userStatus.title')" width="s">
-                <ct-block name="sw_flow_user_status_modal_content">
+                <ct-block name="ct_flow_user_status_modal_content">
                     <div class="ct-flow-user-status-modal__content">
                         <mt-banner variant="attention">
                             {{ $t('ct-flow.userStatus.warning') }}
@@ -16,7 +16,7 @@
                     </div>
                 </ct-block>
                 <template #footer>
-                    <ct-block name="sw_flow_user_status_modal_footer">
+                    <ct-block name="ct_flow_user_status_modal_footer">
                         <div class="ct-flow-modal__footer-actions">
                             <mt-button variant="secondary" @click="onCancel">{{ $t('global.default.cancel') }}</mt-button>
                             <mt-button variant="primary" @click="onSave">{{ $t('global.default.save') }}</mt-button>
@@ -47,7 +47,7 @@ const onModalChange = (isOpen: boolean): void => {
     if (!isOpen) onCancel();
 };
 
-swDefinePublic({
+ctDefinePublic({
     active,
     statusOptions,
     onSave,

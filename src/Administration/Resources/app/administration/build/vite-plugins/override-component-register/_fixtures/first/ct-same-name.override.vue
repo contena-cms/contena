@@ -1,7 +1,7 @@
 <script setup>
 const count = 1;
 
-swDefineOverride({
+ctDefineOverride({
     count,
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_flow_sequence">
+    <ct-block name="ct_flow_sequence">
         <div class="ct-flow-sequence">
-            <ct-block name="sw_flow_sequence_content">
+            <ct-block name="ct_flow_sequence_content">
                 <ct-flow-sequence-selector
                     v-if="sequence.type === 'selector'"
                     :root-index="rootIndex"
@@ -30,7 +30,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_true_block">
+            <ct-block name="ct_flow_sequence_true_block">
                 <div v-if="sequence.trueChild" class="ct-flow-sequence__true-block" :class="trueBlockClasses">
                     <ct-flow-sequence
                         :sequence="sequence.trueChild"
@@ -43,7 +43,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_flow_sequence_false_block">
+            <ct-block name="ct_flow_sequence_false_block">
                 <div v-if="sequence.falseChild" class="ct-flow-sequence__false-block">
                     <ct-flow-sequence
                         :sequence="sequence.falseChild"
@@ -113,7 +113,7 @@ const removeBranch = (branch: 'true' | 'false'): void => {
     emit('update:sequence', updated);
 };
 
-swDefinePublic({
+ctDefinePublic({
     trueBlockClasses,
     replaceSequence,
     updateSequence,

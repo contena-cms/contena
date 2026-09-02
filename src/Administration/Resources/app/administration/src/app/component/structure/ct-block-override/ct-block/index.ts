@@ -31,35 +31,35 @@ import useBlockContext from '../../../../composables/use-block-context';
  * scoped data to the block content.
  *
  * @example override
- * <ct-block name="block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name" :data="$dataScope">
  *     <div>Default content</div>
  * </ct-block-extension>
  *
- * <ct-block extends="block-name">
+ * <ct-block extends="ct_block-name">
  *     <div>Block content override</div>
  * </ct-block>
  *
  * @example extend
- * <ct-block name="block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name" :data="$dataScope">
  *     <div>Default content</div>
  * </ct-block>
  *
- * <ct-block extends="block-name">
+ * <ct-block extends="ct_block-name">
  *     <ct-block-parent>
  *     <div>Block content extension</div>
  * </ct-block>
  *
  * @example extend with multiple blocks
- * <ct-block name="block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name" :data="$dataScope">
  *     <div>Default content</div>
  * </ct-block>
  *
- * <ct-block extends="block-name">
+ * <ct-block extends="ct_block-name">
  *     <ct-block-parent>
  *     <div>Block content extension</div>
  * </ct-block>
  *
- * <ct-block extends="block-name">
+ * <ct-block extends="ct_block-name">
  *     <ct-block-parent>
  *     <div>Another block content extension</div>
  * </ct-block>

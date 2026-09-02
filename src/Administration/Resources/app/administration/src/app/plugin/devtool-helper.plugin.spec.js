@@ -18,7 +18,7 @@ const createComponent = ({ customComponent, customOptions } = {}) => {
 
 describe('app/plugins/devtool-helper.plugin', () => {
     beforeEach(() => {
-        window._sw_extension_component_collection = undefined;
+        window._ct_extension_component_collection = undefined;
     });
 
     it('should not add the component to the collection when no extensionApiDevtoolInformation exists', async () => {
@@ -26,7 +26,7 @@ describe('app/plugins/devtool-helper.plugin', () => {
 
         await flushPromises();
 
-        expect(window._sw_extension_component_collection).toBeUndefined();
+        expect(window._ct_extension_component_collection).toBeUndefined();
     });
 
     it('should add the component to the collection when extensionApiDevtoolInformation exists', async () => {
@@ -44,8 +44,8 @@ describe('app/plugins/devtool-helper.plugin', () => {
 
         await flushPromises();
 
-        expect(window._sw_extension_component_collection).toHaveLength(1);
-        expect(window._sw_extension_component_collection[0]).toBe(component.vm);
+        expect(window._ct_extension_component_collection).toHaveLength(1);
+        expect(window._ct_extension_component_collection[0]).toBe(component.vm);
     });
 
     it('should remove the component from the collection before unmount', async () => {
@@ -63,11 +63,11 @@ describe('app/plugins/devtool-helper.plugin', () => {
 
         await flushPromises();
 
-        expect(window._sw_extension_component_collection).toHaveLength(1);
+        expect(window._ct_extension_component_collection).toHaveLength(1);
 
         component.unmount();
         await flushPromises();
 
-        expect(window._sw_extension_component_collection).toHaveLength(0);
+        expect(window._ct_extension_component_collection).toHaveLength(0);
     });
 });

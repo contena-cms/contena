@@ -15,7 +15,7 @@ function resetLanguage(): void {
 
 onBeforeMount(resetLanguage);
 
-swDefinePublic({
+ctDefinePublic({
     resetLanguage,
 });
 

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_permissions">
+    <ct-block name="ct_permissions">
         <ct-page class="ct-permissions">
             <template #search-bar>
-                <ct-block name="sw_permissions_search_bar">
+                <ct-block name="ct_permissions_search_bar">
                     <mt-search
                         :model-value="roleSearchTerm"
                         :placeholder="$t('ct-permissions.roles.general.placeholderSearchBar')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_permissions_smart_bar_header">
+                <ct-block name="ct_permissions_smart_bar_header">
                     <h2>
                         <span>{{ $t('ct-permissions.roles.grid.title') }}</span>
                         <span v-if="!roleListingLoading" class="ct-page__smart-bar-amount">({{ roleTotal }})</span>
@@ -21,7 +21,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_permissions_smart_bar_actions">
+                <ct-block name="ct_permissions_smart_bar_actions">
                     <mt-button
                         v-tooltip.bottom="{
                             message: $t('ct-privileges.tooltip.warning'),
@@ -40,7 +40,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_permissions_content">
+                <ct-block name="ct_permissions_content">
                     <ct-card-view>
                         <ct-permissions-role-listing
                             ref="roleListing"
@@ -97,7 +97,7 @@ const onRoleLoadingChange = (loading: boolean) => {
     roleListingLoading.value = loading;
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     roleTotal,
     roleListingLoading,

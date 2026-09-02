@@ -4,21 +4,21 @@
         <mt-loader v-if="isLoading" />
 
         <div class="ct-extension-card-base__switch">
-            <ct-block name="sw_extension_card_base_activation_switch_switch">
+            <ct-block name="ct_extension_card_base_activation_switch_switch">
                 <mt-switch v-model="isActive" :disabled="extensionManagementDisabled || !isInstalled" />
             </ct-block>
         </div>
 
         <ct-extension-icon :src="image" />
 
-        <ct-block name="sw_extension_card_base_activation_switch">
+        <ct-block name="ct_extension_card_base_activation_switch">
             <div class="ct-extension-card-base__info">
                 <section>
                     <span class="ct-extension-card-base__info-name">
                         {{ extension.label }}
                     </span>
 
-                    <ct-block name="sw_extension_card_base_info_inactive_label">
+                    <ct-block name="ct_extension_card_base_info_inactive_label">
                         <span v-if="isInstalled && !extension.active" class="ct-extension-card-base__info-inactive">
                             {{ $t('ct-extension.component.ct-extension-card-base.inactiveLabel') }}
                         </span>
@@ -28,7 +28,7 @@
         </ct-block>
 
         <div class="ct-extension-card-base__meta-info">
-            <ct-block name="sw_extension_card_base_info_content">
+            <ct-block name="ct_extension_card_base_info_content">
                 <section>
                     <span v-if="extension.version" class="ct-extension-card-base__meta-info-version">
                         {{ $t('ct-extension.my-extensions.listing.version') }}: {{ extension.version }}
@@ -69,7 +69,7 @@
         </div>
 
         <ct-context-button v-if="showContextMenu" class="ct-extension-card-base__context-menu" :menu-width="180">
-            <ct-block name="sw_extension_card_base_context_menu_actions">
+            <ct-block name="ct_extension_card_base_context_menu_actions">
                 <ct-context-menu-item
                     v-if="openLinkExists && extension.active"
                     :disabled="!openLinkExists"
@@ -88,7 +88,7 @@
                     }}
                 </ct-context-menu-item>
 
-                <ct-block name="sw_extension_card_base_context_menu_actions_additional"></ct-block>
+                <ct-block name="ct_extension_card_base_context_menu_actions_additional"></ct-block>
 
                 <ct-context-menu-item
                     v-if="!extensionManagementDisabled && isRemovable"
@@ -109,7 +109,7 @@
             </ct-block>
         </ct-context-button>
 
-        <ct-block name="sw_extension_card_base_modals">
+        <ct-block name="ct_extension_card_base_modals">
             <ct-extension-uninstall-modal
                 v-if="showUninstallModal"
                 :extension-name="extension.label"
@@ -431,7 +431,7 @@ const closeModalAndRemoveExtension = async () => {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     contenaExtensionService,
     cacheApiService,
     isLoading,

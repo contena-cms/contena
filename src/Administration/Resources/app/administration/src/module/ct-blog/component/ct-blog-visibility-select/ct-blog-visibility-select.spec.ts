@@ -22,7 +22,7 @@ function getVisibilityCollection(entries: EntitySchema.blog_visibility[] = []): 
 }
 
 function createWrapper(entries: EntitySchema.blog_visibility[] = [], disabled = false) {
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     store.blog = {
         id: 'blog-1',

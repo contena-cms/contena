@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_field_copyable">
+    <ct-block name="ct_field_copyable">
         <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events -->
         <mt-icon
             v-tooltip="{
@@ -83,7 +83,7 @@ const resetTooltipText = () => {
     wasCopied.value = false;
 };
 
-swDefinePublic({
+ctDefinePublic({
     wasCopied,
     tooltipText,
     copyToClipboard,

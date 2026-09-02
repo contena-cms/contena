@@ -156,10 +156,10 @@ describe('module/ct-integration/page/ct-integration-list', () => {
         const createButton = wrapper.find('.ct-integration-list__add-integration-action');
         expect(createButton.attributes().disabled).toBeDefined();
 
-        const editMenuItem = wrapper.find('.sw_integration_list__edit-action .ct-context-menu-item');
+        const editMenuItem = wrapper.find('.ct_integration_list__edit-action .ct-context-menu-item');
         expect(editMenuItem.classes()).toContain('is--disabled');
 
-        const deleteMenuItem = wrapper.find('.sw_integration_list__delete-action .ct-context-menu-item');
+        const deleteMenuItem = wrapper.find('.ct_integration_list__delete-action .ct-context-menu-item');
         expect(deleteMenuItem.classes()).toContain('is--disabled');
     });
 
@@ -200,7 +200,7 @@ describe('module/ct-integration/page/ct-integration-list', () => {
             'integration.editor',
         ]);
 
-        const editMenuItem = wrapper.find('.sw_integration_list__edit-action .ct-context-menu-item');
+        const editMenuItem = wrapper.find('.ct_integration_list__edit-action .ct-context-menu-item');
         await editMenuItem.trigger('click');
         await flushPromises();
 
@@ -295,7 +295,7 @@ describe('module/ct-integration/page/ct-integration-list', () => {
             'integration.deleter',
         ]);
 
-        const deleteMenuItem = wrapper.find('.sw_integration_list__delete-action .ct-context-menu-item');
+        const deleteMenuItem = wrapper.find('.ct_integration_list__delete-action .ct-context-menu-item');
         await deleteMenuItem.trigger('click');
         await flushPromises();
 
@@ -320,7 +320,7 @@ describe('module/ct-integration/page/ct-integration-list', () => {
             'integration.deleter',
         ]);
 
-        const editMenuItem = wrapper.find('.sw_integration_list__edit-action .ct-context-menu-item');
+        const editMenuItem = wrapper.find('.ct_integration_list__edit-action .ct-context-menu-item');
         await editMenuItem.trigger('click');
         await flushPromises();
 
@@ -331,7 +331,7 @@ describe('module/ct-integration/page/ct-integration-list', () => {
     it('should allow editing MCP tools for integrations', async () => {
         const wrapper = await createWrapper(['integration_mcp.editor'], [integrationFixture]);
 
-        const mcpMenuItem = wrapper.find('.sw_integration_list__edit-mcp-action .ct-context-menu-item');
+        const mcpMenuItem = wrapper.find('.ct_integration_list__edit-mcp-action .ct-context-menu-item');
         expect(mcpMenuItem.classes()).not.toContain('is--disabled');
     });
 
@@ -341,10 +341,10 @@ describe('module/ct-integration/page/ct-integration-list', () => {
             'integration.deleter',
         ]);
 
-        const editMenuItem = wrapper.find('.sw_integration_list__edit-action .ct-context-menu-item');
+        const editMenuItem = wrapper.find('.ct_integration_list__edit-action .ct-context-menu-item');
         expect(editMenuItem.classes()).not.toContain('is--disabled');
 
-        const deleteMenuItem = wrapper.find('.sw_integration_list__delete-action .ct-context-menu-item');
+        const deleteMenuItem = wrapper.find('.ct_integration_list__delete-action .ct-context-menu-item');
         expect(deleteMenuItem.classes()).not.toContain('is--disabled');
     });
 
@@ -366,14 +366,14 @@ describe('module/ct-integration/page/ct-integration-list', () => {
     it('should gate Edit MCP Tools on integration_mcp.editor not integration.editor', async () => {
         const wrapper = await createWrapper(['integration.editor'], [integrationFixture]);
 
-        const mcpMenuItem = wrapper.find('.sw_integration_list__edit-mcp-action .ct-context-menu-item');
+        const mcpMenuItem = wrapper.find('.ct_integration_list__edit-mcp-action .ct-context-menu-item');
         expect(mcpMenuItem.classes()).toContain('is--disabled');
     });
 
     it('should enable Edit MCP Tools with integration_mcp.editor', async () => {
         const wrapper = await createWrapper(['integration_mcp.editor'], [integrationFixture]);
 
-        const mcpMenuItem = wrapper.find('.sw_integration_list__edit-mcp-action .ct-context-menu-item');
+        const mcpMenuItem = wrapper.find('.ct_integration_list__edit-mcp-action .ct-context-menu-item');
         expect(mcpMenuItem.classes()).not.toContain('is--disabled');
     });
 

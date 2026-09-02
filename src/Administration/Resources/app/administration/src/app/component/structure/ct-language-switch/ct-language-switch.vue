@@ -1,20 +1,20 @@
 <template>
-    <ct-block name="sw_language_switch">
+    <ct-block name="ct_language_switch">
         <div class="ct-language-switch">
-            <ct-block name="sw_language_switch_modal">
+            <ct-block name="ct_language_switch_modal">
                 <ct-modal
                     v-if="showUnsavedChangesModal"
                     :title="$t('ct-language-switch.titleModalUnsavedChanges')"
                     variant="small"
                     @modal-close="onCloseChangesModal"
                 >
-                    <ct-block name="sw_language_switch_message">
+                    <ct-block name="ct_language_switch_message">
                         <p>{{ $t('ct-language-switch.messageModalUnsavedChanges') }}</p>
                     </ct-block>
 
                     <template #modal-footer>
-                        <ct-block name="sw_language_switch_footer">
-                            <ct-block name="sw_language_switch_footer_button_close">
+                        <ct-block name="ct_language_switch_footer">
+                            <ct-block name="ct_language_switch_footer_button_close">
                                 <mt-button
                                     id="ct-language-switch-close-button"
                                     size="small"
@@ -25,7 +25,7 @@
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_language_switch_footer_button_revert">
+                            <ct-block name="ct_language_switch_footer_button_revert">
                                 <mt-button
                                     id="ct-language-switch-revert-changes-button"
                                     size="small"
@@ -36,7 +36,7 @@
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_language_switch_footer_button_save">
+                            <ct-block name="ct_language_switch_footer_button_save">
                                 <mt-button
                                     id="ct-language-switch-save-changes-button"
                                     v-tooltip="{
@@ -56,7 +56,7 @@
                     </template>
                 </ct-modal>
             </ct-block>
-            <ct-block name="sw_language_switch_select">
+            <ct-block name="ct_language_switch_select">
                 <ct-entity-single-select
                     id="language"
                     class="ct-language-switch__select"
@@ -206,7 +206,7 @@ onUnmounted(() => {
     destroyedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     languageId,
     lastLanguageId,
     newLanguageId,

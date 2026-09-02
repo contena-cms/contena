@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_member_create">
+    <ct-block name="ct_member_create">
         <ct-page class="ct-member-create">
             <template #smart-bar-header>
-                <ct-block name="sw_member_create_header">
+                <ct-block name="ct_member_create_header">
                     <h2>{{ t('ct-member.detail.textHeadline') }}</h2>
                 </ct-block>
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_member_create_actions">
+                <ct-block name="ct_member_create_actions">
                     <mt-button variant="secondary" :disabled="isLoading || undefined" @click="onCancel">
                         {{ t('global.default.cancel') }}
                     </mt-button>
@@ -26,7 +26,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_member_create_content">
+                <ct-block name="ct_member_create_content">
                     <ct-card-view v-if="member && address">
                         <mt-card
                             position-identifier="ct-member-create-account"
@@ -178,7 +178,7 @@ const saveFinish = (): void => {
 
 void createState();
 
-swDefinePublic({
+ctDefinePublic({
     member,
     address,
     isLoading,

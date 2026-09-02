@@ -37,11 +37,11 @@ function assertNoUnsupportedSyntax(ast: BabelFile, mode: ContenaSetupMode, scrip
     const wrongModeChecks = getWrongModeWalkChecks(mode);
 
     walk(ast.program, (node, ancestors) => {
-        // A nested `swDefinePublic()` / `swDefineOverride()` is deliberately not rejected, matching how
+        // A nested `ctDefinePublic()` / `ctDefineOverride()` is deliberately not rejected, matching how
         // Vue treats its own macros: it only recognises them at the top level and leaves a nested call
         // alone. Either way the marker is missing where it counts, and the required-marker rule says so.
         if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
-            // Wrong-mode helpers such as useSwProps() in base mode are rejected in any position,
+            // Wrong-mode helpers such as useCtProps() in base mode are rejected in any position,
             // because there is no runtime input they could alias.
             const calleeName = node.callee.name;
             const wrongModeCheck = wrongModeChecks.find((check) => check.name === calleeName);

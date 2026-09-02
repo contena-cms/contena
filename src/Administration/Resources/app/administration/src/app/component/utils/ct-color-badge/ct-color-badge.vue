@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_color_badge">
+    <ct-block name="ct_color_badge">
         <span class="ct-color-badge" :class="variantClass" v-bind="$attrs" :style="colorStyle">
             <slot>
-                <ct-block name="sw_color_badfge_slot_default"></ct-block>
+                <ct-block name="ct_color_badfge_slot_default"></ct-block>
             </slot>
         </span>
     </ct-block>
@@ -44,7 +44,7 @@ const variantClass = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     colorStyle,
     variantClass,
 });

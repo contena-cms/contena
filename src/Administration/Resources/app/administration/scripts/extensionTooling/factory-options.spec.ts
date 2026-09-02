@@ -107,11 +107,11 @@ describe('extension-tooling eslint factory host options', () => {
         expect(nativeSetup?.rules?.['ct-core-rules/native-setup-filename']).toBe('error');
         expect(nativeSetup?.globals).toEqual(
             expect.arrayContaining([
-                'swDefinePublic',
-                'swDefineOverride',
-                'useSwPreviousState',
-                'useSwProps',
-                'useSwContext',
+                'ctDefinePublic',
+                'ctDefineOverride',
+                'useCtPreviousState',
+                'useCtProps',
+                'useCtContext',
             ]),
         );
     });

@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_container">
+    <ct-block name="ct_container">
         <div class="ct-container" :style="currentCssGrid">
             <slot>
-                <ct-block name="sw_container_slot_default"></ct-block>
+                <ct-block name="ct_container_slot_default"></ct-block>
             </slot>
         </div>
     </ct-block>
@@ -141,7 +141,7 @@ function buildCssGridProps(currentBreakpoint = {}) {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     currentCssGrid,
     createdComponent,
     registerResizeListener,

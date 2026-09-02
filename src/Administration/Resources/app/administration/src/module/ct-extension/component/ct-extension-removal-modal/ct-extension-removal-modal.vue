@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_extension_removal_modal">
+    <ct-block name="ct_extension_removal_modal">
         <ct-modal class="ct-extension-removal-modal" :title="title" variant="small" @modal-close="emitClose">
             <template #default>
-                <ct-block name="sw_installed_extension_card_removal_content_modal_body">
+                <ct-block name="ct_installed_extension_card_removal_content_modal_body">
                     <p>
                         {{ $t('ct-extension.component.ct-extension-removal-modal.description') }}
                     </p>
@@ -14,14 +14,14 @@
             </template>
 
             <template #modal-footer>
-                <ct-block name="sw_extension_removal_modal_footer">
-                    <ct-block name="sw_extension_removal_modal_footer_cancel">
+                <ct-block name="ct_extension_removal_modal_footer">
+                    <ct-block name="ct_extension_removal_modal_footer_cancel">
                         <mt-button size="small" :disabled="isLoading" variant="secondary" @click="emitClose">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_extension_removal_modal_footer_deactivate">
+                    <ct-block name="ct_extension_removal_modal_footer_deactivate">
                         <mt-button variant="critical" size="small" :is-loading="isLoading" @click="emitRemoval">
                             {{ btnLabel }}
                         </mt-button>
@@ -78,7 +78,7 @@ const emitRemoval = () => {
     emit('remove-extension');
 };
 
-swDefinePublic({
+ctDefinePublic({
     title,
     alert,
     btnLabel,

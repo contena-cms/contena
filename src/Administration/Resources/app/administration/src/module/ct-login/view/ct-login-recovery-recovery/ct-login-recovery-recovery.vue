@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_login_recovery_recovery">
+    <ct-block name="ct_login_recovery_recovery">
         <form class="ct-login-reset" @submit.prevent="updatePassword">
             <template v-if="hashValid === true">
-                <ct-block name="sw_login_recovery_recovery_headline">
+                <ct-block name="ct_login_recovery_recovery_headline">
                     <div class="ct-login-reset__content">
                         <h1 class="ct-login-reset__title">
                             {{ $t('ct-login.reset.title') }}
@@ -14,8 +14,8 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_login_recovery_recovery_form">
-                    <ct-block name="sw_login_recovery_recovery_form_new_password_field">
+                <ct-block name="ct_login_recovery_recovery_form">
+                    <ct-block name="ct_login_recovery_recovery_form_new_password_field">
                         <mt-password-field
                             v-model="newPassword"
                             v-autofocus
@@ -28,7 +28,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_login_recovery_recovery_form_password_confirm_field">
+                    <ct-block name="ct_login_recovery_recovery_form_password_confirm_field">
                         <mt-password-field
                             v-model="newPasswordConfirm"
                             class="ct-login-reset__repeat-password"
@@ -40,7 +40,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_login_recovery_recovery_form_submit">
+                    <ct-block name="ct_login_recovery_recovery_form_submit">
                         <mt-button
                             class="ct-login-reset__reset"
                             type="submit"
@@ -129,7 +129,7 @@ const updatePassword = async () => {
 
 void validateHash();
 
-swDefinePublic({
+ctDefinePublic({
     userRecoveryService,
     newPassword,
     newPasswordConfirm,

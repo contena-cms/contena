@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_category">
+    <ct-block name="ct_category">
         <ct-page class="ct-category" :class="pageClasses">
             <template #search-bar>
-                <ct-block name="sw_category_search_bar">
+                <ct-block name="ct_category_search_bar">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_category_smart_bar_header">
+                <ct-block name="ct_category_smart_bar_header">
                     <h2 v-if="category">
                         {{ placeholder(category, 'name') }}
                     </h2>
@@ -19,7 +19,7 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_category_language_switch">
+                <ct-block name="ct_category_language_switch">
                     <ct-language-switch
                         :save-changes-function="saveOnLanguageChange"
                         :abort-change-function="abortOnLanguageChange"
@@ -31,7 +31,7 @@
 
             <template #smart-bar-actions>
                 <template v-if="category || landingPage">
-                    <ct-block name="sw_category_smart_bar_abort">
+                    <ct-block name="ct_category_smart_bar_abort">
                         <mt-button
                             v-tooltip.bottom="tooltipCancel"
                             :disabled="isLoading"
@@ -43,8 +43,8 @@
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_category_smart_bar_save">
-                        <ct-block name="sw_category_smart_bar_save_category">
+                    <ct-block name="ct_category_smart_bar_save">
+                        <ct-block name="ct_category_smart_bar_save_category">
                             <ct-button-process
                                 v-if="category"
                                 v-tooltip.bottom="tooltipSave"
@@ -60,7 +60,7 @@
                             </ct-button-process>
                         </ct-block>
 
-                        <ct-block name="sw_category_smart_bar_save_landing_page">
+                        <ct-block name="ct_category_smart_bar_save_landing_page">
                             <ct-button-process
                                 v-if="landingPage"
                                 v-tooltip.bottom="landingPageTooltipSave"
@@ -80,14 +80,14 @@
             </template>
 
             <template #side-content>
-                <ct-block name="sw_category_side_content">
-                    <ct-block name="sw_category_collapse">
+                <ct-block name="ct_category_side_content">
+                    <ct-block name="ct_category_collapse">
                         <ct-sidebar-collapse
                             class="ct-category-detail__category-collapse"
                             :expand-on-loading="landingPageId === null"
                         >
                             <template #header>
-                                <ct-block name="sw_category_collapse_header">
+                                <ct-block name="ct_category_collapse_header">
                                     <div v-if="categoryCheckedItem > 0" class="ct-category-detail__collapse-selected-count">
                                         {{ $t(`ct-category.general.treeHeadSelected`, { count: categoryCheckedItem }) }}:
                                     </div>
@@ -98,7 +98,7 @@
                             </template>
 
                             <template #actions>
-                                <ct-block name="sw_category_collapse_actions">
+                                <ct-block name="ct_category_collapse_actions">
                                     <div v-if="categoryCheckedItem > 0">
                                         <mt-button
                                             class="ct-tree-actions__delete_categories"
@@ -113,7 +113,7 @@
                             </template>
 
                             <template #content>
-                                <ct-block name="sw_category_tree">
+                                <ct-block name="ct_category_tree">
                                     <ct-category-tree
                                         ref="categoryTree"
                                         :category-id="categoryId"
@@ -129,13 +129,13 @@
                         </ct-sidebar-collapse>
                     </ct-block>
 
-                    <ct-block name="sw_landing_page_collapse">
+                    <ct-block name="ct_landing_page_collapse">
                         <ct-sidebar-collapse
                             class="ct-category-detail__landing-page-collapse"
                             :expand-on-loading="landingPageId !== null"
                         >
                             <template #header>
-                                <ct-block name="sw_landing_page_collapse_header">
+                                <ct-block name="ct_landing_page_collapse_header">
                                     <div
                                         v-if="landingPageCheckedItem > 0"
                                         class="ct-category-detail__collapse-selected-count"
@@ -153,7 +153,7 @@
                             </template>
 
                             <template #actions>
-                                <ct-block name="sw_landing_page_collapse_actions">
+                                <ct-block name="ct_landing_page_collapse_actions">
                                     <div v-if="landingPageCheckedItem > 0">
                                         <mt-button
                                             class="ct-tree-actions__delete_categories"
@@ -168,7 +168,7 @@
                             </template>
 
                             <template #content>
-                                <ct-block name="sw_landing_page_tree">
+                                <ct-block name="ct_landing_page_tree">
                                     <ct-landing-page-tree
                                         ref="landingPageTree"
                                         :landing-page-id="landingPageId"
@@ -187,14 +187,14 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_category_content">
+                <ct-block name="ct_category_content">
                     <template v-if="isLoading">
                         <ct-skeleton variant="detail-bold" />
                         <ct-skeleton />
                     </template>
 
                     <div v-else class="ct-category__content">
-                        <ct-block name="sw_category_content_view">
+                        <ct-block name="ct_category_content_view">
                             <ct-category-view
                                 v-if="category"
                                 ref="categoryView"
@@ -203,7 +203,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_content_entry_point_overwrite_modal">
+                        <ct-block name="ct_category_content_entry_point_overwrite_modal">
                             <ct-category-entry-point-overwrite-modal
                                 v-if="showEntryPointOverwriteModal"
                                 :channels="entryPointOverwriteChannels"
@@ -212,11 +212,11 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_landing_page_content_view">
+                        <ct-block name="ct_landing_page_content_view">
                             <ct-landing-page-view v-if="landingPage" ref="landingPageView" :is-loading="isLoading" />
                         </ct-block>
 
-                        <ct-block name="sw_category_content_discard_changes_modal">
+                        <ct-block name="ct_category_content_discard_changes_modal">
                             <ct-discard-changes-modal
                                 v-if="isDisplayingLeavePageWarning"
                                 @keep-editing="onLeaveModalClose(nextRoute)"
@@ -224,7 +224,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_content_empty">
+                        <ct-block name="ct_category_content_empty">
                             <mt-empty-state
                                 v-if="showEmptyState"
                                 :centered="true"
@@ -306,8 +306,8 @@ const entryPointOverwriteChannels = ref(null);
 const splitBreakpoint = 1024;
 
 const changesetGenerator = computed(() => new ChangesetGenerator());
-const landingPage = computed(() => Contena.Store.get('swCategoryDetail').landingPage);
-const category = computed(() => Contena.Store.get('swCategoryDetail').category);
+const landingPage = computed(() => Contena.Store.get('ctCategoryDetail').landingPage);
+const category = computed(() => Contena.Store.get('ctCategoryDetail').category);
 const showEmptyState = computed(() => !category.value && !landingPage.value);
 const identifier = computed(() => {
     if (category.value) {
@@ -412,7 +412,7 @@ const loadCustomFieldSet = () => {
     return customFieldSetRepository.value
         .search(customFieldSetCriteria.value)
         .then((customFieldSet) => {
-            Contena.Store.get('swCategoryDetail').customFieldSets = customFieldSet;
+            Contena.Store.get('ctCategoryDetail').customFieldSets = customFieldSet;
         })
         .finally(() => {
             isCustomFieldLoading.value = false;
@@ -424,7 +424,7 @@ const loadLandingPageCustomFieldSet = () => {
     return customFieldSetRepository.value
         .search(customFieldSetLandingPageCriteria.value)
         .then((customFieldSet) => {
-            Contena.Store.get('swCategoryDetail').customFieldSets = customFieldSet;
+            Contena.Store.get('ctCategoryDetail').customFieldSets = customFieldSet;
         })
         .finally(() => {
             isCustomFieldLoading.value = false;
@@ -435,12 +435,12 @@ const setLandingPage = async () => {
 
     try {
         if (props.landingPageId === null) {
-            Contena.Store.get('swCategoryDetail').landingPage = null;
+            Contena.Store.get('ctCategoryDetail').landingPage = null;
             return;
         }
 
-        Contena.Store.get('swCategoryDetail').category = null;
-        await Contena.Store.get('swCategoryDetail').loadActiveLandingPage({
+        Contena.Store.get('ctCategoryDetail').category = null;
+        await Contena.Store.get('ctCategoryDetail').loadActiveLandingPage({
             repository: landingPageRepository.value,
             apiContext: Contena.Context.api,
             id: props.landingPageId,
@@ -460,13 +460,13 @@ const setCategory = () => {
     isLoading.value = true;
 
     if (props.categoryId === null) {
-        Contena.Store.get('swCategoryDetail').category = null;
+        Contena.Store.get('ctCategoryDetail').category = null;
         isLoading.value = false;
         return Promise.resolve();
     }
 
-    Contena.Store.get('swCategoryDetail').landingPage = null;
-    return Contena.Store.get('swCategoryDetail')
+    Contena.Store.get('ctCategoryDetail').landingPage = null;
+    return Contena.Store.get('ctCategoryDetail')
         .loadActiveCategory({
             repository: categoryRepository.value,
             apiContext: Contena.Context.api,
@@ -528,11 +528,11 @@ const saveFinish = () => {
     isSaveSuccessful.value = false;
 };
 const updateSeoUrls = () => {
-    if (!Contena.Store.list().includes('swSeoUrl')) {
+    if (!Contena.Store.list().includes('ctSeoUrl')) {
         return Promise.resolve();
     }
 
-    const seoUrls = Contena.Store.get('swSeoUrl').newOrModifiedUrls;
+    const seoUrls = Contena.Store.get('ctSeoUrl').newOrModifiedUrls;
 
     return Promise.all(
         seoUrls.map((seoUrl) => {
@@ -677,10 +677,10 @@ const onSaveLandingPage = () => {
         });
 };
 const onLandingPageDelete = () => {
-    Contena.Store.get('swCategoryDetail').landingPagesToDelete = null;
+    Contena.Store.get('ctCategoryDetail').landingPagesToDelete = null;
 };
 const onCategoryDelete = () => {
-    Contena.Store.get('swCategoryDetail').categoriesToDelete = null;
+    Contena.Store.get('ctCategoryDetail').categoriesToDelete = null;
 };
 
 watch(
@@ -707,7 +707,7 @@ onMounted(() => {
     void setLandingPage();
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     term,
     isLoading,

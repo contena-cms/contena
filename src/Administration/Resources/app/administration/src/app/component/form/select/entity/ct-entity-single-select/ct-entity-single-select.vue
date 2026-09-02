@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_entity_single_select">
+    <ct-block name="ct_entity_single_select">
         <ct-select-base
             ref="selectBase"
             class="ct-entity-single-select"
@@ -14,8 +14,8 @@
             @select-collapsed="onSelectCollapsed"
         >
             <template #ct-select-selection>
-                <ct-block name="sw_entity_single_select_base_selection">
-                    <ct-block name="sw_entity_single_select_advanced_selection_modal">
+                <ct-block name="ct_entity_single_select_base_selection">
+                    <ct-block name="ct_entity_single_select_advanced_selection_modal">
                         <component
                             :is="advancedSelectionComponent"
                             v-if="isAdvancedSelectionActive && isAdvancedSelectionModalVisible"
@@ -27,10 +27,10 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_entity_single_select_base_selection_slot">
+                    <ct-block name="ct_entity_single_select_base_selection_slot">
                         <div class="ct-entity-single-select__selection">
-                            <ct-block name="sw_entity_single_select_single_selection_inner">
-                                <ct-block name="sw_entity_single_select_single_selection_inner_label">
+                            <ct-block name="ct_entity_single_select_single_selection_inner">
+                                <ct-block name="ct_entity_single_select_single_selection_inner_label">
                                     <div
                                         v-show="!isExpanded"
                                         class="ct-entity-single-select__selection-text"
@@ -49,10 +49,10 @@
                                         </template>
                                     </div>
                                 </ct-block>
-                                <ct-block name="sw_entity_single_select_single_selection_inner_input">
+                                <ct-block name="ct_entity_single_select_single_selection_inner_input">
                                     <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
                                     <input
-                                        ref="swSelectInput"
+                                        ref="ctSelectInput"
                                         v-model="searchTerm"
                                         class="ct-entity-single-select__selection-input"
                                         :class="inputClasses"
@@ -70,21 +70,21 @@
             </template>
 
             <template #results-list>
-                <ct-block name="sw_entity_single_select_base_results">
-                    <ct-block name="sw_entity_single_select_base_results_slot">
+                <ct-block name="ct_entity_single_select_base_results">
+                    <ct-block name="ct_entity_single_select_base_results_slot">
                         <ct-select-result-list
                             ref="resultsList"
                             :options="results"
                             :is-loading="isLoading"
                             :popover-classes="popoverClasses"
                             :empty-message="translate('global.ct-single-select.messageNoResults', { term: searchTerm })"
-                            :focus-el="$refs.swSelectInput"
+                            :focus-el="$refs.ctSelectInput"
                             @paginate="paginate"
                             @item-select="setValue"
                         >
                             <template #before-item-list>
-                                <ct-block name="sw_entity_single_select_base_results_list_before">
-                                    <ct-block name="sw_entity_single_select_base_results_list_before_advanced_selection">
+                                <ct-block name="ct_entity_single_select_base_results_list_before">
+                                    <ct-block name="ct_entity_single_select_base_results_list_before_advanced_selection">
                                         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
                                         <div
                                             v-if="isAdvancedSelectionActive"
@@ -95,14 +95,14 @@
                                         </div>
                                     </ct-block>
 
-                                    <ct-block name="sw_entity_single_select_base_results_list_before_slot">
+                                    <ct-block name="ct_entity_single_select_base_results_list_before_slot">
                                         <slot name="before-item-list"></slot>
                                     </ct-block>
                                 </ct-block>
                             </template>
 
                             <template #result-item="{ item, index }">
-                                <ct-block name="sw_entity_single_select_base_results_list_result">
+                                <ct-block name="ct_entity_single_select_base_results_list_result">
                                     <slot
                                         name="result-item"
                                         v-bind="{
@@ -125,8 +125,8 @@
                                             @item-select="setValue"
                                         >
                                             <template v-if="shouldShowActiveState" #preview>
-                                                <ct-block name="sw_entity_multi_select_base_results_list_result_preview">
-                                                    <ct-block name="sw_entity_multi_select_base_results_list_result_active">
+                                                <ct-block name="ct_entity_multi_select_base_results_list_result_preview">
+                                                    <ct-block name="ct_entity_multi_select_base_results_list_result_active">
                                                         <mt-icon
                                                             class="ct-entity-single-select__selection-active"
                                                             size="6"
@@ -137,7 +137,7 @@
                                                 </ct-block>
                                             </template>
 
-                                            <ct-block name="sw_entity_single_select_base_results_list_result_label">
+                                            <ct-block name="ct_entity_single_select_base_results_list_result_label">
                                                 <slot
                                                     name="result-label-property"
                                                     v-bind="{
@@ -160,7 +160,7 @@
                                                 </slot>
                                             </ct-block>
                                             <template #description>
-                                                <ct-block name="sw_entity_multi_select_base_results_list_result_description">
+                                                <ct-block name="ct_entity_multi_select_base_results_list_result_description">
                                                     <slot
                                                         name="result-description-property"
                                                         v-bind="{ item, searchTerm, highlightSearchTerm }"
@@ -173,7 +173,7 @@
                             </template>
 
                             <template #after-item-list>
-                                <ct-block name="sw_entity_single_select_base_results_list_after">
+                                <ct-block name="ct_entity_single_select_base_results_list_after">
                                     <slot name="after-item-list"></slot>
                                 </ct-block>
                             </template>
@@ -358,7 +358,7 @@ const { t } = useI18n();
 const { createNotificationSuccess, createNotificationError } = useNotification();
 
 const translate = t;
-const swSelectInput = ref(null);
+const ctSelectInput = ref(null);
 const selectBase = ref(null);
 const resultsList = ref(null);
 
@@ -593,8 +593,8 @@ const onSelectExpanded = () => {
     searchTerm.value = tryGetSearchText(singleSelection.value);
 
     void nextTick(() => {
-        swSelectInput.value.select();
-        swSelectInput.value.focus();
+        ctSelectInput.value.select();
+        ctSelectInput.value.focus();
     });
 };
 function tryGetSearchText(option) {
@@ -614,7 +614,7 @@ const onSelectCollapsed = () => {
     if (searchTerm.value === '' && !itemRecentlySelected.value) {
         clearSelection();
     }
-    swSelectInput.value.blur();
+    ctSelectInput.value.blur();
     searchTerm.value = '';
     itemRecentlySelected.value = false;
     isExpanded.value = false;
@@ -769,7 +769,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     searchTerm,
     isExpanded,

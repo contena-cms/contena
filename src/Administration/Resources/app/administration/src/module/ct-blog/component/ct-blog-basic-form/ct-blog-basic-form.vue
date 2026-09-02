@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_blog_basic_form">
+    <ct-block name="ct_blog_basic_form">
         <div class="ct-blog-basic-form">
-            <ct-block name="sw_blog_basic_form_title">
+            <ct-block name="ct_blog_basic_form_title">
                 <mt-text-field
                     v-model="blog.name"
                     name="ct-field--blog-name"
@@ -13,7 +13,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_basic_form_description">
+            <ct-block name="ct_blog_basic_form_description">
                 <mt-text-editor
                     v-model="blog.description"
                     sanitize-input
@@ -25,7 +25,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_basic_form_publication">
+            <ct-block name="ct_blog_basic_form_publication">
                 <ct-container columns="1fr 1fr" gap="0 var(--scale-size-30)">
                     <mt-switch
                         v-model="blog.active"
@@ -63,7 +63,7 @@ const { t } = useI18n();
 const { placeholder } = usePlaceholder();
 const $t = t;
 
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const getApiError = (property: string) => {
     const entity = blog.value;
 
@@ -78,7 +78,7 @@ const blogDescriptionError = computed(() => getApiError('description'));
 const blogActiveError = computed(() => getApiError('active'));
 const isTitleRequired = computed(() => Contena.Store.get('context').isSystemDefaultLanguage);
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     blogNameError,
     blogDescriptionError,

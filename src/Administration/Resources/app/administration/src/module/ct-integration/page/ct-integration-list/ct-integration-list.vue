@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_integration_list">
+    <ct-block name="ct_integration_list">
         <ct-page class="ct-integration-list">
             <template #search-bar>
-                <ct-block name="sw_integration_list_search_bar">
+                <ct-block name="ct_integration_list_search_bar">
                     <mt-search
                         :model-value="term"
                         :placeholder="translate('ct-integration.general.placeholderSearchBar')"
@@ -12,10 +12,10 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_integration_list_smart_bar_header">
-                    <ct-block name="sw_integration_list_smart_bar_header_title">
+                <ct-block name="ct_integration_list_smart_bar_header">
+                    <ct-block name="ct_integration_list_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_integration_list_smart_bar_header_title_text">
+                            <ct-block name="ct_integration_list_smart_bar_header_title_text">
                                 <span>{{ translate('ct-settings.index.title') }}</span>
 
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -30,7 +30,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_integration_list_smart_bar_actions">
+                <ct-block name="ct_integration_list_smart_bar_actions">
                     <mt-button
                         v-tooltip.bottom="{
                             message: translate('ct-privileges.tooltip.warning'),
@@ -49,16 +49,16 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_integration_list_content">
+                <ct-block name="ct_integration_list_content">
                     <ct-card-view class="ct-integration-list__content">
-                        <ct-block name="sw_integration_list_overview">
+                        <ct-block name="ct_integration_list_overview">
                             <mt-card
                                 class="ct-integration-list__overview"
                                 position-identifier="ct-integration-list-overview"
                                 :is-loading="isLoading"
                             >
-                                <ct-block name="sw_integration_list_overview_inner">
-                                    <ct-block name="sw_integration_list_detail_modal">
+                                <ct-block name="ct_integration_list_overview_inner">
+                                    <ct-block name="ct_integration_list_detail_modal">
                                         <ct-modal
                                             v-if="currentIntegration"
                                             size="650px"
@@ -73,8 +73,8 @@
                                             "
                                             @modal-close="onCloseDetailModal"
                                         >
-                                            <ct-block name="sw_integration_list_detail_modal_inner">
-                                                <ct-block name="sw_integration_list_detail_modal_inner_field_label">
+                                            <ct-block name="ct_integration_list_detail_modal_inner">
+                                                <ct-block name="ct_integration_list_detail_modal_inner_field_label">
                                                     <ct-container columns="2fr 1fr" gap="24px">
                                                         <mt-text-field
                                                             v-model="currentIntegration.label"
@@ -83,7 +83,7 @@
                                                             :disabled="!acl.can('integration.editor')"
                                                         />
 
-                                                        <ct-block name="sw_integration_list_detail_modal_inner_acl_is_admin">
+                                                        <ct-block name="ct_integration_list_detail_modal_inner_acl_is_admin">
                                                             <mt-switch
                                                                 v-model="currentIntegration.admin"
                                                                 name="ct-field--currentIntegration-admin"
@@ -96,7 +96,7 @@
                                                     </ct-container>
                                                 </ct-block>
 
-                                                <ct-block name="sw_integration_list_detail_modal_inner_acl_roles">
+                                                <ct-block name="ct_integration_list_detail_modal_inner_acl_roles">
                                                     <ct-entity-multi-select
                                                         v-model:entity-collection="currentIntegration.aclRoles"
                                                         v-tooltip="{
@@ -117,7 +117,7 @@
                                                     />
                                                 </ct-block>
 
-                                                <ct-block name="sw_integration_list_detail_modal_inner_field_accesskey">
+                                                <ct-block name="ct_integration_list_detail_modal_inner_field_accesskey">
                                                     <mt-text-field
                                                         v-model="currentIntegration.accessKey"
                                                         name="ct-field--currentIntegration-accessKey"
@@ -129,7 +129,7 @@
                                                 </ct-block>
 
                                                 <ct-block
-                                                    name="sw_integration_list_detail_modal_inner_field_secretaccesskey"
+                                                    name="ct_integration_list_detail_modal_inner_field_secretaccesskey"
                                                 >
                                                     <template v-if="showSecretAccessKey">
                                                         <mt-text-field
@@ -165,7 +165,7 @@
                                                         {{ translate('ct-integration.detail.buttonCreateNewApiKeys') }}
                                                     </mt-button>
 
-                                                    <ct-block name="sw_integration_list_detail_modal_inner_field_helpText">
+                                                    <ct-block name="ct_integration_list_detail_modal_inner_field_helpText">
                                                         <div
                                                             v-if="!showSecretAccessKey"
                                                             class="ct-integration-list__help-text"
@@ -175,7 +175,7 @@
                                                     </ct-block>
                                                 </ct-block>
 
-                                                <ct-block name="sw_integration_list_detail_modal_inner_helptext">
+                                                <ct-block name="ct_integration_list_detail_modal_inner_helptext">
                                                     <mt-banner
                                                         v-if="showSecretAccessKey"
                                                         variant="attention"
@@ -187,8 +187,8 @@
                                             </ct-block>
 
                                             <template #modal-footer>
-                                                <ct-block name="sw_integration_list_detail_modal_inner_footer">
-                                                    <ct-block name="sw_integration_list_detail_modal_inner_footer_cancel">
+                                                <ct-block name="ct_integration_list_detail_modal_inner_footer">
+                                                    <ct-block name="ct_integration_list_detail_modal_inner_footer_cancel">
                                                         <mt-button
                                                             size="small"
                                                             :disabled="isModalLoading"
@@ -199,7 +199,7 @@
                                                         </mt-button>
                                                     </ct-block>
 
-                                                    <ct-block name="sw_integration_list_detail_modal_inner_footer_apply">
+                                                    <ct-block name="ct_integration_list_detail_modal_inner_footer_apply">
                                                         <mt-button
                                                             size="small"
                                                             class="ct-integration-detail-modal__save-action"
@@ -222,14 +222,14 @@
                                         </ct-modal>
                                     </ct-block>
 
-                                    <ct-block name="sw_integration_list_mcp_modal">
+                                    <ct-block name="ct_integration_list_mcp_modal">
                                         <ct-modal
                                             v-if="mcpIntegration"
                                             class="ct-integration-list__mcp-modal"
                                             :title="translate('ct-integration.mcp.modalTitle') + ': ' + mcpIntegration.label"
                                             @modal-close="onCloseMcpModal"
                                         >
-                                            <ct-block name="sw_integration_list_mcp_modal_allowlist">
+                                            <ct-block name="ct_integration_list_mcp_modal_allowlist">
                                                 <ct-integration-mcp-allowlist
                                                     :allowlist="pendingMcpAllowlist"
                                                     :is-admin="mcpIntegration.admin"
@@ -240,7 +240,7 @@
                                             </ct-block>
 
                                             <template #modal-footer>
-                                                <ct-block name="sw_integration_list_mcp_modal_footer">
+                                                <ct-block name="ct_integration_list_mcp_modal_footer">
                                                     <mt-button size="small" variant="secondary" @click="onCloseMcpModal">
                                                         {{ translate('global.default.cancel') }}
                                                     </mt-button>
@@ -258,7 +258,7 @@
                                         </ct-modal>
                                     </ct-block>
 
-                                    <ct-block name="sw_integration_list_grid">
+                                    <ct-block name="ct_integration_list_grid">
                                         <ct-entity-listing
                                             v-if="integrations && integrations.length > 0"
                                             class="ct-integration-list__grid"
@@ -275,7 +275,7 @@
                                             :is-loading="isLoading"
                                         >
                                             <template #column-label="{ item }">
-                                                <ct-block name="sw_integration_list_grid_inner_slot_columns_label">
+                                                <ct-block name="ct_integration_list_grid_inner_slot_columns_label">
                                                     <span class="ct-integration-list__app-icon">
                                                         <mt-icon name="regular-share" size="12px" />
                                                     </span>
@@ -287,7 +287,7 @@
                                             </template>
 
                                             <template #column-writeAccess="{ item }">
-                                                <ct-block name="sw_integration_list_grid_inner_slot_columns_writeAccess">
+                                                <ct-block name="ct_integration_list_grid_inner_slot_columns_writeAccess">
                                                     <mt-badge v-if="item.admin" variant="attention">
                                                         {{ translate('ct-users.user-detail.labelAdministrator') }}
                                                     </mt-badge>
@@ -301,9 +301,9 @@
                                             </template>
 
                                             <template #actions="{ item }">
-                                                <ct-block name="sw_integration_list_grid_inner_slot_columns_actions_edit">
+                                                <ct-block name="ct_integration_list_grid_inner_slot_columns_actions_edit">
                                                     <ct-context-menu-item
-                                                        class="sw_integration_list__edit-action"
+                                                        class="ct_integration_list__edit-action"
                                                         :disabled="!acl.can('integration.editor')"
                                                         @click="onShowDetailModal(item)"
                                                     >
@@ -312,10 +312,10 @@
                                                 </ct-block>
 
                                                 <ct-block
-                                                    name="sw_integration_list_grid_inner_slot_columns_actions_edit_mcp"
+                                                    name="ct_integration_list_grid_inner_slot_columns_actions_edit_mcp"
                                                 >
                                                     <ct-context-menu-item
-                                                        class="sw_integration_list__edit-mcp-action"
+                                                        class="ct_integration_list__edit-mcp-action"
                                                         :disabled="!acl.can('integration_mcp.editor')"
                                                         @click="onShowMcpModal(item)"
                                                     >
@@ -323,9 +323,9 @@
                                                     </ct-context-menu-item>
                                                 </ct-block>
 
-                                                <ct-block name="sw_integration_list_grid_inner_slot_columns_actions_delete">
+                                                <ct-block name="ct_integration_list_grid_inner_slot_columns_actions_delete">
                                                     <ct-context-menu-item
-                                                        class="sw_integration_list__delete-action"
+                                                        class="ct_integration_list__delete-action"
                                                         variant="danger"
                                                         :disabled="!acl.can('integration.deleter')"
                                                         @click="showDeleteModal = item.id"
@@ -336,14 +336,14 @@
                                             </template>
 
                                             <template #action-modals="{ item }">
-                                                <ct-block name="sw_integration_list_grid_inner_slot_delete_modal">
+                                                <ct-block name="ct_integration_list_grid_inner_slot_delete_modal">
                                                     <ct-modal
                                                         v-if="showDeleteModal === item.id"
                                                         :title="translate('global.default.delete')"
                                                         @modal-close="onCloseDeleteModal"
                                                     >
                                                         <ct-block
-                                                            name="sw_integration_list_grid_inner_slot_delete_modal_confirmtext"
+                                                            name="ct_integration_list_grid_inner_slot_delete_modal_confirmtext"
                                                         >
                                                             <p>
                                                                 {{ translate('ct-integration.detail.confirmDelete') }}
@@ -353,7 +353,7 @@
 
                                                         <template #modal-footer>
                                                             <ct-block
-                                                                name="sw_integration_list_grid_inner_slot_delete_modal_footer"
+                                                                name="ct_integration_list_grid_inner_slot_delete_modal_footer"
                                                             >
                                                                 <mt-button
                                                                     size="small"
@@ -378,7 +378,7 @@
                                         </ct-entity-listing>
                                     </ct-block>
 
-                                    <ct-block name="sw_integration_list_empty_state">
+                                    <ct-block name="ct_integration_list_empty_state">
                                         <template v-if="integrations && integrations.length > 0"
                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                                         >
@@ -654,7 +654,7 @@ const onConfirmDelete = (id) => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     integrationService,
     repositoryFactory,
     acl,

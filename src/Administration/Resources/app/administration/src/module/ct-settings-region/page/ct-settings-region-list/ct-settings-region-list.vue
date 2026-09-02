@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_settings_region_list">
+    <ct-block name="ct_settings_region_list">
         <ct-page class="ct-settings-region-list">
             <template #search-bar>
-                <ct-block name="sw_settings_region_list_search_bar">
+                <ct-block name="ct_settings_region_list_search_bar">
                     <mt-search
                         :model-value="term"
                         :placeholder="translate('ct-settings-region.list.searchPlaceholder')"
@@ -12,7 +12,7 @@
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_settings_region_list_header">
+                <ct-block name="ct_settings_region_list_header">
                     <h2>
                         {{ translate('ct-settings.index.title') }}
                         <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -22,7 +22,7 @@
             </template>
 
             <template #language-switch>
-                <ct-block name="sw_settings_region_list_context">
+                <ct-block name="ct_settings_region_list_context">
                     <div class="ct-settings-region-list__context">
                         <mt-entity-select
                             v-model="selectedCountryId"
@@ -39,7 +39,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_region_list_actions">
+                <ct-block name="ct_settings_region_list_actions">
                     <mt-button
                         v-tooltip.bottom="createTooltip"
                         class="ct-settings-region-list__add-root-action"
@@ -69,10 +69,10 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_region_list_content">
+                <ct-block name="ct_settings_region_list_content">
                     <ct-card-view>
                         <div class="ct-settings-region-list__workspace">
-                            <ct-block name="sw_settings_region_list_tree_panel">
+                            <ct-block name="ct_settings_region_list_tree_panel">
                                 <mt-card
                                     class="ct-settings-region-list__tree-panel"
                                     position-identifier="ct-settings-region-list-tree"
@@ -110,7 +110,7 @@
                                 </mt-card>
                             </ct-block>
 
-                            <ct-block name="sw_settings_region_list_form_panel">
+                            <ct-block name="ct_settings_region_list_form_panel">
                                 <mt-card
                                     class="ct-settings-region-list__form-panel"
                                     position-identifier="ct-settings-region-list-form"
@@ -397,7 +397,7 @@ void Promise.all([
     loadCustomFieldSets(),
 ]);
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     regionRepository,

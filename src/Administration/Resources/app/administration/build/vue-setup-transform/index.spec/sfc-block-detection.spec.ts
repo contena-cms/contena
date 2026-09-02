@@ -11,7 +11,7 @@ describe('build/vue-setup-transform SFC block detection', () => {
         const source = stripIndent`
             <script setup>
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -25,7 +25,7 @@ describe('build/vue-setup-transform SFC block detection', () => {
         const source = stripIndent`
             <script setup data-example="<script">
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -51,7 +51,7 @@ describe('build/vue-setup-transform SFC block detection', () => {
             const fake = "<script setup>";
             const template = \`<script setup>\${'<script setup>'}\`;
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -92,7 +92,7 @@ describe('build/vue-setup-transform SFC block detection', () => {
         const source = stripIndent`
             <script setup>
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
@@ -148,7 +148,7 @@ describe('build/vue-setup-transform SFC block detection', () => {
             </script>
             <script setup>
             const count = 1;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 

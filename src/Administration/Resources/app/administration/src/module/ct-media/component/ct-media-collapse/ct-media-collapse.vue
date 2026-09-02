@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_collapse_panel">
+    <ct-block name="ct_collapse_panel">
         <div class="ct-collapse ct-media-collapse">
-            <ct-block name="sw_collapse_panel_header">
+            <ct-block name="ct_collapse_panel_header">
                 <div
                     class="ct-collapse__header"
                     role="button"
@@ -10,13 +10,13 @@
                     @keydown.enter="collapseItem"
                 >
                     <slot name="header" v-bind="{ expanded }">
-                        <ct-block name="sw_collapse_panel_header_slot">
+                        <ct-block name="ct_collapse_panel_header_slot">
                             <div class="ct-media-collapse__header">
-                                <ct-block name="sw_media_collapse_title">
+                                <ct-block name="ct_media_collapse_title">
                                     <h4 class="ct-media-collapse__title">{{ title }}</h4>
                                 </ct-block>
 
-                                <ct-block name="sw_media_collapse_buttons">
+                                <ct-block name="ct_media_collapse_buttons">
                                     <div class="ct-media-collapse__indicator">
                                         <mt-icon
                                             name="regular-chevron-right-xs"
@@ -38,10 +38,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_collapse_panel_content">
+            <ct-block name="ct_collapse_panel_content">
                 <div v-if="expanded" class="ct-collapse__content">
                     <slot name="content">
-                        <ct-block name="sw_collapse_panel_content_slot"></ct-block>
+                        <ct-block name="ct_collapse_panel_content_slot"></ct-block>
                     </slot>
                 </div>
             </ct-block>
@@ -73,7 +73,7 @@ const collapseItem = (): void => {
     expanded.value = !expanded.value;
 };
 
-swDefinePublic({
+ctDefinePublic({
     expanded,
     expandButtonClass,
     collapseButtonClass,

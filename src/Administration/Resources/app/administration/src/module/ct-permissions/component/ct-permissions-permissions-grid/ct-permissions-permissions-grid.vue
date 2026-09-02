@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_permissions_permissions_grid">
+    <ct-block name="ct_permissions_permissions_grid">
         <mt-card
             class="ct-permissions-permissions-grid"
             position-identifier="ct-permissions-permissions-grid"
@@ -7,25 +7,25 @@
             :title="$t('ct-permissions.roles.grid.title')"
         >
             <div v-if="role" class="ct-permissions-permissions-grid__grid">
-                <ct-block name="sw_permissions_permissions_grid_header">
+                <ct-block name="ct_permissions_permissions_grid_header">
                     <div class="ct-permissions-permissions-grid__entry ct-permissions-permissions-grid__entry-header">
-                        <ct-block name="sw_permissions_permissions_grid_header_title">
+                        <ct-block name="ct_permissions_permissions_grid_header_title">
                             <div class="ct-permissions-permissions-grid__title">
-                                <ct-block name="sw_permissions_permissions_grid_header_title_content"> </ct-block>
+                                <ct-block name="ct_permissions_permissions_grid_header_title_content"> </ct-block>
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_permissions_grid_header_roles">
+                        <ct-block name="ct_permissions_permissions_grid_header_roles">
                             <div v-for="role in roles" :key="role" class="ct-permissions-permissions-grid__checkbox-wrapper">
-                                <ct-block name="sw_permissions_permissions_grid_header_roles_name">
+                                <ct-block name="ct_permissions_permissions_grid_header_roles_name">
                                     {{ $t('ct-privileges.roles.' + role) }}
                                 </ct-block>
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_permissions_grid_header_all_roles">
+                        <ct-block name="ct_permissions_permissions_grid_header_all_roles">
                             <div class="ct-permissions-permissions-grid__all">
-                                <ct-block name="sw_permissions_permissions_grid_header_all_roles_name">
+                                <ct-block name="ct_permissions_permissions_grid_header_all_roles_name">
                                     {{ $t('ct-privileges.roles.all') }}
                                 </ct-block>
                             </div>
@@ -33,29 +33,29 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_permissions_permissions_grid_permissions">
+                <ct-block name="ct_permissions_permissions_grid_permissions">
                     <template v-for="permission in permissionsWithParents" :key="permission.value">
                         <div
                             v-if="permission.type === 'parent'"
                             :class="'ct-permissions-permissions-grid__parent_' + permission.value"
                             class="ct-permissions-permissions-grid__entry ct-permissions-permissions-grid__parent"
                         >
-                            <ct-block name="sw_permissions_permissions_grid_parent_title">
+                            <ct-block name="ct_permissions_permissions_grid_parent_title">
                                 <div class="ct-permissions-permissions-grid__title">
-                                    <ct-block name="sw_permissions_permissions_grid_parent_title_content">
+                                    <ct-block name="ct_permissions_permissions_grid_parent_title_content">
                                         {{ $t('ct-privileges.permissions.parents.' + (permission.value || 'other')) }}
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_permissions_permissions_grid_parent_roles">
+                            <ct-block name="ct_permissions_permissions_grid_parent_roles">
                                 <div
                                     v-for="role in roles"
                                     :key="`${permission.value}-${role}`"
                                     :class="'ct-permissions-permissions-grid__role_' + role"
                                     class="ct-permissions-permissions-grid__checkbox-wrapper"
                                 >
-                                    <ct-block name="sw_permissions_permissions_grid_parent_roles_field">
+                                    <ct-block name="ct_permissions_permissions_grid_parent_roles_field">
                                         <mt-checkbox
                                             v-if="parentRoleHasChildRoles(permission.value, role)"
                                             v-tooltip="{
@@ -71,9 +71,9 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_permissions_permissions_grid_parent_all_roles">
+                            <ct-block name="ct_permissions_permissions_grid_parent_all_roles">
                                 <div class="ct-permissions-permissions-grid__all ct-permissions-permissions-grid__role_all">
-                                    <ct-block name="sw_permissions_permissions_grid_parent_all_roles_field">
+                                    <ct-block name="ct_permissions_permissions_grid_parent_all_roles_field">
                                         <mt-checkbox
                                             v-tooltip="{
                                                 message: parentAllTooltip(permission.value),
@@ -98,15 +98,15 @@
                             ]"
                             class="ct-permissions-permissions-grid__entry"
                         >
-                            <ct-block name="sw_permissions_permissions_grid_permissions_title">
+                            <ct-block name="ct_permissions_permissions_grid_permissions_title">
                                 <div class="ct-permissions-permissions-grid__title">
-                                    <ct-block name="sw_permissions_permissions_grid_permissions_title_content">
+                                    <ct-block name="ct_permissions_permissions_grid_permissions_title_content">
                                         {{ $t('ct-privileges.permissions.' + permission.key + '.label') }}
                                     </ct-block>
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_permissions_permissions_grid_permissions_roles">
+                            <ct-block name="ct_permissions_permissions_grid_permissions_roles">
                                 <div
                                     v-for="role in roles"
                                     :key="`else-${permission.key}${role}`"
@@ -114,7 +114,7 @@
                                     :data-privilege="privilegeTooltip(permission.key, role)"
                                     class="ct-permissions-permissions-grid__checkbox-wrapper"
                                 >
-                                    <ct-block name="sw_permissions_permissions_grid_permissions_roles_field">
+                                    <ct-block name="ct_permissions_permissions_grid_permissions_roles_field">
                                         <mt-checkbox
                                             v-if="permission.roles[role]"
                                             v-tooltip="{
@@ -132,9 +132,9 @@
                                 </div>
                             </ct-block>
 
-                            <ct-block name="sw_permissions_permissions_grid_permissions_all_roles">
+                            <ct-block name="ct_permissions_permissions_grid_permissions_all_roles">
                                 <div class="ct-permissions-permissions-grid__all ct-permissions-permissions-grid__role_all">
-                                    <ct-block name="sw_permissions_permissions_grid_permissions_all_roles_field">
+                                    <ct-block name="ct_permissions_permissions_grid_permissions_all_roles_field">
                                         <mt-checkbox
                                             v-if="Object.keys(permission.roles).length > 0"
                                             v-tooltip="{
@@ -457,7 +457,7 @@ const parentRoleHasChildRoles = (parentKey, roleKey) => {
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     privileges,
     permissionsWithParents,
     permissions,

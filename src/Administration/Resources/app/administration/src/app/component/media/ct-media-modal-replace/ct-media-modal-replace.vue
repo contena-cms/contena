@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_media_modal_replace">
+    <ct-block name="ct_media_modal_replace">
         <ct-modal
             class="ct-media-modal-replace"
             size="420px"
@@ -20,14 +20,14 @@
             </mt-banner>
 
             <template #modal-footer>
-                <ct-block name="sw_media_modal_replace_modal_footer">
-                    <ct-block name="sw_media_modal_replace_cancel_button">
+                <ct-block name="ct_media_modal_replace_modal_footer">
+                    <ct-block name="ct_media_modal_replace_cancel_button">
                         <mt-button size="small" variant="secondary" @click="emitCloseReplaceModal">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_replace_replace_button">
+                    <ct-block name="ct_media_modal_replace_replace_button">
                         <mt-button
                             class="ct-media-replace__replace-media-action"
                             size="small"
@@ -149,7 +149,7 @@ async function runPresignedReplace(fileHandle) {
     });
 }
 
-swDefinePublic({
+ctDefinePublic({
     mediaService,
     mediaPresignedUploadService,
     repositoryFactory,

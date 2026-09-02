@@ -33,7 +33,7 @@ ruleTester.run('valid-contena-setup', rule, {
             filename: 'base.vue',
             code: `<script setup>
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -41,7 +41,7 @@ swDefinePublic({ count });
             code: `<script setup lang="ts">
 const props = defineProps<{ initialCount?: number }>();
 const count = props.initialCount ?? 0;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -49,7 +49,7 @@ swDefinePublic({ count });
             code: `<script setup>
 defineProps();
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<{ initialCount?: number }>(), {
     initialCount: 1,
 });
 const count = props.initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -71,7 +71,7 @@ const props = withDefaults(defineProps<{ initialCount?: number }>(), {
     initialCount: defaultCount,
 });
 const count = props.initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -79,7 +79,7 @@ swDefinePublic({ count });
             code: `<script setup lang="ts">
 const emit = defineEmits<{ save: [id: string] }>();
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -88,7 +88,7 @@ swDefinePublic({ count });
 function focus() {}
 defineExpose({ focus });
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -96,7 +96,7 @@ swDefinePublic({ count });
             code: `<script setup lang="ts">
 const slots = defineSlots<{ default(props: { count: number }): unknown }>();
 const count = slots.default ? 1 : 0;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -104,7 +104,7 @@ swDefinePublic({ count });
             code: `<script setup>
 defineOptions({ inheritAttrs: false });
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -114,15 +114,15 @@ import { inheritAttrs } from './options';
 
 defineOptions({ inheritAttrs });
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
             filename: 'ct-my-component.override.vue',
             code: `<script setup lang="ts">
-const previousState = useSwPreviousState();
+const previousState = useCtPreviousState();
 const doubled: number = previousState.count.value * 2;
-swDefineOverride({ doubled });
+ctDefineOverride({ doubled });
 </script>`,
         },
 
@@ -137,7 +137,7 @@ swDefineOverride({ doubled });
             code: `<script setup lang="ts">
 const { initialCount = 0 } = defineProps<{ initialCount?: number }>();
 const count = initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -147,7 +147,7 @@ const { initialCount = 0 } = withDefaults(defineProps<{ initialCount?: number }>
     initialCount: 3,
 });
 const count = initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         // Macro arguments reading a local: Vue lifts macro arguments into the options object and hoists a
@@ -161,7 +161,7 @@ const props = withDefaults(defineProps<{ initialCount?: number }>(), {
     initialCount: defaultCount,
 });
 const count = props.initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -174,7 +174,7 @@ const props = defineProps({
     },
 });
 const count = props.initialCount;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -183,7 +183,7 @@ swDefinePublic({ count });
 const events = ['save'];
 const emit = defineEmits(events);
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
         {
@@ -194,7 +194,7 @@ defineOptions({
     inheritAttrs,
 });
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
         },
     ],
@@ -204,7 +204,7 @@ swDefinePublic({ count });
             filename: 'override-props.override.vue',
             code: `<script setup>
 const props = defineProps();
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -218,7 +218,7 @@ swDefineOverride({});
 const props = withDefaults(defineProps<{ label?: string }>(), {
     label: 'fallback',
 });
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -230,7 +230,7 @@ swDefineOverride({});
             filename: 'override-emits.override.vue',
             code: `<script setup>
 const emit = defineEmits(['save']);
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -242,7 +242,7 @@ swDefineOverride({});
             filename: 'override-expose.override.vue',
             code: `<script setup>
 defineExpose({});
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -254,7 +254,7 @@ swDefineOverride({});
             filename: 'override-slots.override.vue',
             code: `<script setup>
 const slots = defineSlots();
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -266,7 +266,7 @@ swDefineOverride({});
             filename: 'override-options.override.vue',
             code: `<script setup>
 defineOptions({ inheritAttrs: false });
-swDefineOverride({});
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
@@ -279,12 +279,12 @@ swDefineOverride({});
             // Also pins the loc math: a full-range error underlines the whole offending property.
             code: `<script setup>
 const count = 1;
-swDefinePublic({ [dynamicKey]: count });
+ctDefinePublic({ [dynamicKey]: count });
 </script>`,
             errors: [
                 {
                     message:
-                        "swDefinePublic() only supports shorthand bindings such as { a, b }. Renaming and string or computed keys (for example { a: b } or { 'a': b }) are not supported.",
+                        "ctDefinePublic() only supports shorthand bindings such as { a, b }. Renaming and string or computed keys (for example { a: b } or { 'a': b }) are not supported.",
                     line: 3,
                     column: 18,
                     endLine: 3,
@@ -296,15 +296,15 @@ swDefinePublic({ [dynamicKey]: count });
             filename: 'override-public.override.vue',
             code: `<script setup>
 const count = 1;
-swDefinePublic({ count });
-swDefineOverride({ count });
+ctDefinePublic({ count });
+ctDefineOverride({ count });
 </script>`,
             errors: [
                 {
                     message:
-                        'swDefinePublic() is a Contena setup compile-time macro for base components. ' +
+                        'ctDefinePublic() is a Contena setup compile-time macro for base components. ' +
                         'It declares which setup bindings are public and may be replaced by overrides. ' +
-                        'Override components must use swDefineOverride() to declare replacement bindings instead.',
+                        'Override components must use ctDefineOverride() to declare replacement bindings instead.',
                 },
             ],
         },
@@ -312,42 +312,42 @@ swDefineOverride({ count });
             filename: 'base-override.vue',
             code: `<script setup>
 const count = 1;
-swDefineOverride({ count });
+ctDefineOverride({ count });
 </script>`,
             errors: [
                 {
                     message:
-                        'swDefineOverride() is a Contena setup compile-time macro for override components. ' +
+                        'ctDefineOverride() is a Contena setup compile-time macro for override components. ' +
                         'It declares which base component bindings this override replaces. ' +
-                        'Base components must use swDefinePublic() to expose overrideable setup bindings instead.',
+                        'Base components must use ctDefinePublic() to expose overrideable setup bindings instead.',
                 },
             ],
         },
         {
             filename: 'reserved-override-private-variable.override.vue',
             code: `<script setup>
-const __swOverride = {};
-swDefineOverride({});
+const __ctOverride = {};
+ctDefineOverride({});
 </script>`,
             errors: [
                 {
                     message:
-                        '"__swOverride" is reserved for Contena override-private state and must not be declared or imported.',
+                        '"__ctOverride" is reserved for Contena override-private state and must not be declared or imported.',
                 },
             ],
         },
         {
             filename: 'reserved-override-private-import.vue',
             code: `<script setup>
-import { __swOverride } from './state';
+import { __ctOverride } from './state';
 
 const count = 1;
-swDefinePublic({ count });
+ctDefinePublic({ count });
 </script>`,
             errors: [
                 {
                     message:
-                        '"__swOverride" is reserved for Contena override-private state and must not be declared or imported.',
+                        '"__ctOverride" is reserved for Contena override-private state and must not be declared or imported.',
                 },
             ],
         },

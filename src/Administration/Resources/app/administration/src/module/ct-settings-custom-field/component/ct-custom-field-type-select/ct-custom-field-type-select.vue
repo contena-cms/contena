@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_custom_field_type_base">
+    <ct-block name="ct_custom_field_type_base">
         <div class="ct-custom-field-type-base">
-            <ct-block name="sw_custom_field_type_base_content">
-                <ct-block name="sw_custom_field_type_base_labels">
+            <ct-block name="ct_custom_field_type_base_content">
+                <ct-block name="ct_custom_field_type_base_labels">
                     <ct-custom-field-translated-labels
                         v-model:config="currentCustomField.config"
                         :disabled="!acl.can('custom_field.editor')"
@@ -11,7 +11,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_select_multi">
+                <ct-block name="ct_custom_field_type_select_multi">
                     <mt-switch
                         v-model="multiSelectSwitch"
                         class="ct-custom-field-detail__switch"
@@ -21,15 +21,15 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_select_options">
+                <ct-block name="ct_custom_field_type_select_options">
                     <div v-for="(option, index) in currentCustomField.config.options" :key="index">
-                        <ct-block name="sw_custom_field_type_select_options_label">
+                        <ct-block name="ct_custom_field_type_select_options_label">
                             <span>
                                 {{ $t('ct-settings-custom-field.customField.detail.labelOption', { count: index + 1 }, 0) }}
                             </span>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_select_options_delete">
+                        <ct-block name="ct_custom_field_type_select_options_delete">
                             <mt-button
                                 class="ct-custom-field-type-select__delete-option-button"
                                 size="small"
@@ -40,16 +40,16 @@
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_type_select_options_container">
+                        <ct-block name="ct_custom_field_type_select_options_container">
                             <div class="ct-custom-field-type-select__option-container">
-                                <ct-block name="sw_custom_field_type_select_options_container_technical_name">
+                                <ct-block name="ct_custom_field_type_select_options_container_technical_name">
                                     <mt-text-field
                                         v-model="option.value"
                                         :label="$t('ct-settings-custom-field.customField.detail.labelTechnicalName')"
                                     />
                                 </ct-block>
 
-                                <ct-block name="sw_custom_field_type_select_options_container_labels">
+                                <ct-block name="ct_custom_field_type_select_options_container_labels">
                                     <div>
                                         <mt-text-field
                                             v-for="locale in locales"
@@ -65,7 +65,7 @@
                     </div>
                 </ct-block>
 
-                <ct-block name="sw_custom_field_type_select_add_option">
+                <ct-block name="ct_custom_field_type_select_add_option">
                     <mt-button
                         v-if="isOptionAddable"
                         size="small"
@@ -169,7 +169,7 @@ function onChangeMultiSelectSwitch(state: boolean): void {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     locales,
     propertyNames,

@@ -45,11 +45,11 @@ const searchTypeServiceTypes = {
 describe('src/app/component/structure/ct-search-bar', () => {
     /** @type Wrapper */
     let wrapper;
-    let swSearchBarComponent;
+    let ctSearchBarComponent;
     let userActivityApiServiceMock;
 
     async function createWrapper(props, searchTypes = searchTypeServiceTypes, privileges = [], customProviders = {}) {
-        swSearchBarComponent = await wrapTestComponent('ct-search-bar');
+        ctSearchBarComponent = await wrapTestComponent('ct-search-bar');
         const defaultProviders = {
             recentlySearchService: {
                 get: () => [],
@@ -60,7 +60,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
             },
         };
 
-        return mount(swSearchBarComponent, {
+        return mount(ctSearchBarComponent, {
             global: {
                 renderStubDefaultSlot: true,
                 stubs: {
@@ -338,7 +338,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     }
 
     beforeAll(async () => {
-        swSearchBarComponent = await wrapTestComponent('ct-search-bar');
+        ctSearchBarComponent = await wrapTestComponent('ct-search-bar');
         const apiService = Contena.Application.getContainer('factory').apiService;
         apiService.register('categoryService', {
             getList: () => {

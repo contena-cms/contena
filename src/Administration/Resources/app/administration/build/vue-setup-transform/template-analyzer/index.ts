@@ -13,15 +13,15 @@ import type { ContenaSetupBlock } from '../utils/contena-setup-block';
 import {
     type ElementNode,
     collectTemplateReferences,
-    getStaticSwBlockExtends,
-    getStaticSwBlockName,
-    isSwBlockExtends,
-    isSwBlockName,
+    getStaticCtBlockExtends,
+    getStaticCtBlockName,
+    isCtBlockExtends,
+    isCtBlockName,
 } from './template-references';
 import {
     assertNoWritesToForwardedBindings,
     assertOverrideTemplateTopLevel,
-    assertSwBlockAttributes,
+    assertCtBlockAttributes,
     findOpeningTagAttributeEnd,
     findOpeningTagNameEnd,
 } from './ct-block-bindings';
@@ -50,11 +50,11 @@ type TemplateAnalysis = {
     dataScopeInsertions: number[];
     slotScopes: OverrideSlotScope[];
     privateBindings: Set<string>;
-    // Static names of the base `<ct-block name="...">` blocks this component owns. Emitted so a later
+    // Static names of the base `<ct-block name="ct_...">` blocks this component owns. Emitted so a later
     // branch can build a block-ownership registry (block name <-> owning component) and reject, at
     // compile time, overrides that extend a block whose owner cannot provide the override-local scope.
     ownedBlockNames: string[];
-    // Static names of the blocks an override `<ct-block extends="...">` extends. The registry's other
+    // Static names of the blocks an override `<ct-block extends="ct_...">` extends. The registry's other
     // half: a later branch cross-checks these against the emitted ownership to fail loudly on a typo'd
     // or non-existent block name (per-file analysis can't see other files, so this is done at build time).
     extendedBlockNames: string[];
@@ -115,11 +115,11 @@ function analyzeOverrideTemplate(block: ContenaSetupBlock, analysis: OverrideSet
 
     forEachTemplateElement(ast.children, (element) => {
         if (element.tag === 'ct-block') {
-            assertSwBlockAttributes(element, 'override', templateOffset);
+            assertCtBlockAttributes(element, 'override', templateOffset);
         }
 
-        if (isSwBlockExtends(element)) {
-            const extendedName = getStaticSwBlockExtends(element);
+        if (isCtBlockExtends(element)) {
+            const extendedName = getStaticCtBlockExtends(element);
 
             if (extendedName !== null) {
                 extendedBlockNames.push(extendedName);
@@ -156,7 +156,7 @@ function analyzeOverrideTemplate(block: ContenaSetupBlock, analysis: OverrideSet
                 privateNames.push(binding.name);
             });
 
-            // Runtime input aliases (useSwPreviousState/useSwProps/useSwContext) are never public
+            // Runtime input aliases (useCtPreviousState/useCtProps/useCtContext) are never public
             // override bindings, but the override template can still reference them, so forward them
             // through the private namespace like any other referenced setup local.
             analysis.runtimeInputAliasNames.forEach((name) => {
@@ -203,11 +203,11 @@ function analyzeBaseTemplate(block: ContenaSetupBlock): TemplateAnalysis {
 
     forEachTemplateElement(ast.children, (element) => {
         if (element.tag === 'ct-block') {
-            assertSwBlockAttributes(element, 'base', template.contentStart);
+            assertCtBlockAttributes(element, 'base', template.contentStart);
         }
 
-        if (isSwBlockName(element)) {
-            const blockName = getStaticSwBlockName(element);
+        if (isCtBlockName(element)) {
+            const blockName = getStaticCtBlockName(element);
 
             if (blockName !== null) {
                 ownedBlockNames.push(blockName);

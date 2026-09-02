@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_category_entry_point_modal">
+    <ct-block name="ct_category_entry_point_modal">
         <mt-modal-root :is-open="true" @change="onModalChange">
             <mt-modal
                 class="ct-category-entry-point-modal"
                 :title="$t('ct-category.base.entry-point-modal.modalTitle')"
                 width="l"
             >
-                <ct-block name="sw_category_entry_point_modal_channel_selection">
+                <ct-block name="ct_category_entry_point_modal_channel_selection">
                     <ct-single-select
                         v-model:value="selectedChannelId"
                         class="ct-category-entry-point-modal__channel-selection"
@@ -15,9 +15,9 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_category_entry_point_modal_selected_channel">
+                <ct-block name="ct_category_entry_point_modal_selected_channel">
                     <template v-if="selectedChannel">
-                        <ct-block name="sw_category_entry_point_modal_selected_channel_show_in_main_navigation">
+                        <ct-block name="ct_category_entry_point_modal_selected_channel_show_in_main_navigation">
                             <mt-switch
                                 v-model="selectedChannel.homeEnabled"
                                 class="ct-category-entry-point-modal__show-in-main-navigation"
@@ -26,7 +26,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_selected_channel_name_in_main_navigation">
+                        <ct-block name="ct_category_entry_point_modal_selected_channel_name_in_main_navigation">
                             <mt-text-field
                                 v-model="selectedChannel.homeName"
                                 class="ct-category-entry-point-modal__name-in-main-navigation"
@@ -40,15 +40,15 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_selected_channel_layout_headline">
+                        <ct-block name="ct_category_entry_point_modal_selected_channel_layout_headline">
                             <h3 class="ct-category-entry-point-modal__layout-headline">
                                 {{ $t('ct-category.base.entry-point-modal.layoutHeadline') }}
                             </h3>
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_layout_selection">
+                        <ct-block name="ct_category_entry_point_modal_layout_selection">
                             <div class="ct-category-entry-point-modal__base-layout">
-                                <ct-block name="sw_category_entry_point_modal_layout_preview">
+                                <ct-block name="ct_category_entry_point_modal_layout_preview">
                                     <button
                                         type="button"
                                         class="ct-category-entry-point-modal__preview"
@@ -61,11 +61,11 @@
                                     </button>
                                 </ct-block>
 
-                                <ct-block name="sw_category_entry_point_modal_layout_desc">
+                                <ct-block name="ct_category_entry_point_modal_layout_desc">
                                     <div class="ct-category-entry-point-modal__desc">
-                                        <ct-block name="sw_category_entry_point_modal_layout_desc_info">
+                                        <ct-block name="ct_category_entry_point_modal_layout_desc_info">
                                             <div class="ct-category-entry-point-modal__desc-info">
-                                                <ct-block name="sw_category_entry_point_modal_layout_desc_info_headline">
+                                                <ct-block name="ct_category_entry_point_modal_layout_desc_info_headline">
                                                     <div
                                                         class="ct-category-entry-point-modal__desc-headline"
                                                         :class="{ 'is--empty': !selectedContentLayoutId }"
@@ -74,7 +74,7 @@
                                                     </div>
                                                 </ct-block>
 
-                                                <ct-block name="sw_category_entry_point_modal_layout_desc_info_subheadline">
+                                                <ct-block name="ct_category_entry_point_modal_layout_desc_info_subheadline">
                                                     <div
                                                         class="ct-category-entry-point-modal__desc-subheadline"
                                                         :class="{ 'is--empty': !selectedContentLayoutId }"
@@ -85,7 +85,7 @@
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_category_entry_point_modal_layout_modal">
+                                        <ct-block name="ct_category_entry_point_modal_layout_modal">
                                             <ct-entity-single-select
                                                 v-model:value="selectedContentLayoutId"
                                                 class="ct-category-entry-point-modal__layout-select"
@@ -100,9 +100,9 @@
                                             />
                                         </ct-block>
 
-                                        <ct-block name="sw_category_entry_point_modal_layout_desc_actions">
+                                        <ct-block name="ct_category_entry_point_modal_layout_desc_actions">
                                             <div class="ct-category-entry-point-modal__desc-actions">
-                                                <ct-block name="sw_category_entry_point_modal_layout_desc_actions_layout">
+                                                <ct-block name="ct_category_entry_point_modal_layout_desc_actions_layout">
                                                     <mt-button
                                                         variant="secondary"
                                                         size="small"
@@ -112,7 +112,7 @@
                                                     </mt-button>
                                                 </ct-block>
 
-                                                <ct-block name="sw_category_entry_point_modal_layout_desc_actions_designer">
+                                                <ct-block name="ct_category_entry_point_modal_layout_desc_actions_designer">
                                                     <mt-button
                                                         v-if="selectedContentLayoutId"
                                                         variant="secondary"
@@ -123,7 +123,7 @@
                                                     </mt-button>
                                                 </ct-block>
 
-                                                <ct-block name="sw_category_entry_point_modal_layout_desc_actions_remove">
+                                                <ct-block name="ct_category_entry_point_modal_layout_desc_actions_remove">
                                                     <mt-button
                                                         v-if="selectedContentLayoutId"
                                                         class="ct-category-entry-point-modal__layout-reset"
@@ -143,13 +143,13 @@
                             </div>
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_seo_headline">
+                        <ct-block name="ct_category_entry_point_modal_seo_headline">
                             <h2 class="ct-category-entry-point-modal__seo-headline">
                                 {{ $t('ct-category.base.entry-point-modal.seoHeadline') }}
                             </h2>
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_meta_title">
+                        <ct-block name="ct_category_entry_point_modal_meta_title">
                             <mt-text-field
                                 v-model="selectedChannel.homeMetaTitle"
                                 class="ct-category-entry-point-modal__meta-title"
@@ -162,7 +162,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_meta_description">
+                        <ct-block name="ct_category_entry_point_modal_meta_description">
                             <mt-textarea
                                 v-model="selectedChannel.homeMetaDescription"
                                 class="ct-category-entry-point-modal__meta-description"
@@ -175,7 +175,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_category_entry_point_modal_seo_keywords">
+                        <ct-block name="ct_category_entry_point_modal_seo_keywords">
                             <mt-text-field
                                 v-model="selectedChannel.homeKeywords"
                                 class="ct-category-entry-point-modal__seo-keywords"
@@ -191,14 +191,14 @@
                 </ct-block>
 
                 <template #footer>
-                    <ct-block name="sw_category_entry_point_modal_footer">
+                    <ct-block name="ct_category_entry_point_modal_footer">
                         <div class="ct-category-entry-point-modal__footer">
-                            <ct-block name="sw_category_entry_point_modal_footer_cancel_button">
+                            <ct-block name="ct_category_entry_point_modal_footer_cancel_button">
                                 <mt-button variant="secondary" @click="closeModal">
                                     {{ $t('global.default.cancel') }}
                                 </mt-button>
                             </ct-block>
-                            <ct-block name="sw_category_entry_point_modal_footer_apply_button">
+                            <ct-block name="ct_category_entry_point_modal_footer_apply_button">
                                 <mt-button
                                     variant="primary"
                                     :disabled="!canEdit || undefined"
@@ -214,7 +214,7 @@
             </mt-modal>
         </mt-modal-root>
 
-        <ct-block name="sw_category_entry_point_modal_discard_changes_modal">
+        <ct-block name="ct_category_entry_point_modal_discard_changes_modal">
             <ct-discard-changes-modal
                 v-if="isDisplayingLeavePageWarning"
                 @keep-editing="onLeaveModalClose"
@@ -481,7 +481,7 @@ onMounted(() => {
     });
 });
 
-swDefinePublic({
+ctDefinePublic({
     temporaryCollection,
     channelOptions,
     selectedChannelId,

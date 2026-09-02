@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_grid_row">
-        <div ref="swGridRow" class="ct-grid-row" role="row" tabindex="0" @dblclick="onInlineEditStart($event.currentTarget)">
-            <ct-block name="sw_grid_row_actions">
+    <ct-block name="ct_grid_row">
+        <div ref="ctGridRow" class="ct-grid-row" role="row" tabindex="0" @dblclick="onInlineEditStart($event.currentTarget)">
+            <ct-block name="ct_grid_row_actions">
                 <div class="ct-grid-row__actions">
                     <slot name="actions">
-                        <ct-block name="sw_grid_row_slot_actions">
+                        <ct-block name="ct_grid_row_slot_actions">
                             <mt-button size="small" variant="secondary" @click="onInlineEditCancel(id, index)">
                                 {{ $t('global.default.cancel') }}
                             </mt-button>
@@ -22,7 +22,7 @@
             </ct-block>
 
             <slot>
-                <ct-block name="sw_grid_row_slot_default"></ct-block>
+                <ct-block name="ct_grid_row_slot_default"></ct-block>
             </slot>
         </div>
     </ct-block>
@@ -54,39 +54,39 @@ const emit = defineEmits(['inline-edit-finish']);
 
 import { ref, inject, watch, onBeforeUnmount, getCurrentInstance } from 'vue';
 
-const swGridRow = ref(null);
+const ctGridRow = ref(null);
 
 const instance = getCurrentInstance();
 const device = instance?.proxy?.$device;
-const swGridInlineEditStart = inject('swGridInlineEditStart', null);
-const swGridInlineEditCancel = inject('swGridInlineEditCancel', null);
-const swOnInlineEditStart = inject('swOnInlineEditStart', null);
-const swRegisterGridDisableInlineEditListener = inject('swRegisterGridDisableInlineEditListener', null);
-const swUnregisterGridDisableInlineEditListener = inject('swUnregisterGridDisableInlineEditListener', null);
-const swGridSetColumns = inject('swGridSetColumns', null);
-const swGridColumns = inject('swGridColumns', null);
+const ctGridInlineEditStart = inject('ctGridInlineEditStart', null);
+const ctGridInlineEditCancel = inject('ctGridInlineEditCancel', null);
+const ctOnInlineEditStart = inject('ctOnInlineEditStart', null);
+const ctRegisterGridDisableInlineEditListener = inject('ctRegisterGridDisableInlineEditListener', null);
+const ctUnregisterGridDisableInlineEditListener = inject('ctUnregisterGridDisableInlineEditListener', null);
+const ctGridSetColumns = inject('ctGridSetColumns', null);
+const ctGridColumns = inject('ctGridColumns', null);
 
 const isEditingActive = ref(false);
 const inlineEditingCls = ref('is--inline-editing');
 const id = ref(utils.createId());
 
 const createdComponent = () => {
-    swRegisterGridDisableInlineEditListener(onInlineEditCancel);
+    ctRegisterGridDisableInlineEditListener(onInlineEditCancel);
 };
 const onInlineEditStart = () => {
     if (!props.allowInlineEdit || (device?.getViewportWidth() ?? Number.POSITIVE_INFINITY) < 960) {
         return;
     }
 
-    const isInlineEditingConfigured = swGridColumns.some((column) => column.editable);
+    const isInlineEditingConfigured = ctGridColumns.some((column) => column.editable);
 
     if (isEditingActive.value || !isInlineEditingConfigured) {
         return;
     }
 
     isEditingActive.value = true;
-    swGridInlineEditStart(id.value);
-    swOnInlineEditStart(props.item);
+    ctGridInlineEditStart(id.value);
+    ctOnInlineEditStart(props.item);
 };
 const startInlineEditing = () => {
     onInlineEditStart();
@@ -96,7 +96,7 @@ function onInlineEditCancel(idValue, index) {
         return;
     }
     isEditingActive.value = false;
-    swGridInlineEditCancel(props.item, index);
+    ctGridInlineEditCancel(props.item, index);
 }
 const onInlineEditFinish = () => {
     isEditingActive.value = false;
@@ -107,28 +107,28 @@ watch(
     () => isEditingActive.value,
     () => {
         if (isEditingActive.value) {
-            swGridRow.value.classList.add(inlineEditingCls.value);
+            ctGridRow.value.classList.add(inlineEditingCls.value);
             return;
         }
 
-        swGridRow.value.classList.remove(inlineEditingCls.value);
+        ctGridRow.value.classList.remove(inlineEditingCls.value);
     },
 );
 
 createdComponent();
 
 onBeforeUnmount(() => {
-    swUnregisterGridDisableInlineEditListener(onInlineEditCancel);
+    ctUnregisterGridDisableInlineEditListener(onInlineEditCancel);
 });
 
-swDefinePublic({
-    swGridInlineEditStart,
-    swGridInlineEditCancel,
-    swOnInlineEditStart,
-    swRegisterGridDisableInlineEditListener,
-    swUnregisterGridDisableInlineEditListener,
-    swGridSetColumns,
-    swGridColumns,
+ctDefinePublic({
+    ctGridInlineEditStart,
+    ctGridInlineEditCancel,
+    ctOnInlineEditStart,
+    ctRegisterGridDisableInlineEditListener,
+    ctUnregisterGridDisableInlineEditListener,
+    ctGridSetColumns,
+    ctGridColumns,
     isEditingActive,
     inlineEditingCls,
     id,
@@ -140,13 +140,13 @@ swDefinePublic({
 });
 
 defineExpose({
-    swGridInlineEditStart,
-    swGridInlineEditCancel,
-    swOnInlineEditStart,
-    swRegisterGridDisableInlineEditListener,
-    swUnregisterGridDisableInlineEditListener,
-    swGridSetColumns,
-    swGridColumns,
+    ctGridInlineEditStart,
+    ctGridInlineEditCancel,
+    ctOnInlineEditStart,
+    ctRegisterGridDisableInlineEditListener,
+    ctUnregisterGridDisableInlineEditListener,
+    ctGridSetColumns,
+    ctGridColumns,
     isEditingActive,
     inlineEditingCls,
     id,

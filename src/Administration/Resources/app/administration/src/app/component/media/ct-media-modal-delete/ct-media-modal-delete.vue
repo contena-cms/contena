@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_media_modal_delete">
+    <ct-block name="ct_media_modal_delete">
         <ct-modal
             variant="small"
             class="ct-media-modal-delete"
             :title="snippets.modalTitle"
             @modal-close="closeDeleteModal($event)"
         >
-            <ct-block name="sw_media_modal_body">
+            <ct-block name="ct_media_modal_body">
                 <div v-if="mediaQuickInfo">
                     <p>{{ $t('global.ct-media-modal-delete.mediaQuickInfoMessage') }}</p>
                     <ct-media-quickinfo-usage :item="mediaQuickInfo" router-link-target="_blank" />
@@ -29,14 +29,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_media_modal_footer">
-                    <ct-block name="sw_media_modal_delete_cancel_button">
+                <ct-block name="ct_media_modal_footer">
+                    <ct-block name="ct_media_modal_delete_cancel_button">
                         <mt-button size="small" variant="secondary" @click="closeDeleteModal($event)">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_delete_confirm_button">
+                    <ct-block name="ct_media_modal_delete_confirm_button">
                         <mt-button
                             class="ct-media-modal-delete__confirm"
                             size="small"
@@ -270,7 +270,7 @@ function checkInUsage(mediaItem) {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     mediaItems,
     folders,

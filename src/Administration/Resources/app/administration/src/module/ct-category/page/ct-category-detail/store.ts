@@ -15,8 +15,8 @@ interface LoadPayload<EntityName extends keyof EntitySchema.Entities> {
 /**
  * @ct-package inventory
  */
-const swCategoryDetailStore = Contena.Store.register({
-    id: 'swCategoryDetail',
+const ctCategoryDetailStore = Contena.Store.register({
+    id: 'ctCategoryDetail',
 
     state: () => ({
         landingPage: null as Entity<'landing_page'> | null,
@@ -69,7 +69,7 @@ const swCategoryDetailStore = Contena.Store.register({
 });
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
-export type SwCategoryDetailStore = ReturnType<typeof swCategoryDetailStore>;
+export type CtCategoryDetailStore = ReturnType<typeof ctCategoryDetailStore>;
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
-export default swCategoryDetailStore;
+export default ctCategoryDetailStore;

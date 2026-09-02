@@ -1,9 +1,9 @@
 <template>
     <!-- DAL entities are intentionally edited in place before the repository save. -->
     <!-- eslint-disable vue/no-mutating-props -->
-    <ct-block name="sw_member_address_form">
+    <ct-block name="ct_member_address_form">
         <div class="ct-member-address-form">
-            <ct-block name="sw_member_address_form_contact">
+            <ct-block name="ct_member_address_form_contact">
                 <div class="ct-member-address-form__grid">
                     <mt-text-field
                         v-model="address.title"
@@ -32,7 +32,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_member_address_form_location">
+            <ct-block name="ct_member_address_form_location">
                 <div class="ct-member-address-form__grid">
                     <mt-entity-select
                         v-model="address.countryId"
@@ -190,7 +190,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     provinceId,
     cityRegionId,
     districtId,

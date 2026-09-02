@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_select_result_list">
+    <ct-block name="ct_select_result_list">
         <div ref="resultListRoot" class="ct-select-result-list">
             <mt-floating-ui
                 :class="['ct-select-result-list-popover', popoverClass]"
@@ -23,7 +23,7 @@
                     <slot name="after-item-list"></slot>
 
                     <div v-if="!isLoading && options && options.length < 1" class="ct-select-result-list__empty">
-                        <ct-block name="sw_select_result_list_empty_icon">
+                        <ct-block name="ct_select_result_list_empty_icon">
                             <mt-icon
                                 name="regular-search"
                                 size="var(--scale-size-16)"
@@ -31,7 +31,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_select_result_list_empty_text">
+                        <ct-block name="ct_select_result_list_empty_text">
                             {{ emptyMessageText }}
                         </ct-block>
                     </div>
@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
     beforeDestroyedComponent();
 });
 
-swDefinePublic({
+ctDefinePublic({
     feature,
     activeItemIndex,
     emptyMessageText,

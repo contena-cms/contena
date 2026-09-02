@@ -7,11 +7,11 @@ export default Contena.Mixin.register(
     'ct-inline-snippet',
     defineComponent({
         computed: {
-            swInlineSnippetLocale(): string {
+            ctInlineSnippetLocale(): string {
                 return Contena.Store.get('session').currentLocale as unknown as string;
             },
 
-            swInlineSnippetFallbackLocale(): string {
+            ctInlineSnippetFallbackLocale(): string {
                 return Contena.Context.app.fallbackLocale as unknown as string;
             },
         },
@@ -21,11 +21,11 @@ export default Contena.Mixin.register(
                 if (Contena.Utils.types.isEmpty(value)) {
                     return '';
                 }
-                if (value[this.swInlineSnippetLocale]) {
-                    return value[this.swInlineSnippetLocale];
+                if (value[this.ctInlineSnippetLocale]) {
+                    return value[this.ctInlineSnippetLocale];
                 }
-                if (value[this.swInlineSnippetFallbackLocale]) {
-                    return value[this.swInlineSnippetFallbackLocale];
+                if (value[this.ctInlineSnippetFallbackLocale]) {
+                    return value[this.ctInlineSnippetFallbackLocale];
                 }
                 if (Contena.Utils.types.isObject(value)) {
                     const locale = Object.keys(value).find((key) => {

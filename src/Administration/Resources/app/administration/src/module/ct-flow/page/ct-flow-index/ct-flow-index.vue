@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_flow_index">
+    <ct-block name="ct_flow_index">
         <ct-page class="ct-flow-index">
             <template #search-bar>
                 <mt-search :model-value="term" :placeholder="$t('ct-flow.list.search')" @change="onSearch" />
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_flow_index_header">
+                <ct-block name="ct_flow_index_header">
                     <h2>
                         {{ $t('ct-flow.list.title') }} <span v-if="!isLoading">({{ flows?.total ?? 0 }})</span>
                     </h2>
@@ -14,7 +14,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_flow_index_actions">
+                <ct-block name="ct_flow_index_actions">
                     <mt-button variant="primary" :disabled="!acl?.can('flow.creator') || undefined" @click="onCreate">
                         {{ $t('global.default.add') }}
                     </mt-button>
@@ -22,9 +22,9 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_flow_index_content">
+                <ct-block name="ct_flow_index_content">
                     <ct-card-view>
-                        <ct-block name="sw_flow_index_tabs">
+                        <ct-block name="ct_flow_index_tabs">
                             <mt-tabs
                                 class="ct-flow-index__tabs"
                                 position-identifier="ct-flow-listing"
@@ -272,7 +272,7 @@ onMounted(() => {
     void load();
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     flowRepository,
     templateRepository,

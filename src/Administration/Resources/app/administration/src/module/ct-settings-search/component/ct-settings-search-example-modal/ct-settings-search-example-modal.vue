@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_example_modal">
+    <ct-block name="ct_settings_search_example_modal">
         <mt-modal-root :is-open="true" @change="closeModal">
             <mt-modal :title="t('ct-settings-search.generalTab.titleExampleModal')" width="l">
                 <p class="ct-settings-search__example-text">{{ t('ct-settings-search.generalTab.modal.textExplain') }}</p>
@@ -92,7 +92,7 @@ const exampleResults = computed(() =>
 );
 const closeModal = (): void => emit('modal-close');
 
-swDefinePublic({
+ctDefinePublic({
     exampleResults,
     closeModal,
 });

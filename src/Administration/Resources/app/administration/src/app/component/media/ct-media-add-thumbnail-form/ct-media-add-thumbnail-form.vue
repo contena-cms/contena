@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_media_add_thumbnail_form">
+    <ct-block name="ct_media_add_thumbnail_form">
         <div class="ct-media-add-thumbnail-form">
-            <ct-block name="sw_media_add_thumbnail_form_form_container">
+            <ct-block name="ct_media_add_thumbnail_form_form_container">
                 <div class="ct-media-add-thumbnail-form__form-container">
-                    <ct-block name="sw_media_add_thumbnail_form_width">
+                    <ct-block name="ct_media_add_thumbnail_form_width">
                         <mt-number-field
                             v-model="width"
                             class="ct-media-add-thumbnail-form__input-width"
@@ -15,13 +15,13 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_media_add_thumbnail_form_lock_button">
+                    <ct-block name="ct_media_add_thumbnail_form_lock_button">
                         <button class="ct-media-add-thumbnail-form__lock" :class="lockedButtonClass" @click="onLockSwitch">
                             <mt-icon :name="isLocked ? 'regular-lock' : 'regular-lock-open'" size="16px" />
                         </button>
                     </ct-block>
 
-                    <ct-block name="sw_media_add_thumbnail_form_height">
+                    <ct-block name="ct_media_add_thumbnail_form_height">
                         <mt-number-field
                             v-model="height"
                             class="ct-media-add-thumbnail-form__input-height"
@@ -35,7 +35,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_media_add_thumbnail_add_button">
+            <ct-block name="ct_media_add_thumbnail_add_button">
                 <mt-button
                     class="ct-media-folder-settings__add-thumbnail-size-action"
                     :disabled="disabled || width === null || height === null || width === 0 || height === 0"
@@ -105,7 +105,7 @@ function inputChanged() {
     });
 }
 
-swDefinePublic({
+ctDefinePublic({
     width,
     height,
     isLocked,

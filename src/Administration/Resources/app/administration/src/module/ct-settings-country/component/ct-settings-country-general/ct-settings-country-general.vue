@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_settings_country_general">
+    <ct-block name="ct_settings_country_general">
         <div>
-            <ct-block name="sw_settings_country_general_card">
+            <ct-block name="ct_settings_country_general_card">
                 <mt-card
                     position-identifier="ct-settings-country-detail-general"
                     :title="$t('ct-settings-country.detail.titleCard')"
@@ -9,7 +9,7 @@
                 >
                     <ct-container columns="repeat(auto-fit, minmax(250px, 1fr))" gap="0px 30px">
                         <!-- eslint-disable ct-deprecation-rules/no-twigjs-blocks, vue/attributes-order, vue/no-mutating-props -->
-                        <ct-block name="sw_settings_country_general_content_field_name">
+                        <ct-block name="ct_settings_country_general_content_field_name">
                             <mt-text-field
                                 v-model="country.name"
                                 name="ct-field--country-name"
@@ -21,7 +21,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_settings_country_general_content_field_position">
+                        <ct-block name="ct_settings_country_general_content_field_position">
                             <mt-number-field
                                 v-model="country.position"
                                 name="ct-field--country-position"
@@ -34,7 +34,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_settings_country_general_content_field_iso">
+                        <ct-block name="ct_settings_country_general_content_field_iso">
                             <mt-text-field
                                 v-model="country.iso"
                                 name="ct-field--country-iso"
@@ -44,7 +44,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_settings_country_general_content_field_iso3">
+                        <ct-block name="ct_settings_country_general_content_field_iso3">
                             <mt-text-field
                                 v-model="country.iso3"
                                 name="ct-field--country-iso3"
@@ -57,13 +57,13 @@
                 </mt-card>
             </ct-block>
 
-            <ct-block name="sw_settings_country_general_options_card">
+            <ct-block name="ct_settings_country_general_options_card">
                 <mt-card
                     position-identifier="ct-settings-country-general"
                     :title="$t('ct-settings-country.detail.titleOptions')"
                     :is-loading="isLoading"
                 >
-                    <ct-block name="sw_settings_country_general_content_field_active">
+                    <ct-block name="ct_settings_country_general_content_field_active">
                         <mt-switch
                             v-model="country.active"
                             name="ct-field--country-active"
@@ -110,7 +110,7 @@ const countryNameError = computed(() => {
     return Contena.Store.get('error').getApiError(entity, 'name');
 });
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     countryNameError,
 });

@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_experience_studio_sidebar_tree">
+    <ct-block name="ct_experience_studio_sidebar_tree">
         <div class="ct-experience-studio-sidebar-tree">
-            <ct-block name="sw_experience_studio_sidebar_tree_header">
+            <ct-block name="ct_experience_studio_sidebar_tree_header">
                 <div class="ct-experience-studio-sidebar-tree__header">
                     <h3>{{ $t('ct-experience-studio.detail.sidebarTree.title') }}</h3>
 
@@ -21,10 +21,10 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_experience_studio_sidebar_tree_content">
+            <ct-block name="ct_experience_studio_sidebar_tree_content">
                 <div v-droppable="rootDropConfig()" class="ct-experience-studio-sidebar-tree__content">
                     <template v-if="hasElements">
-                        <ct-block name="sw_experience_studio_sidebar_tree_nodes">
+                        <ct-block name="ct_experience_studio_sidebar_tree_nodes">
                             <ct-experience-studio-sidebar-tree-node
                                 v-for="(element, elementIndex) in layoutElements"
                                 :key="element.id"
@@ -184,7 +184,7 @@ const onRootDrop = (dragData: { elementId: string } | null, dropData: Omit<MoveE
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     layoutElements,
     hasElements,

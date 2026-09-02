@@ -14,7 +14,7 @@ const createPositionCollection = (positions = []) =>
 async function createWrapper(privileges = []) {
     const reservedPrefixWarning = {
         method: 'warn',
-        msg: 'setup() return property "__swSetupAuthor_',
+        msg: 'setup() return property "__ctSetupAuthor_',
     };
     global.allowedErrors.push(reservedPrefixWarning);
 

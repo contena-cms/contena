@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_filter_panel">
+    <ct-block name="ct_filter_panel">
         <div class="ct-filter-panel">
-            <ct-block name="sw_filter_panel_item">
+            <ct-block name="ct_filter_panel_item">
                 <div v-for="filter in listFilters" :id="filter.name" :key="filter.name" class="ct-filter-panel__item">
-                    <ct-block name="sw_filter_panel_extension_point"></ct-block>
+                    <ct-block name="ct_filter_panel_extension_point"></ct-block>
 
                     <ct-boolean-filter
                         v-if="showFilter(filter, 'boolean-filter')"
@@ -29,7 +29,7 @@
                         @filter-reset="resetFilter"
                     >
                         <template v-if="filter.displayPath" #selection-label-property="{ item }">
-                            <ct-block name="sw_multi_select_filter_content_path_label">
+                            <ct-block name="ct_multi_select_filter_content_path_label">
                                 <ct-highlight-text
                                     :key="item.id"
                                     v-tooltip="{
@@ -43,9 +43,9 @@
                         </template>
 
                         <template v-if="filter.displayPath" #result-item="{ item, index }">
-                            <ct-block name="sw_multi_select_filter_content_path_result_item">
+                            <ct-block name="ct_multi_select_filter_content_path_result_item">
                                 <ct-select-result v-bind="{ item, index }">
-                                    <ct-block name="sw_multi_select_filter_content_path_result_label">
+                                    <ct-block name="ct_multi_select_filter_content_path_result_label">
                                         <span class="ct-select-result__result-item-text">
                                             <ct-highlight-text
                                                 :key="item.id"
@@ -251,7 +251,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     activeFilters,
     filterChanged,

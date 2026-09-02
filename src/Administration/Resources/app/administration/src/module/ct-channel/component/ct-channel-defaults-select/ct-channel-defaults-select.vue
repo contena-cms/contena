@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_channel_defaults_select">
+    <ct-block name="ct_channel_defaults_select">
         <div class="ct-channel-defaults-select">
             <template v-if="channel && propertyEntityName">
                 <mt-entity-select
@@ -217,7 +217,7 @@ const getActiveIconColor = (item: SelectEntity): string => {
     return isDisabledItem(item) ? 'var(--color-icon-secondary-default)' : 'var(--color-icon-positive-default)';
 };
 
-swDefinePublic({
+ctDefinePublic({
     propertyCollection,
     propertyIds,
     defaultId,

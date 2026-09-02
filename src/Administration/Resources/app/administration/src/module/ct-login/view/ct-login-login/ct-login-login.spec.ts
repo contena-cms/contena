@@ -51,12 +51,12 @@ describe('module/ct-login/view/ct-login-login', () => {
     it('uses the large button size for the login action', () => {
         expect(errors).toHaveLength(0);
         expect(template).toContain('class="ct-login-credentials__title"');
-        expect(template).toContain('<ct-block name="sw_login_login_form_icon" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_login_form_icon" :data="$dataScope">');
         expect(template).toContain("assetFilter('/administration/administration/static/img/contena-logo-v4.svg')");
         expect(template).toContain('ct-login.credentials.description');
         expect(template).toContain('class="ct-login-credentials__login-button"');
         expect(template).toContain('size="large"');
-        expect(template).toContain('<ct-block name="sw_login_login_support" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_login_support" :data="$dataScope">');
     });
 
     it('reloads immediately after login when the login shell requested a rebuild', async () => {

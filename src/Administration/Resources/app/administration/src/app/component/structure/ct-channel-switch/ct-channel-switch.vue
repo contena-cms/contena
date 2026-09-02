@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_channel_switch">
+    <ct-block name="ct_channel_switch">
         <div class="ct-channel-switch">
             <ct-modal
                 v-if="showUnsavedChangesModal"
@@ -7,11 +7,11 @@
                 variant="small"
                 @modal-close="onCloseChangesModal"
             >
-                <ct-block name="sw_channel_switch_message">
+                <ct-block name="ct_channel_switch_message">
                     <p>{{ t('ct-channel-switch.messageModalUnsavedChanges') }}</p>
                 </ct-block>
                 <template #modal-footer>
-                    <ct-block name="sw_channel_switch_footer">
+                    <ct-block name="ct_channel_switch_footer">
                         <mt-button size="small" variant="secondary" @click="onCloseChangesModal">
                             {{ t('global.default.cancel') }}
                         </mt-button>
@@ -25,7 +25,7 @@
                 </template>
             </ct-modal>
 
-            <ct-block name="sw_channel_switch_select">
+            <ct-block name="ct_channel_switch_select">
                 <mt-entity-select
                     id="channelSelect"
                     v-model="channelId"
@@ -105,7 +105,7 @@ const onClickSaveChanges = () => {
 };
 const onClickRevertUnsavedChanges = changeToNewChannel;
 
-swDefinePublic({
+ctDefinePublic({
     channelId,
     newChannelId,
     showUnsavedChangesModal,

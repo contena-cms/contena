@@ -25,12 +25,12 @@ function createWrapper() {
                 'ct-card-view': { template: '<div><slot /></div>' },
                 'ct-skeleton': true,
                 'ct-seo-url-template-card': {
-                    name: 'SwSeoUrlTemplateCardStub',
+                    name: 'CtSeoUrlTemplateCardStub',
                     methods: { onClickSave: saveTemplateMock },
                     template: '<div />',
                 },
                 'ct-system-config': {
-                    name: 'SwSystemConfigStub',
+                    name: 'CtSystemConfigStub',
                     props: { domain: String },
                     methods: { saveAll: saveConfigMock },
                     template: '<div />',
@@ -50,7 +50,7 @@ describe('module/ct-settings-seo/page/ct-settings-seo', () => {
     it('loads the SEO configuration domain', () => {
         const wrapper = createWrapper();
 
-        expect(wrapper.findComponent({ name: 'SwSystemConfigStub' }).props('domain')).toBe('core.seo');
+        expect(wrapper.findComponent({ name: 'CtSystemConfigStub' }).props('domain')).toBe('core.seo');
     });
 
     it('saves URL templates and system configuration together', () => {

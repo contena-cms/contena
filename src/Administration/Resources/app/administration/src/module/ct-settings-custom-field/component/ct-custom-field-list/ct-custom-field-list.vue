@@ -1,10 +1,10 @@
 <template>
-    <ct-block name="sw_custom_field_list">
+    <ct-block name="ct_custom_field_list">
         <mt-card class="ct-custom-field-list" position-identifier="ct-custom-field-list">
-            <ct-block name="sw_custom_field_list_toolbar">
+            <ct-block name="ct_custom_field_list_toolbar">
                 <div class="ct-custom-field-list__toolbar">
                     <ct-container columns="1fr 32px minmax(100px, 200px)" gap="0 10px">
-                        <ct-block name="sw_custom_field_list_toolbar_searchfield">
+                        <ct-block name="ct_custom_field_list_toolbar_searchfield">
                             <ct-simple-search-field
                                 v-model:value="term"
                                 size="small"
@@ -14,7 +14,7 @@
                             />
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_list_toolbar_delete">
+                        <ct-block name="ct_custom_field_list_toolbar_delete">
                             <mt-button
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
@@ -32,7 +32,7 @@
                             </mt-button>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_list_toolbar_add">
+                        <ct-block name="ct_custom_field_list_toolbar_add">
                             <mt-button
                                 v-tooltip.bottom="{
                                     message: $t('ct-privileges.tooltip.warning'),
@@ -52,7 +52,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_custom_field_list_grid">
+            <ct-block name="ct_custom_field_list_grid">
                 <ct-grid
                     v-if="(customFields && customFields.length > 0) || term"
                     ref="grid"
@@ -67,7 +67,7 @@
                     @ct-grid-select-all="selectionChanged"
                 >
                     <template #columns="{ item }">
-                        <ct-block name="sw_custom_field_list_grid_column_label">
+                        <ct-block name="ct_custom_field_list_grid_column_label">
                             <ct-grid-column
                                 data-index="label"
                                 truncate
@@ -93,7 +93,7 @@
                             </ct-grid-column>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_list_grid_column_type">
+                        <ct-block name="ct_custom_field_list_grid_column_type">
                             <ct-grid-column
                                 data-index="type"
                                 truncate
@@ -113,7 +113,7 @@
                             </ct-grid-column>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_list_grid_column_custom_field_position">
+                        <ct-block name="ct_custom_field_list_grid_column_custom_field_position">
                             <ct-grid-column
                                 data-index="position"
                                 flex="minmax(50px, 100px)"
@@ -123,17 +123,17 @@
                                 {{ item.config.customFieldPosition }}
 
                                 <template #inline-edit>
-                                    <ct-block name="sw_custom_field_list_grid_column_custom_field_position_edit">
+                                    <ct-block name="ct_custom_field_list_grid_column_custom_field_position_edit">
                                         <mt-number-field v-model="item.config.customFieldPosition" number-type="int" />
                                     </ct-block>
                                 </template>
                             </ct-grid-column>
                         </ct-block>
 
-                        <ct-block name="sw_custom_field_list_grid_column_actions">
+                        <ct-block name="ct_custom_field_list_grid_column_actions">
                             <ct-grid-column flex="minmax(100px, 100px)" align="center" label="&nbsp;">
                                 <ct-context-button>
-                                    <ct-block name="sw_custom_field_list_grid_column_actions_edit">
+                                    <ct-block name="ct_custom_field_list_grid_column_actions_edit">
                                         <ct-context-menu-item
                                             class="ct-custom-field-list__edit-action"
                                             :disabled="item.isDeleted || !acl.can('custom_field.editor') || undefined"
@@ -143,7 +143,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_custom_field_list_grid_column_actions_reset_delete">
+                                    <ct-block name="ct_custom_field_list_grid_column_actions_reset_delete">
                                         <ct-context-menu-item
                                             v-if="item.isDeleted"
                                             variant="success"
@@ -157,7 +157,7 @@
                                         </ct-context-menu-item>
                                     </ct-block>
 
-                                    <ct-block name="sw_custom_field_list_grid_column_actions_delete">
+                                    <ct-block name="ct_custom_field_list_grid_column_actions_delete">
                                         <template v-if="item.isDeleted"
                                             ><!-- Keeps the conditional chain connected across ct-block. --></template
                                         >
@@ -177,7 +177,7 @@
                     </template>
 
                     <template #pagination>
-                        <ct-block name="sw_custom_field_list_grid_pagination">
+                        <ct-block name="ct_custom_field_list_grid_pagination">
                             <ct-pagination
                                 :limit="limit"
                                 :page="page"
@@ -191,7 +191,7 @@
                 </ct-grid>
             </ct-block>
 
-            <ct-block name="sw_custom_field_list_empty_state">
+            <ct-block name="ct_custom_field_list_empty_state">
                 <template v-if="(customFields && customFields.length > 0) || term"
                     ><!-- Keeps the conditional chain connected across ct-block. --></template
                 >
@@ -202,7 +202,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_custom_field_list_custom_field_detail">
+            <ct-block name="ct_custom_field_list_custom_field_detail">
                 <ct-custom-field-detail
                     v-if="currentCustomField"
                     :set="set"
@@ -212,14 +212,14 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_custom_field_list_custom_field_delete">
+            <ct-block name="ct_custom_field_list_custom_field_delete">
                 <ct-modal
                     v-if="deleteCustomField"
                     :title="$t('ct-settings-custom-field.customField.list.titleDeleteAction', {}, deleteCustomField.length)"
                     variant="small"
                     @modal-close="onCancelDeleteCustomField"
                 >
-                    <ct-block name="sw_custom_field_list_custom_field_delete_text">
+                    <ct-block name="ct_custom_field_list_custom_field_delete_text">
                         <p class="ct-custom-field-delete__description">
                             {{
                                 $t(
@@ -232,14 +232,14 @@
                     </ct-block>
 
                     <template #modal-footer>
-                        <ct-block name="sw_custom_field_list_custom_field_delete_actions">
-                            <ct-block name="sw_custom_field_list_custom_field_delete_action_cancel">
+                        <ct-block name="ct_custom_field_list_custom_field_delete_actions">
+                            <ct-block name="ct_custom_field_list_custom_field_delete_action_cancel">
                                 <mt-button size="small" variant="secondary" @click="onCancelDeleteCustomField">
                                     {{ $t('global.default.cancel') }}
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_custom_field_list_custom_field_delete_action_confirm">
+                            <ct-block name="ct_custom_field_list_custom_field_delete_action_confirm">
                                 <mt-button variant="critical" size="small" @click="onDeleteCustomField">
                                     {{ $t('global.default.delete') }}
                                 </mt-button>
@@ -249,7 +249,7 @@
                 </ct-modal>
             </ct-block>
 
-            <ct-block name="sw_custom_field_list_loader">
+            <ct-block name="ct_custom_field_list_loader">
                 <!-- TODO Codemod: Converted from ct-loader - please check if everything works correctly -->
                 <mt-loader v-if="isLoading" />
             </ct-block>
@@ -407,7 +407,7 @@ const isCustomFieldNameUnique = (customField) => {
         return res.length === 0;
     });
 };
-provide('SwCustomFieldListIsCustomFieldNameUnique', isCustomFieldNameUnique);
+provide('CtCustomFieldListIsCustomFieldNameUnique', isCustomFieldNameUnique);
 const onPageChange = (event) => {
     page.value = event.page;
 
@@ -447,7 +447,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     acl,
     term,

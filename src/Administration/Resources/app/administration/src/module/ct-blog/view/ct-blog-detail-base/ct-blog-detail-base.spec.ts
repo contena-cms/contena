@@ -25,7 +25,7 @@ function getMediaCollection(entries: EntitySchema.blog_media[] = []): EntityColl
 }
 
 async function createWrapper(entries: EntitySchema.blog_media[] = []) {
-    const store = Contena.Store.get('swBlogDetail');
+    const store = Contena.Store.get('ctBlogDetail');
     store.$reset();
     const blog = {
         id: 'blog-1',

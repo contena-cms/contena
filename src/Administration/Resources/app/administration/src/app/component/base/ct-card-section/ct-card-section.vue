@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_card_section">
+    <ct-block name="ct_card_section">
         <div class="ct-card-section" :class="cardSectionClasses">
             <slot></slot>
         </div>
@@ -54,7 +54,7 @@ const cardSectionClasses = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     cardSectionClasses,
 });
 

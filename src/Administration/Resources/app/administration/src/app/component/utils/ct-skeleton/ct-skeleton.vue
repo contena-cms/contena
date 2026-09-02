@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_skeleton">
+    <ct-block name="ct_skeleton">
         <div class="ct-skeleton" :class="classList">
             <template v-if="variant === 'detail'">
                 <mt-skeleton-bar class="ct-skeleton-bar" style="width: 170px" />
@@ -97,7 +97,7 @@ const classList = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     classList,
 });
 

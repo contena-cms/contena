@@ -978,7 +978,7 @@ watch(
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     userService,
     loginService,
     mediaDefaultFolderService,

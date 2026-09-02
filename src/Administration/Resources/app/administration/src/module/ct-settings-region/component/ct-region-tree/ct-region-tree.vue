@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_region_tree">
+    <ct-block name="ct_region_tree">
         <ct-tree
             ref="tree"
             class="ct-region-tree"
@@ -143,7 +143,7 @@ const onCheckedElementsCount = (count: number): void => {
 };
 const onDeleteCheckedRegions = (): void => tree.value?.onDeleteElements(null);
 
-swDefinePublic({
+ctDefinePublic({
     checkedElementsCount,
     getRegionName,
     onLoadChildren,

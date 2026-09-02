@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_settings_search_view_live_search_keyword">
+    <ct-block name="ct_settings_search_view_live_search_keyword">
         <span class="ct-settings-search-live-search-keyword">
             <!-- The upstream Advanced Search extension supplies already highlighted markup. -->
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -48,7 +48,7 @@ const getClass = (messageIndex: number) => {
     return messageIndex % 2 === 1 ? props.highlightClass : undefined;
 };
 
-swDefinePublic({
+ctDefinePublic({
     textIsHighlighted,
     parsedSearch,
     parsedMessage,

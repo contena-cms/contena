@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_element_settings">
+    <ct-block name="ct_experience_studio_element_settings">
         <div class="ct-experience-studio-element-settings">
             <div class="ct-experience-studio-element-settings__content">
                 <mt-empty-state
@@ -329,7 +329,7 @@ watch(
     },
 );
 
-swDefinePublic({
+ctDefinePublic({
     activeSettingsTab,
     hasSelectedElement,
     hasTypeLoadError,

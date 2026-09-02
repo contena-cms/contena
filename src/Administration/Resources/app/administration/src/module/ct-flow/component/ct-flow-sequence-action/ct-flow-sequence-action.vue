@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_flow_sequence_action">
+    <ct-block name="ct_flow_sequence_action">
         <div class="ct-flow-sequence-action">
-            <ct-block name="sw_flow_sequence_action_card">
+            <ct-block name="ct_flow_sequence_action_card">
                 <div class="ct-flow-sequence-action__card">
-                    <ct-block name="sw_flow_sequence_action_header">
+                    <ct-block name="ct_flow_sequence_action_header">
                         <div class="ct-flow-sequence-action__header">
                             <div class="ct-flow-sequence-action__title-description">
                                 <h3 class="ct-flow-sequence-action__title">{{ $t('ct-flow.sequence.action') }}</h3>
@@ -33,7 +33,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_flow_sequence_action_content">
+                    <ct-block name="ct_flow_sequence_action_content">
                         <div class="ct-flow-sequence-action__content">
                             <div v-if="configuredActions.length === 0" class="ct-flow-sequence-action__actions-empty">
                                 <span class="ct-flow-sequence-action__no-action">
@@ -379,7 +379,7 @@ const loadMailTemplates = async (): Promise<void> => {
 
 watch(() => props.sequence.actions, loadMailTemplates, { deep: true, immediate: true });
 
-swDefinePublic({
+ctDefinePublic({
     configuredActions,
     showAddAction,
     selectedActionName,

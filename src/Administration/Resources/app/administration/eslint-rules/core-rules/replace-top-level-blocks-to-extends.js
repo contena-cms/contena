@@ -9,30 +9,30 @@
  * Example
  * ```
  * // before
- * <ct-block name="block-1" :data="$dataScope">
+ * <ct-block name="ct_block-1" :data="$dataScope">
  *     <div>
  *         <span>Title</span>
- *         <ct-block name="block-2" :data="$dataScope"></ct-block>
+ *         <ct-block name="ct_block-2" :data="$dataScope"></ct-block>
  *     </div>
  * </ct-block>
- * <ct-block name="block-3" :data="$dataScope">
+ * <ct-block name="ct_block-3" :data="$dataScope">
  *     <div>
  *         <span>Content</span>
- *         <ct-block name="block-4" :data="$dataScope"></ct-block>
+ *         <ct-block name="ct_block-4" :data="$dataScope"></ct-block>
  *     </div>
  * </ct-block>
  *
  * // after
- * <ct-block extends="block-1">
+ * <ct-block extends="ct_block-1">
  *     <div>
  *         <span>Title</span>
- *         <ct-block name="block-2" :data="$dataScope"></ct-block>jm
+ *         <ct-block name="ct_block-2" :data="$dataScope"></ct-block>jm
  *     </div>
  * </ct-block>
- * <ct-block extends="block-3">
+ * <ct-block extends="ct_block-3">
  *     <div>
  *         <span>Content</span>
- *         <ct-block name="block-4" :data="$dataScope"></ct-block>
+ *         <ct-block name="ct_block-4" :data="$dataScope"></ct-block>
  *     </div>
  * </ct-block>
  * ```

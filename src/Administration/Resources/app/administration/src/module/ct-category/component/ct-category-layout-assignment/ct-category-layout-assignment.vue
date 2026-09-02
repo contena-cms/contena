@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_category_layout_assignment">
+    <ct-block name="ct_category_layout_assignment">
         <mt-card
             class="ct-category-layout-assignment"
             position-identifier="ct-category-layout-assignment"
             :title="$t(`${snippetPath}.cardTitle`)"
         >
-            <ct-block name="sw_category_layout_assignment_header">
+            <ct-block name="ct_category_layout_assignment_header">
                 <div class="ct-category-layout-assignment__header">
                     <p>{{ $t(`${snippetPath}.description`) }}</p>
 
@@ -15,7 +15,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_category_layout_assignment_content">
+            <ct-block name="ct_category_layout_assignment_content">
                 <mt-loader v-if="isLoading" />
 
                 <div v-else-if="assignments?.length" class="ct-category-layout-assignment__assignments">
@@ -133,7 +133,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     assignments,
     isLoading,
     assignmentRepository,

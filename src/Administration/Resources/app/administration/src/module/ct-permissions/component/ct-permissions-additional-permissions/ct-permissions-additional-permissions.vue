@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_permissions_additional_permissions">
+    <ct-block name="ct_permissions_additional_permissions">
         <mt-card
             class="ct-permissions-additional-permissions"
             position-identifier="ct-permissions-additional-permissions"
@@ -7,29 +7,29 @@
             :title="$t('ct-permissions.roles.additional-permissions.title')"
         >
             <template v-if="role">
-                <ct-block name="sw_permissions_additional_permissions_additional_privileges">
+                <ct-block name="ct_permissions_additional_permissions_additional_privileges">
                     <template v-for="privilege in additionalPermissions" :key="`head-${privilege.key}`">
-                        <ct-block name="sw_permissions_additional_permissions_additional_privileges_headline">
+                        <ct-block name="ct_permissions_additional_permissions_additional_privileges_headline">
                             <h4
                                 class="ct-permissions-additional-permissions__headline"
                                 :class="' ct-permissions-additional-permissions_' + privilege.key"
                             >
                                 <ct-block
-                                    name="sw_permissions_additional_permissions_additional_privileges_headline_content"
+                                    name="ct_permissions_additional_permissions_additional_privileges_headline_content"
                                 >
                                     {{ $t('ct-privileges.additional_permissions.' + privilege.key + '.label') }}
                                 </ct-block>
                             </h4>
                         </ct-block>
 
-                        <ct-block name="sw_permissions_additional_permissions_additional_privileges_switches">
+                        <ct-block name="ct_permissions_additional_permissions_additional_privileges_switches">
                             <div class="ct-permissions-additional-permissions__switches">
                                 <ct-block
-                                    name="sw_permissions_additional_permissions_additional_privileges_switches_content"
+                                    name="ct_permissions_additional_permissions_additional_privileges_switches_content"
                                 >
                                     <template v-for="(value, roleName) in privilege.roles" :key="roleName">
                                         <ct-block
-                                            name="sw_permissions_additional_permissions_additional_privileges_switches_content_switch"
+                                            name="ct_permissions_additional_permissions_additional_privileges_switches_content_switch"
                                         >
                                             <mt-switch
                                                 :disabled="
@@ -38,7 +38,7 @@
                                                         !acl.can(privilege.key + '.' + roleName))
                                                 "
                                                 :class="
-                                                    'sw_permissions_additional_permissions_' + privilege.key + '_' + roleName
+                                                    'ct_permissions_additional_permissions_' + privilege.key + '_' + roleName
                                                 "
                                                 :model-value="isPrivilegeSelected(privilege.key + '.' + roleName)"
                                                 :label="
@@ -119,7 +119,7 @@ const onSelectPrivilege = (privilegeKey, isSelected) => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     privileges,
     acl,
     additionalPermissions,

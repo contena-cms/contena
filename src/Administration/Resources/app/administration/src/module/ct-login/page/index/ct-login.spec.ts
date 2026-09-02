@@ -18,12 +18,12 @@ describe('module/ct-login/page/index', () => {
         expect(template).toContain("assetFilter('/administration/administration/static/img/contena-logo-v4.svg')");
         expect(template).toContain('alt="Contena"');
         expect(template).toContain('class="ct-login-index__brand"');
-        expect(template).toContain('<ct-block name="sw_login_brand_name" :data="$dataScope">');
-        expect(template).toContain('<ct-block name="sw_login_footer" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_brand_name" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_footer" :data="$dataScope">');
         expect(template).toContain('© {{ copyrightYear }} Contena');
         expect(template).not.toContain("$t('ct-login.index.copyright'");
         expect(template).toContain('class="ct-login-index__card"');
-        expect(template).toContain('<ct-block name="sw_login_back_link" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_back_link" :data="$dataScope">');
         expect(template).toContain('<router-view v-slot="{ Component }">');
     });
 
@@ -36,9 +36,9 @@ describe('module/ct-login/page/index', () => {
     });
 
     it('preserves the native extension block contract', () => {
-        expect(template).toContain('<ct-block name="sw_login" :data="$dataScope">');
-        expect(template).toContain('<ct-block name="sw_login_badge_image" :data="$dataScope">');
-        expect(template).toContain('<ct-block name="sw_login_view" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_badge_image" :data="$dataScope">');
+        expect(template).toContain('<ct-block name="ct_login_view" :data="$dataScope">');
     });
 
     it('provides a dedicated dark theme surface', () => {

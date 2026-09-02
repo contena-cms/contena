@@ -6,7 +6,7 @@ describe('build/vue-setup-transform sourcemap shape', () => {
         const source = `<script setup>
 const count = 1;
 
-swDefinePublic({
+ctDefinePublic({
     count,
 });
 </script>`;
@@ -23,7 +23,7 @@ swDefinePublic({
         const source = `<script setup>
 const count = 1;
 
-swDefinePublic({
+ctDefinePublic({
     count,
 });
 </script>`;

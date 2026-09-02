@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_login_recovery">
+    <ct-block name="ct_login_recovery">
         <form class="ct-login-recovery" novalidate @submit.prevent="sendRecoveryMail">
             <div class="ct-login-recovery__content">
-                <ct-block name="sw_login_recovery_headline">
+                <ct-block name="ct_login_recovery_headline">
                     <h1 class="ct-login-recovery__title">
                         {{ $t('ct-login.recovery.title') }}
                     </h1>
                 </ct-block>
 
-                <ct-block name="sw_login_recovery_text">
+                <ct-block name="ct_login_recovery_text">
                     <p class="ct-login-recovery__description">
                         {{ $t('ct-login.recovery.description') }}
                     </p>
@@ -23,8 +23,8 @@
                 {{ $t('ct-login.recovery.warningTooManyAttempts') }}
             </mt-banner>
 
-            <ct-block name="sw_login_recovery_form">
-                <ct-block name="sw_login_recovery_form_email_field">
+            <ct-block name="ct_login_recovery_form">
+                <ct-block name="ct_login_recovery_form_email_field">
                     <mt-email-field
                         v-model="email"
                         v-autofocus
@@ -37,7 +37,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_login_recovery_form_submit">
+                <ct-block name="ct_login_recovery_form_submit">
                     <mt-button
                         class="ct-login-recovery__submit"
                         type="submit"
@@ -115,7 +115,7 @@ const forwardToRequestSent = async (waitTime?: number) => {
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     userRecoveryService,
     email,
     error,

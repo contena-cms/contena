@@ -384,7 +384,7 @@ function handleStringFormat(dateString: string) {
     }
 }
 
-swDefinePublic({
+ctDefinePublic({
     userLocale,
     userTimeZone,
     is24HourFormat,

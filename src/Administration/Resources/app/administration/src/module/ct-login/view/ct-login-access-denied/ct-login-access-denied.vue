@@ -52,7 +52,7 @@ const loginWithDifferentAccount = () => {
     loginService.logout();
 };
 
-swDefinePublic({
+ctDefinePublic({
     loginService,
     email,
     loginWithDifferentAccount,

@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_settings_item">
+    <ct-block name="ct_settings_item">
         <router-link :to="to" class="ct-settings-item" :class="classes">
-            <ct-block name="sw_settings_item_icon">
+            <ct-block name="ct_settings_item_icon">
                 <div class="ct-settings-item__icon">
                     <slot name="icon"></slot>
                 </div>
             </ct-block>
 
-            <ct-block name="sw_settings_item_label">
+            <ct-block name="ct_settings_item_label">
                 <div class="ct-settings-item__label">
                     <slot name="label">
                         {{ label }}
@@ -48,7 +48,7 @@ const classes = computed(() => {
     };
 });
 
-swDefinePublic({
+ctDefinePublic({
     classes,
 });
 

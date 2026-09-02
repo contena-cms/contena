@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_permissions_role_mcp_reference_modal">
+    <ct-block name="ct_permissions_role_mcp_reference_modal">
         <ct-modal
             class="ct-permissions-role-mcp-reference-modal"
             :title="translate('ct-permissions.roles.mcpModal.title')"
             @modal-close="closeModal"
         >
-            <ct-block name="sw_permissions_role_mcp_reference_modal_content">
+            <ct-block name="ct_permissions_role_mcp_reference_modal_content">
                 <div class="ct-permissions-role-mcp-reference-modal__content">
-                    <ct-block name="sw_permissions_role_mcp_reference_modal_save_reminder">
+                    <ct-block name="ct_permissions_role_mcp_reference_modal_save_reminder">
                         <mt-banner
                             v-if="hasPreselected"
                             variant="info"
@@ -17,7 +17,7 @@
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_permissions_role_mcp_reference_modal_toolbar">
+                    <ct-block name="ct_permissions_role_mcp_reference_modal_toolbar">
                         <div class="ct-permissions-role-mcp-reference-modal__toolbar">
                             <mt-select
                                 v-model="viewMode"
@@ -37,7 +37,7 @@
                         </div>
                     </ct-block>
 
-                    <ct-block name="sw_permissions_role_mcp_reference_modal_legend">
+                    <ct-block name="ct_permissions_role_mcp_reference_modal_legend">
                         <div class="ct-permissions-role-mcp-reference-modal__legend">
                             <span class="ct-permissions-role-mcp-reference-modal__legend-label">
                                 {{ translate('ct-permissions.roles.mcpModal.legendLabel') }}
@@ -70,11 +70,11 @@
                     </ct-block>
                 </div>
 
-                <ct-block name="sw_permissions_role_mcp_reference_modal_loading">
+                <ct-block name="ct_permissions_role_mcp_reference_modal_loading">
                     <mt-loader v-if="isLoading" />
                 </ct-block>
 
-                <ct-block name="sw_permissions_role_mcp_reference_modal_rows">
+                <ct-block name="ct_permissions_role_mcp_reference_modal_rows">
                     <template v-if="!isLoading">
                         <template v-if="displayRows.length > 0">
                             <div
@@ -82,13 +82,13 @@
                                 :key="row.label"
                                 class="ct-permissions-role-mcp-reference-modal__row"
                             >
-                                <ct-block name="sw_permissions_role_mcp_reference_modal_row_label">
+                                <ct-block name="ct_permissions_role_mcp_reference_modal_row_label">
                                     <span class="ct-permissions-role-mcp-reference-modal__row-label">
                                         {{ row.label }}
                                     </span>
                                 </ct-block>
 
-                                <ct-block name="sw_permissions_role_mcp_reference_modal_row_chips">
+                                <ct-block name="ct_permissions_role_mcp_reference_modal_row_chips">
                                     <div class="ct-permissions-role-mcp-reference-modal__row-chips">
                                         <mt-badge
                                             v-for="chip in row.chips"
@@ -111,7 +111,7 @@
                                     </div>
                                 </ct-block>
 
-                                <ct-block name="sw_permissions_role_mcp_reference_modal_row_grant">
+                                <ct-block name="ct_permissions_role_mcp_reference_modal_row_grant">
                                     <mt-button
                                         v-if="row.hasMissingStatic"
                                         size="small"
@@ -126,7 +126,7 @@
                             </div>
                         </template>
 
-                        <ct-block name="sw_permissions_role_mcp_reference_modal_empty">
+                        <ct-block name="ct_permissions_role_mcp_reference_modal_empty">
                             <template v-if="displayRows.length > 0"
                                 ><!-- Keeps the conditional chain connected across ct-block. --></template
                             >
@@ -142,7 +142,7 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_permissions_role_mcp_reference_modal_footer">
+                <ct-block name="ct_permissions_role_mcp_reference_modal_footer">
                     <mt-button variant="primary" @click="closeModal">
                         {{ translate('global.default.close') }}
                     </mt-button>
@@ -373,7 +373,7 @@ const closeModal = () => {
 
 loadTools();
 
-swDefinePublic({
+ctDefinePublic({
     mcpToolService,
     availableTools,
     isLoading,

@@ -16,10 +16,10 @@ tester.run('replace-top-level-blocks-to-extends', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block extends="block-1">
+                    <ct-block extends="ct_block-1">
                         <div>
                             <span>Title</span>
-                            <ct-block name="block-2" :data="$dataScope"></ct-block>
+                            <ct-block name="ct_block-2" :data="$dataScope"></ct-block>
                         </div>
                     </ct-block>
                 </template>
@@ -30,10 +30,10 @@ tester.run('replace-top-level-blocks-to-extends', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="block-1" :data="$dataScope">
+                    <ct-block name="ct_block-1" :data="$dataScope">
                         <div>
                             <span>Title</span>
-                            <ct-block name="block-2" :data="$dataScope"></ct-block>
+                            <ct-block name="ct_block-2" :data="$dataScope"></ct-block>
                         </div>
                     </ct-block>
                 </template>
@@ -46,10 +46,10 @@ tester.run('replace-top-level-blocks-to-extends', rule, {
             filename: 'test.html.twig',
             code: `
                 <template>
-                    <ct-block name="sw_desktop_content" :data="$dataScope">
+                    <ct-block name="ct_desktop_content" :data="$dataScope">
                         <div>
                             <span>Title</span>
-                            <ct-block name="block-2" :data="$dataScope"></ct-block>
+                            <ct-block name="ct_block-2" :data="$dataScope"></ct-block>
                         </div>
                     </ct-block>
                 </template>
@@ -57,10 +57,10 @@ tester.run('replace-top-level-blocks-to-extends', rule, {
             /* eslint-disable */
             output: `
                 <template>
-                    <ct-block extends="sw_desktop_content" >
+                    <ct-block extends="ct_desktop_content" >
                         <div>
                             <span>Title</span>
-                            <ct-block name="block-2" :data="$dataScope"></ct-block>
+                            <ct-block name="ct_block-2" :data="$dataScope"></ct-block>
                         </div>
                     </ct-block>
                 </template>

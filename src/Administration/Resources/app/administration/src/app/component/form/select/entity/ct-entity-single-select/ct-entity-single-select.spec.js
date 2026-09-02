@@ -135,17 +135,17 @@ async function createEntitySingleSelect(
 
 describe('components/ct-entity-single-select', () => {
     it('should disable exact count mode per default', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect();
+        const ctEntitySingleSelect = await createEntitySingleSelect();
         await flushPromises();
 
-        const criteria = swEntitySingleSelect.vm.criteria;
+        const criteria = ctEntitySingleSelect.vm.criteria;
 
         expect(criteria).toBeInstanceOf(Object);
         expect(criteria.totalCountMode).toBe(0);
     });
 
     it('should have no reset option when it is not defined', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: null,
                 entity: 'test',
@@ -153,7 +153,7 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        const { singleSelection } = swEntitySingleSelect.vm;
+        const { singleSelection } = ctEntitySingleSelect.vm;
 
         expect(singleSelection).toBeNull();
     });
@@ -342,7 +342,7 @@ describe('components/ct-entity-single-select', () => {
     });
 
     it('should have a reset option when it is defined an the value is null', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: null,
                 entity: 'test',
@@ -351,7 +351,7 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        const { singleSelection } = swEntitySingleSelect.vm;
+        const { singleSelection } = ctEntitySingleSelect.vm;
 
         expect(singleSelection).not.toBeNull();
         expect(singleSelection.id).toBeNull();
@@ -359,7 +359,7 @@ describe('components/ct-entity-single-select', () => {
     });
 
     it('should have no reset option when it is defined but the value is not null', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: 'uuid',
                 entity: 'test',
@@ -368,9 +368,9 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        await swEntitySingleSelect.vm.$nextTick();
+        await ctEntitySingleSelect.vm.$nextTick();
 
-        const { singleSelection } = swEntitySingleSelect.vm;
+        const { singleSelection } = ctEntitySingleSelect.vm;
 
         expect(singleSelection).not.toBeNull();
         expect(singleSelection.id).toBe('uuid');
@@ -378,7 +378,7 @@ describe('components/ct-entity-single-select', () => {
     });
 
     it('should have prepend reset option to resultCollection when resetOption is given', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: '',
                 entity: 'test',
@@ -398,10 +398,10 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        swEntitySingleSelect.vm.loadData();
-        await swEntitySingleSelect.vm.$nextTick();
+        ctEntitySingleSelect.vm.loadData();
+        await ctEntitySingleSelect.vm.$nextTick();
 
-        const { resultCollection } = swEntitySingleSelect.vm;
+        const { resultCollection } = ctEntitySingleSelect.vm;
 
         expect(resultCollection).toHaveLength(getCollection().length + 1);
         expect(resultCollection[0].name).toBe('reset');
@@ -533,7 +533,7 @@ describe('components/ct-entity-single-select', () => {
     });
 
     it('should emit the correct search term', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: null,
                 entity: 'property_group_option',
@@ -552,22 +552,22 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        swEntitySingleSelect.vm.loadData();
-        await swEntitySingleSelect.vm.$nextTick();
-        await swEntitySingleSelect.vm.$nextTick();
+        ctEntitySingleSelect.vm.loadData();
+        await ctEntitySingleSelect.vm.$nextTick();
+        await ctEntitySingleSelect.vm.$nextTick();
 
-        await swEntitySingleSelect.find('.ct-select__selection').trigger('click');
-        await swEntitySingleSelect.find('input').setValue('first');
-        await swEntitySingleSelect.find('input').trigger('change');
-        await swEntitySingleSelect.vm.$nextTick();
+        await ctEntitySingleSelect.find('.ct-select__selection').trigger('click');
+        await ctEntitySingleSelect.find('input').setValue('first');
+        await ctEntitySingleSelect.find('input').trigger('change');
+        await ctEntitySingleSelect.vm.$nextTick();
 
-        expect(swEntitySingleSelect.emitted('search-term-change')[0]).toEqual([
+        expect(ctEntitySingleSelect.emitted('search-term-change')[0]).toEqual([
             'first',
         ]);
     });
 
     it('should display label provided by callback', async () => {
-        const swEntitySingleSelect = await createEntitySingleSelect({
+        const ctEntitySingleSelect = await createEntitySingleSelect({
             props: {
                 value: fixture[0].id,
                 entity: 'test',
@@ -588,14 +588,14 @@ describe('components/ct-entity-single-select', () => {
         });
         await flushPromises();
 
-        await swEntitySingleSelect.vm.$nextTick();
-        expect(swEntitySingleSelect.find('.ct-entity-single-select__selection-text').text()).toBe('test');
+        await ctEntitySingleSelect.vm.$nextTick();
+        expect(ctEntitySingleSelect.find('.ct-entity-single-select__selection-text').text()).toBe('test');
 
-        await swEntitySingleSelect.find('input').trigger('click');
-        await swEntitySingleSelect.vm.$nextTick();
+        await ctEntitySingleSelect.find('input').trigger('click');
+        await ctEntitySingleSelect.vm.$nextTick();
 
-        expect(swEntitySingleSelect.find('input').element.value).toBe('test');
-        expect(swEntitySingleSelect.find('.ct-select-result__result-item-text').text()).toBe('test');
+        expect(ctEntitySingleSelect.find('input').element.value).toBe('test');
+        expect(ctEntitySingleSelect.find('.ct-select-result__result-item-text').text()).toBe('test');
     });
 
     it('should show the clearable icon in the single select', async () => {
@@ -718,10 +718,10 @@ describe('components/ct-entity-single-select', () => {
             1,
         );
 
-        const swOriginEntitySingleSelect = await wrapTestComponent('ct-entity-single-select', {
+        const ctOriginEntitySingleSelect = await wrapTestComponent('ct-entity-single-select', {
             sync: true,
         });
-        const wrapper = mount(swOriginEntitySingleSelect, {
+        const wrapper = mount(ctOriginEntitySingleSelect, {
             props: {
                 value: 'asdf555',
                 entity: 'product_manufacturer',

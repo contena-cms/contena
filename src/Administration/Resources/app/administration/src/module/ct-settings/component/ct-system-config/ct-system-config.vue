@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_system_config">
+    <ct-block name="ct_system_config">
         <div class="ct-system-config">
-            <ct-block name="sw_system_config_channel_switch">
+            <ct-block name="ct_system_config_channel_switch">
                 <ct-channel-switch
                     v-if="channelSwitchable"
                     :label="t('ct-settings.system-config.labelChannelSelect')"
                     @change-channel-id="onChannelChanged"
                 />
             </ct-block>
-            <ct-block name="sw_system_config_content_card">
+            <ct-block name="ct_system_config_content_card">
                 <mt-card
                     v-for="(card, index) in config"
                     :key="index"
@@ -41,7 +41,7 @@
                                     currentChannelId,
                                 }"
                             >
-                                <ct-block name="sw_system_config_content_card_group">
+                                <ct-block name="ct_system_config_content_card_group">
                                     <template v-if="isMeteorComponent(element)">
                                         <ct-inherit-wrapper
                                             v-model:value="actualConfigData[currentChannelId][element.name]"
@@ -61,7 +61,7 @@
                                     </template>
 
                                     <template v-else>
-                                        <ct-block name="sw_system_config_content_card_field">
+                                        <ct-block name="ct_system_config_content_card_field">
                                             <ct-inherit-wrapper
                                                 v-model:value="actualConfigData[currentChannelId][element.name]"
                                                 v-bind="getInheritWrapperBind(element)"
@@ -491,7 +491,7 @@ watch(
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     systemConfigApiService,
     isLoading,
     currentChannelId,

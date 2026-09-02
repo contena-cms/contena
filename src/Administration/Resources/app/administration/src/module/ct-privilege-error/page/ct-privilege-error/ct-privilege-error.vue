@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_privilege_error">
+    <ct-block name="ct_privilege_error">
         <ct-page class="ct-privilege-error">
             <template #content>
-                <ct-block name="sw_privilege_error_inner">
-                    <ct-block name="sw_privilege_error_inner_content">
+                <ct-block name="ct_privilege_error_inner">
+                    <ct-block name="ct_privilege_error_inner_content">
                         <div class="ct-privilege-error__content">
-                            <ct-block name="sw_privilege_error_inner_content_image">
+                            <ct-block name="ct_privilege_error_inner_content_image">
                                 <img
                                     class="ct-privilege-error__access-denied-image"
                                     :src="
@@ -15,15 +15,15 @@
                                 />
                             </ct-block>
 
-                            <ct-block name="sw_privilege_error_inner_content_headline">
+                            <ct-block name="ct_privilege_error_inner_content_headline">
                                 <h1>{{ $t('ct-privilege-error.general.mainMenuItemGeneral') }}</h1>
                             </ct-block>
 
-                            <ct-block name="sw_privilege_error_inner_content_description">
+                            <ct-block name="ct_privilege_error_inner_content_description">
                                 <p>{{ $t('ct-privilege-error.general.descriptionTextModule') }}</p>
                             </ct-block>
 
-                            <ct-block name="sw_privilege_error_inner_content_back_button">
+                            <ct-block name="ct_privilege_error_inner_content_back_button">
                                 <mt-button variant="primary" class="ct-privilege-error__back-button" @click="routerGoBack">
                                     {{ $t('ct-privilege-error.general.goBack') }}
                                 </mt-button>
@@ -62,7 +62,7 @@ const routerGoBack = () => {
     router.go(-1);
 };
 
-swDefinePublic({
+ctDefinePublic({
     assetFilter,
     routerGoBack,
 });

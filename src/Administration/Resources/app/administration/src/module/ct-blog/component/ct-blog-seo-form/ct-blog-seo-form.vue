@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_blog_seo_form">
+    <ct-block name="ct_blog_seo_form">
         <div class="ct-blog-seo-form">
-            <ct-block name="sw_blog_seo_form_meta_title">
+            <ct-block name="ct_blog_seo_form_meta_title">
                 <mt-text-field
                     v-model="blog.metaTitle"
                     :label="$t('ct-blog.seoForm.labelMetaTitle')"
@@ -12,7 +12,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_seo_form_meta_description">
+            <ct-block name="ct_blog_seo_form_meta_description">
                 <mt-textarea
                     v-model="blog.metaDescription"
                     :label="$t('ct-blog.seoForm.labelMetaDescription')"
@@ -23,7 +23,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_seo_form_keywords">
+            <ct-block name="ct_blog_seo_form_keywords">
                 <mt-text-field
                     v-model="blog.keywords"
                     :label="$t('ct-blog.seoForm.labelKeywords')"
@@ -34,7 +34,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_blog_seo_form_open_graph">
+            <ct-block name="ct_blog_seo_form_open_graph">
                 <div class="ct-blog-seo-form__open-graph">
                     <h3>{{ $t('ct-blog.seoForm.titleOpenGraph') }}</h3>
 
@@ -102,7 +102,7 @@ defineProps({
 });
 
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory')!;
-const blog = computed(() => Contena.Store.get('swBlogDetail').blog);
+const blog = computed(() => Contena.Store.get('ctBlogDetail').blog);
 const mediaRepository = computed(() => repositoryFactory.create('media'));
 const currentOpenGraphMediaId = computed(() => blog.value.openGraphMediaId ?? null);
 const showOgMediaModal = ref(false);
@@ -164,7 +164,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     blog,
     mediaRepository,
     currentOpenGraphMediaId,

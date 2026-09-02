@@ -1,14 +1,14 @@
 <template>
-    <ct-block name="sw_channel_list">
+    <ct-block name="ct_channel_list">
         <ct-page class="ct-channel-list">
             <template #search-bar>
-                <ct-block name="sw_channel_list_search">
+                <ct-block name="ct_channel_list_search">
                     <mt-search :model-value="term" @change="onSearch" />
                 </ct-block>
             </template>
 
             <template #smart-bar-header>
-                <ct-block name="sw_channel_list_header">
+                <ct-block name="ct_channel_list_header">
                     <h2>
                         {{ t('ct-channel.list.title') }}
                         <span v-if="!isLoading" class="ct-page__smart-bar-amount">({{ total }})</span>
@@ -17,7 +17,7 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_channel_list_actions">
+                <ct-block name="ct_channel_list_actions">
                     <mt-button
                         v-tooltip.bottom="createTooltip"
                         variant="primary"
@@ -30,7 +30,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_channel_list_content">
+                <ct-block name="ct_channel_list_content">
                     <mt-data-table
                         layout="full"
                         :caption="t('ct-channel.list.caption')"
@@ -272,7 +272,7 @@ const deleteChannel = async (): Promise<void> => {
 
 void loadChannels();
 
-swDefinePublic({
+ctDefinePublic({
     channels,
     columns,
     additionalContextButtons,

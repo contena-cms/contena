@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_seo_url_template_card">
+    <ct-block name="ct_seo_url_template_card">
         <mt-card
             class="ct-seo-url-template-card"
             position-identifier="ct-seo-url-template-card"
@@ -13,13 +13,13 @@
                 />
             </template>
 
-            <ct-block name="sw_seo_url_template_card_info_box">
+            <ct-block name="ct_seo_url_template_card_info_box">
                 <mt-banner variant="info" :title="$t('global.default.info')">
                     <span>{{ $t('ct-seo-url-template-card.general.textInfoMessageBoxEmptyProperties') }}</span>
                 </mt-banner>
             </ct-block>
 
-            <ct-block name="sw_seo_url_template_card_entries">
+            <ct-block name="ct_seo_url_template_card_entries">
                 <template v-if="!isLoading && !channelIsHeadless">
                     <div
                         v-for="(seoUrlTemplate, index) in getTemplatesForChannel(channelId)"
@@ -458,7 +458,7 @@ const getTemplatesForChannel = (selectedChannelId: string | null): SeoUrlTemplat
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     seoUrlTemplateService,
     repositoryFactory,
     defaultSeoUrlTemplates,

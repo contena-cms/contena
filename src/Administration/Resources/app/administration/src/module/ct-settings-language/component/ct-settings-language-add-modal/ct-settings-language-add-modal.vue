@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_language_add_modal">
+    <ct-block name="ct_settings_language_add_modal">
         <ct-modal
             class="ct-settings-language-add-modal"
             :title="$t('ct-settings-language.addModal.title')"
             @modal-close="onClose"
         >
-            <ct-block name="sw_settings_language_add_modal_select">
+            <ct-block name="ct_settings_language_add_modal_select">
                 <ct-single-select
                     v-model:value="selectedLocale"
                     class="ct-settings-language-add-modal__language-select"
@@ -19,7 +19,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_settings_language_add_modal_selection_info">
+            <ct-block name="ct_settings_language_add_modal_selection_info">
                 <ul v-if="selectedTranslation" class="ct-settings-language-add-modal__selection-info">
                     <li class="ct-settings-language-add-modal__selection-info-item">
                         {{ $t(translationsHintTextKey) }}
@@ -41,7 +41,7 @@
                 </ul>
             </ct-block>
 
-            <ct-block name="sw_settings_language_add_modal_hint">
+            <ct-block name="ct_settings_language_add_modal_hint">
                 <div class="ct-settings-language-add-modal__hint">
                     <i18n-t tag="span" keypath="ct-settings-language.addModal.extensionStoreHint">
                         <template #extensionStoreLink>
@@ -54,8 +54,8 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_settings_language_add_modal_footer">
-                    <ct-block name="sw_settings_language_add_modal_footer_create_custom">
+                <ct-block name="ct_settings_language_add_modal_footer">
+                    <ct-block name="ct_settings_language_add_modal_footer_create_custom">
                         <mt-link
                             class="ct-settings-language-add-modal__create-custom"
                             :to="{ name: 'ct.settings.language.create' }"
@@ -65,15 +65,15 @@
                         </mt-link>
                     </ct-block>
 
-                    <ct-block name="sw_settings_language_add_modal_footer_actions">
+                    <ct-block name="ct_settings_language_add_modal_footer_actions">
                         <div class="ct-settings-language-add-modal__footer-actions">
-                            <ct-block name="sw_settings_language_add_modal_footer_cancel">
+                            <ct-block name="ct_settings_language_add_modal_footer_cancel">
                                 <mt-button variant="secondary" size="small" @click="onClose">
                                     {{ $t('global.default.cancel') }}
                                 </mt-button>
                             </ct-block>
 
-                            <ct-block name="sw_settings_language_add_modal_footer_add">
+                            <ct-block name="ct_settings_language_add_modal_footer_add">
                                 <mt-button
                                     class="ct-settings-language-add-modal__add-action"
                                     variant="primary"
@@ -232,7 +232,7 @@ const onClose = () => {
 
 void createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     repositoryFactory,
     translationService,
     translations,

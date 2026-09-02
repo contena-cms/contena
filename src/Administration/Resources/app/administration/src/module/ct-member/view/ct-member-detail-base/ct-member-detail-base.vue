@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_member_detail_base">
+    <ct-block name="ct_member_detail_base">
         <div class="ct-member-detail-base">
             <ct-member-card
                 :title="t('ct-member.detailBase.labelAccountCard')"
@@ -10,7 +10,7 @@
                 <ct-member-base-info :member="member" :member-edit-mode="memberEditMode" :is-loading="isLoading" />
             </ct-member-card>
 
-            <ct-block name="sw_member_detail_base_custom_fields">
+            <ct-block name="ct_member_detail_base_custom_fields">
                 <mt-card
                     v-if="customFieldSets.length > 0"
                     position-identifier="ct-member-detail-custom-fields"
@@ -56,7 +56,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     customFieldSets,
     loadCustomFieldSets,
 });

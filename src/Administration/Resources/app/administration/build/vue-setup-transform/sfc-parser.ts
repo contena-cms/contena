@@ -20,14 +20,14 @@ import { ContenaSetupTransformError } from './utils/transform-error';
  * Builds the diagnostic for an SFC that has no `<script setup>` block.
  *
  * The two modes fail for the same reason but need different instructions: a base component declares its
- * extension surface with `swDefinePublic()`, an override registers itself with `swDefineOverride()`.
+ * extension surface with `ctDefinePublic()`, an override registers itself with `ctDefineOverride()`.
  * Both markers live in `<script setup>`, so a missing block means the file cannot participate at all.
  */
 function missingScriptSetupMessage(mode: ContenaSetupMode): string {
     if (mode === 'override') {
         return (
             'An override component needs a <script setup> block to register its override. Add ' +
-            '<script setup> with swDefineOverride({ ... }) - pass an empty object for a ' +
+            '<script setup> with ctDefineOverride({ ... }) - pass an empty object for a ' +
             'template-only override.'
         );
     }
@@ -35,7 +35,7 @@ function missingScriptSetupMessage(mode: ContenaSetupMode): string {
     return (
         'A Contena setup component needs a <script setup> block. Every .vue component is extendable, ' +
         'and the extension surface is declared inside <script setup> - add one with ' +
-        'swDefinePublic({ ... }) and pass an empty object if no binding is public. The Options API ' +
+        'ctDefinePublic({ ... }) and pass an empty object if no binding is public. The Options API ' +
         '(a plain <script> block) cannot declare one.'
     );
 }

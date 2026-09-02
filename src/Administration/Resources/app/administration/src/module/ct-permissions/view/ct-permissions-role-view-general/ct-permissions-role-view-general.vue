@@ -1,13 +1,13 @@
 <template>
     <div class="ct-permissions-role-view-general">
-        <ct-block name="sw_permissions_role_role_view_general_card_view_basic_information">
+        <ct-block name="ct_permissions_role_role_view_general_card_view_basic_information">
             <mt-card
                 :title="$t('ct-permissions.roles.detail.basicInformation')"
                 position-identifier="ct-permissions-role-view-general"
                 :is-loading="isLoading"
             >
                 <template v-if="role">
-                    <ct-block name="sw_permissions_role_role_view_general_mcp_hint">
+                    <ct-block name="ct_permissions_role_role_view_general_mcp_hint">
                         <mt-banner
                             v-if="shouldShowMcpHint"
                             variant="info"
@@ -25,7 +25,7 @@
                         </mt-banner>
                     </ct-block>
 
-                    <ct-block name="sw_permissions_role_role_view_general_card_view_basic_information_name">
+                    <ct-block name="ct_permissions_role_role_view_general_card_view_basic_information_name">
                         <mt-text-field
                             v-model="role.name"
                             name="ct-field--role-name"
@@ -36,7 +36,7 @@
                         />
                     </ct-block>
 
-                    <ct-block name="sw_permissions_role_role_view_general_card_view_basic_information_description">
+                    <ct-block name="ct_permissions_role_role_view_general_card_view_basic_information_description">
                         <mt-textarea
                             v-model="role.description"
                             name="ct-field--role-description"
@@ -49,7 +49,7 @@
             </mt-card>
         </ct-block>
 
-        <ct-block name="sw_permissions_role_role_view_general_card_view_permissions">
+        <ct-block name="ct_permissions_role_role_view_general_card_view_permissions">
             <ct-permissions-role-access
                 v-if="role || isLoading"
                 :role="role"
@@ -58,9 +58,9 @@
             />
         </ct-block>
 
-        <ct-block name="sw_permissions_role_role_view_general_card_view_additional_permissions"> </ct-block>
+        <ct-block name="ct_permissions_role_role_view_general_card_view_additional_permissions"> </ct-block>
 
-        <ct-block name="sw_permissions_role_role_view_general_mcp_modal">
+        <ct-block name="ct_permissions_role_role_view_general_mcp_modal">
             <ct-permissions-role-mcp-reference-modal
                 v-if="showMcpModal"
                 :role="role"
@@ -193,7 +193,7 @@ watch(
     { immediate: true },
 );
 
-swDefinePublic({
+ctDefinePublic({
     acl,
     repositoryFactory,
     mcpIntegrations,

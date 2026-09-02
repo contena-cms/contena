@@ -1,17 +1,17 @@
 <template>
-    <ct-block name="sw_desktop">
+    <ct-block name="ct_desktop">
         <div class="ct-desktop" :class="desktopClasses">
             <div v-if="isStaging" class="ct-staging-bar">
                 {{ $t('global.ct-desktop.stagingBarText') }}
             </div>
 
-            <ct-block name="sw_desktop_sidebar">
+            <ct-block name="ct_desktop_sidebar">
                 <ct-admin-menu v-if="!noNavigation" />
             </ct-block>
 
-            <ct-block name="sw_desktop_content">
+            <ct-block name="ct_desktop_content">
                 <div class="ct-desktop__content">
-                    <ct-block name="sw_desktop_content_view">
+                    <ct-block name="ct_desktop_content_view">
                         <ct-error-boundary>
                             <router-view />
                         </ct-error-boundary>
@@ -157,7 +157,7 @@ watch(
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     userActivityApiService,
     noNavigation,
     desktopClasses,

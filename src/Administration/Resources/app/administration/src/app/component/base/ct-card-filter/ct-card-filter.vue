@@ -1,9 +1,9 @@
 <template>
-    <ct-block name="sw_card_search_bar">
+    <ct-block name="ct_card_search_bar">
         <div class="ct-card-filter">
-            <ct-block name="sw_card_filter_bar_container">
+            <ct-block name="ct_card_filter_bar_container">
                 <div :class="hasFilterClass">
-                    <ct-block name="sw_card_filter_bar_container_field">
+                    <ct-block name="ct_card_filter_bar_container_field">
                         <ct-simple-search-field
                             v-model:value="term"
                             size="small"
@@ -16,7 +16,7 @@
                 </div>
             </ct-block>
 
-            <ct-block name="sw_card_filter_bar_container_field_filter">
+            <ct-block name="ct_card_filter_bar_container_field_filter">
                 <div class="ct-card-filter-filter">
                     <slot name="filter"></slot>
                 </div>
@@ -76,7 +76,7 @@ const onSearchTermChange = () => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     term,
     hasFilter,
     hasFilterClass,

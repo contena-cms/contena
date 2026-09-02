@@ -1,7 +1,7 @@
 <template>
-    <ct-block name="sw_media_display_options">
+    <ct-block name="ct_media_display_options">
         <div v-if="inline" class="ct-media-display-options__inline">
-            <ct-block name="sw_media_display_options_sorting">
+            <ct-block name="ct_media_display_options_sorting">
                 <mt-select
                     name="sortType"
                     small
@@ -14,7 +14,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_display_options_presentation">
+            <ct-block name="ct_media_display_options_presentation">
                 <div v-if="!hidePresentation" class="ct-media-display-options__view-buttons">
                     <mt-button
                         class="ct-media-display-options__view-button"
@@ -51,7 +51,7 @@
         </div>
 
         <template v-else>
-            <ct-block name="sw_media_display_options_presentation">
+            <ct-block name="ct_media_display_options_presentation">
                 <mt-select
                     v-if="!hidePresentation"
                     name="presentation"
@@ -65,7 +65,7 @@
                 />
             </ct-block>
 
-            <ct-block name="sw_media_display_options_sorting">
+            <ct-block name="ct_media_display_options_sorting">
                 <mt-select
                     name="sortType"
                     small
@@ -223,7 +223,7 @@ const onPresentationChanged = (value) => {
     emit('media-presentation-change', value);
 };
 
-swDefinePublic({
+ctDefinePublic({
     sortingConCat,
     sortOptions,
     previewOptions,

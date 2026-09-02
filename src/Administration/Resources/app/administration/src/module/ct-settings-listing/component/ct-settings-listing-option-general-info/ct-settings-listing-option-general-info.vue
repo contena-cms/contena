@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-    <ct-block name="sw_settings_listing_option_general_info">
+    <ct-block name="ct_settings_listing_option_general_info">
         <mt-card
             class="ct-settings-listing-option-general-info"
             :title="$t('ct-settings-listing.base.general.title')"
             position-identifier="ct-settings-listing-option-general-info"
         >
             <div class="ct-settings-listing-option-general-info__fields">
-                <ct-block name="sw_settings_listing_option_general_info_name">
+                <ct-block name="ct_settings_listing_option_general_info_name">
                     <mt-text-field
                         v-model="props.sortingOption.label"
                         :label="$t('ct-settings-listing.base.general.labelName')"
@@ -18,7 +18,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_settings_listing_option_general_info_technical_name">
+                <ct-block name="ct_settings_listing_option_general_info_technical_name">
                     <mt-text-field
                         v-model="props.sortingOption.key"
                         :label="$t('ct-settings-listing.base.general.labelTechnicalName')"
@@ -30,7 +30,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_settings_listing_option_general_info_priority">
+                <ct-block name="ct_settings_listing_option_general_info_priority">
                     <mt-number-field
                         v-model="props.sortingOption.priority"
                         :label="$t('ct-settings-listing.general.blogSortingCriteriaGrid.header.priority')"
@@ -40,7 +40,7 @@
                     />
                 </ct-block>
 
-                <ct-block name="sw_settings_listing_option_general_info_active">
+                <ct-block name="ct_settings_listing_option_general_info_active">
                     <mt-switch
                         v-model="props.sortingOption.active"
                         :label="$t('ct-settings-listing.base.general.labelActive')"
@@ -71,7 +71,7 @@ const props = defineProps({
     technicalNameError: { type: Object as PropType<ContenaError | null>, default: null },
 });
 
-swDefinePublic({});
+ctDefinePublic({});
 </script>
 
 <style scoped>

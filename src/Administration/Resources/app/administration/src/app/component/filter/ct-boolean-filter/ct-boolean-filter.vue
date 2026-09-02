@@ -1,8 +1,8 @@
 <template>
-    <ct-block name="sw_boolean_filter">
+    <ct-block name="ct_boolean_filter">
         <div class="ct-boolean-filter">
             <ct-base-filter :title="filter.label" :show-reset-button="!!value" :active="active" @filter-reset="resetFilter">
-                <ct-block name="sw_boolean_filter_content">
+                <ct-block name="ct_boolean_filter_content">
                     <mt-select
                         :model-value="value"
                         :placeholder="filter.placeholder"
@@ -72,7 +72,7 @@ function resetFilter() {
     emit('filter-reset', props.filter.name);
 }
 
-swDefinePublic({
+ctDefinePublic({
     value,
     options,
     changeValue,

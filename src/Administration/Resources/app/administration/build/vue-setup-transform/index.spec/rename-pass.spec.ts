@@ -1,6 +1,6 @@
 /**
  * Covers the reference-rename pass that base lowering relies on: every top-level runtime
- * binding is renamed to a reserved `__swSetupAuthor_` alias, and the footer re-declares the original
+ * binding is renamed to a reserved `__ctSetupAuthor_` alias, and the footer re-declares the original
  * names. These cases pin the edges where a naive rename would corrupt code - shorthand property keys,
  * type-member keys, `typeof` queries, and lexical shadowing.
  */
@@ -15,15 +15,15 @@ describe('build/vue-setup-transform base rename pass', () => {
             const count = ref(0);
             const onMounted = () => count.value++;
             vueOnMounted(onMounted);
-            swDefinePublic({ count, onMounted });
+            ctDefinePublic({ count, onMounted });
             </script>
         `;
 
         const result = transformOrFail(source, 'ct-import-alias.vue').code;
 
         expect(result).toContain("import { ref, onMounted as vueOnMounted } from 'vue';");
-        expect(result).toContain('const __swSetupAuthor_onMounted = () => __swSetupAuthor_count.value++;');
-        expect(result).toContain('vueOnMounted(__swSetupAuthor_onMounted);');
+        expect(result).toContain('const __ctSetupAuthor_onMounted = () => __ctSetupAuthor_count.value++;');
+        expect(result).toContain('vueOnMounted(__ctSetupAuthor_onMounted);');
     });
 
     it('expands a shorthand property instead of renaming its key', () => {
@@ -33,16 +33,16 @@ describe('build/vue-setup-transform base rename pass', () => {
             const foo = ref(1);
             const bar = { foo };
             bar['foo'].value = 2;
-            swDefinePublic({ foo });
+            ctDefinePublic({ foo });
             </script>
         `;
 
         const result = transformOrFail(source, 'ct-shorthand.vue').code;
 
-        // A blind rename would produce `{ __swSetupAuthor_foo }`, silently renaming the KEY so that
+        // A blind rename would produce `{ __ctSetupAuthor_foo }`, silently renaming the KEY so that
         // bar['foo'] resolves to undefined. The shorthand must expand, keeping the key.
-        expect(result).toContain('const __swSetupAuthor_bar = { foo: __swSetupAuthor_foo };');
-        expect(result).toContain("__swSetupAuthor_bar['foo'].value = 2;");
+        expect(result).toContain('const __ctSetupAuthor_bar = { foo: __ctSetupAuthor_foo };');
+        expect(result).toContain("__ctSetupAuthor_bar['foo'].value = 2;");
     });
 
     it('leaves type-member keys untouched while renaming a typeof value query', () => {
@@ -54,7 +54,7 @@ describe('build/vue-setup-transform base rename pass', () => {
             }
             type CountType = typeof count;
             const doubled: CountType = count * 2;
-            swDefinePublic({ count, doubled });
+            ctDefinePublic({ count, doubled });
             </script>
         `;
 
@@ -67,8 +67,8 @@ describe('build/vue-setup-transform base rename pass', () => {
             }
         `);
         // `typeof count` reads the value binding and must be renamed with it.
-        expect(result).toContain('type CountType = typeof __swSetupAuthor_count;');
-        expect(result).toContain('const __swSetupAuthor_doubled = __swSetupAuthor_count * 2;');
+        expect(result).toContain('type CountType = typeof __ctSetupAuthor_count;');
+        expect(result).toContain('const __ctSetupAuthor_doubled = __ctSetupAuthor_count * 2;');
     });
 
     it('does not rename a name shadowed by a function parameter', () => {
@@ -77,7 +77,7 @@ describe('build/vue-setup-transform base rename pass', () => {
             const value = 10;
             const clamp = (value) => value > 0 ? value : 0;
             const result = clamp(value);
-            swDefinePublic({ result });
+            ctDefinePublic({ result });
             </script>
         `;
 
@@ -85,9 +85,9 @@ describe('build/vue-setup-transform base rename pass', () => {
 
         // The arrow parameter `value` shadows the top-level binding, so it stays while the declaration
         // name is aliased.
-        expect(result).toContain('const __swSetupAuthor_clamp = (value) => value > 0 ? value : 0;');
+        expect(result).toContain('const __ctSetupAuthor_clamp = (value) => value > 0 ? value : 0;');
         // The outer read at the call site is the renamed top-level binding.
-        expect(result).toContain('const __swSetupAuthor_result = __swSetupAuthor_clamp(__swSetupAuthor_value);');
+        expect(result).toContain('const __ctSetupAuthor_result = __ctSetupAuthor_clamp(__ctSetupAuthor_value);');
     });
 
     it('does not rename a name shadowed by a body-local declaration', () => {
@@ -99,7 +99,7 @@ describe('build/vue-setup-transform base rename pass', () => {
                 return total;
             }
             const out = compute() + total;
-            swDefinePublic({ out });
+            ctDefinePublic({ out });
             </script>
         `;
 
@@ -108,51 +108,51 @@ describe('build/vue-setup-transform base rename pass', () => {
         // The inner `const total` shadows the top-level binding inside the function body, so neither
         // the declaration nor its read is renamed; the enclosing function name is.
         expect(stripWhitespace(result)).toContain(stripWhitespace`
-            function __swSetupAuthor_compute() {
+            function __ctSetupAuthor_compute() {
                 const total = 5;
                 return total;
             }
         `);
-        expect(result).toContain('const __swSetupAuthor_out = __swSetupAuthor_compute() + __swSetupAuthor_total;');
+        expect(result).toContain('const __ctSetupAuthor_out = __ctSetupAuthor_compute() + __ctSetupAuthor_total;');
     });
 
     it.each([
         [
             'shorthand without a default expands, keeping the key',
             'const { foo } = config;',
-            'const { foo: __swSetupAuthor_foo } = __swSetupAuthor_config;',
+            'const { foo: __ctSetupAuthor_foo } = __ctSetupAuthor_config;',
         ],
         [
             'shorthand WITH a default expands too, keeping the key and the default',
             'const { foo = 5 } = config;',
-            'const { foo: __swSetupAuthor_foo = 5 } = __swSetupAuthor_config;',
+            'const { foo: __ctSetupAuthor_foo = 5 } = __ctSetupAuthor_config;',
         ],
         [
             'renamed key leaves the key alone and aliases the local',
             'const { other: foo } = config;',
-            'const { other: __swSetupAuthor_foo } = __swSetupAuthor_config;',
+            'const { other: __ctSetupAuthor_foo } = __ctSetupAuthor_config;',
         ],
         [
             'renamed key with a default leaves the key alone',
             'const { other: foo = 5 } = config;',
-            'const { other: __swSetupAuthor_foo = 5 } = __swSetupAuthor_config;',
+            'const { other: __ctSetupAuthor_foo = 5 } = __ctSetupAuthor_config;',
         ],
         [
             'array pattern with a default has no key to protect',
             'const [foo = 5] = config;',
-            'const [__swSetupAuthor_foo = 5] = __swSetupAuthor_config;',
+            'const [__ctSetupAuthor_foo = 5] = __ctSetupAuthor_config;',
         ],
         [
             'rest element aliases the collected name while the sibling shorthand still expands',
             'const { other, ...foo } = config;',
-            'const { other: __swSetupAuthor_other, ...__swSetupAuthor_foo } = __swSetupAuthor_config;',
+            'const { other: __ctSetupAuthor_other, ...__ctSetupAuthor_foo } = __ctSetupAuthor_config;',
         ],
     ])('renames a destructured binding: %s', (_name, declaration, expected) => {
         const source = stripIndent`
             <script setup>
             const config = { foo: 1, other: 2 };
             ${declaration}
-            swDefinePublic({ foo });
+            ctDefinePublic({ foo });
             </script>
         `;
 
@@ -174,7 +174,7 @@ describe('build/vue-setup-transform base rename pass', () => {
                 }
             }
             const thing = new Thing();
-            swDefinePublic({ thing });
+            ctDefinePublic({ thing });
             </script>
         `;
 
@@ -184,14 +184,14 @@ describe('build/vue-setup-transform base rename pass', () => {
         // would make `thing.count` read undefined, and renaming `total` would make `thing.total()`
         // throw "is not a function".
         expect(stripWhitespace(result)).toContain(stripWhitespace`
-            class __swSetupAuthor_Thing {
+            class __ctSetupAuthor_Thing {
                 count = 0;
                 total() {
                     return 3;
                 }
             }
         `);
-        expect(result).toContain('const __swSetupAuthor_thing = new __swSetupAuthor_Thing();');
+        expect(result).toContain('const __ctSetupAuthor_thing = new __ctSetupAuthor_Thing();');
     });
 
     it('does not rename enum member names that collide with a top-level binding', () => {
@@ -203,7 +203,7 @@ describe('build/vue-setup-transform base rename pass', () => {
                 done,
             }
             const status = Status.active;
-            swDefinePublic({ status });
+            ctDefinePublic({ status });
             </script>
         `;
 
@@ -213,12 +213,12 @@ describe('build/vue-setup-transform base rename pass', () => {
         // `active` is a key on that enum, not a reference to the top-level `active` binding. Renaming
         // it would make `Status.active` undefined.
         expect(stripWhitespace(result)).toContain(stripWhitespace`
-            enum __swSetupAuthor_Status {
+            enum __ctSetupAuthor_Status {
                 active,
                 done,
             }
         `);
-        expect(result).toContain('const __swSetupAuthor_status = __swSetupAuthor_Status.active;');
+        expect(result).toContain('const __ctSetupAuthor_status = __ctSetupAuthor_Status.active;');
     });
 
     it('renames member-access objects but never the static property name', () => {
@@ -226,14 +226,14 @@ describe('build/vue-setup-transform base rename pass', () => {
             <script setup>
             const source = { count: 1 };
             const count = source.count;
-            swDefinePublic({ count });
+            ctDefinePublic({ count });
             </script>
         `;
 
         const result = transformOrFail(source, 'ct-member.vue').code;
 
         // `source` (the object) is renamed; `.count` (the property name) is not.
-        expect(result).toContain('const __swSetupAuthor_count = __swSetupAuthor_source.count;');
+        expect(result).toContain('const __ctSetupAuthor_count = __ctSetupAuthor_source.count;');
     });
 
     it('does not rewrite meta-property tokens (`import.meta`, `new.target`)', () => {
@@ -241,17 +241,17 @@ describe('build/vue-setup-transform base rename pass', () => {
             <script setup>
             const meta = 1;
             const url = import.meta.url;
-            swDefinePublic({ meta });
+            ctDefinePublic({ meta });
             </script>
         `;
         // `meta` in `import.meta` is a syntax token, not a read of the binding.
-        expect(transformOrFail(metaSource, 'ct-meta.vue').code).toContain('const __swSetupAuthor_url = import.meta.url;');
+        expect(transformOrFail(metaSource, 'ct-meta.vue').code).toContain('const __ctSetupAuthor_url = import.meta.url;');
 
         const targetSource = stripIndent`
             <script setup>
             function make() { return new.target; }
             const target = 5;
-            swDefinePublic({ target });
+            ctDefinePublic({ target });
             </script>
         `;
         expect(transformOrFail(targetSource, 'ct-newtarget.vue').code).toContain('return new.target;');
@@ -262,7 +262,7 @@ describe('build/vue-setup-transform base rename pass', () => {
             <script setup lang="tsx">
             const Lib = { Btn: () => null };
             const node = <div><Lib.Btn /></div>;
-            swDefinePublic({ node });
+            ctDefinePublic({ node });
             </script>
         `;
 
@@ -272,7 +272,7 @@ describe('build/vue-setup-transform base rename pass', () => {
         // The member-expression root `Lib` is a binding and is renamed; `div` (intrinsic) and `.Btn`
         // (member property) are not. Without the fix `<Lib.Btn />` would resolve to the footer binding
         // and fail with a temporal-dead-zone error during setup.
-        expect(result).toContain('const __swSetupAuthor_node = <div><__swSetupAuthor_Lib.Btn /></div>;');
+        expect(result).toContain('const __ctSetupAuthor_node = <div><__ctSetupAuthor_Lib.Btn /></div>;');
     });
 
     it('renames a name in a sibling block, not just where an inner block shadows it', () => {
@@ -287,7 +287,7 @@ describe('build/vue-setup-transform base rename pass', () => {
                 return source.value;
             }
             const out = read();
-            swDefinePublic({ out });
+            ctDefinePublic({ out });
             </script>
         `;
 
@@ -296,7 +296,7 @@ describe('build/vue-setup-transform base rename pass', () => {
         // The inner-block `const source` shadows only its own block, so the later read outside that block
         // is the top-level binding and must be renamed.
         expect(result).toContain('const source = { value: 2 };');
-        expect(result).toContain('return __swSetupAuthor_source.value;');
+        expect(result).toContain('return __ctSetupAuthor_source.value;');
     });
 
     it('does not rename a named function-expression self-reference', () => {
@@ -304,7 +304,7 @@ describe('build/vue-setup-transform base rename pass', () => {
             <script setup>
             const helper = 1;
             const callback = function helper() { return helper; };
-            swDefinePublic({ callback });
+            ctDefinePublic({ callback });
             </script>
         `;
 
@@ -312,15 +312,15 @@ describe('build/vue-setup-transform base rename pass', () => {
 
         // The expression's own name `helper` is visible only inside its body, so the self-reference must
         // stay `helper` (returning the function), not become the outer alias (returning 1).
-        expect(result).toContain('const __swSetupAuthor_callback = function helper() { return helper; };');
-        expect(result).toContain('const __swSetupAuthor_helper = 1;');
+        expect(result).toContain('const __ctSetupAuthor_callback = function helper() { return helper; };');
+        expect(result).toContain('const __ctSetupAuthor_helper = 1;');
     });
 
     it('does not rename a named class-expression self-reference', () => {
         const source = stripIndent`
             <script setup>
             const Holder = class Holder { static self = Holder; };
-            swDefinePublic({ Holder });
+            ctDefinePublic({ Holder });
             </script>
         `;
 
@@ -340,7 +340,7 @@ describe('build/vue-setup-transform base rename pass', () => {
                 return source.name;
             }
             const out = read();
-            swDefinePublic({ out });
+            ctDefinePublic({ out });
             </script>
         `;
 
@@ -350,7 +350,7 @@ describe('build/vue-setup-transform base rename pass', () => {
         // stay `source`; only the outer binding is aliased.
         expect(result).toContain('function source() {}');
         expect(result).toContain('return source.name;');
-        expect(result).toContain('const __swSetupAuthor_source = 1;');
+        expect(result).toContain('const __ctSetupAuthor_source = 1;');
     });
 
     it('expands a shorthand type export so the public name survives the rename', () => {
@@ -359,14 +359,14 @@ describe('build/vue-setup-transform base rename pass', () => {
             class Thing {}
             export type { Thing };
             const t = new Thing();
-            swDefinePublic({ t });
+            ctDefinePublic({ t });
             </script>
         `;
 
         const result = transformOrFail(source, 'ct-type-export.vue').code;
 
         // The runtime class is renamed, but the public type export must keep the name `Thing`.
-        expect(result).toContain('export type { __swSetupAuthor_Thing as Thing };');
-        expect(result).toContain('const __swSetupAuthor_t = new __swSetupAuthor_Thing();');
+        expect(result).toContain('export type { __ctSetupAuthor_Thing as Thing };');
+        expect(result).toContain('const __ctSetupAuthor_t = new __ctSetupAuthor_Thing();');
     });
 });

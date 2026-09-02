@@ -83,12 +83,12 @@ Vue-native block system for SFC templates:
 
 ```html
 <!-- Define extensible block -->
-<ct-block name="product-header">
+<ct-block name="ct_product-header">
     <h1>{{ product.name }}</h1>
 </ct-block>
 
 <!-- Extend block in plugin -->
-<ct-block name="product-header" extends="product-header">
+<ct-block name="ct_product-header" extends="ct_product-header">
     <ct-block-parent />
     <div class="custom-badge">New!</div>
 </ct-block>

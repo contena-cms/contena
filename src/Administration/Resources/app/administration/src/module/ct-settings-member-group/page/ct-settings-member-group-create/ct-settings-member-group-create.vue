@@ -4,5 +4,5 @@
 
 <script setup lang="ts">
 defineProps({});
-swDefinePublic({});
+ctDefinePublic({});
 </script>

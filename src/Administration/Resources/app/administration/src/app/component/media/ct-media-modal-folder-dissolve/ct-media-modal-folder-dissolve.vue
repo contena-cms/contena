@@ -1,12 +1,12 @@
 <template>
-    <ct-block name="sw_media_modal_folder_dissolve">
+    <ct-block name="ct_media_modal_folder_dissolve">
         <ct-modal
             variant="small"
             class="ct-media-modal-folder-dissolve"
             :title="$t('global.default.warning')"
             @modal-close="closeDissolveModal"
         >
-            <ct-block name="sw_media_modal_folder_dissolve_body">
+            <ct-block name="ct_media_modal_folder_dissolve_body">
                 {{
                     $t(
                         'global.ct-media-modal-folder-dissolve.dissolveMessage',
@@ -17,14 +17,14 @@
             </ct-block>
 
             <template #modal-footer>
-                <ct-block name="sw_media_modal_folder_dissolve_footer">
-                    <ct-block name="sw_media_modal_folder_dissolve__cancel_button">
+                <ct-block name="ct_media_modal_folder_dissolve_footer">
+                    <ct-block name="ct_media_modal_folder_dissolve__cancel_button">
                         <mt-button size="small" variant="secondary" @click="closeDissolveModal">
                             {{ $t('global.default.cancel') }}
                         </mt-button>
                     </ct-block>
 
-                    <ct-block name="sw_media_modal_folder_dissolve_confirm_button">
+                    <ct-block name="ct_media_modal_folder_dissolve_confirm_button">
                         <mt-button
                             class="ct-media-modal-folder-dissolve__confirm"
                             size="small"
@@ -132,7 +132,7 @@ const dissolveSelection = async () => {
     }
 };
 
-swDefinePublic({
+ctDefinePublic({
     mediaFolderService,
     closeDissolveModal,
     dissolveItem,

@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_frontend_index">
+    <ct-block name="ct_settings_frontend_index">
         <ct-page class="ct-settings-frontend">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_frontend_smart_bar_header">
-                    <ct-block name="sw_settings_frontend_smart_bar_header_title">
+                <ct-block name="ct_settings_frontend_smart_bar_header">
+                    <ct-block name="ct_settings_frontend_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_settings_frontend_smart_bar_header_title_text">
+                            <ct-block name="ct_settings_frontend_smart_bar_header_title_text">
                                 {{ $t('ct-settings.index.title') }}
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
                                 {{ $t('ct-settings-frontend.general.textHeadline') }}
@@ -16,8 +16,8 @@
             </template>
 
             <template #smart-bar-actions>
-                <ct-block name="sw_settings_frontend_smart_bar_actions">
-                    <ct-block name="sw_settings_frontend_actions_save">
+                <ct-block name="ct_settings_frontend_smart_bar_actions">
+                    <ct-block name="ct_settings_frontend_actions_save">
                         <mt-button
                             class="ct-settings-frontend__save-action"
                             variant="primary"
@@ -32,25 +32,25 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_frontend_content">
+                <ct-block name="ct_settings_frontend_content">
                     <ct-card-view>
                         <ct-skeleton v-if="isLoading" />
 
-                        <ct-block name="sw_settings_frontend">
+                        <ct-block name="ct_settings_frontend">
                             <mt-card
                                 position-identifier="ct-settings-frontend--settings"
                                 :title="$t('ct-settings-frontend.configuration.cardTitle')"
                                 class="ct-settings-frontend__input-fields"
                             >
                                 <template #toolbar>
-                                    <ct-block name="sw_settings_frontend_channel_switch">
+                                    <ct-block name="ct_settings_frontend_channel_switch">
                                         <div class="ct-settings-frontend__channel-switch">
                                             <ct-channel-switch label="" @change-channel-id="onChannelChanged" />
                                         </div>
                                     </ct-block>
                                 </template>
 
-                                <ct-block name="sw_settings_frontend_settings_icon_cache">
+                                <ct-block name="ct_settings_frontend_settings_icon_cache">
                                     <ct-inherit-wrapper
                                         v-model:value="currentChannelFrontendSettings['core.frontendSettings.iconCache']"
                                         :inherited-value="frontendSettings['core.frontendSettings.iconCache']"
@@ -83,7 +83,7 @@
                                     </ct-inherit-wrapper>
                                 </ct-block>
 
-                                <ct-block name="sw_settings_frontend_settings_speculation_rules">
+                                <ct-block name="ct_settings_frontend_settings_speculation_rules">
                                     <ct-inherit-wrapper
                                         v-model:value="
                                             currentChannelFrontendSettings['core.frontendSettings.speculationRules']
@@ -122,13 +122,13 @@
                             </mt-card>
                         </ct-block>
 
-                        <ct-block name="sw_settings_frontend_global">
+                        <ct-block name="ct_settings_frontend_global">
                             <mt-card
                                 position-identifier="ct-settings-frontend--global-settings"
                                 :title="$t('ct-settings-frontend.configuration.theme.cardTitle')"
                                 class="ct-settings-frontend__input-fields"
                             >
-                                <ct-block name="sw_settings_frontend_settings_theme_async">
+                                <ct-block name="ct_settings_frontend_settings_theme_async">
                                     <mt-switch
                                         v-model="frontendSettings['core.frontendSettings.asyncThemeCompilation']"
                                         bordered
@@ -296,7 +296,7 @@ async function onChannelChanged(channelId?: string | null): Promise<void> {
 
 onMounted(loadPageContent);
 
-swDefinePublic({
+ctDefinePublic({
     isLoading,
     isSaveSuccessful,
     selectedChannelId,

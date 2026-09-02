@@ -7,14 +7,14 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <p>{{ headline }}</p>
                 </ct-block>
             </template>
             <script setup>
             const headline = 'Hello';
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -30,7 +30,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <p>{{ headline }}</p>
                 </ct-block>
             </template>
@@ -39,7 +39,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
             const headline = computed(() => 'Hello');
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -57,17 +57,17 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block extends="sw_example_card">
+                <ct-block extends="ct_example_card">
                     <p>{{ headline }}</p>
                 </ct-block>
             </template>
             <script setup>
             import { computed } from 'vue';
 
-            const previousState = useSwPreviousState();
+            const previousState = useCtPreviousState();
             const headline = computed(() => previousState.headline.value);
 
-            swDefineOverride({
+            ctDefineOverride({
                 headline,
             });
             </script>
@@ -92,7 +92,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
             const headline = computed(() => 'Hello');
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -108,14 +108,14 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = [
             '<template>',
-            '    <ct-block name="sw_example_card">',
+            '    <ct-block name="ct_example_card">',
             '        <p>{{ headline }}</p>',
             '    </ct-block>',
             '</template>',
             '<script setup>',
             "const headline = 'Hello';",
             '',
-            'swDefinePublic({',
+            'ctDefinePublic({',
             '    headline,',
             '});',
             '</script>',
@@ -151,7 +151,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
             const headline = props.label;
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -170,14 +170,14 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <p>{{ headline }}</p>
                 </ct-block>
             </template>
             <script setup>
             const headline = 'Hello';
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
             });
             </script>
@@ -185,8 +185,8 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const result = transformOrFail(source, 'template-data-scope.vue');
 
-        expect(result.code).toContain('<ct-block :data="$dataScope" name="sw_example_card">');
-        expectOriginalLine(result, source, 'name="sw_example_card"', 'name="sw_example_card"');
+        expect(result.code).toContain('<ct-block :data="$dataScope" name="ct_example_card">');
+        expectOriginalLine(result, source, 'name="ct_example_card"', 'name="ct_example_card"');
         expectOriginalLine(result, source, '{{ headline }}', '{{ headline }}');
     });
 
@@ -195,7 +195,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block extends="sw_example_card">
+                <ct-block extends="ct_example_card">
                     <p>{{ headline }}</p>
                     <small>{{ info }}</small>
                 </ct-block>
@@ -204,7 +204,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
             const headline = 'Hello';
             const info = 'Local';
 
-            swDefineOverride({
+            ctDefineOverride({
                 headline,
             });
             </script>
@@ -213,8 +213,8 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
         const result = transformOrFail(source, 'template-slot-merge.override.vue');
 
         // The transform generates the #default slot scope (forwarding headline + the private info).
-        expect(result.code).toContain('__swOverride');
-        expectOriginalLine(result, source, 'extends="sw_example_card"', 'extends="sw_example_card"');
+        expect(result.code).toContain('__ctOverride');
+        expectOriginalLine(result, source, 'extends="ct_example_card"', 'extends="ct_example_card"');
         expectOriginalLine(result, source, '{{ headline }}', '{{ headline }}');
         expectOriginalLine(result, source, '{{ info }}', '{{ info }}');
     });
@@ -224,7 +224,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const source = stripIndent`
             <template>
-                <ct-block name="sw_example_card">
+                <ct-block name="ct_example_card">
                     <button @click="emitSave">{{ headline }}</button>
                 </ct-block>
             </template>
@@ -245,7 +245,7 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
                 emit('save', headline.value);
             }
 
-            swDefinePublic({
+            ctDefinePublic({
                 headline,
                 emitSave,
             });

@@ -1,11 +1,11 @@
 <template>
-    <ct-block name="sw_settings_cache_index">
+    <ct-block name="ct_settings_cache_index">
         <ct-page class="ct-settings-cache">
             <template #smart-bar-header>
-                <ct-block name="sw_settings_cache_smart_bar_header">
-                    <ct-block name="sw_settings_cache_smart_bar_header_title">
+                <ct-block name="ct_settings_cache_smart_bar_header">
+                    <ct-block name="ct_settings_cache_smart_bar_header_title">
                         <h2>
-                            <ct-block name="sw_settings_cache_smart_bar_header_title_text">
+                            <ct-block name="ct_settings_cache_smart_bar_header_title_text">
                                 <span>{{ $t('ct-settings.index.title') }}</span>
 
                                 <mt-icon name="regular-chevron-right-xs" size="12px" />
@@ -18,7 +18,7 @@
             </template>
 
             <template #content>
-                <ct-block name="sw_settings_cache_content">
+                <ct-block name="ct_settings_cache_content">
                     <ct-card-view>
                         <mt-card
                             class="ct-settings-cache__card"
@@ -27,45 +27,45 @@
                             :is-loading="isLoading || componentIsBuilding"
                         >
                             <template #toolbar>
-                                <ct-block name="sw_settings_cache_content_toolbar">
+                                <ct-block name="ct_settings_cache_content_toolbar">
                                     <div class="ct-settings-cache__card-toolbar">
-                                        <ct-block name="sw_settings_cache_content_toolbar_environment">
+                                        <ct-block name="ct_settings_cache_content_toolbar_environment">
                                             <div>
-                                                <ct-block name="sw_settings_cache_content_toolbar_environment_heading">
+                                                <ct-block name="ct_settings_cache_content_toolbar_environment_heading">
                                                     <p class="ct-settings-cache__card-toolbar-heading">
                                                         {{ $t('ct-settings-cache.toolbar.environment') }}
                                                     </p>
                                                 </ct-block>
 
-                                                <ct-block name="sw_settings_cache_content_toolbar_environment_text">
+                                                <ct-block name="ct_settings_cache_content_toolbar_environment_text">
                                                     <p>{{ environmentValue }}</p>
                                                 </ct-block>
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_cache_content_toolbar_http_cache">
+                                        <ct-block name="ct_settings_cache_content_toolbar_http_cache">
                                             <div>
-                                                <ct-block name="sw_settings_cache_content_toolbar_http_cache_heading">
+                                                <ct-block name="ct_settings_cache_content_toolbar_http_cache_heading">
                                                     <p class="ct-settings-cache__card-toolbar-heading">
                                                         {{ $t('ct-settings-cache.toolbar.httpCache') }}
                                                     </p>
                                                 </ct-block>
 
-                                                <ct-block name="sw_settings_cache_content_toolbar_http_cache_text">
+                                                <ct-block name="ct_settings_cache_content_toolbar_http_cache_text">
                                                     <p>{{ httpCacheValue }}</p>
                                                 </ct-block>
                                             </div>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_cache_content_toolbar_cache_adapter">
+                                        <ct-block name="ct_settings_cache_content_toolbar_cache_adapter">
                                             <div>
-                                                <ct-block name="sw_settings_cache_content_toolbar_cache_adapter_heading">
+                                                <ct-block name="ct_settings_cache_content_toolbar_cache_adapter_heading">
                                                     <p class="ct-settings-cache__card-toolbar-heading">
                                                         {{ $t('ct-settings-cache.toolbar.cacheAdapter') }}
                                                     </p>
                                                 </ct-block>
 
-                                                <ct-block name="sw_settings_cache_content_toolbar_cache_adapter_text">
+                                                <ct-block name="ct_settings_cache_content_toolbar_cache_adapter_text">
                                                     <p>{{ cacheAdapterValue }}</p>
                                                 </ct-block>
                                             </div>
@@ -74,22 +74,22 @@
                                 </ct-block>
                             </template>
 
-                            <ct-block name="sw_settings_cache_content_clear_data_cache_row">
+                            <ct-block name="ct_settings_cache_content_clear_data_cache_row">
                                 <ct-card-section divider="bottom">
                                     <ct-container align="center" columns="1fr auto" gap="20px">
                                         <div>
-                                            <ct-block name="sw_settings_cache_content_clear_data_cache_row_heading">
+                                            <ct-block name="ct_settings_cache_content_clear_data_cache_row_heading">
                                                 <p class="ct-settings-cache__card-section-heading">
                                                     {{ $t('ct-settings-cache.section.clearDataCachesHeadline') }}
                                                 </p>
                                             </ct-block>
 
-                                            <ct-block name="sw_settings_cache_content_clear_data_cache_row_text">
+                                            <ct-block name="ct_settings_cache_content_clear_data_cache_row_text">
                                                 <p>{{ $t('ct-settings-cache.section.clearDataCachesText') }}</p>
                                             </ct-block>
                                         </div>
 
-                                        <ct-block name="sw_settings_cache_content_clear_data_cache_row_button">
+                                        <ct-block name="ct_settings_cache_content_clear_data_cache_row_button">
                                             <mt-button
                                                 :is-loading="processes.refreshCache"
                                                 :disabled="processes.normalClearCache"
@@ -103,22 +103,22 @@
                                 </ct-card-section>
                             </ct-block>
 
-                            <ct-block name="sw_settings_cache_content_clear_cache_row">
+                            <ct-block name="ct_settings_cache_content_clear_cache_row">
                                 <ct-card-section divider="bottom">
                                     <ct-container align="center" columns="1fr auto" gap="20px">
                                         <div>
-                                            <ct-block name="sw_settings_cache_content_clear_cache_row_heading">
+                                            <ct-block name="ct_settings_cache_content_clear_cache_row_heading">
                                                 <p class="ct-settings-cache__card-section-heading">
                                                     {{ $t('ct-settings-cache.section.clearCachesHeadline') }}
                                                 </p>
                                             </ct-block>
 
-                                            <ct-block name="sw_settings_cache_content_clear_cache_row_text">
+                                            <ct-block name="ct_settings_cache_content_clear_cache_row_text">
                                                 <p>{{ $t('ct-settings-cache.section.clearCachesText') }}</p>
                                             </ct-block>
                                         </div>
 
-                                        <ct-block name="sw_settings_cache_content_clear_cache_row_button">
+                                        <ct-block name="ct_settings_cache_content_clear_cache_row_button">
                                             <mt-button
                                                 variant="secondary"
                                                 :is-loading="processes.normalClearCache"
@@ -132,16 +132,16 @@
                                 </ct-card-section>
                             </ct-block>
 
-                            <ct-block name="sw_settings_cache_content_indexes_row">
+                            <ct-block name="ct_settings_cache_content_indexes_row">
                                 <ct-card-section class="ct-settings-cache__card-indexes">
                                     <ct-container>
-                                        <ct-block name="sw_settings_cache_content_indexes_row_heading">
+                                        <ct-block name="ct_settings_cache_content_indexes_row_heading">
                                             <p class="ct-settings-cache__card-section-heading">
                                                 {{ $t('ct-settings-cache.section.indexesHeadline') }}
                                             </p>
                                         </ct-block>
 
-                                        <ct-block name="sw_settings_cache_content_indexes_row_text">
+                                        <ct-block name="ct_settings_cache_content_indexes_row_text">
                                             <p>{{ $t('ct-settings-cache.section.indexesText') }}</p>
                                         </ct-block>
                                     </ct-container>
@@ -156,7 +156,7 @@
                                             :options="indexingMethodOptions"
                                         />
 
-                                        <ct-block name="sw_settings_cache_content_indexes_row_skip_select">
+                                        <ct-block name="ct_settings_cache_content_indexes_row_skip_select">
                                             <mt-select
                                                 v-model="indexerSelection"
                                                 class="ct-settings-cache__indexers-select"
@@ -188,7 +188,7 @@
                                         </ct-block>
                                     </ct-container>
 
-                                    <ct-block name="sw_settings_cache_content_indexes_row_button">
+                                    <ct-block name="ct_settings_cache_content_indexes_row_button">
                                         <mt-button
                                             name="updateIndexesButton"
                                             variant="primary"
@@ -410,7 +410,7 @@ const createOnlySelection = (only) => {
 
 createdComponent();
 
-swDefinePublic({
+ctDefinePublic({
     cacheApiService,
     componentIsBuilding,
     isLoading,

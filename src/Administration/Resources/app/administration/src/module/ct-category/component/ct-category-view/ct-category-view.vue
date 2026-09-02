@@ -1,13 +1,13 @@
 <template>
-    <ct-block name="sw_category_view">
+    <ct-block name="ct_category_view">
         <ct-card-view class="ct-category-view" position-identifier="ct-category-view">
-            <ct-block name="sw_category_view_language_info">
+            <ct-block name="ct_category_view_language_info">
                 <ct-language-info
                     :entity-description="placeholder(category, 'name', $t('ct-category.general.headlineCategories'))"
                 />
             </ct-block>
 
-            <ct-block name="sw_category_view_column_info">
+            <ct-block name="ct_category_view_column_info">
                 <mt-banner v-if="isCategoryColumn" class="ct-category-view__column-info" variant="info">
                     <div class="ct-category-view__column-info-header">
                         {{ $t('ct-category.view.columnInfoHeader') }}
@@ -18,8 +18,8 @@
                 </mt-banner>
             </ct-block>
 
-            <ct-block name="sw_category_view_tabs">
-                <ct-block name="sw_category_view_mt_tabs">
+            <ct-block name="ct_category_view_tabs">
+                <ct-block name="ct_category_view_mt_tabs">
                     <mt-tabs
                         v-if="!isLoading"
                         position-identifier="ct-category-view"
@@ -31,7 +31,7 @@
                 </ct-block>
             </ct-block>
 
-            <ct-block name="sw_category_view_content">
+            <ct-block name="ct_category_view_content">
                 <router-view v-slot="{ Component }">
                     <component :is="Component" :is-loading="isLoading" />
                 </router-view>
@@ -68,17 +68,17 @@ const router = useRouter();
 const { t } = useI18n();
 const { placeholder } = usePlaceholder();
 
-const category = computed(() => Contena.Store.get('swCategoryDetail').category);
-const isCategoryColumn = computed(() => Contena.Store.get('swCategoryDetail').isCategoryColumn);
+const category = computed(() => Contena.Store.get('ctCategoryDetail').category);
+const isCategoryColumn = computed(() => Contena.Store.get('ctCategoryDetail').isCategoryColumn);
 const isPage = computed(() => props.type !== 'folder' && props.type !== 'link');
 const pageErrors = mapPageErrors(errorConfig);
-const swCategoryViewError = computed(() => pageErrors.swCategoryViewError());
+const ctCategoryViewError = computed(() => pageErrors.ctCategoryViewError());
 const categoryViewTabs = computed(() => {
     const tabs = [
         {
             label: t('ct-category.view.general'),
             name: 'ct.category.detail.base',
-            hasError: swCategoryViewError.value,
+            hasError: ctCategoryViewError.value,
             onClick: () => void router.push({ name: 'ct.category.detail.base' }),
         },
     ];
@@ -99,12 +99,12 @@ const categoryViewTabs = computed(() => {
     return tabs;
 });
 
-swDefinePublic({
+ctDefinePublic({
     category,
     isCategoryColumn,
     isPage,
     categoryViewTabs,
-    swCategoryViewError,
+    ctCategoryViewError,
 });
 
 defineExpose({
@@ -112,6 +112,6 @@ defineExpose({
     isCategoryColumn,
     isPage,
     categoryViewTabs,
-    swCategoryViewError,
+    ctCategoryViewError,
 });
 </script>

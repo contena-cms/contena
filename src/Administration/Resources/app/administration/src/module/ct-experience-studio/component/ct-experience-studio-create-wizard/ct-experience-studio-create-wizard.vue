@@ -1,5 +1,5 @@
 <template>
-    <ct-block name="sw_experience_studio_create_wizard">
+    <ct-block name="ct_experience_studio_create_wizard">
         <div class="ct-experience-studio-create-wizard">
             <div class="ct-experience-studio-create-wizard__content">
                 <h2 class="ct-experience-studio-create-wizard__title">
@@ -186,7 +186,7 @@ const onComplete = () => {
     });
 };
 
-swDefinePublic({
+ctDefinePublic({
     createWizardTitleSnippet,
     createWizardDescriptionSnippet,
     createWizardStartSnippet,
