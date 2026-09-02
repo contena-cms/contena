@@ -4,8 +4,13 @@ import { mount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
 import TimezoneService from 'src/core/service/timezone.service';
 import EntityCollection from 'src/core/data/entity-collection.data';
+import CtUsersUserDetailBase from '../../view/ct-users-user-detail-base.vue';
+import CtUsersUserDetailInterface from '../../view/ct-users-user-detail-interface.vue';
+import CtUsersUserDetailRoles from '../../view/ct-users-user-detail-roles.vue';
+import CtUsersUserDetailIntegrations from '../../view/ct-users-user-detail-integrations.vue';
 
 let wrapper;
+let routerPush;
 
 const mockedLoginService = {
     loginByUsername: jest.fn(() => Promise.resolve()),
@@ -22,6 +27,7 @@ async function createWrapper(
         },
     },
 ) {
+    routerPush = jest.fn();
     wrapper = mount(
         await wrapTestComponent('ct-users-user-detail', {
             sync: true,
@@ -53,7 +59,7 @@ async function createWrapper(
                         meta: { $module: { icon: 'regular-content' } },
                         params: { id: '1a2b3c4d' },
                     },
-                    [routerKey]: { push: jest.fn() },
+                    [routerKey]: { push: routerPush },
                     acl: {
                         can: (identifier) => {
                             if (!identifier) {
@@ -162,6 +168,20 @@ async function createWrapper(
                         `,
                     },
                     'ct-card-view': true,
+                    'router-view': {
+                        components: {
+                            CtUsersUserDetailBase,
+                            CtUsersUserDetailInterface,
+                            CtUsersUserDetailRoles,
+                            CtUsersUserDetailIntegrations,
+                        },
+                        template: `
+                            <CtUsersUserDetailBase />
+                            <CtUsersUserDetailInterface />
+                            <CtUsersUserDetailRoles />
+                            <CtUsersUserDetailIntegrations />
+                        `,
+                    },
                     'mt-card': {
                         template: `
     <div class="ct-card-stub">
@@ -316,9 +336,10 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         const tabs = wrapper.findAll('.mt-tabs-stub button');
         await tabs[1].trigger('click');
 
-        expect(wrapper.vm.activeTab).toBe('interface');
-        expect(wrapper.find('.ct-users-user-detail__information-grid').isVisible()).toBe(false);
-        expect(wrapper.find('.ct-users-user-detail__user-interface-grid').isVisible()).toBe(true);
+        expect(routerPush).toHaveBeenCalledWith({
+            name: 'ct.users.detail.interface',
+            params: { id: '1a2b3c4d' },
+        });
     });
 
     it('loads the tag association', () => {

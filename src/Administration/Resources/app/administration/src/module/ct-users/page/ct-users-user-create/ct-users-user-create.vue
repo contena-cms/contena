@@ -31,17 +31,14 @@
                         <ct-block name="ct_users_user_detail_content">
                             <ct-card-view>
                                 <mt-tabs
-                                    :default-item="activeTab"
+                                    :default-item="$route.name"
                                     :items="detailTabs"
                                     position-identifier="ct-users-user-detail-tabs"
                                     small
                                 />
-                                <div class="ct-users-user-detail__content">
-                                    <ct-users-user-detail-base v-show="activeTab === 'base'" />
-                                    <ct-users-user-detail-interface v-show="activeTab === 'interface'" />
-                                    <ct-users-user-detail-roles v-show="activeTab === 'roles'" />
-                                    <ct-users-user-detail-integrations v-show="activeTab === 'integrations'" />
-                                </div>
+                                <ct-block name="ct_users_user_detail_view">
+                                    <router-view />
+                                </ct-block>
                             </ct-card-view>
 
                             <ct-block name="ct_users_user_detail_grid_inner_slot_media_modal">
@@ -212,10 +209,6 @@
 import { computed, inject, provide, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import CtUsersUserDetailBase from '../../view/ct-users-user-detail-base.vue';
-import CtUsersUserDetailInterface from '../../view/ct-users-user-detail-interface.vue';
-import CtUsersUserDetailRoles from '../../view/ct-users-user-detail-roles.vue';
-import CtUsersUserDetailIntegrations from '../../view/ct-users-user-detail-integrations.vue';
 const {
     user,
     userRepository,
@@ -332,23 +325,26 @@ provide('ctUsersUserDetailContext', {
     onIntegrationContextSelect,
     onIntegrationDelete,
 });
-const activeTab = ref('base');
 const detailTabs = computed(() => [
-    { label: t('ct-users.user-detail.labelCard'), name: 'base', onClick: () => (activeTab.value = 'base') },
+    {
+        label: t('ct-users.user-detail.labelCard'),
+        name: 'ct.users.create.base',
+        onClick: () => void router.push({ name: 'ct.users.create.base' }),
+    },
     {
         label: t('ct-users.user-detail.labelUserInterface'),
-        name: 'interface',
-        onClick: () => (activeTab.value = 'interface'),
+        name: 'ct.users.create.interface',
+        onClick: () => void router.push({ name: 'ct.users.create.interface' }),
     },
     {
         label: t('ct-users.user-detail.labelRolesPermissionsCard'),
-        name: 'roles',
-        onClick: () => (activeTab.value = 'roles'),
+        name: 'ct.users.create.roles',
+        onClick: () => void router.push({ name: 'ct.users.create.roles' }),
     },
     {
         label: t('ct-users.user-detail.labelIntegrationsCard'),
-        name: 'integrations',
-        onClick: () => (activeTab.value = 'integrations'),
+        name: 'ct.users.create.integrations',
+        onClick: () => void router.push({ name: 'ct.users.create.integrations' }),
     },
 ]);
 const loadUser = async () => {
@@ -438,7 +434,6 @@ ctDefinePublic({
     onConfirmDelete,
     onCloseDetailModal,
     onSaveIntegration,
-    activeTab,
     detailTabs,
 });
 
@@ -494,7 +489,6 @@ defineExpose({
     onConfirmDelete,
     onCloseDetailModal,
     onSaveIntegration,
-    activeTab,
     detailTabs,
 });
 </script>

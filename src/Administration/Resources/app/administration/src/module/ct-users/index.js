@@ -37,6 +37,7 @@ Contena.Module.register('ct-users', {
         detail: {
             component: 'ct-users-user-detail',
             path: 'detail/:id',
+            redirect: { name: 'ct.users.detail.base' },
             meta: {
                 parentPath: 'ct.users.index',
                 privilege: 'users_and_permissions.viewer',
@@ -44,13 +45,82 @@ Contena.Module.register('ct-users', {
             props: (route) => ({
                 initialUserId: String(route.params.id),
             }),
+            children: {
+                base: {
+                    component: 'ct-users-user-detail-base',
+                    path: 'base',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+                interface: {
+                    component: 'ct-users-user-detail-interface',
+                    path: 'interface',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+                roles: {
+                    component: 'ct-users-user-detail-roles',
+                    path: 'roles',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+                integrations: {
+                    component: 'ct-users-user-detail-integrations',
+                    path: 'integrations',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+            },
         },
         create: {
             component: 'ct-users-user-create',
             path: 'create',
+            redirect: { name: 'ct.users.create.base' },
             meta: {
                 parentPath: 'ct.users.index',
                 privilege: 'users_and_permissions.creator',
+            },
+            children: {
+                base: {
+                    component: 'ct-users-user-detail-base',
+                    path: 'base',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.creator',
+                    },
+                },
+                interface: {
+                    component: 'ct-users-user-detail-interface',
+                    path: 'interface',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.creator',
+                    },
+                },
+                roles: {
+                    component: 'ct-users-user-detail-roles',
+                    path: 'roles',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.creator',
+                    },
+                },
+                integrations: {
+                    component: 'ct-users-user-detail-integrations',
+                    path: 'integrations',
+                    meta: {
+                        parentPath: 'ct.users.index',
+                        privilege: 'users_and_permissions.creator',
+                    },
+                },
             },
         },
     },

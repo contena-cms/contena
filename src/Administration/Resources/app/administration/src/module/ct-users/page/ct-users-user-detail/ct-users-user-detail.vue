@@ -30,17 +30,14 @@
                     <ct-block name="ct_users_user_detail_content">
                         <ct-card-view>
                             <mt-tabs
-                                :default-item="activeTab"
+                                :default-item="$route.name"
                                 :items="detailTabs"
                                 position-identifier="ct-users-user-detail-tabs"
                                 small
                             />
-                            <div class="ct-users-user-detail__content">
-                                <ct-users-user-detail-base v-show="activeTab === 'base'" />
-                                <ct-users-user-detail-interface v-show="activeTab === 'interface'" />
-                                <ct-users-user-detail-roles v-show="activeTab === 'roles'" />
-                                <ct-users-user-detail-integrations v-show="activeTab === 'integrations'" />
-                            </div>
+                            <ct-block name="ct_users_user_detail_view">
+                                <router-view />
+                            </ct-block>
                         </ct-card-view>
 
                         <ct-block name="ct_users_user_detail_grid_inner_slot_media_modal">
@@ -219,33 +216,32 @@ import { ref, computed, inject, provide, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useNotification } from 'src/app/composables/use-notification';
-import CtUsersUserDetailBase from '../../view/ct-users-user-detail-base.vue';
-import CtUsersUserDetailInterface from '../../view/ct-users-user-detail-interface.vue';
-import CtUsersUserDetailRoles from '../../view/ct-users-user-detail-roles.vue';
-import CtUsersUserDetailIntegrations from '../../view/ct-users-user-detail-integrations.vue';
 
 const { t } = useI18n();
 const { createNotificationError } = useNotification();
 
 const translate = t;
 const router = useRouter();
-const activeTab = ref('base');
 const detailTabs = computed(() => [
-    { label: t('ct-users.user-detail.labelCard'), name: 'base', onClick: () => (activeTab.value = 'base') },
+    {
+        label: t('ct-users.user-detail.labelCard'),
+        name: 'ct.users.detail.base',
+        onClick: () => void router.push({ name: 'ct.users.detail.base', params: { id: props.initialUserId } }),
+    },
     {
         label: t('ct-users.user-detail.labelUserInterface'),
-        name: 'interface',
-        onClick: () => (activeTab.value = 'interface'),
+        name: 'ct.users.detail.interface',
+        onClick: () => void router.push({ name: 'ct.users.detail.interface', params: { id: props.initialUserId } }),
     },
     {
         label: t('ct-users.user-detail.labelRolesPermissionsCard'),
-        name: 'roles',
-        onClick: () => (activeTab.value = 'roles'),
+        name: 'ct.users.detail.roles',
+        onClick: () => void router.push({ name: 'ct.users.detail.roles', params: { id: props.initialUserId } }),
     },
     {
         label: t('ct-users.user-detail.labelIntegrationsCard'),
-        name: 'integrations',
-        onClick: () => (activeTab.value = 'integrations'),
+        name: 'ct.users.detail.integrations',
+        onClick: () => void router.push({ name: 'ct.users.detail.integrations', params: { id: props.initialUserId } }),
     },
 ]);
 const userService = inject('userService');
@@ -879,7 +875,6 @@ ctDefinePublic({
     onCloseDeleteModal,
     onConfirmDelete,
     updateAuthToken,
-    activeTab,
     detailTabs,
 });
 defineExpose({
@@ -974,7 +969,6 @@ defineExpose({
     onCloseDeleteModal,
     onConfirmDelete,
     updateAuthToken,
-    activeTab,
     detailTabs,
 });
 </script>

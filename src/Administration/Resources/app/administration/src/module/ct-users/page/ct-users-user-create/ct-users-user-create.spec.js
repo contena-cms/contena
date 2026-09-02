@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
 import TimezoneService from 'src/core/service/timezone.service';
 import EntityCollection from 'src/core/data/entity-collection.data';
+import CtUsersUserDetailBase from '../../view/ct-users-user-detail-base.vue';
 
 const numberRangeService = {
     reserve: jest.fn((type, preview = false) => Promise.resolve({ number: preview ? '10000' : '10001' })),
@@ -10,8 +11,10 @@ const userRepositorySave = jest.fn(() => Promise.resolve());
 const createTagCollection = (tags = []) => new EntityCollection('', 'tag', Contena.Context.api, null, tags, tags.length);
 const createPositionCollection = (positions = []) =>
     new EntityCollection('', 'position', Contena.Context.api, null, positions, positions.length);
+let routerPush;
 
 async function createWrapper(privileges = []) {
+    routerPush = jest.fn();
     const reservedPrefixWarning = {
         method: 'warn',
         msg: 'setup() return property "__ctSetupAuthor_',
@@ -26,7 +29,7 @@ async function createWrapper(privileges = []) {
                     meta: { $module: { icon: 'regular-content' } },
                     params: {},
                 },
-                [routerKey]: { push: jest.fn() },
+                [routerKey]: { push: routerPush },
                 acl: {
                     can: (identifier) => {
                         if (!identifier) {
@@ -104,6 +107,10 @@ async function createWrapper(privileges = []) {
             stubs: {
                 'ct-page': {
                     template: '<div><slot name="content"></slot></div>',
+                },
+                'router-view': {
+                    components: { CtUsersUserDetailBase },
+                    template: '<CtUsersUserDetailBase />',
                 },
                 'mt-tabs': {
                     props: [
