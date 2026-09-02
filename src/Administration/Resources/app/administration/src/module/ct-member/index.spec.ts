@@ -28,6 +28,9 @@ describe('src/module/ct-member', () => {
 
         const module = Contena.Module.getModuleRegistry().get('ct-member');
         expect(module?.manifest.entity).toBe('member');
+        const snippets = module?.manifest.snippets as Record<string, unknown> | undefined;
+        expect(snippets?.['en-GB']).toBeDefined();
+        expect(snippets?.['zh-CN']).toBeDefined();
         expect(module?.manifest.navigation).toContainEqual(
             expect.objectContaining({
                 id: 'ct-member',

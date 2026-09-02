@@ -3,7 +3,8 @@
         "general": {
             "mainMenuItemGeneral": "Members",
             "mainMenuItemList": "Members",
-            "descriptionTextModule": "Manage members, profiles, addresses and access"
+            "descriptionTextModule": "Manage members, profiles, addresses and access",
+            "placeholderSearchBar": "Search members..."
         },
         "list": {
             "textHeadline": "Members",

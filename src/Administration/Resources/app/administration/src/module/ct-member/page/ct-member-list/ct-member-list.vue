@@ -1,103 +1,85 @@
 <template>
     <ct-block name="ct_member_list">
-        <ct-page class="ct-member-list">
+        <ct-page class="ct-member-list" :show-smart-bar="false">
             <template #search-bar>
                 <ct-block name="ct_member_list_search">
-                    <mt-search :model-value="term" @change="onSearch" />
-                </ct-block>
-            </template>
-
-            <template #smart-bar-header>
-                <ct-block name="ct_member_list_header">
-                    <h2>
-                        {{ t('ct-member.list.textHeadline') }}
-                        <span v-if="!isLoading" class="ct-page__smart-bar-amount">({{ total }})</span>
-                    </h2>
-                </ct-block>
-            </template>
-
-            <template #smart-bar-actions>
-                <ct-block name="ct_member_list_actions">
-                    <mt-button
-                        v-tooltip="createTooltip"
-                        variant="primary"
-                        :disabled="!canCreate || undefined"
-                        @click="onCreateMember"
-                    >
-                        {{ t('ct-member.list.buttonAddMember') }}
-                    </mt-button>
-                </ct-block>
-            </template>
-
-            <template #language-switch>
-                <ct-block name="ct_member_list_filters">
-                    <div class="ct-member-list__filters">
-                        <mt-entity-select
-                            v-model="groupFilter"
-                            entity="member_group"
-                            small
-                            :placeholder="t('ct-member.baseForm.placeholderMemberGroup')"
-                            @update:model-value="loadMembers"
-                        />
-                        <mt-entity-select
-                            v-model="channelFilter"
-                            entity="channel"
-                            small
-                            :placeholder="t('ct-member.baseForm.placeholderChannel')"
-                            @update:model-value="loadMembers"
-                        />
-                    </div>
+                    <ct-search-bar initial-search-type="member" :ignore-route-term="true" @search="onSearch" />
                 </ct-block>
             </template>
 
             <template #content>
                 <ct-block name="ct_member_list_content">
-                    <mt-data-table
-                        layout="full"
-                        :caption="t('ct-member.list.textHeadline')"
-                        :data-source="members"
-                        :columns="columns"
-                        :is-loading="isLoading"
-                        :pagination-total-items="total"
-                        :current-page="page"
-                        :pagination-limit="limit"
-                        :sort-by="sortBy"
-                        :sort-direction="sortDirection"
-                        :disable-edit="true"
-                        :disable-delete="!canDelete"
-                        :additional-context-buttons="additionalContextButtons"
-                        @reload="loadMembers"
-                        @pagination-current-page-change="onPageChange"
-                        @pagination-limit-change="onLimitChange"
-                        @sort-change="onSort"
-                        @item-delete="onItemDelete"
-                        @context-select="onContextSelect"
-                    >
-                        <template #column-name="{ data }">
-                            <router-link :to="{ name: 'ct.member.detail.base', params: { id: data.id } }">
-                                {{ data.name }}
-                            </router-link>
-                        </template>
-                        <!-- eslint-disable-next-line vue/no-unused-vars -->
-                        <template #column-group="{ data }">
-                            {{ data.group?.translated?.name || data.group?.name || '-' }}
-                        </template>
-                        <!-- eslint-disable-next-line vue/no-unused-vars -->
-                        <template #column-channel="{ data }">
-                            {{ data.channel?.translated?.name || data.channel?.name || '-' }}
-                        </template>
-                        <template #column-active="{ data }">
-                            <mt-badge :variant="data.active ? 'positive' : 'neutral'">
-                                {{ data.active ? t('global.default.yes') : t('global.default.no') }}
-                            </mt-badge>
-                        </template>
-                    </mt-data-table>
+                    <div class="ct-member-list__content">
+                        <mt-data-table
+                            class="ct-member-list__table"
+                            layout="full"
+                            :caption="t('ct-member.list.textHeadline')"
+                            :data-source="members"
+                            :columns="columns"
+                            :is-loading="isLoading"
+                            :pagination-total-items="total"
+                            :current-page="page"
+                            :pagination-limit="limit"
+                            :sort-by="sortBy"
+                            :sort-direction="sortDirection"
+                            :search-value="term"
+                            :number-of-results="total"
+                            disable-search
+                            enable-reload
+                            :disable-edit="true"
+                            :disable-delete="!canDelete"
+                            :additional-context-buttons="additionalContextButtons"
+                            :filters="filters"
+                            :applied-filters="appliedFilters"
+                            @reload="loadMembers"
+                            @pagination-current-page-change="onPageChange"
+                            @pagination-limit-change="onLimitChange"
+                            @sort-change="onSort"
+                            @search-value-change="onSearch"
+                            @item-delete="onItemDelete"
+                            @update:applied-filters="onAppliedFiltersChange"
+                            @context-select="onContextSelect"
+                        >
+                            <template #toolbar>
+                                <div class="ct-member-list__toolbar">
+                                    <ct-block name="ct_member_list_toolbar_add">
+                                        <mt-button
+                                            v-tooltip="createTooltip"
+                                            variant="primary"
+                                            size="default"
+                                            :disabled="!canCreate || undefined"
+                                            @click.prevent="onCreateMember"
+                                        >
+                                            {{ t('ct-member.list.buttonAddMember') }}
+                                        </mt-button>
+                                    </ct-block>
+                                </div>
+                            </template>
 
-                    <mt-empty-state
-                        v-if="!isLoading && members.length === 0"
-                        icon="regular-users"
-                        :headline="t('ct-member.list.emptyState')"
-                    />
+                            <template #column-name="{ data }">
+                                <router-link :to="{ name: 'ct.member.detail.base', params: { id: data.id } }">
+                                    {{ data.name }}
+                                </router-link>
+                            </template>
+                            <!-- eslint-disable-next-line vue/no-unused-vars -->
+                            <template #column-group="{ data }">
+                                {{ data.group?.translated?.name || data.group?.name || '-' }}
+                            </template>
+                            <!-- eslint-disable-next-line vue/no-unused-vars -->
+                            <template #column-channel="{ data }">
+                                {{ data.channel?.translated?.name || data.channel?.name || '-' }}
+                            </template>
+                            <template #column-active="{ data }">
+                                <mt-badge :variant="data.active ? 'positive' : 'neutral'">
+                                    {{ data.active ? t('global.default.yes') : t('global.default.no') }}
+                                </mt-badge>
+                            </template>
+
+                            <template #empty-state>
+                                <mt-empty-state icon="regular-users" :headline="t('ct-member.list.emptyState')" />
+                            </template>
+                        </mt-data-table>
+                    </div>
                 </ct-block>
             </template>
         </ct-page>
@@ -128,7 +110,6 @@ import type RepositoryFactory from 'src/core/data/repository-factory.data';
 import type AclService from 'src/app/service/acl.service';
 
 import { useNotification } from 'src/app/composables/use-notification';
-import './ct-member-list.scss';
 
 type SortDirection = 'ASC' | 'DESC';
 type Column = {
@@ -139,6 +120,12 @@ type Column = {
     sortable?: boolean;
     width?: number;
 };
+type AppliedFilter = {
+    id: string;
+    type: {
+        options: Array<{ id: string; label: string }>;
+    };
+};
 
 defineProps({});
 const router = useRouter();
@@ -148,7 +135,11 @@ const repositoryFactory = inject<RepositoryFactory>('repositoryFactory');
 const acl = inject<AclService>('acl');
 if (!repositoryFactory || !acl) throw new Error('The Member list services are unavailable.');
 const memberRepository = repositoryFactory.create('member');
+const memberGroupRepository = repositoryFactory.create('member_group');
+const channelRepository = repositoryFactory.create('channel');
 const members = ref<Entity<'member'>[]>([]);
+const memberGroups = ref<Array<{ id: string; name: string }>>([]);
+const channels = ref<Array<{ id: string; name: string }>>([]);
 const isLoading = ref(false);
 const isDeleting = ref(false);
 const page = ref(1);
@@ -159,6 +150,7 @@ const sortBy = ref('createdAt');
 const sortDirection = ref<SortDirection>('DESC');
 const groupFilter = ref<string | null>(null);
 const channelFilter = ref<string | null>(null);
+const appliedFilters = ref<AppliedFilter[]>([]);
 const memberToDelete = ref<Entity<'member'> | null>(null);
 const canCreate = computed(() => acl.can('member.creator'));
 const canDelete = computed(() => acl.can('member.deleter'));
@@ -167,7 +159,7 @@ const createTooltip = computed(() => ({
     disabled: canCreate.value,
     showOnDisabledElements: true,
 }));
-const columns: Column[] = [
+const columns = computed<Column[]>(() => [
     {
         property: 'memberNumber',
         label: t('ct-member.list.columnMemberNumber'),
@@ -180,7 +172,25 @@ const columns: Column[] = [
     { property: 'group', label: t('ct-member.list.columnGroup'), position: 400, renderer: 'text', width: 180 },
     { property: 'channel', label: t('ct-member.list.columnChannel'), position: 500, renderer: 'text', width: 180 },
     { property: 'active', label: t('ct-member.list.columnActive'), position: 600, renderer: 'text', width: 110 },
-];
+]);
+const filters = computed(() => [
+    {
+        id: 'group',
+        label: t('ct-member.list.columnGroup'),
+        type: {
+            id: 'single-selection',
+            options: memberGroups.value.map((group) => ({ id: group.id, label: group.name })),
+        },
+    },
+    {
+        id: 'channel',
+        label: t('ct-member.list.columnChannel'),
+        type: {
+            id: 'single-selection',
+            options: channels.value.map((channel) => ({ id: channel.id, label: channel.name })),
+        },
+    },
+]);
 const additionalContextButtons = computed(() => {
     const buttons = [];
 
@@ -212,6 +222,13 @@ const loadMembers = async (): Promise<void> => {
 };
 const onSearch = (value: string): void => {
     term.value = value;
+    page.value = 1;
+    void loadMembers();
+};
+const onAppliedFiltersChange = (value: AppliedFilter[]): void => {
+    appliedFilters.value = value;
+    groupFilter.value = value.find((filter) => filter.id === 'group')?.type.options[0]?.id || null;
+    channelFilter.value = value.find((filter) => filter.id === 'channel')?.type.options[0]?.id || null;
     page.value = 1;
     void loadMembers();
 };
@@ -254,6 +271,25 @@ const deleteMember = async (): Promise<void> => {
     }
 };
 
+const loadFilterOptions = async (): Promise<void> => {
+    try {
+        const criteria = new Contena.Data.Criteria(1, 500);
+        criteria.addSorting(Contena.Data.Criteria.sort('name', 'ASC'));
+        const [
+            groupResult,
+            channelResult,
+        ] = await Promise.all([
+            memberGroupRepository.search(criteria, Contena.Context.api),
+            channelRepository.search(criteria, Contena.Context.api),
+        ]);
+        memberGroups.value = Array.from(groupResult).map((group) => ({ id: group.id, name: group.name }));
+        channels.value = Array.from(channelResult).map((channel) => ({ id: channel.id, name: channel.name }));
+    } catch {
+        memberGroups.value = [];
+        channels.value = [];
+    }
+};
+
 watch(
     [
         page,
@@ -262,10 +298,13 @@ watch(
     () => undefined,
 );
 void loadMembers();
+void loadFilterOptions();
 
 ctDefinePublic({
     members,
     columns,
+    filters,
+    appliedFilters,
     isLoading,
     isDeleting,
     page,
@@ -283,6 +322,7 @@ ctDefinePublic({
     createTooltip,
     loadMembers,
     onSearch,
+    onAppliedFiltersChange,
     onPageChange,
     onLimitChange,
     onSort,
@@ -297,6 +337,8 @@ ctDefinePublic({
 defineExpose({
     members,
     columns,
+    filters,
+    appliedFilters,
     isLoading,
     isDeleting,
     page,
@@ -314,6 +356,7 @@ defineExpose({
     createTooltip,
     loadMembers,
     onSearch,
+    onAppliedFiltersChange,
     onPageChange,
     onLimitChange,
     onSort,
@@ -325,3 +368,27 @@ defineExpose({
     deleteMember,
 });
 </script>
+
+<style lang="scss">
+.ct-member-list__table .mt-data-table__toolbar {
+    justify-content: flex-end;
+}
+
+.mt-data-table.ct-member-list__table {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin-bottom: 0;
+}
+
+.ct-member-list__content {
+    height: 100%;
+    padding: var(--scale-size-16);
+    box-sizing: border-box;
+}
+
+.ct-member-list__toolbar {
+    display: flex;
+    justify-content: flex-end;
+}
+</style>

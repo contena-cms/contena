@@ -1,6 +1,8 @@
 import './acl';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import defaultSearchConfiguration from './default-search-configuration';
+import enGB from './snippet/en.json';
+import zhCN from './snippet/zh.json';
 
 /** @private */
 Contena.Component.register('ct-member-list', () => import('./page/ct-member-list'));
@@ -33,6 +35,10 @@ Contena.Module.register('ct-member', {
     icon: 'regular-users',
     favicon: 'icon-module-customers.png',
     entity: 'member',
+    snippets: {
+        'en-GB': enGB,
+        'zh-CN': zhCN,
+    },
 
     routes: {
         index: {

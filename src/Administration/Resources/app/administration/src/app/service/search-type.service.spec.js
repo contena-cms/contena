@@ -10,4 +10,14 @@ describe('search-type.service', () => {
             listingRoute: 'ct.users.index',
         });
     });
+
+    it('registers the member module search type', () => {
+        const searchTypeService = createSearchTypeService();
+
+        expect(searchTypeService.getTypeByName('member')).toEqual({
+            entityName: 'member',
+            placeholderSnippet: 'ct-member.general.placeholderSearchBar',
+            listingRoute: 'ct.member.index',
+        });
+    });
 });
