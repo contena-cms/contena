@@ -1,4 +1,5 @@
 import { mount, type VueWrapper } from '@vue/test-utils';
+import { routerKey } from 'vue-router';
 
 interface UserListingVm {
     setStatusFilter(value: string): void;
@@ -7,7 +8,6 @@ interface UserListingVm {
 }
 
 interface UserPageVm {
-    userFormMode: 'create' | 'edit' | null;
     statusFilter: string;
     onStatusFilterChange(value: string): void;
     resetUserFilters(): void;
@@ -21,8 +21,10 @@ interface UserPageVm {
 
 describe('modules/ct-users/page/ct-users', () => {
     let wrapper: VueWrapper<UserPageVm>;
+    let routerPush: jest.Mock;
 
     async function createWrapper(privileges: string[] = []) {
+        routerPush = jest.fn();
         wrapper = mount(
             await wrapTestComponent('ct-users', {
                 sync: true,
@@ -31,6 +33,7 @@ describe('modules/ct-users/page/ct-users', () => {
                 global: {
                     renderStubDefaultSlot: true,
                     provide: {
+                        [routerKey]: { push: routerPush },
                         acl: {
                             can: (privilege: string) => privileges.includes(privilege),
                         },
@@ -80,21 +83,6 @@ describe('modules/ct-users/page/ct-users', () => {
                                 resetFilters: jest.fn(),
                             },
                         },
-                        'ct-users-user-detail': {
-                            name: 'CtUsersUserDetail',
-                            props: ['initialUserId'],
-                            template: '<div class="user-detail-modal" />',
-                        },
-                        'ct-users-user-create': {
-                            template: '<div class="user-create-modal" />',
-                        },
-                        'mt-modal-root': {
-                            template: '<div class="modal-root"><slot /></div>',
-                        },
-                        'mt-modal': {
-                            props: ['title'],
-                            template: '<div class="modal"><slot /><slot name="footer" /></div>',
-                        },
                         'mt-button': {
                             props: [
                                 'disabled',
@@ -141,27 +129,22 @@ describe('modules/ct-users/page/ct-users', () => {
         expect(onSearch).toHaveBeenCalledWith('alex');
     });
 
-    it('opens the create form in a modal', async () => {
+    it('navigates to the create page', async () => {
         (wrapper.vm as unknown as { onCreateUser: () => void }).onCreateUser();
-        await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.userFormMode).toBe('create');
-        expect(wrapper.find('.user-create-modal').exists()).toBe(true);
+        expect(routerPush).toHaveBeenCalledWith({ name: 'ct.users.create' });
     });
 
-    it('opens the selected user in a modal', async () => {
+    it('navigates to the selected user detail page', async () => {
         wrapper.vm.onEditUser({ id: 'user-42' });
-        await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.userFormMode).toBe('edit');
-        expect(wrapper.findComponent({ name: 'CtUsersUserDetail' }).props('initialUserId')).toBe('user-42');
+        expect(routerPush).toHaveBeenCalledWith({ name: 'ct.users.detail', params: { id: 'user-42' } });
     });
 
-    it('opens the create modal from the listing toolbar action', async () => {
+    it('navigates to the create page from the listing toolbar action', async () => {
         await wrapper.find('.ct-users__create-user').trigger('click');
 
-        expect(wrapper.vm.userFormMode).toBe('create');
-        expect(wrapper.find('.user-create-modal').exists()).toBe(true);
+        expect(routerPush).toHaveBeenCalledWith({ name: 'ct.users.create' });
     });
 
     it('forwards status filter changes and keeps the selection visible', async () => {

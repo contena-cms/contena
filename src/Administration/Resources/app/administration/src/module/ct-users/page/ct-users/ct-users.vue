@@ -20,28 +20,6 @@
             </template>
         </ct-page>
     </ct-block>
-
-    <ct-block name="ct_users_user_form_modal">
-        <mt-modal-root v-if="userFormMode" :is-open="true" @change="onCloseUserForm">
-            <ct-block name="ct_users_user_form_modal_content">
-                <mt-modal :title="userFormTitle" width="l">
-                    <ct-users-user-detail v-if="userFormMode === 'edit'" ref="userForm" :initial-user-id="userFormId" />
-                    <ct-users-user-create v-else ref="userForm" />
-
-                    <template #footer>
-                        <ct-block name="ct_users_user_form_modal_footer">
-                            <mt-button variant="secondary" @click="onCloseUserForm">
-                                {{ $t('global.default.cancel') }}
-                            </mt-button>
-                            <mt-button variant="primary" :is-loading="isUserFormSaving" @click="onSaveUserForm">
-                                {{ $t('global.default.save') }}
-                            </mt-button>
-                        </ct-block>
-                    </template>
-                </mt-modal>
-            </ct-block>
-        </mt-modal-root>
-    </ct-block>
 </template>
 
 <script setup lang="ts">
@@ -55,13 +33,15 @@ defineOptions({
 
 defineProps({});
 
-import { computed, inject, ref } from 'vue';
+import { inject, ref } from 'vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
 import type AclService from 'src/app/service/acl.service';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import CtUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
 
 const { t } = useI18n();
+const router = useRouter();
 const userListing = ref<ComponentExposed<typeof CtUsersUserListing>>();
 const statusFilter = ref('all');
 
@@ -71,21 +51,6 @@ if (!acl) {
 }
 const userTotal = ref(0);
 const userListingLoading = ref(true);
-const userFormMode = ref<'create' | 'edit' | null>(null);
-const userFormId = ref('');
-const userForm = ref<{
-    onSave?: () => Promise<unknown>;
-    isSaveSuccessful?: boolean;
-    isLoading?: boolean;
-    user?: { name?: string; username?: string };
-}>();
-const userFormTitle = computed(() =>
-    userFormMode.value === 'create'
-        ? t('ct-users.user-detail.labelNewUser')
-        : userForm.value?.user?.name || userForm.value?.user?.username || t('ct-users.user-detail.labelCard'),
-);
-const isUserFormSaving = computed(() => Boolean(userForm.value?.isLoading));
-
 const reloadUserListing = () => userListing.value?.getList();
 const onUserSearch = (term: string) => {
     userListing.value?.onSearch(term);
@@ -109,28 +74,10 @@ const onUserLoadingChange = (loading: boolean) => {
     userListingLoading.value = loading;
 };
 const onCreateUser = () => {
-    userFormId.value = '';
-    userFormMode.value = 'create';
+    void router.push({ name: 'ct.users.create' });
 };
 const onEditUser = (user: { id: string }) => {
-    userFormId.value = user.id;
-    userFormMode.value = 'edit';
-};
-const onCloseUserForm = () => {
-    userFormMode.value = null;
-    userFormId.value = '';
-    userForm.value = undefined;
-};
-const onSaveUserForm = async () => {
-    if (!userForm.value?.onSave) {
-        return;
-    }
-
-    await userForm.value.onSave();
-    if (userForm.value.isSaveSuccessful) {
-        onCloseUserForm();
-        void userListing.value?.getList();
-    }
+    void router.push({ name: 'ct.users.detail', params: { id: user.id } });
 };
 
 ctDefinePublic({
@@ -143,14 +90,8 @@ ctDefinePublic({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
-    userFormMode,
-    userFormId,
-    userFormTitle,
-    isUserFormSaving,
     onCreateUser,
     onEditUser,
-    onCloseUserForm,
-    onSaveUserForm,
 });
 
 defineExpose({
@@ -164,41 +105,7 @@ defineExpose({
     resetUserFilters,
     onUserTotalChange,
     onUserLoadingChange,
-    userFormMode,
-    userFormId,
-    userFormTitle,
-    isUserFormSaving,
     onCreateUser,
     onEditUser,
-    onCloseUserForm,
-    onSaveUserForm,
 });
 </script>
-
-<style lang="scss">
-.mt-modal:has(.ct-users-user-detail),
-.mt-modal:has(.ct-users-user-create) {
-    height: min(960px, calc(100dvh - 32px));
-    max-height: calc(100dvh - 32px);
-
-    .mt-modal__content {
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
-    .mt-modal__content-inner {
-        height: 100%;
-        padding: 0;
-    }
-
-    .ct-users-user-detail,
-    .ct-card-view {
-        position: relative;
-        height: 100%;
-    }
-
-    .ct-card-view__content {
-        height: 100%;
-    }
-}
-</style>

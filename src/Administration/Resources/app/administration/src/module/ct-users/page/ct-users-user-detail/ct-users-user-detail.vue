@@ -1,6 +1,32 @@
 <template>
-    <div class="ct-users-user-detail">
-        <ct-block name="ct_users_user_detail">
+    <ct-block name="ct_users_user_detail_page">
+        <ct-page class="ct-users-user-detail">
+            <template #smart-bar-header>
+                <ct-block name="ct_users_user_detail_header">
+                    <h2 v-if="!isLoading">{{ fullName }}</h2>
+                </ct-block>
+            </template>
+
+            <template #smart-bar-actions>
+                <ct-block name="ct_users_user_detail_actions">
+                    <mt-button variant="secondary" @click="onCancel">
+                        {{ translate('global.default.cancel') }}
+                    </mt-button>
+                    <ct-button-process
+                        v-model:process-success="isSaveSuccessful"
+                        variant="primary"
+                        :is-loading="isLoading"
+                        :disabled="isLoading || !acl.can('users_and_permissions.editor') || undefined"
+                        @click.prevent="onSave"
+                        @update:process-success="saveFinish"
+                    >
+                        {{ translate('global.default.save') }}
+                    </ct-button-process>
+                </ct-block>
+            </template>
+
+            <template #content>
+                <ct-block name="ct_users_user_detail">
             <ct-block name="ct_users_user_detail_content">
                 <ct-card-view>
                     <div class="ct-users-user-detail__content">
@@ -456,9 +482,11 @@
                         </template>
                     </ct-modal>
                 </ct-block>
-            </ct-block>
-        </ct-block>
-    </div>
+                </ct-block>
+                </ct-block>
+            </template>
+        </ct-page>
+    </ct-block>
 </template>
 
 <script setup>
@@ -476,12 +504,14 @@ const props = defineProps({
 
 import { ref, computed, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { useNotification } from 'src/app/composables/use-notification';
 
 const { t } = useI18n();
 const { createNotificationError } = useNotification();
 
 const translate = t;
+const router = useRouter();
 const userService = inject('userService');
 const loginService = inject('loginService');
 const mediaDefaultFolderService = inject('mediaDefaultFolderService');
@@ -880,6 +910,9 @@ const saveFinish = () => {
 const onSave = () => {
     return saveUser(Contena.Context.api);
 };
+const onCancel = () => {
+    void router.push({ name: 'ct.users.index' });
+};
 const saveUser = async (context) => {
     isSaveSuccessful.value = false;
     isLoading.value = true;
@@ -1060,6 +1093,7 @@ ctDefinePublic({
     getMediaDefaultFolderId,
     saveFinish,
     onSave,
+    onCancel,
     saveUser,
     updateCurrentUser,
     setPassword,
@@ -1152,6 +1186,7 @@ defineExpose({
     getMediaDefaultFolderId,
     saveFinish,
     onSave,
+    onCancel,
     saveUser,
     updateCurrentUser,
     setPassword,

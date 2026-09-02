@@ -1,6 +1,33 @@
 <template>
-    <div class="ct-users-user-detail">
-        <ct-block name="ct_users_user_detail">
+    <ct-block name="ct_users_user_create_page">
+        <ct-page class="ct-users-user-detail">
+            <template #smart-bar-header>
+                <ct-block name="ct_users_user_create_header">
+                    <h2 v-if="!isLoading">{{ fullName }}</h2>
+                </ct-block>
+            </template>
+
+            <template #smart-bar-actions>
+                <ct-block name="ct_users_user_create_actions">
+                    <mt-button variant="secondary" @click="onCancel">
+                        {{ $t('global.default.cancel') }}
+                    </mt-button>
+                    <ct-button-process
+                        v-model:process-success="isSaveSuccessful"
+                        variant="primary"
+                        :is-loading="isLoading"
+                        :disabled="isLoading || !acl.can('users_and_permissions.creator') || undefined"
+                        @click.prevent="onSave"
+                        @update:process-success="saveFinish"
+                    >
+                        {{ $t('global.default.save') }}
+                    </ct-button-process>
+                </ct-block>
+            </template>
+
+            <template #content>
+                <ct-block name="ct_users_user_create_content">
+                    <ct-block name="ct_users_user_detail">
             <ct-block name="ct_users_user_detail_content">
                 <ct-card-view>
                     <div class="ct-users-user-detail__content">
@@ -450,13 +477,17 @@
                         </template>
                     </ct-modal>
                 </ct-block>
-            </ct-block>
-        </ct-block>
-    </div>
+                    </ct-block>
+                </ct-block>
+                </ct-block>
+            </template>
+        </ct-page>
+    </ct-block>
 </template>
 
 <script setup>
 import { computed, inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 const {
     user,
     userRepository,
@@ -474,6 +505,11 @@ const {
     isSaveSuccessful,
     onSave: parentOnSave,
     saveUser: parentSaveUser,
+    saveFinish,
+    onCancel,
+    fullName,
+    isLoading,
+    acl,
     integrations,
     integrationColumns,
     integrationContextButtons,
@@ -483,6 +519,7 @@ const {
     onIntegrationDelete,
 } = Contena.Component.getExtensionParentSetup();
 const numberRangeService = inject('numberRangeService');
+const router = useRouter();
 const userCodePreview = ref('');
 const userPasswordError = computed(() => {
     const entity = user.value;
@@ -505,12 +542,15 @@ const loadUser = async () => {
     user.value.userCode = number;
     userCodePreview.value = number;
 };
-const onSave = () => {
+const onSave = async () => {
     if (!user.value.localeId) {
         user.value.localeId = currentUser.value.localeId;
     }
 
-    return parentOnSave.value();
+    await parentOnSave.value();
+    if (isSaveSuccessful.value) {
+        await router.push({ name: 'ct.users.detail', params: { id: user.value.id } });
+    }
 };
 const saveUser = async (context) => {
     if (user.value.userCode === userCodePreview.value) {
@@ -530,6 +570,10 @@ ctDefinePublic({
     loadUser,
     onSave,
     saveUser,
+    user,
+    isLoading,
+    fullName,
+    onCancel,
 });
 
 defineExpose({
@@ -538,5 +582,9 @@ defineExpose({
     loadUser,
     onSave,
     saveUser,
+    user,
+    isLoading,
+    fullName,
+    onCancel,
 });
 </script>

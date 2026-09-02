@@ -27,6 +27,25 @@ Contena.Module.register('ct-users', {
                 privilege: 'users_and_permissions.viewer',
             },
         },
+        detail: {
+            component: 'ct-users-user-detail',
+            path: 'detail/:id',
+            meta: {
+                parentPath: 'ct.users.index',
+                privilege: 'users_and_permissions.viewer',
+            },
+            props: (route) => ({
+                initialUserId: String(route.params.id),
+            }),
+        },
+        create: {
+            component: 'ct-users-user-create',
+            path: 'create',
+            meta: {
+                parentPath: 'ct.users.index',
+                privilege: 'users_and_permissions.creator',
+            },
+        },
     },
 
     navigation: [
