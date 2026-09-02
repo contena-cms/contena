@@ -14,7 +14,6 @@
             :sort-direction="sortDirection"
             :search-value="term || ''"
             :number-of-results="total"
-            disable-search
             enable-reload
             disable-edit
             :allow-row-selection="acl.can('users_and_permissions.deleter')"
