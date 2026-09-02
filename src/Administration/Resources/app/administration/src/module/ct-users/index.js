@@ -5,6 +5,13 @@ Contena.Component.register('ct-users', () => import('./page/ct-users'));
 Contena.Component.register('ct-users-user-listing', () => import('./component/ct-users-user-listing'));
 Contena.Component.register('ct-users-user-detail', () => import('./page/ct-users-user-detail'));
 Contena.Component.extend('ct-users-user-create', 'ct-users-user-detail', () => import('./page/ct-users-user-create'));
+Contena.Component.register('ct-users-user-detail-base', () => import('./view/ct-users-user-detail-base.vue'));
+Contena.Component.register('ct-users-user-detail-interface', () => import('./view/ct-users-user-detail-interface.vue'));
+Contena.Component.register('ct-users-user-detail-roles', () => import('./view/ct-users-user-detail-roles.vue'));
+Contena.Component.register(
+    'ct-users-user-detail-integrations',
+    () => import('./view/ct-users-user-detail-integrations.vue'),
+);
 /* eslint-enable ct-deprecation-rules/private-feature-declarations */
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations

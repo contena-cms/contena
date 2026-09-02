@@ -143,6 +143,24 @@ async function createWrapper(
     <slot name="content"></slot>
 </div>`,
                     },
+                    'mt-tabs': {
+                        props: [
+                            'items',
+                            'defaultItem',
+                        ],
+                        template: `
+                            <div class="mt-tabs-stub">
+                                <button
+                                    v-for="item in items"
+                                    :key="item.name"
+                                    type="button"
+                                    @click="item.onClick()"
+                                >
+                                    {{ item.label }}
+                                </button>
+                            </div>
+                        `,
+                    },
                     'ct-card-view': true,
                     'mt-card': {
                         template: `
@@ -289,6 +307,18 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
         expect(fieldLanguage.props('modelValue')).toBe('7dc07b43229843d387bb5f59233c2d66');
         expect(fieldActive.props('modelValue')).toBe(true);
         expect(fieldTags.props('entityCollection')).toBe(wrapper.vm.user.tags);
+    });
+
+    it('switches the visible detail tab', async () => {
+        Object.assign(wrapper.vm, { isLoading: false });
+        await wrapper.vm.$nextTick();
+
+        const tabs = wrapper.findAll('.mt-tabs-stub button');
+        await tabs[1].trigger('click');
+
+        expect(wrapper.vm.activeTab).toBe('interface');
+        expect(wrapper.find('.ct-users-user-detail__information-grid').isVisible()).toBe(false);
+        expect(wrapper.find('.ct-users-user-detail__user-interface-grid').isVisible()).toBe(true);
     });
 
     it('loads the tag association', () => {

@@ -105,11 +105,39 @@ async function createWrapper(privileges = []) {
                 'ct-page': {
                     template: '<div><slot name="content"></slot></div>',
                 },
+                'mt-tabs': {
+                    props: [
+                        'items',
+                        'defaultItem',
+                    ],
+                    template: `
+                        <div class="mt-tabs-stub">
+                            <button
+                                v-for="item in items"
+                                :key="item.name"
+                                type="button"
+                                @click="item.onClick()"
+                            >
+                                {{ item.label }}
+                            </button>
+                        </div>
+                    `,
+                },
                 'ct-card-view': true,
                 'ct-text-field': true,
                 'ct-upload-listener': true,
                 'ct-media-upload-v2': true,
                 'ct-select-field': true,
+                'mt-password-field': {
+                    props: [
+                        'modelValue',
+                        'disabled',
+                        'label',
+                    ],
+                    emits: ['update:modelValue'],
+                    template:
+                        '<label><span>{{ label }}</span><input type="password" :value="modelValue" :aria-label="label" @input="$emit(\'update:modelValue\', $event.target.value)" /></label>',
+                },
 
                 'ct-entity-multi-select': true,
                 'ct-entity-tag-select': {
