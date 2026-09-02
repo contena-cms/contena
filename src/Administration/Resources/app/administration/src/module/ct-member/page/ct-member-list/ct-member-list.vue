@@ -213,7 +213,7 @@ const loadMembers = async (): Promise<void> => {
         if (channelFilter.value) criteria.addFilter(Contena.Data.Criteria.equals('channelId', channelFilter.value));
         const result = await memberRepository.search(criteria, Contena.Context.api);
         members.value = Array.from(result);
-        total.value = result.total;
+        total.value = result.total ?? 0;
     } catch {
         createNotificationError({ message: t('ct-member.list.loadError') });
     } finally {
@@ -368,27 +368,3 @@ defineExpose({
     deleteMember,
 });
 </script>
-
-<style lang="scss">
-.ct-member-list__table .mt-data-table__toolbar {
-    justify-content: flex-end;
-}
-
-.mt-data-table.ct-member-list__table {
-    width: 100%;
-    max-width: none;
-    height: 100%;
-    margin-bottom: 0;
-}
-
-.ct-member-list__content {
-    height: 100%;
-    padding: var(--scale-size-16);
-    box-sizing: border-box;
-}
-
-.ct-member-list__toolbar {
-    display: flex;
-    justify-content: flex-end;
-}
-</style>

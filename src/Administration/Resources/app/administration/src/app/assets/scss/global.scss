@@ -49,26 +49,6 @@ html[lang="zh-CN"] {
     scrollbar-color: var(--color-border-primary-default) transparent;
 }
 
-*::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-    border: 2px solid transparent;
-    border-radius: 999px;
-    background-color: var(--color-border-primary-default);
-    background-clip: padding-box;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-text-secondary-default);
-}
-
 .ct-drag-select-box {
     position: absolute;
     background: $color-drag-select-box;
@@ -171,37 +151,6 @@ a[target="_blank"]:not(.ct-external-link, .ct-internal-link, .mt-button, .mt-lin
 
 .mt-empty-state {
     padding: 48px;
-}
-
-// Keep Meteor data tables aligned with the administration content width.
-.mt-data-table.mt-card {
-    width: calc(100% - (var(--scale-size-16) * 2));
-    max-width: variables.$content-width-wide;
-    margin-inline: auto;
-}
-
-// Keep data-table pagination readable when the administration viewport is narrow.
-@media (max-width: 600px) {
-    .mt-data-table__footer-inset {
-        flex-wrap: wrap;
-        row-gap: 8px;
-    }
-
-    .mt-data-table__footer-right {
-        width: 100%;
-        margin-left: 0;
-        justify-content: flex-end;
-    }
-
-    .mt-pagination {
-        width: 100%;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-    }
-
-    .mt-pagination__info-text {
-        white-space: nowrap;
-    }
 }
 
 /**
