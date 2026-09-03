@@ -51,6 +51,8 @@ class PaymentOrderEntity extends Entity
 
     public protected(set) ?string $notifyUrl = null;
 
+    public protected(set) ?string $returnUrl = null;
+
     public protected(set) string $stateId;
 
     public protected(set) ?string $closeReason = null;

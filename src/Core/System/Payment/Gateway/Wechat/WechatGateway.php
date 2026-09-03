@@ -3,6 +3,9 @@
 namespace Contena\Core\System\Payment\Gateway\Wechat;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
@@ -11,11 +14,7 @@ use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\QueryRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
-use Contena\Core\System\Payment\Struct\TransferRequest;
 
 /**
  * @internal
@@ -31,33 +30,34 @@ final readonly class WechatGateway implements PaymentHandlerInterface, QueryHand
         return 'wechat';
     }
 
-    public function pay(PaymentRequest $request, array $config): PaymentResult
+    public function pay(PaymentOrderEntity $order, array $config): PaymentResult
     {
-        $action = match ($request->method) {
+        $action = match ($order->methodCode) {
             PaymentMethods::H5 => 'h5',
             PaymentMethods::APP => 'app',
             PaymentMethods::MINI_PROGRAM => 'mini',
             PaymentMethods::JSAPI => 'mp',
             PaymentMethods::NATIVE => 'scan',
-            default => throw PaymentException::capabilityNotSupported($this->code(), 'pay:' . $request->method),
+            default => throw PaymentException::capabilityNotSupported($this->code(), 'pay:' . $order->methodCode),
         };
-        $parameters = array_replace($request->extra, [
-            'out_trade_no' => $request->externalOrderNo,
-            'description' => $request->subject,
-            'amount' => ['total' => $request->amount, 'currency' => $request->currencyCode],
-            'notify_url' => $request->notifyUrl,
+        $parameters = array_replace($order->channelExtra ?? [], [
+            'out_trade_no' => $order->orderNo,
+            'description' => $order->subject,
+            'amount' => ['total' => $order->amount, 'currency' => $order->currencyCode],
+            'notify_url' => $order->notifyUrl,
         ]);
 
-        return ProviderResultMapper::paymentResult(ProviderResultMapper::data($this->call($config, $action, $parameters)), PaymentStatus::PENDING, $request->method);
+        return ProviderResultMapper::paymentResult(ProviderResultMapper::data($this->call($config, $action, $parameters)), PaymentStatus::PENDING, $order->methodCode);
     }
 
-    public function query(QueryRequest $request, array $config): PaymentResult
+    public function query(PaymentOrderEntity $order, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'query', array_filter([
-            'out_trade_no' => $request->orderNo,
-            'transaction_id' => $request->providerTradeNo,
-            '_action' => $this->action($request->method),
-        ])));
+        $parameters = array_filter([
+            'out_trade_no' => $order->orderNo,
+            'transaction_id' => $order->channelTradeNo,
+            '_action' => $this->action($order->methodCode),
+        ]);
+        $data = ProviderResultMapper::data($this->call($config, 'query', $parameters));
         $status = match ($data['trade_state'] ?? null) {
             'SUCCESS' => PaymentStatus::SUCCEEDED,
             'NOTPAY', 'USERPAYING' => PaymentStatus::PENDING,
@@ -68,30 +68,32 @@ final readonly class WechatGateway implements PaymentHandlerInterface, QueryHand
         return ProviderResultMapper::paymentResult($data, $status);
     }
 
-    public function refund(RefundRequest $request, array $config): PaymentResult
+    public function refund(PaymentRefundEntity $refund, PaymentOrderEntity $order, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'refund', array_filter([
-            'out_trade_no' => $request->orderNo,
-            'transaction_id' => $request->providerTradeNo,
-            'out_refund_no' => $request->refundNo,
-            'reason' => $request->reason,
-            'amount' => ['refund' => $request->amount, 'total' => $request->totalAmount, 'currency' => $request->currencyCode],
-        ])));
+        $parameters = array_filter([
+            'out_trade_no' => $order->orderNo,
+            'transaction_id' => $order->channelTradeNo,
+            'out_refund_no' => $refund->refundNo,
+            'reason' => $refund->reason,
+            'amount' => ['refund' => $refund->refundAmount, 'total' => $order->amount, 'currency' => $order->currencyCode],
+        ]);
+        $data = ProviderResultMapper::data($this->call($config, 'refund', $parameters));
         $status = isset($data['refund_id']) ? PaymentStatus::PROCESSING : PaymentStatus::FAILED;
 
         return ProviderResultMapper::paymentResult($data, $status);
     }
 
-    public function transfer(TransferRequest $request, array $config): PaymentResult
+    public function transfer(PaymentTransferEntity $transfer, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'transfer', array_replace($request->extra, [
-            'out_bill_no' => $request->externalTransferNo,
-            'transfer_scene_id' => $request->extra['transfer_scene_id'] ?? '1000',
-            'openid' => $request->payee,
-            'transfer_amount' => $request->amount,
-            'transfer_remark' => $request->remark ?? $request->externalTransferNo,
-            'user_name' => $request->payeeName,
-        ])));
+        $parameters = array_replace($transfer->channelExtra ?? [], [
+            'out_bill_no' => $transfer->transferNo,
+            'transfer_scene_id' => ($transfer->channelExtra ?? [])['transfer_scene_id'] ?? '1000',
+            'openid' => $transfer->payee,
+            'transfer_amount' => $transfer->amount,
+            'transfer_remark' => $transfer->remark ?? $transfer->transferNo,
+            'user_name' => $transfer->payeeName,
+        ]);
+        $data = ProviderResultMapper::data($this->call($config, 'transfer', $parameters));
         $status = isset($data['transfer_bill_no'], $data['out_bill_no']) ? PaymentStatus::PROCESSING : PaymentStatus::FAILED;
 
         return ProviderResultMapper::paymentResult($data, $status);

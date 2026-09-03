@@ -12,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -66,8 +67,12 @@ class PaymentTransferDefinition extends EntityDefinition
             new StringField('payee', 'payee', 128)->addFlags(new ApiAware(), new Required()),
             new StringField('payee_name', 'payeeName', 64)->addFlags(new ApiAware(), new Required()),
             new StringField('remark', 'remark', 255)->addFlags(new ApiAware()),
+            new JsonField('channel_extra', 'channelExtra')->addFlags(new ApiAware()),
             new StringField('channel_order_id', 'channelOrderId', 128)->addFlags(new ApiAware()),
             new StringField('channel_status', 'channelStatus', 32)->addFlags(new ApiAware()),
+            new JsonField('response_data', 'responseData')->addFlags(new ApiAware()),
+            new StringField('result_code', 'resultCode', 64)->addFlags(new ApiAware()),
+            new StringField('result_message', 'resultMessage', 255)->addFlags(new ApiAware()),
             new DateTimeField('success_time', 'successTime')->addFlags(new ApiAware()),
             new IntField('version', 'version')->addFlags(new ApiAware()),
             new CustomFields()->addFlags(new ApiAware()),

@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Core\System\Payment\Channel\Configuration\ChannelConfigValidator;
+use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigCollection;
@@ -22,6 +22,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class PaymentRouteResolver extends AbstractPaymentRouteResolver
 {
     /**
+     * @internal
+     *
      * @param EntityRepository<PaymentAppChannelMethodCollection> $methodRepository
      * @param EntityRepository<PaymentChannelConfigCollection> $configRepository
      */
@@ -64,6 +66,24 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         throw PaymentException::routeNotFound($appId, $operation, $method);
     }
 
+    public function resolveConfigured(string $channel, string $channelConfigId, string $operation, Context $context): PaymentRoute
+    {
+        if (!$this->gatewayRegistry->supports($channel, $operation)) {
+            throw PaymentException::capabilityNotSupported($channel, $operation);
+        }
+
+        $config = $this->configById($channelConfigId, $context)
+            ?? $this->configById($channelConfigId, Context::createDefaultContext());
+        if (!$config instanceof PaymentChannelConfigEntity || $config->channel?->code !== $channel) {
+            throw PaymentException::channelConfigNotFound($channelConfigId);
+        }
+
+        $values = $config->config ?? [];
+        $this->configValidator->validate($channel, $config->channel->configSchema ?? [], $values);
+
+        return new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $values, $config->paymentAppId === null);
+    }
+
     /**
      * @return list<string>
      */
@@ -102,6 +122,16 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         $criteria->addFilter(new EqualsFilter('status', true));
         $criteria->addAssociation('channel');
         $criteria->setLimit(1);
+
+        $config = $this->configRepository->search($criteria, $context)->getEntities()->first();
+
+        return $config instanceof PaymentChannelConfigEntity ? $config : null;
+    }
+
+    private function configById(string $channelConfigId, Context $context): ?PaymentChannelConfigEntity
+    {
+        $criteria = new Criteria([$channelConfigId]);
+        $criteria->addAssociation('channel');
 
         $config = $this->configRepository->search($criteria, $context)->getEntities()->first();
 

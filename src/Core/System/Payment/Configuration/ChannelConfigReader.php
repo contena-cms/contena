@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Channel\Configuration;
+namespace Contena\Core\System\Payment\Configuration;
 
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 

@@ -25,6 +25,69 @@ final class PaymentResult extends Struct
         public readonly ?string $resultCode = null,
         public readonly ?string $resultMessage = null,
         public readonly array $data = [],
+        public readonly ?string $resourceNo = null,
+        public readonly ?string $externalResourceNo = null,
+        public readonly ?string $transactionNo = null,
     ) {
+    }
+
+    public function withResource(string $resourceNo, string $externalResourceNo, ?string $transactionNo = null): self
+    {
+        return new self(
+            $this->status,
+            $this->action,
+            $this->actionValue,
+            $this->providerRequestId,
+            $this->providerResourceId,
+            $this->resultCode,
+            $this->resultMessage,
+            $this->data,
+            $resourceNo,
+            $externalResourceNo,
+            $transactionNo,
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'status' => $this->status,
+            'action' => $this->action,
+            'actionValue' => $this->actionValue,
+            'providerRequestId' => $this->providerRequestId,
+            'providerResourceId' => $this->providerResourceId,
+            'resultCode' => $this->resultCode,
+            'resultMessage' => $this->resultMessage,
+            'data' => $this->data,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed>|null $data
+     */
+    public static function fromArray(?array $data, string $fallbackStatus = PaymentStatus::UNKNOWN): self
+    {
+        if ($data === null) {
+            return new self($fallbackStatus);
+        }
+
+        return new self(
+            self::string($data['status'] ?? null) ?? $fallbackStatus,
+            self::string($data['action'] ?? null) ?? self::ACTION_NONE,
+            self::string($data['actionValue'] ?? null),
+            self::string($data['providerRequestId'] ?? null),
+            self::string($data['providerResourceId'] ?? null),
+            self::string($data['resultCode'] ?? null),
+            self::string($data['resultMessage'] ?? null),
+            \is_array($data['data'] ?? null) ? $data['data'] : [],
+        );
+    }
+
+    private static function string(mixed $value): ?string
+    {
+        return \is_string($value) && $value !== '' ? $value : null;
     }
 }

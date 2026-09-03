@@ -3,12 +3,13 @@
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\Gateway\Alipay\AlipayGateway;
 use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Yansongda\Pay\Pay;
@@ -25,15 +26,15 @@ final class ProviderConfigurationTest extends TestCase
         $executor = new RecordingGatewayExecutor(['h5_url' => 'https://pay.example/checkout']);
         $gateway = new AlipayGateway($executor);
 
-        $result = $gateway->pay(new PaymentRequest(
-            'order-1',
-            1250,
-            'CNY',
-            PaymentMethods::H5,
-            'Order 1',
-            notifyUrl: 'https://app.example/notify',
-            returnUrl: 'https://app.example/return',
-        ), [
+        $result = $gateway->pay(new PaymentOrderEntity()->assign([
+            'orderNo' => 'order-1',
+            'amount' => 1250,
+            'currencyCode' => 'CNY',
+            'methodCode' => PaymentMethods::H5,
+            'subject' => 'Order 1',
+            'notifyUrl' => 'https://app.example/notify',
+            'returnUrl' => 'https://app.example/return',
+        ]), [
             'appId' => 'app-id',
             'appPrivateKey' => 'private-key',
             'alipayPublicKey' => 'public-key',
@@ -62,13 +63,13 @@ final class ProviderConfigurationTest extends TestCase
         $executor = new RecordingGatewayExecutor(['code_url' => 'weixin://checkout']);
         $gateway = new WechatGateway($executor);
 
-        $result = $gateway->pay(new PaymentRequest(
-            'order-2',
-            3600,
-            'CNY',
-            PaymentMethods::NATIVE,
-            'Order 2',
-        ), [
+        $result = $gateway->pay(new PaymentOrderEntity()->assign([
+            'orderNo' => 'order-2',
+            'amount' => 3600,
+            'currencyCode' => 'CNY',
+            'methodCode' => PaymentMethods::NATIVE,
+            'subject' => 'Order 2',
+        ]), [
             'merchantId' => 'merchant-id',
             'merchantSecretKey' => 'secret-key',
             'merchantPrivateKey' => 'private-key',
@@ -101,19 +102,40 @@ final class ProviderConfigurationTest extends TestCase
         $executor = new RecordingGatewayExecutor(['refund_id' => 'refund-id']);
         $gateway = new WechatGateway($executor);
 
-        $gateway->refund(new RefundRequest(
-            'order-2',
-            'refund-1',
-            1200,
-            3600,
-            'CNY',
-        ), []);
+        $refund = new PaymentRefundEntity()->assign([
+            'refundNo' => 'refund-1',
+            'refundAmount' => 1200,
+        ]);
+        $order = new PaymentOrderEntity()->assign([
+            'orderNo' => 'order-2',
+            'amount' => 3600,
+            'currencyCode' => 'CNY',
+        ]);
+
+        $gateway->refund($refund, $order, []);
 
         static::assertSame([
             'refund' => 1200,
             'total' => 3600,
             'currency' => 'CNY',
         ], $executor->parameters['amount']);
+    }
+
+    public function testProviderReceivesPlatformTransferNumber(): void
+    {
+        $executor = new RecordingGatewayExecutor(['transfer_bill_no' => 'provider-transfer']);
+        $gateway = new WechatGateway($executor);
+        $transfer = new PaymentTransferEntity()->assign([
+            'transferNo' => 'platform-transfer-1',
+            'externalTransferNo' => 'app-transfer-1',
+            'amount' => 500,
+            'payee' => 'openid-1',
+            'payeeName' => 'Payee',
+        ]);
+
+        $gateway->transfer($transfer, []);
+
+        static::assertSame('platform-transfer-1', $executor->parameters['out_bill_no']);
     }
 }
 

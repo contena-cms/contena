@@ -9,4 +9,6 @@ final class PaymentRecurringStatus
     final public const int STATUS_SIGNED = 1;
 
     final public const int STATUS_UNSIGNED = 2;
+
+    final public const int STATUS_FAILED = 3;
 }

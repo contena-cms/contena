@@ -2,13 +2,14 @@
 
 namespace Contena\Core\System\Payment\Gateway;
 
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\RefundRequest;
 
 interface RefundHandlerInterface extends GatewayInterface
 {
     /**
      * @param array<string, mixed> $config
      */
-    public function refund(RefundRequest $request, array $config): PaymentResult;
+    public function refund(PaymentRefundEntity $refund, PaymentOrderEntity $order, array $config): PaymentResult;
 }

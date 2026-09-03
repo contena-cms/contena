@@ -7,9 +7,8 @@ use Contena\Core\Framework\Struct\Struct;
 final class QueryRequest extends Struct
 {
     public function __construct(
-        public readonly string $orderNo,
-        public readonly ?string $providerTradeNo = null,
-        public readonly ?string $method = null,
+        public readonly ?string $orderNo = null,
+        public readonly ?string $externalOrderNo = null,
     ) {
     }
 }

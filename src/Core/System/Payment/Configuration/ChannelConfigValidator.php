@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Channel\Configuration;
+namespace Contena\Core\System\Payment\Configuration;
 
 use Contena\Core\System\Payment\PaymentException;
 
@@ -50,7 +50,10 @@ final class ChannelConfigValidator
         }
 
         if ($invalid !== []) {
-            throw PaymentException::invalidChannelConfig($channel, array_values(array_unique($invalid)));
+            throw $invalid
+                    |> array_unique(...)
+                    |> array_values(...)
+                    |> (fn ($x) => PaymentException::invalidChannelConfig($channel, $x));
         }
     }
 }

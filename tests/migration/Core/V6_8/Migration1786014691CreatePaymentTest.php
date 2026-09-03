@@ -54,7 +54,12 @@ class Migration1786014691CreatePaymentTest extends TestCase
 
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_channel', 'config_schema'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_recurring', 'channel_config_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_recurring', 'channel_extra'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_recurring', 'response_data'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'channel_config_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'channel_extra'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'response_data'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_order', 'return_url'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_recurring', 'fk.payment_recurring.channel_config_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_transfer', 'fk.payment_transfer.channel_config_id'));
     }

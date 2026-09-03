@@ -10,4 +10,6 @@ abstract class AbstractPaymentRouteResolver
     abstract public function getDecorated(): self;
 
     abstract public function resolve(string $appId, string $operation, Context $context, ?string $method = null, ?string $preferredChannel = null): PaymentRoute;
+
+    abstract public function resolveConfigured(string $channel, string $channelConfigId, string $operation, Context $context): PaymentRoute;
 }

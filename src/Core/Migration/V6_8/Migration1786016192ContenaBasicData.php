@@ -14,7 +14,7 @@ use Contena\Core\Migration\Traits\StateMachineMigration;
 use Contena\Core\Migration\Traits\StateMachineMigrationTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\System\DataDictionary\DataDictionaryDefinition;
-use Contena\Core\System\Payment\Channel\Configuration\ChannelConfigReader;
+use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Doctrine\DBAL\Connection;

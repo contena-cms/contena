@@ -32,6 +32,24 @@ class PaymentRecurringEntity extends Entity
      */
     public protected(set) ?array $channelParams = null;
 
+    /**
+     * @var array<mixed>|null
+     */
+    public protected(set) ?array $channelExtra = null;
+
+    public protected(set) ?string $notifyUrl = null;
+
+    public protected(set) ?string $returnUrl = null;
+
+    /**
+     * @var array<mixed>|null
+     */
+    public protected(set) ?array $responseData = null;
+
+    public protected(set) ?string $resultCode = null;
+
+    public protected(set) ?string $resultMessage = null;
+
     public protected(set) int $status;
 
     public protected(set) ?\DateTimeInterface $signTime = null;

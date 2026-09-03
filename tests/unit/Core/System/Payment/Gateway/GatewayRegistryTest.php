@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringEntity;
 use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class GatewayRegistryTest extends TestCase
                 return 'agreement-only';
             }
 
-            public function subscribe(SubscriptionRequest $request, array $config): PaymentResult
+            public function subscribe(PaymentRecurringEntity $subscription, array $config): PaymentResult
             {
                 return new PaymentResult();
             }

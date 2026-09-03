@@ -2,7 +2,7 @@
 
 namespace Contena\Core\System\Payment\Gateway;
 
-use Contena\Core\System\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 
 interface PaymentHandlerInterface extends GatewayInterface
@@ -10,5 +10,5 @@ interface PaymentHandlerInterface extends GatewayInterface
     /**
      * @param array<string, mixed> $config
      */
-    public function pay(PaymentRequest $request, array $config): PaymentResult;
+    public function pay(PaymentOrderEntity $order, array $config): PaymentResult;
 }

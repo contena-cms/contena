@@ -75,6 +75,7 @@ class PaymentOrderDefinition extends EntityDefinition
             new StringField('client_ip', 'clientIp', 64)->addFlags(new ApiAware()),
             new JsonField('channel_extra', 'channelExtra')->addFlags(new ApiAware()),
             new StringField('notify_url', 'notifyUrl', 2048)->addFlags(new ApiAware()),
+            new StringField('return_url', 'returnUrl', 2048)->addFlags(new ApiAware()),
             new StateMachineStateField('state_id', 'stateId', PaymentOrderStates::STATE_MACHINE)->addFlags(new ApiAware(), new Required()),
             new StringField('close_reason', 'closeReason', 32)->addFlags(new ApiAware()),
             new StringField('channel_trade_no', 'channelTradeNo', 128)->addFlags(new ApiAware()),

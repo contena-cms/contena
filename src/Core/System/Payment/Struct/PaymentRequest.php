@@ -16,6 +16,7 @@ final class PaymentRequest extends Struct
         public readonly string $method,
         public readonly string $subject,
         public readonly ?string $channel = null,
+        public readonly ?string $deviceType = null,
         public readonly ?string $clientIp = null,
         public readonly ?string $notifyUrl = null,
         public readonly ?string $returnUrl = null,

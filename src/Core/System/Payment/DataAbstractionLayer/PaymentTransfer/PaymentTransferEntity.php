@@ -38,9 +38,23 @@ class PaymentTransferEntity extends Entity
 
     public protected(set) ?string $remark = null;
 
+    /**
+     * @var array<mixed>|null
+     */
+    public protected(set) ?array $channelExtra = null;
+
     public protected(set) ?string $channelOrderId = null;
 
     public protected(set) ?string $channelStatus = null;
+
+    /**
+     * @var array<mixed>|null
+     */
+    public protected(set) ?array $responseData = null;
+
+    public protected(set) ?string $resultCode = null;
+
+    public protected(set) ?string $resultMessage = null;
 
     public protected(set) ?\DateTimeInterface $successTime = null;
 
