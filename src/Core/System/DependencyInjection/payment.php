@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
@@ -64,6 +65,7 @@ return static function (ContainerConfigurator $container): void {
             service('payment_channel_config.repository'),
             service(GatewayRegistry::class),
             service(ChannelConfigValidator::class),
+            service(AbstractRuleLoader::class),
             service('event_dispatcher'),
         ]);
     $services->alias(AbstractPaymentRouteResolver::class, PaymentRouteResolver::class);

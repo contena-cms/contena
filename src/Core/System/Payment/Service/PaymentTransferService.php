@@ -21,6 +21,7 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\TransferRequest;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
@@ -59,7 +60,15 @@ final class PaymentTransferService
             return $this->resultFromTransfer($existing);
         }
 
-        $route = $this->routeResolver->resolve($app->getId(), PaymentOperation::TRANSFER, $context, preferredChannel: $request->channel);
+        $route = $this->routeResolver->resolve(new PaymentRuleScope(
+            $context,
+            $app,
+            PaymentOperation::TRANSFER,
+            preferredChannel: $request->channel,
+            amount: $request->amount,
+            currencyCode: strtoupper($request->currencyCode),
+            data: $request->extra,
+        ));
         if (!$route->gateway instanceof TransferHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::TRANSFER);
         }

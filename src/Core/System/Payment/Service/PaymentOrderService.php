@@ -26,6 +26,7 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
@@ -68,7 +69,16 @@ final class PaymentOrderService
             return $this->resultFromOrder($existing);
         }
 
-        $route = $this->routeResolver->resolve($app->getId(), PaymentOperation::PAY, $context, $request->method, $request->channel);
+        $route = $this->routeResolver->resolve(new PaymentRuleScope(
+            $context,
+            $app,
+            PaymentOperation::PAY,
+            $request->method,
+            $request->channel,
+            $request->amount,
+            strtoupper($request->currencyCode),
+            $request->extra,
+        ));
         if (!$route->gateway instanceof PaymentHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::PAY);
         }

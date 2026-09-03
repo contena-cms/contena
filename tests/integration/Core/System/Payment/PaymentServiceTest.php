@@ -34,6 +34,7 @@ use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Service\PaymentRefundService;
 use Contena\Core\System\Payment\Service\PaymentService;
@@ -349,7 +350,7 @@ final class WorkflowRouteResolver extends AbstractPaymentRouteResolver
         throw new DecorationPatternException(self::class);
     }
 
-    public function resolve(string $appId, string $operation, Context $context, ?string $method = null, ?string $preferredChannel = null): PaymentRoute
+    public function resolve(PaymentRuleScope $scope): PaymentRoute
     {
         return $this->route;
     }

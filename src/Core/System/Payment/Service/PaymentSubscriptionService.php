@@ -21,6 +21,7 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Psr\Clock\ClockInterface;
@@ -54,7 +55,14 @@ final class PaymentSubscriptionService
             return $this->resultFromSubscription($existing);
         }
 
-        $route = $this->routeResolver->resolve($app->getId(), PaymentOperation::SUBSCRIBE, $context, preferredChannel: $request->channel);
+        $route = $this->routeResolver->resolve(new PaymentRuleScope(
+            $context,
+            $app,
+            PaymentOperation::SUBSCRIBE,
+            preferredChannel: $request->channel,
+            amount: $request->singleAmount,
+            data: $request->extra,
+        ));
         if (!$route->gateway instanceof SubscribeHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::SUBSCRIBE);
         }

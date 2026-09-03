@@ -11,6 +11,7 @@ use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yansongda\Pay\Pay;
 
@@ -136,6 +137,46 @@ final class ProviderConfigurationTest extends TestCase
         $gateway->transfer($transfer, []);
 
         static::assertSame('platform-transfer-1', $executor->parameters['out_bill_no']);
+    }
+
+    #[DataProvider('alipayQueryStatuses')]
+    public function testAlipayQueryMapsProviderStatus(string $providerStatus, string $expectedStatus): void
+    {
+        $gateway = new AlipayGateway(new RecordingGatewayExecutor(['trade_status' => $providerStatus]));
+        $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'methodCode' => PaymentMethods::NATIVE]);
+
+        static::assertSame($expectedStatus, $gateway->query($order, [])->status);
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function alipayQueryStatuses(): iterable
+    {
+        yield 'completed trade succeeds' => ['TRADE_SUCCESS', PaymentStatus::SUCCEEDED];
+        yield 'buyer payment remains pending' => ['WAIT_BUYER_PAY', PaymentStatus::PENDING];
+        yield 'closed trade is closed' => ['TRADE_CLOSED', PaymentStatus::CLOSED];
+        yield 'unrecognized status is unknown' => ['UNEXPECTED', PaymentStatus::UNKNOWN];
+    }
+
+    #[DataProvider('wechatQueryStatuses')]
+    public function testWechatQueryMapsProviderStatus(string $providerStatus, string $expectedStatus): void
+    {
+        $gateway = new WechatGateway(new RecordingGatewayExecutor(['trade_state' => $providerStatus]));
+        $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'methodCode' => PaymentMethods::NATIVE]);
+
+        static::assertSame($expectedStatus, $gateway->query($order, [])->status);
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function wechatQueryStatuses(): iterable
+    {
+        yield 'successful trade succeeds' => ['SUCCESS', PaymentStatus::SUCCEEDED];
+        yield 'user payment remains pending' => ['USERPAYING', PaymentStatus::PENDING];
+        yield 'revoked trade is closed' => ['REVOKED', PaymentStatus::CLOSED];
+        yield 'unrecognized status is unknown' => ['UNEXPECTED', PaymentStatus::UNKNOWN];
     }
 }
 
