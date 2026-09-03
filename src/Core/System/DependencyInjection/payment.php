@@ -12,7 +12,6 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\Aggreg
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentChannelMethodDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentChannelNotifyRecordDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordDefinition;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOperation\PaymentOperationDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregate\PaymentOrderTransaction\PaymentOrderTransactionDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
@@ -62,7 +61,6 @@ return static function (ContainerConfigurator $container): void {
         PaymentRecurringDefinition::class,
         PaymentChannelNotifyRecordDefinition::class,
         PaymentNotifyRecordDefinition::class,
-        PaymentOperationDefinition::class,
     ] as $definition) {
         $services->set($definition)->tag('contena.entity.definition');
     }

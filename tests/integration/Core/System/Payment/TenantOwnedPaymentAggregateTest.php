@@ -186,7 +186,7 @@ class TenantOwnedPaymentAggregateTest extends TestCase
     }
 
     /**
-     * @return array{app: string, method: string, config: string, recurring: string, order: string, refund: string, transfer: string, transaction: string, channelNotify: string, notify: string, operation: string}
+     * @return array{app: string, method: string, config: string, recurring: string, order: string, refund: string, transfer: string, transaction: string, channelNotify: string, notify: string}
      */
     private function createPaymentAppAggregate(string $scope, Context $context): array
     {
@@ -200,7 +200,6 @@ class TenantOwnedPaymentAggregateTest extends TestCase
         $transactionId = Uuid::randomHex();
         $channelNotifyId = Uuid::randomHex();
         $notifyId = Uuid::randomHex();
-        $operationId = Uuid::randomHex();
         $number = $scope . '-' . \bin2hex(\random_bytes(4));
 
         $this->repository('payment_app')->create([[
@@ -292,16 +291,6 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             'notifyType' => 1,
             'notifyUrl' => 'https://example.invalid/payment-notify',
         ]], $context);
-        $this->repository('payment_operation')->create([[
-            'id' => $operationId,
-            'operationNo' => 'operation-' . $number,
-            'operation' => 'pay',
-            'status' => 'created',
-            'channelCode' => 'tenant-matrix',
-            'channelConfigId' => $configId,
-            'orderId' => $orderId,
-            'startedAt' => new \DateTimeImmutable(),
-        ]], $context);
 
         return [
             'app' => $appId,
@@ -314,7 +303,6 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             'transaction' => $transactionId,
             'channelNotify' => $channelNotifyId,
             'notify' => $notifyId,
-            'operation' => $operationId,
         ];
     }
 
@@ -334,12 +322,11 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             'payment_order_transaction' => 'transaction',
             'payment_channel_notify_record' => 'channelNotify',
             'payment_notify_record' => 'notify',
-            'payment_operation' => 'operation',
         ];
     }
 
     /**
-     * @param array{app: string, method: string, config: string, recurring: string, order: string, refund: string, transfer: string, transaction: string, channelNotify: string, notify: string, operation: string} $ids
+     * @param array{app: string, method: string, config: string, recurring: string, order: string, refund: string, transfer: string, transaction: string, channelNotify: string, notify: string} $ids
      *
      * @return array<string, array<string, mixed>>
      */
@@ -356,7 +343,6 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             'payment_order_transaction' => ['id' => $ids['transaction'], 'customFields' => ['matrix' => $value]],
             'payment_channel_notify_record' => ['id' => $ids['channelNotify'], 'customFields' => ['matrix' => $value]],
             'payment_notify_record' => ['id' => $ids['notify'], 'customFields' => ['matrix' => $value]],
-            'payment_operation' => ['id' => $ids['operation'], 'customFields' => ['matrix' => $value]],
         ];
     }
 

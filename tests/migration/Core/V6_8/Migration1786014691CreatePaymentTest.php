@@ -16,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 class Migration1786014691CreatePaymentTest extends TestCase
 {
     private const array TABLES = [
-        'payment_operation',
         'payment_notify_record',
         'payment_channel_notify_record',
         'payment_order_transaction',
@@ -56,7 +55,6 @@ class Migration1786014691CreatePaymentTest extends TestCase
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_channel', 'config_schema'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_recurring', 'channel_config_id'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'channel_config_id'));
-        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_operation', 'fk.payment_operation.channel_config_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_recurring', 'fk.payment_recurring.channel_config_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_transfer', 'fk.payment_transfer.channel_config_id'));
     }

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
-use Contena\Core\System\Payment\Gateway\CustomOperationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
@@ -19,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(GatewayRegistry::class)]
 final class GatewayRegistryTest extends TestCase
 {
-    public function testEachSubscriptionOperationIsAnIndependentCapability(): void
+    public function testGatewayOnlySupportsCapabilitiesItImplements(): void
     {
         $gateway = new class implements SubscribeHandlerInterface {
             public function code(): string
@@ -35,33 +34,9 @@ final class GatewayRegistryTest extends TestCase
         $registry = new GatewayRegistry([$gateway]);
 
         static::assertTrue($registry->supports('agreement-only', PaymentOperation::SUBSCRIBE));
-        static::assertFalse($registry->supports('agreement-only', PaymentOperation::UNSUBSCRIBE));
-        static::assertFalse($registry->supports('agreement-only', PaymentOperation::DEDUCT));
-    }
-
-    public function testProviderSpecificOperationDoesNotRequireARegistryChange(): void
-    {
-        $gateway = new class implements CustomOperationHandlerInterface {
-            public function code(): string
-            {
-                return 'card-provider';
-            }
-
-            public function supports(string $operation): bool
-            {
-                return $operation === 'authorize';
-            }
-
-            public function execute(string $operation, array $request, array $config): PaymentResult
-            {
-                return new PaymentResult();
-            }
-        };
-        $registry = new GatewayRegistry([$gateway]);
-
-        static::assertTrue($registry->supports('card-provider', 'authorize'));
-        static::assertFalse($registry->supports('card-provider', 'capture'));
-        static::assertFalse($registry->supports('unknown-provider', 'authorize'));
+        static::assertFalse($registry->supports('agreement-only', PaymentOperation::PAY));
+        static::assertFalse($registry->supports('agreement-only', 'authorize'));
+        static::assertFalse($registry->supports('unknown-provider', PaymentOperation::SUBSCRIBE));
     }
 
     public function testReturnsRegisteredGateway(): void

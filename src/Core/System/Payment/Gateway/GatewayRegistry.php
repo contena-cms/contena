@@ -41,9 +41,7 @@ final class GatewayRegistry
             PaymentOperation::REFUND => $gateway instanceof RefundHandlerInterface,
             PaymentOperation::TRANSFER => $gateway instanceof TransferHandlerInterface,
             PaymentOperation::SUBSCRIBE => $gateway instanceof SubscribeHandlerInterface,
-            PaymentOperation::UNSUBSCRIBE => $gateway instanceof UnsubscribeHandlerInterface,
-            PaymentOperation::DEDUCT => $gateway instanceof DeductHandlerInterface,
-            default => $gateway instanceof CustomOperationHandlerInterface && $gateway->supports($operation),
+            default => false,
         };
     }
 }

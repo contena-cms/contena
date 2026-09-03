@@ -135,7 +135,6 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'payment_channel_notify_record',
         'payment_channel_translation',
         'payment_notify_record',
-        'payment_operation',
         'payment_order',
         'payment_order_transaction',
         'payment_recurring',
@@ -1269,7 +1268,6 @@ HTML,
             ['name' => 'payment_refund', 'pattern' => 'R{date}{n}', 'zh' => '退款单', 'en' => 'Payment refund'],
             ['name' => 'payment_transfer', 'pattern' => 'F{date}{n}', 'zh' => '转账单', 'en' => 'Payment transfer'],
             ['name' => 'payment_recurring', 'pattern' => 'A{date}{n}', 'zh' => '周期扣款', 'en' => 'Recurring deduction'],
-            ['name' => 'payment_operation', 'pattern' => 'O{date}{n}', 'zh' => '支付操作', 'en' => 'Payment operation'],
         ] as $range) {
             $typeId = $connection->fetchOne(
                 'SELECT `id` FROM `number_range_type` WHERE `technical_name` = :name',

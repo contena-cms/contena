@@ -410,8 +410,8 @@ CREATE TABLE IF NOT EXISTS `payment_order_transaction` (
     `channel_request_no` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Channel request no',
     `channel_trade_no` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Channel transaction no',
     `state_id` BINARY(16) NOT NULL COMMENT 'State ID',
-    `request_data` JSON NULL COMMENT 'Request data (PII masked before persistence)',
-    `response_data` JSON NULL COMMENT 'Response data (PII masked before persistence)',
+    `request_data` JSON NULL COMMENT 'Provider request snapshot',
+    `response_data` JSON NULL COMMENT 'Provider response snapshot',
     `result_code` VARCHAR(64) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Result code',
     `result_message` VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Result message',
     `operator` VARCHAR(64) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Operator',
@@ -511,58 +511,6 @@ CREATE TABLE IF NOT EXISTS `payment_notify_record` (
     CONSTRAINT `fk.payment_notify_record.tenant_id` FOREIGN KEY (`tenant_id`)
         REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-SQL
-        );
-
-        // payment_operation
-        $this->executeDdlStatement(
-            $connection,
-            <<<'SQL'
-CREATE TABLE IF NOT EXISTS `payment_operation` (
-    `id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NULL,
-    `operation_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform operation no',
-    `operation` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Provider operation: pay / query / refund / transfer / subscribe / unsubscribe / deduct',
-    `status` VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unified operation status',
-    `channel_code` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Channel code snapshot',
-    `channel_config_id` BINARY(16) NOT NULL COMMENT 'Exact routed channel configuration',
-    `order_id` BINARY(16) NULL,
-    `refund_id` BINARY(16) NULL,
-    `transfer_id` BINARY(16) NULL,
-    `recurring_id` BINARY(16) NULL,
-    `provider_request_id` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL,
-    `provider_resource_id` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL,
-    `request_data` JSON NULL COMMENT 'Sanitized provider request snapshot',
-    `response_data` JSON NULL COMMENT 'Sanitized provider response snapshot',
-    `result_code` VARCHAR(64) COLLATE utf8mb4_unicode_ci NULL,
-    `result_message` VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
-    `http_status` INT NULL,
-    `duration_ms` INT NULL,
-    `error_class` VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
-    `started_at` DATETIME(3) NOT NULL,
-    `completed_at` DATETIME(3) NULL,
-    `custom_fields` JSON NULL,
-    `created_at` DATETIME(3) NOT NULL,
-    `updated_at` DATETIME(3) NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE `uniq.payment_operation.operation_no` (`tenant_id`, `operation_no`),
-    KEY `idx.payment_operation.tenant_id` (`tenant_id`),
-    KEY `idx.payment_operation.channel_started` (`channel_code`, `started_at`),
-    KEY `idx.payment_operation.channel_config_id` (`channel_config_id`),
-    KEY `idx.payment_operation.order_id` (`order_id`),
-    KEY `idx.payment_operation.refund_id` (`refund_id`),
-    KEY `idx.payment_operation.transfer_id` (`transfer_id`),
-    KEY `idx.payment_operation.recurring_id` (`recurring_id`),
-    CONSTRAINT `json.payment_operation.request_data` CHECK (JSON_VALID(`request_data`)),
-    CONSTRAINT `json.payment_operation.response_data` CHECK (JSON_VALID(`response_data`)),
-    CONSTRAINT `json.payment_operation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.payment_operation.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_operation.channel_config_id` FOREIGN KEY (`channel_config_id`) REFERENCES `payment_channel_config` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_operation.order_id` FOREIGN KEY (`order_id`) REFERENCES `payment_order` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_operation.refund_id` FOREIGN KEY (`refund_id`) REFERENCES `payment_refund` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_operation.transfer_id` FOREIGN KEY (`transfer_id`) REFERENCES `payment_transfer` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_operation.recurring_id` FOREIGN KEY (`recurring_id`) REFERENCES `payment_recurring` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
         );

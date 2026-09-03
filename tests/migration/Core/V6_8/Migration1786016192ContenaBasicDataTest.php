@@ -146,15 +146,15 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertSame(3840, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `region`'));
         static::assertSame(7680, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `region_translation`'));
         static::assertSame(
-            ['member', 'payment_operation', 'payment_order', 'payment_order_transaction', 'payment_recurring', 'payment_refund', 'payment_transfer', 'user'],
+            ['member', 'payment_order', 'payment_order_transaction', 'payment_recurring', 'payment_refund', 'payment_transfer', 'user'],
             $this->connection->fetchFirstColumn('SELECT `technical_name` FROM `number_range_type` ORDER BY `technical_name`')
         );
         static::assertSame(
-            ['{n}', '{n}', 'A{date}{n}', 'F{date}{n}', 'O{date}{n}', 'P{date}{n}', 'R{date}{n}', 'T{date}{n}'],
+            ['{n}', '{n}', 'A{date}{n}', 'F{date}{n}', 'P{date}{n}', 'R{date}{n}', 'T{date}{n}'],
             $this->connection->fetchFirstColumn('SELECT `pattern` FROM `number_range` ORDER BY `pattern`')
         );
         static::assertSame(
-            [10, 10, 10, 10, 10, 10, 10000, 10000],
+            [10, 10, 10, 10, 10, 10000, 10000],
             array_map(
                 static fn (string $start): int => (int) $start,
                 $this->connection->fetchFirstColumn('SELECT `start` FROM `number_range` ORDER BY `start`')

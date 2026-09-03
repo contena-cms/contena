@@ -2,6 +2,9 @@
 
 namespace Contena\Core\System\Payment\Gateway;
 
+/**
+ * @internal
+ */
 interface GatewayExecutorInterface
 {
     /**
