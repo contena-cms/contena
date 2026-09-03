@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Tests\Integration\Core\System\Payment;
+namespace Contena\Tests\Integration\Core\System\Payment\OpenApi;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -9,14 +9,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Payment\Api\PaymentApiException;
-use Contena\Core\System\Payment\Api\PaymentApiResponse;
-use Contena\Core\System\Payment\Api\PaymentController;
-use Contena\Core\System\Payment\Api\PaymentRequestSignature;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
+use Contena\Core\System\Payment\OpenApi\Api\OpenApiResponse;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
+use Contena\Core\System\Payment\OpenApi\Authentication\RequestSignature;
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
@@ -33,17 +33,17 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @internal
  */
-final class PaymentApiTest extends TestCase
+final class OpenApiTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
     private const string APP_SECRET = 'payment-api-secret';
 
-    private static ?PaymentApiServiceStub $sharedPaymentService = null;
+    private static ?OpenApiServiceStub $sharedPaymentService = null;
 
     private KernelBrowser $browser;
 
-    private PaymentApiServiceStub $paymentService;
+    private OpenApiServiceStub $paymentService;
 
     private string $appId;
 
@@ -64,8 +64,8 @@ final class PaymentApiTest extends TestCase
             'status' => true,
         ]], Context::createTenantContext($this->tenantId));
 
-        if (!self::$sharedPaymentService instanceof PaymentApiServiceStub) {
-            self::$sharedPaymentService = new PaymentApiServiceStub();
+        if (!self::$sharedPaymentService instanceof OpenApiServiceStub) {
+            self::$sharedPaymentService = new OpenApiServiceStub();
             static::getContainer()->set(PaymentController::class, new PaymentController(self::$sharedPaymentService));
         }
         self::$sharedPaymentService->reset();
@@ -92,7 +92,7 @@ final class PaymentApiTest extends TestCase
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
         $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        static::assertSame(PaymentApiResponse::SUCCESS, $body['code']);
+        static::assertSame(OpenApiResponse::SUCCESS, $body['code']);
         static::assertSame([
             'resource_no' => 'platform-resource',
             'external_resource_no' => 'app-resource',
@@ -112,7 +112,7 @@ final class PaymentApiTest extends TestCase
         static::assertSame(['buyer_id' => 'buyer-1'], $paymentRequest->extra);
     }
 
-    public function testInvalidSignatureUsesThePaymentApiErrorEnvelope(): void
+    public function testInvalidSignatureUsesTheOpenApiErrorEnvelope(): void
     {
         $parameters = $this->signed(['order_no' => 'platform-order']);
         $parameters['sign'] = str_repeat('0', 64);
@@ -122,7 +122,7 @@ final class PaymentApiTest extends TestCase
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        static::assertSame(PaymentApiException::INVALID_SIGNATURE, $body['code']);
+        static::assertSame(OpenApiException::INVALID_SIGNATURE, $body['code']);
         static::assertNull($body['data']);
         static::assertNull($this->paymentService->operation);
     }
@@ -130,19 +130,19 @@ final class PaymentApiTest extends TestCase
     public function testExpiredSignatureIsRejectedBeforeThePaymentServiceIsCalled(): void
     {
         $parameters = $this->signed(['order_no' => 'platform-order']);
-        $parameters['timestamp'] = (string) (time() - PaymentRequestSignature::TIMESTAMP_TOLERANCE - 1);
-        $parameters['sign'] = PaymentRequestSignature::sign($parameters, self::APP_SECRET);
+        $parameters['timestamp'] = (string) (time() - RequestSignature::TIMESTAMP_TOLERANCE - 1);
+        $parameters['sign'] = RequestSignature::sign($parameters, self::APP_SECRET);
 
         $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
 
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        static::assertSame(PaymentApiException::INVALID_SIGNATURE, $body['code']);
+        static::assertSame(OpenApiException::INVALID_SIGNATURE, $body['code']);
         static::assertNull($this->paymentService->operation);
     }
 
-    public function testMissingRequiredParameterUsesThePaymentApiErrorEnvelope(): void
+    public function testMissingRequiredParameterUsesTheOpenApiErrorEnvelope(): void
     {
         $this->browser->jsonRequest('POST', '/payment-api/v1/pay', $this->signed([
             'amount' => 1250,
@@ -153,7 +153,7 @@ final class PaymentApiTest extends TestCase
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        static::assertSame(PaymentApiException::MISSING_PARAMETER, $body['code']);
+        static::assertSame(OpenApiException::MISSING_PARAMETER, $body['code']);
         static::assertNull($body['data']);
         static::assertNull($this->paymentService->operation);
     }
@@ -256,7 +256,7 @@ final class PaymentApiTest extends TestCase
             'nonce' => bin2hex(random_bytes(8)),
             ...$parameters,
         ];
-        $parameters['sign'] = PaymentRequestSignature::sign($parameters, self::APP_SECRET);
+        $parameters['sign'] = RequestSignature::sign($parameters, self::APP_SECRET);
 
         return $parameters;
     }
@@ -273,7 +273,7 @@ final class PaymentApiTest extends TestCase
 /**
  * @internal
  */
-final class PaymentApiServiceStub extends AbstractPaymentService
+final class OpenApiServiceStub extends AbstractPaymentService
 {
     public ?string $operation = null;
 

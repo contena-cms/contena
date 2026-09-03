@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
+use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\QueryRequest;
@@ -20,9 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [PaymentApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [OpenApiRouteScope::ID]])]
 final class PaymentController
 {
     public function __construct(private readonly AbstractPaymentService $paymentService)
@@ -47,7 +49,7 @@ final class PaymentController
             $this->optionalArray($data, 'channel_extra'),
         ), $context);
 
-        return new JsonResponse(PaymentApiResponse::success($result));
+        return new JsonResponse(OpenApiResponse::success($result));
     }
 
     #[Route(path: '/payment-api/v1/query', name: 'payment-api.v1.query', methods: [Request::METHOD_POST])]
@@ -59,7 +61,7 @@ final class PaymentController
             $this->optionalString($data, 'external_order_no', 64),
         ), $context);
 
-        return new JsonResponse(PaymentApiResponse::success($result));
+        return new JsonResponse(OpenApiResponse::success($result));
     }
 
     #[Route(path: '/payment-api/v1/refund', name: 'payment-api.v1.refund', methods: [Request::METHOD_POST])]
@@ -74,7 +76,7 @@ final class PaymentController
             $this->optionalString($data, 'reason', 255),
         ), $context);
 
-        return new JsonResponse(PaymentApiResponse::success($result));
+        return new JsonResponse(OpenApiResponse::success($result));
     }
 
     #[Route(path: '/payment-api/v1/subscribe', name: 'payment-api.v1.subscribe', methods: [Request::METHOD_POST])]
@@ -95,7 +97,7 @@ final class PaymentController
             $this->optionalArray($data, 'channel_extra'),
         ), $context);
 
-        return new JsonResponse(PaymentApiResponse::success($result));
+        return new JsonResponse(OpenApiResponse::success($result));
     }
 
     #[Route(path: '/payment-api/v1/transfer', name: 'payment-api.v1.transfer', methods: [Request::METHOD_POST])]
@@ -114,16 +116,16 @@ final class PaymentController
             $this->optionalArray($data, 'channel_extra'),
         ), $context);
 
-        return new JsonResponse(PaymentApiResponse::success($result));
+        return new JsonResponse(OpenApiResponse::success($result));
     }
 
     private function app(Request $request): PaymentAppEntity
     {
-        $app = $request->attributes->get(PaymentApiRouteScope::ATTRIBUTE_PAYMENT_APP);
+        $app = $request->attributes->get(OpenApiRouteScope::ATTRIBUTE_PAYMENT_APP);
 
         return $app instanceof PaymentAppEntity
             ? $app
-            : throw PaymentApiException::invalidSignature();
+            : throw OpenApiException::invalidSignature();
     }
 
     /**
@@ -133,7 +135,7 @@ final class PaymentController
     {
         $value = $this->optionalString($data, $name, $maxLength);
 
-        return $value ?? throw PaymentApiException::missingParameter($name);
+        return $value ?? throw OpenApiException::missingParameter($name);
     }
 
     /**
@@ -146,7 +148,7 @@ final class PaymentController
             return null;
         }
         if (!\is_string($value) || mb_strlen($value) > $maxLength) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be a string of at most %d characters.', $name, $maxLength));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be a string of at most %d characters.', $name, $maxLength));
         }
 
         return $value;
@@ -159,12 +161,12 @@ final class PaymentController
     {
         $value = $data[$name] ?? null;
         if (!\is_int($value) && !(\is_string($value) && ctype_digit($value))) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be a positive integer.', $name));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be a positive integer.', $name));
         }
 
         $value = (int) $value;
         if ($value <= 0) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be a positive integer.', $name));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be a positive integer.', $name));
         }
 
         return $value;
@@ -191,7 +193,7 @@ final class PaymentController
     {
         $value = $data[$name] ?? [];
         if (!\is_array($value)) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be an object.', $name));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be an object.', $name));
         }
 
         return $value;
@@ -209,7 +211,7 @@ final class PaymentController
 
         $scheme = parse_url($value, \PHP_URL_SCHEME);
         if (!\in_array($scheme, ['http', 'https'], true) || filter_var($value, \FILTER_VALIDATE_URL) === false) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be an HTTP or HTTPS URL.', $name));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be an HTTP or HTTPS URL.', $name));
         }
 
         return $value;
@@ -228,7 +230,7 @@ final class PaymentController
         try {
             return new \DateTimeImmutable($value);
         } catch (\Exception) {
-            throw PaymentApiException::invalidRequest(\sprintf('Request parameter "%s" must be a valid date and time.', $name));
+            throw OpenApiException::invalidRequest(\sprintf('Request parameter "%s" must be a valid date and time.', $name));
         }
     }
 }

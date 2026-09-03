@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Struct\GatewayNotification;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +15,10 @@ use Symfony\Component\Routing\Attribute\Route;
  *
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [PaymentApiRouteScope::ID], 'auth_required' => false])]
-final class PaymentNotificationController
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [OpenApiRouteScope::ID], 'auth_required' => false])]
+final class ProviderNotificationController
 {
     public function __construct(private readonly GatewayNotificationService $notificationService)
     {

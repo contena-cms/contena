@@ -23,5 +23,5 @@ return static function (RoutingConfigurator $routes): void {
     $routes->import('../../Region/Channel/**/*Route.php', 'attribute');
     $routes->import('../../Member/Api/**/*Controller.php', 'attribute');
     $routes->import('../../Member/Channel/**/*Route.php', 'attribute');
-    $routes->import('../../Payment/Api/*Controller.php', 'attribute');
+    $routes->import('../../Payment/OpenApi/Api/*Controller.php', 'attribute');
 };

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-class PaymentApiRouteScope extends AbstractRouteScope
+class OpenApiRouteScope extends AbstractRouteScope
 {
     final public const string ID = 'payment-api';
     final public const string ALLOWED_PATH = 'payment-api';

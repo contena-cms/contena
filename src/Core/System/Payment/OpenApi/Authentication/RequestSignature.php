@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Authentication;
 
-final class PaymentRequestSignature
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
+
+final class RequestSignature
 {
     final public const int TIMESTAMP_TOLERANCE = 300;
 
@@ -24,7 +26,7 @@ final class PaymentRequestSignature
                 $value = json_encode($value, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
             }
             if (!\is_scalar($value)) {
-                throw PaymentApiException::invalidRequest('Request signature parameters must contain scalar or array values.');
+                throw OpenApiException::invalidRequest('Request signature parameters must contain scalar or array values.');
             }
 
             $parts[] = $name . '=' . (string) $value;
@@ -49,7 +51,7 @@ final class PaymentRequestSignature
 
         try {
             return hash_equals(self::sign($parameters, $secret), $signature);
-        } catch (\JsonException|PaymentApiException) {
+        } catch (\JsonException|OpenApiException) {
             return false;
         }
     }

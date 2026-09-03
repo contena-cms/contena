@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\Framework\HttpException;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-final class PaymentApiExceptionSubscriber implements EventSubscriberInterface
+final class OpenApiExceptionSubscriber implements EventSubscriberInterface
 {
     final public const string INTERNAL_ERROR = 'PAYMENT_API__INTERNAL_ERROR';
 
@@ -29,7 +30,7 @@ final class PaymentApiExceptionSubscriber implements EventSubscriberInterface
     public function onException(ExceptionEvent $event): void
     {
         $scopes = $event->getRequest()->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []);
-        if (!\is_array($scopes) || !\in_array(PaymentApiRouteScope::ID, $scopes, true)) {
+        if (!\is_array($scopes) || !\in_array(OpenApiRouteScope::ID, $scopes, true)) {
             return;
         }
 
@@ -44,6 +45,6 @@ final class PaymentApiExceptionSubscriber implements EventSubscriberInterface
             $message = 'The payment request could not be processed.';
         }
 
-        $event->setResponse(new JsonResponse(PaymentApiResponse::error($code, $message), $status));
+        $event->setResponse(new JsonResponse(OpenApiResponse::error($code, $message), $status));
     }
 }

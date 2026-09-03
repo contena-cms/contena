@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\System\Payment\Struct\PaymentResult;
 
 /**
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-final class PaymentApiResponse
+final class OpenApiResponse
 {
     final public const string SUCCESS = 'SUCCESS';
 

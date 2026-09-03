@@ -3,12 +3,6 @@
 use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
-use Contena\Core\System\Payment\Api\PaymentApiAuthenticationListener;
-use Contena\Core\System\Payment\Api\PaymentApiExceptionSubscriber;
-use Contena\Core\System\Payment\Api\PaymentApiRouteScope;
-use Contena\Core\System\Payment\Api\PaymentApiSchemaController;
-use Contena\Core\System\Payment\Api\PaymentController;
-use Contena\Core\System\Payment\Api\PaymentNotificationController;
 use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\Aggregate\PaymentAppTranslation\PaymentAppTranslationDefinition;
@@ -32,6 +26,12 @@ use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
+use Contena\Core\System\Payment\OpenApi\Api\OpenApiExceptionSubscriber;
+use Contena\Core\System\Payment\OpenApi\Api\OpenApiSchemaController;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
+use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
+use Contena\Core\System\Payment\OpenApi\Authentication\PaymentAppAuthenticationListener;
+use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
@@ -149,10 +149,10 @@ return static function (ContainerConfigurator $container): void {
             service(Connection::class),
         ]);
 
-    $services->set(PaymentApiRouteScope::class)
+    $services->set(OpenApiRouteScope::class)
         ->tag('contena.route_scope');
 
-    $services->set(PaymentApiAuthenticationListener::class)
+    $services->set(PaymentAppAuthenticationListener::class)
         ->args([
             service('payment_app.repository'),
             service(ClockInterface::class),
@@ -160,7 +160,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(PaymentApiExceptionSubscriber::class)
+    $services->set(OpenApiExceptionSubscriber::class)
         ->tag('kernel.event_subscriber');
 
     $services->set(PaymentController::class)
@@ -169,13 +169,13 @@ return static function (ContainerConfigurator $container): void {
             service(AbstractPaymentService::class),
         ]);
 
-    $services->set(PaymentNotificationController::class)
+    $services->set(ProviderNotificationController::class)
         ->public()
         ->args([
             service(GatewayNotificationService::class),
         ]);
 
-    $services->set(PaymentApiSchemaController::class)
+    $services->set(OpenApiSchemaController::class)
         ->public();
 
     foreach ([

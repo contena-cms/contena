@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi;
 
 use Contena\Core\System\Payment\PaymentException;
 use Symfony\Component\HttpFoundation\Response;
 
-class PaymentApiException extends PaymentException
+class OpenApiException extends PaymentException
 {
     final public const string INVALID_SIGNATURE = 'PAYMENT_API__INVALID_SIGNATURE';
     final public const string MISSING_PARAMETER = 'PAYMENT_API__MISSING_PARAMETER';

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Api;
+namespace Contena\Core\System\Payment\OpenApi\Authentication;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -12,6 +12,8 @@ use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
+use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Contena\Core\System\Payment\PaymentException;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,9 +25,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @codeCoverageIgnore
  *
- * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-final class PaymentApiAuthenticationListener implements EventSubscriberInterface
+final class PaymentAppAuthenticationListener implements EventSubscriberInterface
 {
     use RouteScopeCheckTrait;
 
@@ -51,14 +53,14 @@ final class PaymentApiAuthenticationListener implements EventSubscriberInterface
     public function authenticate(ControllerEvent $event): void
     {
         $request = $event->getRequest();
-        if (!$request->attributes->get('auth_required', true) || !$this->isRequestScoped($request, PaymentApiRouteScope::class)) {
+        if (!$request->attributes->get('auth_required', true) || !$this->isRequestScoped($request, OpenApiRouteScope::class)) {
             return;
         }
 
         $parameters = $request->request->all();
         $appCode = $parameters['app_id'] ?? null;
         if (!\is_string($appCode) || $appCode === '') {
-            throw PaymentApiException::missingParameter('app_id');
+            throw OpenApiException::missingParameter('app_id');
         }
 
         $criteria = new Criteria();
@@ -68,15 +70,15 @@ final class PaymentApiAuthenticationListener implements EventSubscriberInterface
         if (!$app instanceof PaymentAppEntity || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }
-        if (!PaymentRequestSignature::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
-            throw PaymentApiException::invalidSignature();
+        if (!RequestSignature::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
+            throw OpenApiException::invalidSignature();
         }
 
         $context = $app->tenantId === null
             ? Context::createDefaultContext()
             : Context::createTenantContext($app->tenantId);
 
-        $request->attributes->set(PaymentApiRouteScope::ATTRIBUTE_PAYMENT_APP, $app);
+        $request->attributes->set(OpenApiRouteScope::ATTRIBUTE_PAYMENT_APP, $app);
         $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, $context);
     }
 
