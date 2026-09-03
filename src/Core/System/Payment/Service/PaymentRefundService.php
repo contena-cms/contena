@@ -23,6 +23,7 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
@@ -115,6 +116,22 @@ final class PaymentRefundService
         return $result->withResource($refund->refundNo, $refund->externalRefundNo);
     }
 
+    public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    {
+        $refund = $this->loadNotificationRefund($target->entityId, $target->context);
+        $order = $refund->order;
+        if (!$order instanceof PaymentOrderEntity) {
+            throw PaymentException::notificationResourceNotFound($refund->refundNo);
+        }
+        if ($refund->channelCode !== $channel || $order->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($refund->refundNo);
+        }
+
+        if (!\in_array($refund->status, [PaymentRefundStatus::STATUS_SUCCEEDED, PaymentRefundStatus::STATUS_FAILED], true)) {
+            $this->persistResult($refund, $order, $result, $target->context);
+        }
+    }
+
     private function persistResult(PaymentRefundEntity $refund, PaymentOrderEntity $order, PaymentResult $result, Context $context): void
     {
         $failed = \in_array($result->status, [PaymentStatus::FAILED, PaymentStatus::CLOSED], true);
@@ -196,6 +213,15 @@ final class PaymentRefundService
         $refund = $this->paymentRefundRepository->search(new Criteria([$refundId]), $context)->getEntities()->first();
 
         return $refund instanceof PaymentRefundEntity ? $refund : throw PaymentException::invalidRequest('Payment refund could not be loaded.');
+    }
+
+    private function loadNotificationRefund(string $refundId, Context $context): PaymentRefundEntity
+    {
+        $criteria = new Criteria([$refundId]);
+        $criteria->addAssociation('order');
+        $refund = $this->paymentRefundRepository->search($criteria, $context)->getEntities()->first();
+
+        return $refund instanceof PaymentRefundEntity ? $refund : throw PaymentException::notificationResourceNotFound($refundId);
     }
 
     private function resultFromRefund(PaymentRefundEntity $refund): PaymentResult

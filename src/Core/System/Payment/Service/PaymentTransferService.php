@@ -22,6 +22,7 @@ use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Rule\PaymentRuleScope;
+use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\TransferRequest;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
@@ -88,6 +89,7 @@ final class PaymentTransferService
             'payee' => $request->payee,
             'payeeName' => $request->payeeName,
             'remark' => $request->remark,
+            'notifyUrl' => $request->notifyUrl,
             'channelExtra' => $request->extra,
         ]], $context);
 
@@ -110,6 +112,18 @@ final class PaymentTransferService
         $this->eventDispatcher->dispatch(new PaymentGatewayCallCompletedEvent(PaymentTransferDefinition::ENTITY_NAME, $transfer->getId(), $transfer->transferNo, PaymentOperation::TRANSFER, $transfer->channelCode, $transfer->channelConfigId, $result, $context));
 
         return $result->withResource($transfer->transferNo, $transfer->externalTransferNo);
+    }
+
+    public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    {
+        $transfer = $this->loadTransfer($target->entityId, $target->context);
+        if ($transfer->channelCode !== $channel || $transfer->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($transfer->transferNo);
+        }
+
+        if (!\in_array($transfer->state?->getTechnicalName(), [PaymentTransferStates::STATE_SUCCEEDED, PaymentTransferStates::STATE_FAILED], true)) {
+            $this->persistResult($transfer, $result, $target->context);
+        }
     }
 
     private function persistResult(PaymentTransferEntity $transfer, PaymentResult $result, Context $context): void

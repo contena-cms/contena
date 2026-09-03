@@ -27,6 +27,7 @@ use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Rule\PaymentRuleScope;
+use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
@@ -176,6 +177,26 @@ final class PaymentOrderService
         return $order;
     }
 
+    public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    {
+        $order = $this->loadOrder($target->entityId, $target->context);
+        if ($order->channelCode !== $channel || $order->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($order->orderNo);
+        }
+
+        $this->connection->transactional(function () use ($order, $result, $target): void {
+            $update = ['id' => $order->getId()];
+            if ($result->providerResourceId !== null) {
+                $update['channelTradeNo'] = $result->providerResourceId;
+            }
+            if ($result->status === PaymentStatus::SUCCEEDED && $order->state?->getTechnicalName() !== PaymentOrderStates::STATE_SUCCEEDED) {
+                $update['successTime'] = $this->clock->now();
+            }
+            $this->paymentOrderRepository->update([$update], $target->context);
+            $this->transitionOrder($order, $result->status, $target->context);
+        });
+    }
+
     private function executePayment(PaymentOrderEntity $order, PaymentOrderTransactionEntity $transaction, PaymentRoute $route, Context $context): PaymentResult
     {
         $this->dispatchStarted($order, PaymentOperation::PAY, $context);
@@ -184,13 +205,13 @@ final class PaymentOrderService
             \assert($route->gateway instanceof PaymentHandlerInterface);
             $result = $route->gateway->pay($order, $route->config);
         } catch (\Throwable $exception) {
-            $this->persistFailure($order, $transaction, $exception, $context);
+            $this->persistFailure($order, $transaction, $exception, $context, true);
             $this->dispatchFailed($order, PaymentOperation::PAY, $exception, $context);
 
             throw $exception;
         }
 
-        $this->persistResult($order, $transaction, $result, $context);
+        $this->persistResult($order, $transaction, $result, $context, true);
         $this->dispatchCompleted($order, PaymentOperation::PAY, $result, $context);
 
         return $result->withResource($order->orderNo, $order->externalOrderNo, $transaction->transactionNo);
@@ -204,21 +225,21 @@ final class PaymentOrderService
             \assert($route->gateway instanceof QueryHandlerInterface);
             $result = $route->gateway->query($order, $route->config);
         } catch (\Throwable $exception) {
-            $this->persistFailure($order, $transaction, $exception, $context);
+            $this->persistFailure($order, $transaction, $exception, $context, false);
             $this->dispatchFailed($order, PaymentOperation::QUERY, $exception, $context);
 
             throw $exception;
         }
 
-        $this->persistResult($order, $transaction, $result, $context);
+        $this->persistResult($order, $transaction, $result, $context, false);
         $this->dispatchCompleted($order, PaymentOperation::QUERY, $result, $context);
 
         return $result->withResource($order->orderNo, $order->externalOrderNo, $transaction->transactionNo);
     }
 
-    private function persistResult(PaymentOrderEntity $order, PaymentOrderTransactionEntity $transaction, PaymentResult $result, Context $context): void
+    private function persistResult(PaymentOrderEntity $order, PaymentOrderTransactionEntity $transaction, PaymentResult $result, Context $context, bool $primary): void
     {
-        $this->connection->transactional(function () use ($order, $transaction, $result, $context): void {
+        $this->connection->transactional(function () use ($order, $transaction, $result, $context, $primary): void {
             $this->paymentOrderTransactionRepository->update([[
                 'id' => $transaction->getId(),
                 'channelRequestNo' => $result->providerRequestId,
@@ -229,10 +250,10 @@ final class PaymentOrderService
             ]], $context);
             $this->transitionTransaction($transaction->getId(), $result->status === PaymentStatus::FAILED ? 'fail' : 'succeed', $context);
 
-            $orderUpdate = [
-                'id' => $order->getId(),
-                'primaryTransactionId' => $transaction->getId(),
-            ];
+            $orderUpdate = ['id' => $order->getId()];
+            if ($primary) {
+                $orderUpdate['primaryTransactionId'] = $transaction->getId();
+            }
             if ($result->providerResourceId !== null) {
                 $orderUpdate['channelTradeNo'] = $result->providerResourceId;
             }
@@ -244,18 +265,20 @@ final class PaymentOrderService
         });
     }
 
-    private function persistFailure(PaymentOrderEntity $order, PaymentOrderTransactionEntity $transaction, \Throwable $exception, Context $context): void
+    private function persistFailure(PaymentOrderEntity $order, PaymentOrderTransactionEntity $transaction, \Throwable $exception, Context $context, bool $primary): void
     {
-        $this->connection->transactional(function () use ($order, $transaction, $exception, $context): void {
+        $this->connection->transactional(function () use ($order, $transaction, $exception, $context, $primary): void {
             $this->paymentOrderTransactionRepository->update([[
                 'id' => $transaction->getId(),
                 'resultMessage' => $exception->getMessage(),
             ]], $context);
             $this->transitionTransaction($transaction->getId(), 'fail', $context);
-            $this->paymentOrderRepository->update([[
-                'id' => $order->getId(),
-                'primaryTransactionId' => $transaction->getId(),
-            ]], $context);
+            if ($primary) {
+                $this->paymentOrderRepository->update([[
+                    'id' => $order->getId(),
+                    'primaryTransactionId' => $transaction->getId(),
+                ]], $context);
+            }
             $this->transitionOrder($order, PaymentStatus::UNKNOWN, $context);
         });
     }

@@ -22,6 +22,7 @@ use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Rule\PaymentRuleScope;
+use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Psr\Clock\ClockInterface;
@@ -115,6 +116,32 @@ final class PaymentSubscriptionService
         $this->eventDispatcher->dispatch(new PaymentGatewayCallCompletedEvent(PaymentRecurringDefinition::ENTITY_NAME, $subscription->getId(), $subscription->recurringNo, PaymentOperation::SUBSCRIBE, $subscription->channelCode, $subscription->channelConfigId, $result, $context));
 
         return $result->withResource($subscription->recurringNo, $subscription->externalRecurringNo);
+    }
+
+    public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    {
+        $subscription = $this->loadSubscription($target->entityId, $target->context);
+        if ($subscription->channelCode !== $channel || $subscription->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($subscription->recurringNo);
+        }
+
+        $status = match ($result->status) {
+            PaymentStatus::SUCCEEDED => PaymentRecurringStatus::STATUS_SIGNED,
+            PaymentStatus::CLOSED => PaymentRecurringStatus::STATUS_UNSIGNED,
+            PaymentStatus::FAILED => PaymentRecurringStatus::STATUS_FAILED,
+            default => PaymentRecurringStatus::STATUS_PENDING,
+        };
+        if ($subscription->status === PaymentRecurringStatus::STATUS_PENDING || ($subscription->status === PaymentRecurringStatus::STATUS_SIGNED && $status === PaymentRecurringStatus::STATUS_UNSIGNED)) {
+            $this->paymentRecurringRepository->update([[
+                'id' => $subscription->getId(),
+                'channelRecurringNo' => $result->providerResourceId,
+                'status' => $status,
+                'signTime' => $status === PaymentRecurringStatus::STATUS_SIGNED ? $this->clock->now() : $subscription->signTime,
+                'responseData' => $result->toArray(),
+                'resultCode' => $result->resultCode,
+                'resultMessage' => $result->resultMessage,
+            ]], $target->context);
+        }
     }
 
     private function findSubscription(string $appId, string $externalSubscriptionNo, Context $context): ?PaymentRecurringEntity

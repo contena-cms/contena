@@ -3,10 +3,12 @@
 namespace Contena\Core\System\Payment\Gateway\Wechat;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
+use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\ProviderResultMapper;
@@ -14,12 +16,14 @@ use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 
 /**
  * @internal
  */
-final readonly class WechatGateway implements PaymentHandlerInterface, QueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface
+final readonly class WechatGateway implements PaymentHandlerInterface, QueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface
 {
     public function __construct(private GatewayExecutorInterface $executor)
     {
@@ -44,7 +48,6 @@ final readonly class WechatGateway implements PaymentHandlerInterface, QueryHand
             'out_trade_no' => $order->orderNo,
             'description' => $order->subject,
             'amount' => ['total' => $order->amount, 'currency' => $order->currencyCode],
-            'notify_url' => $order->notifyUrl,
         ]);
 
         return ProviderResultMapper::paymentResult(ProviderResultMapper::data($this->call($config, $action, $parameters)), PaymentStatus::PENDING, $order->methodCode);
@@ -97,6 +100,76 @@ final readonly class WechatGateway implements PaymentHandlerInterface, QueryHand
         $status = isset($data['transfer_bill_no'], $data['out_bill_no']) ? PaymentStatus::PROCESSING : PaymentStatus::FAILED;
 
         return ProviderResultMapper::paymentResult($data, $status);
+    }
+
+    public function handleNotification(GatewayNotification $notification, array $config): GatewayNotificationResult
+    {
+        $data = ProviderResultMapper::data($this->call($config, 'callback', [
+            'body' => $notification->rawBody,
+            'headers' => $notification->headers,
+        ]));
+        $type = $this->notificationType($data);
+        $resourceNo = $this->notificationResourceNo($data, $type);
+        $status = $this->notificationStatus($data, $type);
+
+        return new GatewayNotificationResult(
+            $type,
+            $resourceNo,
+            ProviderResultMapper::paymentResult($data, $status),
+            json_encode(['code' => 'SUCCESS', 'message' => '成功'], \JSON_THROW_ON_ERROR),
+            'application/json',
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationType(array $data): int
+    {
+        return match (true) {
+            isset($data['out_refund_no']) => PaymentNotificationTypes::REFUND,
+            isset($data['out_bill_no']) => PaymentNotificationTypes::TRANSFER,
+            isset($data['contract_id']) || isset($data['external_agreement_no']) => PaymentNotificationTypes::SUBSCRIPTION,
+            default => PaymentNotificationTypes::PAYMENT,
+        };
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationResourceNo(array $data, int $type): string
+    {
+        $value = match ($type) {
+            PaymentNotificationTypes::REFUND => $data['out_refund_no'] ?? null,
+            PaymentNotificationTypes::TRANSFER => $data['out_bill_no'] ?? null,
+            PaymentNotificationTypes::SUBSCRIPTION => $data['external_agreement_no'] ?? null,
+            default => $data['out_trade_no'] ?? null,
+        };
+
+        return \is_scalar($value) && (string) $value !== ''
+            ? (string) $value
+            : throw PaymentException::invalidRequest('The WeChat Pay notification has no platform resource number.');
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationStatus(array $data, int $type): string
+    {
+        $status = $data['trade_state'] ?? $data['refund_status'] ?? $data['state'] ?? $data['contract_state'] ?? null;
+
+        return match ($type) {
+            PaymentNotificationTypes::PAYMENT => match ($status) {
+                'SUCCESS' => PaymentStatus::SUCCEEDED,
+                'NOTPAY', 'USERPAYING' => PaymentStatus::PENDING,
+                'CLOSED', 'REVOKED', 'PAYERROR' => PaymentStatus::CLOSED,
+                default => PaymentStatus::UNKNOWN,
+            },
+            PaymentNotificationTypes::REFUND => $status === 'SUCCESS' ? PaymentStatus::SUCCEEDED : ($status === 'ABNORMAL' ? PaymentStatus::FAILED : PaymentStatus::PROCESSING),
+            PaymentNotificationTypes::TRANSFER => $status === 'SUCCESS' ? PaymentStatus::SUCCEEDED : (\in_array($status, ['FAIL', 'FAILED'], true) ? PaymentStatus::FAILED : PaymentStatus::PROCESSING),
+            PaymentNotificationTypes::SUBSCRIPTION => \in_array($status, ['SIGNED', 'NORMAL'], true) ? PaymentStatus::SUCCEEDED : (\in_array($status, ['TERMINATED', 'UNSIGNED'], true) ? PaymentStatus::CLOSED : PaymentStatus::PENDING),
+            default => PaymentStatus::UNKNOWN,
+        };
     }
 
     private function action(?string $method): string

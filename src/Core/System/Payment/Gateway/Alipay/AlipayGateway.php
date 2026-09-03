@@ -3,10 +3,12 @@
 namespace Contena\Core\System\Payment\Gateway\Alipay;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
+use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\ProviderResultMapper;
@@ -14,13 +16,15 @@ use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Yansongda\Pay\Pay;
 
 /**
  * @internal
  */
-final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface
+final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface
 {
     public function __construct(private GatewayExecutorInterface $executor)
     {
@@ -45,7 +49,6 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
             'out_trade_no' => $order->orderNo,
             'total_amount' => number_format($order->amount / 100, 2, '.', ''),
             'subject' => $order->subject,
-            '_notify_url' => $order->notifyUrl,
             '_return_url' => $order->returnUrl,
         ]);
 
@@ -95,6 +98,72 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
         $status = ($data['code'] ?? null) === '10000' ? PaymentStatus::SUCCEEDED : PaymentStatus::FAILED;
 
         return ProviderResultMapper::paymentResult($data, $status);
+    }
+
+    public function handleNotification(GatewayNotification $notification, array $config): GatewayNotificationResult
+    {
+        $data = ProviderResultMapper::data($this->call($config, 'callback', $notification->parameters));
+        $type = $this->notificationType($data);
+        $resourceNo = $this->notificationResourceNo($data, $type);
+        $status = $this->notificationStatus($data, $type);
+
+        return new GatewayNotificationResult(
+            $type,
+            $resourceNo,
+            ProviderResultMapper::paymentResult($data, $status),
+            'success',
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationType(array $data): int
+    {
+        return match (true) {
+            isset($data['out_request_no']) => PaymentNotificationTypes::REFUND,
+            isset($data['external_agreement_no']) || isset($data['agreement_no']) => PaymentNotificationTypes::SUBSCRIPTION,
+            isset($data['out_biz_no']) && !isset($data['out_trade_no']) => PaymentNotificationTypes::TRANSFER,
+            default => PaymentNotificationTypes::PAYMENT,
+        };
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationResourceNo(array $data, int $type): string
+    {
+        $value = match ($type) {
+            PaymentNotificationTypes::REFUND => $data['out_request_no'] ?? null,
+            PaymentNotificationTypes::TRANSFER => $data['out_biz_no'] ?? null,
+            PaymentNotificationTypes::SUBSCRIPTION => $data['external_agreement_no'] ?? null,
+            default => $data['out_trade_no'] ?? null,
+        };
+
+        return \is_scalar($value) && (string) $value !== ''
+            ? (string) $value
+            : throw PaymentException::invalidRequest('The Alipay notification has no platform resource number.');
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function notificationStatus(array $data, int $type): string
+    {
+        $status = $data['trade_status'] ?? $data['refund_status'] ?? $data['status'] ?? null;
+
+        return match ($type) {
+            PaymentNotificationTypes::PAYMENT => match ($status) {
+                'TRADE_SUCCESS', 'TRADE_FINISHED' => PaymentStatus::SUCCEEDED,
+                'WAIT_BUYER_PAY' => PaymentStatus::PENDING,
+                'TRADE_CLOSED' => PaymentStatus::CLOSED,
+                default => PaymentStatus::UNKNOWN,
+            },
+            PaymentNotificationTypes::REFUND => $status === 'REFUND_SUCCESS' ? PaymentStatus::SUCCEEDED : PaymentStatus::UNKNOWN,
+            PaymentNotificationTypes::TRANSFER => \in_array($status, ['SUCCESS', 'FINISHED'], true) ? PaymentStatus::SUCCEEDED : (\in_array($status, ['FAIL', 'FAILED'], true) ? PaymentStatus::FAILED : PaymentStatus::PROCESSING),
+            PaymentNotificationTypes::SUBSCRIPTION => \in_array($status, ['NORMAL', 'SIGNED'], true) ? PaymentStatus::SUCCEEDED : (\in_array($status, ['STOP', 'UNSIGNED'], true) ? PaymentStatus::CLOSED : PaymentStatus::PENDING),
+            default => PaymentStatus::UNKNOWN,
+        };
     }
 
     /**

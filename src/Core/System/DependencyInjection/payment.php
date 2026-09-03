@@ -28,6 +28,8 @@ use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
+use Contena\Core\System\Payment\Service\GatewayNotificationService;
+use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
 use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Service\PaymentRefundService;
 use Contena\Core\System\Payment\Service\PaymentService;
@@ -117,6 +119,28 @@ return static function (ContainerConfigurator $container): void {
             service(PaymentSubscriptionService::class),
         ]);
     $services->alias(AbstractPaymentService::class, PaymentService::class);
+
+    $services->set(PaymentNotificationTargetResolver::class)
+        ->args([
+            service('payment_order.repository'),
+            service('payment_refund.repository'),
+            service('payment_transfer.repository'),
+            service('payment_recurring.repository'),
+        ]);
+
+    $services->set(GatewayNotificationService::class)
+        ->args([
+            service('payment_channel_config.repository'),
+            service('payment_channel_notify_record.repository'),
+            service('payment_notify_record.repository'),
+            service(GatewayRegistry::class),
+            service(PaymentNotificationTargetResolver::class),
+            service(PaymentOrderService::class),
+            service(PaymentRefundService::class),
+            service(PaymentTransferService::class),
+            service(PaymentSubscriptionService::class),
+            service(Connection::class),
+        ]);
 
     foreach ([
         PaymentAppDefinition::class,

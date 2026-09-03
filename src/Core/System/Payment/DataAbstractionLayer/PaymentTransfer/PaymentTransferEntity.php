@@ -7,6 +7,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentChannelNotifyRecordCollection;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 
 class PaymentTransferEntity extends Entity
@@ -38,6 +40,8 @@ class PaymentTransferEntity extends Entity
 
     public protected(set) ?string $remark = null;
 
+    public protected(set) ?string $notifyUrl = null;
+
     /**
      * @var array<mixed>|null
      */
@@ -65,4 +69,8 @@ class PaymentTransferEntity extends Entity
     public protected(set) ?PaymentChannelConfigEntity $channelConfig = null;
 
     public protected(set) ?StateMachineStateEntity $state = null;
+
+    public protected(set) ?PaymentNotifyRecordCollection $notifyRecords = null;
+
+    public protected(set) ?PaymentChannelNotifyRecordCollection $channelNotifyRecords = null;
 }

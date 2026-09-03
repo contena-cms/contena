@@ -17,6 +17,7 @@ final class TransferRequest extends Struct
         public readonly string $payeeName,
         public readonly ?string $channel = null,
         public readonly ?string $remark = null,
+        public readonly ?string $notifyUrl = null,
         public readonly array $extra = [],
     ) {
     }

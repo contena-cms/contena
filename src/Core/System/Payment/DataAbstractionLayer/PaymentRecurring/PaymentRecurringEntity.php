@@ -7,6 +7,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigEntity;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentChannelNotifyRecordCollection;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 
 class PaymentRecurringEntity extends Entity
 {
@@ -73,4 +75,8 @@ class PaymentRecurringEntity extends Entity
     public protected(set) ?PaymentAppEntity $app = null;
 
     public protected(set) ?PaymentChannelConfigEntity $channelConfig = null;
+
+    public protected(set) ?PaymentNotifyRecordCollection $notifyRecords = null;
+
+    public protected(set) ?PaymentChannelNotifyRecordCollection $channelNotifyRecords = null;
 }

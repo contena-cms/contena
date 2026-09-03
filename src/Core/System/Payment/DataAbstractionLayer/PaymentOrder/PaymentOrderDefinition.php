@@ -6,6 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowPlatformOwnedReference;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -79,7 +80,7 @@ class PaymentOrderDefinition extends EntityDefinition
             new StateMachineStateField('state_id', 'stateId', PaymentOrderStates::STATE_MACHINE)->addFlags(new ApiAware(), new Required()),
             new StringField('close_reason', 'closeReason', 32)->addFlags(new ApiAware()),
             new StringField('channel_trade_no', 'channelTradeNo', 128)->addFlags(new ApiAware()),
-            new FkField('channel_config_id', 'channelConfigId', PaymentChannelConfigDefinition::class)->addFlags(new ApiAware(), new Required()),
+            new FkField('channel_config_id', 'channelConfigId', PaymentChannelConfigDefinition::class)->addFlags(new ApiAware(), new Required(), new AllowPlatformOwnedReference()),
             new DateTimeField('success_time', 'successTime')->addFlags(new ApiAware()),
             new DateTimeField('expire_time', 'expireTime')->addFlags(new ApiAware()),
             new IntField('version', 'version')->addFlags(new ApiAware()),

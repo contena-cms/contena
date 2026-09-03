@@ -280,14 +280,20 @@ class TenantOwnedPaymentAggregateTest extends TestCase
         $this->repository('payment_channel_notify_record')->create([[
             'id' => $channelNotifyId,
             'channelCode' => 'tenant-matrix',
+            'channelConfigId' => $configId,
+            'notificationKey' => hash('sha256', $number),
             'orderId' => $orderId,
             'refundId' => $refundId,
+            'transferId' => $transferId,
+            'recurringId' => $recurringId,
             'notifyType' => 1,
         ]], $context);
         $this->repository('payment_notify_record')->create([[
             'id' => $notifyId,
             'orderId' => $orderId,
             'refundId' => $refundId,
+            'transferId' => $transferId,
+            'recurringId' => $recurringId,
             'notifyType' => 1,
             'notifyUrl' => 'https://example.invalid/payment-notify',
         ]], $context);

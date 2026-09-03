@@ -17,7 +17,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferDefinition;
 
 class PaymentNotifyRecordDefinition extends EntityDefinition
 {
@@ -40,7 +42,7 @@ class PaymentNotifyRecordDefinition extends EntityDefinition
 
     public function getDefaults(): array
     {
-        return ['status' => 0, 'retryCount' => 0];
+        return ['status' => PaymentNotifyRecordStatus::STATUS_PENDING, 'retryCount' => 0];
     }
 
     public function since(): ?string
@@ -55,6 +57,8 @@ class PaymentNotifyRecordDefinition extends EntityDefinition
             new TenantField()->setDescription('Unique identity of the owning tenant.'),
             new FkField('order_id', 'orderId', PaymentOrderDefinition::class)->addFlags(new ApiAware()),
             new FkField('refund_id', 'refundId', PaymentRefundDefinition::class)->addFlags(new ApiAware()),
+            new FkField('transfer_id', 'transferId', PaymentTransferDefinition::class)->addFlags(new ApiAware()),
+            new FkField('recurring_id', 'recurringId', PaymentRecurringDefinition::class)->addFlags(new ApiAware()),
             new IntField('notify_type', 'notifyType')->addFlags(new ApiAware(), new Required()),
             new StringField('notify_url', 'notifyUrl', 2048)->addFlags(new ApiAware(), new Required()),
             new LongTextField('request_body', 'requestBody'),
@@ -65,6 +69,8 @@ class PaymentNotifyRecordDefinition extends EntityDefinition
             new CustomFields()->addFlags(new ApiAware()),
             new ManyToOneAssociationField('order', 'order_id', PaymentOrderDefinition::class)->addFlags(new ApiAware()),
             new ManyToOneAssociationField('refund', 'refund_id', PaymentRefundDefinition::class)->addFlags(new ApiAware()),
+            new ManyToOneAssociationField('transfer', 'transfer_id', PaymentTransferDefinition::class)->addFlags(new ApiAware()),
+            new ManyToOneAssociationField('recurring', 'recurring_id', PaymentRecurringDefinition::class)->addFlags(new ApiAware()),
         ]);
     }
 }

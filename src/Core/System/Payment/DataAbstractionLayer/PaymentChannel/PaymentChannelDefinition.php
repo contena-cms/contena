@@ -57,7 +57,7 @@ class PaymentChannelDefinition extends EntityDefinition
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             new StringField('code', 'code', 32)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new TranslatedField('name')->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
-            new JsonField('config_schema', 'configSchema')->addFlags(new ApiAware()),
+            new JsonField('config_schema', 'configSchema'),
             new BoolField('status', 'status')->addFlags(new ApiAware(), new Required()),
             new IntField('sort', 'sort')->addFlags(new ApiAware(), new Required()),
             new OneToManyAssociationField('methods', PaymentChannelMethodDefinition::class, 'channel_id')->addFlags(new ApiAware(), new RestrictDelete()),

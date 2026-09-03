@@ -59,9 +59,21 @@ class Migration1786014691CreatePaymentTest extends TestCase
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'channel_config_id'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'channel_extra'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'response_data'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'payment_transfer', 'notify_url'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'payment_order', 'return_url'));
+        foreach (['channel_config_id', 'notification_key', 'transfer_id', 'recurring_id', 'response_content_type', 'response_status'] as $column) {
+            static::assertTrue(TableHelper::columnExists($this->connection, 'payment_channel_notify_record', $column));
+        }
+        foreach (['transfer_id', 'recurring_id'] as $column) {
+            static::assertTrue(TableHelper::columnExists($this->connection, 'payment_notify_record', $column));
+        }
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_recurring', 'fk.payment_recurring.channel_config_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_transfer', 'fk.payment_transfer.channel_config_id'));
+        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_channel_notify_record', 'fk.payment_channel_notify_record.channel_config_id'));
+        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_channel_notify_record', 'fk.payment_channel_notify_record.transfer_id'));
+        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_channel_notify_record', 'fk.payment_channel_notify_record.recurring_id'));
+        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_notify_record', 'fk.payment_notify_record.transfer_id'));
+        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_notify_record', 'fk.payment_notify_record.recurring_id'));
     }
 
     private function dropPaymentTables(): void

@@ -3,6 +3,7 @@
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
@@ -10,6 +11,7 @@ use Contena\Core\System\Payment\Gateway\Alipay\AlipayGateway;
 use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
+use Contena\Core\System\Payment\Struct\GatewayNotification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,8 @@ final class ProviderConfigurationTest extends TestCase
         ], $executor->config);
         static::assertSame('order-1', $executor->parameters['out_trade_no']);
         static::assertSame('12.50', $executor->parameters['total_amount']);
+        static::assertArrayNotHasKey('_notify_url', $executor->parameters);
+        static::assertSame('https://app.example/return', $executor->parameters['_return_url']);
         static::assertSame(PaymentStatus::PENDING, $result->status);
     }
 
@@ -95,6 +99,7 @@ final class ProviderConfigurationTest extends TestCase
         ], $executor->config);
         static::assertSame('order-2', $executor->parameters['out_trade_no']);
         static::assertSame(['total' => 3600, 'currency' => 'CNY'], $executor->parameters['amount']);
+        static::assertArrayNotHasKey('notify_url', $executor->parameters);
         static::assertSame(PaymentStatus::PENDING, $result->status);
     }
 
@@ -177,6 +182,48 @@ final class ProviderConfigurationTest extends TestCase
         yield 'user payment remains pending' => ['USERPAYING', PaymentStatus::PENDING];
         yield 'revoked trade is closed' => ['REVOKED', PaymentStatus::CLOSED];
         yield 'unrecognized status is unknown' => ['UNEXPECTED', PaymentStatus::UNKNOWN];
+    }
+
+    public function testAlipayNotificationIsVerifiedAndMappedByTheGateway(): void
+    {
+        $executor = new RecordingGatewayExecutor([
+            'out_trade_no' => 'platform-order-1',
+            'trade_no' => 'provider-order-1',
+            'trade_status' => 'TRADE_SUCCESS',
+        ]);
+        $gateway = new AlipayGateway($executor);
+
+        $notification = $gateway->handleNotification(new GatewayNotification('', parameters: ['sign' => 'signature']), []);
+
+        static::assertSame('callback', $executor->operation);
+        static::assertSame(['sign' => 'signature'], $executor->parameters);
+        static::assertSame(PaymentNotificationTypes::PAYMENT, $notification->type);
+        static::assertSame('platform-order-1', $notification->resourceNo);
+        static::assertSame(PaymentStatus::SUCCEEDED, $notification->result->status);
+        static::assertSame('success', $notification->responseBody);
+    }
+
+    public function testWechatNotificationKeepsRawBodyAndHeadersForSignatureVerification(): void
+    {
+        $executor = new RecordingGatewayExecutor([
+            'out_refund_no' => 'platform-refund-1',
+            'refund_id' => 'provider-refund-1',
+            'refund_status' => 'SUCCESS',
+        ]);
+        $gateway = new WechatGateway($executor);
+        $headers = ['Wechatpay-Signature' => 'signature'];
+
+        $notification = $gateway->handleNotification(new GatewayNotification('{"event_type":"REFUND.SUCCESS"}', $headers), []);
+
+        static::assertSame('callback', $executor->operation);
+        static::assertSame([
+            'body' => '{"event_type":"REFUND.SUCCESS"}',
+            'headers' => $headers,
+        ], $executor->parameters);
+        static::assertSame(PaymentNotificationTypes::REFUND, $notification->type);
+        static::assertSame('platform-refund-1', $notification->resourceNo);
+        static::assertSame(PaymentStatus::SUCCEEDED, $notification->result->status);
+        static::assertSame('application/json', $notification->responseContentType);
     }
 }
 

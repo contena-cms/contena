@@ -6,6 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowPlatformOwnedReference;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
@@ -65,6 +66,8 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     }
                 } elseif (\in_array($expectedTenant, $owners[$valueKey], true)) {
                     continue;
+                } elseif ($reference['allowPlatformOwned'] && $expectedTenant !== null && \in_array(null, $owners[$valueKey], true)) {
+                    continue;
                 }
 
                 $message = 'The referenced tenant-scoped entity does not belong to the current tenant context.';
@@ -89,7 +92,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
     /**
      * @param list<WriteCommand> $commands
      *
-     * @return array<string, array{table: string, field: string, binary: bool, membership: bool, values: list<string>, commands: list<array{command: WriteCommand, property: string, value: string}>}>
+     * @return array<string, array{table: string, field: string, binary: bool, membership: bool, allowPlatformOwned: bool, values: list<string>, commands: list<array{command: WriteCommand, property: string, value: string}>}>
      */
     private function collectReferences(array $commands): array
     {
@@ -137,12 +140,14 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     $referenceStorageField = $membership->getMappingLocalColumn();
                 }
 
-                $key = $table . '::' . $referenceStorageField;
+                $allowPlatformOwned = $field->is(AllowPlatformOwnedReference::class);
+                $key = $table . '::' . $referenceStorageField . '::' . (int) $allowPlatformOwned;
                 $references[$key] ??= [
                     'table' => $table,
                     'field' => $referenceStorageField,
                     'binary' => $referenceField instanceof IdField,
                     'membership' => $membership instanceof TenantMembershipAssociationField,
+                    'allowPlatformOwned' => $allowPlatformOwned,
                     'values' => [],
                     'commands' => [],
                 ];

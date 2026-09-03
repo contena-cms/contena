@@ -14,6 +14,8 @@ class PaymentException extends HttpException
     final public const string DUPLICATE_REFERENCE = 'PAYMENT__DUPLICATE_REFERENCE';
     final public const string GATEWAY_NOT_FOUND = 'PAYMENT__GATEWAY_NOT_FOUND';
     final public const string INVALID_REQUEST = 'PAYMENT__INVALID_REQUEST';
+    final public const string NOTIFICATION_CONFIGURATION_MISMATCH = 'PAYMENT__NOTIFICATION_CONFIGURATION_MISMATCH';
+    final public const string NOTIFICATION_RESOURCE_NOT_FOUND = 'PAYMENT__NOTIFICATION_RESOURCE_NOT_FOUND';
     final public const string ORDER_NOT_FOUND = 'PAYMENT__ORDER_NOT_FOUND';
     final public const string ORDER_NOT_SUCCEEDED = 'PAYMENT__ORDER_NOT_SUCCEEDED';
     final public const string REFUND_AMOUNT_EXCEEDED = 'PAYMENT__REFUND_AMOUNT_EXCEEDED';
@@ -55,6 +57,16 @@ class PaymentException extends HttpException
     public static function invalidRequest(string $message): self
     {
         return new self(Response::HTTP_BAD_REQUEST, self::INVALID_REQUEST, $message);
+    }
+
+    public static function notificationConfigurationMismatch(string $reference): self
+    {
+        return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::NOTIFICATION_CONFIGURATION_MISMATCH, 'The payment resource "{{ reference }}" does not belong to this channel configuration.', ['reference' => $reference]);
+    }
+
+    public static function notificationResourceNotFound(string $reference): self
+    {
+        return new self(Response::HTTP_NOT_FOUND, self::NOTIFICATION_RESOURCE_NOT_FOUND, 'Payment notification resource "{{ reference }}" was not found.', ['reference' => $reference]);
     }
 
     public static function orderNotFound(string $reference): self
