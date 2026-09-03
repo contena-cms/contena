@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\OpenApi\Authentication;
+namespace Contena\Core\System\Payment\OpenApi\Util;
 
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 
-final class RequestSignature
+final class SignUtil
 {
     final public const int TIMESTAMP_TOLERANCE = 300;
 

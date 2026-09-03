@@ -63,6 +63,7 @@ class PaymentNotifyRecordDefinition extends EntityDefinition
             new StringField('notify_url', 'notifyUrl', 2048)->addFlags(new ApiAware(), new Required()),
             new LongTextField('request_body', 'requestBody'),
             new LongTextField('response_body', 'responseBody'),
+            new IntField('response_status', 'responseStatus')->addFlags(new ApiAware()),
             new IntField('status', 'status')->addFlags(new ApiAware(), new Required()),
             new IntField('retry_count', 'retryCount')->addFlags(new ApiAware(), new Required()),
             new DateTimeField('available_at', 'availableAt')->addFlags(new ApiAware()),

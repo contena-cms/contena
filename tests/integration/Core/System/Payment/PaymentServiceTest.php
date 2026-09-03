@@ -406,7 +406,7 @@ final class PaymentServiceTest extends TestCase
         static::assertInstanceOf(PaymentNotifyRecordEntity::class, $notifyRecord);
         static::assertSame(PaymentNotifyRecordStatus::STATUS_PENDING, $notifyRecord->status);
         static::assertSame('https://app.example/payment-notify', $notifyRecord->notifyUrl);
-        static::assertStringContainsString('"externalResourceNo":"notified-order"', $notifyRecord->requestBody ?? '');
+        static::assertStringContainsString('"external_resource_no":"notified-order"', $notifyRecord->requestBody ?? '');
     }
 
     public function testNotificationRejectsAResourceCreatedWithAnotherConfiguration(): void

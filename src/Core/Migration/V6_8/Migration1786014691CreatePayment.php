@@ -524,6 +524,7 @@ CREATE TABLE IF NOT EXISTS `payment_notify_record` (
     `notify_url` VARCHAR(2048) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Notify URL of the external system',
     `request_body` LONGTEXT COLLATE utf8mb4_unicode_ci NULL COMMENT 'Request body sent to the external system',
     `response_body` LONGTEXT COLLATE utf8mb4_unicode_ci NULL COMMENT 'Response body returned by the external system',
+    `response_status` SMALLINT NULL COMMENT 'HTTP status returned by the external system',
     `status` TINYINT NOT NULL DEFAULT 0 COMMENT 'Status: 0=pending, 1=processing, 2=success, 3=failed',
     `retry_count` INT NOT NULL DEFAULT 0 COMMENT 'Retry count',
     `available_at` DATETIME(3) NULL COMMENT 'Next retry time',

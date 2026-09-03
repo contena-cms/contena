@@ -281,11 +281,11 @@ final class GatewayNotificationService
                 PaymentNotificationTypes::SUBSCRIPTION => 'subscription',
                 default => 'unknown',
             },
-            'resourceNo' => $notification->resourceNo,
-            'externalResourceNo' => $target->externalResourceNo,
+            'resource_no' => $notification->resourceNo,
+            'external_resource_no' => $target->externalResourceNo,
             'status' => $notification->result->status,
-            'resultCode' => $notification->result->resultCode,
-            'resultMessage' => $notification->result->resultMessage,
+            'result_code' => $notification->result->resultCode,
+            'result_message' => $notification->result->resultMessage,
         ], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
     }
 }

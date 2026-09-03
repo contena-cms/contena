@@ -33,6 +33,8 @@ class PaymentNotifyRecordEntity extends Entity
 
     public protected(set) ?string $responseBody = null;
 
+    public protected(set) ?int $responseStatus = null;
+
     public protected(set) int $status;
 
     public protected(set) int $retryCount;

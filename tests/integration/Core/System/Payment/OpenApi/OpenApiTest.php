@@ -15,8 +15,8 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiResponse;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
-use Contena\Core\System\Payment\OpenApi\Authentication\RequestSignature;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
+use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
@@ -130,8 +130,8 @@ final class OpenApiTest extends TestCase
     public function testExpiredSignatureIsRejectedBeforeThePaymentServiceIsCalled(): void
     {
         $parameters = $this->signed(['order_no' => 'platform-order']);
-        $parameters['timestamp'] = (string) (time() - RequestSignature::TIMESTAMP_TOLERANCE - 1);
-        $parameters['sign'] = RequestSignature::sign($parameters, self::APP_SECRET);
+        $parameters['timestamp'] = (string) (time() - SignUtil::TIMESTAMP_TOLERANCE - 1);
+        $parameters['sign'] = SignUtil::sign($parameters, self::APP_SECRET);
 
         $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
 
@@ -256,7 +256,7 @@ final class OpenApiTest extends TestCase
             'nonce' => bin2hex(random_bytes(8)),
             ...$parameters,
         ];
-        $parameters['sign'] = RequestSignature::sign($parameters, self::APP_SECRET);
+        $parameters['sign'] = SignUtil::sign($parameters, self::APP_SECRET);
 
         return $parameters;
     }

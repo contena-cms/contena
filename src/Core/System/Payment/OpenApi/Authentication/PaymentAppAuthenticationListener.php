@@ -14,6 +14,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollec
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
+use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Core\System\Payment\PaymentException;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -70,7 +71,7 @@ final class PaymentAppAuthenticationListener implements EventSubscriberInterface
         if (!$app instanceof PaymentAppEntity || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }
-        if (!RequestSignature::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
+        if (!SignUtil::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
             throw OpenApiException::invalidSignature();
         }
 

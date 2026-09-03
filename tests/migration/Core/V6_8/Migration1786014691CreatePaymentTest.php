@@ -64,7 +64,7 @@ class Migration1786014691CreatePaymentTest extends TestCase
         foreach (['channel_config_id', 'notification_key', 'transfer_id', 'recurring_id', 'response_content_type', 'response_status'] as $column) {
             static::assertTrue(TableHelper::columnExists($this->connection, 'payment_channel_notify_record', $column));
         }
-        foreach (['transfer_id', 'recurring_id'] as $column) {
+        foreach (['transfer_id', 'recurring_id', 'response_status'] as $column) {
             static::assertTrue(TableHelper::columnExists($this->connection, 'payment_notify_record', $column));
         }
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'payment_recurring', 'fk.payment_recurring.channel_config_id'));

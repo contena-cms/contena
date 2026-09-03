@@ -30,8 +30,11 @@ use Contena\Core\System\Payment\OpenApi\Api\OpenApiExceptionSubscriber;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiSchemaController;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
+use Contena\Core\System\Payment\OpenApi\AppNotificationService;
 use Contena\Core\System\Payment\OpenApi\Authentication\PaymentAppAuthenticationListener;
 use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
+use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTask;
+use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTaskHandler;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
@@ -43,6 +46,7 @@ use Contena\Core\System\Payment\Service\PaymentService;
 use Contena\Core\System\Payment\Service\PaymentSubscriptionService;
 use Contena\Core\System\Payment\Service\PaymentTransferService;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
+use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -162,6 +166,25 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set(OpenApiExceptionSubscriber::class)
         ->tag('kernel.event_subscriber');
+
+    $services->set(AppNotificationService::class)
+        ->args([
+            service('payment_notify_record.repository'),
+            service(Connection::class),
+            service('http_client'),
+            service(ClockInterface::class),
+        ]);
+
+    $services->set(AppNotificationDeliveryTask::class)
+        ->tag('contena.scheduled.task');
+
+    $services->set(AppNotificationDeliveryTaskHandler::class)
+        ->args([
+            service('scheduled_task.repository'),
+            service('logger'),
+            service(AppNotificationService::class),
+            service(TenantScopeContextProvider::class),
+        ]);
 
     $services->set(PaymentController::class)
         ->public()
