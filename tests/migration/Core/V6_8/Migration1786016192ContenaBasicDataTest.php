@@ -111,6 +111,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertContains('experience_studio.deleter', $defaultPrivileges);
         static::assertContains('member_groups.deleter', $defaultPrivileges);
         static::assertContains('theme.deleter', $defaultPrivileges);
+        static::assertContains('payment.settings', $defaultPrivileges);
         static::assertContains('payment.viewer', $defaultPrivileges);
         static::assertContains('payment_order:delete', $defaultPrivileges);
         static::assertNotContains('all', $defaultPrivileges);

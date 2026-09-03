@@ -1,0 +1,74 @@
+{
+    "ct-payment": {
+        "general": {
+            "mainMenuItemGeneral": "支付",
+            "description": "管理支付订单和退款订单。"
+        },
+        "navigation": {
+            "orders": "支付订单",
+            "refunds": "退款订单"
+        },
+        "list": {
+            "search": "搜索支付记录",
+            "empty": "暂无支付记录",
+            "orderNo": "订单编号",
+            "externalOrderNo": "外部订单号",
+            "platformOrderNo": "平台订单号",
+            "refundNo": "退款编号",
+            "externalRefundNo": "外部退款号",
+            "platformRefundNo": "平台退款号",
+            "amount": "金额",
+            "channel": "渠道",
+            "status": "状态",
+            "createdAt": "创建时间",
+            "expireTime": "过期时间",
+            "subject": "订单主题",
+            "deviceType": "场景",
+            "loadError": "支付记录加载失败。"
+        },
+        "status": {
+            "active": "启用",
+            "inactive": "停用",
+            "created": "已创建",
+            "pending": "待处理",
+            "processing": "处理中",
+            "unknown": "未知",
+            "succeeded": "已成功",
+            "failed": "失败",
+            "closed": "已关闭"
+        },
+        "settings": {
+            "appsTitle": "支付应用",
+            "channelsTitle": "支付渠道配置",
+            "methodsTitle": "应用支付方式"
+        },
+        "app": {
+            "code": "应用编码",
+            "name": "名称",
+            "status": "状态",
+            "createdAt": "创建时间"
+        },
+        "channel": {
+            "code": "渠道",
+            "app": "应用",
+            "scope": "凭证归属",
+            "platform": "平台",
+            "rule": "规则",
+            "status": "状态",
+            "createdAt": "创建时间"
+        },
+        "method": {
+            "methodCode": "方式编码",
+            "channel": "渠道",
+            "app": "应用",
+            "rule": "规则",
+            "status": "状态",
+            "sort": "排序"
+        }
+    },
+    "ct-settings": {
+        "index": {
+            "tabPayment": "支付"
+        }
+    }
+}

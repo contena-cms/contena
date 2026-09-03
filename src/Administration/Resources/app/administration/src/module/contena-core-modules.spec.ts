@@ -56,6 +56,7 @@ describe('Contena core Administration modules', () => {
                 'ct-landing-page',
                 'ct-mail-template',
                 'ct-media',
+                'ct-payment',
                 'ct-permissions',
                 'ct-settings',
                 'ct-settings-basic-information',

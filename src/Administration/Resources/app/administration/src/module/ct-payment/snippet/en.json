@@ -1,0 +1,74 @@
+{
+    "ct-payment": {
+        "general": {
+            "mainMenuItemGeneral": "Payments",
+            "description": "Manage payment and refund orders."
+        },
+        "navigation": {
+            "orders": "Payment orders",
+            "refunds": "Refund orders"
+        },
+        "list": {
+            "search": "Search payment records",
+            "empty": "No payment records found",
+            "orderNo": "Order number",
+            "externalOrderNo": "External",
+            "platformOrderNo": "Platform",
+            "refundNo": "Refund number",
+            "externalRefundNo": "External",
+            "platformRefundNo": "Platform",
+            "amount": "Amount",
+            "channel": "Channel",
+            "status": "Status",
+            "createdAt": "Created",
+            "expireTime": "Expires",
+            "subject": "Subject",
+            "deviceType": "Scene",
+            "loadError": "The payment records could not be loaded."
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "created": "Created",
+            "pending": "Pending",
+            "processing": "Processing",
+            "unknown": "Unknown",
+            "succeeded": "Succeeded",
+            "failed": "Failed",
+            "closed": "Closed"
+        },
+        "settings": {
+            "appsTitle": "Payment applications",
+            "channelsTitle": "Payment channel configurations",
+            "methodsTitle": "Application payment methods"
+        },
+        "app": {
+            "code": "App code",
+            "name": "Name",
+            "status": "Status",
+            "createdAt": "Created"
+        },
+        "channel": {
+            "code": "Channel",
+            "app": "Application",
+            "scope": "Credential owner",
+            "platform": "Platform",
+            "rule": "Rule",
+            "status": "Status",
+            "createdAt": "Created"
+        },
+        "method": {
+            "methodCode": "Method code",
+            "channel": "Channel",
+            "app": "Application",
+            "rule": "Rule",
+            "status": "Status",
+            "sort": "Priority"
+        }
+    },
+    "ct-settings": {
+        "index": {
+            "tabPayment": "Payment"
+        }
+    }
+}

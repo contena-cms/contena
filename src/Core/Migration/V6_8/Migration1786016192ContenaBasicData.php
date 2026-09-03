@@ -214,6 +214,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'api_send_email',
         'increment:manage',
         'message_queue_stats:read',
+        'payment.settings',
         'system.clear_cache',
         'system.logging',
         'system.system_config',
@@ -1421,6 +1422,7 @@ HTML,
         foreach (['viewer', 'editor', 'creator', 'deleter'] as $role) {
             $privileges[] = 'payment.' . $role;
         }
+        $privileges[] = 'payment.settings';
 
         sort($privileges);
         $connection->update(
