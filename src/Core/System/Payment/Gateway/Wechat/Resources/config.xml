@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../SystemConfig/Schema/config.xsd">
+    <card>
+        <title>WeChat Pay account</title>
+        <title lang="zh-CN">微信支付账户</title>
+
+        <component name="mt-text-field">
+            <name>merchantId</name>
+            <type>text</type>
+            <required>true</required>
+            <label>Merchant ID</label>
+            <label lang="zh-CN">商户号</label>
+        </component>
+
+        <component name="mt-password-field">
+            <name>merchantSecretKey</name>
+            <type>password</type>
+            <required>true</required>
+            <secret>true</secret>
+            <label>API v3 key</label>
+            <label lang="zh-CN">API v3 密钥</label>
+        </component>
+
+        <component name="mt-textarea">
+            <name>merchantPrivateKey</name>
+            <type>textarea</type>
+            <required>true</required>
+            <secret>true</secret>
+            <label>Merchant private key</label>
+            <label lang="zh-CN">商户私钥</label>
+        </component>
+
+        <component name="mt-textarea">
+            <name>merchantCertificate</name>
+            <type>textarea</type>
+            <required>true</required>
+            <secret>true</secret>
+            <label>Merchant certificate</label>
+            <label lang="zh-CN">商户证书</label>
+        </component>
+
+        <component name="mt-text-field">
+            <name>appId</name>
+            <type>text</type>
+            <required>false</required>
+            <label>App application ID</label>
+            <label lang="zh-CN">App 应用 ID</label>
+        </component>
+
+        <component name="mt-text-field">
+            <name>officialAccountAppId</name>
+            <type>text</type>
+            <required>false</required>
+            <label>Official account application ID</label>
+            <label lang="zh-CN">公众号应用 ID</label>
+        </component>
+
+        <component name="mt-text-field">
+            <name>miniProgramAppId</name>
+            <type>text</type>
+            <required>false</required>
+            <label>Mini program application ID</label>
+            <label lang="zh-CN">小程序应用 ID</label>
+        </component>
+
+        <component name="mt-url-field">
+            <name>notifyUrl</name>
+            <type>url</type>
+            <required>true</required>
+            <label>Notification URL</label>
+            <label lang="zh-CN">异步通知地址</label>
+        </component>
+    </card>
+</config>

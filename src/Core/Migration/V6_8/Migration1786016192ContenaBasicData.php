@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
@@ -11,9 +10,14 @@ use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Traits\ImportTranslationsTrait;
+use Contena\Core\Migration\Traits\StateMachineMigration;
 use Contena\Core\Migration\Traits\StateMachineMigrationTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\System\DataDictionary\DataDictionaryDefinition;
+use Contena\Core\System\Payment\Channel\Configuration\ChannelConfigReader;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
+use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal
@@ -121,6 +125,22 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'organization_translation',
         'organization_unit',
         'organization_unit_translation',
+        'payment_app',
+        'payment_app_channel_method',
+        'payment_app_translation',
+        'payment_channel',
+        'payment_channel_config',
+        'payment_channel_method',
+        'payment_channel_method_translation',
+        'payment_channel_notify_record',
+        'payment_channel_translation',
+        'payment_notify_record',
+        'payment_operation',
+        'payment_order',
+        'payment_order_transaction',
+        'payment_recurring',
+        'payment_refund',
+        'payment_transfer',
         'position',
         'position_translation',
         'region',
@@ -175,6 +195,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'member',
         'member_groups',
         'organization',
+        'payment',
         'position',
         'region',
         'rule',
@@ -304,6 +325,9 @@ class Migration1786016192ContenaBasicData extends MigrationStep
     {
         $hasData = $connection->executeQuery('SELECT 1 FROM `language` LIMIT 1')->fetchAssociative();
         if ($hasData) {
+            $this->createPaymentDefaultData($connection);
+            $this->addPaymentPrivilegesToDefaultAdministrator($connection);
+
             return;
         }
 
@@ -329,6 +353,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         $this->createUserNumberRange($connection);
         $this->createMemberNumberRange($connection);
         $this->createDomainDefaultData($connection);
+        $this->createPaymentDefaultData($connection);
     }
 
     public function updateDestructive(Connection $connection): void
@@ -1167,25 +1192,244 @@ HTML,
         }
     }
 
-    private function getLanguageIdByLocale(Connection $connection, string $locale): ?string
+    private function createPaymentDefaultData(Connection $connection): void
     {
-        $sql = <<<'SQL'
-SELECT `language`.`id`
-FROM `language`
-INNER JOIN `locale` ON `locale`.`id` = `language`.`locale_id`
-WHERE `locale`.`code` = :code
-SQL;
+        $this->createPaymentStateMachines($connection);
+        $this->createPaymentNumberRanges($connection);
+        $this->createPaymentChannels($connection);
+    }
 
-        $languageId = $connection->executeQuery($sql, ['code' => $locale])->fetchOne();
-        if (!$languageId && $locale !== 'zh-CN') {
-            return null;
+    private function createPaymentStateMachines(Connection $connection): void
+    {
+        $this->import(new StateMachineMigration(
+            'payment_order.state',
+            '支付订单状态',
+            'Payment order state',
+            [
+                StateMachineMigration::state('created', '已创建', 'Created'),
+                StateMachineMigration::state('pending', '待支付', 'Pending'),
+                StateMachineMigration::state('processing', '支付处理中', 'Processing'),
+                StateMachineMigration::state('unknown', '结果待确认', 'Unknown'),
+                StateMachineMigration::state('succeeded', '支付成功', 'Succeeded'),
+                StateMachineMigration::state('failed', '支付失败', 'Failed'),
+                StateMachineMigration::state('closed', '已关闭', 'Closed'),
+            ],
+            [
+                StateMachineMigration::transition('submit', 'created', 'pending'),
+                StateMachineMigration::transition('process', 'created', 'processing'),
+                StateMachineMigration::transition('process', 'pending', 'processing'),
+                StateMachineMigration::transition('mark_unknown', 'created', 'unknown'),
+                StateMachineMigration::transition('mark_unknown', 'pending', 'unknown'),
+                StateMachineMigration::transition('mark_unknown', 'processing', 'unknown'),
+                StateMachineMigration::transition('succeed', 'created', 'succeeded'),
+                StateMachineMigration::transition('succeed', 'pending', 'succeeded'),
+                StateMachineMigration::transition('succeed', 'processing', 'succeeded'),
+                StateMachineMigration::transition('succeed', 'unknown', 'succeeded'),
+                StateMachineMigration::transition('fail', 'created', 'failed'),
+                StateMachineMigration::transition('fail', 'pending', 'failed'),
+                StateMachineMigration::transition('fail', 'processing', 'failed'),
+                StateMachineMigration::transition('fail', 'unknown', 'failed'),
+                StateMachineMigration::transition('close', 'created', 'closed'),
+                StateMachineMigration::transition('close', 'pending', 'closed'),
+                StateMachineMigration::transition('close', 'processing', 'closed'),
+                StateMachineMigration::transition('close', 'unknown', 'closed'),
+                StateMachineMigration::transition('mark_pending', 'unknown', 'pending'),
+                StateMachineMigration::transition('process', 'unknown', 'processing'),
+            ],
+            'created'
+        ), $connection);
+
+        foreach ([
+            ['name' => 'payment_order_transaction.state', 'zh' => '支付流水状态', 'en' => 'Payment transaction state'],
+            ['name' => 'payment_transfer.state', 'zh' => '转账状态', 'en' => 'Payment transfer state'],
+        ] as $stateMachine) {
+            $this->import(new StateMachineMigration(
+                $stateMachine['name'],
+                $stateMachine['zh'],
+                $stateMachine['en'],
+                [
+                    StateMachineMigration::state('processing', '处理中', 'Processing'),
+                    StateMachineMigration::state('succeeded', '成功', 'Succeeded'),
+                    StateMachineMigration::state('failed', '失败', 'Failed'),
+                ],
+                [
+                    StateMachineMigration::transition('succeed', 'processing', 'succeeded'),
+                    StateMachineMigration::transition('fail', 'processing', 'failed'),
+                ],
+                'processing'
+            ), $connection);
+        }
+    }
+
+    private function createPaymentNumberRanges(Connection $connection): void
+    {
+        foreach ([
+            ['name' => 'payment_order', 'pattern' => 'P{date}{n}', 'zh' => '支付订单', 'en' => 'Payment order'],
+            ['name' => 'payment_order_transaction', 'pattern' => 'T{date}{n}', 'zh' => '支付流水', 'en' => 'Payment transaction'],
+            ['name' => 'payment_refund', 'pattern' => 'R{date}{n}', 'zh' => '退款单', 'en' => 'Payment refund'],
+            ['name' => 'payment_transfer', 'pattern' => 'F{date}{n}', 'zh' => '转账单', 'en' => 'Payment transfer'],
+            ['name' => 'payment_recurring', 'pattern' => 'A{date}{n}', 'zh' => '周期扣款', 'en' => 'Recurring deduction'],
+            ['name' => 'payment_operation', 'pattern' => 'O{date}{n}', 'zh' => '支付操作', 'en' => 'Payment operation'],
+        ] as $range) {
+            $typeId = $connection->fetchOne(
+                'SELECT `id` FROM `number_range_type` WHERE `technical_name` = :name',
+                ['name' => $range['name']]
+            );
+
+            if (!$typeId) {
+                $typeId = Uuid::randomBytes();
+                $connection->insert('number_range_type', [
+                    'id' => $typeId,
+                    'technical_name' => $range['name'],
+                    'global' => 0,
+                    'created_at' => $this->createdAt(),
+                ]);
+
+                $this->importTranslation('number_range_type_translation', new Translations(
+                    ['number_range_type_id' => $typeId, 'type_name' => $range['zh']],
+                    ['number_range_type_id' => $typeId, 'type_name' => $range['en']]
+                ), $connection);
+            }
+
+            $numberRangeExists = $connection->fetchOne(
+                'SELECT 1 FROM `number_range` WHERE `type_id` = :typeId LIMIT 1',
+                ['typeId' => $typeId]
+            );
+            if ($numberRangeExists) {
+                continue;
+            }
+
+            $numberRangeId = Uuid::randomBytes();
+            $connection->insert('number_range', [
+                'id' => $numberRangeId,
+                'type_id' => $typeId,
+                'global' => 1,
+                'pattern' => $range['pattern'],
+                'start' => 10,
+                'created_at' => $this->createdAt(),
+            ]);
+            $this->importTranslation('number_range_translation', new Translations(
+                ['number_range_id' => $numberRangeId, 'name' => $range['zh'] . '编号'],
+                ['number_range_id' => $numberRangeId, 'name' => $range['en'] . ' numbers']
+            ), $connection);
+        }
+    }
+
+    private function createPaymentChannels(Connection $connection): void
+    {
+        $reader = new ChannelConfigReader(new ConfigReader());
+        $channels = [
+            'alipay' => [
+                'sort' => 10,
+                'zh' => '支付宝',
+                'en' => 'Alipay',
+                'schema' => __DIR__ . '/../../System/Payment/Gateway/Alipay/Resources/config.xml',
+                'methods' => [
+                    PaymentMethods::H5 => ['zh' => '支付宝 H5 支付', 'en' => 'Alipay H5'],
+                    PaymentMethods::APP => ['zh' => '支付宝 App 支付', 'en' => 'Alipay App'],
+                    PaymentMethods::MINI_PROGRAM => ['zh' => '支付宝小程序支付', 'en' => 'Alipay Mini Program'],
+                    PaymentMethods::PAGE => ['zh' => '支付宝电脑网站支付', 'en' => 'Alipay Page'],
+                    PaymentMethods::FACE => ['zh' => '支付宝当面付', 'en' => 'Alipay Face-to-Face'],
+                    PaymentMethods::AUTO_DEBIT => ['zh' => '支付宝周期扣款', 'en' => 'Alipay Recurring'],
+                ],
+            ],
+            'wechat' => [
+                'sort' => 20,
+                'zh' => '微信支付',
+                'en' => 'WeChat Pay',
+                'schema' => __DIR__ . '/../../System/Payment/Gateway/Wechat/Resources/config.xml',
+                'methods' => [
+                    PaymentMethods::H5 => ['zh' => '微信 H5 支付', 'en' => 'WeChat H5'],
+                    PaymentMethods::APP => ['zh' => '微信 App 支付', 'en' => 'WeChat App'],
+                    PaymentMethods::MINI_PROGRAM => ['zh' => '微信小程序支付', 'en' => 'WeChat Mini Program'],
+                    PaymentMethods::JSAPI => ['zh' => '微信公众号支付', 'en' => 'WeChat Official Account'],
+                    PaymentMethods::NATIVE => ['zh' => '微信扫码支付', 'en' => 'WeChat Native'],
+                ],
+            ],
+        ];
+
+        foreach ($channels as $code => $channel) {
+            $channelId = $connection->fetchOne('SELECT `id` FROM `payment_channel` WHERE `code` = :code', ['code' => $code]);
+            $schema = Json::encode($reader->read($channel['schema']));
+
+            if (!$channelId) {
+                $channelId = Uuid::randomBytes();
+                $connection->insert('payment_channel', [
+                    'id' => $channelId,
+                    'code' => $code,
+                    'config_schema' => $schema,
+                    'status' => 1,
+                    'sort' => $channel['sort'],
+                    'created_at' => $this->createdAt(),
+                ]);
+                $this->importTranslation('payment_channel_translation', new Translations(
+                    ['payment_channel_id' => $channelId, 'name' => $channel['zh']],
+                    ['payment_channel_id' => $channelId, 'name' => $channel['en']]
+                ), $connection);
+            } else {
+                $connection->update('payment_channel', ['config_schema' => $schema], ['id' => $channelId]);
+            }
+
+            $sort = 10;
+            foreach ($channel['methods'] as $methodCode => $method) {
+                $methodId = $connection->fetchOne(
+                    'SELECT `id` FROM `payment_channel_method` WHERE `channel_id` = :channelId AND `method_code` = :method',
+                    ['channelId' => $channelId, 'method' => $methodCode]
+                );
+                if ($methodId) {
+                    $sort += 10;
+
+                    continue;
+                }
+
+                $methodId = Uuid::randomBytes();
+                $connection->insert('payment_channel_method', [
+                    'id' => $methodId,
+                    'channel_id' => $channelId,
+                    'method_code' => $methodCode,
+                    'status' => 1,
+                    'sort' => $sort,
+                    'created_at' => $this->createdAt(),
+                ]);
+                $this->importTranslation('payment_channel_method_translation', new Translations(
+                    ['payment_channel_method_id' => $methodId, 'name' => $method['zh']],
+                    ['payment_channel_method_id' => $methodId, 'name' => $method['en']]
+                ), $connection);
+                $sort += 10;
+            }
+        }
+    }
+
+    private function addPaymentPrivilegesToDefaultAdministrator(Connection $connection): void
+    {
+        $encoded = $connection->fetchOne(
+            'SELECT `privileges` FROM `acl_role` WHERE `id` = :id',
+            ['id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID)]
+        );
+        if (!\is_string($encoded)) {
+            return;
         }
 
-        if (!$languageId) {
-            return Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM);
+        $privileges = Json::decodeToArray($encoded);
+        foreach (self::DEFAULT_ADMINISTRATOR_RESOURCES as $resource) {
+            if (!str_starts_with($resource, 'payment_')) {
+                continue;
+            }
+
+            foreach (['read', 'create', 'update', 'delete'] as $operation) {
+                $privileges[] = $resource . ':' . $operation;
+            }
+        }
+        foreach (['viewer', 'editor', 'creator', 'deleter'] as $role) {
+            $privileges[] = 'payment.' . $role;
         }
 
-        return $languageId;
+        sort($privileges);
+        $connection->update(
+            'acl_role',
+            ['privileges' => Json::encode(array_values(array_unique($privileges)))],
+            ['id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID)]
+        );
     }
 
     private function createdAt(): string

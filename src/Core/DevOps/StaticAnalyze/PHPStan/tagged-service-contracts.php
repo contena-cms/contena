@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
@@ -30,12 +29,14 @@ use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInter
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Snippet\Filter\SnippetFilterInterface;
 use Contena\Core\System\Tenant\Resolver\TenantResolverInterface;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Frontend\Framework\Captcha\AbstractCaptcha;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 
 return [
@@ -61,6 +62,7 @@ return [
             'contena.metadata.loader' => MetadataLoaderInterface::class,
             'contena.metric_transport_factory' => MetricTransportInterface::class,
             'contena.oauth.scope' => ScopeEntityInterface::class,
+            'contena.payment.gateway' => GatewayInterface::class,
             'contena.path.strategy' => AbstractMediaPathStrategy::class,
             'contena.route_scope' => AbstractRouteScope::class,
             'contena.route_scope_whitelist' => RouteScopeWhitelistInterface::class,

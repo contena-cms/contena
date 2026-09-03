@@ -46,6 +46,7 @@ class System extends Bundle
         $phpLoader->load('consent.php');
         $phpLoader->load('data_dictionary.php');
         $phpLoader->load('tenant.php');
+        $phpLoader->load('payment.php');
 
         if ($container->getParameter('kernel.environment') === 'test') {
             $phpLoader->load('services_test.php');

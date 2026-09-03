@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Alipay account</title>
+        <title lang="zh-CN">支付宝账户</title>
+
+        <component name="mt-select">
+            <name>mode</name>
+            <type>single-select</type>
+            <required>true</required>
+            <label>Environment</label>
+            <label lang="zh-CN">运行环境</label>
+            <defaultValue>normal</defaultValue>
+            <options>
+                <option>
+                    <id>normal</id>
+                    <name>Production</name>
+                    <name lang="zh-CN">正式环境</name>
+                </option>
+                <option>
+                    <id>sandbox</id>
+                    <name>Sandbox</name>
+                    <name lang="zh-CN">沙箱环境</name>
+                </option>
+            </options>
+        </component>
+
+        <component name="mt-text-field">
+            <name>appId</name>
+            <type>text</type>
+            <required>true</required>
+            <label>Application ID</label>
+            <label lang="zh-CN">应用 ID</label>
+        </component>
+
+        <component name="mt-password-field">
+            <name>appPrivateKey</name>
+            <type>password</type>
+            <required>true</required>
+            <secret>true</secret>
+            <label>Application private key</label>
+            <label lang="zh-CN">应用私钥</label>
+        </component>
+
+        <component name="mt-textarea">
+            <name>alipayPublicKey</name>
+            <type>textarea</type>
+            <required>true</required>
+            <secret>true</secret>
+            <label>Alipay public key</label>
+            <label lang="zh-CN">支付宝公钥</label>
+        </component>
+
+        <component name="mt-url-field">
+            <name>notifyUrl</name>
+            <type>url</type>
+            <required>true</required>
+            <label>Notification URL</label>
+            <label lang="zh-CN">异步通知地址</label>
+        </component>
+
+        <component name="mt-url-field">
+            <name>returnUrl</name>
+            <type>url</type>
+            <required>false</required>
+            <label>Return URL</label>
+            <label lang="zh-CN">同步跳转地址</label>
+        </component>
+    </card>
+</config>

@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Migration\Core\V6_8;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_8\Migration1786016192ContenaBasicData;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -55,6 +55,10 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         'flow_sequence',
         'flow_template',
         'seo_url_template',
+        'payment_channel_method_translation',
+        'payment_channel_method',
+        'payment_channel_translation',
+        'payment_channel',
     ];
 
     private Connection $connection;
@@ -107,6 +111,8 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertContains('experience_studio.deleter', $defaultPrivileges);
         static::assertContains('member_groups.deleter', $defaultPrivileges);
         static::assertContains('theme.deleter', $defaultPrivileges);
+        static::assertContains('payment.viewer', $defaultPrivileges);
+        static::assertContains('payment_order:delete', $defaultPrivileges);
         static::assertNotContains('all', $defaultPrivileges);
         static::assertNotContains('system.plugin_maintain', $defaultPrivileges);
         static::assertNotContains('system.extension_store', $defaultPrivileges);
@@ -140,15 +146,15 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertSame(3840, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `region`'));
         static::assertSame(7680, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `region_translation`'));
         static::assertSame(
-            ['member', 'user'],
+            ['member', 'payment_operation', 'payment_order', 'payment_order_transaction', 'payment_recurring', 'payment_refund', 'payment_transfer', 'user'],
             $this->connection->fetchFirstColumn('SELECT `technical_name` FROM `number_range_type` ORDER BY `technical_name`')
         );
         static::assertSame(
-            ['{n}', '{n}'],
+            ['{n}', '{n}', 'A{date}{n}', 'F{date}{n}', 'O{date}{n}', 'P{date}{n}', 'R{date}{n}', 'T{date}{n}'],
             $this->connection->fetchFirstColumn('SELECT `pattern` FROM `number_range` ORDER BY `pattern`')
         );
         static::assertSame(
-            [10, 10],
+            [10, 10, 10, 10, 10, 10, 10000, 10000],
             array_map(
                 static fn (string $start): int => (int) $start,
                 $this->connection->fetchFirstColumn('SELECT `start` FROM `number_range` ORDER BY `start`')
@@ -298,6 +304,19 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
             'SELECT COUNT(*) FROM `mail_template_type` WHERE `technical_name` = :technicalName',
             ['technicalName' => 'user.recovery.request']
         ));
+
+        static::assertSame(
+            ['alipay', 'wechat'],
+            $this->connection->fetchFirstColumn('SELECT `code` FROM `payment_channel` ORDER BY `code`')
+        );
+        static::assertSame(11, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `payment_channel_method`'));
+        static::assertSame(
+            'true',
+            $this->connection->fetchOne(
+                'SELECT JSON_UNQUOTE(JSON_EXTRACT(`config_schema`, \'$[0].elements[2].secret\')) FROM `payment_channel` WHERE `code` = :code',
+                ['code' => 'alipay']
+            )
+        );
         static::assertSame(
             ['userRecovery' => 'user_recovery'],
             json_decode((string) $this->connection->fetchOne(
@@ -414,7 +433,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
             $this->connection->fetchFirstColumn('SELECT `code` FROM `locale` ORDER BY `code`')
         );
         static::assertSame(0, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `acl_role`'));
-        static::assertSame(0, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `state_machine`'));
+        static::assertSame(3, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `state_machine`'));
         static::assertSame(0, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `mail_template_type`'));
         static::assertSame(0, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `media_default_folder`'));
     }
@@ -454,6 +473,49 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
 
     private function createTemporaryTables(): void
     {
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE `payment_channel` (
+                `id` BINARY(16) NOT NULL,
+                `code` VARCHAR(32) NOT NULL,
+                `config_schema` JSON NULL,
+                `status` TINYINT(1) NOT NULL,
+                `sort` INT NOT NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                `updated_at` DATETIME(3) NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE (`code`)
+            )'
+        );
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE `payment_channel_translation` (
+                `payment_channel_id` BINARY(16) NOT NULL,
+                `language_id` BINARY(16) NOT NULL,
+                `name` VARCHAR(255) NOT NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                PRIMARY KEY (`payment_channel_id`, `language_id`)
+            )'
+        );
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE `payment_channel_method` (
+                `id` BINARY(16) NOT NULL,
+                `channel_id` BINARY(16) NOT NULL,
+                `method_code` VARCHAR(32) NOT NULL,
+                `status` TINYINT(1) NOT NULL,
+                `sort` INT NOT NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE (`channel_id`, `method_code`)
+            )'
+        );
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE `payment_channel_method_translation` (
+                `payment_channel_method_id` BINARY(16) NOT NULL,
+                `language_id` BINARY(16) NOT NULL,
+                `name` VARCHAR(255) NOT NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                PRIMARY KEY (`payment_channel_method_id`, `language_id`)
+            )'
+        );
         $this->connection->executeStatement(
             'CREATE TEMPORARY TABLE `seo_url_template` (
                 `id` BINARY(16) NOT NULL,

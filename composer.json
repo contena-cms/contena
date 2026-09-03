@@ -85,6 +85,7 @@
         "composer/class-map-generator": "^1.7",
         "composer/composer": "^2.9.3",
         "composer/semver": "^3.4.0",
+        "contena/conflicts": "0.6.1",
         "doctrine/dbal": "~4.4.0",
         "dompdf/dompdf": "3.1.4",
         "dragonmantank/cron-expression": "^3.3",
@@ -93,6 +94,7 @@
         "guzzlehttp/promises": "^2.5",
         "guzzlehttp/psr7": "^2.4",
         "horstoeko/zugferd": "^1.0.104",
+        "hyperf/pimple": "^2.2",
         "lcobucci/jwt": "^5.5",
         "league/flysystem": "^3.13.0",
         "league/flysystem-local": "^3.29.0",
@@ -121,7 +123,6 @@
         "scssphp/scssphp": "v1.12.0",
         "setasign/fpdi": "^2.3.7",
         "setasign/tfpdf": "^1.33",
-        "contena/conflicts": "0.6.1",
         "shyim/opensearch-php-dsl": "^1.1.4",
         "squirrelphp/twig-php-syntax": "^1.13.0",
         "symfony/asset": "~7.4.0",
@@ -185,6 +186,7 @@
         "twig/intl-extra": "^3.26.0",
         "twig/string-extra": "^3.24.0",
         "twig/twig": "^3.26.0",
+        "yansongda/pay": "^3.7",
         "zircote/swagger-php": "^4.9.2"
     },
     "require-dev": {
