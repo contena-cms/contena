@@ -1,0 +1,55 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Payment\Api;
+
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Payment\Service\GatewayNotificationService;
+use Contena\Core\System\Payment\Struct\GatewayNotification;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+/**
+ * @internal
+ *
+ * @codeCoverageIgnore
+ *
+ * @see \Contena\Tests\Integration\Core\System\Payment\PaymentApiTest
+ */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [PaymentApiRouteScope::ID], 'auth_required' => false])]
+final class PaymentNotificationController
+{
+    public function __construct(private readonly GatewayNotificationService $notificationService)
+    {
+    }
+
+    #[Route(
+        path: '/payment-api/v1/notify/{channel}/{channelConfigId}',
+        name: 'payment-api.v1.notify',
+        requirements: ['channelConfigId' => '[0-9a-f]{32}'],
+        methods: [Request::METHOD_POST],
+    )]
+    public function notify(string $channel, string $channelConfigId, Request $request): Response
+    {
+        $result = $this->notificationService->process($channel, $channelConfigId, new GatewayNotification(
+            $request->getContent(),
+            $this->headers($request),
+            $request->request->all(),
+        ));
+
+        return new Response($result->body, $result->status, ['Content-Type' => $result->contentType]);
+    }
+
+    /**
+     * @return array<string, list<string>>
+     */
+    private function headers(Request $request): array
+    {
+        $headers = [];
+        foreach ($request->headers->all() as $name => $values) {
+            $headers[$name] = array_values(array_filter($values, \is_string(...)));
+        }
+
+        return $headers;
+    }
+}

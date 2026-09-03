@@ -1,0 +1,347 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\System\Payment;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Payment\Api\PaymentApiException;
+use Contena\Core\System\Payment\Api\PaymentApiResponse;
+use Contena\Core\System\Payment\Api\PaymentController;
+use Contena\Core\System\Payment\Api\PaymentRequestSignature;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\Gateway\PaymentStatus;
+use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Service\AbstractPaymentService;
+use Contena\Core\System\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\QueryRequest;
+use Contena\Core\System\Payment\Struct\RefundRequest;
+use Contena\Core\System\Payment\Struct\SubscriptionRequest;
+use Contena\Core\System\Payment\Struct\TransferRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+final class PaymentApiTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    private const string APP_SECRET = 'payment-api-secret';
+
+    private static ?PaymentApiServiceStub $sharedPaymentService = null;
+
+    private KernelBrowser $browser;
+
+    private PaymentApiServiceStub $paymentService;
+
+    private string $appId;
+
+    private string $appCode;
+
+    private string $tenantId;
+
+    protected function setUp(): void
+    {
+        $this->tenantId = $this->createTenant('Payment API tenant')->id;
+        $this->appId = Uuid::randomHex();
+        $this->appCode = 'payment-api-' . bin2hex(random_bytes(6));
+        $this->appRepository()->create([[
+            'id' => $this->appId,
+            'appCode' => $this->appCode,
+            'appSecret' => self::APP_SECRET,
+            'name' => 'Payment API app',
+            'status' => true,
+        ]], Context::createTenantContext($this->tenantId));
+
+        if (!self::$sharedPaymentService instanceof PaymentApiServiceStub) {
+            self::$sharedPaymentService = new PaymentApiServiceStub();
+            static::getContainer()->set(PaymentController::class, new PaymentController(self::$sharedPaymentService));
+        }
+        self::$sharedPaymentService->reset();
+        $this->paymentService = self::$sharedPaymentService;
+        $this->browser = KernelLifecycleManager::createBrowser(static::getKernel());
+    }
+
+    public function testSignedPaymentRequestUsesTheAuthenticatedTenantAndReturnsAUnifiedResult(): void
+    {
+        $parameters = $this->signed([
+            'external_order_no' => 'app-order-1',
+            'amount' => 1250,
+            'currency_code' => 'cny',
+            'method_code' => 'h5',
+            'subject' => 'Test order',
+            'channel_code' => 'alipay',
+            'notify_url' => 'https://app.example/notify',
+            'return_url' => 'https://app.example/return',
+            'channel_extra' => ['buyer_id' => 'buyer-1'],
+        ]);
+
+        $this->browser->jsonRequest('POST', '/payment-api/v1/pay', $parameters);
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame(PaymentApiResponse::SUCCESS, $body['code']);
+        static::assertSame([
+            'resource_no' => 'platform-resource',
+            'external_resource_no' => 'app-resource',
+            'transaction_no' => 'platform-transaction',
+            'status' => PaymentStatus::PENDING,
+            'action' => PaymentResult::ACTION_REDIRECT,
+            'action_value' => 'https://cashier.example/pay',
+        ], $body['data']);
+
+        static::assertSame('pay', $this->paymentService->operation);
+        static::assertSame($this->tenantId, $this->paymentService->context?->getTenantId());
+        static::assertSame($this->appCode, $this->paymentService->app?->appCode);
+        $paymentRequest = $this->paymentService->request;
+        static::assertInstanceOf(PaymentRequest::class, $paymentRequest);
+        static::assertSame('app-order-1', $paymentRequest->externalOrderNo);
+        static::assertSame(1250, $paymentRequest->amount);
+        static::assertSame(['buyer_id' => 'buyer-1'], $paymentRequest->extra);
+    }
+
+    public function testInvalidSignatureUsesThePaymentApiErrorEnvelope(): void
+    {
+        $parameters = $this->signed(['order_no' => 'platform-order']);
+        $parameters['sign'] = str_repeat('0', 64);
+
+        $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame(PaymentApiException::INVALID_SIGNATURE, $body['code']);
+        static::assertNull($body['data']);
+        static::assertNull($this->paymentService->operation);
+    }
+
+    public function testExpiredSignatureIsRejectedBeforeThePaymentServiceIsCalled(): void
+    {
+        $parameters = $this->signed(['order_no' => 'platform-order']);
+        $parameters['timestamp'] = (string) (time() - PaymentRequestSignature::TIMESTAMP_TOLERANCE - 1);
+        $parameters['sign'] = PaymentRequestSignature::sign($parameters, self::APP_SECRET);
+
+        $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame(PaymentApiException::INVALID_SIGNATURE, $body['code']);
+        static::assertNull($this->paymentService->operation);
+    }
+
+    public function testMissingRequiredParameterUsesThePaymentApiErrorEnvelope(): void
+    {
+        $this->browser->jsonRequest('POST', '/payment-api/v1/pay', $this->signed([
+            'amount' => 1250,
+            'method_code' => 'h5',
+            'subject' => 'Test order',
+        ]));
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame(PaymentApiException::MISSING_PARAMETER, $body['code']);
+        static::assertNull($body['data']);
+        static::assertNull($this->paymentService->operation);
+    }
+
+    public function testAppSecretIsAvailableForSigningButHiddenFromGenericApis(): void
+    {
+        $app = $this->appRepository()->search(new Criteria([$this->appId]), Context::createGlobalContext())->getEntities()->first();
+        static::assertInstanceOf(PaymentAppEntity::class, $app);
+        static::assertSame(self::APP_SECRET, $app->appSecret);
+
+        $field = static::getContainer()->get(PaymentAppDefinition::class)->getFields()->get('appSecret');
+        static::assertNotNull($field);
+        static::assertNull($field->getFlag(ApiAware::class));
+    }
+
+    public function testServesTheOpenApiContractWithoutAppAuthentication(): void
+    {
+        $this->browser->request('GET', '/payment-api/v1/openapi.json');
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $schema = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame('3.0.3', $schema['openapi']);
+        static::assertArrayHasKey('/pay', $schema['paths']);
+        static::assertArrayHasKey('/notify/{channel}/{channelConfigId}', $schema['paths']);
+    }
+
+    public function testProviderNotificationRouteDoesNotRequireAppAuthentication(): void
+    {
+        $this->browser->request(
+            'POST',
+            '/payment-api/v1/notify/alipay/' . Uuid::randomHex(),
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_PAYMENT_TEST' => 'header-value'],
+            content: '{"event":"payment.succeeded"}',
+        );
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame(PaymentException::CHANNEL_CONFIG_NOT_FOUND, $body['code']);
+        static::assertNull($body['data']);
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     * @param class-string $requestClass
+     */
+    #[DataProvider('operationProvider')]
+    public function testTranslatesTheUnifiedOperationContracts(string $path, string $operation, array $parameters, string $requestClass): void
+    {
+        $this->browser->jsonRequest('POST', $path, $this->signed($parameters));
+
+        static::assertSame(Response::HTTP_OK, $this->browser->getResponse()->getStatusCode(), (string) $this->browser->getResponse()->getContent());
+        static::assertSame($operation, $this->paymentService->operation);
+        static::assertInstanceOf($requestClass, $this->paymentService->request);
+        static::assertSame($this->tenantId, $this->paymentService->context?->getTenantId());
+    }
+
+    /**
+     * @return iterable<string, array{string, string, array<string, mixed>, class-string}>
+     */
+    public static function operationProvider(): iterable
+    {
+        yield 'query by app order number' => [
+            '/payment-api/v1/query',
+            'query',
+            ['external_order_no' => 'app-order-1'],
+            QueryRequest::class,
+        ];
+        yield 'refund a platform order' => [
+            '/payment-api/v1/refund',
+            'refund',
+            ['order_no' => 'platform-order', 'external_refund_no' => 'app-refund-1', 'refund_amount' => 500],
+            RefundRequest::class,
+        ];
+        yield 'create a recurring agreement' => [
+            '/payment-api/v1/subscribe',
+            'subscribe',
+            ['external_subscription_no' => 'app-subscription-1', 'channel_code' => 'paypal', 'period' => 1],
+            SubscriptionRequest::class,
+        ];
+        yield 'transfer funds to a payee' => [
+            '/payment-api/v1/transfer',
+            'transfer',
+            ['external_transfer_no' => 'app-transfer-1', 'amount' => 500, 'payee' => 'payee', 'payee_name' => 'Payee'],
+            TransferRequest::class,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     *
+     * @return array<string, mixed>
+     */
+    private function signed(array $parameters): array
+    {
+        $parameters = [
+            'app_id' => $this->appCode,
+            'timestamp' => (string) time(),
+            'nonce' => bin2hex(random_bytes(8)),
+            ...$parameters,
+        ];
+        $parameters['sign'] = PaymentRequestSignature::sign($parameters, self::APP_SECRET);
+
+        return $parameters;
+    }
+
+    /**
+     * @return EntityRepository<PaymentAppCollection>
+     */
+    private function appRepository(): EntityRepository
+    {
+        return static::getContainer()->get('payment_app.repository');
+    }
+}
+
+/**
+ * @internal
+ */
+final class PaymentApiServiceStub extends AbstractPaymentService
+{
+    public ?string $operation = null;
+
+    public ?PaymentAppEntity $app = null;
+
+    public PaymentRequest|QueryRequest|RefundRequest|SubscriptionRequest|TransferRequest|null $request = null;
+
+    public ?Context $context = null;
+
+    public function reset(): void
+    {
+        $this->operation = null;
+        $this->app = null;
+        $this->request = null;
+        $this->context = null;
+    }
+
+    public function getDecorated(): AbstractPaymentService
+    {
+        return $this;
+    }
+
+    public function pay(PaymentAppEntity $app, PaymentRequest $request, Context $context): PaymentResult
+    {
+        return $this->record('pay', $app, $request, $context);
+    }
+
+    public function query(PaymentAppEntity $app, QueryRequest $request, Context $context): PaymentResult
+    {
+        return $this->record('query', $app, $request, $context);
+    }
+
+    public function refund(PaymentAppEntity $app, RefundRequest $request, Context $context): PaymentResult
+    {
+        return $this->record('refund', $app, $request, $context);
+    }
+
+    public function transfer(PaymentAppEntity $app, TransferRequest $request, Context $context): PaymentResult
+    {
+        return $this->record('transfer', $app, $request, $context);
+    }
+
+    public function subscribe(PaymentAppEntity $app, SubscriptionRequest $request, Context $context): PaymentResult
+    {
+        return $this->record('subscribe', $app, $request, $context);
+    }
+
+    private function record(
+        string $operation,
+        PaymentAppEntity $app,
+        PaymentRequest|QueryRequest|RefundRequest|SubscriptionRequest|TransferRequest $request,
+        Context $context,
+    ): PaymentResult {
+        $this->operation = $operation;
+        $this->app = $app;
+        $this->request = $request;
+        $this->context = $context;
+
+        return new PaymentResult(
+            PaymentStatus::PENDING,
+            PaymentResult::ACTION_REDIRECT,
+            'https://cashier.example/pay',
+            providerRequestId: 'hidden-provider-request',
+            providerResourceId: 'hidden-provider-resource',
+            data: ['hidden' => true],
+            resourceNo: 'platform-resource',
+            externalResourceNo: 'app-resource',
+            transactionNo: 'platform-transaction',
+        );
+    }
+}

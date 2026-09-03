@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
@@ -58,7 +57,7 @@ class PaymentAppDefinition extends EntityDefinition
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             new TenantField()->setDescription('Unique identity of the owning tenant.'),
             new StringField('app_code', 'appCode', 64)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
-            new PasswordField('app_secret', 'appSecret')->addFlags(new Required()),
+            new StringField('app_secret', 'appSecret')->removeFlag(ApiAware::class)->addFlags(new Required()),
             new TranslatedField('name')->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new BoolField('status', 'status')->addFlags(new ApiAware(), new Required()),
             new OneToManyAssociationField('channelConfigs', PaymentChannelConfigDefinition::class, 'payment_app_id')->addFlags(new ApiAware(), new RestrictDelete()),

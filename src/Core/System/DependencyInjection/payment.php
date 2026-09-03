@@ -1,7 +1,14 @@
 <?php declare(strict_types=1);
 
 use Contena\Core\Content\Rule\AbstractRuleLoader;
+use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
+use Contena\Core\System\Payment\Api\PaymentApiAuthenticationListener;
+use Contena\Core\System\Payment\Api\PaymentApiExceptionSubscriber;
+use Contena\Core\System\Payment\Api\PaymentApiRouteScope;
+use Contena\Core\System\Payment\Api\PaymentApiSchemaController;
+use Contena\Core\System\Payment\Api\PaymentController;
+use Contena\Core\System\Payment\Api\PaymentNotificationController;
 use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\Aggregate\PaymentAppTranslation\PaymentAppTranslationDefinition;
@@ -141,6 +148,35 @@ return static function (ContainerConfigurator $container): void {
             service(PaymentSubscriptionService::class),
             service(Connection::class),
         ]);
+
+    $services->set(PaymentApiRouteScope::class)
+        ->tag('contena.route_scope');
+
+    $services->set(PaymentApiAuthenticationListener::class)
+        ->args([
+            service('payment_app.repository'),
+            service(ClockInterface::class),
+            service(RouteScopeRegistry::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(PaymentApiExceptionSubscriber::class)
+        ->tag('kernel.event_subscriber');
+
+    $services->set(PaymentController::class)
+        ->public()
+        ->args([
+            service(AbstractPaymentService::class),
+        ]);
+
+    $services->set(PaymentNotificationController::class)
+        ->public()
+        ->args([
+            service(GatewayNotificationService::class),
+        ]);
+
+    $services->set(PaymentApiSchemaController::class)
+        ->public();
 
     foreach ([
         PaymentAppDefinition::class,
