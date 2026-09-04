@@ -5,13 +5,15 @@ namespace Contena\Core\System\Payment\Service;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\Refund\PaymentRefundService;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Contena\Core\System\Payment\Struct\TransferRequest;
+use Contena\Core\System\Payment\Subscription\PaymentSubscriptionService;
 
 /**
  * @internal

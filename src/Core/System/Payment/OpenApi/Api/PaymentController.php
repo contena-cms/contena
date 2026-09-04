@@ -7,7 +7,6 @@ use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;

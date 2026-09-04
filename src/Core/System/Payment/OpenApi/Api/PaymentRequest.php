@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Struct;
+namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\Serializer\Attribute\Ignore;

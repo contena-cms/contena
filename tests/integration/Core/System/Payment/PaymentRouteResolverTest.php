@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Payment;
 
-use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -17,11 +16,10 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\Pa
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
-use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -93,11 +91,10 @@ final class PaymentRouteResolverTest extends TestCase
             $methodRepository,
             $configRepository,
             new GatewayRegistry([$gateway]),
-            static::getContainer()->get(AbstractRuleLoader::class),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve(new PaymentRouteRequest($context, $app, PaymentOperation::PAY, method: 'h5', amount: 1000, currencyCode: 'CNY'));
+        $route = $resolver->resolve($app, $context, new PaymentRequest('route-order', 1000, 'h5', 'Route order'));
 
         static::assertSame($gateway, $route->gateway);
         static::assertSame($configId, $route->channelConfigId);

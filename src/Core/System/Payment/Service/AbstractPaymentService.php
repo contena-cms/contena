@@ -4,7 +4,7 @@ namespace Contena\Core\System\Payment\Service;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;

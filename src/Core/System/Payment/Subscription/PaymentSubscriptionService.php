@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Service;
+namespace Contena\Core\System\Payment\Subscription;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -17,11 +17,10 @@ use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Psr\Clock\ClockInterface;
 
@@ -36,7 +35,7 @@ final class PaymentSubscriptionService
     public function __construct(
         private readonly EntityRepository $paymentRecurringRepository,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
-        private readonly AbstractPaymentRouteResolver $routeResolver,
+        private readonly PaymentGatewayResolver $gatewayResolver,
         private readonly ClockInterface $clock,
     ) {
     }
@@ -54,14 +53,7 @@ final class PaymentSubscriptionService
             return $this->createResultForSubscription($existingSubscription);
         }
 
-        $route = $this->routeResolver->resolve(new PaymentRouteRequest(
-            context: $context,
-            app: $app,
-            operation: PaymentOperation::SUBSCRIBE,
-            preferredChannel: $request->channel,
-            amount: $request->singleAmount,
-            data: $request->extra,
-        ));
+        $route = $this->gatewayResolver->resolveForApp($app, $request->channel, $context);
         if (!$route->gateway instanceof SubscribeHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::SUBSCRIBE);
         }

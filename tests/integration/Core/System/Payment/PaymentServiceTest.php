@@ -45,27 +45,27 @@ use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\Order\PaymentOrderPersister;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Refund\PaymentRefundService;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
-use Contena\Core\System\Payment\Service\PaymentOrderPersister;
 use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Service\PaymentOrderStateHandler;
-use Contena\Core\System\Payment\Service\PaymentRefundService;
 use Contena\Core\System\Payment\Service\PaymentService;
-use Contena\Core\System\Payment\Service\PaymentSubscriptionService;
 use Contena\Core\System\Payment\Service\PaymentTransferService;
 use Contena\Core\System\Payment\Struct\GatewayNotification;
 use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Contena\Core\System\Payment\Struct\TransferRequest;
+use Contena\Core\System\Payment\Subscription\PaymentSubscriptionService;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
@@ -163,12 +163,14 @@ final class PaymentServiceTest extends TestCase
         $paymentChannelNotifyRecordRepository = $this->repository('payment_channel_notify_record');
         /** @var EntityRepository<PaymentNotifyRecordCollection> $paymentNotifyRecordRepository */
         $paymentNotifyRecordRepository = $this->repository('payment_notify_record');
+        $gatewayResolver = new PaymentGatewayResolver($paymentChannelConfigRepository, new GatewayRegistry([$this->gateway]));
         $orderService = new PaymentOrderService(
             $paymentOrderRepository,
             $paymentOrderTransactionRepository,
             static::getContainer()->get(PaymentOrderPersister::class),
             static::getContainer()->get(PaymentOrderStateHandler::class),
             $this->routeResolver,
+            $gatewayResolver,
             $connection,
             $clock,
         );
@@ -176,7 +178,7 @@ final class PaymentServiceTest extends TestCase
             $paymentRefundRepository,
             $orderService,
             $numberRange,
-            $this->routeResolver,
+            $gatewayResolver,
             $connection,
             $clock,
         );
@@ -184,14 +186,14 @@ final class PaymentServiceTest extends TestCase
             $paymentTransferRepository,
             $numberRange,
             $stateMachine,
-            $this->routeResolver,
+            $gatewayResolver,
             $connection,
             $clock,
         );
         $subscriptionService = new PaymentSubscriptionService(
             $paymentRecurringRepository,
             $numberRange,
-            $this->routeResolver,
+            $gatewayResolver,
             $clock,
         );
         $this->paymentService = new PaymentService($orderService, $refundService, $transferService, $subscriptionService);
@@ -215,7 +217,7 @@ final class PaymentServiceTest extends TestCase
         );
     }
 
-    public function testPaymentIsIdempotentAndQueryReusesItsChannelConfiguration(): void
+    public function testPaymentAndQueryReuseItsChannelConfiguration(): void
     {
         $this->gateway->paymentResult = new PaymentResult(
             PaymentStatus::SUCCEEDED,
@@ -234,11 +236,9 @@ final class PaymentServiceTest extends TestCase
         );
 
         $created = $this->paymentService->pay($this->app, $request, $this->context);
-        $repeated = $this->paymentService->pay($this->app, $request, $this->context);
 
         static::assertSame(1, $this->gateway->paymentCalls);
         static::assertSame($created->resourceNo, $this->gateway->lastOrder?->orderNo);
-        static::assertSame($created->resourceNo, $repeated->resourceNo);
         static::assertSame('app-order-1', $created->externalResourceNo);
         static::assertNotSame($created->externalResourceNo, $created->resourceNo);
 
@@ -254,16 +254,19 @@ final class PaymentServiceTest extends TestCase
 
         static::assertSame($created->resourceNo, $queryResult->resourceNo);
         static::assertSame(1, $this->gateway->queryCalls);
-        static::assertSame([[
-            'channel' => $this->gateway->code(),
-            'channelConfigId' => $this->routeResolver->route->channelConfigId,
-            'operation' => 'query',
-        ]], $this->routeResolver->configuredCalls);
-
         $queriedOrder = $this->loadOrder('app-order-1');
         static::assertSame($primaryTransactionId, $queriedOrder->primaryTransactionId);
         static::assertEquals($this->gateway->paymentResult->toArray(), $queriedOrder->primaryTransaction?->responseData);
-        static::assertSame($created->action, $this->paymentService->pay($this->app, $request, $this->context)->action);
+    }
+
+    public function testPaymentRejectsAnyExistingExternalOrderReference(): void
+    {
+        $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED, providerResourceId: 'provider-trade-duplicate');
+        $this->paymentService->pay($this->app, new PaymentRequest('duplicate-order', 1000, 'h5', 'Original order', 'CNY'), $this->context);
+
+        $this->expectExceptionObject(PaymentException::duplicateReference('duplicate-order'));
+
+        $this->paymentService->pay($this->app, new PaymentRequest('duplicate-order', 2000, 'pc', 'Changed order', 'USD'), $this->context);
     }
 
     public function testPendingGatewayResultKeepsTheTransactionProcessing(): void
@@ -693,11 +696,6 @@ final class PaymentServiceTest extends TestCase
  */
 final class WorkflowRouteResolver extends AbstractPaymentRouteResolver
 {
-    /**
-     * @var list<array{channel: string, channelConfigId: string, operation: string}>
-     */
-    public array $configuredCalls = [];
-
     public function __construct(public readonly PaymentRoute $route)
     {
     }
@@ -707,17 +705,14 @@ final class WorkflowRouteResolver extends AbstractPaymentRouteResolver
         throw new DecorationPatternException(self::class);
     }
 
-    public function resolve(PaymentRouteRequest $request): PaymentRoute
-    {
+    public function resolve(
+        PaymentAppEntity $app,
+        Context $context,
+        PaymentRequest $request,
+    ): PaymentRoute {
         return $this->route;
     }
 
-    public function resolveConfigured(string $channel, string $channelConfigId, string $operation, Context $context): PaymentRoute
-    {
-        $this->configuredCalls[] = \compact('channel', 'channelConfigId', 'operation');
-
-        return $this->route;
-    }
 }
 
 /**

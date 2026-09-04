@@ -27,21 +27,4 @@ final class GatewayRegistry
     {
         return $this->gateways[$code] ?? throw PaymentException::gatewayNotFound($code);
     }
-
-    public function supports(string $code, string $operation): bool
-    {
-        $gateway = $this->gateways[$code] ?? null;
-        if (!$gateway instanceof GatewayInterface) {
-            return false;
-        }
-
-        return match ($operation) {
-            PaymentOperation::PAY => $gateway instanceof PaymentHandlerInterface,
-            PaymentOperation::QUERY => $gateway instanceof QueryHandlerInterface,
-            PaymentOperation::REFUND => $gateway instanceof RefundHandlerInterface,
-            PaymentOperation::TRANSFER => $gateway instanceof TransferHandlerInterface,
-            PaymentOperation::SUBSCRIBE => $gateway instanceof SubscribeHandlerInterface,
-            default => false,
-        };
-    }
 }

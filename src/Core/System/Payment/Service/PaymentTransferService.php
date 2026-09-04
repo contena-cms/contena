@@ -17,11 +17,10 @@ use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\TransferRequest;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\StateMachine\Transition;
@@ -40,7 +39,7 @@ final class PaymentTransferService
         private readonly EntityRepository $paymentTransferRepository,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
         private readonly StateMachineRegistry $stateMachineRegistry,
-        private readonly AbstractPaymentRouteResolver $routeResolver,
+        private readonly PaymentGatewayResolver $gatewayResolver,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
     ) {
@@ -57,15 +56,7 @@ final class PaymentTransferService
             return $this->createResultForTransfer($existingTransfer);
         }
 
-        $route = $this->routeResolver->resolve(new PaymentRouteRequest(
-            context: $context,
-            app: $app,
-            operation: PaymentOperation::TRANSFER,
-            preferredChannel: $request->channel,
-            amount: $request->amount,
-            currencyCode: strtoupper($request->currencyCode),
-            data: $request->extra,
-        ));
+        $route = $this->gatewayResolver->resolveForApp($app, $request->channel, $context);
         if (!$route->gateway instanceof TransferHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::TRANSFER);
         }

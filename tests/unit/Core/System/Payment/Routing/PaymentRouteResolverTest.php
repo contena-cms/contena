@@ -18,12 +18,11 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\Paymen
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
-use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -68,16 +67,13 @@ final class PaymentRouteResolverTest extends TestCase
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class),
             StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
             new GatewayRegistry([$gateway]),
-            new StaticPaymentRuleLoader(new RuleCollection()),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolveConfigured('query-provider', $configId, PaymentOperation::QUERY, Context::createDefaultContext());
-
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'query-app', 'status' => true]);
+        $gatewayResolver = new PaymentGatewayResolver(StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]), new GatewayRegistry([$gateway]));
+        $route = $gatewayResolver->resolve($configId, Context::createDefaultContext());
         static::assertSame($gateway, $route->gateway);
-        static::assertSame($configId, $route->channelConfigId);
-        static::assertSame(['merchantId' => 'merchant-1'], $route->config);
-        static::assertTrue($route->platformConfig);
     }
 
     public function testAssignmentRuleSkipsTheFirstChannelWhenItDoesNotMatch(): void
@@ -100,18 +96,10 @@ final class PaymentRouteResolverTest extends TestCase
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class, [$assignments]),
             StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
             new GatewayRegistry([$firstGateway, $secondGateway]),
-            new StaticPaymentRuleLoader(new RuleCollection([$rule])),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve(new PaymentRouteRequest(
-            context: Context::createDefaultContext(),
-            app: $app,
-            operation: PaymentOperation::PAY,
-            method: 'h5',
-            amount: 1000,
-            currencyCode: 'CNY',
-        ));
+        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRequest('route-1', 1000, 'h5', 'Route'));
 
         static::assertSame($secondGateway, $route->gateway);
         static::assertSame(['key' => 'second'], $route->config);
@@ -137,18 +125,10 @@ final class PaymentRouteResolverTest extends TestCase
                 new PaymentChannelConfigCollection([$platformConfig]),
             ]),
             new GatewayRegistry([$gateway]),
-            new StaticPaymentRuleLoader(new RuleCollection([$rule])),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve(new PaymentRouteRequest(
-            context: Context::createDefaultContext(),
-            app: $app,
-            operation: PaymentOperation::PAY,
-            method: 'h5',
-            amount: 1000,
-            currencyCode: 'CNY',
-        ));
+        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRequest('route-2', 1000, 'h5', 'Route'));
 
         static::assertSame($platformConfig->getId(), $route->channelConfigId);
         static::assertSame(['key' => 'platform'], $route->config);

@@ -11,8 +11,8 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregate\Paym
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderStates;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 
@@ -41,35 +41,33 @@ final class PaymentOrderConverter
         $currencyCode = strtoupper($request->currencyCode);
         $channelCode = $route->gateway->code();
 
+        $orderData = [
+            'paymentAppId' => $app->getId(),
+            'orderNo' => $orderNo,
+            'externalOrderNo' => $request->externalOrderNo,
+            'currencyCode' => $currencyCode,
+            'channelCode' => $channelCode,
+            'methodCode' => $request->method,
+            'deviceType' => $request->deviceType ?? $request->method,
+            'subject' => $request->subject,
+            'clientIp' => $request->clientIp,
+            'channelExtra' => $request->extra,
+            'notifyUrl' => $request->notifyUrl,
+            'returnUrl' => $request->returnUrl,
+            'channelConfigId' => $route->channelConfigId,
+            'stateId' => $this->initialStateId(PaymentOrderStates::STATE_MACHINE, $context),
+        ];
+
         return [
             'orderId' => $orderId,
             'transactionId' => $transactionId,
-            'order' => [
+            'order' => $orderData + [
                 'id' => $orderId,
-                'paymentAppId' => $app->getId(),
-                'orderNo' => $orderNo,
-                'externalOrderNo' => $request->externalOrderNo,
                 'amount' => $request->amount,
-                'currencyCode' => $currencyCode,
-                'channelCode' => $channelCode,
-                'methodCode' => $request->method,
-                'deviceType' => $request->deviceType ?? $request->method,
-                'subject' => $request->subject,
-                'clientIp' => $request->clientIp,
-                'channelExtra' => $request->extra,
-                'notifyUrl' => $request->notifyUrl,
-                'returnUrl' => $request->returnUrl,
-                'channelConfigId' => $route->channelConfigId,
-                'stateId' => $this->initialStateId(PaymentOrderStates::STATE_MACHINE, $context),
-                'transactions' => [$this->initialTransaction(
-                    $transactionId,
-                    $transactionNo,
-                    $channelCode,
-                    $request,
-                    $context,
-                )],
+                'transactions' => [$this->initialTransaction($transactionId, $transactionNo, $channelCode, $request, $context)],
             ],
         ];
+
     }
 
     /**

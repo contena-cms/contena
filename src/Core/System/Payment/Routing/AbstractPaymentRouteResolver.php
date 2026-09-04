@@ -3,14 +3,17 @@
 namespace Contena\Core\System\Payment\Routing;
 
 use Contena\Core\Framework\Context;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 
 abstract class AbstractPaymentRouteResolver
 {
     abstract public function getDecorated(): self;
 
-    abstract public function resolve(PaymentRouteRequest $request): PaymentRoute;
-
-    abstract public function resolveConfigured(string $channel, string $channelConfigId, string $operation, Context $context): PaymentRoute;
+    abstract public function resolve(
+        PaymentAppEntity $app,
+        Context $context,
+        PaymentRequest $request,
+    ): PaymentRoute;
 }

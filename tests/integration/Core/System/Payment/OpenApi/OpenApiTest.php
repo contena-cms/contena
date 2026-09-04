@@ -15,11 +15,11 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiResponse;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;

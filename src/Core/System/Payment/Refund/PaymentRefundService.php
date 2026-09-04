@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Service;
+namespace Contena\Core\System\Payment\Refund;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,7 +19,8 @@ use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
+use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;
@@ -39,7 +40,7 @@ final class PaymentRefundService
         private readonly EntityRepository $paymentRefundRepository,
         private readonly PaymentOrderService $paymentOrderService,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
-        private readonly AbstractPaymentRouteResolver $routeResolver,
+        private readonly PaymentGatewayResolver $gatewayResolver,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
     ) {
@@ -65,7 +66,7 @@ final class PaymentRefundService
             return $this->createResultForRefund($existingRefund);
         }
 
-        $route = $this->routeResolver->resolveConfigured($order->channelCode, $order->channelConfigId, PaymentOperation::REFUND, $context);
+        $route = $this->gatewayResolver->resolve($order->channelConfigId, $context);
         if (!$route->gateway instanceof RefundHandlerInterface) {
             throw PaymentException::capabilityNotSupported($order->channelCode, PaymentOperation::REFUND);
         }

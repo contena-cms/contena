@@ -76,8 +76,8 @@ class PaymentException extends HttpException
         return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::REFUND_AMOUNT_EXCEEDED, 'The refundable balance is less than {{ amount }}.', ['amount' => $amount]);
     }
 
-    public static function routeNotFound(string $appId, string $operation, ?string $method = null): self
+    public static function routeNotFound(string $appId, ?string $method = null): self
     {
-        return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::ROUTE_NOT_FOUND, 'No payment route is available for app "{{ appId }}", operation "{{ operation }}" and method "{{ method }}".', ['appId' => $appId, 'operation' => $operation, 'method' => $method ?? '-']);
+        return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::ROUTE_NOT_FOUND, 'No payment route is available for app "{{ appId }}" and method "{{ method }}".', ['appId' => $appId, 'method' => $method ?? '-']);
     }
 }

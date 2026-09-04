@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Service;
+namespace Contena\Core\System\Payment\Order;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -8,7 +8,8 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregate\PaymentOrderTransaction\PaymentOrderTransactionCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
-use Contena\Core\System\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\Service\PaymentOrderCreation;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
 
 /**

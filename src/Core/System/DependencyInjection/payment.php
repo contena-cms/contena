@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\Aggregate\PaymentAppTranslation\PaymentAppTranslationDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
@@ -28,7 +27,11 @@ use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
 use Contena\Core\System\Payment\OpenApi\PaymentAppValueResolver;
 use Contena\Core\System\Payment\OpenApi\Subscriber\PaymentAppValidator;
+use Contena\Core\System\Payment\Order\PaymentOrderConverter;
+use Contena\Core\System\Payment\Order\PaymentOrderPersister;
+use Contena\Core\System\Payment\Refund\PaymentRefundService;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\ScheduledTask\AppNotificationDeliveryTask;
 use Contena\Core\System\Payment\ScheduledTask\AppNotificationDeliveryTaskHandler;
@@ -36,21 +39,17 @@ use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Service\AppNotificationService;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
-use Contena\Core\System\Payment\Service\PaymentOrderConverter;
-use Contena\Core\System\Payment\Service\PaymentOrderPersister;
 use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Service\PaymentOrderStateHandler;
-use Contena\Core\System\Payment\Service\PaymentRefundService;
 use Contena\Core\System\Payment\Service\PaymentService;
-use Contena\Core\System\Payment\Service\PaymentSubscriptionService;
 use Contena\Core\System\Payment\Service\PaymentTransferService;
+use Contena\Core\System\Payment\Subscription\PaymentSubscriptionService;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\RequestStack;
-
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -74,10 +73,14 @@ return static function (ContainerConfigurator $container): void {
             service('payment_app_channel_method.repository'),
             service('payment_channel_config.repository'),
             service(GatewayRegistry::class),
-            service(AbstractRuleLoader::class),
             service('event_dispatcher'),
         ]);
     $services->alias(AbstractPaymentRouteResolver::class, PaymentRouteResolver::class);
+    $services->set(PaymentGatewayResolver::class)
+        ->args([
+            service('payment_channel_config.repository'),
+            service(GatewayRegistry::class),
+        ]);
 
     $services->set(PaymentOrderService::class)
         ->args([
@@ -85,7 +88,8 @@ return static function (ContainerConfigurator $container): void {
             service('payment_order_transaction.repository'),
             service(PaymentOrderPersister::class),
             service(PaymentOrderStateHandler::class),
-            service(AbstractPaymentRouteResolver::class),
+            service(PaymentGatewayResolver::class),
+            service(PaymentGatewayResolver::class),
             service(Connection::class),
             service(ClockInterface::class),
         ]);
@@ -109,7 +113,7 @@ return static function (ContainerConfigurator $container): void {
             service('payment_refund.repository'),
             service(PaymentOrderService::class),
             service(AbstractNumberRangeValueGenerator::class),
-            service(AbstractPaymentRouteResolver::class),
+            service(PaymentGatewayResolver::class),
             service(Connection::class),
             service(ClockInterface::class),
         ]);
@@ -118,7 +122,7 @@ return static function (ContainerConfigurator $container): void {
             service('payment_transfer.repository'),
             service(AbstractNumberRangeValueGenerator::class),
             service(StateMachineRegistry::class),
-            service(AbstractPaymentRouteResolver::class),
+            service(PaymentGatewayResolver::class),
             service(Connection::class),
             service(ClockInterface::class),
         ]);
@@ -126,7 +130,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service('payment_recurring.repository'),
             service(AbstractNumberRangeValueGenerator::class),
-            service(AbstractPaymentRouteResolver::class),
+            service(PaymentGatewayResolver::class),
             service(ClockInterface::class),
         ]);
     $services->set(PaymentService::class)
