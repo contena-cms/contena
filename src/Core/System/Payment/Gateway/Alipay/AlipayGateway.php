@@ -11,7 +11,6 @@ use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\Gateway\ProviderResultMapper;
 use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
@@ -19,7 +18,10 @@ use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Struct\GatewayNotification;
 use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentResult;
+use Psr\Http\Message\ResponseInterface;
+use Yansongda\Artful\Rocket;
 use Yansongda\Pay\Pay;
+use Yansongda\Supports\Collection;
 
 /**
  * @internal
@@ -52,12 +54,12 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
             '_return_url' => $order->returnUrl,
         ]);
 
-        return ProviderResultMapper::paymentResult(ProviderResultMapper::data($this->call($config, $action, $parameters)), PaymentStatus::PENDING, $order->methodCode);
+        return $this->mapPayResult($this->responseData($this->call($config, $action, $parameters)), $order->methodCode);
     }
 
     public function query(PaymentOrderEntity $order, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'query', array_filter([
+        $data = $this->responseData($this->call($config, 'query', array_filter([
             'out_trade_no' => $order->orderNo,
             'trade_no' => $order->channelTradeNo,
         ])));
@@ -68,12 +70,12 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
             default => PaymentStatus::UNKNOWN,
         };
 
-        return ProviderResultMapper::paymentResult($data, $status);
+        return $this->result($data, $status, 'out_trade_no', ['trade_no']);
     }
 
     public function refund(PaymentRefundEntity $refund, PaymentOrderEntity $order, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'refund', array_filter([
+        $data = $this->responseData($this->call($config, 'refund', array_filter([
             'out_trade_no' => $order->orderNo,
             'trade_no' => $order->channelTradeNo,
             'out_request_no' => $refund->refundNo,
@@ -82,12 +84,12 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
         ])));
         $status = ($data['code'] ?? null) === '10000' ? PaymentStatus::SUCCEEDED : PaymentStatus::FAILED;
 
-        return ProviderResultMapper::paymentResult($data, $status);
+        return $this->result($data, $status, 'out_request_no', ['refund_id', 'trade_no']);
     }
 
     public function transfer(PaymentTransferEntity $transfer, array $config): PaymentResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'transfer', array_replace($transfer->channelExtra ?? [], [
+        $data = $this->responseData($this->call($config, 'transfer', array_replace($transfer->channelExtra ?? [], [
             'out_biz_no' => $transfer->transferNo,
             'trans_amount' => number_format($transfer->amount / 100, 2, '.', ''),
             'product_code' => 'TRANS_ACCOUNT_NO_PWD',
@@ -97,12 +99,12 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
         ])));
         $status = ($data['code'] ?? null) === '10000' ? PaymentStatus::SUCCEEDED : PaymentStatus::FAILED;
 
-        return ProviderResultMapper::paymentResult($data, $status);
+        return $this->result($data, $status, 'out_biz_no', ['order_id']);
     }
 
     public function handleNotification(GatewayNotification $notification, array $config): GatewayNotificationResult
     {
-        $data = ProviderResultMapper::data($this->call($config, 'callback', $notification->parameters));
+        $data = $this->responseData($this->call($config, 'callback', $notification->parameters));
         $type = $this->notificationType($data);
         $resourceNo = $this->notificationResourceNo($data, $type);
         $status = $this->notificationStatus($data, $type);
@@ -110,9 +112,98 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, QueryHand
         return new GatewayNotificationResult(
             $type,
             $resourceNo,
-            ProviderResultMapper::paymentResult($data, $status),
+            $this->mapNotificationResult($data, $status, $type),
             'success',
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function responseData(mixed $response): array
+    {
+        if ($response instanceof Collection) {
+            return $response->all();
+        }
+        if ($response instanceof Rocket) {
+            return $this->responseData($response->getDestination() ?? $response->getPayload());
+        }
+        if ($response instanceof ResponseInterface) {
+            return [
+                '_http_status' => $response->getStatusCode(),
+                '_headers' => $response->getHeaders(),
+                '_body' => (string) $response->getBody(),
+            ];
+        }
+        if (\is_array($response)) {
+            return $response;
+        }
+
+        return ['value' => $response];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function mapPayResult(array $data, string $method): PaymentResult
+    {
+        $action = PaymentResult::ACTION_NONE;
+        $actionValue = null;
+
+        if (\is_string($data['_body'] ?? null) && $data['_body'] !== '') {
+            $action = $method === PaymentMethods::APP ? PaymentResult::ACTION_CLIENT : PaymentResult::ACTION_HTML;
+            $actionValue = $data['_body'];
+        } elseif (\is_string($data['h5_url'] ?? null) && $data['h5_url'] !== '') {
+            $action = PaymentResult::ACTION_REDIRECT;
+            $actionValue = $data['h5_url'];
+        }
+
+        return $this->result($data, PaymentStatus::PENDING, 'out_trade_no', ['trade_no'], $action, $actionValue);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param list<string> $resourceKeys
+     */
+    private function result(array $data, string $status, string $requestKey, array $resourceKeys, string $action = PaymentResult::ACTION_NONE, ?string $actionValue = null): PaymentResult
+    {
+        return new PaymentResult(
+            $status,
+            $action,
+            $actionValue,
+            $this->string($data, $requestKey),
+            $this->string($data, ...$resourceKeys),
+            $this->string($data, 'code', 'result_code'),
+            $this->string($data, 'msg', 'message', 'sub_msg'),
+            $data,
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function mapNotificationResult(array $data, string $status, int $type): PaymentResult
+    {
+        return match ($type) {
+            PaymentNotificationTypes::REFUND => $this->result($data, $status, 'out_request_no', ['refund_id', 'trade_no']),
+            PaymentNotificationTypes::TRANSFER => $this->result($data, $status, 'out_biz_no', ['order_id']),
+            PaymentNotificationTypes::SUBSCRIPTION => $this->result($data, $status, 'external_agreement_no', ['agreement_no', 'contract_id']),
+            default => $this->result($data, $status, 'out_trade_no', ['trade_no']),
+        };
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function string(array $data, string ...$keys): ?string
+    {
+        foreach ($keys as $key) {
+            if (\is_scalar($data[$key] ?? null)) {
+                return (string) $data[$key];
+            }
+        }
+
+        return null;
     }
 
     /**

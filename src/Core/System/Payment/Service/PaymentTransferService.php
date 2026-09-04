@@ -13,9 +13,6 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTran
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferStates;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallCompletedEvent;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallFailedEvent;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallStartedEvent;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
@@ -24,12 +21,12 @@ use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\PaymentRoute;
 use Contena\Core\System\Payment\Struct\TransferRequest;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\StateMachine\Transition;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -44,7 +41,6 @@ final class PaymentTransferService
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
         private readonly StateMachineRegistry $stateMachineRegistry,
         private readonly AbstractPaymentRouteResolver $routeResolver,
-        private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
     ) {
@@ -74,28 +70,9 @@ final class PaymentTransferService
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::TRANSFER);
         }
 
-        $transferId = Uuid::randomHex();
-        $transferNo = $this->numberRangeValueGenerator->getValue(PaymentTransferDefinition::ENTITY_NAME, $context);
-        $this->paymentTransferRepository->create([[
-            'id' => $transferId,
-            'paymentAppId' => $app->getId(),
-            'transferNo' => $transferNo,
-            'externalTransferNo' => $request->externalTransferNo,
-            'amount' => $request->amount,
-            'currencyCode' => strtoupper($request->currencyCode),
-            'channelCode' => $route->gateway->code(),
-            'channelConfigId' => $route->channelConfigId,
-            'stateId' => $this->initialStateId($context),
-            'payee' => $request->payee,
-            'payeeName' => $request->payeeName,
-            'remark' => $request->remark,
-            'notifyUrl' => $request->notifyUrl,
-            'channelExtra' => $request->extra,
-        ]], $context);
+        $transferId = $this->createTransfer($app, $request, $route, $context);
 
         $transfer = $this->loadTransfer($transferId, $context);
-        $this->eventDispatcher->dispatch(new PaymentGatewayCallStartedEvent(PaymentTransferDefinition::ENTITY_NAME, $transfer->getId(), $transfer->transferNo, PaymentOperation::TRANSFER, $transfer->channelCode, $transfer->channelConfigId, $context));
-
         try {
             $result = $route->gateway->transfer($transfer, $route->config);
         } catch (\Throwable $exception) {
@@ -103,13 +80,10 @@ final class PaymentTransferService
                 'id' => $transfer->getId(),
                 'resultMessage' => $exception->getMessage(),
             ]], $context);
-            $this->eventDispatcher->dispatch(new PaymentGatewayCallFailedEvent(PaymentTransferDefinition::ENTITY_NAME, $transfer->getId(), $transfer->transferNo, PaymentOperation::TRANSFER, $transfer->channelCode, $transfer->channelConfigId, $exception, $context));
-
             throw $exception;
         }
 
         $this->persistResult($transfer, $result, $context);
-        $this->eventDispatcher->dispatch(new PaymentGatewayCallCompletedEvent(PaymentTransferDefinition::ENTITY_NAME, $transfer->getId(), $transfer->transferNo, PaymentOperation::TRANSFER, $transfer->channelCode, $transfer->channelConfigId, $result, $context));
 
         return $result->withResource($transfer->transferNo, $transfer->externalTransferNo);
     }
@@ -201,5 +175,29 @@ final class PaymentTransferService
         if ($transfer->amount !== $request->amount || $transfer->currencyCode !== strtoupper($request->currencyCode) || $transfer->payee !== $request->payee) {
             throw PaymentException::duplicateReference($request->externalTransferNo);
         }
+    }
+
+    private function createTransfer(PaymentAppEntity $app, TransferRequest $request, PaymentRoute $route, Context $context): string
+    {
+        $transferId = Uuid::randomHex();
+
+        $this->paymentTransferRepository->create([[
+            'id' => $transferId,
+            'paymentAppId' => $app->getId(),
+            'transferNo' => $this->numberRangeValueGenerator->getValue(PaymentTransferDefinition::ENTITY_NAME, $context),
+            'externalTransferNo' => $request->externalTransferNo,
+            'amount' => $request->amount,
+            'currencyCode' => strtoupper($request->currencyCode),
+            'channelCode' => $route->gateway->code(),
+            'channelConfigId' => $route->channelConfigId,
+            'stateId' => $this->initialStateId($context),
+            'payee' => $request->payee,
+            'payeeName' => $request->payeeName,
+            'remark' => $request->remark,
+            'notifyUrl' => $request->notifyUrl,
+            'channelExtra' => $request->extra,
+        ]], $context);
+
+        return $transferId;
     }
 }

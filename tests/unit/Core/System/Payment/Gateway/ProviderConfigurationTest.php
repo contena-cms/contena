@@ -127,6 +127,25 @@ final class ProviderConfigurationTest extends TestCase
         ], $executor->parameters['amount']);
     }
 
+    public function testWechatRefundMapsRefundReferencesWhenOrderReferenceIsAlsoPresent(): void
+    {
+        $executor = new RecordingGatewayExecutor([
+            'out_trade_no' => 'order-2',
+            'out_refund_no' => 'refund-1',
+            'refund_id' => 'provider-refund-1',
+        ]);
+        $gateway = new WechatGateway($executor);
+
+        $result = $gateway->refund(
+            new PaymentRefundEntity()->assign(['refundNo' => 'refund-1', 'refundAmount' => 1200]),
+            new PaymentOrderEntity()->assign(['orderNo' => 'order-2', 'amount' => 3600, 'currencyCode' => 'CNY']),
+            [],
+        );
+
+        static::assertSame('refund-1', $result->providerRequestId);
+        static::assertSame('provider-refund-1', $result->providerResourceId);
+    }
+
     public function testProviderReceivesPlatformTransferNumber(): void
     {
         $executor = new RecordingGatewayExecutor(['transfer_bill_no' => 'provider-transfer']);

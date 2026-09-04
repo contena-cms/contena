@@ -15,9 +15,6 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefund
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundStatus;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallCompletedEvent;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallFailedEvent;
-use Contena\Core\System\Payment\Event\PaymentGatewayCallStartedEvent;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
@@ -29,7 +26,6 @@ use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -44,7 +40,6 @@ final class PaymentRefundService
         private readonly PaymentOrderService $paymentOrderService,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
         private readonly AbstractPaymentRouteResolver $routeResolver,
-        private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
     ) {
@@ -95,8 +90,6 @@ final class PaymentRefundService
         });
 
         $refund = $this->loadRefund($refundId, $context);
-        $this->dispatchStarted($refund, $order, $context);
-
         try {
             $result = $route->gateway->refund($refund, $order, $route->config);
         } catch (\Throwable $exception) {
@@ -105,13 +98,10 @@ final class PaymentRefundService
                 'status' => PaymentRefundStatus::STATUS_PROCESSING,
                 'resultMessage' => $exception->getMessage(),
             ]], $context);
-            $this->dispatchFailed($refund, $order, $exception, $context);
-
             throw $exception;
         }
 
         $this->persistResult($refund, $order, $result, $context);
-        $this->dispatchCompleted($refund, $order, $result, $context);
 
         return $result->withResource($refund->refundNo, $refund->externalRefundNo);
     }
@@ -134,13 +124,13 @@ final class PaymentRefundService
 
     private function persistResult(PaymentRefundEntity $refund, PaymentOrderEntity $order, PaymentResult $result, Context $context): void
     {
-        $failed = \in_array($result->status, [PaymentStatus::FAILED, PaymentStatus::CLOSED], true);
-        $succeeded = $result->status === PaymentStatus::SUCCEEDED;
+        $status = $this->refundStatus($result->status);
+        $succeeded = $status === PaymentRefundStatus::STATUS_SUCCEEDED;
 
-        $this->connection->transactional(function () use ($refund, $order, $result, $failed, $succeeded, $context): void {
+        $this->connection->transactional(function () use ($refund, $order, $result, $status, $succeeded, $context): void {
             $this->paymentRefundRepository->update([[
                 'id' => $refund->getId(),
-                'status' => $failed ? PaymentRefundStatus::STATUS_FAILED : ($succeeded ? PaymentRefundStatus::STATUS_SUCCEEDED : PaymentRefundStatus::STATUS_PROCESSING),
+                'status' => $status,
                 'channelRefundNo' => $result->providerResourceId,
                 'successTime' => $succeeded ? $this->clock->now() : null,
                 'responseData' => $result->toArray(),
@@ -148,10 +138,19 @@ final class PaymentRefundService
                 'resultMessage' => $result->resultMessage,
             ]], $context);
 
-            if ($failed) {
+            if ($status === PaymentRefundStatus::STATUS_FAILED) {
                 $this->releaseRefundAmount($order, $refund->refundAmount, $context);
             }
         });
+    }
+
+    private function refundStatus(string $status): int
+    {
+        return match ($status) {
+            PaymentStatus::SUCCEEDED => PaymentRefundStatus::STATUS_SUCCEEDED,
+            PaymentStatus::FAILED, PaymentStatus::CLOSED => PaymentRefundStatus::STATUS_FAILED,
+            default => PaymentRefundStatus::STATUS_PROCESSING,
+        };
     }
 
     private function reserveRefundAmount(PaymentOrderEntity $order, int $amount, Context $context): int
@@ -234,20 +233,5 @@ final class PaymentRefundService
 
         return PaymentResult::fromArray($refund->responseData, $status)
             ->withResource($refund->refundNo, $refund->externalRefundNo);
-    }
-
-    private function dispatchStarted(PaymentRefundEntity $refund, PaymentOrderEntity $order, Context $context): void
-    {
-        $this->eventDispatcher->dispatch(new PaymentGatewayCallStartedEvent(PaymentRefundDefinition::ENTITY_NAME, $refund->getId(), $refund->refundNo, PaymentOperation::REFUND, $order->channelCode, $order->channelConfigId, $context));
-    }
-
-    private function dispatchCompleted(PaymentRefundEntity $refund, PaymentOrderEntity $order, PaymentResult $result, Context $context): void
-    {
-        $this->eventDispatcher->dispatch(new PaymentGatewayCallCompletedEvent(PaymentRefundDefinition::ENTITY_NAME, $refund->getId(), $refund->refundNo, PaymentOperation::REFUND, $order->channelCode, $order->channelConfigId, $result, $context));
-    }
-
-    private function dispatchFailed(PaymentRefundEntity $refund, PaymentOrderEntity $order, \Throwable $exception, Context $context): void
-    {
-        $this->eventDispatcher->dispatch(new PaymentGatewayCallFailedEvent(PaymentRefundDefinition::ENTITY_NAME, $refund->getId(), $refund->refundNo, PaymentOperation::REFUND, $order->channelCode, $order->channelConfigId, $exception, $context));
     }
 }

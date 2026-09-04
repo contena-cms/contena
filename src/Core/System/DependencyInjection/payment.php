@@ -40,7 +40,10 @@ use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
+use Contena\Core\System\Payment\Service\PaymentOrderConverter;
+use Contena\Core\System\Payment\Service\PaymentOrderPersister;
 use Contena\Core\System\Payment\Service\PaymentOrderService;
+use Contena\Core\System\Payment\Service\PaymentOrderStateHandler;
 use Contena\Core\System\Payment\Service\PaymentRefundService;
 use Contena\Core\System\Payment\Service\PaymentService;
 use Contena\Core\System\Payment\Service\PaymentSubscriptionService;
@@ -87,12 +90,26 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service('payment_order.repository'),
             service('payment_order_transaction.repository'),
-            service(AbstractNumberRangeValueGenerator::class),
-            service(StateMachineRegistry::class),
+            service(PaymentOrderPersister::class),
+            service(PaymentOrderStateHandler::class),
             service(AbstractPaymentRouteResolver::class),
-            service('event_dispatcher'),
             service(Connection::class),
             service(ClockInterface::class),
+        ]);
+    $services->set(PaymentOrderPersister::class)
+        ->args([
+            service('payment_order.repository'),
+            service('payment_order_transaction.repository'),
+            service(PaymentOrderConverter::class),
+        ]);
+    $services->set(PaymentOrderConverter::class)
+        ->args([
+            service(AbstractNumberRangeValueGenerator::class),
+            service(StateMachineRegistry::class),
+        ]);
+    $services->set(PaymentOrderStateHandler::class)
+        ->args([
+            service(StateMachineRegistry::class),
         ]);
     $services->set(PaymentRefundService::class)
         ->args([
@@ -100,7 +117,6 @@ return static function (ContainerConfigurator $container): void {
             service(PaymentOrderService::class),
             service(AbstractNumberRangeValueGenerator::class),
             service(AbstractPaymentRouteResolver::class),
-            service('event_dispatcher'),
             service(Connection::class),
             service(ClockInterface::class),
         ]);
@@ -110,7 +126,6 @@ return static function (ContainerConfigurator $container): void {
             service(AbstractNumberRangeValueGenerator::class),
             service(StateMachineRegistry::class),
             service(AbstractPaymentRouteResolver::class),
-            service('event_dispatcher'),
             service(Connection::class),
             service(ClockInterface::class),
         ]);
@@ -119,7 +134,6 @@ return static function (ContainerConfigurator $container): void {
             service('payment_recurring.repository'),
             service(AbstractNumberRangeValueGenerator::class),
             service(AbstractPaymentRouteResolver::class),
-            service('event_dispatcher'),
             service(ClockInterface::class),
         ]);
     $services->set(PaymentService::class)

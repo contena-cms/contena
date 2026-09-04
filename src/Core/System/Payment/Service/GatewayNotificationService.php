@@ -17,6 +17,10 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordStatus;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundDefinition;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferDefinition;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\PaymentException;
@@ -233,10 +237,10 @@ final class GatewayNotificationService
     private function targetAssociation(PaymentNotificationTarget $target): array
     {
         return match ($target->entityName) {
-            'payment_order' => ['orderId' => $target->entityId],
-            'payment_refund' => ['refundId' => $target->entityId],
-            'payment_transfer' => ['transferId' => $target->entityId],
-            'payment_recurring' => ['recurringId' => $target->entityId],
+            PaymentOrderDefinition::ENTITY_NAME => ['orderId' => $target->entityId],
+            PaymentRefundDefinition::ENTITY_NAME => ['refundId' => $target->entityId],
+            PaymentTransferDefinition::ENTITY_NAME => ['transferId' => $target->entityId],
+            PaymentRecurringDefinition::ENTITY_NAME => ['recurringId' => $target->entityId],
             default => throw PaymentException::invalidRequest('The payment notification target is not supported.'),
         };
     }
