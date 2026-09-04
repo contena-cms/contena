@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Contena\Core\Content\Rule\AbstractRuleLoader;
-use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
@@ -31,10 +30,10 @@ use Contena\Core\System\Payment\OpenApi\Api\OpenApiSchemaController;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
 use Contena\Core\System\Payment\OpenApi\AppNotificationService;
-use Contena\Core\System\Payment\OpenApi\Authentication\PaymentAppAuthenticationListener;
-use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
+use Contena\Core\System\Payment\OpenApi\PaymentAppValueResolver;
 use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTask;
 use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTaskHandler;
+use Contena\Core\System\Payment\OpenApi\Subscriber\PaymentAppValidator;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
@@ -167,16 +166,15 @@ return static function (ContainerConfigurator $container): void {
             service(Connection::class),
         ]);
 
-    $services->set(OpenApiRouteScope::class)
-        ->tag('contena.route_scope');
-
-    $services->set(PaymentAppAuthenticationListener::class)
+    $services->set(PaymentAppValidator::class)
         ->args([
             service('payment_app.repository'),
             service(ClockInterface::class),
-            service(RouteScopeRegistry::class),
         ])
         ->tag('kernel.event_subscriber');
+
+    $services->set(PaymentAppValueResolver::class)
+        ->tag('controller.argument_value_resolver', ['priority' => 1001]);
 
     $services->set(OpenApiExceptionSubscriber::class)
         ->tag('kernel.event_subscriber');

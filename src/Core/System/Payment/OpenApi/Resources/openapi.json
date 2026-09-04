@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "/payment-api/v1"
+            "url": "/api/payment"
         }
     ],
     "paths": {
@@ -35,7 +35,6 @@
                                             "subject": {"type": "string", "maxLength": 255},
                                             "channel_code": {"type": "string", "maxLength": 32},
                                             "device_type": {"type": "string", "maxLength": 32},
-                                            "client_ip": {"type": "string", "maxLength": 64},
                                             "notify_url": {"type": "string", "format": "uri", "maxLength": 2048},
                                             "return_url": {"type": "string", "format": "uri", "maxLength": 2048},
                                             "channel_extra": {"type": "object", "additionalProperties": true}

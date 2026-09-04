@@ -3,13 +3,16 @@
 namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\PlatformRequest;
-use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
+use Contena\Core\System\Payment\PaymentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException as SymfonyHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 /**
  * @internal
@@ -29,8 +32,7 @@ final class OpenApiExceptionSubscriber implements EventSubscriberInterface
 
     public function onException(ExceptionEvent $event): void
     {
-        $scopes = $event->getRequest()->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []);
-        if (!\is_array($scopes) || !\in_array(OpenApiRouteScope::ID, $scopes, true)) {
+        if (!str_starts_with($event->getRequest()->getPathInfo(), '/api/payment/')) {
             return;
         }
 
@@ -39,6 +41,29 @@ final class OpenApiExceptionSubscriber implements EventSubscriberInterface
             $status = $exception->getStatusCode();
             $code = $exception->getErrorCode();
             $message = $exception->getMessage();
+        } elseif ($exception instanceof SymfonyHttpException) {
+            $status = $exception->getStatusCode();
+            $code = PaymentException::INVALID_REQUEST;
+            $message = $exception->getMessage() !== '' ? $exception->getMessage() : 'The payment request is invalid.';
+
+            $validation = $exception;
+            while ($validation instanceof SymfonyHttpException) {
+                $validation = $validation->getPrevious();
+            }
+            if ($validation instanceof ValidationFailedException) {
+                $requestData = $event->getRequest()->request->all();
+                foreach ($validation->getViolations() as $violation) {
+                    $propertyPath = $violation->getPropertyPath();
+                    $parameter = self::snakeCase($propertyPath);
+                    if ($propertyPath !== '' && ($violation->getConstraint() instanceof NotBlank || !\array_key_exists($parameter, $requestData))) {
+                        $error = OpenApiException::missingParameter($parameter);
+                        $status = $error->getStatusCode();
+                        $code = $error->getErrorCode();
+                        $message = $error->getMessage();
+                        break;
+                    }
+                }
+            }
         } else {
             $status = Response::HTTP_INTERNAL_SERVER_ERROR;
             $code = self::INTERNAL_ERROR;
@@ -46,5 +71,10 @@ final class OpenApiExceptionSubscriber implements EventSubscriberInterface
         }
 
         $event->setResponse(new JsonResponse(OpenApiResponse::error($code, $message), $status));
+    }
+
+    private static function snakeCase(string $propertyPath): string
+    {
+        return strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $propertyPath));
     }
 }

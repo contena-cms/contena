@@ -66,7 +66,10 @@ final class OpenApiTest extends TestCase
 
         if (!self::$sharedPaymentService instanceof OpenApiServiceStub) {
             self::$sharedPaymentService = new OpenApiServiceStub();
-            static::getContainer()->set(PaymentController::class, new PaymentController(self::$sharedPaymentService));
+            static::getContainer()->set(PaymentController::class, new PaymentController(
+                self::$sharedPaymentService,
+                static::getContainer()->get('request_stack'),
+            ));
         }
         self::$sharedPaymentService->reset();
         $this->paymentService = self::$sharedPaymentService;
@@ -87,7 +90,7 @@ final class OpenApiTest extends TestCase
             'channel_extra' => ['buyer_id' => 'buyer-1'],
         ]);
 
-        $this->browser->jsonRequest('POST', '/payment-api/v1/pay', $parameters);
+        $this->browser->jsonRequest('POST', '/api/payment/pay', $parameters);
 
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
@@ -112,12 +115,31 @@ final class OpenApiTest extends TestCase
         static::assertSame(['buyer_id' => 'buyer-1'], $paymentRequest->extra);
     }
 
+    public function testClientIpIsCapturedFromTheHttpRequestInsteadOfThePayload(): void
+    {
+        $this->browser->jsonRequest(
+            'POST',
+            '/api/payment/pay',
+            $this->signed([
+                'external_order_no' => 'app-order-ip',
+                'amount' => 1250,
+                'method_code' => 'h5',
+                'subject' => 'Test order',
+            ]),
+            ['REMOTE_ADDR' => '198.51.100.7'],
+        );
+
+        static::assertSame(Response::HTTP_OK, $this->browser->getResponse()->getStatusCode(), (string) $this->browser->getResponse()->getContent());
+        static::assertInstanceOf(PaymentRequest::class, $this->paymentService->request);
+        static::assertSame('198.51.100.7', $this->paymentService->request->clientIp);
+    }
+
     public function testInvalidSignatureUsesTheOpenApiErrorEnvelope(): void
     {
         $parameters = $this->signed(['order_no' => 'platform-order']);
         $parameters['sign'] = str_repeat('0', 64);
 
-        $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
+        $this->browser->jsonRequest('POST', '/api/payment/query', $parameters);
 
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -133,7 +155,7 @@ final class OpenApiTest extends TestCase
         $parameters['timestamp'] = (string) (time() - SignUtil::TIMESTAMP_TOLERANCE - 1);
         $parameters['sign'] = SignUtil::sign($parameters, self::APP_SECRET);
 
-        $this->browser->jsonRequest('POST', '/payment-api/v1/query', $parameters);
+        $this->browser->jsonRequest('POST', '/api/payment/query', $parameters);
 
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -144,7 +166,7 @@ final class OpenApiTest extends TestCase
 
     public function testMissingRequiredParameterUsesTheOpenApiErrorEnvelope(): void
     {
-        $this->browser->jsonRequest('POST', '/payment-api/v1/pay', $this->signed([
+        $this->browser->jsonRequest('POST', '/api/payment/pay', $this->signed([
             'amount' => 1250,
             'method_code' => 'h5',
             'subject' => 'Test order',
@@ -171,7 +193,7 @@ final class OpenApiTest extends TestCase
 
     public function testServesTheOpenApiContractWithoutAppAuthentication(): void
     {
-        $this->browser->request('GET', '/payment-api/v1/openapi.json');
+        $this->browser->request('GET', '/api/payment/openapi.json');
 
         $response = $this->browser->getResponse();
         static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
@@ -185,7 +207,7 @@ final class OpenApiTest extends TestCase
     {
         $this->browser->request(
             'POST',
-            '/payment-api/v1/notify/alipay/' . Uuid::randomHex(),
+            '/api/payment/notify/alipay/' . Uuid::randomHex(),
             server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_PAYMENT_TEST' => 'header-value'],
             content: '{"event":"payment.succeeded"}',
         );
@@ -218,25 +240,25 @@ final class OpenApiTest extends TestCase
     public static function operationProvider(): iterable
     {
         yield 'query by app order number' => [
-            '/payment-api/v1/query',
+            '/api/payment/query',
             'query',
             ['external_order_no' => 'app-order-1'],
             QueryRequest::class,
         ];
         yield 'refund a platform order' => [
-            '/payment-api/v1/refund',
+            '/api/payment/refund',
             'refund',
             ['order_no' => 'platform-order', 'external_refund_no' => 'app-refund-1', 'refund_amount' => 500],
             RefundRequest::class,
         ];
         yield 'create a recurring agreement' => [
-            '/payment-api/v1/subscribe',
+            '/api/payment/subscribe',
             'subscribe',
             ['external_subscription_no' => 'app-subscription-1', 'channel_code' => 'paypal', 'period' => 1],
             SubscriptionRequest::class,
         ];
         yield 'transfer funds to a payee' => [
-            '/payment-api/v1/transfer',
+            '/api/payment/transfer',
             'transfer',
             ['external_transfer_no' => 'app-transfer-1', 'amount' => 500, 'payee' => 'payee', 'payee_name' => 'Payee'],
             TransferRequest::class,

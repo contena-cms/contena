@@ -1,23 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\OpenApi\Authentication;
+namespace Contena\Core\System\Payment\OpenApi\Subscriber;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
-use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
-use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
-use Contena\Core\System\Payment\OpenApi\OpenApiRouteScope;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Core\System\Payment\PaymentException;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -28,9 +25,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @see \Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest
  */
-final class PaymentAppAuthenticationListener implements EventSubscriberInterface
+final class PaymentAppValidator implements EventSubscriberInterface
 {
-    use RouteScopeCheckTrait;
+    final public const string ATTRIBUTE_PAYMENT_APP = 'contena-payment-app';
 
     /**
      * @param EntityRepository<PaymentAppCollection> $paymentAppRepository
@@ -38,7 +35,6 @@ final class PaymentAppAuthenticationListener implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $paymentAppRepository,
         private readonly ClockInterface $clock,
-        private readonly RouteScopeRegistry $routeScopeRegistry,
     ) {
     }
 
@@ -46,15 +42,20 @@ final class PaymentAppAuthenticationListener implements EventSubscriberInterface
     {
         return [
             KernelEvents::CONTROLLER => [
-                ['authenticate', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_PRIORITY_AUTH_VALIDATE],
+                ['validator', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_CONTEXT_RESOLVE_POST],
             ],
         ];
     }
 
-    public function authenticate(ControllerEvent $event): void
+    public function validator(ControllerEvent $event): void
     {
         $request = $event->getRequest();
-        if (!$request->attributes->get('auth_required', true) || !$this->isRequestScoped($request, OpenApiRouteScope::class)) {
+        if (!$request->attributes->get('payment_auth_required', false)) {
+            return;
+        }
+
+        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT);
+        if (!$context instanceof Context) {
             return;
         }
 
@@ -68,23 +69,13 @@ final class PaymentAppAuthenticationListener implements EventSubscriberInterface
         $criteria->addFilter(new EqualsFilter('appCode', $appCode));
         $criteria->setLimit(1);
         $app = $this->paymentAppRepository->search($criteria, Context::createGlobalContext())->getEntities()->first();
-        if (!$app instanceof PaymentAppEntity || !$app->status) {
+        if ($app === null || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }
         if (!SignUtil::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
             throw OpenApiException::invalidSignature();
         }
 
-        $context = $app->tenantId === null
-            ? Context::createDefaultContext()
-            : Context::createTenantContext($app->tenantId);
-
-        $request->attributes->set(OpenApiRouteScope::ATTRIBUTE_PAYMENT_APP, $app);
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, $context);
-    }
-
-    protected function getScopeRegistry(): RouteScopeRegistry
-    {
-        return $this->routeScopeRegistry;
+        $request->attributes->set(self::ATTRIBUTE_PAYMENT_APP, $app);
     }
 }

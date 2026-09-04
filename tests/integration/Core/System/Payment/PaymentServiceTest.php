@@ -227,9 +227,9 @@ final class PaymentServiceTest extends TestCase
         $request = new PaymentRequest(
             'app-order-1',
             1250,
-            'cny',
             'h5',
             'Order 1',
+            'cny',
             returnUrl: 'https://app.example/return',
         );
 
@@ -270,7 +270,7 @@ final class PaymentServiceTest extends TestCase
     {
         $this->gateway->paymentResult = new PaymentResult(PaymentStatus::PENDING);
 
-        $this->paymentService->pay($this->app, new PaymentRequest('pending-order', 1000, 'CNY', 'h5', 'Pending order'), $this->context);
+        $this->paymentService->pay($this->app, new PaymentRequest('pending-order', 1000, 'h5', 'Pending order', 'CNY'), $this->context);
 
         $order = $this->loadOrder('pending-order');
         static::assertSame(PaymentOrderStates::STATE_PENDING, $order->state?->getTechnicalName());
@@ -280,7 +280,7 @@ final class PaymentServiceTest extends TestCase
     public function testRefundReservationIsReleasedOnlyForAConfirmedFailure(): void
     {
         $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED, providerResourceId: 'provider-trade-2');
-        $this->paymentService->pay($this->app, new PaymentRequest('app-order-2', 1000, 'CNY', 'h5', 'Order 2'), $this->context);
+        $this->paymentService->pay($this->app, new PaymentRequest('app-order-2', 1000, 'h5', 'Order 2', 'CNY'), $this->context);
 
         $this->gateway->refundResult = new PaymentResult(PaymentStatus::FAILED, resultCode: 'REFUSED');
         $failed = $this->paymentService->refund($this->app, new RefundRequest('app-refund-1', 400, externalOrderNo: 'app-order-2'), $this->context);
@@ -307,14 +307,14 @@ final class PaymentServiceTest extends TestCase
 
         $this->expectExceptionObject(PaymentException::appNotFound($disabledApp->appCode));
 
-        $this->paymentService->pay($disabledApp, new PaymentRequest('disabled-app-order', 100, 'CNY', 'h5', 'Disabled app'), $this->context);
+        $this->paymentService->pay($disabledApp, new PaymentRequest('disabled-app-order', 100, 'h5', 'Disabled app', 'CNY'), $this->context);
     }
 
     public function testPaymentRejectsGlobalWriteContext(): void
     {
         $this->expectExceptionObject(PaymentException::invalidRequest('Payment writes require a platform or tenant context.'));
 
-        $this->paymentService->pay($this->app, new PaymentRequest('global-order', 100, 'CNY', 'h5', 'Global context'), Context::createGlobalContext());
+        $this->paymentService->pay($this->app, new PaymentRequest('global-order', 100, 'h5', 'Global context', 'CNY'), Context::createGlobalContext());
     }
 
     public function testTransferAndSubscriptionPersistTheirOwnResults(): void
@@ -352,9 +352,9 @@ final class PaymentServiceTest extends TestCase
         $payment = $this->paymentService->pay($this->app, new PaymentRequest(
             'notified-order',
             1500,
-            'CNY',
             'h5',
             'Notified order',
+            'CNY',
             notifyUrl: 'https://app.example/payment-notify',
         ), $this->context);
         static::assertNotNull($payment->resourceNo);
@@ -400,7 +400,7 @@ final class PaymentServiceTest extends TestCase
     public function testNotificationRejectsAResourceCreatedWithAnotherConfiguration(): void
     {
         $this->gateway->paymentResult = new PaymentResult(PaymentStatus::PENDING);
-        $payment = $this->paymentService->pay($this->app, new PaymentRequest('wrong-config-order', 500, 'CNY', 'h5', 'Wrong config'), $this->context);
+        $payment = $this->paymentService->pay($this->app, new PaymentRequest('wrong-config-order', 500, 'h5', 'Wrong config', 'CNY'), $this->context);
         static::assertNotNull($payment->resourceNo);
 
         $otherConfigId = Uuid::randomHex();
@@ -433,7 +433,7 @@ final class PaymentServiceTest extends TestCase
     public function testRefundFailureNotificationReleasesTheReservedAmount(): void
     {
         $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED);
-        $this->paymentService->pay($this->app, new PaymentRequest('refund-notify-order', 1000, 'CNY', 'h5', 'Refund notify'), $this->context);
+        $this->paymentService->pay($this->app, new PaymentRequest('refund-notify-order', 1000, 'h5', 'Refund notify', 'CNY'), $this->context);
         $this->gateway->refundResult = new PaymentResult(PaymentStatus::PROCESSING);
         $refund = $this->paymentService->refund($this->app, new RefundRequest('refund-notify', 400, externalOrderNo: 'refund-notify-order'), $this->context);
         static::assertNotNull($refund->resourceNo);
