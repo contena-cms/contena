@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Tests\Integration\Core\System\Payment\OpenApi;
+namespace Contena\Tests\Integration\Core\System\Payment\Service;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -15,9 +15,9 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\Payment
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordStatus;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderStates;
-use Contena\Core\System\Payment\OpenApi\AppNotificationService;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
+use Contena\Core\System\Payment\Service\AppNotificationService;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;

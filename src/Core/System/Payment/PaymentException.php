@@ -3,13 +3,13 @@
 namespace Contena\Core\System\Payment;
 
 use Contena\Core\Framework\HttpException;
+use Contena\Core\System\Payment\Exception\PaymentAppNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PaymentException extends HttpException
 {
     final public const string APP_NOT_FOUND = 'PAYMENT__APP_NOT_FOUND';
     final public const string CAPABILITY_NOT_SUPPORTED = 'PAYMENT__CAPABILITY_NOT_SUPPORTED';
-    final public const string CHANNEL_CONFIG_INVALID = 'PAYMENT__CHANNEL_CONFIG_INVALID';
     final public const string CHANNEL_CONFIG_NOT_FOUND = 'PAYMENT__CHANNEL_CONFIG_NOT_FOUND';
     final public const string DUPLICATE_REFERENCE = 'PAYMENT__DUPLICATE_REFERENCE';
     final public const string GATEWAY_NOT_FOUND = 'PAYMENT__GATEWAY_NOT_FOUND';
@@ -23,20 +23,12 @@ class PaymentException extends HttpException
 
     public static function appNotFound(string $code): self
     {
-        return new self(Response::HTTP_UNAUTHORIZED, self::APP_NOT_FOUND, 'Payment app "{{ code }}" was not found or is disabled.', ['code' => $code]);
+        return new PaymentAppNotFoundException($code);
     }
 
     public static function capabilityNotSupported(string $channel, string $operation): self
     {
         return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::CAPABILITY_NOT_SUPPORTED, 'Payment channel "{{ channel }}" does not support "{{ operation }}".', ['channel' => $channel, 'operation' => $operation]);
-    }
-
-    /**
-     * @param list<string> $fields
-     */
-    public static function invalidChannelConfig(string $channel, array $fields): self
-    {
-        return new self(Response::HTTP_UNPROCESSABLE_ENTITY, self::CHANNEL_CONFIG_INVALID, 'Payment channel "{{ channel }}" has invalid configuration fields: {{ fields }}.', ['channel' => $channel, 'fields' => implode(', ', $fields)]);
     }
 
     public static function channelConfigNotFound(string $id): self

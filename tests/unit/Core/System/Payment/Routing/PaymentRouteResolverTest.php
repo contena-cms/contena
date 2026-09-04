@@ -8,7 +8,6 @@ use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Rule\SimpleRule;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodEntity;
@@ -69,7 +68,6 @@ final class PaymentRouteResolverTest extends TestCase
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class),
             StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
             new GatewayRegistry([$gateway]),
-            new ChannelConfigValidator(),
             new StaticPaymentRuleLoader(new RuleCollection()),
             new EventDispatcher(),
         );
@@ -102,7 +100,6 @@ final class PaymentRouteResolverTest extends TestCase
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class, [$assignments]),
             StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
             new GatewayRegistry([$firstGateway, $secondGateway]),
-            new ChannelConfigValidator(),
             new StaticPaymentRuleLoader(new RuleCollection([$rule])),
             new EventDispatcher(),
         );
@@ -140,7 +137,6 @@ final class PaymentRouteResolverTest extends TestCase
                 new PaymentChannelConfigCollection([$platformConfig]),
             ]),
             new GatewayRegistry([$gateway]),
-            new ChannelConfigValidator(),
             new StaticPaymentRuleLoader(new RuleCollection([$rule])),
             new EventDispatcher(),
         );

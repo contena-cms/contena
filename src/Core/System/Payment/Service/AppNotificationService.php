@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\OpenApi;
+namespace Contena\Core\System\Payment\Service;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -20,14 +20,15 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEn
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
+use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
-use Contena\Tests\Integration\Core\System\Payment\OpenApi\AppNotificationServiceTest;
+use Contena\Tests\Integration\Core\System\Payment\Service\AppNotificationServiceTest;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Delivers the provider-neutral status notifications owned by the OpenApi boundary.
+ * Delivers provider-neutral payment status notifications to applications.
  *
  * @internal
  *

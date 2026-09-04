@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Rule\Rule;
-use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigCollection;
@@ -36,7 +35,6 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         private readonly EntityRepository $methodRepository,
         private readonly EntityRepository $configRepository,
         private readonly GatewayRegistry $gatewayRegistry,
-        private readonly ChannelConfigValidator $configValidator,
         private readonly AbstractRuleLoader $ruleLoader,
         private readonly EventDispatcherInterface $eventDispatcher,
     ) {
@@ -64,7 +62,6 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
             }
 
             $values = $config->config ?? [];
-            $this->configValidator->validate($channel, $config->channel->configSchema ?? [], $values);
             $route = new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $values, $config->paymentAppId === null);
             $event = new PaymentRouteResolvedEvent($route, $request);
             $this->eventDispatcher->dispatch($event);
@@ -88,7 +85,6 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         }
 
         $values = $config->config ?? [];
-        $this->configValidator->validate($channel, $config->channel->configSchema ?? [], $values);
 
         return new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $values, $config->paymentAppId === null);
     }

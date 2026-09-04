@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_8\Migration1786016192ContenaBasicData;
-use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigCollection;
@@ -94,7 +93,6 @@ final class PaymentRouteResolverTest extends TestCase
             $methodRepository,
             $configRepository,
             new GatewayRegistry([$gateway]),
-            new ChannelConfigValidator(),
             static::getContainer()->get(AbstractRuleLoader::class),
             new EventDispatcher(),
         );

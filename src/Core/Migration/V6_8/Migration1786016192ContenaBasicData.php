@@ -14,7 +14,6 @@ use Contena\Core\Migration\Traits\StateMachineMigration;
 use Contena\Core\Migration\Traits\StateMachineMigrationTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\System\DataDictionary\DataDictionaryDefinition;
-use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Doctrine\DBAL\Connection;
@@ -1316,7 +1315,7 @@ HTML,
 
     private function createPaymentChannels(Connection $connection): void
     {
-        $reader = new ChannelConfigReader(new ConfigReader());
+        $reader = new ConfigReader();
         $channels = [
             'alipay' => [
                 'sort' => 10,

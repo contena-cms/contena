@@ -2,8 +2,6 @@
 
 use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
-use Contena\Core\System\Payment\Configuration\ChannelConfigReader;
-use Contena\Core\System\Payment\Configuration\ChannelConfigValidator;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\Aggregate\PaymentAppTranslation\PaymentAppTranslationDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodDefinition;
@@ -29,14 +27,14 @@ use Contena\Core\System\Payment\OpenApi\Api\OpenApiExceptionSubscriber;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiSchemaController;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
-use Contena\Core\System\Payment\OpenApi\AppNotificationService;
 use Contena\Core\System\Payment\OpenApi\PaymentAppValueResolver;
-use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTask;
-use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTaskHandler;
 use Contena\Core\System\Payment\OpenApi\Subscriber\PaymentAppValidator;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
+use Contena\Core\System\Payment\ScheduledTask\AppNotificationDeliveryTask;
+use Contena\Core\System\Payment\ScheduledTask\AppNotificationDeliveryTaskHandler;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
+use Contena\Core\System\Payment\Service\AppNotificationService;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
 use Contena\Core\System\Payment\Service\PaymentOrderConverter;
@@ -59,9 +57,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    $services->set(ChannelConfigReader::class)->autowire();
-    $services->set(ChannelConfigValidator::class);
-
     $services->set(GatewayExecutor::class);
     $services->alias(GatewayExecutorInterface::class, GatewayExecutor::class);
 
@@ -79,7 +74,6 @@ return static function (ContainerConfigurator $container): void {
             service('payment_app_channel_method.repository'),
             service('payment_channel_config.repository'),
             service(GatewayRegistry::class),
-            service(ChannelConfigValidator::class),
             service(AbstractRuleLoader::class),
             service('event_dispatcher'),
         ]);
