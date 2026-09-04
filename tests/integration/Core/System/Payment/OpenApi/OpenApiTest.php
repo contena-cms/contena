@@ -191,18 +191,6 @@ final class OpenApiTest extends TestCase
         static::assertNull($field->getFlag(ApiAware::class));
     }
 
-    public function testServesTheOpenApiContractWithoutAppAuthentication(): void
-    {
-        $this->browser->request('GET', '/api/payment/openapi.json');
-
-        $response = $this->browser->getResponse();
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
-        $schema = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        static::assertSame('3.0.3', $schema['openapi']);
-        static::assertArrayHasKey('/pay', $schema['paths']);
-        static::assertArrayHasKey('/notify/{channel}/{channelConfigId}', $schema['paths']);
-    }
-
     public function testProviderNotificationRouteDoesNotRequireAppAuthentication(): void
     {
         $this->browser->request(

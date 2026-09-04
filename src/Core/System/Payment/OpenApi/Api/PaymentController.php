@@ -43,6 +43,7 @@ final class PaymentController
         Context $context,
     ): JsonResponse {
         $paymentRequest->clientIp = $this->requestStack->getCurrentRequest()?->getClientIp();
+
         return new JsonResponse(OpenApiResponse::success($this->paymentService->pay($app, $paymentRequest, $context)));
     }
 

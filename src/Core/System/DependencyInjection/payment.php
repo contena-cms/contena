@@ -24,7 +24,6 @@ use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiExceptionSubscriber;
-use Contena\Core\System\Payment\OpenApi\Api\OpenApiSchemaController;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\Api\ProviderNotificationController;
 use Contena\Core\System\Payment\OpenApi\PaymentAppValueResolver;
@@ -50,6 +49,7 @@ use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
@@ -196,6 +196,7 @@ return static function (ContainerConfigurator $container): void {
         ->public()
         ->args([
             service(AbstractPaymentService::class),
+            service(RequestStack::class),
         ]);
 
     $services->set(ProviderNotificationController::class)
@@ -203,9 +204,6 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(GatewayNotificationService::class),
         ]);
-
-    $services->set(OpenApiSchemaController::class)
-        ->public();
 
     foreach ([
         PaymentAppDefinition::class,
