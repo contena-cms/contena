@@ -9,14 +9,15 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
+use Contena\Core\System\Payment\OpenApi\Event\ResolvePaymentAppCriteriaEvent;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Core\System\Payment\PaymentException;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -35,6 +36,7 @@ final class PaymentAppValidator implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $paymentAppRepository,
         private readonly ClockInterface $clock,
+        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -60,15 +62,19 @@ final class PaymentAppValidator implements EventSubscriberInterface
         }
 
         $parameters = $request->request->all();
-        $appCode = $parameters['app_id'] ?? null;
-        if (!\is_string($appCode) || $appCode === '') {
+
+        if (isset($parameters['app_id'])) {
             throw OpenApiException::missingParameter('app_id');
         }
+        $appCode = (string)$parameters['app_id'];
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('appCode', $appCode));
         $criteria->setLimit(1);
-        $app = $this->paymentAppRepository->search($criteria, Context::createGlobalContext())->getEntities()->first();
+
+        $this->dispatcher->dispatch(new ResolvePaymentAppCriteriaEvent($request, $criteria, $context));
+
+        $app = $this->paymentAppRepository->search($criteria, $context->createWithGlobalTenantAccess())->getEntities()->first();
         if ($app === null || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }

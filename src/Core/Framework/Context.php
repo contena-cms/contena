@@ -220,6 +220,52 @@ class Context extends Struct
     }
 
     /**
+     * Creates a copy bound to the given tenant while preserving the current context settings.
+     */
+    public function createWithTenantId(string $tenantId): self
+    {
+        $context = new self(
+            $this->source,
+            $this->languageIdChain,
+            $this->versionId,
+            $this->considerInheritance,
+            $this->ruleIds,
+            $tenantId,
+            false,
+        );
+        $context->scope = $this->scope;
+
+        foreach ($this->getExtensions() as $key => $extension) {
+            $context->addExtension($key, $extension);
+        }
+
+        return $context;
+    }
+
+    /**
+     * Creates a copy with cross-tenant read access while preserving the current context settings.
+     * Writes remain platform-scoped because the copied context has no tenant id.
+     */
+    public function createWithGlobalTenantAccess(): self
+    {
+        $context = new self(
+            $this->source,
+            $this->languageIdChain,
+            $this->versionId,
+            $this->considerInheritance,
+            $this->ruleIds,
+            globalTenantAccess: true,
+        );
+        $context->scope = $this->scope;
+
+        foreach ($this->getExtensions() as $key => $extension) {
+            $context->addExtension($key, $extension);
+        }
+
+        return $context;
+    }
+
+    /**
      * @template TReturn of mixed
      *
      * @param \Closure(Context): TReturn $callback

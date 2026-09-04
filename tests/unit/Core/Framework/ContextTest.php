@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Struct\Serializer\StructNormalizer;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Assert\Serialization;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -116,6 +116,47 @@ class ContextTest extends TestCase
 
         static::assertSame(Defaults::LIVE_VERSION, $context->getVersionId());
         static::assertSame($versionId, $versionContext->getVersionId());
+    }
+
+    public function testTenantChangeCreatesAnIndependentContextWithPreservedSettings(): void
+    {
+        $context = new Context(
+            new AdminApiSource('user-id'),
+            ['de-DE', Defaults::LANGUAGE_SYSTEM],
+            Uuid::randomHex(),
+            true,
+            ['rule-a'],
+            'tenant-a',
+        );
+        $context->addExtension('foo', new ArrayEntity());
+
+        $tenantContext = $context->createWithTenantId('tenant-b');
+
+        static::assertSame('tenant-b', $tenantContext->getTenantId());
+        static::assertFalse($tenantContext->hasGlobalTenantAccess());
+        static::assertSame($context->getSource(), $tenantContext->getSource());
+        static::assertSame($context->getLanguageIdChain(), $tenantContext->getLanguageIdChain());
+        static::assertSame($context->getVersionId(), $tenantContext->getVersionId());
+        static::assertTrue($tenantContext->considerInheritance());
+        static::assertSame(['rule-a'], $tenantContext->getRuleIds());
+        static::assertNotNull($tenantContext->getExtension('foo'));
+
+        static::assertSame('tenant-a', $context->getTenantId());
+        static::assertFalse($context->hasGlobalTenantAccess());
+    }
+
+    public function testGlobalTenantAccessCreatesAnIndependentPlatformWriteContext(): void
+    {
+        $context = Context::createTenantContext('tenant-a', new AdminApiSource('user-id'));
+
+        $globalContext = $context->createWithGlobalTenantAccess();
+
+        static::assertNull($globalContext->getTenantId());
+        static::assertTrue($globalContext->hasGlobalTenantAccess());
+        static::assertSame($context->getSource(), $globalContext->getSource());
+        static::assertSame(Context::USER_SCOPE, $globalContext->getScope());
+        static::assertSame('tenant-a', $context->getTenantId());
+        static::assertFalse($context->hasGlobalTenantAccess());
     }
 
     public function testRuleIdsArePreservedAcrossVersionAndSerialization(): void

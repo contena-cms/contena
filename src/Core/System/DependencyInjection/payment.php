@@ -164,6 +164,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service('payment_app.repository'),
             service(ClockInterface::class),
+            service('event_dispatcher'),
         ])
         ->tag('kernel.event_subscriber');
 
