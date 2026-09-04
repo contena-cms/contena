@@ -646,7 +646,6 @@
     "payment_order_transaction.channelRequestNo",
     "payment_order_transaction.channelTradeNo",
     "payment_order_transaction.stateId",
-    "payment_order_transaction.requestData",
     "payment_order_transaction.responseData",
     "payment_order_transaction.resultCode",
     "payment_order_transaction.resultMessage",

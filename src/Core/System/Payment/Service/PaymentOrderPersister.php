@@ -33,7 +33,7 @@ final class PaymentOrderPersister
     {
         $payload = $this->converter->convert($app, $request, $route, $context);
 
-        $this->paymentOrderRepository->create([$payload['data']], $context);
+        $this->paymentOrderRepository->create([$payload['order']], $context);
 
         return new PaymentOrderCreation($payload['orderId'], $payload['transactionId']);
     }
@@ -42,8 +42,8 @@ final class PaymentOrderPersister
     {
         $payload = $this->converter->convertQueryTransaction($order, $context);
 
-        $this->paymentOrderTransactionRepository->create([$payload['data']], $context);
+        $this->paymentOrderTransactionRepository->create([$payload['transaction']], $context);
 
-        return $payload['id'];
+        return $payload['transactionId'];
     }
 }

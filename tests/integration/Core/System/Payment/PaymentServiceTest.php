@@ -47,7 +47,6 @@ use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
-use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Service\GatewayNotificationService;
 use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
 use Contena\Core\System\Payment\Service\PaymentOrderPersister;
@@ -62,6 +61,7 @@ use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Contena\Core\System\Payment\Struct\RefundRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
@@ -707,7 +707,7 @@ final class WorkflowRouteResolver extends AbstractPaymentRouteResolver
         throw new DecorationPatternException(self::class);
     }
 
-    public function resolve(PaymentRuleScope $scope): PaymentRoute
+    public function resolve(PaymentRouteRequest $request): PaymentRoute
     {
         return $this->route;
     }

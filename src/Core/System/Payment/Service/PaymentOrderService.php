@@ -18,11 +18,11 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
-use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\QueryRequest;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -49,22 +49,26 @@ final class PaymentOrderService
 
     public function pay(PaymentAppEntity $app, PaymentRequest $request, Context $context): PaymentResult
     {
-        $existing = $this->findByExternalOrderNo($app->getId(), $request->externalOrderNo, $context);
-        if ($existing instanceof PaymentOrderEntity) {
-            $this->assertSamePayment($existing, $request);
+        $existingOrder = $this->paymentOrderRepository->search(new Criteria()
+            ->addFilter(new EqualsFilter('paymentAppId', $app->getId()))
+            ->addFilter(new EqualsFilter('externalOrderNo', $request->externalOrderNo))
+            ->addAssociations(['state', 'primaryTransaction', 'primaryTransaction.state'])
+            ->setLimit(1), $context)->getEntities()->first();
+        if ($existingOrder instanceof PaymentOrderEntity) {
+            $this->assertPaymentRequestMatchesOrder($existingOrder, $request);
 
-            return $this->resultFromOrder($existing);
+            return $this->createResultForOrder($existingOrder);
         }
 
-        $route = $this->routeResolver->resolve(new PaymentRuleScope(
-            $context,
-            $app,
-            PaymentOperation::PAY,
-            $request->method,
-            $request->channel,
-            $request->amount,
-            strtoupper($request->currencyCode),
-            $request->extra,
+        $route = $this->routeResolver->resolve(new PaymentRouteRequest(
+            context: $context,
+            app: $app,
+            operation: PaymentOperation::PAY,
+            method: $request->method,
+            preferredChannel: $request->channel,
+            amount: $request->amount,
+            currencyCode: strtoupper($request->currencyCode),
+            data: $request->extra,
         ));
         if (!$route->gateway instanceof PaymentHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::PAY);
@@ -72,15 +76,18 @@ final class PaymentOrderService
 
         $creation = $this->paymentOrderPersister->persist($app, $request, $route, $context);
 
-        $order = $this->loadOrder($creation->orderId, $context);
-        $transaction = $this->loadTransaction($creation->transactionId, $context);
+        $order = $this->getOrderById($creation->orderId, $context);
+        $transaction = $order->transactions?->get($creation->transactionId);
+        if (!$transaction instanceof PaymentOrderTransactionEntity) {
+            throw PaymentException::orderNotFound($creation->transactionId);
+        }
 
         return $this->executePayment($order, $transaction, $route, $context);
     }
 
     public function query(PaymentAppEntity $app, QueryRequest $request, Context $context): PaymentResult
     {
-        $order = $this->findOrder($app->getId(), $request, $context);
+        $order = $this->getOrderByReference($app->getId(), $request, $context);
         $route = $this->routeResolver->resolveConfigured($order->channelCode, $order->channelConfigId, PaymentOperation::QUERY, $context);
         if (!$route->gateway instanceof QueryHandlerInterface) {
             throw PaymentException::capabilityNotSupported($order->channelCode, PaymentOperation::QUERY);
@@ -88,10 +95,10 @@ final class PaymentOrderService
 
         $transactionId = $this->paymentOrderPersister->persistQueryTransaction($order, $context);
 
-        return $this->executeQuery($order, $this->loadTransaction($transactionId, $context), $route, $context);
+        return $this->executeQuery($order, $this->getTransactionById($transactionId, $context), $route, $context);
     }
 
-    public function findOrder(string $paymentAppId, QueryRequest $request, Context $context): PaymentOrderEntity
+    public function getOrderByReference(string $paymentAppId, QueryRequest $request, Context $context): PaymentOrderEntity
     {
         $field = $request->orderNo !== null ? 'orderNo' : 'externalOrderNo';
         $reference = $request->orderNo ?? $request->externalOrderNo;
@@ -102,7 +109,7 @@ final class PaymentOrderService
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('paymentAppId', $paymentAppId));
         $criteria->addFilter(new EqualsFilter($field, $reference));
-        $this->addOrderAssociations($criteria);
+        $criteria->addAssociations(['state', 'primaryTransaction', 'primaryTransaction.state']);
         $criteria->setLimit(1);
 
         $order = $this->paymentOrderRepository->search($criteria, $context)->getEntities()->first();
@@ -115,7 +122,7 @@ final class PaymentOrderService
 
     public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
     {
-        $order = $this->loadOrder($target->entityId, $target->context);
+        $order = $this->getOrderById($target->entityId, $target->context);
         if ($order->channelCode !== $channel || $order->channelConfigId !== $channelConfigId) {
             throw PaymentException::notificationConfigurationMismatch($order->orderNo);
         }
@@ -208,16 +215,16 @@ final class PaymentOrderService
         });
     }
 
-    private function loadOrder(string $orderId, Context $context): PaymentOrderEntity
+    private function getOrderById(string $orderId, Context $context): PaymentOrderEntity
     {
         $criteria = new Criteria([$orderId]);
-        $this->addOrderAssociations($criteria);
+        $criteria->addAssociations(['state', 'primaryTransaction', 'primaryTransaction.state', 'transactions', 'transactions.state']);
         $order = $this->paymentOrderRepository->search($criteria, $context)->getEntities()->first();
 
         return $order instanceof PaymentOrderEntity ? $order : throw PaymentException::orderNotFound($orderId);
     }
 
-    private function loadTransaction(string $transactionId, Context $context): PaymentOrderTransactionEntity
+    private function getTransactionById(string $transactionId, Context $context): PaymentOrderTransactionEntity
     {
         $criteria = new Criteria([$transactionId]);
         $criteria->addAssociation('state');
@@ -226,26 +233,7 @@ final class PaymentOrderService
         return $transaction instanceof PaymentOrderTransactionEntity ? $transaction : throw PaymentException::orderNotFound($transactionId);
     }
 
-    private function findByExternalOrderNo(string $appId, string $externalOrderNo, Context $context): ?PaymentOrderEntity
-    {
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('paymentAppId', $appId));
-        $criteria->addFilter(new EqualsFilter('externalOrderNo', $externalOrderNo));
-        $this->addOrderAssociations($criteria);
-        $criteria->setLimit(1);
-        $order = $this->paymentOrderRepository->search($criteria, $context)->getEntities()->first();
-
-        return $order instanceof PaymentOrderEntity ? $order : null;
-    }
-
-    private function addOrderAssociations(Criteria $criteria): void
-    {
-        $criteria->addAssociation('state');
-        $criteria->addAssociation('primaryTransaction');
-        $criteria->addAssociation('primaryTransaction.state');
-    }
-
-    private function resultFromOrder(PaymentOrderEntity $order): PaymentResult
+    private function createResultForOrder(PaymentOrderEntity $order): PaymentResult
     {
         $status = $order->state?->getTechnicalName() ?? PaymentStatus::UNKNOWN;
         $result = PaymentResult::fromArray($order->primaryTransaction?->responseData, $status);
@@ -253,7 +241,7 @@ final class PaymentOrderService
         return $result->withResource($order->orderNo, $order->externalOrderNo, $order->primaryTransaction?->transactionNo);
     }
 
-    private function assertSamePayment(PaymentOrderEntity $order, PaymentRequest $request): void
+    private function assertPaymentRequestMatchesOrder(PaymentOrderEntity $order, PaymentRequest $request): void
     {
         if ($order->amount !== $request->amount || $order->currencyCode !== strtoupper($request->currencyCode) || $order->methodCode !== $request->method) {
             throw PaymentException::duplicateReference($request->externalOrderNo);

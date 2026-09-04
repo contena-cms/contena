@@ -63,7 +63,6 @@ class PaymentOrderTransactionDefinition extends EntityDefinition
             new StringField('channel_request_no', 'channelRequestNo', 128)->addFlags(new ApiAware()),
             new StringField('channel_trade_no', 'channelTradeNo', 128)->addFlags(new ApiAware()),
             new StateMachineStateField('state_id', 'stateId', PaymentTransactionStates::STATE_MACHINE)->addFlags(new ApiAware(), new Required()),
-            new JsonField('request_data', 'requestData')->addFlags(new ApiAware()),
             new JsonField('response_data', 'responseData')->addFlags(new ApiAware()),
             new StringField('result_code', 'resultCode', 64)->addFlags(new ApiAware()),
             new StringField('result_message', 'resultMessage', 255)->addFlags(new ApiAware()),

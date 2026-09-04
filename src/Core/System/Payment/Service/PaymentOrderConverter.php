@@ -30,7 +30,7 @@ final class PaymentOrderConverter
     }
 
     /**
-     * @return array{orderId: string, transactionId: string, data: array<string, mixed>}
+     * @return array{orderId: string, transactionId: string, order: array<string, mixed>}
      */
     public function convert(PaymentAppEntity $app, PaymentRequest $request, PaymentRoute $route, Context $context): array
     {
@@ -44,7 +44,7 @@ final class PaymentOrderConverter
         return [
             'orderId' => $orderId,
             'transactionId' => $transactionId,
-            'data' => [
+            'order' => [
                 'id' => $orderId,
                 'paymentAppId' => $app->getId(),
                 'orderNo' => $orderNo,
@@ -66,8 +66,6 @@ final class PaymentOrderConverter
                     $transactionNo,
                     $channelCode,
                     $request,
-                    $orderNo,
-                    $currencyCode,
                     $context,
                 )],
             ],
@@ -75,15 +73,15 @@ final class PaymentOrderConverter
     }
 
     /**
-     * @return array{id: string, data: array<string, mixed>}
+     * @return array{transactionId: string, transaction: array<string, mixed>}
      */
     public function convertQueryTransaction(PaymentOrderEntity $order, Context $context): array
     {
         $transactionId = Uuid::randomHex();
 
         return [
-            'id' => $transactionId,
-            'data' => [
+            'transactionId' => $transactionId,
+            'transaction' => [
                 'id' => $transactionId,
                 'orderId' => $order->getId(),
                 'transactionNo' => $this->numberRangeValueGenerator->getValue(PaymentOrderTransactionDefinition::ENTITY_NAME, $context),
@@ -92,7 +90,6 @@ final class PaymentOrderConverter
                 'methodCode' => $order->methodCode,
                 'amount' => 0,
                 'stateId' => $this->initialStateId(PaymentTransactionStates::STATE_MACHINE, $context),
-                'requestData' => ['orderNo' => $order->orderNo, 'channelTradeNo' => $order->channelTradeNo],
             ],
         ];
     }
@@ -105,8 +102,6 @@ final class PaymentOrderConverter
         string $transactionNo,
         string $channelCode,
         PaymentRequest $request,
-        string $orderNo,
-        string $currencyCode,
         Context $context,
     ): array {
         return [
@@ -117,14 +112,6 @@ final class PaymentOrderConverter
             'methodCode' => $request->method,
             'amount' => $request->amount,
             'stateId' => $this->initialStateId(PaymentTransactionStates::STATE_MACHINE, $context),
-            'requestData' => [
-                'orderNo' => $orderNo,
-                'amount' => $request->amount,
-                'currencyCode' => $currencyCode,
-                'method' => $request->method,
-                'subject' => $request->subject,
-                'extra' => $request->extra,
-            ],
         ];
     }
 

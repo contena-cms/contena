@@ -36,11 +36,6 @@ class PaymentOrderTransactionEntity extends Entity
     /**
      * @var array<mixed>|null
      */
-    public protected(set) ?array $requestData = null;
-
-    /**
-     * @var array<mixed>|null
-     */
     public protected(set) ?array $responseData = null;
 
     public protected(set) ?string $resultCode = null;

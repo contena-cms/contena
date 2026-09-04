@@ -18,10 +18,10 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
-use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\SubscriptionRequest;
 use Psr\Clock\ClockInterface;
 
@@ -47,17 +47,17 @@ final class PaymentSubscriptionService
             throw PaymentException::invalidRequest('External subscription number is required.');
         }
 
-        $existing = $this->findSubscription($app->getId(), $request->externalSubscriptionNo, $context);
-        if ($existing instanceof PaymentRecurringEntity) {
-            $this->assertSameSubscription($existing, $request);
+        $existingSubscription = $this->findSubscription($app->getId(), $request->externalSubscriptionNo, $context);
+        if ($existingSubscription instanceof PaymentRecurringEntity) {
+            $this->assertSubscriptionRequestMatchesEntity($existingSubscription, $request);
 
-            return $this->resultFromSubscription($existing);
+            return $this->createResultForSubscription($existingSubscription);
         }
 
-        $route = $this->routeResolver->resolve(new PaymentRuleScope(
-            $context,
-            $app,
-            PaymentOperation::SUBSCRIBE,
+        $route = $this->routeResolver->resolve(new PaymentRouteRequest(
+            context: $context,
+            app: $app,
+            operation: PaymentOperation::SUBSCRIBE,
             preferredChannel: $request->channel,
             amount: $request->singleAmount,
             data: $request->extra,
@@ -68,7 +68,7 @@ final class PaymentSubscriptionService
 
         $subscriptionId = $this->createSubscription($app, $request, $route, $context);
 
-        $subscription = $this->loadSubscription($subscriptionId, $context);
+        $subscription = $this->getSubscriptionById($subscriptionId, $context);
         try {
             $result = $route->gateway->subscribe($subscription, $route->config);
         } catch (\Throwable $exception) {
@@ -95,7 +95,7 @@ final class PaymentSubscriptionService
 
     public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
     {
-        $subscription = $this->loadSubscription($target->entityId, $target->context);
+        $subscription = $this->getSubscriptionById($target->entityId, $target->context);
         if ($subscription->channelCode !== $channel || $subscription->channelConfigId !== $channelConfigId) {
             throw PaymentException::notificationConfigurationMismatch($subscription->recurringNo);
         }
@@ -139,14 +139,14 @@ final class PaymentSubscriptionService
         return $subscription instanceof PaymentRecurringEntity ? $subscription : null;
     }
 
-    private function loadSubscription(string $subscriptionId, Context $context): PaymentRecurringEntity
+    private function getSubscriptionById(string $subscriptionId, Context $context): PaymentRecurringEntity
     {
         $subscription = $this->paymentRecurringRepository->search(new Criteria([$subscriptionId]), $context)->getEntities()->first();
 
         return $subscription instanceof PaymentRecurringEntity ? $subscription : throw PaymentException::invalidRequest('Payment subscription could not be loaded.');
     }
 
-    private function resultFromSubscription(PaymentRecurringEntity $subscription): PaymentResult
+    private function createResultForSubscription(PaymentRecurringEntity $subscription): PaymentResult
     {
         $status = match ($subscription->status) {
             PaymentRecurringStatus::STATUS_SIGNED => PaymentStatus::SUCCEEDED,
@@ -158,7 +158,7 @@ final class PaymentSubscriptionService
             ->withResource($subscription->recurringNo, $subscription->externalRecurringNo);
     }
 
-    private function assertSameSubscription(PaymentRecurringEntity $subscription, SubscriptionRequest $request): void
+    private function assertSubscriptionRequestMatchesEntity(PaymentRecurringEntity $subscription, SubscriptionRequest $request): void
     {
         if ($subscription->periodType !== $request->periodType
             || $subscription->period !== $request->period

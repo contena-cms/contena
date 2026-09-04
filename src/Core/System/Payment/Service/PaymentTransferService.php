@@ -18,10 +18,10 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
-use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\System\Payment\Struct\TransferRequest;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\StateMachine\Transition;
@@ -50,17 +50,17 @@ final class PaymentTransferService
     {
         $this->validateRequest($request);
 
-        $existing = $this->findTransfer($app->getId(), $request->externalTransferNo, $context);
-        if ($existing instanceof PaymentTransferEntity) {
-            $this->assertSameTransfer($existing, $request);
+        $existingTransfer = $this->findTransfer($app->getId(), $request->externalTransferNo, $context);
+        if ($existingTransfer instanceof PaymentTransferEntity) {
+            $this->assertTransferRequestMatchesEntity($existingTransfer, $request);
 
-            return $this->resultFromTransfer($existing);
+            return $this->createResultForTransfer($existingTransfer);
         }
 
-        $route = $this->routeResolver->resolve(new PaymentRuleScope(
-            $context,
-            $app,
-            PaymentOperation::TRANSFER,
+        $route = $this->routeResolver->resolve(new PaymentRouteRequest(
+            context: $context,
+            app: $app,
+            operation: PaymentOperation::TRANSFER,
             preferredChannel: $request->channel,
             amount: $request->amount,
             currencyCode: strtoupper($request->currencyCode),
@@ -72,7 +72,7 @@ final class PaymentTransferService
 
         $transferId = $this->createTransfer($app, $request, $route, $context);
 
-        $transfer = $this->loadTransfer($transferId, $context);
+        $transfer = $this->getTransferById($transferId, $context);
         try {
             $result = $route->gateway->transfer($transfer, $route->config);
         } catch (\Throwable $exception) {
@@ -90,7 +90,7 @@ final class PaymentTransferService
 
     public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
     {
-        $transfer = $this->loadTransfer($target->entityId, $target->context);
+        $transfer = $this->getTransferById($target->entityId, $target->context);
         if ($transfer->channelCode !== $channel || $transfer->channelConfigId !== $channelConfigId) {
             throw PaymentException::notificationConfigurationMismatch($transfer->transferNo);
         }
@@ -139,7 +139,7 @@ final class PaymentTransferService
         return $transfer instanceof PaymentTransferEntity ? $transfer : null;
     }
 
-    private function loadTransfer(string $transferId, Context $context): PaymentTransferEntity
+    private function getTransferById(string $transferId, Context $context): PaymentTransferEntity
     {
         $criteria = new Criteria([$transferId]);
         $criteria->addAssociation('state');
@@ -148,7 +148,7 @@ final class PaymentTransferService
         return $transfer instanceof PaymentTransferEntity ? $transfer : throw PaymentException::invalidRequest('Payment transfer could not be loaded.');
     }
 
-    private function resultFromTransfer(PaymentTransferEntity $transfer): PaymentResult
+    private function createResultForTransfer(PaymentTransferEntity $transfer): PaymentResult
     {
         $status = match ($transfer->state?->getTechnicalName()) {
             PaymentTransferStates::STATE_SUCCEEDED => PaymentStatus::SUCCEEDED,
@@ -170,7 +170,7 @@ final class PaymentTransferService
         }
     }
 
-    private function assertSameTransfer(PaymentTransferEntity $transfer, TransferRequest $request): void
+    private function assertTransferRequestMatchesEntity(PaymentTransferEntity $transfer, TransferRequest $request): void
     {
         if ($transfer->amount !== $request->amount || $transfer->currencyCode !== strtoupper($request->currencyCode) || $transfer->payee !== $request->payee) {
             throw PaymentException::duplicateReference($request->externalTransferNo);

@@ -21,6 +21,7 @@ use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class PaymentRouteResolver extends AbstractPaymentRouteResolver
@@ -46,18 +47,18 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         throw new DecorationPatternException(self::class);
     }
 
-    public function resolve(PaymentRuleScope $scope): PaymentRoute
+    public function resolve(PaymentRouteRequest $request): PaymentRoute
     {
-        $context = $scope->getContext();
-        $appId = $scope->app->getId();
+        $context = $request->context;
+        $appId = $request->app->getId();
         $rules = $this->ruleLoader->load($context);
 
-        foreach ($this->channelCandidates($scope, $rules) as $channel) {
-            if (!$this->gatewayRegistry->supports($channel, $scope->operation)) {
+        foreach ($this->channelCandidates($request, $rules) as $channel) {
+            if (!$this->gatewayRegistry->supports($channel, $request->operation)) {
                 continue;
             }
 
-            $config = $this->matchingConfig($appId, $channel, $scope, $rules);
+            $config = $this->matchingConfig($appId, $channel, $request, $rules);
             if (!$config instanceof PaymentChannelConfigEntity || !$config->channel) {
                 continue;
             }
@@ -65,13 +66,13 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
             $values = $config->config ?? [];
             $this->configValidator->validate($channel, $config->channel->configSchema ?? [], $values);
             $route = new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $values, $config->paymentAppId === null);
-            $event = new PaymentRouteResolvedEvent($route, $scope);
+            $event = new PaymentRouteResolvedEvent($route, $request);
             $this->eventDispatcher->dispatch($event);
 
             return $event->route;
         }
 
-        throw PaymentException::routeNotFound($appId, $scope->operation, $scope->method);
+        throw PaymentException::routeNotFound($appId, $request->operation, $request->method);
     }
 
     public function resolveConfigured(string $channel, string $channelConfigId, string $operation, Context $context): PaymentRoute
@@ -95,29 +96,29 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
     /**
      * @return list<string>
      */
-    private function channelCandidates(PaymentRuleScope $scope, RuleCollection $rules): array
+    private function channelCandidates(PaymentRouteRequest $request, RuleCollection $rules): array
     {
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('paymentAppId', $scope->app->getId()));
+        $criteria->addFilter(new EqualsFilter('paymentAppId', $request->app->getId()));
         $criteria->addFilter(new EqualsFilter('status', true));
         $criteria->addAssociation('channelMethod.channel');
         $criteria->addSorting(new FieldSorting('sort'));
-        if ($scope->method !== null) {
-            $criteria->addFilter(new EqualsFilter('channelMethod.methodCode', $scope->method));
+        if ($request->method !== null) {
+            $criteria->addFilter(new EqualsFilter('channelMethod.methodCode', $request->method));
             $criteria->addFilter(new EqualsFilter('channelMethod.status', true));
         }
 
         $channels = [];
-        foreach ($this->methodRepository->search($criteria, $scope->getContext())->getEntities() as $assignment) {
+        foreach ($this->methodRepository->search($criteria, $request->context)->getEntities() as $assignment) {
             if (!$assignment instanceof PaymentAppChannelMethodEntity || !$assignment->channelMethod?->channel?->status) {
                 continue;
             }
-            if (!$this->ruleMatches($assignment->ruleId, $rules, $scope)) {
+            if (!$this->ruleMatches($assignment->ruleId, $rules, $request)) {
                 continue;
             }
 
             $code = $assignment->channelMethod->channel->code;
-            if ($scope->preferredChannel === null || $scope->preferredChannel === $code) {
+            if ($request->preferredChannel === null || $request->preferredChannel === $code) {
                 $channels[] = $code;
             }
         }
@@ -125,20 +126,20 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
         return array_values(array_unique($channels));
     }
 
-    private function matchingConfig(string $appId, string $channel, PaymentRuleScope $scope, RuleCollection $rules): ?PaymentChannelConfigEntity
+    private function matchingConfig(string $appId, string $channel, PaymentRouteRequest $request, RuleCollection $rules): ?PaymentChannelConfigEntity
     {
-        $config = $this->findConfig($appId, $channel, $scope->getContext());
-        if ($config instanceof PaymentChannelConfigEntity && $this->ruleMatches($config->ruleId, $rules, $scope)) {
+        $config = $this->findConfig($appId, $channel, $request->context);
+        if ($config instanceof PaymentChannelConfigEntity && $this->ruleMatches($config->ruleId, $rules, $request)) {
             return $config;
         }
 
         $platformRules = $this->ruleLoader->load(Context::createDefaultContext());
         $config = $this->findConfig(null, $channel, Context::createDefaultContext());
 
-        return $config instanceof PaymentChannelConfigEntity && $this->ruleMatches($config->ruleId, $platformRules, $scope) ? $config : null;
+        return $config instanceof PaymentChannelConfigEntity && $this->ruleMatches($config->ruleId, $platformRules, $request) ? $config : null;
     }
 
-    private function ruleMatches(?string $ruleId, RuleCollection $rules, PaymentRuleScope $scope): bool
+    private function ruleMatches(?string $ruleId, RuleCollection $rules, PaymentRouteRequest $request): bool
     {
         if ($ruleId === null) {
             return true;
@@ -146,7 +147,21 @@ final class PaymentRouteResolver extends AbstractPaymentRouteResolver
 
         $rule = $rules->get($ruleId)?->getPayload();
 
-        return $rule instanceof Rule && $rule->match($scope);
+        return $rule instanceof Rule && $rule->match($this->ruleScope($request));
+    }
+
+    private function ruleScope(PaymentRouteRequest $request): PaymentRuleScope
+    {
+        return new PaymentRuleScope(
+            $request->context,
+            $request->app,
+            $request->operation,
+            $request->method,
+            $request->preferredChannel,
+            $request->amount,
+            $request->currencyCode,
+            $request->data,
+        );
     }
 
     private function findConfig(?string $appId, string $channel, Context $context): ?PaymentChannelConfigEntity

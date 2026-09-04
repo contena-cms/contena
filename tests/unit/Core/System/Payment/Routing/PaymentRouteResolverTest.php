@@ -23,8 +23,8 @@ use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
-use Contena\Core\System\Payment\Rule\PaymentRuleScope;
 use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\PaymentRouteRequest;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -107,11 +107,11 @@ final class PaymentRouteResolverTest extends TestCase
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve(new PaymentRuleScope(
-            Context::createDefaultContext(),
-            $app,
-            PaymentOperation::PAY,
-            'h5',
+        $route = $resolver->resolve(new PaymentRouteRequest(
+            context: Context::createDefaultContext(),
+            app: $app,
+            operation: PaymentOperation::PAY,
+            method: 'h5',
             amount: 1000,
             currencyCode: 'CNY',
         ));
@@ -145,11 +145,11 @@ final class PaymentRouteResolverTest extends TestCase
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve(new PaymentRuleScope(
-            Context::createDefaultContext(),
-            $app,
-            PaymentOperation::PAY,
-            'h5',
+        $route = $resolver->resolve(new PaymentRouteRequest(
+            context: Context::createDefaultContext(),
+            app: $app,
+            operation: PaymentOperation::PAY,
+            method: 'h5',
             amount: 1000,
             currencyCode: 'CNY',
         ));

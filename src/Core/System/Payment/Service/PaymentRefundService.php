@@ -51,18 +51,18 @@ final class PaymentRefundService
             throw PaymentException::invalidRequest('External refund number and positive refund amount are required.');
         }
 
-        $order = $this->paymentOrderService->findOrder($app->getId(), new QueryRequest($request->orderNo, $request->externalOrderNo), $context);
+        $order = $this->paymentOrderService->getOrderByReference($app->getId(), new QueryRequest($request->orderNo, $request->externalOrderNo), $context);
         if ($order->state?->getTechnicalName() !== PaymentOrderStates::STATE_SUCCEEDED) {
             throw PaymentException::orderNotSucceeded($order->orderNo);
         }
 
-        $existing = $this->findRefund($order->getId(), $request->externalRefundNo, $context);
-        if ($existing instanceof PaymentRefundEntity) {
-            if ($existing->refundAmount !== $request->amount) {
+        $existingRefund = $this->findRefund($order->getId(), $request->externalRefundNo, $context);
+        if ($existingRefund instanceof PaymentRefundEntity) {
+            if ($existingRefund->refundAmount !== $request->amount) {
                 throw PaymentException::duplicateReference($request->externalRefundNo);
             }
 
-            return $this->resultFromRefund($existing);
+            return $this->createResultForRefund($existingRefund);
         }
 
         $route = $this->routeResolver->resolveConfigured($order->channelCode, $order->channelConfigId, PaymentOperation::REFUND, $context);
@@ -89,7 +89,7 @@ final class PaymentRefundService
             }
         });
 
-        $refund = $this->loadRefund($refundId, $context);
+        $refund = $this->getRefundById($refundId, $context);
         try {
             $result = $route->gateway->refund($refund, $order, $route->config);
         } catch (\Throwable $exception) {
@@ -108,7 +108,7 @@ final class PaymentRefundService
 
     public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
     {
-        $refund = $this->loadNotificationRefund($target->entityId, $target->context);
+        $refund = $this->getRefundForNotification($target->entityId, $target->context);
         $order = $refund->order;
         if (!$order instanceof PaymentOrderEntity) {
             throw PaymentException::notificationResourceNotFound($refund->refundNo);
@@ -207,14 +207,14 @@ final class PaymentRefundService
         return $refund instanceof PaymentRefundEntity ? $refund : null;
     }
 
-    private function loadRefund(string $refundId, Context $context): PaymentRefundEntity
+    private function getRefundById(string $refundId, Context $context): PaymentRefundEntity
     {
         $refund = $this->paymentRefundRepository->search(new Criteria([$refundId]), $context)->getEntities()->first();
 
         return $refund instanceof PaymentRefundEntity ? $refund : throw PaymentException::invalidRequest('Payment refund could not be loaded.');
     }
 
-    private function loadNotificationRefund(string $refundId, Context $context): PaymentRefundEntity
+    private function getRefundForNotification(string $refundId, Context $context): PaymentRefundEntity
     {
         $criteria = new Criteria([$refundId]);
         $criteria->addAssociation('order');
@@ -223,7 +223,7 @@ final class PaymentRefundService
         return $refund instanceof PaymentRefundEntity ? $refund : throw PaymentException::notificationResourceNotFound($refundId);
     }
 
-    private function resultFromRefund(PaymentRefundEntity $refund): PaymentResult
+    private function createResultForRefund(PaymentRefundEntity $refund): PaymentResult
     {
         $status = match ($refund->status) {
             PaymentRefundStatus::STATUS_SUCCEEDED => PaymentStatus::SUCCEEDED,
