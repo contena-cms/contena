@@ -3,7 +3,7 @@
 namespace Contena\Core\System\Payment\Notification;
 
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 
 /**
  * Adapts a verified gateway notification to its owning payment aggregate.
@@ -16,5 +16,5 @@ interface PaymentNotificationHandlerInterface
 
     public function resolve(string $resourceNo, string $channelConfigId): PaymentNotificationTarget;
 
-    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void;
+    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void;
 }

@@ -18,12 +18,10 @@ use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\PaymentAppGuard;
 use Contena\Core\System\Payment\Routing\ConfiguredPaymentRouteProvider;
-use Contena\Core\System\Payment\Routing\FirstAvailableRouteStrategy;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -93,8 +91,7 @@ final class PaymentRouteResolverTest extends TestCase
         $configRepository = $this->repository('payment_channel_config');
         $resolver = new PaymentRouteResolver(
             [new ConfiguredPaymentRouteProvider($methodRepository, $configRepository, new GatewayRegistry([$gateway]))],
-            [new FirstAvailableRouteStrategy()],
-            new PaymentAppGuard(),
+            [],
             new EventDispatcher(),
         );
 
@@ -132,8 +129,8 @@ final class RouteResolverGateway implements PaymentHandlerInterface
         return $this->gatewayCode;
     }
 
-    public function pay(PaymentOrderEntity $order, array $config): PaymentResult
+    public function pay(PaymentOrderEntity $order, array $config): GatewayResult
     {
-        return new PaymentResult(PaymentStatus::PENDING);
+        return new GatewayResult(PaymentStatus::PENDING);
     }
 }

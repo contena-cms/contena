@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Notification;
 
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerRegistry;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\PaymentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;

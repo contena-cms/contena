@@ -6,13 +6,13 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferDefinition;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Tests\Integration\Core\System\Payment\PaymentServiceTest;
 
 /**
@@ -29,7 +29,7 @@ final class PaymentTransferNotificationHandler implements PaymentNotificationHan
      */
     public function __construct(
         private readonly EntityRepository $repository,
-        private readonly PaymentTransferPersister $persister,
+        private readonly PaymentTransferStateHandler $stateHandler,
     ) {
     }
 
@@ -42,7 +42,8 @@ final class PaymentTransferNotificationHandler implements PaymentNotificationHan
     {
         $criteria = new Criteria()
             ->addFilter(new EqualsFilter('transferNo', $resourceNo))
-            ->addFilter(new EqualsFilter('channelConfigId', $channelConfigId));
+            ->addFilter(new EqualsFilter('channelConfigId', $channelConfigId))
+            ->setLimit(2);
         $entities = $this->repository->search($criteria, Context::createGlobalContext())->getEntities();
         $entity = $entities->first();
         if ($entities->count() !== 1 || $entity === null) {
@@ -54,8 +55,16 @@ final class PaymentTransferNotificationHandler implements PaymentNotificationHan
         return new PaymentNotificationTarget(PaymentTransferDefinition::ENTITY_NAME, $entity->getId(), $context, 'transferId');
     }
 
-    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void
     {
-        $this->persister->applyNotification($channel, $channelConfigId, $target, $result);
+        $criteria = new Criteria([$target->entityId]);
+        $criteria->addAssociation('state');
+        $transfer = $this->repository->search($criteria, $target->context)->getEntities()->first()
+            ?? throw PaymentException::notificationResourceNotFound($target->entityId);
+        if ($transfer->channelCode !== $channel || $transfer->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($transfer->transferNo);
+        }
+
+        $this->stateHandler->apply($transfer, $result, $target->context);
     }
 }

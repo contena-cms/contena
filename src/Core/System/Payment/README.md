@@ -17,7 +17,7 @@ Payment is a set of four business modules, not a generic workflow engine. Its co
 
 Modules are named for business responsibilities, not a shared notion of an order. Payment, refund and transfer orders have separate state and invariants; subscription agreements are not payment orders. Query belongs to the business it reads, not a separate domain. Each module keeps its callback handler alongside its service and persister; a one-file notification subdirectory adds no useful boundary.
 
-Every public business-service entry validates application status and the concrete tenant/platform scope before loading or creating data. There is no generic operation executor or duplicate operation-level event cycle. Decorate the module contract for entry-point policies that need different timing.
+Every public business-service entry validates application status and the concrete tenant/platform scope before loading or creating data. There is no generic business-workflow executor or duplicate operation-level event cycle. Decorate the module contract for entry-point policies that need different timing.
 
 The existing `AbstractPaymentService` is a convenience facade. It only delegates; business logic belongs in the four modules. Decorate the abstract contract, never inherit an internal implementation. Prefer an event when its timing matches the customization. New methods on supported abstract contracts should delegate to `getDecorated()` by default, so existing decorators remain compatible.
 
@@ -25,13 +25,15 @@ DAL entity/table names remain stable except for removal of the native routing `r
 
 ## Conversion, execution and persistence
 
-`PaymentOrderConverter::convert()` returns the flat order data array. It does not return an `order` envelope, allocate IDs or numbers, create execution records, or return a persistence result. `PaymentOrderConvertedEvent` permits enrichment before persistence. Accepted amount, currency, application, external reference and route cannot be changed at this stage; use the application-service contract to introduce a different business operation. Core-managed IDs, ownership, state and execution records cannot be supplied through conversion enrichment.
+`PaymentOrderConverter::convert()` returns the flat order data array. It does not return an `order` envelope, allocate IDs or numbers, create execution records, or return a persistence result. Like Shopware's order conversion event, `PaymentOrderConvertedEvent` exposes the converted array to plugins before persistence and returns the modified array. The core persister still allocates its own ID, number and initial state, and the application service creates execution records explicitly after the order exists.
 
-`PaymentOrderPersister` allocates the order identity and number and writes the order. Only after the order exists, the service creates the payment execution record and pins it as the primary transaction, then calls the gateway. Query creates its own audit record without replacing the primary payment execution. Conversion itself never calls a provider or persists data.
+`PaymentOrderPersister` allocates the order identity and number and writes the order. Only after the order exists, the service creates the payment transaction, pins it as the primary transaction and then calls the gateway. A query updates that same payment transaction; it is not a new financial transaction or a separate audit row. Conversion itself never calls a provider or persists data.
 
-`payment_order_transaction` currently records create/query executions. It is neither a database transaction nor a financial ledger, and query records are not additional debits. Do not infer settlement or retry safety from its name. A future payment-attempt/authorization/capture model must distinguish those business concepts explicitly rather than reuse query audit rows as money movements.
+`payment_order_transaction` represents the provider-facing payment attempt for an order, similar to Shopware's order transaction. It is neither a database transaction nor a financial ledger, and therefore has no generic operation `type`. Status queries reconcile the primary transaction instead of creating synthetic query transactions. Future authorization, capture and retry support must model those payment operations explicitly instead of adding speculative discriminators to this record.
 
-Each module's persister owns its local transaction and fixed-table tenant-scoped locks. Refund creation and amount reservation commit together. Result updates and outgoing notification enqueueing also commit together. Provider I/O is outside these local write transactions. Callers must not wrap a financial operation in a longer outer transaction: it would hold locks across I/O and could roll back local records after the provider accepted the operation.
+Persisters only create their module's records. The application services own orchestration and the state handlers own concurrent result application, failure recording and status transitions. Refund creation and amount reservation still commit together because they are one financial write. Result updates and outgoing notification enqueueing also commit together. Provider I/O is outside these local write transactions. Callers must not wrap a financial operation in a longer outer transaction: it would hold locks across I/O and could roll back local records after the provider accepted the operation.
+
+Gateway capability methods return `GatewayResult`: normalized provider status, an optional client `PaymentAction`, and `GatewayResponse` metadata/raw data. Business services return `PaymentResult`, which adds the platform resource numbers without copying gateway fields or mutating the gateway result after construction.
 
 State decisions use the values returned by the locking read, not a subsequent ordinary DAL snapshot read. Under an older repeatable-read snapshot, a conflicting nonterminal state-machine update fails with `PAYMENT__CONCURRENT_MODIFICATION` rather than overwriting another execution. Reconcile in a new transaction; never repeat a debit automatically.
 
@@ -56,7 +58,7 @@ Routing has two different extension contracts:
 
 Providers return candidates in preference order and must enforce application/tenant ownership. Core configuration checks enabled method assignments and channel configurations, using shared platform configurations as fallback. Unsupported capabilities and mismatched explicitly requested channels are excluded before selection. There is no core rule evaluation or `PaymentRuleScope`.
 
-`PaymentRouteCandidateEvent` lets a plugin veto a candidate. Strategies run in tagged priority order; `null` declines. A strategy must return one of the eligible candidate objects, not invent a new route. The built-in first-available strategy has priority `-1000`. `PaymentRouteResolvedEvent` observes the immutable selection. Add a rule engine, weights or circuit-breaker policy in a plugin through these contracts; do not introduce those policies into the core resolver.
+`PaymentRouteCandidateEvent` lets a plugin veto a candidate. Strategies run in tagged priority order; `null` declines. A strategy must return one of the eligible candidate objects, not invent a new route. If no plugin strategy selects one, core uses the first eligible candidate. `PaymentRouteResolvedEvent` observes the immutable selection. Add a rule engine, weights or circuit-breaker policy in a plugin through these contracts; do not introduce those policies into the core resolver.
 
 Queries and refunds load the order's persisted configuration using `PaymentGatewayResolver`; they must not run new-payment selection. A failed/unknown response never triggers automatic rerouting or a second financial call.
 
@@ -65,11 +67,11 @@ Queries and refunds load the order's persisted configuration using `PaymentGatew
 | Stage | Event | Failure semantics |
 | --- | --- | --- |
 | Eligible candidate / selected route | `PaymentRouteCandidateEvent` / `PaymentRouteResolvedEvent` | Runs before new resource creation |
-| Order data conversion | `Payment\Event\PaymentOrderConvertedEvent` | May enrich metadata or reject before persistence |
+| Order data conversion | `Event\PaymentOrderConvertedEvent` | May modify order data or reject before persistence |
 | Aggregate creation | `PaymentEntityCreatedEvent` | Inside the local creation transaction; failure rolls it back |
 | Before provider call | `PaymentGatewayStartedEvent` | May reject before provider I/O |
 | Provider returned / threw | `PaymentGatewayCompletedEvent` / `PaymentGatewayFailedEvent` | Observational; listener failures are logged, not substituted for the provider outcome |
-| Aggregate state changed | `PaymentResultAppliedEvent` | Inside the result transaction; failure rolls back state and transactional subscribers |
+| Aggregate state changed | `PaymentStatusChangedEvent` | Inside the result transaction; failure rolls back state and transactional subscribers |
 | Verified inbound notification applied | `GatewayNotificationProcessedEvent` | Inside the notification transaction |
 
 “Completed” means a PHP call returned, not that money moved successfully. Pending/unknown outcomes remain pending/unknown. Success/failure observers are best-effort; if a listener throws, later listeners in that dispatch might not run. They are not a durable message bus.
@@ -81,7 +83,7 @@ Transactional subscribers must only perform local transactional work. Do not sen
 ## Plugin example: enrich order metadata
 
 ```php
-use Contena\Core\System\Payment\Payment\Event\PaymentOrderConvertedEvent;
+use Contena\Core\System\Payment\Event\PaymentOrderConvertedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class MerchantOrderSubscriber implements EventSubscriberInterface
@@ -116,6 +118,6 @@ The implementation follows Shopware's explicit domain services, tagged handler d
 
 The minimum core retains tenant ownership, money/state consistency, refund reservation, callback verification/deduplication and transactional notification records. Routing rules, fees, risk decisions, orchestration and business-specific schedules belong in plugins. Removing a safety invariant is not an architectural simplification.
 
-The private-method review keeps protocol mappings, shared SDK conversion, exact amount formatting, reusable persistence/scoping rules, idempotent response reconstruction and observer exception isolation. Single-use forwarding wrappers and duplicate snapshot-state checks were removed. Input-format validation belongs to `OpenApi\Request` DTO constraints, not business services. Other PHP adapters must supply validated inputs; core still enforces application ownership, idempotency, state transitions and refundable balances. No validator factory, generic comparison engine or request pipeline was introduced. New private methods must name a real rule, boundary or reusable operation; new classes/interfaces must represent an actual module or extension contract, not merely shorten a method.
+The private-method review keeps protocol mappings, shared SDK conversion, exact amount formatting, reusable persistence/scoping rules, idempotent response reconstruction and observer exception isolation. Single-use forwarding wrappers and duplicate snapshot-state checks were removed. Input-format validation belongs to `OpenApi\Struct` DTO constraints, not business services. Other PHP adapters must supply validated inputs; core still enforces application ownership, idempotency, state transitions and refundable balances. No validator factory, generic comparison engine or request pipeline was introduced. New private methods must name a real rule, boundary or reusable operation; new classes/interfaces must represent an actual module or extension contract, not merely shorten a method.
 
 Missing refund, transfer, subscription and execution-record lookups now return their respective `PAYMENT__*_NOT_FOUND` codes with HTTP 404, instead of a generic invalid request or an unrelated order-not-found error.

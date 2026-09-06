@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\Payment\OpenApi\Api;
 
+use Contena\Core\System\Payment\Struct\PaymentAction;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 
 /**
@@ -22,12 +23,12 @@ final class OpenApiResponse
             'code' => self::SUCCESS,
             'message' => 'ok',
             'data' => array_filter([
-                'resource_no' => $result->resourceNo,
-                'external_resource_no' => $result->externalResourceNo,
-                'transaction_no' => $result->transactionNo,
-                'status' => $result->status,
-                'action' => $result->action,
-                'action_value' => $result->actionValue,
+                'resource_no' => $result->number,
+                'external_resource_no' => $result->externalNumber,
+                'transaction_no' => $result->transactionNumber,
+                'status' => $result->gatewayResult->status,
+                'action' => $result->gatewayResult->action === null ? PaymentAction::NONE : $result->gatewayResult->action->type,
+                'action_value' => $result->gatewayResult->action?->value,
             ], static fn (mixed $value): bool => $value !== null),
         ];
     }

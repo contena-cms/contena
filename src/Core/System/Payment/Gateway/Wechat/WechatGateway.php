@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Payment\Gateway\Wechat;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
@@ -14,10 +13,13 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
 use Contena\Core\System\Payment\Gateway\YansongdaPayClientInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
 use Contena\Core\System\Payment\Notification\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResponse;
+use Contena\Core\System\Payment\Struct\GatewayResult;
+use Contena\Core\System\Payment\Struct\PaymentAction;
 
 /**
  * @internal
@@ -33,7 +35,7 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
         return 'wechat';
     }
 
-    public function pay(PaymentOrderEntity $order, array $config): PaymentResult
+    public function pay(PaymentOrderEntity $order, array $config): GatewayResult
     {
         $action = match ($order->methodCode) {
             PaymentMethods::H5 => 'h5',
@@ -52,7 +54,7 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
         return $this->mapPayResult($this->call($config, $action, $parameters), $order->methodCode);
     }
 
-    public function query(PaymentOrderEntity $order, array $config): PaymentResult
+    public function query(PaymentOrderEntity $order, array $config): GatewayResult
     {
         $parameters = array_filter([
             'out_trade_no' => $order->orderNo,
@@ -70,7 +72,7 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
         return $this->createResult($data, $status, 'out_trade_no', ['transaction_id']);
     }
 
-    public function refund(PaymentRefundEntity $refund, PaymentOrderEntity $order, array $config): PaymentResult
+    public function refund(PaymentRefundEntity $refund, PaymentOrderEntity $order, array $config): GatewayResult
     {
         $parameters = array_filter([
             'out_trade_no' => $order->orderNo,
@@ -85,7 +87,7 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
         return $this->createResult($data, $status, 'out_refund_no', ['refund_id']);
     }
 
-    public function transfer(PaymentTransferEntity $transfer, array $config): PaymentResult
+    public function transfer(PaymentTransferEntity $transfer, array $config): GatewayResult
     {
         $parameters = array_replace($transfer->channelExtra ?? [], [
             '_action' => 'mch_transfer',
@@ -135,45 +137,41 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
     /**
      * @param array<string, mixed> $data
      */
-    private function mapPayResult(array $data, string $method): PaymentResult
+    private function mapPayResult(array $data, string $method): GatewayResult
     {
-        $action = PaymentResult::ACTION_NONE;
-        $actionValue = null;
+        $action = null;
 
         if (\is_string($data['_body'] ?? null) && $data['_body'] !== '') {
-            $action = $method === PaymentMethods::APP ? PaymentResult::ACTION_CLIENT : PaymentResult::ACTION_HTML;
-            $actionValue = $data['_body'];
+            $action = new PaymentAction($method === PaymentMethods::APP ? PaymentAction::CLIENT : PaymentAction::HTML, $data['_body']);
         } elseif ($method === PaymentMethods::H5 && \is_string($data['h5_url'] ?? null) && $data['h5_url'] !== '') {
-            $action = PaymentResult::ACTION_REDIRECT;
-            $actionValue = $data['h5_url'];
+            $action = new PaymentAction(PaymentAction::REDIRECT, $data['h5_url']);
         } elseif ($method === PaymentMethods::NATIVE && \is_string($data['code_url'] ?? $data['qr_code'] ?? null)) {
-            $action = PaymentResult::ACTION_QR_CODE;
-            $actionValue = (string) ($data['code_url'] ?? $data['qr_code']);
+            $action = new PaymentAction(PaymentAction::QR_CODE, (string) ($data['code_url'] ?? $data['qr_code']));
         } elseif (\in_array($method, [PaymentMethods::APP, PaymentMethods::JSAPI, PaymentMethods::MINI_PROGRAM], true)
             && (isset($data['prepay_id']) || isset($data['paySign']))
         ) {
-            $action = PaymentResult::ACTION_CLIENT;
-            $actionValue = json_encode($data, \JSON_THROW_ON_ERROR);
+            $action = new PaymentAction(PaymentAction::CLIENT, json_encode($data, \JSON_THROW_ON_ERROR));
         }
 
-        return $this->createResult($data, PaymentStatus::PENDING, 'out_trade_no', ['transaction_id'], $action, $actionValue);
+        return $this->createResult($data, PaymentStatus::PENDING, 'out_trade_no', ['transaction_id'], $action);
     }
 
     /**
      * @param array<string, mixed> $data
      * @param list<string> $resourceKeys
      */
-    private function createResult(array $data, string $status, string $requestKey, array $resourceKeys, string $action = PaymentResult::ACTION_NONE, ?string $actionValue = null): PaymentResult
+    private function createResult(array $data, string $status, string $requestKey, array $resourceKeys, ?PaymentAction $action = null): GatewayResult
     {
-        return new PaymentResult(
+        return new GatewayResult(
             status: $status,
             action: $action,
-            actionValue: $actionValue,
-            providerRequestId: $this->readString($data, $requestKey),
-            providerResourceId: $this->readString($data, ...$resourceKeys),
-            resultCode: $this->readString($data, 'code', 'result_code'),
-            resultMessage: $this->readString($data, 'message', 'msg', 'result_msg'),
-            data: $data,
+            response: new GatewayResponse(
+                requestId: $this->readString($data, $requestKey),
+                resourceId: $this->readString($data, ...$resourceKeys),
+                code: $this->readString($data, 'code', 'result_code'),
+                message: $this->readString($data, 'message', 'msg', 'result_msg'),
+                data: $data,
+            ),
         );
     }
 

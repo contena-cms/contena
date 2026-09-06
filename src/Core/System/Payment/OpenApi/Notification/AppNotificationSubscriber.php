@@ -6,11 +6,11 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordStatus;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
-use Contena\Core\System\Payment\Event\PaymentResultAppliedEvent;
+use Contena\Core\System\Payment\Event\PaymentStatusChangedEvent;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\PaymentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -40,10 +40,10 @@ final class AppNotificationSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [PaymentResultAppliedEvent::class => 'enqueue'];
+        return [PaymentStatusChangedEvent::class => 'enqueue'];
     }
 
-    public function enqueue(PaymentResultAppliedEvent $event): void
+    public function enqueue(PaymentStatusChangedEvent $event): void
     {
         $reference = $event->entity;
         $envelope = self::ENVELOPES[$reference->entityName] ?? null;
@@ -74,9 +74,9 @@ final class AppNotificationSubscriber implements EventSubscriberInterface
                 'type' => $envelope['type'],
                 'resource_no' => $entity->get($envelope['number']),
                 'external_resource_no' => $entity->get($envelope['externalNumber']),
-                'status' => $event->result->status,
-                'result_code' => $event->result->resultCode,
-                'result_message' => $event->result->resultMessage,
+                'status' => $event->gatewayResult->status,
+                'result_code' => $event->gatewayResult->response->code,
+                'result_message' => $event->gatewayResult->response->message,
             ], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE),
             'status' => PaymentNotifyRecordStatus::STATUS_PENDING,
             'retryCount' => 0,

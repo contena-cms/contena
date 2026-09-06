@@ -13,8 +13,9 @@ use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\PaymentRoute;
+use Contena\Core\System\Payment\Struct\GatewayResponse;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Core\System\Payment\Struct\PaymentEntityReference;
-use Contena\Core\System\Payment\Struct\PaymentResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -42,16 +43,16 @@ final class GatewayOperationExecutorTest extends TestCase
     public function testGatewayObserverCannotDiscardProviderSuccessOrRepeatCall(): void
     {
         $this->dispatcher->addListener(PaymentGatewayCompletedEvent::class, static function (PaymentGatewayCompletedEvent $event): never {
-            static::assertSame(PaymentStatus::SUCCEEDED, $event->result->status);
+            static::assertSame(PaymentStatus::SUCCEEDED, $event->gatewayResult->status);
             throw PaymentException::invalidRequest('Observer failed');
         });
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('error');
         $executor = new GatewayOperationExecutor($this->dispatcher, $logger);
-        $result = new PaymentResult(PaymentStatus::SUCCEEDED, providerResourceId: 'provider-1');
+        $result = new GatewayResult(PaymentStatus::SUCCEEDED, response: new GatewayResponse(resourceId: 'provider-1'));
         $calls = 0;
 
-        $actual = $executor->execute(PaymentOperation::PAY, $this->reference(), $this->route(), $this->context, static function () use (&$calls, $result): PaymentResult {
+        $actual = $executor->execute(PaymentOperation::PAY, $this->reference(), $this->route(), $this->context, static function () use (&$calls, $result): GatewayResult {
             ++$calls;
 
             return $result;

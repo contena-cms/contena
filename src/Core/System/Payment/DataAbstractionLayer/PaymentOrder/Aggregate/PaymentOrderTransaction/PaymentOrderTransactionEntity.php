@@ -19,8 +19,6 @@ class PaymentOrderTransactionEntity extends Entity
 
     public protected(set) string $transactionNo;
 
-    public protected(set) string $type;
-
     public protected(set) string $channelCode;
 
     public protected(set) ?string $methodCode = null;
@@ -41,8 +39,6 @@ class PaymentOrderTransactionEntity extends Entity
     public protected(set) ?string $resultCode = null;
 
     public protected(set) ?string $resultMessage = null;
-
-    public protected(set) ?string $operator = null;
 
     public protected(set) ?PaymentOrderEntity $order = null;
 

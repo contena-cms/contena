@@ -8,7 +8,11 @@ Incoming payments (`Payment`), refunds, transfers and subscription agreements no
 
 The order converter returns flat order data and dispatches `PaymentOrderConvertedEvent` for metadata/custom-field enrichment before persistence. It no longer allocates identifiers, creates transactions or returns an `order` envelope. Provider execution records are created explicitly before provider I/O.
 
-Input-format validation is centralized in OpenApi request DTOs. PHP business-service callers must supply validated inputs; ownership, idempotency and financial state constraints remain in core. Catchable failures now have dedicated classes under `Payment\Exception`, retaining existing factory methods, error codes and HTTP statuses. Transfer replay rejects a changed payee name. Orders no longer eagerly load transaction histories during result processing.
+Payment status queries now reconcile the primary payment transaction instead of creating synthetic query transactions. Payment transactions represent provider-facing payment attempts, so the unused operation discriminator and operator placeholder were removed.
+
+Gateway capability methods now return `GatewayResult`, while business services return `PaymentResult` with the platform resource numbers. Provider response metadata/raw data and client actions are represented by `GatewayResponse` and `PaymentAction`; the ambiguous mutating `PaymentResult::withResource()` API was removed.
+
+Input-format validation is centralized in the request objects under `OpenApi\Struct`. PHP business-service callers must supply validated inputs; ownership, idempotency and financial state constraints remain in core. Catchable failures now have dedicated classes under `Payment\Exception`, retaining existing factory methods, error codes and HTTP statuses. Transfer replay rejects a changed payee name. Orders no longer eagerly load transaction histories during result processing.
 
 Gateway SDK handling is consolidated in the internal `YansongdaPayClient`; plugins can register capability-specific gateways with their own clients. WeChat single transfers select the matching SDK protocol. Unrecognized responses and abnormal refunds remain unresolved rather than releasing reservations as confirmed failures, and Alipay amount conversion preserves integer precision.
 

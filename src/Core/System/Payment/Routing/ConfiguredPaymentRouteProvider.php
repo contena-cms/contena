@@ -49,10 +49,14 @@ final class ConfiguredPaymentRouteProvider implements PaymentRouteProviderInterf
                 |> array_unique(...)
                 |> array_values(...) as $channel) {
                 foreach ($configs as $config) {
-                    if ($config->channel?->code !== $channel || !$config->channel->status || !$config->status
-                        || $config->tenantId !== $context->getTenantId() || $config->paymentAppId !== $appId
-                        || !$this->gatewayRegistry->has($channel)
-                    ) {
+                    $configuredChannel = $config->channel;
+                    if ($configuredChannel === null || !$config->status || !$configuredChannel->status) {
+                        continue;
+                    }
+                    if ($config->paymentAppId !== $appId || $config->tenantId !== $context->getTenantId()) {
+                        continue;
+                    }
+                    if ($configuredChannel->code !== $channel || !$this->gatewayRegistry->has($channel)) {
                         continue;
                     }
 
@@ -80,15 +84,18 @@ final class ConfiguredPaymentRouteProvider implements PaymentRouteProviderInterf
         $criteria->addFilter(new EqualsFilter('status', true));
         $criteria->addFilter(new EqualsFilter('channelMethod.methodCode', $routing->request->methodCode));
         $criteria->addFilter(new EqualsFilter('channelMethod.status', true));
+        $criteria->addFilter(new EqualsFilter('channelMethod.channel.status', true));
         $criteria->addAssociation('channelMethod.channel');
         $criteria->addSorting(new FieldSorting('sort'), new FieldSorting('id'));
         $channels = [];
         foreach ($this->methodRepository->search($criteria, $routing->context)->getEntities() as $assignment) {
-            if (!$assignment->status || !$assignment->channelMethod?->status || !$assignment->channelMethod->channel?->status
-            ) {
+            $method = $assignment->channelMethod;
+            if (!$assignment->status || $method === null || !$method->status || !$method->channel?->status) {
                 continue;
             }
-            $channels[] = $assignment->channelMethod->channel->code;
+            if ($method->channel->code !== '') {
+                $channels[] = $method->channel->code;
+            }
         }
 
         return array_values(array_unique($channels));

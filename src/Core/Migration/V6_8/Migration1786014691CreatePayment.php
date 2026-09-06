@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `payment_transfer` (
 SQL
         );
 
-        // payment_order_transaction (payment flow log, no notifications)
+        // payment_order_transaction (provider-facing payment attempt, no notifications)
         $this->executeDdlStatement(
             $connection,
             <<<'SQL'
@@ -419,17 +419,15 @@ CREATE TABLE IF NOT EXISTS `payment_order_transaction` (
     `tenant_id`  BINARY(16)                              NULL,
     `order_id` BINARY(16) NOT NULL COMMENT 'Order ID',
     `transaction_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform transaction no',
-    `type` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Payment channel execution type: create / query / close (refunds are stored on payment_refund)',
     `channel_code` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Channel code (snapshot)',
     `method_code` VARCHAR(32) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Payment method code (snapshot)',
-    `amount` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Operation amount in cents (0 for query operations)',
+    `amount` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Payment amount in cents',
     `channel_request_no` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Channel request no',
     `channel_trade_no` VARCHAR(128) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Channel transaction no',
     `state_id` BINARY(16) NOT NULL COMMENT 'State ID',
     `response_data` JSON NULL COMMENT 'Provider response snapshot',
     `result_code` VARCHAR(64) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Result code',
     `result_message` VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Result message',
-    `operator` VARCHAR(64) COLLATE utf8mb4_unicode_ci NULL COMMENT 'Operator',
     `custom_fields` JSON NULL COMMENT 'Custom fields',
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,

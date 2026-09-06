@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
@@ -11,6 +10,7 @@ use Contena\Core\System\Payment\Gateway\Alipay\AlipayGateway;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
 use Contena\Core\System\Payment\Gateway\YansongdaPayClientInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -144,8 +144,8 @@ final class ProviderConfigurationTest extends TestCase
             [],
         );
 
-        static::assertSame('refund-1', $result->providerRequestId);
-        static::assertSame('provider-refund-1', $result->providerResourceId);
+        static::assertSame('refund-1', $result->response->requestId);
+        static::assertSame('provider-refund-1', $result->response->resourceId);
     }
 
     public function testProviderReceivesPlatformTransferNumber(): void

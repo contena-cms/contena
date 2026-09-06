@@ -11,9 +11,7 @@ use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
-use Contena\Core\System\Payment\PaymentAppGuard;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Routing\FirstAvailableRouteStrategy;
 use Contena\Core\System\Payment\Routing\PaymentRoute;
 use Contena\Core\System\Payment\Routing\PaymentRouteProviderInterface;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
@@ -29,7 +27,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 #[CoversClass(PaymentRouteResolver::class)]
 #[CoversClass(PaymentRouteCandidateEvent::class)]
-#[CoversClass(FirstAvailableRouteStrategy::class)]
 #[CoversClass(GatewayRegistry::class)]
 final class PaymentRoutingExtensionTest extends TestCase
 {
@@ -64,7 +61,7 @@ final class PaymentRoutingExtensionTest extends TestCase
             static::assertSame($preferred, $event->route);
             $resolved = true;
         });
-        $resolver = new PaymentRouteResolver([$provider], [$strategy, new FirstAvailableRouteStrategy()], new PaymentAppGuard(), $dispatcher);
+        $resolver = new PaymentRouteResolver([$provider], [$strategy], $dispatcher);
 
         static::assertSame($preferred, $resolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class)));
         static::assertTrue($resolved);
@@ -77,7 +74,7 @@ final class PaymentRoutingExtensionTest extends TestCase
         $gateway->method('code')->willReturn('gateway');
         $strategy = static::createStub(PaymentRouteSelectionStrategyInterface::class);
         $strategy->method('select')->willReturn(new PaymentRoute($gateway, Uuid::randomHex(), [], false));
-        $resolver = new PaymentRouteResolver([], [$strategy], new PaymentAppGuard(), new EventDispatcher());
+        $resolver = new PaymentRouteResolver([], [$strategy], new EventDispatcher());
 
         $this->expectExceptionObject(PaymentException::invalidRequest('A routing strategy must select an eligible payment route.'));
         $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class));

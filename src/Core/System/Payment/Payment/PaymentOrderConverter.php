@@ -4,7 +4,7 @@ namespace Contena\Core\System\Payment\Payment;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\Payment\Event\PaymentOrderConvertedEvent;
+use Contena\Core\System\Payment\Event\PaymentOrderConvertedEvent;
 use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\Routing\PaymentRoute;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

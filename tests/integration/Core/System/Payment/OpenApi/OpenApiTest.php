@@ -9,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Payment\AbstractPaymentService;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
@@ -16,13 +17,13 @@ use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiResponse;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
-use Contena\Core\System\Payment\OpenApi\Request\PaymentRequestMapper;
-use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
-use Contena\Core\System\Payment\Payment\Struct\OrderReference;
+use Contena\Core\System\Payment\OpenApi\Signature;
 use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Refund\Struct\RefundRequest;
-use Contena\Core\System\Payment\Service\AbstractPaymentService;
+use Contena\Core\System\Payment\Struct\GatewayResponse;
+use Contena\Core\System\Payment\Struct\GatewayResult;
+use Contena\Core\System\Payment\Struct\PaymentAction;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest;
 use Contena\Core\System\Payment\Transfer\Struct\TransferRequest;
@@ -70,7 +71,6 @@ final class OpenApiTest extends TestCase
             static::getContainer()->set(PaymentController::class, new PaymentController(
                 self::$sharedPaymentService,
                 static::getContainer()->get('request_stack'),
-                new PaymentRequestMapper(),
             ));
         }
         self::$sharedPaymentService->reset();
@@ -103,7 +103,7 @@ final class OpenApiTest extends TestCase
             'external_resource_no' => 'app-resource',
             'transaction_no' => 'platform-transaction',
             'status' => PaymentStatus::PENDING,
-            'action' => PaymentResult::ACTION_REDIRECT,
+            'action' => PaymentAction::REDIRECT,
             'action_value' => 'https://cashier.example/pay',
         ], $body['data']);
 
@@ -154,8 +154,8 @@ final class OpenApiTest extends TestCase
     public function testExpiredSignatureIsRejectedBeforeThePaymentServiceIsCalled(): void
     {
         $parameters = $this->signed(['order_no' => 'platform-order']);
-        $parameters['timestamp'] = (string) (time() - SignUtil::TIMESTAMP_TOLERANCE - 1);
-        $parameters['sign'] = SignUtil::sign($parameters, self::APP_SECRET);
+        $parameters['timestamp'] = (string) (time() - Signature::TIMESTAMP_TOLERANCE - 1);
+        $parameters['sign'] = Signature::sign($parameters, self::APP_SECRET);
 
         $this->browser->jsonRequest('POST', '/api/payment/query', $parameters);
 
@@ -211,21 +211,26 @@ final class OpenApiTest extends TestCase
 
     /**
      * @param array<string, mixed> $parameters
-     * @param class-string $requestClass
+     * @param class-string|null $requestClass
      */
     #[DataProvider('operationProvider')]
-    public function testTranslatesTheUnifiedOperationContracts(string $path, string $operation, array $parameters, string $requestClass): void
+    public function testTranslatesTheUnifiedOperationContracts(string $path, string $operation, array $parameters, ?string $requestClass): void
     {
         $this->browser->jsonRequest('POST', $path, $this->signed($parameters));
 
         static::assertSame(Response::HTTP_OK, $this->browser->getResponse()->getStatusCode(), (string) $this->browser->getResponse()->getContent());
         static::assertSame($operation, $this->paymentService->operation);
-        static::assertInstanceOf($requestClass, $this->paymentService->request);
+        if ($requestClass === null) {
+            static::assertNull($this->paymentService->request);
+            static::assertSame('app-order-1', $this->paymentService->externalOrderNo);
+        } else {
+            static::assertInstanceOf($requestClass, $this->paymentService->request);
+        }
         static::assertSame($this->tenantId, $this->paymentService->context?->getTenantId());
     }
 
     /**
-     * @return iterable<string, array{string, string, array<string, mixed>, class-string}>
+     * @return iterable<string, array{string, string, array<string, mixed>, class-string|null}>
      */
     public static function operationProvider(): iterable
     {
@@ -233,7 +238,7 @@ final class OpenApiTest extends TestCase
             '/api/payment/query',
             'query',
             ['external_order_no' => 'app-order-1'],
-            OrderReference::class,
+            null,
         ];
         yield 'refund a platform order' => [
             '/api/payment/refund',
@@ -318,7 +323,7 @@ final class OpenApiTest extends TestCase
             'nonce' => bin2hex(random_bytes(8)),
             ...$parameters,
         ];
-        $parameters['sign'] = SignUtil::sign($parameters, self::APP_SECRET);
+        $parameters['sign'] = Signature::sign($parameters, self::APP_SECRET);
 
         return $parameters;
     }
@@ -341,7 +346,11 @@ final class OpenApiServiceStub extends AbstractPaymentService
 
     public ?PaymentAppEntity $app = null;
 
-    public PaymentRequest|OrderReference|RefundRequest|SubscriptionRequest|TransferRequest|null $request = null;
+    public PaymentRequest|RefundRequest|SubscriptionRequest|TransferRequest|null $request = null;
+
+    public ?string $orderNo = null;
+
+    public ?string $externalOrderNo = null;
 
     public ?Context $context = null;
 
@@ -350,6 +359,8 @@ final class OpenApiServiceStub extends AbstractPaymentService
         $this->operation = null;
         $this->app = null;
         $this->request = null;
+        $this->orderNo = null;
+        $this->externalOrderNo = null;
         $this->context = null;
     }
 
@@ -363,9 +374,12 @@ final class OpenApiServiceStub extends AbstractPaymentService
         return $this->record('pay', $app, $request, $context);
     }
 
-    public function query(PaymentAppEntity $app, OrderReference $request, Context $context): PaymentResult
+    public function query(PaymentAppEntity $app, ?string $orderNo, ?string $externalOrderNo, Context $context): PaymentResult
     {
-        return $this->record('query', $app, $request, $context);
+        $this->orderNo = $orderNo;
+        $this->externalOrderNo = $externalOrderNo;
+
+        return $this->record('query', $app, null, $context);
     }
 
     public function refund(PaymentAppEntity $app, RefundRequest $request, Context $context): PaymentResult
@@ -386,7 +400,7 @@ final class OpenApiServiceStub extends AbstractPaymentService
     private function record(
         string $operation,
         PaymentAppEntity $app,
-        PaymentRequest|OrderReference|RefundRequest|SubscriptionRequest|TransferRequest $request,
+        PaymentRequest|RefundRequest|SubscriptionRequest|TransferRequest|null $request,
         Context $context,
     ): PaymentResult {
         $this->operation = $operation;
@@ -395,15 +409,14 @@ final class OpenApiServiceStub extends AbstractPaymentService
         $this->context = $context;
 
         return new PaymentResult(
-            PaymentStatus::PENDING,
-            PaymentResult::ACTION_REDIRECT,
-            'https://cashier.example/pay',
-            providerRequestId: 'hidden-provider-request',
-            providerResourceId: 'hidden-provider-resource',
-            data: ['hidden' => true],
-            resourceNo: 'platform-resource',
-            externalResourceNo: 'app-resource',
-            transactionNo: 'platform-transaction',
+            'platform-resource',
+            'app-resource',
+            new GatewayResult(
+                PaymentStatus::PENDING,
+                new PaymentAction(PaymentAction::REDIRECT, 'https://cashier.example/pay'),
+                new GatewayResponse('hidden-provider-request', 'hidden-provider-resource', data: ['hidden' => true]),
+            ),
+            'platform-transaction',
         );
     }
 }

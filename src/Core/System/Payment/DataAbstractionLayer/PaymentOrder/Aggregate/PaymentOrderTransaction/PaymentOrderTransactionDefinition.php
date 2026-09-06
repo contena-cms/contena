@@ -39,11 +39,6 @@ class PaymentOrderTransactionDefinition extends EntityDefinition
         return PaymentOrderTransactionEntity::class;
     }
 
-    public function getDefaults(): array
-    {
-        return ['amount' => 0];
-    }
-
     public function since(): ?string
     {
         return '6.8.0.0';
@@ -56,7 +51,6 @@ class PaymentOrderTransactionDefinition extends EntityDefinition
             new TenantField()->setDescription('Unique identity of the owning tenant.'),
             new FkField('order_id', 'orderId', PaymentOrderDefinition::class)->addFlags(new ApiAware(), new Required()),
             new StringField('transaction_no', 'transactionNo', 64)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
-            new StringField('type', 'type', 32)->addFlags(new ApiAware(), new Required()),
             new StringField('channel_code', 'channelCode', 32)->addFlags(new ApiAware(), new Required()),
             new StringField('method_code', 'methodCode', 32)->addFlags(new ApiAware()),
             new IntField('amount', 'amount')->addFlags(new ApiAware(), new Required()),
@@ -66,7 +60,6 @@ class PaymentOrderTransactionDefinition extends EntityDefinition
             new JsonField('response_data', 'responseData')->addFlags(new ApiAware()),
             new StringField('result_code', 'resultCode', 64)->addFlags(new ApiAware()),
             new StringField('result_message', 'resultMessage', 255)->addFlags(new ApiAware()),
-            new StringField('operator', 'operator', 64)->addFlags(new ApiAware()),
             new CustomFields()->addFlags(new ApiAware()),
             new ManyToOneAssociationField('order', 'order_id', PaymentOrderDefinition::class)->addFlags(new ApiAware()),
             new ManyToOneAssociationField('state', 'state_id', StateMachineStateDefinition::class)->addFlags(new ApiAware()),

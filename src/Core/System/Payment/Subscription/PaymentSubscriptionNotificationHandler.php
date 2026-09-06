@@ -6,13 +6,13 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Tests\Integration\Core\System\Payment\PaymentServiceTest;
 
 /**
@@ -29,7 +29,7 @@ final class PaymentSubscriptionNotificationHandler implements PaymentNotificatio
      */
     public function __construct(
         private readonly EntityRepository $repository,
-        private readonly PaymentSubscriptionPersister $persister,
+        private readonly PaymentSubscriptionStateHandler $stateHandler,
     ) {
     }
 
@@ -55,8 +55,14 @@ final class PaymentSubscriptionNotificationHandler implements PaymentNotificatio
         return new PaymentNotificationTarget(PaymentRecurringDefinition::ENTITY_NAME, $entity->getId(), $context, 'recurringId');
     }
 
-    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void
     {
-        $this->persister->applyNotification($channel, $channelConfigId, $target, $result);
+        $subscription = $this->repository->search(new Criteria([$target->entityId]), $target->context)->getEntities()->first()
+            ?? throw PaymentException::notificationResourceNotFound($target->entityId);
+        if ($subscription->channelCode !== $channel || $subscription->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($subscription->recurringNo);
+        }
+
+        $this->stateHandler->apply($subscription, $result, $target->context);
     }
 }

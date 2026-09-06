@@ -5,14 +5,17 @@ namespace Contena\Core\System\Payment\OpenApi\Api;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Payment\AbstractPaymentService;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\OpenApi\Request\PaymentRequest;
-use Contena\Core\System\Payment\OpenApi\Request\PaymentRequestMapper;
-use Contena\Core\System\Payment\OpenApi\Request\QueryRequest;
-use Contena\Core\System\Payment\OpenApi\Request\RefundRequest;
-use Contena\Core\System\Payment\OpenApi\Request\SubscriptionRequest;
-use Contena\Core\System\Payment\OpenApi\Request\TransferRequest;
-use Contena\Core\System\Payment\Service\AbstractPaymentService;
+use Contena\Core\System\Payment\OpenApi\Struct\PaymentRequest;
+use Contena\Core\System\Payment\OpenApi\Struct\QueryRequest;
+use Contena\Core\System\Payment\OpenApi\Struct\RefundRequest;
+use Contena\Core\System\Payment\OpenApi\Struct\SubscriptionRequest;
+use Contena\Core\System\Payment\OpenApi\Struct\TransferRequest;
+use Contena\Core\System\Payment\Payment\Struct\PaymentRequest as DomainPaymentRequest;
+use Contena\Core\System\Payment\Refund\Struct\RefundRequest as DomainRefundRequest;
+use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest as DomainSubscriptionRequest;
+use Contena\Core\System\Payment\Transfer\Struct\TransferRequest as DomainTransferRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,7 +36,6 @@ final class PaymentController
     public function __construct(
         private readonly AbstractPaymentService $paymentService,
         private readonly RequestStack $requestStack,
-        private readonly PaymentRequestMapper $requestMapper,
     ) {
     }
 
@@ -44,7 +46,19 @@ final class PaymentController
         PaymentRequest $paymentRequest,
         Context $context,
     ): JsonResponse {
-        $request = $this->requestMapper->payment($paymentRequest, $this->requestStack->getCurrentRequest()?->getClientIp());
+        $request = new DomainPaymentRequest(
+            externalOrderNo: $paymentRequest->externalOrderNo,
+            amount: $paymentRequest->amount,
+            method: $paymentRequest->method,
+            subject: $paymentRequest->subject,
+            currencyCode: $paymentRequest->currencyCode,
+            channel: $paymentRequest->channel,
+            deviceType: $paymentRequest->deviceType,
+            notifyUrl: $paymentRequest->notifyUrl,
+            returnUrl: $paymentRequest->returnUrl,
+            extra: $paymentRequest->extra,
+            clientIp: $this->requestStack->getCurrentRequest()?->getClientIp(),
+        );
 
         return new JsonResponse(OpenApiResponse::success($this->paymentService->pay($app, $request, $context)));
     }
@@ -56,7 +70,7 @@ final class PaymentController
         QueryRequest $queryRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->query($app, $this->requestMapper->query($queryRequest), $context);
+        $result = $this->paymentService->query($app, $queryRequest->orderNo, $queryRequest->externalOrderNo, $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -68,7 +82,13 @@ final class PaymentController
         RefundRequest $refundRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->refund($app, $this->requestMapper->refund($refundRequest), $context);
+        $result = $this->paymentService->refund($app, new DomainRefundRequest(
+            externalRefundNo: $refundRequest->externalRefundNo,
+            amount: $refundRequest->amount,
+            orderNo: $refundRequest->orderNo,
+            externalOrderNo: $refundRequest->externalOrderNo,
+            reason: $refundRequest->reason,
+        ), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -80,7 +100,19 @@ final class PaymentController
         SubscriptionRequest $subscriptionRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->subscribe($app, $this->requestMapper->subscription($subscriptionRequest), $context);
+        $result = $this->paymentService->subscribe($app, new DomainSubscriptionRequest(
+            externalSubscriptionNo: $subscriptionRequest->externalSubscriptionNo,
+            channel: $subscriptionRequest->channel,
+            notifyUrl: $subscriptionRequest->notifyUrl,
+            returnUrl: $subscriptionRequest->returnUrl,
+            periodType: $subscriptionRequest->periodType,
+            period: $subscriptionRequest->period,
+            executeTime: $subscriptionRequest->executeTime,
+            singleAmount: $subscriptionRequest->singleAmount,
+            totalAmount: $subscriptionRequest->totalAmount,
+            totalPayments: $subscriptionRequest->totalPayments,
+            extra: $subscriptionRequest->extra,
+        ), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -92,7 +124,17 @@ final class PaymentController
         TransferRequest $transferRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->transfer($app, $this->requestMapper->transfer($transferRequest), $context);
+        $result = $this->paymentService->transfer($app, new DomainTransferRequest(
+            externalTransferNo: $transferRequest->externalTransferNo,
+            amount: $transferRequest->amount,
+            currencyCode: $transferRequest->currencyCode,
+            payee: $transferRequest->payee,
+            payeeName: $transferRequest->payeeName,
+            channel: $transferRequest->channel,
+            remark: $transferRequest->remark,
+            notifyUrl: $transferRequest->notifyUrl,
+            extra: $transferRequest->extra,
+        ), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }

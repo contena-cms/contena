@@ -7,8 +7,8 @@ use Contena\Core\System\Payment\Event\PaymentGatewayCompletedEvent;
 use Contena\Core\System\Payment\Event\PaymentGatewayFailedEvent;
 use Contena\Core\System\Payment\Event\PaymentGatewayStartedEvent;
 use Contena\Core\System\Payment\Routing\PaymentRoute;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Core\System\Payment\Struct\PaymentEntityReference;
-use Contena\Core\System\Payment\Struct\PaymentResult;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -30,9 +30,9 @@ class GatewayOperationExecutor
     }
 
     /**
-     * @param callable(): PaymentResult $call
+     * @param callable(): GatewayResult $call
      */
-    public function execute(string $operation, PaymentEntityReference $entity, PaymentRoute $route, Context $context, callable $call): PaymentResult
+    public function execute(string $operation, PaymentEntityReference $entity, PaymentRoute $route, Context $context, callable $call): GatewayResult
     {
         try {
             $this->eventDispatcher->dispatch(new PaymentGatewayStartedEvent($operation, $entity, $route->gateway->code(), $route->channelConfigId, $context));

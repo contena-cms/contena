@@ -9,19 +9,20 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordStatus;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
-use Contena\Core\System\Payment\Event\PaymentResultAppliedEvent;
+use Contena\Core\System\Payment\Event\PaymentStatusChangedEvent;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\OpenApi\Notification\AppNotificationSubscriber;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Struct\GatewayResponse;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Core\System\Payment\Struct\PaymentEntityReference;
-use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -31,7 +32,7 @@ use PHPUnit\Framework\TestCase;
  * @internal
  */
 #[CoversClass(AppNotificationSubscriber::class)]
-#[CoversClass(PaymentResultAppliedEvent::class)]
+#[CoversClass(PaymentStatusChangedEvent::class)]
 final class AppNotificationSubscriberTest extends TestCase
 {
     #[DataProvider('notificationEnvelopes')]
@@ -73,10 +74,10 @@ final class AppNotificationSubscriberTest extends TestCase
             static::identicalTo($context),
         );
 
-        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentResultAppliedEvent(
+        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentStatusChangedEvent(
             new PaymentEntityReference($entityName, $id),
             $context,
-            new PaymentResult(PaymentStatus::SUCCEEDED, resultCode: 'SUCCESS', resultMessage: 'Accepted'),
+            new GatewayResult(PaymentStatus::SUCCEEDED, response: new GatewayResponse(code: 'SUCCESS', message: 'Accepted')),
         ));
     }
 
@@ -98,7 +99,7 @@ final class AppNotificationSubscriberTest extends TestCase
         $registry->expects($this->never())->method('getRepository');
         $outbox = StaticEntityRepository::of(PaymentNotifyRecordCollection::class);
 
-        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentResultAppliedEvent(new PaymentEntityReference('plugin_invoice', Uuid::randomHex()), Context::createDefaultContext(), new PaymentResult()));
+        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentStatusChangedEvent(new PaymentEntityReference('plugin_invoice', Uuid::randomHex()), Context::createDefaultContext(), new GatewayResult()));
 
         static::assertSame([], $outbox->creates);
     }
@@ -111,7 +112,7 @@ final class AppNotificationSubscriberTest extends TestCase
         $registry->method('getRepository')->willReturn(StaticEntityRepository::of(EntityCollection::class, [new EntityCollection([$entity])]));
         $outbox = StaticEntityRepository::of(PaymentNotifyRecordCollection::class);
 
-        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentResultAppliedEvent(new PaymentEntityReference('payment_order', $id), Context::createDefaultContext(), new PaymentResult()));
+        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentStatusChangedEvent(new PaymentEntityReference('payment_order', $id), Context::createDefaultContext(), new GatewayResult()));
 
         static::assertSame([], $outbox->creates);
     }
@@ -124,6 +125,6 @@ final class AppNotificationSubscriberTest extends TestCase
         $outbox = StaticEntityRepository::of(PaymentNotifyRecordCollection::class);
 
         $this->expectExceptionObject(PaymentException::notificationResourceNotFound($id));
-        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentResultAppliedEvent(new PaymentEntityReference('payment_order', $id), Context::createDefaultContext(), new PaymentResult()));
+        new AppNotificationSubscriber($outbox, $registry)->enqueue(new PaymentStatusChangedEvent(new PaymentEntityReference('payment_order', $id), Context::createDefaultContext(), new GatewayResult()));
     }
 }

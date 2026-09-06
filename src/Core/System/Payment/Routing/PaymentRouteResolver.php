@@ -7,7 +7,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\Event\PaymentRouteCandidateEvent;
 use Contena\Core\System\Payment\Event\PaymentRouteResolvedEvent;
-use Contena\Core\System\Payment\PaymentAppGuard;
 use Contena\Core\System\Payment\PaymentException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -23,7 +22,6 @@ class PaymentRouteResolver extends AbstractPaymentRouteResolver
     public function __construct(
         private readonly iterable $providers,
         private readonly iterable $strategies,
-        private readonly PaymentAppGuard $appGuard,
         private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
@@ -35,7 +33,12 @@ class PaymentRouteResolver extends AbstractPaymentRouteResolver
 
     public function resolve(PaymentAppEntity $app, Context $context, PaymentRoutingRequest $request): PaymentRoute
     {
-        $this->appGuard->validate($app, $context);
+        if (!$app->status || $app->tenantId !== $context->getTenantId()) {
+            throw PaymentException::appNotFound($app->appCode);
+        }
+        if ($context->hasGlobalTenantAccess()) {
+            throw PaymentException::invalidRequest('Payment operations require a platform or tenant context.');
+        }
         $routing = new PaymentRoutingContext($app, $request, $context);
         $candidates = [];
         $seen = [];
@@ -58,20 +61,25 @@ class PaymentRouteResolver extends AbstractPaymentRouteResolver
             }
         }
 
+        $selected = null;
         foreach ($this->strategies as $strategy) {
-            $route = $strategy->select($candidates, $routing);
-            if ($route === null) {
+            $selected = $strategy->select($candidates, $routing);
+            if ($selected === null) {
                 continue;
             }
-            if (!\in_array($route, $candidates, true)) {
+            if (!\in_array($selected, $candidates, true)) {
                 throw PaymentException::invalidRequest('A routing strategy must select an eligible payment route.');
             }
 
-            $this->eventDispatcher->dispatch(new PaymentRouteResolvedEvent($route, $routing));
-
-            return $route;
+            break;
+        }
+        $selected ??= $candidates[0] ?? null;
+        if ($selected === null) {
+            throw PaymentException::routeNotFound($app->getId(), $request->methodCode);
         }
 
-        throw PaymentException::routeNotFound($app->getId(), $request->methodCode);
+        $this->eventDispatcher->dispatch(new PaymentRouteResolvedEvent($selected, $routing));
+
+        return $selected;
     }
 }

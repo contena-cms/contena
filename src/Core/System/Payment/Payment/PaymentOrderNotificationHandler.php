@@ -6,13 +6,14 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregate\PaymentOrderTransaction\PaymentOrderTransactionCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Tests\Integration\Core\System\Payment\PaymentServiceTest;
 
 /**
@@ -26,10 +27,12 @@ final class PaymentOrderNotificationHandler implements PaymentNotificationHandle
 {
     /**
      * @param EntityRepository<PaymentOrderCollection> $repository
+     * @param EntityRepository<PaymentOrderTransactionCollection> $transactionRepository
      */
     public function __construct(
         private readonly EntityRepository $repository,
-        private readonly PaymentOrderPersister $persister,
+        private readonly EntityRepository $transactionRepository,
+        private readonly PaymentOrderStateHandler $stateHandler,
     ) {
     }
 
@@ -55,8 +58,19 @@ final class PaymentOrderNotificationHandler implements PaymentNotificationHandle
         return new PaymentNotificationTarget(PaymentOrderDefinition::ENTITY_NAME, $entity->getId(), $context, 'orderId');
     }
 
-    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void
     {
-        $this->persister->applyNotification($channel, $channelConfigId, $target, $result);
+        $criteria = new Criteria([$target->entityId]);
+        $criteria->addAssociation('state');
+        $order = $this->repository->search($criteria, $target->context)->getEntities()->first()
+            ?? throw PaymentException::notificationResourceNotFound($target->entityId);
+        if ($order->channelCode !== $channel || $order->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($order->orderNo);
+        }
+
+        $transactionId = $order->primaryTransactionId ?? throw PaymentException::transactionNotFound($order->orderNo);
+        $transaction = $this->transactionRepository->search(new Criteria([$transactionId]), $target->context)->getEntities()->first()
+            ?? throw PaymentException::transactionNotFound($transactionId);
+        $this->stateHandler->apply($order, $transaction, $result, $target->context);
     }
 }

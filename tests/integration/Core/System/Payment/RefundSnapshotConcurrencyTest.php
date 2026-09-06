@@ -11,8 +11,8 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEn
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundStatus;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\Refund\PaymentRefundPersister;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Refund\PaymentRefundStateHandler;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\TransactionIsolationLevel;
@@ -86,7 +86,7 @@ final class RefundSnapshotConcurrencyTest extends TestCase
             });
 
             static::assertSame(PaymentRefundStatus::STATUS_PROCESSING, (int) $connection->fetchOne('SELECT status FROM payment_refund WHERE id = ?', [Uuid::fromHexToBytes($refundId)]));
-            $result = static::getContainer()->get(PaymentRefundPersister::class)->persistResult($refund, $order, new PaymentResult(PaymentStatus::FAILED), $context);
+            $result = static::getContainer()->get(PaymentRefundStateHandler::class)->apply($refund, $order, new GatewayResult(PaymentStatus::FAILED), $context);
             $connection->commit();
 
             static::assertSame(PaymentStatus::FAILED, $result->status);

@@ -3,11 +3,15 @@
 namespace Contena\Tests\Unit\Core\System\Payment\Gateway;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
+use Contena\Core\System\Payment\Gateway\Alipay\AlipayGateway;
 use Contena\Core\System\Payment\Gateway\GatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
+use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
+use Contena\Core\System\Payment\Gateway\YansongdaPayClient;
+use Contena\Core\System\Payment\Gateway\YansongdaPayClientInterface;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
@@ -23,8 +27,25 @@ final class GatewayRegistryTest extends TestCase
     public function testPluginGatewayNeedsOnlyItsCapabilityAndServiceTag(): void
     {
         $container = new ContainerBuilder();
-        $configuration = \dirname(__DIR__, 6) . '/src/Core/System/DependencyInjection/payment';
-        new PhpFileLoader($container, new FileLocator($configuration))->load('gateway.php');
+        $configuration = \dirname(__DIR__, 6) . '/src/Core/System/DependencyInjection';
+        new PhpFileLoader($container, new FileLocator($configuration))->load('payment.php');
+        $gatewayServices = [
+            'service_container',
+            YansongdaPayClient::class,
+            AlipayGateway::class,
+            WechatGateway::class,
+            GatewayRegistry::class,
+        ];
+        foreach ($container->getDefinitions() as $id => $_definition) {
+            if (!\in_array($id, $gatewayServices, true)) {
+                $container->removeDefinition($id);
+            }
+        }
+        foreach ($container->getAliases() as $id => $_alias) {
+            if ($id !== YansongdaPayClientInterface::class) {
+                $container->removeAlias($id);
+            }
+        }
         $container->register(PluginPaymentGateway::class)->addTag(GatewayInterface::SERVICE_TAG);
         $container->setAlias('test.payment.gateway_registry', GatewayRegistry::class)->setPublic(true);
         $container->compile();
@@ -69,8 +90,8 @@ final class PluginPaymentGateway implements PaymentHandlerInterface
         return 'plugin_gateway';
     }
 
-    public function pay(PaymentOrderEntity $order, array $config): PaymentResult
+    public function pay(PaymentOrderEntity $order, array $config): GatewayResult
     {
-        return new PaymentResult();
+        return new GatewayResult();
     }
 }

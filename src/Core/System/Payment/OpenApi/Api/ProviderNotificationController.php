@@ -32,25 +32,17 @@ final class ProviderNotificationController
     )]
     public function notify(string $channel, string $channelConfigId, Request $request): Response
     {
-        $result = $this->notificationService->process($channel, $channelConfigId, new GatewayNotification(
-            $request->getContent(),
-            $this->headers($request),
-            $request->request->all(),
-        ));
-
-        return new Response($result->body, $result->status, ['Content-Type' => $result->contentType]);
-    }
-
-    /**
-     * @return array<string, list<string>>
-     */
-    private function headers(Request $request): array
-    {
         $headers = [];
         foreach ($request->headers->all() as $name => $values) {
             $headers[$name] = array_values(array_filter($values, \is_string(...)));
         }
 
-        return $headers;
+        $result = $this->notificationService->process($channel, $channelConfigId, new GatewayNotification(
+            $request->getContent(),
+            $headers,
+            $request->request->all(),
+        ));
+
+        return new Response($result->body, $result->status, ['Content-Type' => $result->contentType]);
     }
 }

@@ -19,13 +19,12 @@ use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\PaymentAppGuard;
+use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\ConfiguredPaymentRouteProvider;
-use Contena\Core\System\Payment\Routing\FirstAvailableRouteStrategy;
 use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +37,24 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 #[CoversClass(ConfiguredPaymentRouteProvider::class)]
 final class PaymentRouteResolverTest extends TestCase
 {
+    public function testResolverRejectsDisabledApplicationBeforeLoadingCandidates(): void
+    {
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'disabled-app', 'status' => false]);
+        $resolver = new PaymentRouteResolver([], [], new EventDispatcher());
+        $this->expectExceptionObject(PaymentException::appNotFound('disabled-app'));
+
+        $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class));
+    }
+
+    public function testResolverRejectsGlobalExecutionScope(): void
+    {
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'platform-app', 'status' => true]);
+        $resolver = new PaymentRouteResolver([], [], new EventDispatcher());
+        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require a platform or tenant context.'));
+
+        $resolver->resolve($app, Context::createGlobalContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class));
+    }
+
     public function testResolveConfiguredUsesThePersistedConfiguration(): void
     {
         $configId = Uuid::randomHex();
@@ -61,9 +78,9 @@ final class PaymentRouteResolverTest extends TestCase
                 return 'query-provider';
             }
 
-            public function query(PaymentOrderEntity $order, array $config): PaymentResult
+            public function query(PaymentOrderEntity $order, array $config): GatewayResult
             {
-                return new PaymentResult(PaymentStatus::PENDING);
+                return new GatewayResult(PaymentStatus::PENDING);
             }
         };
 
@@ -134,8 +151,7 @@ final class PaymentRouteResolverTest extends TestCase
     {
         return new PaymentRouteResolver(
             [new ConfiguredPaymentRouteProvider($methods, $configs, $gateways)],
-            [new FirstAvailableRouteStrategy()],
-            new PaymentAppGuard(),
+            [],
             $dispatcher,
         );
     }
@@ -205,8 +221,8 @@ final class RoutingPaymentGateway implements PaymentHandlerInterface
         return $this->gatewayCode;
     }
 
-    public function pay(PaymentOrderEntity $order, array $config): PaymentResult
+    public function pay(PaymentOrderEntity $order, array $config): GatewayResult
     {
-        return new PaymentResult(PaymentStatus::PENDING);
+        return new GatewayResult(PaymentStatus::PENDING);
     }
 }

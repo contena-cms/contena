@@ -270,10 +270,8 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             'id' => $transactionId,
             'orderId' => $orderId,
             'transactionNo' => 'transaction-' . $number,
-            'type' => 'create',
             'channelCode' => 'tenant-matrix',
             'methodCode' => 'test',
-            'refundId' => $refundId,
             'amount' => 100,
             'stateId' => $this->transactionStateId,
         ]], $context);

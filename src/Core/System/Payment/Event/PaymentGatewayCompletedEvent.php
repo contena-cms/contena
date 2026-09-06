@@ -4,8 +4,8 @@ namespace Contena\Core\System\Payment\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Core\System\Payment\Struct\PaymentEntityReference;
-use Contena\Core\System\Payment\Struct\PaymentResult;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class PaymentGatewayCompletedEvent extends Event implements ContenaEvent
@@ -16,7 +16,7 @@ final class PaymentGatewayCompletedEvent extends Event implements ContenaEvent
         public readonly string $channel,
         public readonly string $channelConfigId,
         private readonly Context $context,
-        public readonly PaymentResult $result,
+        public readonly GatewayResult $gatewayResult,
     ) {
     }
 

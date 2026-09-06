@@ -6,13 +6,14 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelNotifyRecord\PaymentNotificationTypes;
+use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundDefinition;
 use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationTypes;
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 use Contena\Tests\Integration\Core\System\Payment\PaymentServiceTest;
 
 /**
@@ -29,7 +30,7 @@ final class PaymentRefundNotificationHandler implements PaymentNotificationHandl
      */
     public function __construct(
         private readonly EntityRepository $repository,
-        private readonly PaymentRefundPersister $persister,
+        private readonly PaymentRefundStateHandler $stateHandler,
     ) {
     }
 
@@ -55,8 +56,20 @@ final class PaymentRefundNotificationHandler implements PaymentNotificationHandl
         return new PaymentNotificationTarget(PaymentRefundDefinition::ENTITY_NAME, $entity->getId(), $context, 'refundId');
     }
 
-    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
+    public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void
     {
-        $this->persister->applyNotification($channel, $channelConfigId, $target, $result);
+        $criteria = new Criteria([$target->entityId]);
+        $criteria->addAssociation('order');
+        $refund = $this->repository->search($criteria, $target->context)->getEntities()->first()
+            ?? throw PaymentException::notificationResourceNotFound($target->entityId);
+        $order = $refund->order;
+        if (!$order instanceof PaymentOrderEntity) {
+            throw PaymentException::notificationResourceNotFound($refund->refundNo);
+        }
+        if ($refund->channelCode !== $channel || $order->channelConfigId !== $channelConfigId) {
+            throw PaymentException::notificationConfigurationMismatch($refund->refundNo);
+        }
+
+        $this->stateHandler->apply($refund, $order, $result, $target->context);
     }
 }

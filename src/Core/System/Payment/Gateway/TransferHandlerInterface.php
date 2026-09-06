@@ -3,12 +3,12 @@
 namespace Contena\Core\System\Payment\Gateway;
 
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
-use Contena\Core\System\Payment\Struct\PaymentResult;
+use Contena\Core\System\Payment\Struct\GatewayResult;
 
 interface TransferHandlerInterface extends GatewayInterface
 {
     /**
      * @param array<string, mixed> $config
      */
-    public function transfer(PaymentTransferEntity $transfer, array $config): PaymentResult;
+    public function transfer(PaymentTransferEntity $transfer, array $config): GatewayResult;
 }

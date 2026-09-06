@@ -9,16 +9,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppCollection;
-use Contena\Core\System\Payment\OpenApi\Event\ResolvePaymentAppCriteriaEvent;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
-use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
+use Contena\Core\System\Payment\OpenApi\Signature;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Tests\Integration\Core\System\Payment\OpenApi\OpenApiTest;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -37,7 +35,6 @@ final class PaymentAppValidator implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $paymentAppRepository,
         private readonly ClockInterface $clock,
-        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -45,12 +42,12 @@ final class PaymentAppValidator implements EventSubscriberInterface
     {
         return [
             KernelEvents::CONTROLLER => [
-                ['validator', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_CONTEXT_RESOLVE_POST],
+                ['validate', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_CONTEXT_RESOLVE_POST],
             ],
         ];
     }
 
-    public function validator(ControllerEvent $event): void
+    public function validate(ControllerEvent $event): void
     {
         $request = $event->getRequest();
         if (!$request->attributes->get('payment_auth_required', false)) {
@@ -73,13 +70,11 @@ final class PaymentAppValidator implements EventSubscriberInterface
         $criteria->addFilter(new EqualsFilter('appCode', $appCode));
         $criteria->setLimit(1);
 
-        $this->dispatcher->dispatch(new ResolvePaymentAppCriteriaEvent($request, $criteria, $context));
-
         $app = $this->paymentAppRepository->search($criteria, $context->createWithGlobalTenantAccess())->getEntities()->first();
         if ($app === null || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }
-        if (!SignUtil::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
+        if (!Signature::verify($parameters, $app->appSecret, $this->clock->now()->getTimestamp())) {
             throw OpenApiException::invalidSignature();
         }
 
