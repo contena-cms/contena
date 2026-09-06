@@ -16,10 +16,6 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord\PaymentNotifyRecordStatus;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringEntity;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
 use Contena\Tests\Integration\Core\System\Payment\Service\AppNotificationServiceTest;
@@ -173,20 +169,11 @@ final class AppNotificationService
 
     private function app(PaymentNotifyRecordEntity $record): PaymentAppEntity
     {
-        if ($record->order instanceof PaymentOrderEntity && $record->order->app instanceof PaymentAppEntity) {
-            return $record->order->app;
-        }
-        if ($record->refund instanceof PaymentRefundEntity && $record->refund->order instanceof PaymentOrderEntity && $record->refund->order->app instanceof PaymentAppEntity) {
-            return $record->refund->order->app;
-        }
-        if ($record->transfer instanceof PaymentTransferEntity && $record->transfer->app instanceof PaymentAppEntity) {
-            return $record->transfer->app;
-        }
-        if ($record->recurring instanceof PaymentRecurringEntity && $record->recurring->app instanceof PaymentAppEntity) {
-            return $record->recurring->app;
-        }
-
-        throw OpenApiException::invalidRequest('The payment app for the notification could not be loaded.');
+        return $record->order->app
+            ?? $record->refund->order->app
+            ?? $record->transfer->app
+            ?? $record->recurring->app
+            ?? throw OpenApiException::invalidRequest('The payment app for the notification could not be loaded.');
     }
 
     /**

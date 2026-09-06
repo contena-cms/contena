@@ -19,6 +19,9 @@ final class GatewayRegistry
     public function __construct(iterable $gateways)
     {
         foreach ($gateways as $gateway) {
+            if ($gateway->code() === '' || isset($this->gateways[$gateway->code()])) {
+                throw PaymentException::invalidExtensionRegistration(GatewayInterface::class, $gateway->code());
+            }
             $this->gateways[$gateway->code()] = $gateway;
         }
     }
@@ -26,5 +29,10 @@ final class GatewayRegistry
     public function get(string $code): GatewayInterface
     {
         return $this->gateways[$code] ?? throw PaymentException::gatewayNotFound($code);
+    }
+
+    public function has(string $code): bool
+    {
+        return isset($this->gateways[$code]);
     }
 }

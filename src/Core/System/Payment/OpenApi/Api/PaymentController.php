@@ -6,11 +6,13 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
+use Contena\Core\System\Payment\OpenApi\Request\PaymentRequest;
+use Contena\Core\System\Payment\OpenApi\Request\PaymentRequestMapper;
+use Contena\Core\System\Payment\OpenApi\Request\QueryRequest;
+use Contena\Core\System\Payment\OpenApi\Request\RefundRequest;
+use Contena\Core\System\Payment\OpenApi\Request\SubscriptionRequest;
+use Contena\Core\System\Payment\OpenApi\Request\TransferRequest;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
-use Contena\Core\System\Payment\Struct\QueryRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
-use Contena\Core\System\Payment\Struct\TransferRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -31,6 +33,7 @@ final class PaymentController
     public function __construct(
         private readonly AbstractPaymentService $paymentService,
         private readonly RequestStack $requestStack,
+        private readonly PaymentRequestMapper $requestMapper,
     ) {
     }
 
@@ -41,9 +44,9 @@ final class PaymentController
         PaymentRequest $paymentRequest,
         Context $context,
     ): JsonResponse {
-        $paymentRequest->clientIp = $this->requestStack->getCurrentRequest()?->getClientIp();
+        $request = $this->requestMapper->payment($paymentRequest, $this->requestStack->getCurrentRequest()?->getClientIp());
 
-        return new JsonResponse(OpenApiResponse::success($this->paymentService->pay($app, $paymentRequest, $context)));
+        return new JsonResponse(OpenApiResponse::success($this->paymentService->pay($app, $request, $context)));
     }
 
     #[Route(path: '/api/payment/query', name: 'api.payment.query', methods: [Request::METHOD_POST])]
@@ -53,7 +56,7 @@ final class PaymentController
         QueryRequest $queryRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->query($app, $queryRequest, $context);
+        $result = $this->paymentService->query($app, $this->requestMapper->query($queryRequest), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -65,7 +68,7 @@ final class PaymentController
         RefundRequest $refundRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->refund($app, $refundRequest, $context);
+        $result = $this->paymentService->refund($app, $this->requestMapper->refund($refundRequest), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -77,7 +80,7 @@ final class PaymentController
         SubscriptionRequest $subscriptionRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->subscribe($app, $subscriptionRequest, $context);
+        $result = $this->paymentService->subscribe($app, $this->requestMapper->subscription($subscriptionRequest), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }
@@ -89,7 +92,7 @@ final class PaymentController
         TransferRequest $transferRequest,
         Context $context,
     ): JsonResponse {
-        $result = $this->paymentService->transfer($app, $transferRequest, $context);
+        $result = $this->paymentService->transfer($app, $this->requestMapper->transfer($transferRequest), $context);
 
         return new JsonResponse(OpenApiResponse::success($result));
     }

@@ -3,139 +3,73 @@
 namespace Contena\Core\System\Payment\Subscription;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringCollection;
-use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringStatus;
+use Contena\Core\System\Payment\Gateway\GatewayOperationExecutor;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
+use Contena\Core\System\Payment\Gateway\SubscriptionHandlerInterface;
+use Contena\Core\System\Payment\PaymentAppGuard;
 use Contena\Core\System\Payment\PaymentException;
-use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
-use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
+use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
-use Psr\Clock\ClockInterface;
+use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest;
+use Contena\Tests\Integration\Core\System\Payment\PaymentServiceTest;
 
 /**
  * @internal
+ *
+ * @codeCoverageIgnore
+ *
+ * @see PaymentServiceTest
  */
-final class PaymentSubscriptionService
+class PaymentSubscriptionService extends AbstractPaymentSubscriptionService
 {
-    /**
-     * @param EntityRepository<PaymentRecurringCollection> $paymentRecurringRepository
-     */
     public function __construct(
-        private readonly EntityRepository $paymentRecurringRepository,
-        private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
-        private readonly PaymentGatewayResolver $gatewayResolver,
-        private readonly ClockInterface $clock,
+        private readonly PaymentSubscriptionPersister $persister,
+        private readonly AbstractPaymentRouteResolver $routeResolver,
+        private readonly GatewayOperationExecutor $gatewayExecutor,
+        private readonly PaymentAppGuard $appGuard,
     ) {
+    }
+
+    public function getDecorated(): AbstractPaymentSubscriptionService
+    {
+        throw new DecorationPatternException(self::class);
     }
 
     public function subscribe(PaymentAppEntity $app, SubscriptionRequest $request, Context $context): PaymentResult
     {
-        if ($request->externalSubscriptionNo === '') {
-            throw PaymentException::invalidRequest('External subscription number is required.');
-        }
+        $this->appGuard->validate($app, $context);
 
-        $existingSubscription = $this->findSubscription($app->getId(), $request->externalSubscriptionNo, $context);
+        $existingSubscription = $this->persister->findSubscription($app->getId(), $request->externalSubscriptionNo, $context);
         if ($existingSubscription instanceof PaymentRecurringEntity) {
             $this->assertSubscriptionRequestMatchesEntity($existingSubscription, $request);
 
             return $this->createResultForSubscription($existingSubscription);
         }
 
-        $route = $this->gatewayResolver->resolveForApp($app, $request->channel, $context);
-        if (!$route->gateway instanceof SubscribeHandlerInterface) {
+        $route = $this->routeResolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::SUBSCRIBE, SubscriptionHandlerInterface::class, preferredChannel: $request->channel));
+        if (!$route->gateway instanceof SubscriptionHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::SUBSCRIBE);
         }
 
-        $subscriptionId = $this->createSubscription($app, $request, $route, $context);
+        $subscriptionId = $this->persister->createSubscription($app, $request, $route, $context);
 
-        $subscription = $this->getSubscriptionById($subscriptionId, $context);
+        $subscription = $this->persister->getSubscriptionById($subscriptionId, $context);
         try {
-            $result = $route->gateway->subscribe($subscription, $route->config);
+            $result = $this->gatewayExecutor->execute(PaymentOperation::SUBSCRIBE, $this->persister->reference($subscription), $route, $context, fn (): PaymentResult => $route->gateway->subscribe($subscription, $route->config));
         } catch (\Throwable $exception) {
-            $this->paymentRecurringRepository->update([[
-                'id' => $subscription->getId(),
-                'resultMessage' => $exception->getMessage(),
-            ]], $context);
+            $this->persister->recordFailure($subscription, $exception, $context);
             throw $exception;
         }
 
-        $status = $this->subscriptionStatus($result->status);
-        $this->paymentRecurringRepository->update([[
-            'id' => $subscription->getId(),
-            'channelRecurringNo' => $result->providerResourceId,
-            'status' => $status,
-            'signTime' => $status === PaymentRecurringStatus::STATUS_SIGNED ? $this->clock->now() : null,
-            'responseData' => $result->toArray(),
-            'resultCode' => $result->resultCode,
-            'resultMessage' => $result->resultMessage,
-        ]], $context);
+        $result = $this->persister->persistResult($subscription, $result, $context);
 
         return $result->withResource($subscription->recurringNo, $subscription->externalRecurringNo);
-    }
-
-    public function applyNotification(string $channel, string $channelConfigId, PaymentNotificationTarget $target, PaymentResult $result): void
-    {
-        $subscription = $this->getSubscriptionById($target->entityId, $target->context);
-        if ($subscription->channelCode !== $channel || $subscription->channelConfigId !== $channelConfigId) {
-            throw PaymentException::notificationConfigurationMismatch($subscription->recurringNo);
-        }
-
-        $status = match ($result->status) {
-            PaymentStatus::SUCCEEDED => PaymentRecurringStatus::STATUS_SIGNED,
-            PaymentStatus::CLOSED => PaymentRecurringStatus::STATUS_UNSIGNED,
-            PaymentStatus::FAILED => PaymentRecurringStatus::STATUS_FAILED,
-            default => PaymentRecurringStatus::STATUS_PENDING,
-        };
-        if ($subscription->status === PaymentRecurringStatus::STATUS_PENDING || ($subscription->status === PaymentRecurringStatus::STATUS_SIGNED && $status === PaymentRecurringStatus::STATUS_UNSIGNED)) {
-            $this->paymentRecurringRepository->update([[
-                'id' => $subscription->getId(),
-                'channelRecurringNo' => $result->providerResourceId,
-                'status' => $status,
-                'signTime' => $status === PaymentRecurringStatus::STATUS_SIGNED ? $this->clock->now() : $subscription->signTime,
-                'responseData' => $result->toArray(),
-                'resultCode' => $result->resultCode,
-                'resultMessage' => $result->resultMessage,
-            ]], $target->context);
-        }
-    }
-
-    private function subscriptionStatus(string $status): int
-    {
-        return match ($status) {
-            PaymentStatus::SUCCEEDED => PaymentRecurringStatus::STATUS_SIGNED,
-            PaymentStatus::FAILED, PaymentStatus::CLOSED => PaymentRecurringStatus::STATUS_FAILED,
-            default => PaymentRecurringStatus::STATUS_PENDING,
-        };
-    }
-
-    private function findSubscription(string $appId, string $externalSubscriptionNo, Context $context): ?PaymentRecurringEntity
-    {
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('paymentAppId', $appId));
-        $criteria->addFilter(new EqualsFilter('externalRecurringNo', $externalSubscriptionNo));
-        $criteria->setLimit(1);
-        $subscription = $this->paymentRecurringRepository->search($criteria, $context)->getEntities()->first();
-
-        return $subscription instanceof PaymentRecurringEntity ? $subscription : null;
-    }
-
-    private function getSubscriptionById(string $subscriptionId, Context $context): PaymentRecurringEntity
-    {
-        $subscription = $this->paymentRecurringRepository->search(new Criteria([$subscriptionId]), $context)->getEntities()->first();
-
-        return $subscription instanceof PaymentRecurringEntity ? $subscription : throw PaymentException::invalidRequest('Payment subscription could not be loaded.');
     }
 
     private function createResultForSubscription(PaymentRecurringEntity $subscription): PaymentResult
@@ -143,6 +77,7 @@ final class PaymentSubscriptionService
         $status = match ($subscription->status) {
             PaymentRecurringStatus::STATUS_SIGNED => PaymentStatus::SUCCEEDED,
             PaymentRecurringStatus::STATUS_FAILED => PaymentStatus::FAILED,
+            PaymentRecurringStatus::STATUS_UNSIGNED => PaymentStatus::CLOSED,
             default => PaymentStatus::PENDING,
         };
 
@@ -154,43 +89,12 @@ final class PaymentSubscriptionService
     {
         if ($subscription->periodType !== $request->periodType
             || $subscription->period !== $request->period
-            || $this->timestamp($subscription->executeTime) !== $this->timestamp($request->executeTime)
+            || $subscription->executeTime?->getTimestamp() !== $request->executeTime?->getTimestamp()
             || $subscription->singleAmount !== $request->singleAmount
             || $subscription->totalAmount !== $request->totalAmount
             || $subscription->totalPayments !== $request->totalPayments
         ) {
             throw PaymentException::duplicateReference($request->externalSubscriptionNo);
         }
-    }
-
-    private function timestamp(?\DateTimeInterface $date): ?int
-    {
-        return $date?->getTimestamp();
-    }
-
-    private function createSubscription(PaymentAppEntity $app, SubscriptionRequest $request, PaymentRoute $route, Context $context): string
-    {
-        $subscriptionId = Uuid::randomHex();
-
-        $this->paymentRecurringRepository->create([[
-            'id' => $subscriptionId,
-            'paymentAppId' => $app->getId(),
-            'recurringNo' => $this->numberRangeValueGenerator->getValue(PaymentRecurringDefinition::ENTITY_NAME, $context),
-            'externalRecurringNo' => $request->externalSubscriptionNo,
-            'channelCode' => $route->gateway->code(),
-            'channelConfigId' => $route->channelConfigId,
-            'channelExtra' => $request->extra,
-            'notifyUrl' => $request->notifyUrl,
-            'returnUrl' => $request->returnUrl,
-            'periodType' => $request->periodType,
-            'period' => $request->period,
-            'executeTime' => $request->executeTime,
-            'singleAmount' => $request->singleAmount,
-            'totalAmount' => $request->totalAmount,
-            'totalPayments' => $request->totalPayments,
-            'status' => PaymentRecurringStatus::STATUS_PENDING,
-        ]], $context);
-
-        return $subscriptionId;
     }
 }

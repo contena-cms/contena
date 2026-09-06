@@ -8,14 +8,16 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEn
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\Gateway\Alipay\AlipayGateway;
-use Contena\Core\System\Payment\Gateway\GatewayExecutorInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\Wechat\WechatGateway;
-use Contena\Core\System\Payment\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Gateway\YansongdaPayClientInterface;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yansongda\Pay\Pay;
+use Yansongda\Pay\Plugin\Wechat\V3\Marketing\MchTransfer\CreatePlugin;
+use Yansongda\Pay\Shortcut\Wechat\TransferShortcut;
 
 /**
  * @internal
@@ -26,7 +28,7 @@ final class ProviderConfigurationTest extends TestCase
 {
     public function testAlipayOwnsItsProviderConfigurationMapping(): void
     {
-        $executor = new RecordingGatewayExecutor(['h5_url' => 'https://pay.example/checkout']);
+        $executor = new RecordingYansongdaPayClient(['h5_url' => 'https://pay.example/checkout']);
         $gateway = new AlipayGateway($executor);
 
         $result = $gateway->pay(new PaymentOrderEntity()->assign([
@@ -65,7 +67,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testWechatOwnsItsProviderConfigurationMapping(): void
     {
-        $executor = new RecordingGatewayExecutor(['code_url' => 'weixin://checkout']);
+        $executor = new RecordingYansongdaPayClient(['code_url' => 'weixin://checkout']);
         $gateway = new WechatGateway($executor);
 
         $result = $gateway->pay(new PaymentOrderEntity()->assign([
@@ -105,7 +107,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testWechatRefundDistinguishesRefundAmountFromOriginalTotal(): void
     {
-        $executor = new RecordingGatewayExecutor(['refund_id' => 'refund-id']);
+        $executor = new RecordingYansongdaPayClient(['refund_id' => 'refund-id']);
         $gateway = new WechatGateway($executor);
 
         $refund = new PaymentRefundEntity()->assign([
@@ -129,7 +131,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testWechatRefundMapsRefundReferencesWhenOrderReferenceIsAlsoPresent(): void
     {
-        $executor = new RecordingGatewayExecutor([
+        $executor = new RecordingYansongdaPayClient([
             'out_trade_no' => 'order-2',
             'out_refund_no' => 'refund-1',
             'refund_id' => 'provider-refund-1',
@@ -148,7 +150,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testProviderReceivesPlatformTransferNumber(): void
     {
-        $executor = new RecordingGatewayExecutor(['transfer_bill_no' => 'provider-transfer']);
+        $executor = new RecordingYansongdaPayClient(['transfer_bill_no' => 'provider-transfer']);
         $gateway = new WechatGateway($executor);
         $transfer = new PaymentTransferEntity()->assign([
             'transferNo' => 'platform-transfer-1',
@@ -161,12 +163,86 @@ final class ProviderConfigurationTest extends TestCase
         $gateway->transfer($transfer, []);
 
         static::assertSame('platform-transfer-1', $executor->parameters['out_bill_no']);
+        static::assertSame('mch_transfer', $executor->parameters['_action']);
+        static::assertContains(CreatePlugin::class, new TransferShortcut()->getPlugins($executor->parameters));
+    }
+
+    /**
+     * @param array<string, mixed> $response
+     */
+    #[DataProvider('unconfirmedResponses')]
+    public function testUnconfirmedResponsesNeverReleaseRefundReservation(array $response): void
+    {
+        $refund = new PaymentRefundEntity()->assign(['refundNo' => 'refund-1', 'refundAmount' => 100]);
+        $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'amount' => 1000, 'currencyCode' => 'CNY']);
+        $transfer = new PaymentTransferEntity()->assign(['transferNo' => 'transfer-1', 'amount' => 100, 'payee' => 'payee', 'payeeName' => 'Payee']);
+        $client = new RecordingYansongdaPayClient($response);
+
+        foreach ([new AlipayGateway($client), new WechatGateway($client)] as $gateway) {
+            static::assertSame(PaymentStatus::UNKNOWN, $gateway->refund($refund, $order, [])->status);
+            static::assertSame(PaymentStatus::UNKNOWN, $gateway->transfer($transfer, [])->status);
+        }
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>}>
+     */
+    public static function unconfirmedResponses(): iterable
+    {
+        yield 'empty response' => [[]];
+        yield 'normalized null SDK response' => [['value' => null]];
+        yield 'unexpected response shape' => [['unexpected' => 'value']];
+        yield 'provider system error is not a business rejection' => [['code' => '20000']];
+    }
+
+    public function testAlipayDistinguishesAcceptedTransferFromFinalSuccess(): void
+    {
+        $transfer = new PaymentTransferEntity()->assign(['transferNo' => 'transfer-1', 'amount' => 100, 'payee' => 'payee', 'payeeName' => 'Payee']);
+
+        static::assertSame(PaymentStatus::PROCESSING, new AlipayGateway(new RecordingYansongdaPayClient(['code' => '10000', 'status' => 'DEALING']))->transfer($transfer, [])->status);
+        static::assertSame(PaymentStatus::SUCCEEDED, new AlipayGateway(new RecordingYansongdaPayClient(['code' => '10000', 'status' => 'SUCCESS']))->transfer($transfer, [])->status);
+        static::assertSame(PaymentStatus::FAILED, new AlipayGateway(new RecordingYansongdaPayClient(['code' => '40004']))->transfer($transfer, [])->status);
+    }
+
+    public function testWechatRefundRequiresAnExplicitOutcome(): void
+    {
+        $refund = new PaymentRefundEntity()->assign(['refundNo' => 'refund-1', 'refundAmount' => 100]);
+        $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'amount' => 1000, 'currencyCode' => 'CNY']);
+
+        static::assertSame(PaymentStatus::SUCCEEDED, new WechatGateway(new RecordingYansongdaPayClient(['status' => 'SUCCESS']))->refund($refund, $order, [])->status);
+        static::assertSame(PaymentStatus::FAILED, new WechatGateway(new RecordingYansongdaPayClient(['status' => 'CLOSED']))->refund($refund, $order, [])->status);
+        static::assertSame(PaymentStatus::UNKNOWN, new WechatGateway(new RecordingYansongdaPayClient(['status' => 'ABNORMAL']))->refund($refund, $order, [])->status);
+    }
+
+    public function testAbnormalRefundCallbackDoesNotInheritTheOriginalPaymentSuccess(): void
+    {
+        $gateway = new WechatGateway(new RecordingYansongdaPayClient([
+            'out_refund_no' => 'refund-1',
+            'refund_status' => 'ABNORMAL',
+            'trade_state' => 'SUCCESS',
+        ]));
+
+        static::assertSame(PaymentStatus::UNKNOWN, $gateway->handleNotification(new GatewayNotification(''), [])->result->status);
+    }
+
+    public function testAlipayPreservesEveryCentWithoutFloatingPointArithmetic(): void
+    {
+        $client = new RecordingYansongdaPayClient([]);
+        $gateway = new AlipayGateway($client);
+        $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'amount' => \PHP_INT_MAX, 'methodCode' => PaymentMethods::H5, 'subject' => 'Large amount']);
+
+        $gateway->pay($order, []);
+        static::assertSame('92233720368547758.07', $client->parameters['total_amount']);
+        $gateway->refund(new PaymentRefundEntity()->assign(['refundNo' => 'refund-1', 'refundAmount' => 1]), $order, []);
+        static::assertSame('0.01', $client->parameters['refund_amount']);
+        $gateway->transfer(new PaymentTransferEntity()->assign(['transferNo' => 'transfer-1', 'amount' => 101, 'payee' => 'payee', 'payeeName' => 'Payee']), []);
+        static::assertSame('1.01', $client->parameters['trans_amount']);
     }
 
     #[DataProvider('alipayQueryStatuses')]
     public function testAlipayQueryMapsProviderStatus(string $providerStatus, string $expectedStatus): void
     {
-        $gateway = new AlipayGateway(new RecordingGatewayExecutor(['trade_status' => $providerStatus]));
+        $gateway = new AlipayGateway(new RecordingYansongdaPayClient(['trade_status' => $providerStatus]));
         $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'methodCode' => PaymentMethods::NATIVE]);
 
         static::assertSame($expectedStatus, $gateway->query($order, [])->status);
@@ -186,7 +262,7 @@ final class ProviderConfigurationTest extends TestCase
     #[DataProvider('wechatQueryStatuses')]
     public function testWechatQueryMapsProviderStatus(string $providerStatus, string $expectedStatus): void
     {
-        $gateway = new WechatGateway(new RecordingGatewayExecutor(['trade_state' => $providerStatus]));
+        $gateway = new WechatGateway(new RecordingYansongdaPayClient(['trade_state' => $providerStatus]));
         $order = new PaymentOrderEntity()->assign(['orderNo' => 'order-1', 'methodCode' => PaymentMethods::NATIVE]);
 
         static::assertSame($expectedStatus, $gateway->query($order, [])->status);
@@ -205,7 +281,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testAlipayNotificationIsVerifiedAndMappedByTheGateway(): void
     {
-        $executor = new RecordingGatewayExecutor([
+        $executor = new RecordingYansongdaPayClient([
             'out_trade_no' => 'platform-order-1',
             'trade_no' => 'provider-order-1',
             'trade_status' => 'TRADE_SUCCESS',
@@ -224,7 +300,7 @@ final class ProviderConfigurationTest extends TestCase
 
     public function testWechatNotificationKeepsRawBodyAndHeadersForSignatureVerification(): void
     {
-        $executor = new RecordingGatewayExecutor([
+        $executor = new RecordingYansongdaPayClient([
             'out_refund_no' => 'platform-refund-1',
             'refund_id' => 'provider-refund-1',
             'refund_status' => 'SUCCESS',
@@ -249,7 +325,7 @@ final class ProviderConfigurationTest extends TestCase
 /**
  * @internal
  */
-final class RecordingGatewayExecutor implements GatewayExecutorInterface
+final class RecordingYansongdaPayClient implements YansongdaPayClientInterface
 {
     public ?string $provider = null;
 
@@ -272,7 +348,7 @@ final class RecordingGatewayExecutor implements GatewayExecutorInterface
     {
     }
 
-    public function execute(string $provider, array $config, string $operation, array $parameters): mixed
+    public function request(string $provider, array $config, string $operation, array $parameters): array
     {
         $this->provider = $provider;
         $this->config = $config;

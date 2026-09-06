@@ -4,12 +4,12 @@ namespace Contena\Core\System\Payment\Service;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\Payment\Struct\OrderReference;
+use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\Refund\Struct\RefundRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\QueryRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
-use Contena\Core\System\Payment\Struct\TransferRequest;
+use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest;
+use Contena\Core\System\Payment\Transfer\Struct\TransferRequest;
 
 abstract class AbstractPaymentService
 {
@@ -17,7 +17,7 @@ abstract class AbstractPaymentService
 
     abstract public function pay(PaymentAppEntity $app, PaymentRequest $request, Context $context): PaymentResult;
 
-    abstract public function query(PaymentAppEntity $app, QueryRequest $request, Context $context): PaymentResult;
+    abstract public function query(PaymentAppEntity $app, OrderReference $request, Context $context): PaymentResult;
 
     abstract public function refund(PaymentAppEntity $app, RefundRequest $request, Context $context): PaymentResult;
 

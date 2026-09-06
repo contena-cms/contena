@@ -2,13 +2,22 @@
 
 namespace Contena\Core\System\Payment\Event;
 
-use Contena\Core\System\Payment\Struct\PaymentRoute;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Event\ContenaEvent;
+use Contena\Core\System\Payment\Routing\PaymentRoute;
+use Contena\Core\System\Payment\Routing\PaymentRoutingContext;
 use Symfony\Contracts\EventDispatcher\Event;
 
-final class PaymentRouteResolvedEvent extends Event
+final class PaymentRouteResolvedEvent extends Event implements ContenaEvent
 {
     public function __construct(
-        public PaymentRoute $route,
+        public readonly PaymentRoute $route,
+        public readonly PaymentRoutingContext $routing,
     ) {
+    }
+
+    public function getContext(): Context
+    {
+        return $this->routing->context;
     }
 }

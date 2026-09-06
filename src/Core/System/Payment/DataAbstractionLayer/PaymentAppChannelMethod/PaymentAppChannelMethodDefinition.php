@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod;
 
-use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
@@ -58,11 +57,9 @@ class PaymentAppChannelMethodDefinition extends EntityDefinition
             new JsonField('config', 'config')->addFlags(new ApiAware()),
             new IntField('sort', 'sort')->addFlags(new ApiAware(), new Required()),
             new BoolField('status', 'status')->addFlags(new ApiAware(), new Required()),
-            new FkField('rule_id', 'ruleId', RuleDefinition::class)->addFlags(new ApiAware()),
             new CustomFields()->addFlags(new ApiAware()),
             new ManyToOneAssociationField('app', 'payment_app_id', PaymentAppDefinition::class)->addFlags(new ApiAware()),
             new ManyToOneAssociationField('channelMethod', 'channel_method_id', PaymentChannelMethodDefinition::class)->addFlags(new ApiAware()),
-            new ManyToOneAssociationField('rule', 'rule_id', RuleDefinition::class)->addFlags(new ApiAware()),
         ]);
     }
 }

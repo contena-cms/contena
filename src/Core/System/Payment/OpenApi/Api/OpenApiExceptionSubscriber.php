@@ -55,7 +55,7 @@ final class OpenApiExceptionSubscriber implements EventSubscriberInterface
                 foreach ($validation->getViolations() as $violation) {
                     $propertyPath = $violation->getPropertyPath();
                     $parameter = self::snakeCase($propertyPath);
-                    if ($propertyPath !== '' && ($violation->getConstraint() instanceof NotBlank || !\array_key_exists($parameter, $requestData))) {
+                    if ($propertyPath !== '' && ($violation->getConstraint() instanceof NotBlank || ($violation->getInvalidValue() === null && !\array_key_exists($parameter, $requestData)))) {
                         $error = OpenApiException::missingParameter($parameter);
                         $status = $error->getStatusCode();
                         $code = $error->getErrorCode();

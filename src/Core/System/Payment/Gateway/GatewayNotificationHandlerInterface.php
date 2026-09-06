@@ -2,8 +2,8 @@
 
 namespace Contena\Core\System\Payment\Gateway;
 
-use Contena\Core\System\Payment\Struct\GatewayNotification;
-use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotificationResult;
 
 interface GatewayNotificationHandlerInterface extends GatewayInterface
 {

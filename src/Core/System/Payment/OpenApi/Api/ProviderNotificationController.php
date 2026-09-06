@@ -4,8 +4,8 @@ namespace Contena\Core\System\Payment\OpenApi\Api;
 
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Payment\Service\GatewayNotificationService;
-use Contena\Core\System\Payment\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Notification\GatewayNotificationService;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

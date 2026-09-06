@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod;
 
-use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -29,11 +28,7 @@ class PaymentAppChannelMethodEntity extends Entity
 
     public protected(set) bool $status;
 
-    public protected(set) ?string $ruleId = null;
-
     public protected(set) ?PaymentAppEntity $app = null;
 
     public protected(set) ?PaymentChannelMethodEntity $channelMethod = null;
-
-    public protected(set) ?RuleEntity $rule = null;
 }

@@ -2,11 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Routing;
 
-use Contena\Core\Content\Rule\AbstractRuleLoader;
-use Contena\Core\Content\Rule\RuleCollection;
-use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Rule\SimpleRule;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentAppChannelMethod\PaymentAppChannelMethodCollection;
@@ -16,12 +13,18 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\Pa
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\PaymentChannelEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentChannelMethodEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
+use Contena\Core\System\Payment\Event\PaymentRouteCandidateEvent;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
+use Contena\Core\System\Payment\Gateway\PaymentOperation;
+use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\PaymentAppGuard;
+use Contena\Core\System\Payment\Routing\ConfiguredPaymentRouteProvider;
+use Contena\Core\System\Payment\Routing\FirstAvailableRouteStrategy;
 use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,6 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @internal
  */
 #[CoversClass(PaymentRouteResolver::class)]
+#[CoversClass(ConfiguredPaymentRouteProvider::class)]
 final class PaymentRouteResolverTest extends TestCase
 {
     public function testResolveConfiguredUsesThePersistedConfiguration(): void
@@ -51,7 +55,7 @@ final class PaymentRouteResolverTest extends TestCase
             'config' => ['merchantId' => 'merchant-1'],
             'status' => true,
         ]);
-        $gateway = new class implements QueryHandlerInterface {
+        $gateway = new class implements PaymentQueryHandlerInterface {
             public function code(): string
             {
                 return 'query-provider';
@@ -63,79 +67,80 @@ final class PaymentRouteResolverTest extends TestCase
             }
         };
 
-        $resolver = new PaymentRouteResolver(
-            StaticEntityRepository::of(PaymentAppChannelMethodCollection::class),
-            StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
-            new GatewayRegistry([$gateway]),
-            new EventDispatcher(),
-        );
-
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'query-app', 'status' => true]);
         $gatewayResolver = new PaymentGatewayResolver(StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]), new GatewayRegistry([$gateway]));
         $route = $gatewayResolver->resolve($configId, Context::createDefaultContext());
         static::assertSame($gateway, $route->gateway);
     }
 
-    public function testAssignmentRuleSkipsTheFirstChannelWhenItDoesNotMatch(): void
+    public function testDisabledAssignmentIsNotRouted(): void
     {
         $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'app-1', 'status' => true]);
-        $rule = new RuleEntity()->assign([
-            'id' => Uuid::randomHex(),
-            'name' => 'Minimum amount',
-            'priority' => 1,
-            'payload' => new SimpleRule(false),
-        ]);
         $firstGateway = new RoutingPaymentGateway('first');
         $secondGateway = new RoutingPaymentGateway('second');
         $assignments = new PaymentAppChannelMethodCollection([
-            $this->assignment($app, $firstGateway->code(), $rule->getId(), 1),
-            $this->assignment($app, $secondGateway->code(), null, 2),
+            $this->assignment($app, $firstGateway->code(), 1)->assign(['status' => false]),
+            $this->assignment($app, $secondGateway->code(), 2),
         ]);
+        $firstConfig = $this->config($app->getId(), $firstGateway->code(), ['key' => 'first']);
         $config = $this->config($app->getId(), $secondGateway->code(), ['key' => 'second']);
-        $resolver = new PaymentRouteResolver(
+        $resolver = $this->resolver(
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class, [$assignments]),
-            StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
+            StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$firstConfig, $config]), new PaymentChannelConfigCollection()]),
             new GatewayRegistry([$firstGateway, $secondGateway]),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRequest('route-1', 1000, 'h5', 'Route'));
+        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
 
         static::assertSame($secondGateway, $route->gateway);
         static::assertSame(['key' => 'second'], $route->config);
     }
 
-    public function testUnmatchedAppConfigurationFallsBackToPlatformConfiguration(): void
+    public function testPluginCanRejectAppConfigurationAndAllowPlatformFallback(): void
     {
         $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'app-2', 'status' => true]);
         $gateway = new RoutingPaymentGateway('platform-fallback');
-        $rule = new RuleEntity()->assign([
-            'id' => Uuid::randomHex(),
-            'name' => 'Minimum amount',
-            'priority' => 1,
-            'payload' => new SimpleRule(false),
-        ]);
-        $assignment = $this->assignment($app, $gateway->code(), null, 1);
-        $appConfig = $this->config($app->getId(), $gateway->code(), ['key' => 'app'], $rule->getId());
+        $assignment = $this->assignment($app, $gateway->code(), 1);
+        $appConfig = $this->config($app->getId(), $gateway->code(), ['key' => 'app']);
         $platformConfig = $this->config(null, $gateway->code(), ['key' => 'platform']);
-        $resolver = new PaymentRouteResolver(
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener(PaymentRouteCandidateEvent::class, static function (PaymentRouteCandidateEvent $event) use ($appConfig): void {
+            if ($event->route->channelConfigId === $appConfig->getId()) {
+                $event->eligible = false;
+            }
+        });
+        $resolver = $this->resolver(
             StaticEntityRepository::of(PaymentAppChannelMethodCollection::class, [new PaymentAppChannelMethodCollection([$assignment])]),
             StaticEntityRepository::of(PaymentChannelConfigCollection::class, [
                 new PaymentChannelConfigCollection([$appConfig]),
                 new PaymentChannelConfigCollection([$platformConfig]),
             ]),
             new GatewayRegistry([$gateway]),
-            new EventDispatcher(),
+            $dispatcher,
         );
 
-        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRequest('route-2', 1000, 'h5', 'Route'));
+        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
 
         static::assertSame($platformConfig->getId(), $route->channelConfigId);
         static::assertSame(['key' => 'platform'], $route->config);
         static::assertTrue($route->platformConfig);
     }
 
-    private function assignment(PaymentAppEntity $app, string $channelCode, ?string $ruleId, int $sort): PaymentAppChannelMethodEntity
+    /**
+     * @param EntityRepository<PaymentAppChannelMethodCollection> $methods
+     * @param EntityRepository<PaymentChannelConfigCollection> $configs
+     */
+    private function resolver(EntityRepository $methods, EntityRepository $configs, GatewayRegistry $gateways, EventDispatcher $dispatcher): PaymentRouteResolver
+    {
+        return new PaymentRouteResolver(
+            [new ConfiguredPaymentRouteProvider($methods, $configs, $gateways)],
+            [new FirstAvailableRouteStrategy()],
+            new PaymentAppGuard(),
+            $dispatcher,
+        );
+    }
+
+    private function assignment(PaymentAppEntity $app, string $channelCode, int $sort): PaymentAppChannelMethodEntity
     {
         $channel = new PaymentChannelEntity()->assign([
             'id' => Uuid::randomHex(),
@@ -157,7 +162,6 @@ final class PaymentRouteResolverTest extends TestCase
             'paymentAppId' => $app->getId(),
             'channelMethodId' => $method->getId(),
             'channelMethod' => $method,
-            'ruleId' => $ruleId,
             'status' => true,
             'sort' => $sort,
         ]);
@@ -166,7 +170,7 @@ final class PaymentRouteResolverTest extends TestCase
     /**
      * @param array<string, mixed> $values
      */
-    private function config(?string $appId, string $channelCode, array $values, ?string $ruleId = null): PaymentChannelConfigEntity
+    private function config(?string $appId, string $channelCode, array $values): PaymentChannelConfigEntity
     {
         $channel = new PaymentChannelEntity()->assign([
             'id' => Uuid::randomHex(),
@@ -182,29 +186,8 @@ final class PaymentRouteResolverTest extends TestCase
             'channelId' => $channel->getId(),
             'channel' => $channel,
             'config' => $values,
-            'ruleId' => $ruleId,
             'status' => true,
         ]);
-    }
-}
-
-/**
- * @internal
- */
-final class StaticPaymentRuleLoader extends AbstractRuleLoader
-{
-    public function __construct(private readonly RuleCollection $rules)
-    {
-    }
-
-    public function getDecorated(): AbstractRuleLoader
-    {
-        return $this;
-    }
-
-    public function load(Context $context): RuleCollection
-    {
-        return $this->rules;
     }
 }
 

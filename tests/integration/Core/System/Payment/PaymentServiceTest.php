@@ -3,6 +3,7 @@
 namespace Contena\Tests\Integration\Core\System\Payment;
 
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -37,39 +38,61 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefund
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferStates;
+use Contena\Core\System\Payment\Event\PaymentEntityCreatedEvent;
+use Contena\Core\System\Payment\Event\PaymentGatewayCompletedEvent;
+use Contena\Core\System\Payment\Event\PaymentGatewayStartedEvent;
+use Contena\Core\System\Payment\Event\PaymentResultAppliedEvent;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
+use Contena\Core\System\Payment\Gateway\GatewayOperationExecutor;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
+use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\Gateway\QueryHandlerInterface;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
-use Contena\Core\System\Payment\Gateway\SubscribeHandlerInterface;
+use Contena\Core\System\Payment\Gateway\SubscriptionHandlerInterface;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
-use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
-use Contena\Core\System\Payment\Order\PaymentOrderPersister;
-use Contena\Core\System\Payment\Order\PaymentOrderService;
-use Contena\Core\System\Payment\Order\PaymentOrderStateHandler;
+use Contena\Core\System\Payment\Notification\GatewayNotificationService;
+use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerRegistry;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotification;
+use Contena\Core\System\Payment\Notification\Struct\GatewayNotificationResult;
+use Contena\Core\System\Payment\OpenApi\Notification\AppNotificationSubscriber;
+use Contena\Core\System\Payment\Payment\Event\PaymentOrderConvertedEvent;
+use Contena\Core\System\Payment\Payment\PaymentOrderConverter;
+use Contena\Core\System\Payment\Payment\PaymentOrderLoader;
+use Contena\Core\System\Payment\Payment\PaymentOrderNotificationHandler;
+use Contena\Core\System\Payment\Payment\PaymentOrderPersister;
+use Contena\Core\System\Payment\Payment\PaymentOrderService;
+use Contena\Core\System\Payment\Payment\PaymentOrderStateHandler;
+use Contena\Core\System\Payment\Payment\RefundAmountReservation;
+use Contena\Core\System\Payment\Payment\Struct\OrderReference;
+use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\PaymentAppGuard;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Refund\PaymentRefundNotificationHandler;
+use Contena\Core\System\Payment\Refund\PaymentRefundPersister;
 use Contena\Core\System\Payment\Refund\PaymentRefundService;
+use Contena\Core\System\Payment\Refund\Struct\RefundRequest;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
-use Contena\Core\System\Payment\Service\GatewayNotificationService;
-use Contena\Core\System\Payment\Service\PaymentNotificationTargetResolver;
+use Contena\Core\System\Payment\Routing\PaymentRoute;
+use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
 use Contena\Core\System\Payment\Service\PaymentService;
-use Contena\Core\System\Payment\Struct\GatewayNotification;
-use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\PaymentRoute;
-use Contena\Core\System\Payment\Struct\QueryRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
-use Contena\Core\System\Payment\Struct\TransferRequest;
+use Contena\Core\System\Payment\Subscription\PaymentSubscriptionNotificationHandler;
+use Contena\Core\System\Payment\Subscription\PaymentSubscriptionPersister;
 use Contena\Core\System\Payment\Subscription\PaymentSubscriptionService;
+use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest;
+use Contena\Core\System\Payment\Transfer\PaymentTransferNotificationHandler;
+use Contena\Core\System\Payment\Transfer\PaymentTransferPersister;
 use Contena\Core\System\Payment\Transfer\PaymentTransferService;
+use Contena\Core\System\Payment\Transfer\Struct\TransferRequest;
+use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @internal
@@ -95,6 +118,8 @@ final class PaymentServiceTest extends TestCase
     private GatewayNotificationService $notificationService;
 
     private WorkflowRouteResolver $routeResolver;
+
+    private EventDispatcher $dispatcher;
 
     protected function setUp(): void
     {
@@ -164,57 +189,130 @@ final class PaymentServiceTest extends TestCase
         /** @var EntityRepository<PaymentNotifyRecordCollection> $paymentNotifyRecordRepository */
         $paymentNotifyRecordRepository = $this->repository('payment_notify_record');
         $gatewayResolver = new PaymentGatewayResolver($paymentChannelConfigRepository, new GatewayRegistry([$this->gateway]));
-        $orderService = new PaymentOrderService(
+        $dispatcher = $this->dispatcher = new EventDispatcher();
+        $dispatcher->addSubscriber(new AppNotificationSubscriber($paymentNotifyRecordRepository, static::getContainer()->get(DefinitionInstanceRegistry::class)));
+        $appGuard = new PaymentAppGuard();
+        $gatewayExecutor = new GatewayOperationExecutor($dispatcher);
+        $orderLoader = new PaymentOrderLoader($paymentOrderRepository);
+        $orderPersister = new PaymentOrderPersister(
             $paymentOrderRepository,
             $paymentOrderTransactionRepository,
-            static::getContainer()->get(PaymentOrderPersister::class),
+            new PaymentOrderConverter($dispatcher),
             static::getContainer()->get(PaymentOrderStateHandler::class),
-            $this->routeResolver,
-            $gatewayResolver,
             $connection,
             $clock,
-        );
-        $refundService = new PaymentRefundService(
-            $paymentRefundRepository,
-            $orderService,
+            $dispatcher,
             $numberRange,
-            $gatewayResolver,
-            $connection,
-            $clock,
+            static::getContainer()->get(InitialStateIdLoader::class),
         );
-        $transferService = new PaymentTransferService(
-            $paymentTransferRepository,
-            $numberRange,
-            $stateMachine,
-            $gatewayResolver,
-            $connection,
-            $clock,
-        );
-        $subscriptionService = new PaymentSubscriptionService(
-            $paymentRecurringRepository,
-            $numberRange,
-            $gatewayResolver,
-            $clock,
-        );
+        $refundPersister = new PaymentRefundPersister($paymentRefundRepository, $numberRange, new RefundAmountReservation($connection), $connection, $clock, $dispatcher);
+        $transferPersister = new PaymentTransferPersister($paymentTransferRepository, $numberRange, $stateMachine, $connection, $clock, $dispatcher);
+        $subscriptionPersister = new PaymentSubscriptionPersister($paymentRecurringRepository, $numberRange, $connection, $clock, $dispatcher);
+        $orderService = new PaymentOrderService($orderPersister, $orderLoader, $this->routeResolver, $gatewayResolver, $gatewayExecutor, $appGuard);
+        $refundService = new PaymentRefundService($refundPersister, $orderLoader, $gatewayResolver, $gatewayExecutor, $appGuard);
+        $transferService = new PaymentTransferService($transferPersister, $this->routeResolver, $gatewayExecutor, $appGuard);
+        $subscriptionService = new PaymentSubscriptionService($subscriptionPersister, $this->routeResolver, $gatewayExecutor, $appGuard);
         $this->paymentService = new PaymentService($orderService, $refundService, $transferService, $subscriptionService);
-        $notificationTargetResolver = new PaymentNotificationTargetResolver(
-            $paymentOrderRepository,
-            $paymentRefundRepository,
-            $paymentTransferRepository,
-            $paymentRecurringRepository,
-        );
+        $handlers = new PaymentNotificationHandlerRegistry([
+            new PaymentOrderNotificationHandler($paymentOrderRepository, $orderPersister),
+            new PaymentRefundNotificationHandler($paymentRefundRepository, $refundPersister),
+            new PaymentTransferNotificationHandler($paymentTransferRepository, $transferPersister),
+            new PaymentSubscriptionNotificationHandler($paymentRecurringRepository, $subscriptionPersister),
+        ]);
         $this->notificationService = new GatewayNotificationService(
             $paymentChannelConfigRepository,
             $paymentChannelNotifyRecordRepository,
-            $paymentNotifyRecordRepository,
             new GatewayRegistry([$this->gateway]),
-            $notificationTargetResolver,
-            $orderService,
-            $refundService,
-            $transferService,
-            $subscriptionService,
+            $handlers,
             $connection,
+            $dispatcher,
         );
+    }
+
+    public function testConversionPrecedesPersistenceAndExecutionRecordPrecedesGatewayCall(): void
+    {
+        $phases = [];
+        $this->dispatcher->addListener(PaymentOrderConvertedEvent::class, function (PaymentOrderConvertedEvent $event) use (&$phases): void {
+            $phases[] = 'converted';
+            static::assertSame($this->context, $event->getContext());
+            static::assertSame(0, $this->gateway->paymentCalls);
+            static::assertCount(0, $this->repository('payment_order')->search(new Criteria(), $this->context)->getEntities());
+            $event->convertedOrder['subject'] = 'Plugin enriched subject';
+        });
+        $this->dispatcher->addListener(PaymentEntityCreatedEvent::class, function (PaymentEntityCreatedEvent $event) use (&$phases): void {
+            $phases[] = 'created';
+            static::assertSame('payment_order', $event->entity->entityName);
+            $order = $this->loadOrder('creation-sequence');
+            static::assertSame($order->getId(), $event->entity->entityId);
+            static::assertSame('Plugin enriched subject', $order->subject);
+            static::assertNull($order->primaryTransactionId);
+            static::assertCount(0, $order->transactions ?? []);
+        });
+        $this->dispatcher->addListener(PaymentGatewayStartedEvent::class, function () use (&$phases): void {
+            $phases[] = 'gateway';
+            $order = $this->loadOrder('creation-sequence');
+            static::assertNotNull($order->primaryTransactionId);
+            static::assertCount(1, $order->transactions ?? []);
+            static::assertSame(0, $this->gateway->paymentCalls);
+        });
+
+        $this->paymentService->pay($this->app, new PaymentRequest('creation-sequence', 100, 'h5', 'Original subject'), $this->context);
+
+        static::assertSame(['converted', 'created', 'gateway'], $phases);
+        static::assertSame(1, $this->gateway->paymentCalls);
+    }
+
+    public function testObserverFailureDoesNotLoseConfirmedProviderResult(): void
+    {
+        $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED, providerResourceId: 'confirmed-trade');
+        $this->dispatcher->addListener(PaymentGatewayCompletedEvent::class, static function (): never {
+            throw PaymentException::invalidRequest('Metrics backend unavailable');
+        });
+
+        $result = $this->paymentService->pay($this->app, new PaymentRequest('observer-failure', 100, 'h5', 'Subject'), $this->context);
+
+        static::assertSame(PaymentStatus::SUCCEEDED, $result->status);
+        $order = $this->loadOrder('observer-failure');
+        static::assertSame(PaymentOrderStates::STATE_SUCCEEDED, $order->state?->getTechnicalName());
+        static::assertSame('confirmed-trade', $order->channelTradeNo);
+        static::assertSame('confirmed-trade', $order->primaryTransaction?->channelTradeNo);
+        static::assertSame(1, $this->gateway->paymentCalls);
+    }
+
+    public function testResultAndNotificationOutboxRollbackTogether(): void
+    {
+        $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED);
+        $this->dispatcher->addListener(PaymentResultAppliedEvent::class, static function (): never {
+            throw PaymentException::invalidRequest('Transactional subscriber failed');
+        }, -100);
+
+        try {
+            $this->paymentService->pay($this->app, new PaymentRequest('rolled-back-result', 100, 'h5', 'Subject', notifyUrl: 'https://app.example/notify'), $this->context);
+            static::fail('Result persistence must fail atomically.');
+        } catch (PaymentException $exception) {
+            static::assertSame('Transactional subscriber failed', $exception->getMessage());
+        }
+
+        static::assertSame(PaymentOrderStates::STATE_CREATED, $this->loadOrder('rolled-back-result')->state?->getTechnicalName());
+        static::assertCount(0, $this->repository('payment_notify_record')->search(new Criteria(), $this->context)->getEntities());
+        static::assertSame(1, $this->gateway->paymentCalls);
+    }
+
+    public function testDifferentFailureNotificationsCannotReleaseAnotherRefundReservation(): void
+    {
+        $this->gateway->paymentResult = new PaymentResult(PaymentStatus::SUCCEEDED);
+        $this->paymentService->pay($this->app, new PaymentRequest('reserved-order', 1000, 'h5', 'Subject'), $this->context);
+        $first = $this->paymentService->refund($this->app, new RefundRequest('first-refund', 300, externalOrderNo: 'reserved-order'), $this->context);
+        $this->paymentService->refund($this->app, new RefundRequest('second-refund', 400, externalOrderNo: 'reserved-order'), $this->context);
+        static::assertSame(700, $this->loadOrder('reserved-order')->refundedAmount);
+        static::assertNotNull($first->resourceNo);
+        $this->gateway->notificationResult = new GatewayNotificationResult(PaymentNotificationTypes::REFUND, $first->resourceNo, new PaymentResult(PaymentStatus::FAILED), 'accepted');
+
+        $this->notificationService->process($this->channelCode, $this->channelConfigId, new GatewayNotification('first-failure'));
+        $this->notificationService->process($this->channelCode, $this->channelConfigId, new GatewayNotification('different-delivery-of-same-failure'));
+
+        static::assertSame(400, $this->loadOrder('reserved-order')->refundedAmount);
+        static::assertSame(2, $this->gateway->notificationCalls);
     }
 
     public function testPaymentAndQueryReuseItsChannelConfiguration(): void
@@ -250,7 +348,7 @@ final class PaymentServiceTest extends TestCase
         $primaryTransactionId = $order->primaryTransactionId;
 
         $this->gateway->queryResult = new PaymentResult(PaymentStatus::SUCCEEDED, providerResourceId: 'provider-trade-1', resultCode: 'QUERY_SUCCESS');
-        $queryResult = $this->paymentService->query($this->app, new QueryRequest(externalOrderNo: 'app-order-1'), $this->context);
+        $queryResult = $this->paymentService->query($this->app, new OrderReference(externalOrderNo: 'app-order-1'), $this->context);
 
         static::assertSame($created->resourceNo, $queryResult->resourceNo);
         static::assertSame(1, $this->gateway->queryCalls);
@@ -303,6 +401,60 @@ final class PaymentServiceTest extends TestCase
         static::assertSame(2, $this->gateway->refundCalls);
     }
 
+    /**
+     * @param 'pay'|'query'|'refund'|'transfer'|'subscribe' $operation
+     */
+    #[DataProvider('unauthorizedEntries')]
+    public function testEveryBusinessEntryRejectsUnauthorizedApplications(string $operation, string $scope): void
+    {
+        $app = clone $this->app;
+        $tenant = '11111111111111111111111111111111';
+        $context = match ($scope) {
+            'global' => Context::createGlobalContext(),
+            'platform-in-tenant', 'other-tenant' => Context::createTenantContext($tenant),
+            default => Context::createDefaultContext(),
+        };
+        if ($scope === 'disabled') {
+            $app->assign(['status' => false]);
+        } elseif ($scope === 'tenant-in-platform' || $scope === 'other-tenant') {
+            $app->assign(['tenantId' => '22222222222222222222222222222222']);
+        }
+
+        $this->expectExceptionObject($scope === 'global'
+            ? PaymentException::invalidRequest('Payment operations require a platform or tenant context.')
+            : PaymentException::appNotFound($app->appCode));
+
+        match ($operation) {
+            'pay' => $this->paymentService->pay($app, new PaymentRequest('guarded-order', 100, 'h5', 'Guarded'), $context),
+            'query' => $this->paymentService->query($app, new OrderReference('guarded-order'), $context),
+            'refund' => $this->paymentService->refund($app, new RefundRequest('guarded-refund', 100, orderNo: 'guarded-order'), $context),
+            'transfer' => $this->paymentService->transfer($app, new TransferRequest('guarded-transfer', 100, 'CNY', 'payee', 'Payee'), $context),
+            'subscribe' => $this->paymentService->subscribe($app, new SubscriptionRequest('guarded-agreement'), $context),
+        };
+    }
+
+    /**
+     * @return iterable<string, array{'pay'|'query'|'refund'|'transfer'|'subscribe', string}>
+     */
+    public static function unauthorizedEntries(): iterable
+    {
+        foreach (['pay', 'query', 'refund', 'transfer', 'subscribe'] as $operation) {
+            yield $operation . ' rejects disabled application' => [$operation, 'disabled'];
+            yield $operation . ' requires concrete scope' => [$operation, 'global'];
+            yield $operation . ' hides platform application from tenant' => [$operation, 'platform-in-tenant'];
+            yield $operation . ' hides tenant application from platform' => [$operation, 'tenant-in-platform'];
+            yield $operation . ' hides another tenant application' => [$operation, 'other-tenant'];
+        }
+    }
+
+    public function testTransferIdempotencyRejectsAnotherPayeeName(): void
+    {
+        $this->paymentService->transfer($this->app, new TransferRequest('same-transfer', 100, 'CNY', 'account', 'Original Name'), $this->context);
+        $this->expectExceptionObject(PaymentException::duplicateReference('same-transfer'));
+
+        $this->paymentService->transfer($this->app, new TransferRequest('same-transfer', 100, 'CNY', 'account', 'Another Name'), $this->context);
+    }
+
     public function testPaymentRejectsDisabledApps(): void
     {
         $disabledApp = clone $this->app;
@@ -315,7 +467,7 @@ final class PaymentServiceTest extends TestCase
 
     public function testPaymentRejectsGlobalWriteContext(): void
     {
-        $this->expectExceptionObject(PaymentException::invalidRequest('Payment writes require a platform or tenant context.'));
+        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require a platform or tenant context.'));
 
         $this->paymentService->pay($this->app, new PaymentRequest('global-order', 100, 'h5', 'Global context', 'CNY'), Context::createGlobalContext());
     }
@@ -392,12 +544,17 @@ final class PaymentServiceTest extends TestCase
         static::assertSame($order->getId(), $channelRecord->orderId);
 
         $notifyRecords = $this->repository('payment_notify_record')->search(new Criteria(), $this->context)->getEntities();
-        static::assertCount(1, $notifyRecords);
-        $notifyRecord = $notifyRecords->first();
-        static::assertInstanceOf(PaymentNotifyRecordEntity::class, $notifyRecord);
-        static::assertSame(PaymentNotifyRecordStatus::STATUS_PENDING, $notifyRecord->status);
-        static::assertSame('https://app.example/payment-notify', $notifyRecord->notifyUrl);
-        static::assertStringContainsString('"external_resource_no":"notified-order"', $notifyRecord->requestBody ?? '');
+        static::assertCount(2, $notifyRecords);
+        $statuses = [];
+        foreach ($notifyRecords as $record) {
+            static::assertInstanceOf(PaymentNotifyRecordEntity::class, $record);
+            $payload = json_decode($record->requestBody ?? '', true, 512, \JSON_THROW_ON_ERROR);
+            $statuses[] = $payload['status'];
+            static::assertSame(PaymentNotifyRecordStatus::STATUS_PENDING, $record->status);
+            static::assertSame('https://app.example/payment-notify', $record->notifyUrl);
+            static::assertSame('notified-order', $payload['external_resource_no']);
+        }
+        static::assertEqualsCanonicalizing([PaymentStatus::PENDING, PaymentStatus::SUCCEEDED], $statuses);
     }
 
     public function testNotificationRejectsAResourceCreatedWithAnotherConfiguration(): void
@@ -422,15 +579,12 @@ final class PaymentServiceTest extends TestCase
 
         try {
             $this->notificationService->process($this->channelCode, $otherConfigId, new GatewayNotification('wrong-config-payload'));
-            static::fail('Expected the notification configuration mismatch.');
+            static::fail('A resource belonging to another configuration must not be visible.');
         } catch (PaymentException $exception) {
-            static::assertSame(PaymentException::NOTIFICATION_CONFIGURATION_MISMATCH, $exception->getErrorCode());
+            static::assertSame(PaymentException::NOTIFICATION_RESOURCE_NOT_FOUND, $exception->getErrorCode());
         }
 
-        $record = $this->repository('payment_channel_notify_record')->search(new Criteria(), $this->context)->getEntities()->first();
-        static::assertInstanceOf(PaymentChannelNotifyRecordEntity::class, $record);
-        static::assertSame(PaymentChannelNotifyRecordStatus::STATUS_FAILED, $record->status);
-        static::assertNotNull($record->errorMessage);
+        static::assertCount(0, $this->repository('payment_channel_notify_record')->search(new Criteria(), $this->context)->getEntities());
     }
 
     public function testRefundFailureNotificationReleasesTheReservedAmount(): void
@@ -454,6 +608,36 @@ final class PaymentServiceTest extends TestCase
         $storedRefund = $this->findByExternalReference('payment_refund', 'externalRefundNo', 'refund-notify');
         static::assertInstanceOf(PaymentRefundEntity::class, $storedRefund);
         static::assertSame(PaymentRefundStatus::STATUS_FAILED, $storedRefund->status);
+    }
+
+    public function testTransferNotificationRejectsAnAmbiguousPlatformNumber(): void
+    {
+        $first = $this->paymentService->transfer($this->app, new TransferRequest('first-transfer', 100, 'CNY', 'payee', 'Payee'), $this->context);
+        $this->paymentService->transfer($this->app, new TransferRequest('second-transfer', 100, 'CNY', 'payee', 'Payee'), $this->context);
+        $second = $this->findByExternalReference('payment_transfer', 'externalTransferNo', 'second-transfer');
+        static::assertNotNull($first->resourceNo);
+        static::assertInstanceOf(PaymentTransferEntity::class, $second);
+        $this->repository('payment_transfer')->update([[
+            'id' => $second->getId(),
+            'transferNo' => $first->resourceNo,
+        ]], $this->context);
+        $this->gateway->notificationResult = new GatewayNotificationResult(
+            PaymentNotificationTypes::TRANSFER,
+            $first->resourceNo,
+            new PaymentResult(PaymentStatus::SUCCEEDED),
+            'accepted',
+        );
+        $this->expectExceptionObject(PaymentException::notificationResourceNotFound($first->resourceNo));
+
+        $this->notificationService->process($this->channelCode, $this->channelConfigId, new GatewayNotification('ambiguous-transfer'));
+    }
+
+    public function testEmptyOrderReferenceCannotSelectAnExistingOrder(): void
+    {
+        $this->paymentService->pay($this->app, new PaymentRequest('existing-order', 100, 'h5', 'Subject'), $this->context);
+        $this->expectExceptionObject(PaymentException::orderNotFound(''));
+
+        $this->paymentService->query($this->app, new OrderReference(), $this->context);
     }
 
     public function testTransferAndSubscriptionNotificationsUpdateTheirAggregates(): void
@@ -664,6 +848,7 @@ final class PaymentServiceTest extends TestCase
         $criteria->addAssociation('state');
         $criteria->addAssociation('primaryTransaction');
         $criteria->addAssociation('primaryTransaction.state');
+        $criteria->addAssociation('transactions');
         $order = $this->repository('payment_order')->search($criteria, $this->context)->getEntities()->first();
 
         static::assertInstanceOf(PaymentOrderEntity::class, $order);
@@ -708,17 +893,16 @@ final class WorkflowRouteResolver extends AbstractPaymentRouteResolver
     public function resolve(
         PaymentAppEntity $app,
         Context $context,
-        PaymentRequest $request,
+        PaymentRoutingRequest $request,
     ): PaymentRoute {
         return $this->route;
     }
-
 }
 
 /**
  * @internal
  */
-final class WorkflowGateway implements PaymentHandlerInterface, QueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, SubscribeHandlerInterface, GatewayNotificationHandlerInterface
+final class WorkflowGateway implements PaymentHandlerInterface, PaymentQueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, SubscriptionHandlerInterface, GatewayNotificationHandlerInterface
 {
     public ?PaymentOrderEntity $lastOrder = null;
 

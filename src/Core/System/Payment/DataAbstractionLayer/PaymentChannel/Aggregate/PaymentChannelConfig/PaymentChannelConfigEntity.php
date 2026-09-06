@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig;
 
-use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -26,15 +25,11 @@ class PaymentChannelConfigEntity extends Entity
      */
     public protected(set) ?array $config = null;
 
-    public protected(set) ?string $ruleId = null;
-
     public protected(set) bool $status;
 
     public protected(set) ?PaymentAppEntity $app = null;
 
     public protected(set) ?PaymentChannelEntity $channel = null;
-
-    public protected(set) ?RuleEntity $rule = null;
 
     public protected(set) ?PaymentOrderCollection $orders = null;
 }

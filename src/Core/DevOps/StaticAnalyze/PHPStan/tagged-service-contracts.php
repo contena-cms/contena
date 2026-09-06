@@ -30,6 +30,9 @@ use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
 use Contena\Core\System\Payment\Gateway\GatewayInterface;
+use Contena\Core\System\Payment\Notification\PaymentNotificationHandlerInterface;
+use Contena\Core\System\Payment\Routing\PaymentRouteProviderInterface;
+use Contena\Core\System\Payment\Routing\PaymentRouteSelectionStrategyInterface;
 use Contena\Core\System\Snippet\Filter\SnippetFilterInterface;
 use Contena\Core\System\Tenant\Resolver\TenantResolverInterface;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
@@ -63,6 +66,9 @@ return [
             'contena.metric_transport_factory' => MetricTransportInterface::class,
             'contena.oauth.scope' => ScopeEntityInterface::class,
             'contena.payment.gateway' => GatewayInterface::class,
+            'contena.payment.notification_handler' => PaymentNotificationHandlerInterface::class,
+            'contena.payment.route_provider' => PaymentRouteProviderInterface::class,
+            'contena.payment.route_selection_strategy' => PaymentRouteSelectionStrategyInterface::class,
             'contena.path.strategy' => AbstractMediaPathStrategy::class,
             'contena.route_scope' => AbstractRouteScope::class,
             'contena.route_scope_whitelist' => RouteScopeWhitelistInterface::class,

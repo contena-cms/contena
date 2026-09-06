@@ -4,6 +4,28 @@
 
 <details>
 
+## Payment module contracts and routing rules
+
+PHP payment callers must use `Payment\Struct\PaymentRequest`, `Payment\Struct\OrderReference`, `Refund\Struct\RefundRequest`, `Transfer\Struct\TransferRequest` and `Subscription\Struct\SubscriptionRequest` under `Contena\Core\System\Payment`. The former `Order` namespace is now `Payment`, not an umbrella for refund or transfer orders. Update service, converter, state-handler and request imports accordingly. DAL entity/table names are unchanged. The HTTP/validation DTOs live in `OpenApi\Request` and are mapped at the controller boundary. Inject the corresponding module's abstract service contract; the existing `Service\AbstractPaymentService` remains a delegating facade. HTTP routes and JSON field names are unchanged.
+
+`AbstractPaymentRouteResolver::resolve()` now accepts `PaymentRoutingRequest`. Use tagged route providers/selection strategies or `PaymentRouteCandidateEvent` for routing customization. `PaymentRouteResolvedEvent` is an observation of the selected route, not a mutable route override. Provider-notification inputs/results moved from `Struct` to `Notification\Struct`; update gateway handler imports accordingly. `Struct\PaymentRoute` moved to `Routing\PaymentRoute`.
+
+`PaymentOrderConverter::convert()` returns order data directly, without `order`, `orderId`, or `transactionId` wrappers or embedded execution records. Extend metadata through `Payment\Event\PaymentOrderConvertedEvent`. IDs, numbers and initial execution records are managed by persistence. Order creation events now occur before the explicit creation of the primary execution record; the primary record exists before provider I/O.
+
+Gateway plugins must rename `QueryHandlerInterface` imports to `PaymentQueryHandlerInterface` (queries payment orders only), and `SubscribeHandlerInterface` to `SubscriptionHandlerInterface`. Gateways do not need the internal SDK client. Integrations that replaced the old internal `GatewayExecutorInterface` must target `YansongdaPayClientInterface::request()` and return normalized arrays instead of SDK objects.
+
+Input-format validation is performed by OpenApi DTO constraints. Internal PHP callers must provide validated mandatory fields, positive monetary/schedule values and currency codes. Core services retain ownership, idempotency, state and refund-balance invariants. Query/refund HTTP requests must supply at least one nonblank order reference. Plugins can catch dedicated `Payment\Exception` subclasses for lookup, routing/capability, duplicate-reference, concurrency, notification-target and refund-eligibility failures; existing factories, error codes and HTTP statuses remain stable.
+
+Uninterpretable gateway responses remain unknown rather than being treated as confirmed failures; refund reservations remain held pending reconciliation. WeChat abnormal refunds also remain unresolved. Alipay transfer acceptance is distinguished from final success. Review recovery/monitoring consumers that previously assumed missing response fields meant rejection.
+
+The native `ruleId` and `rule` DAL fields/associations on `payment_channel_config` and `payment_app_channel_method` were removed. Core no longer loads or evaluates routing rules. The nullable `rule_id` database columns and their data are retained for a non-destructive transition. If existing routes relied on these conditions, install a routing plugin that restores the required entity extensions and policy before upgrading, or disable/review those configurations. Without such a plugin, routing uses only enabled configurations, method assignments, requested channel and gateway capabilities.
+
+Merchant notifications are enqueued on synchronous state transitions as well as verified callbacks. Consumers must tolerate pending and subsequent terminal notifications and deduplicate using the notification ID. Completion observers must not be used for durable side effects; enqueue transactional work from `PaymentResultAppliedEvent`. Delivery URLs must resolve to public network addresses.
+
+Missing refund, transfer, subscription and execution-record lookups now use `PAYMENT__REFUND_NOT_FOUND`, `PAYMENT__TRANSFER_NOT_FOUND`, `PAYMENT__SUBSCRIPTION_NOT_FOUND` and `PAYMENT__TRANSACTION_NOT_FOUND` (HTTP 404). Update error-code handling that previously expected a generic invalid request or an unrelated order-not-found error for these lookups.
+
+Run payment operations with platform or owning-tenant Contexts, not Global/CLI Contexts. Do not hold an outer transaction across gateway I/O. See `src/Core/System/Payment/README.md` for the event failure and recovery contracts, including remaining business-completeness requirements.
+
 ## Administration user detail and create routes removed
 
 The `ct.users.user.detail` and `ct.users.user.create` Administration routes are no longer registered. User details and creation are now handled by the user-listing drawer. Extensions that linked to these routes should link to `ct.users.index` and open the corresponding list action instead.

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig;
 
-use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
@@ -58,12 +57,10 @@ class PaymentChannelConfigDefinition extends EntityDefinition
             new FkField('payment_app_id', 'paymentAppId', PaymentAppDefinition::class)->addFlags(new ApiAware()),
             new FkField('channel_id', 'channelId', PaymentChannelDefinition::class)->addFlags(new ApiAware(), new Required()),
             new JsonField('config', 'config'),
-            new FkField('rule_id', 'ruleId', RuleDefinition::class)->addFlags(new ApiAware()),
             new BoolField('status', 'status')->addFlags(new ApiAware(), new Required()),
             new CustomFields()->addFlags(new ApiAware()),
             new ManyToOneAssociationField('app', 'payment_app_id', PaymentAppDefinition::class)->addFlags(new ApiAware()),
             new ManyToOneAssociationField('channel', 'channel_id', PaymentChannelDefinition::class)->addFlags(new ApiAware()),
-            new ManyToOneAssociationField('rule', 'rule_id', RuleDefinition::class)->addFlags(new ApiAware()),
             new OneToManyAssociationField('orders', PaymentOrderDefinition::class, 'channel_config_id')->addFlags(new ApiAware(), new RestrictDelete()),
         ]);
     }

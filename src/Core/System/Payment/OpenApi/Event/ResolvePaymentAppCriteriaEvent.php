@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Contena\Core\System\Payment\OpenApi\Event;
 
@@ -11,11 +11,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 class ResolvePaymentAppCriteriaEvent extends Event implements ContenaEvent
 {
     public function __construct(
-        private(set) readonly Request  $request,
-        private(set) readonly Criteria $criteria,
-        private readonly Context       $context
-    )
-    {
+        public private(set) readonly Request $request,
+        public private(set) readonly Criteria $criteria,
+        private readonly Context $context
+    ) {
     }
 
     public function getContext(): Context

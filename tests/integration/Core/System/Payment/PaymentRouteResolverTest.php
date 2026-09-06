@@ -16,9 +16,13 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\Pa
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
+use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
-use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
+use Contena\Core\System\Payment\PaymentAppGuard;
+use Contena\Core\System\Payment\Routing\ConfiguredPaymentRouteProvider;
+use Contena\Core\System\Payment\Routing\FirstAvailableRouteStrategy;
 use Contena\Core\System\Payment\Routing\PaymentRouteResolver;
+use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
@@ -88,13 +92,13 @@ final class PaymentRouteResolverTest extends TestCase
         /** @var EntityRepository<PaymentChannelConfigCollection> $configRepository */
         $configRepository = $this->repository('payment_channel_config');
         $resolver = new PaymentRouteResolver(
-            $methodRepository,
-            $configRepository,
-            new GatewayRegistry([$gateway]),
+            [new ConfiguredPaymentRouteProvider($methodRepository, $configRepository, new GatewayRegistry([$gateway]))],
+            [new FirstAvailableRouteStrategy()],
+            new PaymentAppGuard(),
             new EventDispatcher(),
         );
 
-        $route = $resolver->resolve($app, $context, new PaymentRequest('route-order', 1000, 'h5', 'Route order'));
+        $route = $resolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
 
         static::assertSame($gateway, $route->gateway);
         static::assertSame($configId, $route->channelConfigId);

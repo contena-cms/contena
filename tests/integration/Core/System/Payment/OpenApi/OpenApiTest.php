@@ -15,16 +15,17 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\OpenApi\Api\OpenApiResponse;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentController;
-use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
 use Contena\Core\System\Payment\OpenApi\OpenApiException;
+use Contena\Core\System\Payment\OpenApi\Request\PaymentRequestMapper;
 use Contena\Core\System\Payment\OpenApi\Util\SignUtil;
+use Contena\Core\System\Payment\Payment\Struct\OrderReference;
+use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
 use Contena\Core\System\Payment\PaymentException;
+use Contena\Core\System\Payment\Refund\Struct\RefundRequest;
 use Contena\Core\System\Payment\Service\AbstractPaymentService;
 use Contena\Core\System\Payment\Struct\PaymentResult;
-use Contena\Core\System\Payment\Struct\QueryRequest;
-use Contena\Core\System\Payment\Struct\RefundRequest;
-use Contena\Core\System\Payment\Struct\SubscriptionRequest;
-use Contena\Core\System\Payment\Struct\TransferRequest;
+use Contena\Core\System\Payment\Subscription\Struct\SubscriptionRequest;
+use Contena\Core\System\Payment\Transfer\Struct\TransferRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -69,6 +70,7 @@ final class OpenApiTest extends TestCase
             static::getContainer()->set(PaymentController::class, new PaymentController(
                 self::$sharedPaymentService,
                 static::getContainer()->get('request_stack'),
+                new PaymentRequestMapper(),
             ));
         }
         self::$sharedPaymentService->reset();
@@ -231,7 +233,7 @@ final class OpenApiTest extends TestCase
             '/api/payment/query',
             'query',
             ['external_order_no' => 'app-order-1'],
-            QueryRequest::class,
+            OrderReference::class,
         ];
         yield 'refund a platform order' => [
             '/api/payment/refund',
@@ -251,6 +253,56 @@ final class OpenApiTest extends TestCase
             ['external_transfer_no' => 'app-transfer-1', 'amount' => 500, 'payee' => 'payee', 'payee_name' => 'Payee'],
             TransferRequest::class,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    #[DataProvider('invalidRequests')]
+    public function testInvalidInputIsRejectedBeforeCallingTheBusinessService(string $operation, array $parameters, string $errorCode): void
+    {
+        $this->browser->jsonRequest('POST', '/api/payment/' . $operation, $this->signed($parameters));
+
+        $response = $this->browser->getResponse();
+        static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), (string) $response->getContent());
+        $body = json_decode((string) $response->getContent(), true, flags: \JSON_THROW_ON_ERROR);
+        static::assertSame($errorCode, $body['code']);
+        static::assertNull($body['data']);
+        static::assertNull($this->paymentService->operation);
+    }
+
+    /**
+     * @return iterable<string, array{string, array<string, mixed>, string}>
+     */
+    public static function invalidRequests(): iterable
+    {
+        $pay = ['external_order_no' => 'order', 'amount' => 100, 'method_code' => 'h5', 'subject' => 'Subject'];
+        $refund = ['order_no' => 'order', 'external_refund_no' => 'refund', 'refund_amount' => 100];
+        $transfer = ['external_transfer_no' => 'transfer', 'amount' => 100, 'payee' => 'account', 'payee_name' => 'Name'];
+        $subscribe = ['external_subscription_no' => 'agreement'];
+
+        yield 'payment requires business reference' => ['pay', array_replace($pay, ['external_order_no' => '  ']), OpenApiException::MISSING_PARAMETER];
+        yield 'payment rejects negative money' => ['pay', array_replace($pay, ['amount' => -1]), PaymentException::INVALID_REQUEST];
+        yield 'payment rejects zero money' => ['pay', array_replace($pay, ['amount' => 0]), PaymentException::INVALID_REQUEST];
+        yield 'payment requires method' => ['pay', array_replace($pay, ['method_code' => '']), OpenApiException::MISSING_PARAMETER];
+        yield 'payment requires subject' => ['pay', array_replace($pay, ['subject' => '  ']), OpenApiException::MISSING_PARAMETER];
+        yield 'payment currency cannot be numeric' => ['pay', array_replace($pay, ['currency_code' => '123']), PaymentException::INVALID_REQUEST];
+        yield 'payment currency cannot be blank' => ['pay', array_replace($pay, ['currency_code' => '']), OpenApiException::MISSING_PARAMETER];
+        yield 'refund requires business reference' => ['refund', array_replace($refund, ['external_refund_no' => '']), OpenApiException::MISSING_PARAMETER];
+        yield 'refund rejects negative money' => ['refund', array_replace($refund, ['refund_amount' => -1]), PaymentException::INVALID_REQUEST];
+        yield 'transfer requires business reference' => ['transfer', array_replace($transfer, ['external_transfer_no' => ' ']), OpenApiException::MISSING_PARAMETER];
+        yield 'transfer rejects zero money' => ['transfer', array_replace($transfer, ['amount' => 0]), PaymentException::INVALID_REQUEST];
+        yield 'transfer requires payee' => ['transfer', array_replace($transfer, ['payee' => ' ']), OpenApiException::MISSING_PARAMETER];
+        yield 'transfer requires payee name' => ['transfer', array_replace($transfer, ['payee_name' => ' ']), OpenApiException::MISSING_PARAMETER];
+        yield 'transfer currency cannot be numeric' => ['transfer', array_replace($transfer, ['currency_code' => '123']), PaymentException::INVALID_REQUEST];
+        yield 'agreement requires reference' => ['subscribe', array_replace($subscribe, ['external_subscription_no' => ' ']), OpenApiException::MISSING_PARAMETER];
+        yield 'agreement period cannot be negative' => ['subscribe', array_replace($subscribe, ['period' => -1]), PaymentException::INVALID_REQUEST];
+        yield 'agreement single amount cannot be zero' => ['subscribe', array_replace($subscribe, ['single_amount' => 0]), PaymentException::INVALID_REQUEST];
+        yield 'agreement total amount cannot be negative' => ['subscribe', array_replace($subscribe, ['total_amount' => -1]), PaymentException::INVALID_REQUEST];
+        yield 'agreement payment count cannot be negative' => ['subscribe', array_replace($subscribe, ['total_payments' => -1]), PaymentException::INVALID_REQUEST];
+        yield 'query requires an order reference' => ['query', [], PaymentException::INVALID_REQUEST];
+        yield 'query rejects blank references' => ['query', ['order_no' => ' ', 'external_order_no' => ' '], PaymentException::INVALID_REQUEST];
+        yield 'refund requires an order reference' => ['refund', ['external_refund_no' => 'refund', 'refund_amount' => 100], PaymentException::INVALID_REQUEST];
     }
 
     /**
@@ -289,7 +341,7 @@ final class OpenApiServiceStub extends AbstractPaymentService
 
     public ?PaymentAppEntity $app = null;
 
-    public PaymentRequest|QueryRequest|RefundRequest|SubscriptionRequest|TransferRequest|null $request = null;
+    public PaymentRequest|OrderReference|RefundRequest|SubscriptionRequest|TransferRequest|null $request = null;
 
     public ?Context $context = null;
 
@@ -311,7 +363,7 @@ final class OpenApiServiceStub extends AbstractPaymentService
         return $this->record('pay', $app, $request, $context);
     }
 
-    public function query(PaymentAppEntity $app, QueryRequest $request, Context $context): PaymentResult
+    public function query(PaymentAppEntity $app, OrderReference $request, Context $context): PaymentResult
     {
         return $this->record('query', $app, $request, $context);
     }
@@ -334,7 +386,7 @@ final class OpenApiServiceStub extends AbstractPaymentService
     private function record(
         string $operation,
         PaymentAppEntity $app,
-        PaymentRequest|QueryRequest|RefundRequest|SubscriptionRequest|TransferRequest $request,
+        PaymentRequest|OrderReference|RefundRequest|SubscriptionRequest|TransferRequest $request,
         Context $context,
     ): PaymentResult {
         $this->operation = $operation;

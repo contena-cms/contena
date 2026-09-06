@@ -4,8 +4,8 @@ namespace Contena\Tests\Unit\Core\System\Payment\OpenApi\Authentication;
 
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
-use Contena\Core\System\Payment\OpenApi\PaymentAppValueResolver;
-use Contena\Core\System\Payment\OpenApi\Subscriber\PaymentAppValidator;
+use Contena\Core\System\Payment\OpenApi\Authentication\PaymentAppValidator;
+use Contena\Core\System\Payment\OpenApi\Authentication\PaymentAppValueResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
