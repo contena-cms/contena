@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\ScheduledTask;
+namespace Contena\Core\System\Payment\OpenApi\ScheduledTask;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
-use Contena\Core\System\Payment\Service\AppNotificationService;
+use Contena\Core\System\Payment\OpenApi\Service\AppNotificationService;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Contena\Tests\Integration\Core\System\Payment\Service\AppNotificationServiceTest;
 use Psr\Log\LoggerInterface;

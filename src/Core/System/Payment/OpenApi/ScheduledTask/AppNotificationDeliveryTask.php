@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\ScheduledTask;
+namespace Contena\Core\System\Payment\OpenApi\ScheduledTask;
 
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 

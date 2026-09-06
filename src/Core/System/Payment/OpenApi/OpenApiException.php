@@ -12,16 +12,29 @@ class OpenApiException extends PaymentException
 
     public static function invalidSignature(): self
     {
-        return new self(Response::HTTP_UNAUTHORIZED, self::INVALID_SIGNATURE, 'Payment request signature verification failed.');
+        return new self(
+            Response::HTTP_UNAUTHORIZED,
+            self::INVALID_SIGNATURE,
+            'Payment request signature verification failed.'
+        );
     }
 
     public static function missingParameter(string $parameter): self
     {
-        return new self(Response::HTTP_BAD_REQUEST, self::MISSING_PARAMETER, 'Request parameter "{{ parameter }}" is required.', ['parameter' => $parameter]);
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::MISSING_PARAMETER,
+            'Request parameter "{{ parameter }}" is required.',
+            ['parameter' => $parameter]
+        );
     }
 
     public static function invalidRequest(string $message): self
     {
-        return new self(Response::HTTP_BAD_REQUEST, PaymentException::INVALID_REQUEST, $message);
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            PaymentException::INVALID_REQUEST,
+            $message
+        );
     }
 }

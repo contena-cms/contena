@@ -23,6 +23,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefund
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferDefinition;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
+use Contena\Core\System\Payment\Order\PaymentOrderService;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Refund\PaymentRefundService;
 use Contena\Core\System\Payment\Struct\GatewayNotification;
@@ -30,6 +31,7 @@ use Contena\Core\System\Payment\Struct\GatewayNotificationResponse;
 use Contena\Core\System\Payment\Struct\GatewayNotificationResult;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Subscription\PaymentSubscriptionService;
+use Contena\Core\System\Payment\Transfer\PaymentTransferService;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 

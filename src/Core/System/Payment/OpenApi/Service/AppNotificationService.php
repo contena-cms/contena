@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Payment\Service;
+namespace Contena\Core\System\Payment\OpenApi\Service;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;

@@ -9,7 +9,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregate\Paym
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\OpenApi\Api\PaymentRequest;
-use Contena\Core\System\Payment\Service\PaymentOrderCreation;
+use Contena\Core\System\Payment\Service\PaymentOrderConverter;
 use Contena\Core\System\Payment\Struct\PaymentRoute;
 
 /**

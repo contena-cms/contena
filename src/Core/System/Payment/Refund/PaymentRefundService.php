@@ -18,9 +18,9 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefund
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\RefundHandlerInterface;
+use Contena\Core\System\Payment\Order\PaymentOrderService;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
-use Contena\Core\System\Payment\Service\PaymentOrderService;
 use Contena\Core\System\Payment\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\PaymentResult;
 use Contena\Core\System\Payment\Struct\QueryRequest;

@@ -2,7 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\ScheduledTask;
 
-use Contena\Core\System\Payment\ScheduledTask\AppNotificationDeliveryTask;
+use Contena\Core\System\Payment\OpenApi\ScheduledTask\AppNotificationDeliveryTask;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
