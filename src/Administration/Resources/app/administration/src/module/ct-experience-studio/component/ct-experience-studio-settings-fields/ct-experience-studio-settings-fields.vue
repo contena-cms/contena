@@ -477,6 +477,22 @@
                                         @update:model-value="onUpdateField(field.key, $event)"
                                     />
 
+                                    <mt-entity-select
+                                        v-else-if="
+                                            getControlType(field.property) === 'entity-multi' &&
+                                            getEntityName(field.property) &&
+                                            getEntityMultiCodec(field)
+                                        "
+                                        v-bind="getControlProps(field.property)"
+                                        :entity="getEntityName(field.property)"
+                                        :label="field.property.title"
+                                        :help-text="getPropertyHelpText(field.property)"
+                                        :model-value="getEntityMultiValue(field.key)"
+                                        :disabled="!allowEdit || undefined"
+                                        enable-multi-selection
+                                        @update:model-value="onUpdateEntityMultiField(field, $event)"
+                                    />
+
                                     <ct-media-field
                                         v-else-if="getControlType(field.property) === 'media'"
                                         v-bind="getControlProps(field.property)"
@@ -567,6 +583,7 @@ import './ct-experience-studio-settings-fields.scss';
 type PrimitiveValue = string | number | boolean | null | Record<string, unknown>;
 type ResponsiveViewport = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 type ResponsiveValue = Record<ResponsiveViewport, PrimitiveValue>;
+type EntityMultiCodec = 'csv' | 'array';
 type SettingsFieldPanel = {
     key: string;
     technicalName: string | null;
@@ -998,6 +1015,49 @@ const getEntityName = (property: ContentSystemElementTypeProperty) => {
 
     return typeof entity === 'string' && entity.length > 0 ? entity : null;
 };
+const getEntityMultiCodec = (field: SettingsFieldDefinition): EntityMultiCodec | null => {
+    const selectedElementType = props.selectedElementType as ContentSystemElementTypeSpecification | null;
+    const storesIdArray = Object.values(selectedElementType?.bindingSpecifications ?? {}).some(
+        (bindingSpecification) =>
+            bindingSpecification.default && bindingSpecification.resolves[field.key]?.loader === 'entity_collection',
+    );
+
+    if (storesIdArray) {
+        return 'array';
+    }
+
+    const propertyType = field.property.type;
+    const storesCommaSeparatedIds = Array.isArray(propertyType)
+        ? propertyType.includes('string')
+        : propertyType === 'string';
+
+    return storesCommaSeparatedIds ? 'csv' : null;
+};
+const getEntityMultiValue = (key: string): string[] => {
+    const rawValue = getRawPropertyValue(key);
+
+    if (typeof rawValue === 'string') {
+        return rawValue.split(',').filter((id) => id.length > 0);
+    }
+
+    if (Array.isArray(rawValue)) {
+        return rawValue.filter((id): id is string => typeof id === 'string');
+    }
+
+    return [];
+};
+const onUpdateEntityMultiField = (field: SettingsFieldDefinition, ids: string[]): void => {
+    const codec = getEntityMultiCodec(field);
+
+    if (codec === 'csv') {
+        onUpdateField(field.key, ids.join(','));
+        return;
+    }
+
+    if (codec === 'array') {
+        onUpdateField(field.key, ids);
+    }
+};
 const getControlProps = (property: ContentSystemElementTypeProperty) => {
     return getPropertyAdminUiProps(property);
 };
@@ -1069,7 +1129,7 @@ const getRadioPanelLabelTargetId = (
 
     return getRadioPanelOptionId(key, selectedOption.value);
 };
-const onUpdateField = (key: string, value: PrimitiveValue) => {
+const onUpdateField = (key: string, value: PrimitiveValue | string[]) => {
     if (!props.allowEdit) {
         return;
     }
@@ -1324,6 +1384,9 @@ ctDefinePublic({
     onUpdateResponsiveViewportProperty,
     getSelectOptions,
     getEntityName,
+    getEntityMultiCodec,
+    getEntityMultiValue,
+    onUpdateEntityMultiField,
     getControlProps,
     getPropertyHelpText,
     getRadioPanelOptions,
@@ -1372,6 +1435,9 @@ defineExpose({
     onUpdateResponsiveViewportProperty,
     getSelectOptions,
     getEntityName,
+    getEntityMultiCodec,
+    getEntityMultiValue,
+    onUpdateEntityMultiField,
     getControlProps,
     getPropertyHelpText,
     getRadioPanelOptions,

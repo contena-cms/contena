@@ -152,6 +152,179 @@ describe('module/ct-experience-studio/component/ct-experience-studio-settings-fi
         ]);
     });
 
+    it('presents a comma-separated id list to the entity picker as an array', () => {
+        const wrapper = createWrapper({
+            selectedElementType: null,
+            values: { propertyAllowlist: 'a,b' },
+        });
+        const field = {
+            key: 'propertyAllowlist',
+            property: {
+                type: 'string',
+                adminUI: {
+                    component: 'entity-multi',
+                    entity: 'property_group',
+                },
+            },
+        };
+
+        expect(wrapper.vm.getEntityMultiCodec(field)).toBe('csv');
+        expect(wrapper.vm.getEntityMultiValue(field.key)).toEqual([
+            'a',
+            'b',
+        ]);
+    });
+
+    it('joins picked ids into a comma-separated list for a string property', () => {
+        const wrapper = createWrapper({
+            selectedElementType: null,
+            values: {},
+            allowEdit: true,
+        });
+        const field = {
+            key: 'propertyAllowlist',
+            property: {
+                type: 'string',
+                adminUI: {
+                    component: 'entity-multi',
+                    entity: 'property_group',
+                },
+            },
+        };
+
+        wrapper.vm.onUpdateEntityMultiField(field, [
+            'a',
+            'b',
+        ]);
+
+        expect(wrapper.emitted('update-field')).toEqual([
+            [
+                {
+                    key: 'propertyAllowlist',
+                    value: 'a,b',
+                },
+            ],
+        ]);
+    });
+
+    it('presents a resolved id array to the entity picker unchanged', () => {
+        const wrapper = createWrapper({
+            selectedElementType: {
+                bindingSpecifications: {
+                    blogListing: {
+                        default: true,
+                        resolves: {
+                            blogs: {
+                                loader: 'entity_collection',
+                                config: { property: 'blogIds' },
+                            },
+                        },
+                    },
+                },
+            },
+            values: {
+                blogs: [
+                    'a',
+                    'b',
+                ],
+            },
+        });
+        const field = {
+            key: 'blogs',
+            property: {
+                type: 'array',
+                adminUI: {
+                    component: 'entity-multi',
+                    entity: 'blog',
+                },
+            },
+        };
+
+        expect(wrapper.vm.getEntityMultiCodec(field)).toBe('array');
+        expect(wrapper.vm.getEntityMultiValue(field.key)).toEqual([
+            'a',
+            'b',
+        ]);
+    });
+
+    it('emits picked ids as an array for an entity collection property', () => {
+        const wrapper = createWrapper({
+            selectedElementType: {
+                bindingSpecifications: {
+                    blogListing: {
+                        default: true,
+                        resolves: {
+                            blogs: {
+                                loader: 'entity_collection',
+                                config: { property: 'blogIds' },
+                            },
+                        },
+                    },
+                },
+            },
+            values: {},
+            allowEdit: true,
+        });
+        const field = {
+            key: 'blogs',
+            property: {
+                type: 'array',
+                adminUI: {
+                    component: 'entity-multi',
+                    entity: 'blog',
+                },
+            },
+        };
+
+        wrapper.vm.onUpdateEntityMultiField(field, [
+            'a',
+            'b',
+        ]);
+
+        expect(wrapper.emitted('update-field')).toEqual([
+            [
+                {
+                    key: 'blogs',
+                    value: [
+                        'a',
+                        'b',
+                    ],
+                },
+            ],
+        ]);
+    });
+
+    it('resolves no codec for an entity-multi property matching neither stored shape', () => {
+        const wrapper = createWrapper({
+            selectedElementType: {
+                bindingSpecifications: {
+                    blogListing: {
+                        default: false,
+                        resolves: {
+                            blogs: {
+                                loader: 'entity_collection',
+                                config: { property: 'blogIds' },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        const field = {
+            key: 'blogs',
+            property: {
+                type: 'array',
+                adminUI: {
+                    component: 'entity-multi',
+                    entity: 'blog',
+                },
+            },
+        };
+
+        expect(wrapper.vm.getControlType(field.property)).toBe('entity-multi');
+        expect(wrapper.vm.getEntityMultiCodec(field)).toBeNull();
+    });
+
     it('uses a shared structured default for breakpoint-aware box spacing', () => {
         const wrapper = createWrapper();
 
