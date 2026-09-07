@@ -35,7 +35,7 @@ describe('build/vue-setup-transform override template forwarding', () => {
         const result = transformOrFail(source, 'src/plugin/ct-example-component.override.vue').code;
 
         expect(result).toContain(
-            `<ct-block extends="ct_example_component_body" #default="{ __ctOverride: { [__ctSetupNamespace]: { info } }, body }">`,
+            `<ct-block ct-internal-component-name='ct-example-component' extends="ct_example_component_body" #default="{ __ctOverride: { [__ctSetupNamespace]: { info } }, body }">`,
         );
         expect(stripWhitespace(result)).toContain(stripWhitespace`
             return {
@@ -68,7 +68,9 @@ describe('build/vue-setup-transform override template forwarding', () => {
 
         const result = transformOrFail(source, 'override-ct-block-data.override.vue').code;
 
-        expect(result).toContain('<ct-block extends="ct_example_component_headline" #default="{ headline }">');
+        expect(result).toContain(
+            `<ct-block ct-internal-component-name='override-ct-block-data' extends="ct_example_component_headline" #default="{ headline }">`,
+        );
         expect(result).not.toContain(':data="$dataScope"');
     });
 

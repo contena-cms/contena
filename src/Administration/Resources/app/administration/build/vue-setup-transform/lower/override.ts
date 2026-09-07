@@ -74,6 +74,20 @@ function toSlotScopeEdit(scope: OverrideSlotScope): SourceEdit {
 }
 
 /**
+ * The generated attribute that scopes an override `<ct-block extends>` to the component it overrides.
+ *
+ * Carries the target component name so the override registers against `componentName + blockName`, matching
+ * the base block's own scope and mirroring how Twig scopes a `{% block %}`.
+ */
+function toComponentNameEdit(at: number, componentName: string): SourceEdit {
+    return {
+        start: at,
+        end: at,
+        replacement: ` ct-internal-component-name='${escapeSingleQuoted(componentName)}'`,
+    };
+}
+
+/**
  * Lowers override mode into a hidden override component consumed by
  * registerOverrideComponent.
  *
@@ -163,6 +177,7 @@ function buildOverrideScript(
 
     return [
         ...registrationTemplate,
+        ...templateAnalysis.componentNameInsertions.map((at) => toComponentNameEdit(at, block.componentName)),
         ...templateAnalysis.slotScopes.map(toSlotScopeEdit),
         {
             start: block.contentStart,

@@ -65,7 +65,9 @@ describe('build/vue-setup-transform base transforms', () => {
 
         const result = transformOrFail(source, 'base-deeper-child-named-slot.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="ct_example_component_body">');
+        expect(result).toContain(
+            `<ct-block ct-internal-component-name='base-deeper-child-named-slot' :data="$dataScope" name="ct_example_component_body">`,
+        );
     });
 
     it('pins the whole generated output for a base component with props, private state and an <ct-block>', () => {
@@ -110,7 +112,7 @@ describe('build/vue-setup-transform base transforms', () => {
         // Vue round-trip below is what guarantees the result is still valid code.
         const expected = stripWhitespace`
             <template>
-                <ct-block :data="$dataScope" name="ct_example_headline">
+                <ct-block ct-internal-component-name='ct-example' :data="$dataScope" name="ct_example_headline">
                     <h1>{{ title }}</h1>
                     <p>{{ doubled }}</p>
                 </ct-block>
@@ -215,7 +217,9 @@ describe('build/vue-setup-transform base transforms', () => {
 
         const result = transformOrFail(source, 'base-ct-block-data.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="ct_example_component_headline">');
+        expect(result).toContain(
+            `<ct-block ct-internal-component-name='base-ct-block-data' :data="$dataScope" name="ct_example_component_headline">`,
+        );
     });
 
     it('returns destructured runtime declarations as setup bindings', () => {
@@ -298,11 +302,18 @@ describe('build/vue-setup-transform base transforms', () => {
 
         const result = transformOrFail(source, 'base-nested-ct-block-data.vue').code;
 
-        expect(result).toContain('<ct-block :data="$dataScope" name="ct_outer">');
-        expect(result).toContain('<ct-block :data="$dataScope" name="ct_inner" />');
+        expect(result).toContain(
+            `<ct-block ct-internal-component-name='base-nested-ct-block-data' :data="$dataScope" name="ct_outer">`,
+        );
+        expect(result).toContain(
+            `<ct-block ct-internal-component-name='base-nested-ct-block-data' :data="$dataScope" name="ct_inner" />`,
+        );
     });
 
-    it.each(['name', 'extends'])('requires the static %s of ct-block to use the ct_ prefix', (identity) => {
+    it.each([
+        'name',
+        'extends',
+    ])('requires the static %s of ct-block to use the ct_ prefix', (identity) => {
         const mode = identity === 'name' ? 'base' : 'override';
         const marker = mode === 'base' ? 'ctDefinePublic({ body });' : 'ctDefineOverride({ body });';
         const source = stripIndent`
@@ -318,7 +329,10 @@ describe('build/vue-setup-transform base transforms', () => {
             </script>
         `;
 
-        expect(() => transformContenaSetupSfc(source, `${mode}-invalid-${identity}.vue`)).toThrow(
+        const filename =
+            mode === 'override' ? `${mode}-invalid-${identity}.override.vue` : `${mode}-invalid-${identity}.vue`;
+
+        expect(() => transformContenaSetupSfc(source, filename)).toThrow(
             `The static ${identity} of <ct-block> must start with "ct_".`,
         );
     });

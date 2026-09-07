@@ -16,6 +16,27 @@ import parentsInjectionKey from './parents-injection-key';
 import useBlockContext from '../../../../composables/use-block-context';
 
 /**
+ * Builds the key under which a block registers and resolves its slots.
+ *
+ * Native `<ct-block>` scopes block matching to `componentName + blockName`, mirroring Twig, so that block
+ * `foo` in one component never resolves overrides meant for block `foo` in another. The owning component
+ * name reaches this component through the `ct-internal-component-name` attribute that the Contena setup
+ * transform stamps onto every `<ct-block>` when it lowers the SFC. When it is absent — a `<ct-block>`
+ * mounted directly in a test — the block falls back to matching on the block name alone.
+ *
+ * @example
+ * scopedBlockKey('ct-blog-detail', 'ct_blog_detail_base'); // 'ct-blog-detail ct_blog_detail_base'
+ * scopedBlockKey(undefined, 'ct_blog_detail_base'); // 'ct_blog_detail_base'
+ */
+function scopedBlockKey(componentName: string | undefined, blockName: string | undefined): string | undefined {
+    if (blockName === undefined) {
+        return undefined;
+    }
+
+    return componentName ? `${componentName} ${blockName}` : blockName;
+}
+
+/**
  * @private
  *
  * @component ct-block
@@ -28,11 +49,10 @@ import useBlockContext from '../../../../composables/use-block-context';
  * block name to override and the `extends` attribute. The `ct-block-parent` component is used to render the parent
  * block default content.
  *
- * The prop `data` is used to pass data to the block content. The `$dataScope` is used to pass the entire component
- * scoped data to the block content.
+ * The Contena setup transform wires the owning component name and data scope to each block.
  *
  * @example override
- * <ct-block name="ct_block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name">
  *     <div>Default content</div>
  * </ct-block-extension>
  *
@@ -41,7 +61,7 @@ import useBlockContext from '../../../../composables/use-block-context';
  * </ct-block>
  *
  * @example extend
- * <ct-block name="ct_block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name">
  *     <div>Default content</div>
  * </ct-block>
  *
@@ -51,7 +71,7 @@ import useBlockContext from '../../../../composables/use-block-context';
  * </ct-block>
  *
  * @example extend with multiple blocks
- * <ct-block name="ct_block-name" :data="$dataScope">
+ * <ct-block name="ct_block-name">
  *     <div>Default content</div>
  * </ct-block>
  *
@@ -75,6 +95,10 @@ export default Contena.Component.wrapComponentConfig({
         extends: {
             type: String,
         },
+        ctInternalComponentName: {
+            type: String,
+            default: undefined,
+        },
         data: {
             type: Object as PropType<ComponentInternalInstance['proxy']>,
             default: null,
@@ -85,12 +109,13 @@ export default Contena.Component.wrapComponentConfig({
         const instance = getCurrentInstance();
 
         if (props.extends) {
+            const scopedExtends = scopedBlockKey(props.ctInternalComponentName, props.extends);
             // addBlock is a no-op for undefined, so an explicit guard is not needed.
-            addBlock(props.extends, slots.default);
+            addBlock(scopedExtends!, slots.default);
 
             onBeforeUnmount(() => {
                 if (props.extends) {
-                    removeBlock(props.extends, slots.default);
+                    removeBlock(scopedExtends!, slots.default);
                 }
             });
 
@@ -116,7 +141,7 @@ export default Contena.Component.wrapComponentConfig({
                 throw new Error('[ct-block] The "name" prop is required when "extends" is not set.');
             }
 
-            const nativeBlocks = getBlocks(props.name);
+            const nativeBlocks = getBlocks(scopedBlockKey(props.ctInternalComponentName, props.name)!);
             const blocksAndParent = [
                 slots.default ?? (() => []),
                 ...nativeBlocks,

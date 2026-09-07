@@ -40,7 +40,7 @@ describe('build/vue-setup-transform override transforms', () => {
         // blank-line residue is not behaviour. The Vue round-trip below guards the token sequence.
         const expected = stripWhitespace`
             <template>
-                <ct-block extends="ct_example_headline" #default="{ __ctOverride: { [__ctSetupNamespace]: { suffix } }, headline }">
+                <ct-block ct-internal-component-name='ct-example' extends="ct_example_headline" #default="{ __ctOverride: { [__ctSetupNamespace]: { suffix } }, headline }">
                     <h1>{{ headline }} - {{ suffix }}</h1>
                 </ct-block>
             </template>

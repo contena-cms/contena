@@ -43,13 +43,13 @@ Used inside an override block to render the content from the previous block in t
 In a component SFC:
 
 ```html
-<ct-block name="ct_product_detail_summary" :data="$dataScope">
+<ct-block name="ct_product_detail_summary">
     <p>Default summary content</p>
 </ct-block>
 ```
 
-- `name` — unique identifier for this block, scoped globally across the app. New block names use the `ct_` prefix and snake_case (e.g., `ct_product_detail_summary`). Existing `ct_` names remain valid legacy extension points.
-- `:data="$dataScope"` — passes the component's entire data/computed/methods scope to any override that wants it (more on this below)
+- `name` — identifier for this block, scoped to the owning component. Like a Twig `{% block %}`, a block is addressed by `componentName + blockName`, so the same block name in two different components never collide: a `<ct-block extends="...">` only resolves against the `<ct-block name="...">` in the same component. The Contena setup transform stamps the owning component name onto every `<ct-block>` (the `ct-internal-component-name` attribute) when it lowers the SFC; authors do not write it. Block names use the `ct_` prefix and snake_case (e.g., `ct_product_detail_summary`).
+- The block's owning component and data scope are wired by the Contena setup transform; `name` (or `extends`) is the only binding an author writes on `<ct-block>`.
 
 ### Complete end-to-end example
 
@@ -58,7 +58,7 @@ The following shows both sides together: the base component that declares the bl
 ```html
 <!-- ── Base component: ct-product-detail.vue ── -->
 <div class="ct-product-detail">
-    <ct-block name="ct_product_detail_summary" :data="$dataScope">
+    <ct-block name="ct_product_detail_summary">
         <p>Default summary content</p>
     </ct-block>
 </div>
@@ -162,35 +162,32 @@ When there are multiple overrides and none uses `<ct-block-parent />`, only the 
 
 ---
 
-## Accessing the Component's Data Scope
+## Accessing State Around a Block
 
-Override blocks are rendered outside the component they extend, so they normally have no access to its reactive data. The `data` prop and the slot's default scope solve this.
+Override blocks are rendered outside the component they extend, so they have no implicit access to its reactive state. State flows through the Contena setup transform instead:
 
-### Passing data
+- The owning component's data scope is wired to every named `<ct-block>` by the transform, which is how `<ct-block-parent />` content keeps rendering with the base component's state.
+- Inside `<ct-block extends>` content, an override references its own setup bindings directly. Public base state is read through `useCtPreviousState()`.
 
-The component that owns the block passes itself down via `:data="$dataScope"`:
+```vue
+<template>
+    <ct-block extends="ct_blog_title">
+        <ct-block-parent />
+        <span class="custom-title">{{ customTitle }}</span>
+    </ct-block>
+</template>
 
-```html
-<!-- In the component being extended -->
-<ct-block name="ct_product_price_display" :data="$dataScope">
-    <span>{{ product.price }}</span>
-</ct-block>
+<script setup>
+import { computed } from 'vue';
+
+const previousState = useCtPreviousState();
+const customTitle = computed(() => `${previousState.title.value}!`);
+
+ctDefineOverride({});
+</script>
 ```
 
-`$dataScope` is a helper that returns the current component's proxy (`getCurrentInstance()?.proxy`), which exposes all `data`, `computed`, and `methods`.
-
-### Consuming data in an override
-
-The override block receives the scope as its default slot argument:
-
-```html
-<ct-block extends="ct_product_price_display" #default="{ product, formatPrice }">
-    <ct-block-parent />
-    <span class="custom-price">{{ formatPrice(product.price) }}</span>
-</ct-block>
-```
-
-This is standard Vue scoped slot syntax — `#default="{ ... }"` destructures whatever the `data` prop provided.
+See [`07-native-setup-authoring.md`](./07-native-setup-authoring.md) for the authoring rules.
 
 ---
 
@@ -200,13 +197,13 @@ Blocks can be nested freely. Each block is independently overrideable:
 
 ```html
 <!-- Component template -->
-<ct-block name="ct_product_tabs" :data="$dataScope">
+<ct-block name="ct_product_tabs">
     <div class="tabs">
-        <ct-block name="ct_product_tab_basic" :data="$dataScope">
+        <ct-block name="ct_product_tab_basic">
             <span>Basic Info</span>
         </ct-block>
 
-        <ct-block name="ct_product_tab_advanced" :data="$dataScope">
+        <ct-block name="ct_product_tab_advanced">
             <span>Advanced</span>
         </ct-block>
     </div>
@@ -215,11 +212,11 @@ Blocks can be nested freely. Each block is independently overrideable:
 <!-- Plugin: add a new tab without touching the outer block -->
 <ct-block extends="ct_product_tabs">
     <ct-block-parent />
-    <ct-block name="ct_product_tab_custom" :data="$dataScope">
-        <span>Custom Tab</span>
-    </ct-block>
+    <span>Custom Tab</span>
 </ct-block>
 ```
+
+New named blocks are declared by the base components that own them; override files use `extends` to contribute into existing blocks.
 
 ---
 
@@ -360,11 +357,11 @@ export default Contena.Component.wrapComponentConfig({
 ### Data flow diagram
 
 ```
-Component with <ct-block name="ct_foo" :data="$dataScope">
+Component with <ct-block name="ct_foo">
 │
 │  Mount
 │
-│  useBlockContext.getBlocks("foo")
+│  useBlockContext.getBlocks("component-name ct_foo")
 │  → [defaultSlot, overrideSlot1, overrideSlot2]
 │
 │  Call each slot with $dataScope

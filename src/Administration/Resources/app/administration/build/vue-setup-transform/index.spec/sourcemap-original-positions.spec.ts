@@ -185,7 +185,9 @@ describe('build/vue-setup-transform sourcemap original positions', () => {
 
         const result = transformOrFail(source, 'template-data-scope.vue');
 
-        expect(result.code).toContain('<ct-block :data="$dataScope" name="ct_example_card">');
+        expect(result.code).toContain(
+            `<ct-block ct-internal-component-name='template-data-scope' :data="$dataScope" name="ct_example_card">`,
+        );
         expectOriginalLine(result, source, 'name="ct_example_card"', 'name="ct_example_card"');
         expectOriginalLine(result, source, '{{ headline }}', '{{ headline }}');
     });
