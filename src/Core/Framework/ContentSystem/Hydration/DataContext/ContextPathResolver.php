@@ -113,9 +113,4 @@ class ContextPathResolver
 
         return str_starts_with($consumerKey, $providerKey . '.');
     }
-
-    public function extractBaseKey(string $key): string
-    {
-        return explode('.', $key)[0];
-    }
 }

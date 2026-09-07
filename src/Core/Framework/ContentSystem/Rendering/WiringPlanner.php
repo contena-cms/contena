@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Rendering;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKey;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKeyResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerScope;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextConsumer;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextProvider;
@@ -97,12 +97,12 @@ final readonly class WiringPlanner
     private function validatePropertyAliases(array $consumers): void
     {
         $propertyKeys = [];
-        $consumerBaseKey = new ConsumerBaseKey();
+        $consumerBaseKey = new ConsumerBaseKeyResolver();
 
         foreach ($consumers as $contextKey => $consumer) {
             $propertyKey = $consumer->propertyAlias ?? $contextKey;
 
-            $baseKey = $consumerBaseKey->of($propertyKey);
+            $baseKey = $consumerBaseKey->resolve($propertyKey);
 
             if (\array_key_exists($baseKey, $propertyKeys)) {
                 throw ContentSystemException::propertyAliasCollision(

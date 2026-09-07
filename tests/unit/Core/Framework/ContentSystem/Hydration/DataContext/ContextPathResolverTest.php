@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataContext;
 
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextPathResolver;
+use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\Test\Stub\ContentSystem\StubPathStruct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWithJson;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextPathResolver;
-use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\Test\Stub\ContentSystem\StubPathStruct;
 
 /**
  * @internal
@@ -148,13 +148,5 @@ class ContextPathResolverTest extends TestCase
     public function testMatchesReturnsFalseForNonMatchingKeyPair(string $provider, string $consumer): void
     {
         static::assertFalse($this->resolver->matches($provider, $consumer));
-    }
-
-    #[TestDox('extracts base key from dotted path')]
-    public function testExtractBaseKeyFromDottedPath(): void
-    {
-        $result = $this->resolver->extractBaseKey('blog.cover');
-
-        static::assertSame('blog', $result);
     }
 }

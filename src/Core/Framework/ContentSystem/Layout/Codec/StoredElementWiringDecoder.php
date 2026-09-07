@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Codec;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKey;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKeyResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerScope;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextConsumer;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextProvider;
@@ -43,7 +43,7 @@ use Contena\Core\Framework\ContentSystem\Rendering\WiringPlanner;
  * {@see WiringPlanner}. The three stay independent implementations of the same rules; StoredTreeShapeConformanceTest
  * runs this side and the descriptor side over one payload table to catch a divergence sharing would hide.
  * {@see rejectUnknownKeys()} and {@see stringKeyed()} are duplicated from {@see StoredElementCodec} rather
- * than borrowed from it. {@see ConsumerBaseKey} is the one shared collaborator, constructed locally where
+ * than borrowed from it. {@see ConsumerBaseKeyResolver} is the one shared collaborator, constructed locally where
  * {@see rejectInvalidElementWiring()} needs it, since it carries the base-key split every one of these
  * independent implementations otherwise duplicates.
  *
@@ -208,12 +208,12 @@ final class StoredElementWiringDecoder
     public function rejectInvalidElementWiring(array $consumers, array $providers): void
     {
         $holders = [];
-        $consumerBaseKey = new ConsumerBaseKey();
+        $consumerBaseKey = new ConsumerBaseKeyResolver();
 
         foreach ($consumers as $contextKey => $consumer) {
             $propertyKey = $consumer->propertyAlias ?? $contextKey;
 
-            $baseKey = $consumerBaseKey->of($propertyKey);
+            $baseKey = $consumerBaseKey->resolve($propertyKey);
 
             if (\array_key_exists($baseKey, $holders)) {
                 throw ContentSystemException::propertyAliasCollision($baseKey, $holders[$baseKey], $contextKey);

@@ -2,7 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Context;
 
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKey;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKeyResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -11,21 +11,21 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[CoversClass(ConsumerBaseKey::class)]
-class ConsumerBaseKeyTest extends TestCase
+#[CoversClass(ConsumerBaseKeyResolver::class)]
+class ConsumerBaseKeyResolverTest extends TestCase
 {
-    private ConsumerBaseKey $consumerBaseKey;
+    private ConsumerBaseKeyResolver $consumerBaseKey;
 
     protected function setUp(): void
     {
-        $this->consumerBaseKey = new ConsumerBaseKey();
+        $this->consumerBaseKey = new ConsumerBaseKeyResolver();
     }
 
     #[DataProvider('keyProvider')]
     #[TestDox('reduces a property key to the write boundary\'s uniqueness axis')]
-    public function testOfReducesKeyToItsBaseKey(string $key, string $expected): void
+    public function testResolveReducesKeyToItsBaseKey(string $key, string $expected): void
     {
-        static::assertSame($expected, $this->consumerBaseKey->of($key));
+        static::assertSame($expected, $this->consumerBaseKey->resolve($key));
     }
 
     /**
@@ -37,5 +37,6 @@ class ConsumerBaseKeyTest extends TestCase
         yield 'dotted key returns its first segment' => ['blog.name', 'blog'];
         yield 'multi-dot key returns its first segment' => ['blog.name.short', 'blog'];
         yield 'leading-dot key returns the empty first segment' => ['.blog', ''];
+        yield 'empty key returns itself' => ['', ''];
     }
 }

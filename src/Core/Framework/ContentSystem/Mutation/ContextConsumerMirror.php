@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Mutation;
 
 use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredElementWiringDecoder;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKey;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerBaseKeyResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ConsumerScope;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextConsumer;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
@@ -18,8 +18,10 @@ use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
  * becomes a parent-scope consumer, a root-resolved one a {@see ConsumerScope::Root} consumer.
  *
  * @internal
+ *
+ * @final
  */
-class PageContextConsumerWiring
+class ContextConsumerMirror
 {
     /**
      * @param array<string, list<PropertyResolution>> $resolutions per-element resolutions, keyed by element id
@@ -97,6 +99,7 @@ class PageContextConsumerWiring
         $consumers = $definitions->getAllConsumers();
         $providers = $definitions->getAllProviders();
         $added = false;
+        $consumerBaseKey = new ConsumerBaseKeyResolver();
 
         foreach ($resolutions[$element->id] ?? [] as $resolution) {
             $mirrored = $this->consumerFor($resolution);
@@ -108,7 +111,7 @@ class PageContextConsumerWiring
             [$contextKey, $consumer] = $mirrored;
             $writtenKey = $resolution->key;
 
-            if (isset($consumers[$contextKey]) || $this->collidesOnBaseKey($writtenKey, $consumers)) {
+            if (isset($consumers[$contextKey]) || $this->collidesOnBaseKey($consumerBaseKey, $writtenKey, $consumers)) {
                 continue;
             }
 
@@ -130,13 +133,12 @@ class PageContextConsumerWiring
      *
      * @param array<string, ContextConsumer> $consumers
      */
-    private function collidesOnBaseKey(string $writtenKey, array $consumers): bool
+    private function collidesOnBaseKey(ConsumerBaseKeyResolver $consumerBaseKey, string $writtenKey, array $consumers): bool
     {
-        $consumerBaseKey = new ConsumerBaseKey();
-        $baseKey = $consumerBaseKey->of($writtenKey);
+        $baseKey = $consumerBaseKey->resolve($writtenKey);
 
         foreach ($consumers as $consumerKey => $consumer) {
-            if ($consumerBaseKey->of($consumer->propertyAlias ?? $consumerKey) === $baseKey) {
+            if ($consumerBaseKey->resolve($consumer->propertyAlias ?? $consumerKey) === $baseKey) {
                 return true;
             }
         }
@@ -162,6 +164,12 @@ class PageContextConsumerWiring
         $key = $resolved->contextKey;
 
         if ($key === null || $key === '') {
+            return null;
+        }
+
+        // An integer-like key ("0", "42") is coerced to an int array key on write below, and the decode gate
+        // ({@see StoredElementWiringDecoder::decodeConsumers()}) rejects a non-string consumer key.
+        if ((string) (int) $key === $key) {
             return null;
         }
 

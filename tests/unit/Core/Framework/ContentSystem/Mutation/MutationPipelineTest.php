@@ -16,12 +16,12 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
+use Contena\Core\Framework\ContentSystem\Mutation\ContextConsumerMirror;
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\DuplicateElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\MoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\ReplaceElement;
-use Contena\Core\Framework\ContentSystem\Mutation\PageContextConsumerWiring;
 use Contena\Core\Framework\ContentSystem\Resolution\CandidateOrigin;
 use Contena\Core\Framework\ContentSystem\Resolution\PropertyKind;
 use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
@@ -251,7 +251,7 @@ class MutationPipelineTest extends TestCase
 
     private function pipeline(LayoutDiagnostics $diagnostics): MutationPipeline
     {
-        return new MutationPipeline($diagnostics, new PageContextConsumerWiring());
+        return new MutationPipeline($diagnostics, new ContextConsumerMirror());
     }
 
     private function inputTree(): StoredTree

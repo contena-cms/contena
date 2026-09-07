@@ -82,8 +82,8 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemEleme
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\ElementTypeCollisionDetector;
+use Contena\Core\Framework\ContentSystem\Mutation\ContextConsumerMirror;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
-use Contena\Core\Framework\ContentSystem\Mutation\PageContextConsumerWiring;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
 use Contena\Core\Framework\ContentSystem\Output\ElementTreePruner;
 use Contena\Core\Framework\ContentSystem\Output\Encoder\ContentDataPageEncoder;
@@ -462,7 +462,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('validator'),
             service(Connection::class),
             param('kernel.environment'),
-            service('logger'),
         ])
         ->tag('content_system.type_loader');
 
@@ -520,7 +519,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('validator'),
             service(Connection::class),
             param('kernel.environment'),
-            service('logger'),
         ])
         ->tag('content_system.style_option_loader');
 
@@ -572,7 +570,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             param('kernel.environment'),
             service(Connection::class),
-            service('logger'),
             service(BindingSpecificationSerializer::class),
             service('validator'),
         ])
@@ -752,12 +749,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     // Mutation Pipeline
-    $services->set(PageContextConsumerWiring::class);
+    $services->set(ContextConsumerMirror::class);
 
     $services->set(MutationPipeline::class)
         ->args([
             service(LayoutDiagnostics::class),
-            service(PageContextConsumerWiring::class),
+            service(ContextConsumerMirror::class),
         ]);
 
     // Layout Mutation Actions (Admin API)
