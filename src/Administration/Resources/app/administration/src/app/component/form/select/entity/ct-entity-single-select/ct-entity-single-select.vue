@@ -425,7 +425,7 @@ function loadSelected() {
             props.criteria,
         )
         .then((item) => {
-            if (!item) {
+            if (!item && !props.disabled) {
                 emit('update:value', null);
             }
             props.criteria.setIds([]);
