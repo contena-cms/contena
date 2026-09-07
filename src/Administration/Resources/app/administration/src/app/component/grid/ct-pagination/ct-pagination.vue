@@ -286,23 +286,4 @@ ctDefinePublic({
     changePageByPageNumber,
     refresh,
 });
-
-defineExpose({
-    currentPage,
-    perPage,
-    maxPage,
-    displayedPages,
-    shouldBeVisible,
-    possibleSteps,
-    possibleStepsOptions,
-    range,
-    pageChange,
-    onPageSizeChange,
-    firstPage,
-    prevPage,
-    nextPage,
-    lastPage,
-    changePageByPageNumber,
-    refresh,
-});
 </script>

@@ -858,11 +858,4 @@ ctDefinePublic({
     allSelectedChecked,
     getSelectableTooltip,
 });
-
-defineExpose({
-    recordIsSelectable,
-    isSelectAllDisabled,
-    allSelectedChecked,
-    getSelectableTooltip,
-});
 </script>

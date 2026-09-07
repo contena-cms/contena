@@ -96,6 +96,4 @@ ctDefinePublic({
     exampleResults,
     closeModal,
 });
-
-defineExpose({ exampleResults, closeModal });
 </script>

@@ -60,6 +60,4 @@ ctDefinePublic({
     customFieldSets,
     loadCustomFieldSets,
 });
-
-defineExpose({ customFieldSets, loadCustomFieldSets });
 </script>

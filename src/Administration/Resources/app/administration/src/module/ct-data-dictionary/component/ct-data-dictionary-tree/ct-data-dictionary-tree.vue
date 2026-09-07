@@ -240,15 +240,6 @@ const onDragEnd = (payload: unknown): void => {
 };
 
 ctDefinePublic({
-    onSelect,
-    onAddChild,
-    onAddChildTreeItem,
-    onSelectTreeItem,
-    onDelete,
-    onDragEnd,
-});
-
-defineExpose({
     items,
     treeItems,
     rootId,

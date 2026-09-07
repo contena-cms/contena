@@ -159,6 +159,4 @@ ctDefinePublic({
     onSave,
     createNameNotUniqueNotification,
 });
-
-defineExpose({ createdComponent, saveFinish, onSave, createNameNotUniqueNotification });
 </script>

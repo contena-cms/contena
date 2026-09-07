@@ -342,15 +342,4 @@ ctDefinePublic({
     onModalClosed,
     getFileName,
 });
-
-defineExpose({
-    mediaModalIsOpen,
-    mediaPreview,
-    removeFileButtonLabel,
-    isDeletionDisabled,
-    mediaNameFilter,
-    closeModal,
-    onModalClosed,
-    getFileName,
-});
 </script>

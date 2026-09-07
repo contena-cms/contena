@@ -121,12 +121,4 @@ ctDefinePublic({
     createdComponent,
     registerColumn,
 });
-
-defineExpose({
-    feature,
-    ctGridColumns,
-    parentGrid,
-    createdComponent,
-    registerColumn,
-});
 </script>

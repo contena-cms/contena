@@ -300,22 +300,6 @@ ctDefinePublic({
     loadMailerSettings,
     onSave,
 });
-
-defineExpose({
-    mailerSettings,
-    isLoading,
-    isSaveSuccessful,
-    smtpHostError,
-    smtpPortError,
-    emailAgentOptions,
-    sendmailOptions,
-    encryptionOptions,
-    isSmtpMode,
-    isOauthMode,
-    hasSelectedAgent,
-    loadMailerSettings,
-    onSave,
-});
 </script>
 
 <style>

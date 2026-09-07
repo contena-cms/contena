@@ -1,6 +1,7 @@
 /**
- * Covers Vue macros the transform rejects: unsupported macros such as `defineModel()` (nested
- * calls stay untouched, like compiler-sfc), and base-only macros used in override mode.
+ * Covers Vue macros the transform rejects: unsupported macros such as `defineModel()` and
+ * `defineExpose()` (nested calls stay untouched, like compiler-sfc), and base-only macros used in
+ * override mode.
  */
 
 import { stripIndent, transformOrFail, transformContenaSetupSfc } from './helpers';
@@ -10,6 +11,10 @@ describe('build/vue-setup-transform unsupported macros', () => {
         [
             'defineModel()',
             'Vue macro defineModel() is not supported inside Contena setup blocks.',
+        ],
+        [
+            'defineExpose({})',
+            'defineExpose() is not supported inside Contena setup blocks.',
         ],
     ])('rejects unsupported Vue macro %s', (macro, expectedMessage) => {
         const source = stripIndent`
@@ -82,7 +87,9 @@ describe('build/vue-setup-transform unsupported macros', () => {
         );
     });
 
-    it('rejects defineExpose() in override mode', () => {
+    // An override cannot be told to use ctDefinePublic(): that marker is itself rejected in override
+    // mode, so the advice would only swap one error for the next.
+    it('sends an override authoring defineExpose() to ctDefineOverride(), not ctDefinePublic()', () => {
         const source = stripIndent`
             <script setup lang="ts">
             defineExpose({});
@@ -91,7 +98,21 @@ describe('build/vue-setup-transform unsupported macros', () => {
         `;
 
         expect(() => transformContenaSetupSfc(source, 'override-expose.override.vue')).toThrow(
-            'defineExpose() is only supported in base Contena setup blocks.',
+            'Declare replacement bindings with ctDefineOverride({ ... }) instead.',
+        );
+    });
+
+    it('points an authored defineExpose() at ctDefinePublic() instead', () => {
+        const source = stripIndent`
+            <script setup lang="ts">
+            const count = 1;
+            defineExpose({ count });
+            ctDefinePublic({ count });
+            </script>
+        `;
+
+        expect(() => transformContenaSetupSfc(source, 'base-expose.vue')).toThrow(
+            'Use ctDefinePublic({ ... }) instead, which will call it for you automatically.',
         );
     });
 

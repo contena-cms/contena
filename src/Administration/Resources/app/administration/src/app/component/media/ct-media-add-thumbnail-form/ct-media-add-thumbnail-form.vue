@@ -116,16 +116,4 @@ ctDefinePublic({
     heightInputChanged,
     inputChanged,
 });
-
-defineExpose({
-    width,
-    height,
-    isLocked,
-    lockedButtonClass,
-    onLockSwitch,
-    onAdd,
-    widthInputChanged,
-    heightInputChanged,
-    inputChanged,
-});
 </script>

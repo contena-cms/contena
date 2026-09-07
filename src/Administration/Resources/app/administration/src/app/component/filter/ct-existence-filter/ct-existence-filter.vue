@@ -77,11 +77,4 @@ ctDefinePublic({
     changeValue,
     resetFilter,
 });
-
-defineExpose({
-    value,
-    filterOptions,
-    changeValue,
-    resetFilter,
-});
 </script>

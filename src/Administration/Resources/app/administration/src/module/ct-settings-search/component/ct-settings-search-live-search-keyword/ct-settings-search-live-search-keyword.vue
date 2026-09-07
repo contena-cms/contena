@@ -54,6 +54,4 @@ ctDefinePublic({
     parsedMessage,
     getClass,
 });
-
-defineExpose({ textIsHighlighted, parsedSearch, parsedMessage, getClass });
 </script>

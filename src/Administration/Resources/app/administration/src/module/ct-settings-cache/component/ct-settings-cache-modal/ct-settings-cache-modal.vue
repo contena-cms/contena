@@ -110,8 +110,6 @@ ctDefinePublic({
 
 onMounted(() => document.addEventListener('keydown', keydownEventListener.value));
 onBeforeUnmount(() => document.removeEventListener('keydown', keydownEventListener.value));
-
-defineExpose({ open, keydownEventListener, openModal, closeModal, clearCache, onModalChange });
 </script>
 
 <style scoped>

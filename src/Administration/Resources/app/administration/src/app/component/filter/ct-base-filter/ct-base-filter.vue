@@ -62,8 +62,4 @@ watch(
 ctDefinePublic({
     resetFilter,
 });
-
-defineExpose({
-    resetFilter,
-});
 </script>

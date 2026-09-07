@@ -85,6 +85,4 @@ ctDefinePublic({
     blogActiveError,
     isTitleRequired,
 });
-
-defineExpose({ blog, blogNameError, blogDescriptionError, blogActiveError, isTitleRequired });
 </script>

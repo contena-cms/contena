@@ -232,14 +232,4 @@ ctDefinePublic({
     onSortingChanged,
     onPresentationChanged,
 });
-
-defineExpose({
-    sortingConCat,
-    sortOptions,
-    previewOptions,
-    presentationOptions,
-    sortOptionsSelect,
-    onSortingChanged,
-    onPresentationChanged,
-});
 </script>

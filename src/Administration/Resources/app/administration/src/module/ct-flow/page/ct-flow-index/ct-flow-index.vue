@@ -305,39 +305,6 @@ ctDefinePublic({
     onDuplicate,
     onToggleActive,
 });
-
-defineExpose({
-    acl,
-    flowRepository,
-    templateRepository,
-    flows,
-    templates,
-    term,
-    page,
-    limit,
-    flowTotal,
-    templateTotal,
-    activeTab,
-    isLoading,
-    tabItems,
-    flowColumns,
-    templateColumns,
-    formatDate,
-    onSearch,
-    onTabChange,
-    onCreate,
-    onCreateFromTemplate,
-    onEdit,
-    onDelete,
-    flowContextButtons,
-    templateContextButtons,
-    onPageChange,
-    onLimitChange,
-    onFlowContextSelect,
-    onTemplateContextSelect,
-    onDuplicate,
-    onToggleActive,
-});
 </script>
 
 <style scoped>

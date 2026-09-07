@@ -147,16 +147,4 @@ ctDefinePublic({
     onChangeEntityType,
     onChangeMultiSelectSwitch,
 });
-
-defineExpose({
-    acl,
-    locales,
-    propertyNames,
-    entityTypes,
-    sortedEntityTypes,
-    multiSelectSwitch,
-    multiSelectSwitchDisabled,
-    onChangeEntityType,
-    onChangeMultiSelectSwitch,
-});
 </script>

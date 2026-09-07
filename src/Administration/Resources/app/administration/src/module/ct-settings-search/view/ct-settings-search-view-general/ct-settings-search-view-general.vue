@@ -36,6 +36,4 @@ ctDefinePublic({
     searchConfigId,
     loadData,
 });
-
-defineExpose({ searchConfigId, loadData });
 </script>

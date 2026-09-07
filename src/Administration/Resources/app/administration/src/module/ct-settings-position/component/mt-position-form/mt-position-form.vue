@@ -98,8 +98,6 @@ ctDefinePublic({
     placeholder,
     onUpdatePosition,
 });
-
-defineExpose({ placeholder, onUpdatePosition });
 </script>
 
 <style scoped lang="scss">

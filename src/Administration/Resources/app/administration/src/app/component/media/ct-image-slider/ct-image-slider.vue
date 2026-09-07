@@ -488,33 +488,4 @@ ctDefinePublic({
     onSetCurrentItem,
     isHiddenItem,
 });
-
-defineExpose({
-    currentPageNumber,
-    currentItemIndex,
-    totalPage,
-    remainder,
-    buttonList,
-    wrapperStyles,
-    componentStyles,
-    containerStyles,
-    scrollableContainerStyles,
-    imageStyles,
-    buttonClasses,
-    showButtons,
-    showArrows,
-    setCurrentPageNumber,
-    isImageObject,
-    hasValidDescription,
-    getImage,
-    imageAlt,
-    goToPreviousImage,
-    goToNextImage,
-    elementClasses,
-    elementStyles,
-    imageClasses,
-    borderStyles,
-    onSetCurrentItem,
-    isHiddenItem,
-});
 </script>

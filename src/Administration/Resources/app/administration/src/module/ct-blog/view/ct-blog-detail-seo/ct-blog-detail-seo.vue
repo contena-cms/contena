@@ -76,15 +76,4 @@ ctDefinePublic({
     onRemoveMainCategory,
     onChangeChannel,
 });
-
-defineExpose({
-    currentChannelId,
-    blog,
-    isLoading,
-    allowEdit,
-    categories,
-    onAddMainCategory,
-    onRemoveMainCategory,
-    onChangeChannel,
-});
 </script>

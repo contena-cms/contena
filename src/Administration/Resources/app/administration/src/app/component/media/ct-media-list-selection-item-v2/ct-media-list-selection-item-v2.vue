@@ -95,10 +95,4 @@ ctDefinePublic({
     itemClasses,
     sourceId,
 });
-
-defineExpose({
-    isPlaceholder,
-    itemClasses,
-    sourceId,
-});
 </script>

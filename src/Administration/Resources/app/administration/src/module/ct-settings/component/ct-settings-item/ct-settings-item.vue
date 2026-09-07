@@ -51,8 +51,4 @@ const classes = computed(() => {
 ctDefinePublic({
     classes,
 });
-
-defineExpose({
-    classes,
-});
 </script>

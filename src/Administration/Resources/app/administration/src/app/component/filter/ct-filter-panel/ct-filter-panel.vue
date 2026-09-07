@@ -269,23 +269,4 @@ ctDefinePublic({
     getBreadcrumb,
     getLabelName,
 });
-
-defineExpose({
-    repositoryFactory,
-    activeFilters,
-    filterChanged,
-    storedFilters,
-    storedFiltersRequestId,
-    criteria,
-    isFilterActive,
-    activeFiltersNumber,
-    listFilters,
-    createdComponent,
-    updateFilter,
-    resetFilter,
-    resetAll,
-    showFilter,
-    getBreadcrumb,
-    getLabelName,
-});
 </script>

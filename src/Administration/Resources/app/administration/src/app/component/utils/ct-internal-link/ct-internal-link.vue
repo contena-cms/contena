@@ -87,9 +87,4 @@ ctDefinePublic({
     elementType,
     componentClasses,
 });
-
-defineExpose({
-    elementType,
-    componentClasses,
-});
 </script>

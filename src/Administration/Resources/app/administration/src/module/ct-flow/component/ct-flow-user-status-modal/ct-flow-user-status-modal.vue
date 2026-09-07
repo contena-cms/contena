@@ -54,8 +54,6 @@ ctDefinePublic({
     onCancel,
     onModalChange,
 });
-
-defineExpose({ active, statusOptions, onSave, onCancel, onModalChange });
 </script>
 
 <style scoped>

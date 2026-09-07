@@ -33,6 +33,4 @@ const frontendEsEnable = computed(() => Contena.Context.app.storefrontEsEnable ?
 ctDefinePublic({
     frontendEsEnable,
 });
-
-defineExpose({ frontendEsEnable });
 </script>

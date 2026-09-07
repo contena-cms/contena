@@ -287,24 +287,4 @@ ctDefinePublic({
     startInlineEdit,
     endInlineEdit,
 });
-
-defineExpose({
-    systemConfigApiService,
-    isInlineEdit,
-    defaultArReady,
-    mediaItemClasses,
-    mediaNameContainerClasses,
-    listSelected,
-    selectionIndicatorClasses,
-    isLoading,
-    isSpatial,
-    createdComponent,
-    handleItemClick,
-    isSelectionIndicatorClicked,
-    onClickedItem,
-    selectItem,
-    removeFromSelection,
-    startInlineEdit,
-    endInlineEdit,
-});
 </script>

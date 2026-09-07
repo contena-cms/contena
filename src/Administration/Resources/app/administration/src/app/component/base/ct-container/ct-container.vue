@@ -150,14 +150,4 @@ ctDefinePublic({
     cssGridDefaults,
     buildCssGridProps,
 });
-
-defineExpose({
-    currentCssGrid,
-    createdComponent,
-    registerResizeListener,
-    updateCssGrid,
-    buildCssGrid,
-    cssGridDefaults,
-    buildCssGridProps,
-});
 </script>

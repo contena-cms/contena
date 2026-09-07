@@ -222,24 +222,6 @@ ctDefinePublic({
     onDelete,
     onBatchDelete,
 });
-
-defineExpose({
-    expandedIds,
-    checkedIds,
-    visibleItems,
-    checkedCount,
-    getOrganizationName,
-    getOrganizationMeta,
-    hasChildren,
-    isExpanded,
-    isChecked,
-    toggleExpanded,
-    onChecked,
-    onSelect,
-    onAddChild,
-    onDelete,
-    onBatchDelete,
-});
 </script>
 
 <style scoped lang="scss">

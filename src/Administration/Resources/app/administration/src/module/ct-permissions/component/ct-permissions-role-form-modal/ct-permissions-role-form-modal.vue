@@ -160,16 +160,4 @@ ctDefinePublic({
     closeModal,
     onModalChange,
 });
-
-defineExpose({
-    role,
-    isLoading,
-    modalTitle,
-    canSave,
-    loadRole,
-    requestSave,
-    saveRole,
-    closeModal,
-    onModalChange,
-});
 </script>

@@ -141,7 +141,6 @@ import { ref, computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useListing } from 'src/app/composables/use-listing';
-import { useNotification } from 'src/app/composables/use-notification';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -284,32 +283,6 @@ initializeListing({
 });
 
 ctDefinePublic({
-    repositoryFactory,
-    acl,
-    entityName,
-    country,
-    sortBy,
-    isLoading,
-    sortDirection,
-    naturalSorting,
-    showDeleteModal,
-    countryRepository,
-    detailPageLinkText,
-    getList,
-    onChangeLanguage,
-    onDelete,
-    onCloseDeleteModal,
-    onConfirmDelete,
-    itemToDelete,
-    additionalContextButtons,
-    onPageChange,
-    onLimitChange,
-    onSort,
-    onContextSelect,
-    getCountryColumns,
-});
-
-defineExpose({
     repositoryFactory,
     acl,
     entityName,

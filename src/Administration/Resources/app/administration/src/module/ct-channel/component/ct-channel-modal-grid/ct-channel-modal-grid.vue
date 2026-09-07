@@ -80,6 +80,4 @@ ctDefinePublic({
     onAddChannel,
     onOpenDetail,
 });
-
-defineExpose({ channelTypes, isLoading, loadChannelTypes, onAddChannel, onOpenDetail });
 </script>

@@ -138,22 +138,4 @@ ctDefinePublic({
     onInlineEditCancel,
     onInlineEditFinish,
 });
-
-defineExpose({
-    ctGridInlineEditStart,
-    ctGridInlineEditCancel,
-    ctOnInlineEditStart,
-    ctRegisterGridDisableInlineEditListener,
-    ctUnregisterGridDisableInlineEditListener,
-    ctGridSetColumns,
-    ctGridColumns,
-    isEditingActive,
-    inlineEditingCls,
-    id,
-    createdComponent,
-    onInlineEditStart,
-    startInlineEditing,
-    onInlineEditCancel,
-    onInlineEditFinish,
-});
 </script>

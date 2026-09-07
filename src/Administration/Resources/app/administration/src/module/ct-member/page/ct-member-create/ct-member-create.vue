@@ -193,20 +193,4 @@ ctDefinePublic({
     onCancel,
     saveFinish,
 });
-
-defineExpose({
-    member,
-    address,
-    isLoading,
-    isSaveSuccessful,
-    canCreate,
-    memberRepository,
-    memberNumberPreview,
-    createState,
-    onChannelChange,
-    validateRequiredFields,
-    onSave,
-    onCancel,
-    saveFinish,
-});
 </script>

@@ -164,19 +164,4 @@ ctDefinePublic({
     onTableSortChange,
     formatDate,
 });
-
-defineExpose({
-    apps,
-    isLoading,
-    sortBy,
-    sortDirection,
-    appRepository,
-    columns,
-    criteria,
-    getList,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-    formatDate,
-});
 </script>

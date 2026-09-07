@@ -306,25 +306,4 @@ ctDefinePublic({
     onReset,
     resetSearchPreference,
 });
-
-defineExpose({
-    searchPreferencesService,
-    searchRankingService,
-    isLoading,
-    minSearchTermLength,
-    searchPreferences,
-    userSearchPreferences,
-    defaultSearchPreferences,
-    createdComponent,
-    beforeDestroyComponent,
-    getMinSearchTermLength,
-    getDataSource,
-    addEventListeners,
-    removeEventListeners,
-    getModuleTitle,
-    onChangeSearchPreference,
-    onSelect,
-    onReset,
-    resetSearchPreference,
-});
 </script>

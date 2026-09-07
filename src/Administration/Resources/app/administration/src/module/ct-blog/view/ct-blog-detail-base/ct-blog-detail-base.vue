@@ -167,23 +167,4 @@ ctDefinePublic({
     isExistingMedia,
     setMediaAsCover,
 });
-
-defineExpose({
-    blog,
-    isLoading,
-    allowEdit,
-    showMediaModal,
-    mediaDefaultFolderId,
-    blogMediaRepository,
-    mediaDefaultFolderRepository,
-    mediaDefaultFolderCriteria,
-    getMediaDefaultFolderId,
-    onOpenMediaModal,
-    onCloseMediaModal,
-    onAddMedia,
-    addMedia,
-    isSpatial,
-    isExistingMedia,
-    setMediaAsCover,
-});
 </script>

@@ -85,12 +85,4 @@ ctDefinePublic({
     emitClose,
     emitRemoval,
 });
-
-defineExpose({
-    title,
-    alert,
-    btnLabel,
-    emitClose,
-    emitRemoval,
-});
 </script>

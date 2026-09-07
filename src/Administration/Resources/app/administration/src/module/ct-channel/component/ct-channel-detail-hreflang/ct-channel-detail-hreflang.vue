@@ -86,6 +86,4 @@ ctDefinePublic({
     domainCriteria,
     domainRepositoryFactory,
 });
-
-defineExpose({ domainCriteria, domainRepositoryFactory });
 </script>

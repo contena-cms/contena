@@ -226,32 +226,4 @@ ctDefinePublic({
     onDeleteModalChange,
     deleteMemberGroup,
 });
-
-defineExpose({
-    memberGroups,
-    isLoading,
-    isDeleting,
-    page,
-    limit,
-    total,
-    term,
-    sortBy,
-    sortDirection,
-    columns,
-    additionalContextButtons,
-    memberGroupToDelete,
-    canCreate,
-    canDelete,
-    loadMemberGroups,
-    onSearch,
-    onPageChange,
-    onLimitChange,
-    onSort,
-    onCreate,
-    onEdit,
-    onItemDelete,
-    onContextSelect,
-    onDeleteModalChange,
-    deleteMemberGroup,
-});
 </script>

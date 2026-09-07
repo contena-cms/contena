@@ -108,8 +108,6 @@ ctDefinePublic({
     onCancel,
     onModalChange,
 });
-
-defineExpose({ draft, customRecipients, recipientOptions, onSave, onCancel, onModalChange });
 </script>
 
 <style scoped>

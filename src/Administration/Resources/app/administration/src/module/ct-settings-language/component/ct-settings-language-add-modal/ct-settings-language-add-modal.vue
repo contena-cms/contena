@@ -252,25 +252,4 @@ ctDefinePublic({
     onAddLanguage,
     onClose,
 });
-
-defineExpose({
-    repositoryFactory,
-    translationService,
-    translations,
-    documentationUrlSnippetKey,
-    completenessThreshold,
-    existingLanguageLocales,
-    selectedLocale,
-    isLoading,
-    isSaving,
-    languageRepository,
-    languageOptions,
-    selectedTranslation,
-    translationsSufficient,
-    translationsHintTextKey,
-    createdComponent,
-    loadExistingLanguageLocales,
-    onAddLanguage,
-    onClose,
-});
 </script>

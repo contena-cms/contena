@@ -115,11 +115,4 @@ ctDefinePublic({
     updateFilter,
     resetFilter,
 });
-
-defineExpose({
-    numberValue,
-    fromToFieldLabel,
-    updateFilter,
-    resetFilter,
-});
 </script>

@@ -349,31 +349,4 @@ ctDefinePublic({
     openChannelModal,
     openFrontendLink,
 });
-
-defineExpose({
-    channels,
-    channelsLoaded,
-    showModal,
-    isLoading,
-    isMobileViewport,
-    contextMenuOpen,
-    mobileViewportQuery,
-    adminMenuStore,
-    isSidebarExpanded,
-    channelRepository,
-    canCreateChannels,
-    showAddChannelMenuItem,
-    channelCriteria,
-    moreChannelsAvailable,
-    buildMenuTree,
-    moreItemsEntry,
-    channelFavoritesService,
-    channelFavorites,
-    syncMobileViewport,
-    registerListener,
-    unregisterListener,
-    loadEntityData,
-    openChannelModal,
-    openFrontendLink,
-});
 </script>

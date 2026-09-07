@@ -112,15 +112,4 @@ ctDefinePublic({
     removeItem,
     updateSelectedChannels,
 });
-
-defineExpose({
-    blog,
-    defaultVisibility,
-    associationRepository,
-    channelCriteria,
-    selectedChannelIds,
-    addItem,
-    removeItem,
-    updateSelectedChannels,
-});
 </script>

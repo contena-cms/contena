@@ -325,26 +325,4 @@ ctDefinePublic({
     refreshCurrentSeoUrl,
     onChannelChanged,
 });
-
-defineExpose({
-    repositoryFactory,
-    currentChannelId,
-    showEmptySeoUrlError,
-    seoUrlCollection,
-    currentSeoUrl,
-    defaultSeoUrl,
-    seoUrlRepository,
-    channelRepository,
-    isHeadlessChannel,
-    seoUrlHelptext,
-    seoPathInfoError,
-    hasAdditionalSeoSlot,
-    allowInput,
-    createdComponent,
-    initChannelCollection,
-    initSeoUrlCollection,
-    clearDefaultSeoUrls,
-    refreshCurrentSeoUrl,
-    onChannelChanged,
-});
 </script>

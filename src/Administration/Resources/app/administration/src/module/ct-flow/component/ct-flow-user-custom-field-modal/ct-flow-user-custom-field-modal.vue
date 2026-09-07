@@ -105,18 +105,6 @@ ctDefinePublic({
     onCancel,
     onModalChange,
 });
-
-defineExpose({
-    customFieldId,
-    customFieldValue,
-    option,
-    options,
-    customFieldCriteria,
-    canSave,
-    onSave,
-    onCancel,
-    onModalChange,
-});
 </script>
 
 <style scoped>

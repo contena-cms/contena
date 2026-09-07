@@ -18,6 +18,4 @@ onBeforeMount(resetLanguage);
 ctDefinePublic({
     resetLanguage,
 });
-
-defineExpose({ resetLanguage });
 </script>

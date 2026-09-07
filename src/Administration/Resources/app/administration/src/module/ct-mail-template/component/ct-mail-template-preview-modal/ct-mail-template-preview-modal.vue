@@ -176,6 +176,4 @@ ctDefinePublic({
     onClose,
     onModalChange,
 });
-
-defineExpose({ plainParts, htmlParts, onClose, onModalChange });
 </script>

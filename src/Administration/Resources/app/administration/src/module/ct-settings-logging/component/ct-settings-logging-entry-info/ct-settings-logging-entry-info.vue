@@ -70,12 +70,4 @@ ctDefinePublic({
     onTabChange,
     onClose,
 });
-
-defineExpose({
-    activeTab,
-    tabItems,
-    displayString,
-    onTabChange,
-    onClose,
-});
 </script>

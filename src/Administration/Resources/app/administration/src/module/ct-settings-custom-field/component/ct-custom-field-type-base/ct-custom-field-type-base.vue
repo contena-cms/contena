@@ -47,10 +47,4 @@ ctDefinePublic({
     propertyNames,
     locales,
 });
-
-defineExpose({
-    acl,
-    propertyNames,
-    locales,
-});
 </script>

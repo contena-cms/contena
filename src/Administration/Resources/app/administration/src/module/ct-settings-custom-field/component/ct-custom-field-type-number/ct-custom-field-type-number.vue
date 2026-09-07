@@ -135,14 +135,6 @@ ctDefinePublic({
     numberTypes,
     isIntField,
 });
-
-defineExpose({
-    acl,
-    locales,
-    propertyNames,
-    numberTypes,
-    isIntField,
-});
 </script>
 
 <style scoped>

@@ -193,22 +193,4 @@ ctDefinePublic({
     onSubmitValue,
     onInput,
 });
-
-defineExpose({
-    hasSubmittedFromKey,
-    isEditing,
-    draft,
-    event,
-    confirmFieldClasses,
-    removeActionButtons,
-    onStartEditing,
-    onBlurField,
-    cancelSubmit,
-    onCancelFromKey,
-    onCancelSubmit,
-    submitValue,
-    onSubmitFromKey,
-    onSubmitValue,
-    onInput,
-});
 </script>

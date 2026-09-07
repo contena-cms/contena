@@ -216,14 +216,4 @@ ctDefinePublic({
     landingPageChannelsError,
     landingPage,
 });
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    customFieldSetsArray,
-    landingPageNameError,
-    landingPageUrlError,
-    landingPageChannelsError,
-    landingPage,
-});
 </script>

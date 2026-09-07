@@ -175,19 +175,4 @@ ctDefinePublic({
     updateParentFolder,
     emitInput,
 });
-
-defineExpose({
-    filterItems,
-    repositoryFactory,
-    subFolders,
-    parentFolder,
-    mediaFolderRepository,
-    assetFilter,
-    mountedComponent,
-    getSubFolders,
-    getChildCount,
-    fetchParentFolder,
-    updateParentFolder,
-    emitInput,
-});
 </script>

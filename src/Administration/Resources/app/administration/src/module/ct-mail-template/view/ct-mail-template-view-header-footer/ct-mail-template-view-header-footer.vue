@@ -20,6 +20,4 @@ function getList(): void {
 ctDefinePublic({
     getList,
 });
-
-defineExpose({ getList });
 </script>

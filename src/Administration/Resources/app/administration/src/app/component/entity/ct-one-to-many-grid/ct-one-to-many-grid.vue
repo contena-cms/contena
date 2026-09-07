@@ -804,24 +804,4 @@ ctDefinePublic({
     sort,
     paginate,
 });
-
-defineExpose({
-    repositoryFactory,
-    repository,
-    result,
-    page,
-    limit,
-    total,
-    initial,
-    createdComponent,
-    applyResult,
-    save,
-    revert,
-    load,
-    deleteItem,
-    deleteItems,
-    deleteItemsFinish,
-    sort,
-    paginate,
-});
 </script>

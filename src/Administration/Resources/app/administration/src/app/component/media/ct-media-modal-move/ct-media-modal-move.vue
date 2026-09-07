@@ -321,27 +321,4 @@ ctDefinePublic({
 });
 
 provide('filterItems', isNotPartOfItemsToMove);
-
-defineExpose({
-    repositoryFactory,
-    targetFolder,
-    parentFolder,
-    displayFolder,
-    displayFolderId,
-    mediaRepository,
-    mediaFolderRepository,
-    mediaNameFilter,
-    targetFolderId,
-    rootFolderName,
-    isMoveDisabled,
-    startFolderId,
-    assetFilter,
-    mountedComponent,
-    closeMoveModal,
-    isNotPartOfItemsToMove,
-    updateParentFolder,
-    fetchParentFolder,
-    onSelection,
-    moveSelection,
-});
 </script>

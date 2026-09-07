@@ -79,11 +79,4 @@ ctDefinePublic({
     collapseButtonClass,
     collapseItem,
 });
-
-defineExpose({
-    expanded,
-    expandButtonClass,
-    collapseButtonClass,
-    collapseItem,
-});
 </script>

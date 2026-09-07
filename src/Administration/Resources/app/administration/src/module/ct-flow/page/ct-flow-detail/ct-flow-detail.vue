@@ -520,25 +520,6 @@ ctDefinePublic({
     onSave,
     onCancel,
 });
-
-defineExpose({
-    flow,
-    sequences,
-    triggerEvents,
-    availableActions,
-    activeTab,
-    detailTabs,
-    isLoading,
-    isSaveSuccessful,
-    canEdit,
-    canSave,
-    hasConfiguredSequences,
-    load,
-    onEventChange,
-    onTabChange,
-    onSave,
-    onCancel,
-});
 </script>
 
 <style scoped>

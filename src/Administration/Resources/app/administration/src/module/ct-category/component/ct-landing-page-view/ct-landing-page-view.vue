@@ -80,9 +80,4 @@ ctDefinePublic({
     landingPage,
     landingPageViewTabs,
 });
-
-defineExpose({
-    landingPage,
-    landingPageViewTabs,
-});
 </script>

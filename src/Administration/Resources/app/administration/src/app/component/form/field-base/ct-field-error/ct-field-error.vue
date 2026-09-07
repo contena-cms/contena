@@ -55,9 +55,4 @@ ctDefinePublic({
     errorMessage,
     formatParameters,
 });
-
-defineExpose({
-    errorMessage,
-    formatParameters,
-});
 </script>

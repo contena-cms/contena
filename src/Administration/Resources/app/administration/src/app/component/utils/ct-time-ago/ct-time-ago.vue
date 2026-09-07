@@ -153,19 +153,4 @@ ctDefinePublic({
     isToday,
     formatRelativeTime,
 });
-
-defineExpose({
-    formattedRelativeTime,
-    interval,
-    now,
-    dateObject,
-    dateFilter,
-    fullDatetime,
-    lessThanOneMinute,
-    lessThanOneHour,
-    lessThanOneMinuteFromNow,
-    lessThanOneHourFromNow,
-    isToday,
-    formatRelativeTime,
-});
 </script>

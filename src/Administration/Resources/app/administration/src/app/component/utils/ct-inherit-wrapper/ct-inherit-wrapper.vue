@@ -276,18 +276,4 @@ ctDefinePublic({
     restoreInheritance,
     removeInheritance,
 });
-
-defineExpose({
-    feature,
-    forceInheritanceRemove,
-    currentValue,
-    isInheritField,
-    isInherited,
-    labelClasses,
-    updateCurrentValue,
-    updateValue,
-    toggleInheritance,
-    restoreInheritance,
-    removeInheritance,
-});
 </script>

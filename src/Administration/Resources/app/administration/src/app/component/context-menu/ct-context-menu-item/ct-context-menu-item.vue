@@ -124,9 +124,4 @@ ctDefinePublic({
     contextMenuItemStyles,
     handleClick,
 });
-
-defineExpose({
-    contextMenuItemStyles,
-    handleClick,
-});
 </script>

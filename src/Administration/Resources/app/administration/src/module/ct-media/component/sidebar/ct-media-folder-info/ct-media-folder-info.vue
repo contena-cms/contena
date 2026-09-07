@@ -295,30 +295,4 @@ ctDefinePublic({
     onFolderDissolved,
     onFolderMoved,
 });
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    mediaFolderRepository,
-    createdAt,
-    mediaFolderNameError,
-    nameItemClasses,
-    onChangeFolderName,
-    quickActionClasses,
-    showModalDelete,
-    showFolderSettings,
-    showFolderDissolve,
-    showModalMove,
-    openModalDelete,
-    closeModalDelete,
-    openFolderSettings,
-    closeFolderSettings,
-    openFolderDissolve,
-    closeFolderDissolve,
-    openModalMove,
-    closeModalMove,
-    deleteSelectedItems,
-    onFolderDissolved,
-    onFolderMoved,
-});
 </script>

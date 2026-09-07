@@ -126,12 +126,4 @@ ctDefinePublic({
     isPrivilegeSelected,
     onSelectPrivilege,
 });
-
-defineExpose({
-    privileges,
-    acl,
-    additionalPermissions,
-    isPrivilegeSelected,
-    onSelectPrivilege,
-});
 </script>

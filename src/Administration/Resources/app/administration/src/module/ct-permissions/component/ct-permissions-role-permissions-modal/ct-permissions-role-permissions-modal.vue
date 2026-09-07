@@ -204,19 +204,4 @@ ctDefinePublic({
     closeModal,
     onModalChange,
 });
-
-defineExpose({
-    role,
-    detailedPrivileges,
-    isLoading,
-    activeTab,
-    tabItems,
-    canEdit,
-    loadRole,
-    requestSave,
-    savePermissions,
-    updateCurrentUser,
-    closeModal,
-    onModalChange,
-});
 </script>

@@ -86,10 +86,4 @@ ctDefinePublic({
     selectedSortingOption,
     sortingOptions,
 });
-
-defineExpose({
-    filterByActiveState,
-    selectedSortingOption,
-    sortingOptions,
-});
 </script>

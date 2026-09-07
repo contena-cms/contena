@@ -102,8 +102,6 @@ ctDefinePublic({
     placeholder,
     onUpdateRegion,
 });
-
-defineExpose({ placeholder, onUpdateRegion });
 </script>
 
 <style scoped lang="scss">

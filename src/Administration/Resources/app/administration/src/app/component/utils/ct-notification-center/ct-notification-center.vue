@@ -246,25 +246,4 @@ ctDefinePublic({
     changeVisibility,
     createNotificationFromSystemError,
 });
-
-defineExpose({
-    feature,
-    isOpened,
-    optionsMenuOpen,
-    isBellRinging,
-    showDeleteModal,
-    unsubscribeFromStore,
-    notifications,
-    hasNotifications,
-    additionalContextButtonClass,
-    onVisibilityChange,
-    openDeleteModal,
-    onConfirmDelete,
-    onCloseDeleteModal,
-    onEmptyStateBellClick,
-    togglePanel,
-    onPanelClose,
-    changeVisibility,
-    createNotificationFromSystemError,
-});
 </script>

@@ -57,10 +57,4 @@ ctDefinePublic({
     isLoggedIn,
     overrideComponents,
 });
-
-defineExpose({
-    loginService,
-    isLoggedIn,
-    overrideComponents,
-});
 </script>

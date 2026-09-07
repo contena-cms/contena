@@ -105,8 +105,6 @@ ctDefinePublic({
     onCancel,
     onModalChange,
 });
-
-defineExpose({ draft, requiredPrivileges, statusOptions, canSave, onSave, onCancel, onModalChange });
 </script>
 
 <style scoped>

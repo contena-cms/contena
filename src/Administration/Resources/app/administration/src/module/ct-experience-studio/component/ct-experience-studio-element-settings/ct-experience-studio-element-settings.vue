@@ -347,23 +347,4 @@ ctDefinePublic({
     onUpdateElementField,
     onUpdateLayoutField,
 });
-
-defineExpose({
-    activeSettingsTab,
-    hasSelectedElement,
-    hasTypeLoadError,
-    hasStyleOptionLoadError,
-    hasSelectedElementType,
-    isLoadingSettings,
-    elementPropertyValues,
-    elementStyleValues,
-    elementFields,
-    layoutFields,
-    showElementEmptyState,
-    showLayoutEmptyState,
-    settingsTabItems,
-    onSettingsTabChange,
-    onUpdateElementField,
-    onUpdateLayoutField,
-});
 </script>

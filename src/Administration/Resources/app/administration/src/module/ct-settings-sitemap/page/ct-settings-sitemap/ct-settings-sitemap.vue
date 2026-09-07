@@ -106,12 +106,4 @@ ctDefinePublic({
 });
 
 usePageTitle();
-
-defineExpose({
-    isLoading,
-    isSaveSuccessful,
-    saveFinish,
-    onSave,
-    onLoadingChanged,
-});
 </script>

@@ -136,18 +136,6 @@ ctDefinePublic({
     onCreateHeaderFooter,
     onLanguageChange,
 });
-
-defineExpose({
-    languageKey,
-    term,
-    searchType,
-    canCreate,
-    mailTemplateTabs,
-    onSearch,
-    onCreateTemplate,
-    onCreateHeaderFooter,
-    onLanguageChange,
-});
 </script>
 
 <style>

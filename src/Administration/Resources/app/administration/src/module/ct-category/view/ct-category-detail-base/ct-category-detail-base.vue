@@ -208,18 +208,4 @@ ctDefinePublic({
     category,
     isCategoryColumn,
 });
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    customFieldSetsArray,
-    categoryNameError,
-    categoryTypeError,
-    categoryTypes,
-    typeLinkLabel,
-    categoryTypeHelpText,
-    isChannelEntryPoint,
-    category,
-    isCategoryColumn,
-});
 </script>

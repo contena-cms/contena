@@ -41,10 +41,4 @@ ctDefinePublic({
     setFocus,
     focusElement,
 });
-
-defineExpose({
-    focussed,
-    setFocus,
-    focusElement,
-});
 </script>

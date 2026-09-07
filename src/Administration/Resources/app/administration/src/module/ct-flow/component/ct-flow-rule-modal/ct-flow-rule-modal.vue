@@ -293,22 +293,6 @@ ctDefinePublic({
     onClose,
     onModalChange,
 });
-
-defineExpose({
-    rule,
-    conditions,
-    matchMode,
-    activeTab,
-    tabs,
-    modalTitle,
-    isLoading,
-    canEdit,
-    canSave,
-    load,
-    onSave,
-    onClose,
-    onModalChange,
-});
 </script>
 
 <style scoped>

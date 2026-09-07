@@ -275,23 +275,4 @@ ctDefinePublic({
     setDropDown,
     expandValueLimit,
 });
-
-defineExpose({
-    getKey,
-    searchTerm,
-    hasFocus,
-    limit,
-    errorObject,
-    inputIsValid,
-    visibleValues,
-    totalValuesCount,
-    invisibleValueCount,
-    onSelectionListKeyDownEnter,
-    addItem,
-    remove,
-    removeLastItem,
-    onSearchTermChange,
-    setDropDown,
-    expandValueLimit,
-});
 </script>

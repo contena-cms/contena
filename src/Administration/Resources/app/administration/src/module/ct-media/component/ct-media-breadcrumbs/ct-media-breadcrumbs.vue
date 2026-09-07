@@ -154,18 +154,4 @@ ctDefinePublic({
     updateFolder,
     onBreadcrumbsItemClicked,
 });
-
-defineExpose({
-    repositoryFactory,
-    feature,
-    currentFolder,
-    parentFolder,
-    mediaFolderRepository,
-    rootFolder,
-    ctMediaBreadcrumbsClasses,
-    assetFilter,
-    createdComponent,
-    updateFolder,
-    onBreadcrumbsItemClicked,
-});
 </script>

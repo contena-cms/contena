@@ -355,30 +355,4 @@ ctDefinePublic({
     addProtocolToLink,
     onSelectFieldChange,
 });
-
-defineExpose({
-    isLoading,
-    showLinkModal,
-    linkHref,
-    linkTarget,
-    linkType,
-    displayAsButton,
-    buttonVariant,
-    linkOptions,
-    buttonVariantList,
-    seoUrlReplacePrefix,
-    showOpenInNewTabToggle,
-    getEditor,
-    openLinkModal,
-    parseLink,
-    parseButtonClass,
-    applyLink,
-    removeLink,
-    isLink,
-    prepareLink,
-    prepareClass,
-    prepareTarget,
-    addProtocolToLink,
-    onSelectFieldChange,
-});
 </script>

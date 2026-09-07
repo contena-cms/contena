@@ -219,19 +219,4 @@ ctDefinePublic({
     registerToggleActiveListener,
     registerCloseContentListener,
 });
-
-defineExpose({
-    registerSidebarItem,
-    isActive,
-    toggleActiveListener,
-    closeContentListener,
-    sidebarItemClasses,
-    hasDefaultSlot,
-    showContent,
-    openContent,
-    closeContent,
-    sidebarButtonClick,
-    registerToggleActiveListener,
-    registerCloseContentListener,
-});
 </script>

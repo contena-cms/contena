@@ -36,11 +36,9 @@ defineProps({});
 import { inject, ref } from 'vue';
 import type { ComponentExposed } from 'vue-component-type-helpers';
 import type AclService from 'src/app/service/acl.service';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import CtUsersUserListing from '../../component/ct-users-user-listing/ct-users-user-listing.vue';
 
-const { t } = useI18n();
 const router = useRouter();
 const userListing = ref<ComponentExposed<typeof CtUsersUserListing>>();
 const statusFilter = ref('all');
@@ -81,22 +79,8 @@ const onEditUser = (user: { id: string }) => {
 };
 
 ctDefinePublic({
-    acl,
-    userTotal,
-    userListingLoading,
-    reloadUserListing,
-    onUserSearch,
-    onStatusFilterChange,
-    resetUserFilters,
-    onUserTotalChange,
-    onUserLoadingChange,
-    onCreateUser,
-    onEditUser,
-});
-
-defineExpose({
-    acl,
     statusFilter,
+    acl,
     userTotal,
     userListingLoading,
     reloadUserListing,

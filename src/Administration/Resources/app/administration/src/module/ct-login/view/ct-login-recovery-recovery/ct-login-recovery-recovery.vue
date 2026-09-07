@@ -139,13 +139,4 @@ ctDefinePublic({
     validateHash,
     updatePassword,
 });
-
-defineExpose({
-    newPassword,
-    newPasswordConfirm,
-    hashValid,
-    isSubmitting,
-    canSubmit,
-    updatePassword,
-});
 </script>

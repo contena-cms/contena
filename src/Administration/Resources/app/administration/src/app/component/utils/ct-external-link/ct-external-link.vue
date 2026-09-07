@@ -77,10 +77,4 @@ ctDefinePublic({
     iconSize,
     onClick,
 });
-
-defineExpose({
-    classes,
-    iconSize,
-    onClick,
-});
 </script>

@@ -109,14 +109,4 @@ ctDefinePublic({
     showLink,
     displayLinkText,
 });
-
-defineExpose({
-    error,
-    imagePath,
-    message,
-    statusCode,
-    showStack,
-    showLink,
-    displayLinkText,
-});
 </script>

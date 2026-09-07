@@ -296,27 +296,6 @@ const fieldLabel = (field: string) => {
     return snippet ? t(`ct-settings-search.generalTab.configFields.${snippet}`) : field;
 };
 
-const api = {
-    breakdown,
-    explainName,
-    getScoreValue,
-    formatScore,
-    getExplainBreakdown,
-    termCoverage,
-    collectFieldRows,
-    matchTypeRank,
-    isMoreSpecificSignal,
-    toSignalRows,
-    isFlatRow,
-    matchedFragment,
-    foldTerm,
-    longestCommonSubstring,
-    humanizeField,
-    explainTypeLabel,
-    explainTypeTooltip,
-    fieldLabel,
-};
-
 ctDefinePublic({
     breakdown,
     explainName,
@@ -337,6 +316,4 @@ ctDefinePublic({
     explainTypeTooltip,
     fieldLabel,
 });
-
-defineExpose(api);
 </script>

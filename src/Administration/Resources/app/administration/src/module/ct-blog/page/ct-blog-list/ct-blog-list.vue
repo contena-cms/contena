@@ -290,29 +290,4 @@ ctDefinePublic({
 });
 
 usePageTitle();
-
-defineExpose({
-    acl,
-    blogs,
-    isLoading,
-    sortBy,
-    sortDirection,
-    blogRepository,
-    columns,
-    criteria,
-    allowCreate,
-    allowEdit,
-    allowDelete,
-    additionalContextButtons,
-    getList,
-    onCreateBlog,
-    onOpenDetails,
-    onDuplicate,
-    onDelete,
-    onContextSelect,
-    onChangeLanguage,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-});
 </script>

@@ -99,8 +99,4 @@ const getRandomLength = () => {
 ctDefinePublic({
     getRandomLength,
 });
-
-defineExpose({
-    getRandomLength,
-});
 </script>

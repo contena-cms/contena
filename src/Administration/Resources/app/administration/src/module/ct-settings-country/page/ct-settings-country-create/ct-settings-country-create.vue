@@ -135,6 +135,4 @@ ctDefinePublic({
     createdComponent,
     saveFinish,
 });
-
-defineExpose({ createdComponent, saveFinish });
 </script>

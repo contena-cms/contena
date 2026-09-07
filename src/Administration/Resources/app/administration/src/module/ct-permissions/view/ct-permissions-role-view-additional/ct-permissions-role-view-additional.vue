@@ -58,6 +58,4 @@ if (!acl) {
 ctDefinePublic({
     acl,
 });
-
-defineExpose({ acl });
 </script>

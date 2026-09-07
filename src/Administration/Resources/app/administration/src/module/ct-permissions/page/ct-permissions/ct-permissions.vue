@@ -98,19 +98,8 @@ const onRoleLoadingChange = (loading: boolean) => {
 };
 
 ctDefinePublic({
-    acl,
-    roleTotal,
-    roleListingLoading,
-    reloadRoleListing,
-    onRoleSearch,
-    openCreateRole,
-    onRoleTotalChange,
-    onRoleLoadingChange,
-});
-
-defineExpose({
-    acl,
     roleSearchTerm,
+    acl,
     roleTotal,
     roleListingLoading,
     reloadRoleListing,

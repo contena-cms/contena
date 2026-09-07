@@ -81,9 +81,4 @@ ctDefinePublic({
     version,
     getHumanReadableText,
 });
-
-defineExpose({
-    version,
-    getHumanReadableText,
-});
 </script>

@@ -201,20 +201,4 @@ ctDefinePublic({
     onResetRanking,
     onRemove,
 });
-
-defineExpose({
-    customFields,
-    currentCustomFieldId,
-    customFieldRepository,
-    customFieldFilteredCriteria,
-    customFieldCriteria,
-    loadCustomFields,
-    showCustomFieldWithSet,
-    getMatchingCustomFields,
-    onSelectCustomField,
-    onAddField,
-    onConfigChanged,
-    onResetRanking,
-    onRemove,
-});
 </script>

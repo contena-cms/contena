@@ -296,25 +296,6 @@ ctDefinePublic({
     isCustomField,
     getCriteriaLabel,
 });
-
-defineExpose({
-    selectedCriteria,
-    customFields,
-    customFieldSetIds,
-    sortingFields,
-    columns,
-    criteriaOptions,
-    availableCriteriaOptions,
-    customFieldOptions,
-    orderOptions,
-    fetchCustomFieldSetIds,
-    fetchCustomFields,
-    onAddCriteria,
-    onRemoveCriteria,
-    changeCustomField,
-    isCustomField,
-    getCriteriaLabel,
-});
 </script>
 
 <style scoped>

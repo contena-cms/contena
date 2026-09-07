@@ -138,11 +138,4 @@ ctDefinePublic({
     dissolveItem,
     dissolveSelection,
 });
-
-defineExpose({
-    mediaFolderService,
-    closeDissolveModal,
-    dissolveItem,
-    dissolveSelection,
-});
 </script>

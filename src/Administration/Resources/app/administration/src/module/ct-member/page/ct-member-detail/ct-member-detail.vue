@@ -242,23 +242,4 @@ ctDefinePublic({
     acceptMemberGroupRegistration,
     declineMemberGroupRegistration,
 });
-
-defineExpose({
-    member,
-    isLoading,
-    isSaveSuccessful,
-    editMode,
-    fullName,
-    detailTabs,
-    canEdit,
-    editTooltip,
-    memberRepository,
-    loadMember,
-    validPassword,
-    onSave,
-    onCancel,
-    saveFinish,
-    acceptMemberGroupRegistration,
-    declineMemberGroupRegistration,
-});
 </script>

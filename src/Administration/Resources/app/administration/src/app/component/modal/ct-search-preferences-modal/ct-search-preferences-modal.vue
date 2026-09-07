@@ -243,27 +243,4 @@ ctDefinePublic({
     onCancel,
     onSave,
 });
-
-defineExpose({
-    searchPreferencesService,
-    searchRankingService,
-    userConfigService,
-    isLoading,
-    searchPreferences,
-    userSearchPreferences,
-    defaultSearchPreferences,
-    searchPreferencesColumns,
-    createdComponent,
-    mountedComponent,
-    beforeDestroyComponent,
-    getDataSource,
-    addEventListeners,
-    removeEventListeners,
-    getModuleName,
-    onChangeSearchPreference,
-    onClose,
-    onOpenSearchSettings,
-    onCancel,
-    onSave,
-});
 </script>

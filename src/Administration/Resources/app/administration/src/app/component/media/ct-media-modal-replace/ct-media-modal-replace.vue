@@ -162,18 +162,4 @@ ctDefinePublic({
     replaceMediaItem,
     runPresignedReplace,
 });
-
-defineExpose({
-    mediaService,
-    mediaPresignedUploadService,
-    repositoryFactory,
-    isUploadDataSet,
-    newFileExtension,
-    pendingPresignedFile,
-    presignedSupported,
-    onNewUpload,
-    emitCloseReplaceModal,
-    replaceMediaItem,
-    runPresignedReplace,
-});
 </script>

@@ -151,18 +151,6 @@ ctDefinePublic({
     getInlineSnippetKey,
     onInput,
 });
-
-defineExpose({
-    activeLocale,
-    fallbackLocale,
-    localeCount,
-    localeTabs,
-    onTabChange,
-    initializeConfiguration,
-    getLabel,
-    getInlineSnippetKey,
-    onInput,
-});
 </script>
 
 <style src="./ct-custom-field-translated-labels.scss" lang="scss"></style>

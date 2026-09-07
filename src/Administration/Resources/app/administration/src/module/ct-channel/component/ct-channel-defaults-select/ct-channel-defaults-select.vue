@@ -235,16 +235,4 @@ ctDefinePublic({
     isDisabledItem,
     getActiveIconColor,
 });
-
-defineExpose({
-    propertyCollection,
-    propertyIds,
-    defaultId,
-    propertyEntityName,
-    updateCollection,
-    addItem,
-    removeItem,
-    updateDefault,
-    getDomainUsingValue,
-});
 </script>

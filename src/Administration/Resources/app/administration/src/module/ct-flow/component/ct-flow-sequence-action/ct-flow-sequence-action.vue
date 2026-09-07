@@ -400,28 +400,6 @@ ctDefinePublic({
     removeAction,
     moveAction,
 });
-
-defineExpose({
-    configuredActions,
-    showAddAction,
-    selectedActionName,
-    modalConfig,
-    getActionLabel,
-    getActionIcon,
-    getActionDescription,
-    getActionGroupLabel,
-    canMoveAction,
-    selectAction,
-    selectActionOption,
-    openEdit,
-    closeModal,
-    saveMailAction,
-    saveNotificationAction,
-    saveSelectedAction,
-    removeContainer,
-    removeAction,
-    moveAction,
-});
 </script>
 
 <style scoped>

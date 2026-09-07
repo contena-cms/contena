@@ -148,17 +148,4 @@ ctDefinePublic({
     refreshExtension,
     onSave,
 });
-
-defineExpose({
-    contenaExtensionService,
-    extension,
-    domain,
-    myExtensions,
-    defaultExtensionAsset,
-    image,
-    extensionLabel,
-    createdComponent,
-    refreshExtension,
-    onSave,
-});
 </script>

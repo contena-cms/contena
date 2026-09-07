@@ -105,13 +105,4 @@ ctDefinePublic({
     onUpdateModelValue,
     validate,
 });
-
-defineExpose({
-    compatValue,
-    mergedCustomButtons,
-    mergedExcludedButtons,
-    getSlots,
-    onUpdateModelValue,
-    validate,
-});
 </script>

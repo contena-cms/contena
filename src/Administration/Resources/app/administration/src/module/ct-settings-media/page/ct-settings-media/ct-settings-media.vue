@@ -113,14 +113,4 @@ ctDefinePublic({
     onSave,
     onLoadingChanged,
 });
-
-defineExpose({
-    systemConfigApiService,
-    isLoading,
-    isSaveSuccessful,
-    createdComponent,
-    saveFinish,
-    onSave,
-    onLoadingChanged,
-});
 </script>

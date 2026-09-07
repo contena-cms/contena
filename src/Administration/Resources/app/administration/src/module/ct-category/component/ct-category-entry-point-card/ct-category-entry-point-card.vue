@@ -230,24 +230,4 @@ ctDefinePublic({
     openConfigureHomeModal,
     closeConfigureHomeModal,
 });
-
-defineExpose({
-    acl,
-    selectedEntryPoint,
-    initialNavigationChannels,
-    addedNavigationChannels,
-    entryPoints,
-    associatedCollection,
-    helpText,
-    hasExistingNavigation,
-    channelSelectionLabel,
-    channelCriteria,
-    configureHomeModalVisible,
-    getInitialEntryPointFromCategory,
-    onEntryPointChange,
-    onChannelChange,
-    resetChannelCollections,
-    openConfigureHomeModal,
-    closeConfigureHomeModal,
-});
 </script>

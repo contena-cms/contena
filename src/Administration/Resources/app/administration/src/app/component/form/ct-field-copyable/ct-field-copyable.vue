@@ -91,13 +91,4 @@ ctDefinePublic({
     notificationSuccess,
     resetTooltipText,
 });
-
-defineExpose({
-    wasCopied,
-    tooltipText,
-    copyToClipboard,
-    tooltipSuccess,
-    notificationSuccess,
-    resetTooltipText,
-});
 </script>

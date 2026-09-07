@@ -308,24 +308,6 @@ ctDefinePublic({
     updateGroup,
     updateGroupMode,
 });
-
-defineExpose({
-    conditionTypes,
-    modeOptions,
-    weekdayOptions,
-    numericOperatorOptions,
-    updateMode,
-    addCondition,
-    addGroup,
-    removeCondition,
-    removeAll,
-    resetValue,
-    setLanguage,
-    isGroup,
-    groupMode,
-    updateGroup,
-    updateGroupMode,
-});
 </script>
 
 <style scoped>

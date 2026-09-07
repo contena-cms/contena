@@ -120,16 +120,4 @@ ctDefinePublic({
     setValueByPath,
     onSaveMedia,
 });
-
-defineExpose({
-    mediaModal,
-    saveMediaModal,
-    closeModal,
-    closeSaveModal,
-    onSelectionChange,
-    getValueByPath,
-    transformObjectsByPaths,
-    setValueByPath,
-    onSaveMedia,
-});
 </script>

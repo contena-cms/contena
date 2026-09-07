@@ -245,25 +245,4 @@ ctDefinePublic({
     onFirstItemUpdated,
     onClose,
 });
-
-defineExpose({
-    repositoryFactory,
-    currentFolder,
-    mediaRepository,
-    mediaFolderRepository,
-    mediaNameFilter,
-    mediaSidebarClasses,
-    isSingleFile,
-    isMultipleFile,
-    headLine,
-    getSelectedFilesCount,
-    firstEntity,
-    assetFilter,
-    filteredAttributes,
-    createdComponent,
-    fetchCurrentFolder,
-    onMediaFolderRenamed,
-    onFirstItemUpdated,
-    onClose,
-});
 </script>

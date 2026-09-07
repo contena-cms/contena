@@ -80,9 +80,4 @@ ctDefinePublic({
     updateFilter,
     resetFilter,
 });
-
-defineExpose({
-    updateFilter,
-    resetFilter,
-});
 </script>

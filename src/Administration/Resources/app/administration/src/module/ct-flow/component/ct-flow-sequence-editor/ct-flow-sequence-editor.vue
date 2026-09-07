@@ -80,8 +80,6 @@ ctDefinePublic({
     setRootSequence,
     removeRootSequence,
 });
-
-defineExpose({ addRootSequence, setRootSequence, removeRootSequence });
 </script>
 
 <style scoped>

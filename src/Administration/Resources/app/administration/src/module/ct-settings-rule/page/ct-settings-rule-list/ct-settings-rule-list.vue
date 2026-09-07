@@ -288,30 +288,4 @@ ctDefinePublic({
     onDelete,
     confirmDelete,
 });
-
-defineExpose({
-    acl,
-    ruleRepository,
-    rules,
-    term,
-    isLoading,
-    isDeleting,
-    ruleToDelete,
-    sortBy,
-    sortDirection,
-    columns,
-    additionalContextButtons,
-    formatDate,
-    onSearch,
-    onPageChange,
-    onLimitChange,
-    onSort,
-    onCreate,
-    onEdit,
-    onItemDelete,
-    onContextSelect,
-    onDuplicate,
-    onDelete,
-    confirmDelete,
-});
 </script>

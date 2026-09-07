@@ -95,12 +95,4 @@ ctDefinePublic({
     onClickRestoreInheritance,
     onClickRemoveInheritance,
 });
-
-defineExpose({
-    restoreInheritanceHandler,
-    removeInheritanceHandler,
-    unInheritClasses,
-    onClickRestoreInheritance,
-    onClickRemoveInheritance,
-});
 </script>

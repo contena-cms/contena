@@ -186,34 +186,10 @@ const saveOnLanguageChange = () => onSave();
 
 createdComponent();
 
-ctDefinePublic({
-    repositoryFactory,
-    acl,
-    set,
-    setId,
-    isLoading,
-    isSaveSuccessful,
-    technicalNameError,
-    identifier,
-    customFieldSetRepository,
-    customFieldRepository,
-    customFieldCriteria,
-    customFieldSetCriteria,
-    createdComponent,
-    loadEntityData,
-    saveFinish,
-    onCancel,
-    abortOnLanguageChange,
-    onChangeLanguage,
-    onLoadingChanged,
-    onResetErrors,
-    onSave,
-    saveOnLanguageChange,
-});
 usePageTitle(() => identifier.value);
 const { discardChanges } = useDiscardDetailPageChanges(route, { set: () => set.value });
 
-defineExpose({
+ctDefinePublic({
     discardChanges,
     getInlineSnippet,
     repositoryFactory,

@@ -269,27 +269,4 @@ ctDefinePublic({
     onSelectionAdd,
     onSelectionRemove,
 });
-
-defineExpose({
-    acl,
-    repositoryFactory,
-    categoriesCollection,
-    linkHasProtocol,
-    linkTypeValues,
-    entityValues,
-    mainType,
-    isExternal,
-    isInternal,
-    categoryCriteria,
-    internalLinkCriteria,
-    categoryRepository,
-    categoryLinkPlaceholder,
-    allowedCategoryTypes,
-    categoryLinkHelpText,
-    createdComponent,
-    changeEntity,
-    createCategoryCollection,
-    onSelectionAdd,
-    onSelectionRemove,
-});
 </script>

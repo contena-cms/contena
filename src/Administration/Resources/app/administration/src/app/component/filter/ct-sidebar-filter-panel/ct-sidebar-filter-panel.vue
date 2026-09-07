@@ -63,12 +63,4 @@ ctDefinePublic({
 });
 
 provide('registerSidebarItem', unref(registerSidebarItem));
-
-defineExpose({
-    parentRegisterSidebarItem,
-    filterSidebarItem,
-    registerSidebarItem,
-    openFilterPanel,
-    resetAll,
-});
 </script>

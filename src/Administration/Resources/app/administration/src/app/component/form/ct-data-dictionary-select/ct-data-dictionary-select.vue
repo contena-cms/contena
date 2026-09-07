@@ -70,12 +70,4 @@ ctDefinePublic({
     load,
     onUpdateModelValue,
 });
-
-defineExpose({
-    service,
-    options,
-    isLoading,
-    load,
-    onUpdateModelValue,
-});
 </script>

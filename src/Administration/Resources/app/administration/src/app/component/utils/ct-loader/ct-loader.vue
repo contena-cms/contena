@@ -25,8 +25,4 @@ const getSlots = () => {
 ctDefinePublic({
     getSlots,
 });
-
-defineExpose({
-    getSlots,
-});
 </script>

@@ -98,15 +98,4 @@ ctDefinePublic({
     isEmittedFromChildren,
     emitSelectionCleared,
 });
-
-defineExpose({
-    presentationClass,
-    nonDeselectingComponents,
-    createdComponent,
-    beforeDestroyComponent,
-    clearSelectionOnClickOutside,
-    originatesFromExcludedComponent,
-    isEmittedFromChildren,
-    emitSelectionCleared,
-});
 </script>

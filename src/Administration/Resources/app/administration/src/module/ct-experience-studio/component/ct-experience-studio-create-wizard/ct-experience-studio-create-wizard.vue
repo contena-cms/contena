@@ -202,21 +202,4 @@ ctDefinePublic({
     onCancel,
     onComplete,
 });
-
-defineExpose({
-    createWizardTitleSnippet,
-    createWizardDescriptionSnippet,
-    createWizardStartSnippet,
-    trimmedName,
-    hasTypeLoadError,
-    hasTypeOptions,
-    isCompletable,
-    getTypeOptionId,
-    isSelectedType,
-    getTypeIcon,
-    onNameChange,
-    onTypeChange,
-    onCancel,
-    onComplete,
-});
 </script>

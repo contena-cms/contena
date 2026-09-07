@@ -469,40 +469,6 @@ ctDefinePublic({
     onSave,
     onCancel,
 });
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    repository,
-    itemRepository,
-    dictionaryRouteId,
-    dictionary,
-    items,
-    selectedItemId,
-    selectedItem,
-    selectedParentLabel,
-    isItemEditorOpen,
-    pendingItem,
-    treeSourceItems,
-    hasInvalidItems,
-    isLoading,
-    canEdit,
-    canEditItem,
-    canCreateItem,
-    canDeleteItem,
-    load,
-    selectItem,
-    closeItemEditor,
-    saveItem,
-    removeItemFromEditor,
-    addItem,
-    getBranchItems,
-    removeItem,
-    onTreeDragEnd,
-    getItemsInSaveOrder,
-    onSave,
-    onCancel,
-});
 </script>
 
 <style lang="scss">

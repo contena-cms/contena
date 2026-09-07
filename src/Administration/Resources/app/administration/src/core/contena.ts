@@ -40,6 +40,7 @@ import Store from 'src/app/store';
 import {
     attachOverrides,
     createExtendableSetup,
+    getExposedProps,
     overrideComponentSetup,
 } from 'src/app/adapter/composition-extension-system';
 import * as Vue from 'vue';
@@ -123,6 +124,7 @@ class ContenaClass implements CustomContenaProperties {
         getOverrideRegistry: AsyncComponentFactory.getOverrideRegistry,
         createExtendableSetup: createExtendableSetup,
         attachOverrides: attachOverrides,
+        getExposedProps: getExposedProps,
         overrideComponentSetup: overrideComponentSetup,
 
         /**

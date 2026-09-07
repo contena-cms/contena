@@ -174,14 +174,4 @@ ctDefinePublic({
     isEntityDisabled,
     changePermissionForEntity,
 });
-
-defineExpose({
-    privileges,
-    allEntities,
-    allGeneralSelectedPrivileges,
-    permissionTypes,
-    isEntitySelected,
-    isEntityDisabled,
-    changePermissionForEntity,
-});
 </script>

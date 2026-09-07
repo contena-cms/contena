@@ -222,21 +222,4 @@ ctDefinePublic({
     onClickRevertUnsavedChanges,
     changeToNewLanguage,
 });
-
-defineExpose({
-    languageId,
-    lastLanguageId,
-    newLanguageId,
-    showUnsavedChangesModal,
-    languageCriteria,
-    createdComponent,
-    destroyedComponent,
-    onInput,
-    checkAbort,
-    emitChange,
-    onCloseChangesModal,
-    onClickSaveChanges,
-    onClickRevertUnsavedChanges,
-    changeToNewLanguage,
-});
 </script>

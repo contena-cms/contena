@@ -384,28 +384,4 @@ ctDefinePublic({
     validateMoveDrop,
     onDropElement,
 });
-
-defineExpose({
-    acl,
-    isExpanded,
-    contentElement,
-    elementTypeStore,
-    label,
-    typeIcon,
-    slotEntries,
-    hasSlots,
-    isSelected,
-    allowEdit,
-    onSelectElement,
-    onToggleExpand,
-    onAddElement,
-    onDuplicateElement,
-    onDeleteElement,
-    collectSubtreeIds,
-    dragConfig,
-    dropConfigForSlot,
-    dropConfigForElement,
-    validateMoveDrop,
-    onDropElement,
-});
 </script>

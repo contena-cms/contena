@@ -261,19 +261,4 @@ ctDefinePublic({
     closeModal,
     closeModalOnEscapeKey,
 });
-
-defineExpose({
-    id,
-    modalClasses,
-    modalDialogClasses,
-    modalBodyClasses,
-    hasFooterSlot,
-    showHelpSidebar,
-    mountedComponent,
-    beforeDestroyComponent,
-    setFocusToModal,
-    closeModalOnClickOutside,
-    closeModal,
-    closeModalOnEscapeKey,
-});
 </script>

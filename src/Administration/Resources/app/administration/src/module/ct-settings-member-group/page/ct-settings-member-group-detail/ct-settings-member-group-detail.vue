@@ -243,25 +243,4 @@ ctDefinePublic({
     saveFinish,
     onChangeLanguage,
 });
-
-defineExpose({
-    memberGroup,
-    isLoading,
-    isSaveSuccessful,
-    customFieldSets,
-    pageTitle,
-    allowSave,
-    registrationChannelIds,
-    repository,
-    loadMemberGroup,
-    loadCustomFieldSets,
-    getApiError,
-    onChannelAdd,
-    onChannelRemove,
-    onChannelsUpdate,
-    onSave,
-    onCancel,
-    saveFinish,
-    onChangeLanguage,
-});
 </script>

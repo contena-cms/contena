@@ -252,26 +252,4 @@ ctDefinePublic({
 });
 
 usePageTitle(() => blogTitle.value);
-
-defineExpose({
-    acl,
-    blog,
-    blogId,
-    isLoading,
-    isSaveSuccessful,
-    blogRepository,
-    blogCriteria,
-    blogTitle,
-    blogDetailTabs,
-    allowEdit,
-    createState,
-    loadBlog,
-    onSave,
-    saveBlog,
-    onCancel,
-    saveFinish,
-    abortOnLanguageChange,
-    saveOnLanguageChange,
-    onChangeLanguage,
-});
 </script>

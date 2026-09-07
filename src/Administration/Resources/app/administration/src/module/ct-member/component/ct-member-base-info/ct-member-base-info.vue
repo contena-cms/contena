@@ -46,6 +46,4 @@ const mailTo = computed(() => `mailto:${props.member.email}`);
 ctDefinePublic({
     mailTo,
 });
-
-defineExpose({ mailTo });
 </script>

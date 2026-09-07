@@ -205,15 +205,4 @@ ctDefinePublic({
     onSelect,
     itemTooltip,
 });
-
-defineExpose({
-    categoryOrder,
-    fallbackCategoryKey,
-    groupedElements,
-    flyoutStyle,
-    normalizeCategoryKey,
-    categoryHeadlineSnippetKey,
-    onSelect,
-    itemTooltip,
-});
 </script>

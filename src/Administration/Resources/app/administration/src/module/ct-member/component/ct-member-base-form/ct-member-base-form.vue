@@ -157,6 +157,4 @@ ctDefinePublic({
     getApiError,
     onChannelChange,
 });
-
-defineExpose({ getApiError, onChannelChange });
 </script>

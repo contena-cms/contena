@@ -182,23 +182,4 @@ ctDefinePublic({
     onOgMediaUploadFinish,
     onOgMediaSelectionChange,
 });
-
-defineExpose({
-    blog,
-    mediaRepository,
-    currentOpenGraphMediaId,
-    showOgMediaModal,
-    openGraphMediaItem,
-    openGraphMediaUploadTag,
-    blogKeywordsError,
-    blogMetaDescriptionError,
-    blogMetaTitleError,
-    blogOgTitleError,
-    blogOgDescriptionError,
-    onOpenOgMediaModal,
-    onCloseOgMediaModal,
-    onRemoveOgMedia,
-    onOgMediaUploadFinish,
-    onOgMediaSelectionChange,
-});
 </script>

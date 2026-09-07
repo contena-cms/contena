@@ -101,13 +101,4 @@ ctDefinePublic({
     onSearch,
     updateRouteQueryTerm,
 });
-
-defineExpose({
-    acl,
-    searchValue,
-    queryParams,
-    extensionManagementDisabled,
-    onSearch,
-    updateRouteQueryTerm,
-});
 </script>

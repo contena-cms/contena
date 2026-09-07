@@ -139,16 +139,4 @@ ctDefinePublic({
     updateTags,
     updateSearchKeywords,
 });
-
-defineExpose({
-    blog,
-    displayVisibilityDetail,
-    hasSelectedVisibilities,
-    blogTagsError,
-    displayAdvancedVisibility,
-    closeAdvancedVisibility,
-    updateVisibilities,
-    updateTags,
-    updateSearchKeywords,
-});
 </script>

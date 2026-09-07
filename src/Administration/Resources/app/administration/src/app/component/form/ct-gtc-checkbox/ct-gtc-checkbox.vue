@@ -36,9 +36,4 @@ ctDefinePublic({
     feature,
     onChange,
 });
-
-defineExpose({
-    feature,
-    onChange,
-});
 </script>

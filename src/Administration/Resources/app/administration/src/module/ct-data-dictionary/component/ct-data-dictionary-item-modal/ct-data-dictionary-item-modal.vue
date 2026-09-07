@@ -145,13 +145,6 @@ const onAddChild = (): void => emit('add-child', item.value);
 const onDelete = (): void => emit('delete-item', item.value);
 
 ctDefinePublic({
-    onCancel,
-    onSave,
-    onAddChild,
-    onDelete,
-});
-
-defineExpose({
     item,
     parentLabel,
     canEdit,

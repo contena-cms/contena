@@ -113,11 +113,4 @@ ctDefinePublic({
     placeholder,
     onInput,
 });
-
-defineExpose({
-    onSearchTermChanged,
-    fieldClasses,
-    placeholder,
-    onInput,
-});
 </script>

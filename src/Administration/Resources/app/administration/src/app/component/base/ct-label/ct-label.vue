@@ -155,9 +155,4 @@ ctDefinePublic({
     labelClasses,
     showDismissable,
 });
-
-defineExpose({
-    labelClasses,
-    showDismissable,
-});
 </script>

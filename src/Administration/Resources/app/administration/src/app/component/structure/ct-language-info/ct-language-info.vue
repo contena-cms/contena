@@ -152,18 +152,4 @@ ctDefinePublic({
     refreshParentLanguage,
     onClickParentLanguage,
 });
-
-defineExpose({
-    repositoryFactory,
-    parentLanguage,
-    languageId,
-    systemLanguageId,
-    language,
-    languageRepository,
-    infoParent,
-    infoText,
-    isDefaultLanguage,
-    refreshParentLanguage,
-    onClickParentLanguage,
-});
 </script>

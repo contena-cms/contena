@@ -45,8 +45,4 @@ const currentValue = computed({
 ctDefinePublic({
     currentValue,
 });
-
-defineExpose({
-    currentValue,
-});
 </script>

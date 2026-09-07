@@ -125,13 +125,4 @@ ctDefinePublic({
     sendRecoveryMail,
     forwardToRequestSent,
 });
-
-defineExpose({
-    email,
-    error,
-    warning,
-    isSubmitting,
-    canSubmit,
-    sendRecoveryMail,
-});
 </script>

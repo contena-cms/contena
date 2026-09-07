@@ -237,20 +237,4 @@ ctDefinePublic({
     createdComponent,
     loadStats,
 });
-
-defineExpose({
-    messageStatsService,
-    isLoading,
-    statsResponse,
-    columns,
-    statsData,
-    hasStats,
-    isStatsDisabled,
-    formattedProcessedSince,
-    formattedAverageTime,
-    statBlocks,
-    sortedMessageTypeStats,
-    createdComponent,
-    loadStats,
-});
 </script>

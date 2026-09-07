@@ -83,12 +83,4 @@ ctDefinePublic({
     createdComponent,
     onSearchTermChange,
 });
-
-defineExpose({
-    term,
-    hasFilter,
-    hasFilterClass,
-    createdComponent,
-    onSearchTermChange,
-});
 </script>

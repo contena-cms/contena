@@ -241,15 +241,4 @@ ctDefinePublic({
     getGroupLabel,
     itemIsQueried,
 });
-
-defineExpose({
-    acl,
-    searchQuery,
-    settingsGroups,
-    hasPluginConfig,
-    getRouteConfig,
-    getLabel,
-    getGroupLabel,
-    itemIsQueried,
-});
 </script>

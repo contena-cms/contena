@@ -314,23 +314,4 @@ ctDefinePublic({
     getComponentFromType,
     getScopedSlots,
 });
-
-defineExpose({
-    ctFieldConfig,
-    currentValue,
-    bind,
-    hasConfig,
-    componentName,
-    ctFieldType,
-    translations,
-    optionTranslations,
-    isRadioGroup,
-    radioGroupBind,
-    radioOptions,
-    componentPropName,
-    emitUpdate,
-    getTranslations,
-    getComponentFromType,
-    getScopedSlots,
-});
 </script>

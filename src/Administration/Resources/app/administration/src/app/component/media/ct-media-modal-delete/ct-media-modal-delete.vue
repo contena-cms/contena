@@ -289,24 +289,4 @@ ctDefinePublic({
     updateSuccessNotification,
     checkInUsage,
 });
-
-defineExpose({
-    repositoryFactory,
-    mediaItems,
-    folders,
-    notificationId,
-    mediaRepository,
-    mediaFolderRepository,
-    mediaNameFilter,
-    snippets,
-    mediaQuickInfo,
-    mediaInUsages,
-    createdComponent,
-    closeDeleteModal,
-    getEntityRepository,
-    deleteItem,
-    deleteSelection,
-    updateSuccessNotification,
-    checkInUsage,
-});
 </script>

@@ -60,11 +60,4 @@ ctDefinePublic({
     setMedia,
     removeMedia,
 });
-
-defineExpose({
-    uploadTag,
-    successfulUpload,
-    setMedia,
-    removeMedia,
-});
 </script>

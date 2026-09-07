@@ -107,13 +107,4 @@ ctDefinePublic({
     closeModal,
     openModal,
 });
-
-defineExpose({
-    shortened,
-    showModal,
-    shortenedText,
-    fullText,
-    closeModal,
-    openModal,
-});
 </script>

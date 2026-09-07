@@ -42,9 +42,4 @@ ctDefinePublic({
     keepEditing,
     discardChanges,
 });
-
-defineExpose({
-    keepEditing,
-    discardChanges,
-});
 </script>

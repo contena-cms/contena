@@ -266,18 +266,4 @@ ctDefinePublic({
     saveOnLanguageChange,
     onChangeLanguage,
 });
-
-defineExpose({
-    channel,
-    isLoading,
-    pageTitle,
-    loadChannel,
-    createChannel,
-    validateRequiredFields,
-    onSave,
-    openTab,
-    abortOnLanguageChange,
-    saveOnLanguageChange,
-    onChangeLanguage,
-});
 </script>

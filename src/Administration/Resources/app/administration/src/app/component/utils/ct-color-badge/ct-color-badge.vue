@@ -48,9 +48,4 @@ ctDefinePublic({
     colorStyle,
     variantClass,
 });
-
-defineExpose({
-    colorStyle,
-    variantClass,
-});
 </script>

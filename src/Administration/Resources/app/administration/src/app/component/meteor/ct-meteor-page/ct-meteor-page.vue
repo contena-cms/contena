@@ -304,24 +304,4 @@ ctDefinePublic({
     isTabItem,
     initPage,
 });
-
-defineExpose({
-    module,
-    parentRoute,
-    pageClasses,
-    hasIcon,
-    hasIconOrIconSlot,
-    pageColor,
-    hasTabs,
-    tabItems,
-    defaultTab,
-    mountedComponent,
-    emitNewTab,
-    getTabItemsFromSlot,
-    createTabItem,
-    getTabItemDefaultSlotText,
-    getRouteName,
-    isTabItem,
-    initPage,
-});
 </script>

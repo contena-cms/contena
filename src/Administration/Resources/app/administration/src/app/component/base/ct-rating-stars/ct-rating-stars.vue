@@ -119,11 +119,4 @@ ctDefinePublic({
     partialStarCutStyle,
     dynamicWidthStyle,
 });
-
-defineExpose({
-    ratingTooltip,
-    cappedValue,
-    partialStarCutStyle,
-    dynamicWidthStyle,
-});
 </script>

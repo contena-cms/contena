@@ -202,24 +202,4 @@ ctDefinePublic({
     onOpenDetails,
 });
 usePageTitle();
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    layouts,
-    isLoading,
-    sortBy,
-    sortDirection,
-    layoutRepository,
-    columnConfig,
-    criteria,
-    allowCreate,
-    getList,
-    onCreateNewLayout,
-    onChangeLanguage,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-    onOpenDetails,
-});
 </script>

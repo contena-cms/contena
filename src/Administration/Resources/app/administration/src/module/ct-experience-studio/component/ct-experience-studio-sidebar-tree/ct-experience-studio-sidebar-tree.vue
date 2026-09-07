@@ -199,20 +199,4 @@ ctDefinePublic({
     rootDropConfig,
     onRootDrop,
 });
-
-defineExpose({
-    acl,
-    layoutElements,
-    hasElements,
-    allowEdit,
-    onSelectElement,
-    onAddElement,
-    onAddRootElement,
-    onDuplicateElement,
-    onDeleteElement,
-    onMoveElement,
-    validateMoveDrop,
-    rootDropConfig,
-    onRootDrop,
-});
 </script>

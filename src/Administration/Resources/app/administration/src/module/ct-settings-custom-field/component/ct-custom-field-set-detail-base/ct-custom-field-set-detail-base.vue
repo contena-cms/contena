@@ -250,18 +250,4 @@ ctDefinePublic({
     getRelationLabel,
     onTechnicalNameChange,
 });
-
-defineExpose({
-    acl,
-    propertyNames,
-    locales,
-    customFieldSetRelationRepository,
-    selectedRelationEntityNames,
-    relationEntityNames,
-    onAddRelation,
-    onRemoveRelation,
-    searchRelationEntityNames,
-    getRelationLabel,
-    onTechnicalNameChange,
-});
 </script>

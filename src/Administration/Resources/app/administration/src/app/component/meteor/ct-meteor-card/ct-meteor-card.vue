@@ -135,13 +135,4 @@ ctDefinePublic({
     isToolbarLastHeaderElement,
     cardClasses,
 });
-
-defineExpose({
-    hasToolbar,
-    hasContent,
-    hasDefaultSlot,
-    hasHeader,
-    isToolbarLastHeaderElement,
-    cardClasses,
-});
 </script>

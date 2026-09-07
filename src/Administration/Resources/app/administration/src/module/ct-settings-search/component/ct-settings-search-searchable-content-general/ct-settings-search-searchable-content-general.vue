@@ -131,6 +131,4 @@ ctDefinePublic({
     onResetRanking,
     getConfigRankingDefault,
 });
-
-defineExpose({ getMatchingFields, onSelectField, onConfigChanged, onResetRanking, getConfigRankingDefault });
 </script>

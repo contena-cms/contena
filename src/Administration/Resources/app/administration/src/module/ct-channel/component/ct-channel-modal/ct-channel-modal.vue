@@ -73,6 +73,4 @@ ctDefinePublic({
     onModalChange,
     onAddChannel,
 });
-
-defineExpose({ detailType, modalTitle, onGridOpenDetails, onCloseModal, onModalChange, onAddChannel });
 </script>

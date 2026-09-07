@@ -45,8 +45,13 @@ type MacroCallEntry = {
 type MacroRule = {
     /** Modes whose analysis accepts this name at the top level. Empty = rejected everywhere. */
     modes: ContenaSetupMode[];
-    /** Error for a top-level call in a mode not listed in `modes` (or for empty `modes`). */
-    wrongModeMessage: string;
+    /**
+     * Error for a top-level call in a mode not listed in `modes` (or for empty `modes`).
+     *
+     * A per-mode record when the remedy differs: a macro rejected in both modes cannot point base and
+     * override authors at the same replacement, because each mode rejects the other's marker.
+     */
+    wrongModeMessage: string | Record<ContenaSetupMode, string>;
     /** Error for the second top-level call of this name. Omit for no multiplicity limit. */
     duplicateMessage?: string;
     /**
@@ -102,8 +107,19 @@ const MACRO_RULES: Record<MacroName, MacroRule> = {
     },
     defineExpose: {
         vueBuiltin: true,
-        modes: ['base'],
-        wrongModeMessage: 'defineExpose() is only supported in base Contena setup blocks.',
+        modes: [],
+        wrongModeMessage: {
+            base: [
+                'defineExpose() is not supported inside Contena setup blocks.',
+                'Use ctDefinePublic({ ... }) instead, which will call it for you automatically.',
+            ].join(' '),
+            override: [
+                'defineExpose() is not supported inside Contena setup blocks.',
+                'The base component owns the exposed API and its ctDefinePublic() entries generate it, so a binding',
+                'this override replaces is already what a parent reads.',
+                'Declare replacement bindings with ctDefineOverride({ ... }) instead.',
+            ].join(' '),
+        },
     },
     defineOptions: {
         vueBuiltin: true,
@@ -184,6 +200,11 @@ const MACRO_RULES: Record<MacroName, MacroRule> = {
 };
 
 const MACRO_NAMES = Object.keys(MACRO_RULES) as MacroName[];
+
+/** Picks the mode's wrong-mode error, for the rules that word their remedy per mode. */
+function getWrongModeMessage(rule: MacroRule, mode: ContenaSetupMode): string {
+    return typeof rule.wrongModeMessage === 'string' ? rule.wrongModeMessage : rule.wrongModeMessage[mode];
+}
 
 function isMacroName(name: string): name is MacroName {
     return name in MACRO_RULES;
@@ -267,7 +288,10 @@ function assertMacroRules(entries: MacroCallEntry[], mode: ContenaSetupMode, scr
         const named = entriesFor(name);
 
         if (!rule.modes.includes(mode) && named.length > 0) {
-            throw new ContenaSetupTransformError(rule.wrongModeMessage, absoluteRange(named[0].call, scriptOffset));
+            throw new ContenaSetupTransformError(
+                getWrongModeMessage(rule, mode),
+                absoluteRange(named[0].call, scriptOffset),
+            );
         }
     });
 
@@ -339,7 +363,7 @@ function getWrongModeWalkChecks(mode: ContenaSetupMode): { name: MacroName; mess
         (name) => MACRO_RULES[name].rejectAnywhereInWrongMode && !MACRO_RULES[name].modes.includes(mode),
     ).map((name) => ({
         name,
-        message: MACRO_RULES[name].wrongModeMessage,
+        message: getWrongModeMessage(MACRO_RULES[name], mode),
     }));
 }
 

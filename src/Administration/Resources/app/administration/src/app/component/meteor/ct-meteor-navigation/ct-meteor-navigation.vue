@@ -54,9 +54,4 @@ ctDefinePublic({
     hasParentRoute,
     parentRoute,
 });
-
-defineExpose({
-    hasParentRoute,
-    parentRoute,
-});
 </script>

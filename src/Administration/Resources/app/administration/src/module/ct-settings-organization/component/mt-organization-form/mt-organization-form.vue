@@ -116,8 +116,6 @@ ctDefinePublic({
     placeholder,
     onUpdateOrganization,
 });
-
-defineExpose({ organizationUnitCriteria, placeholder, onUpdateOrganization });
 </script>
 
 <style scoped lang="scss">

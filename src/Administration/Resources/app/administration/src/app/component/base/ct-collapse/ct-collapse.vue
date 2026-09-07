@@ -47,9 +47,4 @@ ctDefinePublic({
     expanded,
     collapseItem,
 });
-
-defineExpose({
-    expanded,
-    collapseItem,
-});
 </script>

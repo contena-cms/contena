@@ -219,26 +219,4 @@ ctDefinePublic({
     onSaveMedia,
     onEmitModalClosed,
 });
-
-defineExpose({
-    repositoryFactory,
-    fileName,
-    folderId,
-    currentFolder,
-    compact,
-    selection,
-    isLoading,
-    mediaFolderRepository,
-    mediaRepository,
-    createdComponent,
-    mountedComponent,
-    beforeDestroyComponent,
-    addResizeListener,
-    removeOnResizeListener,
-    getComponentWidth,
-    fetchCurrentFolder,
-    getMediaEntityForUpload,
-    onSaveMedia,
-    onEmitModalClosed,
-});
 </script>

@@ -182,20 +182,6 @@ ctDefinePublic({
     onDeleteOption,
     onChangeMultiSelectSwitch,
 });
-
-defineExpose({
-    acl,
-    locales,
-    propertyNames,
-    multiSelectSwitch,
-    multiSelectSwitchDisabled,
-    isOptionAddable,
-    addOption,
-    onClickAddOption,
-    getLabel,
-    onDeleteOption,
-    onChangeMultiSelectSwitch,
-});
 </script>
 
 <style src="./ct-custom-field-type-select.scss" lang="scss"></style>

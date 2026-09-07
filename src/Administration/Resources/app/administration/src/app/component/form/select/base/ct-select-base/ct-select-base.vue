@@ -244,20 +244,4 @@ ctDefinePublic({
     emitClear,
     focusParentSelect,
 });
-
-defineExpose({
-    expanded,
-    ctFieldClasses,
-    isClearable,
-    onMounted,
-    onBeforeUnmount,
-    handleKeydown,
-    toggleExpand,
-    expand,
-    collapse,
-    focusPreviousFormElement,
-    listenToClickOutside,
-    emitClear,
-    focusParentSelect,
-});
 </script>

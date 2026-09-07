@@ -100,8 +100,4 @@ const classList = computed(() => {
 ctDefinePublic({
     classList,
 });
-
-defineExpose({
-    classList,
-});
 </script>

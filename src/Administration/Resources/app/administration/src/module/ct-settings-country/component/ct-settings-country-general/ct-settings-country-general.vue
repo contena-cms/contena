@@ -114,8 +114,4 @@ ctDefinePublic({
     acl,
     countryNameError,
 });
-defineExpose({
-    acl,
-    countryNameError,
-});
 </script>

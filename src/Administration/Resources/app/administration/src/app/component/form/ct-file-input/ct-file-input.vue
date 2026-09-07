@@ -299,26 +299,4 @@ ctDefinePublic({
     stopEventPropagation,
     onDrop,
 });
-
-defineExpose({
-    feature,
-    selectedFile,
-    utilsId,
-    isDragActive,
-    id,
-    isDragActiveClass,
-    mountedComponent,
-    beforeUnmountComponent,
-    onChooseButtonClick,
-    onRemoveIconClick,
-    onFileInputChange,
-    setSelectedFile,
-    checkFileSize,
-    checkFileType,
-    checkFileExtension,
-    onDragEnter,
-    onDragLeave,
-    stopEventPropagation,
-    onDrop,
-});
 </script>

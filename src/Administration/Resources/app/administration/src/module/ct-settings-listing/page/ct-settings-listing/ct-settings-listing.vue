@@ -456,39 +456,12 @@ void Promise.all([
     loadCustomFields(),
 ]);
 
-ctDefinePublic({
-    blogSortingOptions,
-    sortingToDelete,
-    isSortingLoading,
-    isSystemConfigLoading,
-    page,
-    limit,
-    total,
-    term,
-    customFields,
-    systemConfig,
-    columns,
-    sortingOptions,
-    loadSortings,
-    loadCustomFields,
-    setDefaultSortingsActive,
-    isDefaultSorting,
-    onSave,
-    onCreate,
-    onEdit,
-    onRequestDelete,
-    onConfirmDelete,
-    onPageChange,
-    onLimitChange,
-    onSearch,
-    onSystemConfigLoadingChanged,
-    formatBlogSortingFields,
-});
-
 const isLoading = computed(() => isSortingLoading.value || isSystemConfigLoading.value);
 usePageTitle();
 
-defineExpose({
+ctDefinePublic({
+    isSortingLoading,
+    isSystemConfigLoading,
     blogSortingOptions,
     sortingToDelete,
     isLoading,

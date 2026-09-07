@@ -161,13 +161,4 @@ ctDefinePublic({
     changeValue,
     resetFilter,
 });
-
-defineExpose({
-    repositoryFactory,
-    isEntityMultiSelect,
-    labelProperty,
-    values,
-    changeValue,
-    resetFilter,
-});
 </script>

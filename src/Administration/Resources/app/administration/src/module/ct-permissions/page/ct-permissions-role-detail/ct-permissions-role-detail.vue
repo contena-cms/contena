@@ -266,29 +266,4 @@ ctDefinePublic({
     onCancel,
 });
 usePageTitle(() => identifier.value);
-
-defineExpose({
-    repositoryFactory,
-    privileges,
-    userService,
-    acl,
-    isLoading,
-    isSaveSuccessful,
-    role,
-    detailedPrivileges,
-    identifier,
-    roleTabItems,
-    languageId,
-    roleRepository,
-    roleId,
-    onTabChange,
-    createdComponent,
-    createNewRole,
-    getRole,
-    onSave,
-    saveRole,
-    updateCurrentUser,
-    saveFinish,
-    onCancel,
-});
 </script>

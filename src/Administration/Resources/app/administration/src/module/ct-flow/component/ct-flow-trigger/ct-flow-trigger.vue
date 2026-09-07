@@ -384,31 +384,6 @@ ctDefinePublic({
     cancelTriggerChange,
     onConfirmModalChange,
 });
-
-defineExpose({
-    searchTerm,
-    isExpanded,
-    expandedIds,
-    focusIndex,
-    triggerTree,
-    eventTree,
-    treeItems,
-    visibleTreeRows,
-    focusedTreeItemId,
-    isSearching,
-    searchResults,
-    showConfirmModal,
-    formatEventName,
-    openDropdown,
-    closeDropdown,
-    activateTreeRow,
-    changeTrigger,
-    selectEvent,
-    handleKeydown,
-    confirmTriggerChange,
-    cancelTriggerChange,
-    onConfirmModalChange,
-});
 </script>
 
 <style scoped>

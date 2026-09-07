@@ -83,12 +83,4 @@ ctDefinePublic({
     searchTypes,
     searchContent,
 });
-
-defineExpose({
-    searchTypeService,
-    moduleFactory,
-    searchTypeRoute,
-    searchTypes,
-    searchContent,
-});
 </script>

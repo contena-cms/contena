@@ -244,28 +244,4 @@ ctDefinePublic({
     onFolderDissolved,
     onFolderMoved,
 });
-
-defineExpose({
-    itemsIsAvailable,
-    getFileSize,
-    getFileSizeLabel,
-    hasFolder,
-    hasMedia,
-    isPrivate,
-    onRemoveItemFromSelection,
-    quickActionClassesDelete,
-    quickActionClasses,
-    showModalDelete,
-    showFolderDissolve,
-    showModalMove,
-    openModalDelete,
-    closeModalDelete,
-    openFolderDissolve,
-    closeFolderDissolve,
-    openModalMove,
-    closeModalMove,
-    deleteSelectedItems,
-    onFolderDissolved,
-    onFolderMoved,
-});
 </script>

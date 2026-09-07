@@ -30,8 +30,4 @@ const warningText = computed(() => {
 ctDefinePublic({
     warningText,
 });
-
-defineExpose({
-    warningText,
-});
 </script>

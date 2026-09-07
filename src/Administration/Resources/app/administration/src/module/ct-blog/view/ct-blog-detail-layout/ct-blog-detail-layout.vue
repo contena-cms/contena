@@ -119,17 +119,4 @@ ctDefinePublic({
     onCreateLayout,
     onOpenLayout,
 });
-
-defineExpose({
-    assignments,
-    isLoading,
-    assignmentRepository,
-    criteria,
-    blogId,
-    allowCreate,
-    allChannelsLabel,
-    loadAssignments,
-    onCreateLayout,
-    onOpenLayout,
-});
 </script>

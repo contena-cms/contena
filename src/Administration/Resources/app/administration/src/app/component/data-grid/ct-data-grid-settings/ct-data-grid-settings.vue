@@ -234,17 +234,4 @@ ctDefinePublic({
     onClickChangeColumnOrderDown,
     getColumnLabel,
 });
-
-defineExpose({
-    currentCompact,
-    currentPreviews,
-    currentColumns,
-    contextMenuClasses,
-    onChangeCompactMode,
-    onChangePreviews,
-    onChangeColumnVisibility,
-    onClickChangeColumnOrderUp,
-    onClickChangeColumnOrderDown,
-    getColumnLabel,
-});
 </script>

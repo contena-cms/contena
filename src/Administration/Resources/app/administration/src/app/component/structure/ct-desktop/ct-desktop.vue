@@ -169,17 +169,4 @@ ctDefinePublic({
     getModuleMetadata,
     getModuleMetadataWithSearchMatcher,
 });
-
-defineExpose({
-    userActivityApiService,
-    noNavigation,
-    desktopClasses,
-    currentUser,
-    isStaging,
-    createdComponent,
-    checkRouteSettings,
-    onUpdateSearchFrequently,
-    getModuleMetadata,
-    getModuleMetadataWithSearchMatcher,
-});
 </script>

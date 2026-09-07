@@ -154,15 +154,4 @@ ctDefinePublic({
     onMainCategorySelected,
     refreshMainCategoryForChannel,
 });
-
-defineExpose({
-    repositoryFactory,
-    mainCategoryForChannel,
-    mainCategoryRepository,
-    isHeadlessChannel,
-    selectedCategory,
-    createdComponent,
-    onMainCategorySelected,
-    refreshMainCategoryForChannel,
-});
 </script>

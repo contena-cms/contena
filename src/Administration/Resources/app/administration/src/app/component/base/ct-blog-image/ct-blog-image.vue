@@ -124,8 +124,4 @@ const blogImageClasses = computed(() => {
 ctDefinePublic({
     blogImageClasses,
 });
-
-defineExpose({
-    blogImageClasses,
-});
 </script>

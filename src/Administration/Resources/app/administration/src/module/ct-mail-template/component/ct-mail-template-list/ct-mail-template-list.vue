@@ -167,24 +167,6 @@ ctDefinePublic({
     onDuplicate,
     updateRecords,
 });
-
-defineExpose({
-    acl,
-    repository,
-    templates,
-    isLoading,
-    page,
-    limit,
-    columns,
-    criteria,
-    skeletonItemAmount,
-    showListing,
-    assetFilter,
-    getList,
-    onPageChange,
-    onDuplicate,
-    updateRecords,
-});
 </script>
 
 <style lang="scss">

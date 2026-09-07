@@ -214,23 +214,6 @@ ctDefinePublic({
 });
 
 usePageTitle(() => identifier.value);
-
-defineExpose({
-    position,
-    customFieldSets,
-    positionRepository,
-    isLoading,
-    isSaveSuccessful,
-    isNewPosition,
-    identifier,
-    allowSave,
-    loadPosition,
-    loadCustomFieldSets,
-    onUpdatePosition,
-    onSave,
-    onCancel,
-    onChangeLanguage,
-});
 </script>
 
 <style scoped lang="scss">

@@ -44,8 +44,6 @@ ctDefinePublic({
     emitDelete,
     onModalChange,
 });
-
-defineExpose({ emitCancel, emitDelete, onModalChange });
 </script>
 
 <style scoped>

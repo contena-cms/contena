@@ -269,37 +269,6 @@ ctDefinePublic({
     additionalContextButtons,
     onContextSelect,
 });
-
-defineExpose({
-    repositoryFactory,
-    acl,
-    repository,
-    dictionaries,
-    total,
-    isLoading,
-    term,
-    page,
-    limit,
-    columns,
-    load,
-    onSearch,
-    onChangeLanguage,
-    onPageChange,
-    onLimitChange,
-    onCreate,
-    onEdit,
-    isDetailModalOpen,
-    editingDictionaryId,
-    closeDetailModal,
-    onDetailSaved,
-    itemToDelete,
-    showDelete,
-    closeDelete,
-    confirmDelete,
-    onDelete,
-    additionalContextButtons,
-    onContextSelect,
-});
 </script>
 
 <style lang="scss">

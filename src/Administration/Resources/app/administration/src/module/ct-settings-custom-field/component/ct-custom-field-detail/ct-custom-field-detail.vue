@@ -326,25 +326,4 @@ ctDefinePublic({
     createEntityTypeRequiredNotification,
     applyTypeConfiguration,
 });
-
-defineExpose({
-    customFieldDataProviderService,
-    CtCustomFieldListIsCustomFieldNameUnique,
-    acl,
-    fieldTypes,
-    locales,
-    canSave,
-    renderComponentName,
-    modalTitle,
-    labelSaveButton,
-    customFieldTypeOptions,
-    currentCustomFieldNameError,
-    createdComponent,
-    onModalChange,
-    onCancel,
-    onSave,
-    createNameNotUniqueNotification,
-    createEntityTypeRequiredNotification,
-    applyTypeConfiguration,
-});
 </script>

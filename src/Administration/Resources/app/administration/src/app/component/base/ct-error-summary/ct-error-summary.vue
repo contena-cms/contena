@@ -100,10 +100,4 @@ ctDefinePublic({
     errorEntries,
     errorCount,
 });
-
-defineExpose({
-    errors,
-    errorEntries,
-    errorCount,
-});
 </script>

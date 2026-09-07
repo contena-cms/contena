@@ -287,29 +287,4 @@ ctDefinePublic({
     onDeleteModalChange,
     onConfirmDeleteAddress,
 });
-
-defineExpose({
-    addresses,
-    currentAddress,
-    addressToDelete,
-    isLoading,
-    isSaving,
-    columns,
-    additionalContextButtons,
-    canEdit,
-    canDelete,
-    addressRepository,
-    loadAddresses,
-    createAddress,
-    onCreateNewAddress,
-    onEditAddress,
-    onDuplicateAddress,
-    onItemDelete,
-    onContextSelect,
-    validateAddress,
-    onSaveAddress,
-    onAddressModalChange,
-    onDeleteModalChange,
-    onConfirmDeleteAddress,
-});
 </script>

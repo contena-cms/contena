@@ -58,10 +58,4 @@ ctDefinePublic({
     tooltipContent,
     emitButtonClicked,
 });
-
-defineExpose({
-    badgeTypeClasses,
-    tooltipContent,
-    emitButtonClicked,
-});
 </script>

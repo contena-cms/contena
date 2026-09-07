@@ -166,23 +166,4 @@ ctDefinePublic({
     registerSidebarItem,
     setItemActive,
 });
-
-defineExpose({
-    setCtPageSidebarOffset,
-    removeCtPageSidebarOffset,
-    items,
-    isOpened,
-    resizeNavigationKey,
-    sections,
-    sidebarClasses,
-    mountedComponent,
-    destroyedComponent,
-    isItemRegistered,
-    isAnyItemActive,
-    closeSidebar,
-    onResize,
-    updateSidebarOffset,
-    registerSidebarItem,
-    setItemActive,
-});
 </script>

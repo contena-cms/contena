@@ -201,20 +201,4 @@ ctDefinePublic({
     emitUrl,
     onModalChange,
 });
-
-defineExpose({
-    url,
-    extensionFromUrl,
-    extensionFromInput,
-    showModal,
-    urlObject,
-    hasInvalidInput,
-    invalidUrlError,
-    missingFileExtension,
-    fileExtension,
-    isValid,
-    mountedComponent,
-    emitUrl,
-    onModalChange,
-});
 </script>

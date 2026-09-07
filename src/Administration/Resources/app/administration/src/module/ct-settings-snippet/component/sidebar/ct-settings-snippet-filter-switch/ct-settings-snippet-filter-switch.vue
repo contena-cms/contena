@@ -50,6 +50,4 @@ ctDefinePublic({
     fieldClasses,
     onChange,
 });
-
-defineExpose({ fieldClasses, onChange });
 </script>

@@ -235,24 +235,4 @@ ctDefinePublic({
     getUserConfig,
     saveConfig,
 });
-
-defineExpose({
-    extensionStoreActionService,
-    repositoryFactory,
-    isLoading,
-    confirmModalVisible,
-    shouldHideConfirmModal,
-    pluginUploadUserConfig,
-    userConfigRepository,
-    currentUser,
-    userConfigCriteria,
-    createdComponent,
-    onClickUpload,
-    onFileInputChange,
-    handleUpload,
-    showConfirmModal,
-    closeConfirmModal,
-    getUserConfig,
-    saveConfig,
-});
 </script>

@@ -88,10 +88,4 @@ ctDefinePublic({
     onLoadingChanged,
 });
 usePageTitle();
-
-defineExpose({
-    isLoading,
-    onClickSave,
-    onLoadingChanged,
-});
 </script>

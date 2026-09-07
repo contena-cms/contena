@@ -332,19 +332,4 @@ ctDefinePublic({
     onRemoveMedia,
     onOpenMedia,
 });
-
-defineExpose({
-    acl,
-    userPasswordError,
-    computedNewPassword,
-    computedNewPasswordConfirm,
-    computedUserTheme,
-    moduleIconColorsOptions,
-    computedUserModuleIconColors,
-    localeOptions,
-    onUploadMedia,
-    onDropMedia,
-    onRemoveMedia,
-    onOpenMedia,
-});
 </script>

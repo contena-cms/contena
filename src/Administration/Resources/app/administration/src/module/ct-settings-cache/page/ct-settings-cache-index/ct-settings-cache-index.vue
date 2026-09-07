@@ -431,26 +431,4 @@ ctDefinePublic({
     changeSelection,
     createOnlySelection,
 });
-
-defineExpose({
-    cacheApiService,
-    componentIsBuilding,
-    isLoading,
-    cacheInfo,
-    processes,
-    indexingMethod,
-    indexerSelection,
-    indexers,
-    indexerOptions,
-    httpCacheValue,
-    environmentValue,
-    cacheAdapterValue,
-    indexingMethodOptions,
-    createdComponent,
-    clearDataCache,
-    clearCache,
-    updateIndexes,
-    changeSelection,
-    createOnlySelection,
-});
 </script>

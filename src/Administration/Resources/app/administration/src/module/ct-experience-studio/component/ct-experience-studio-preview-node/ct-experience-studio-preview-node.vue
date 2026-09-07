@@ -119,11 +119,4 @@ ctDefinePublic({
     isPreviewPrimitive,
     formatPrimitiveValue,
 });
-
-defineExpose({
-    primitiveProperties,
-    slotEntries,
-    isPreviewPrimitive,
-    formatPrimitiveValue,
-});
 </script>

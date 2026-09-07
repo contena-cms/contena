@@ -109,14 +109,6 @@ ctDefinePublic({
     types,
     timeForms,
 });
-
-defineExpose({
-    acl,
-    locales,
-    propertyNames,
-    types,
-    timeForms,
-});
 </script>
 
 <style scoped>

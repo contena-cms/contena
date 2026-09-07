@@ -69,9 +69,4 @@ ctDefinePublic({
     email,
     waitTime,
 });
-
-defineExpose({
-    email,
-    waitTime,
-});
 </script>

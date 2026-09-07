@@ -244,38 +244,10 @@ const onUpdateCountry = (path, value) => {
 
 createdComponent();
 
-ctDefinePublic({
-    repositoryFactory,
-    acl,
-    customFieldDataProviderService,
-    country,
-    countryId,
-    isLoading,
-    isSaveSuccessful,
-    customFieldSets,
-    countryRepository,
-    identifier,
-    isNewCountry,
-    countryTabItems,
-    allowSave,
-    countryNameError,
-    showCustomFields,
-    onTabChange,
-    createdComponent,
-    loadEntityData,
-    loadCustomFieldSets,
-    saveFinish,
-    onSave,
-    onCancel,
-    abortOnLanguageChange,
-    saveOnLanguageChange,
-    onChangeLanguage,
-    onUpdateCountry,
-});
 usePageTitle(() => identifier.value);
 const { discardChanges } = useDiscardDetailPageChanges(route, { country: () => country.value });
 
-defineExpose({
+ctDefinePublic({
     discardChanges,
     placeholder,
     repositoryFactory,

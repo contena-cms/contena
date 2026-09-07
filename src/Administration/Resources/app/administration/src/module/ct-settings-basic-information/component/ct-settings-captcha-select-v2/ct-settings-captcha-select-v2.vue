@@ -252,15 +252,4 @@ ctDefinePublic({
     renderCaptchaOption,
     getTranslations,
 });
-
-defineExpose({
-    availableCaptchas,
-    attributes,
-    currentValue,
-    activeCaptchaSelect,
-    createdComponent,
-    setCaptchaOptions,
-    renderCaptchaOption,
-    getTranslations,
-});
 </script>

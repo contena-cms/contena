@@ -44,9 +44,4 @@ ctDefinePublic({
     acl,
     category,
 });
-
-defineExpose({
-    acl,
-    category,
-});
 </script>

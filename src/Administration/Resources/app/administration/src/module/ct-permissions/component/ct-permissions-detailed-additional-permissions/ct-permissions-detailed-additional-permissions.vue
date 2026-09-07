@@ -161,16 +161,4 @@ ctDefinePublic({
     isEntityDisabled,
     changePermissionForEntity,
 });
-
-defineExpose({
-    privileges,
-    aclApiService,
-    detailedAdditionalPermissions,
-    allGeneralSelectedPrivileges,
-    createdComponent,
-    setDetailedAdditionalPermissions,
-    isEntitySelected,
-    isEntityDisabled,
-    changePermissionForEntity,
-});
 </script>

@@ -295,18 +295,6 @@ ctDefinePublic({
     onSave,
     onCancel,
 });
-
-defineExpose({
-    rule,
-    conditions,
-    matchMode,
-    isLoading,
-    isSaveSuccessful,
-    canEdit,
-    canSave,
-    onSave,
-    onCancel,
-});
 </script>
 
 <style scoped>

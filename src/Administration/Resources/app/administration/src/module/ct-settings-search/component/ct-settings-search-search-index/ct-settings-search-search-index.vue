@@ -187,28 +187,4 @@ ctDefinePublic({
     rebuildSearchIndex,
     buildFinish,
 });
-
-defineExpose({
-    internalLoading,
-    isRebuildSuccess,
-    isRebuildInProgress,
-    progressBarValue,
-    offset,
-    syncPolling,
-    totalBlog,
-    latestIndex,
-    isLoading,
-    blogRepository,
-    blogSearchKeywordRepository,
-    blogCriteria,
-    blogSearchKeywordsCriteria,
-    createdComponent,
-    getLatestBlogKeywordIndexed,
-    getTotalBlog,
-    updateProgress,
-    pollData,
-    clearPolling,
-    rebuildSearchIndex,
-    buildFinish,
-});
 </script>

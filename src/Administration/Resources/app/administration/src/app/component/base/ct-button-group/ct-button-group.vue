@@ -37,8 +37,4 @@ const buttonGroupClasses = computed(() => {
 ctDefinePublic({
     buttonGroupClasses,
 });
-
-defineExpose({
-    buttonGroupClasses,
-});
 </script>

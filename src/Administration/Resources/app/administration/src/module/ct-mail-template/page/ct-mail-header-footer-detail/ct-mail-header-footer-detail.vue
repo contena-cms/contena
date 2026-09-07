@@ -208,8 +208,6 @@ ctDefinePublic({
     onSave,
     onCancel,
 });
-
-defineExpose({ item, isLoading, isSaveSuccessful, headline, canEdit, load, onSave, onCancel });
 </script>
 
 <style>

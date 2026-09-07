@@ -57,8 +57,4 @@ const cardSectionClasses = computed(() => {
 ctDefinePublic({
     cardSectionClasses,
 });
-
-defineExpose({
-    cardSectionClasses,
-});
 </script>

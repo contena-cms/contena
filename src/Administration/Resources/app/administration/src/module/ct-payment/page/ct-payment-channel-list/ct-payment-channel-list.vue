@@ -172,21 +172,6 @@ ctDefinePublic({
     onTableSortChange,
     formatDate,
 });
-
-defineExpose({
-    channels,
-    isLoading,
-    sortBy,
-    sortDirection,
-    channelRepository,
-    columns,
-    criteria,
-    getList,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-    formatDate,
-});
 </script>
 
 <style scoped lang="scss">

@@ -507,31 +507,4 @@ ctDefinePublic({
     onLeaveModalClose,
     onLeaveModalConfirm,
 });
-
-defineExpose({
-    temporaryCollection,
-    channelOptions,
-    selectedChannelId,
-    selectedChannel,
-    assignmentRepository,
-    contentLayoutCriteria,
-    assignmentByChannel,
-    selectedLayoutIds,
-    selectedContentLayoutId,
-    currentLayoutName,
-    canEdit,
-    isSaving,
-    isDisplayingLeavePageWarning,
-    nextRoute,
-    loadLayoutAssignments,
-    closeModal,
-    onModalChange,
-    applyChanges,
-    hasNotAppliedChanges,
-    onLayoutReset,
-    openInExperienceStudio,
-    createInExperienceStudio,
-    onLeaveModalClose,
-    onLeaveModalConfirm,
-});
 </script>

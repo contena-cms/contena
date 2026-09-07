@@ -112,12 +112,4 @@ ctDefinePublic({
     getAvatarUserUsage,
     getIconForModule,
 });
-
-defineExpose({
-    moduleFactory,
-    getUsages,
-    isNotUsed,
-    getAvatarUserUsage,
-    getIconForModule,
-});
 </script>

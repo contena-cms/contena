@@ -327,19 +327,4 @@ ctDefinePublic({
     onAssign,
     onUnassign,
 });
-
-defineExpose({
-    layoutName,
-    channelCriteria,
-    frontendChannelRepositoryFactory,
-    onBack,
-    onViewportChange,
-    onPreviewChannelChange,
-    onPreviewEntityIdChange,
-    onSave,
-    onUndo,
-    onRedo,
-    onAssign,
-    onUnassign,
-});
 </script>

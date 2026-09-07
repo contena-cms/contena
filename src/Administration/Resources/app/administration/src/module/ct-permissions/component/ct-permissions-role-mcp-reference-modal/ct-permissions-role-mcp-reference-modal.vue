@@ -393,25 +393,4 @@ ctDefinePublic({
     grantRow,
     closeModal,
 });
-
-defineExpose({
-    mcpToolService,
-    availableTools,
-    isLoading,
-    viewMode,
-    hasPreselected,
-    filterOptions,
-    anyIntegrationAllowsAllTools,
-    allowlistedToolNames,
-    relevantTools,
-    rolePrivileges,
-    displayRows,
-    allMissingStatic,
-    getBadgeVariant,
-    loadTools,
-    grantPrivilege,
-    grantAllMissing,
-    grantRow,
-    closeModal,
-});
 </script>

@@ -351,18 +351,4 @@ ctDefinePublic({
     getLocaleCriterias,
     getTermCriteria,
 });
-
-defineExpose({
-    acl,
-    feature,
-    entityName,
-    sortBy,
-    datetime,
-    showModal,
-    titleSaveSuccess,
-    messageSaveSuccess,
-    listingCriteria,
-    getLocaleCriterias,
-    getTermCriteria,
-});
 </script>

@@ -86,6 +86,4 @@ ctDefinePublic({
     getKnownIp,
     translateKnownIpName,
 });
-
-defineExpose({ validKnownIps, validUnselectedKnownIps, addSpecific, getKnownIp, translateKnownIpName });
 </script>

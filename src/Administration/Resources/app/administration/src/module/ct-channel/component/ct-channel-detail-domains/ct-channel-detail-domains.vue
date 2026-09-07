@@ -260,6 +260,4 @@ ctDefinePublic({
     onDeleteModalChange,
     deleteDomain,
 });
-
-defineExpose({ currentDomain, domainToDelete, openCreateModal, openEditModal, saveDomain, deleteDomain });
 </script>

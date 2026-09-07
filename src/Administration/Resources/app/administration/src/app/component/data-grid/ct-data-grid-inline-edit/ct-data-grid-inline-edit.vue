@@ -109,13 +109,4 @@ ctDefinePublic({
     createdComponent,
     emitInput,
 });
-
-defineExpose({
-    feature,
-    currentValue,
-    classes,
-    inputFieldSize,
-    createdComponent,
-    emitInput,
-});
 </script>

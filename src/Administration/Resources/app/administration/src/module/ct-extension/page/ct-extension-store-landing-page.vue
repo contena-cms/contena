@@ -213,16 +213,6 @@ ctDefinePublic({
     installStore,
 });
 
-defineExpose({
-    extensionService,
-    isLoading,
-    activationStatus,
-    activationError,
-    extractActivationError,
-    reloadPage,
-    installStore,
-});
-
 defineOptions({
     metaInfo() {
         return {

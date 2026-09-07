@@ -131,14 +131,4 @@ ctDefinePublic({
     onModalChange,
     onClose,
 });
-
-defineExpose({
-    activeTab,
-    tabItems,
-    displayString,
-    recipientString,
-    onTabChange,
-    onModalChange,
-    onClose,
-});
 </script>

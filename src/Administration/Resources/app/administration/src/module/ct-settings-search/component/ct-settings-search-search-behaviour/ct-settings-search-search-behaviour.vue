@@ -107,6 +107,4 @@ ctDefinePublic({
     updateAndLogic,
     updateMinSearchLength,
 });
-
-defineExpose({ min, max, conditionsOptions, updateAndLogic, updateMinSearchLength });
 </script>

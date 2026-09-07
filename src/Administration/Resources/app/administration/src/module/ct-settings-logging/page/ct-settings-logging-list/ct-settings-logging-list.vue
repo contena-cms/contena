@@ -279,27 +279,4 @@ ctDefinePublic({
     logLevelToString,
     getLogColumns,
 });
-
-defineExpose({
-    repositoryFactory,
-    entityName,
-    sortBy,
-    sortDirection,
-    isLoading,
-    logs,
-    displayedLog,
-    logLevels,
-    logEntryRepository,
-    logColumns,
-    additionalContextButtons,
-    modalNameFromLogEntry,
-    showInfoModal,
-    closeInfoModal,
-    onLimitChange,
-    onSort,
-    onContextSelect,
-    getList,
-    logLevelToString,
-    getLogColumns,
-});
 </script>

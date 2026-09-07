@@ -178,20 +178,6 @@ ctDefinePublic({
     onTableLimitChange,
     onTableSortChange,
 });
-
-defineExpose({
-    methods,
-    isLoading,
-    sortBy,
-    sortDirection,
-    methodRepository,
-    columns,
-    criteria,
-    getList,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-});
 </script>
 
 <style scoped lang="scss">

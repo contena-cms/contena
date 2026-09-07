@@ -153,19 +153,4 @@ ctDefinePublic({
     updateBulkEditSelection,
     editItems,
 });
-
-defineExpose({
-    records,
-    bulkEditSelection,
-    limit,
-    page,
-    identifier,
-    itemCount,
-    paginateRecords,
-    getSlots,
-    createdComponent,
-    paginate,
-    updateBulkEditSelection,
-    editItems,
-});
 </script>

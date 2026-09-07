@@ -165,14 +165,6 @@ const getNotificationVariant = (notification) => {
 };
 
 ctDefinePublic({
-    notifications,
-    notificationsStyle,
-    onClose,
-    handleAction,
-    getNotificationVariant,
-});
-
-defineExpose({
     getTranslatedTitle,
     getTranslatedMessage,
     notifications,

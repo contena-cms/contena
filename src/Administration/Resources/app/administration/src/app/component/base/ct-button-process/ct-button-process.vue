@@ -55,9 +55,4 @@ ctDefinePublic({
     feature,
     contentVisibilityClass,
 });
-
-defineExpose({
-    feature,
-    contentVisibilityClass,
-});
 </script>

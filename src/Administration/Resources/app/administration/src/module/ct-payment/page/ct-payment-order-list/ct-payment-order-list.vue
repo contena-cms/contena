@@ -231,24 +231,6 @@ ctDefinePublic({
     stateLabel,
     statusVariant,
 });
-
-defineExpose({
-    orders,
-    isLoading,
-    sortBy,
-    sortDirection,
-    orderRepository,
-    columns,
-    criteria,
-    getList,
-    onTablePageChange,
-    onTableLimitChange,
-    onTableSortChange,
-    formatAmount,
-    formatDate,
-    stateLabel,
-    statusVariant,
-});
 </script>
 
 <style scoped lang="scss">

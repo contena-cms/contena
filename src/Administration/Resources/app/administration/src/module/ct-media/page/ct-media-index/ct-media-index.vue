@@ -723,65 +723,6 @@ onUnmounted(() => {
     destroyedComponent();
 });
 
-ctDefinePublic({
-    repositoryFactory,
-    mediaService,
-    acl,
-    isLoading,
-    selectedItems,
-    uploads,
-    pendingUploadsCount,
-    term,
-    uploadTag,
-    parentFolder,
-    currentFolder,
-    navigationFolders,
-    navigationMediaTotal,
-    expandedFolderIds,
-    editingFolderId,
-    editingFolderName,
-    treeFolderPendingDelete,
-    pendingTreeCreateFolderId,
-    presentation,
-    sorting,
-    mediaType,
-    mediaTypeOptions,
-    visibleFolderEntries,
-    mediaFolderRepository,
-    mediaRepository,
-    rootFolder,
-    assetFilter,
-    createdComponent,
-    updateFolder,
-    loadNavigationFolders,
-    destroyedComponent,
-    onUploadsAdded,
-    onUploadFinished,
-    onUploadFailed,
-    onUploadCanceled,
-    onChangeLanguage,
-    onSearch,
-    onItemsDeleted,
-    onMediaFoldersDissolved,
-    reloadList,
-    decrementPendingUploads,
-    clearSelection,
-    onMediaUnselect,
-    updateRoute,
-    createFolder,
-    isTreeFolderExpanded,
-    toggleTreeFolder,
-    expandTreeToFolder,
-    onTreeAddFolder,
-    startTreeRename,
-    cancelTreeRename,
-    onTreeRenameSubmit,
-    onTreeFolderDeleted,
-    onPresentationChanged,
-    onSortingChanged,
-    onMediaTypeChanged,
-});
-
 const folderEntries = computed(() => {
     if (!props.routeFolderId) {
         return mediaLibrary.value?.subFolders ?? navigationFolders.value;
@@ -811,7 +752,7 @@ const currentFolderTitle = computed(() => {
     return currentFolder.value?.name ?? t('ct-media.index.labelUntitledFolder');
 });
 
-defineExpose({
+ctDefinePublic({
     folderEntries,
     folderCount,
     mediaCount,

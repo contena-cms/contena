@@ -80,8 +80,6 @@ ctDefinePublic({
     chooseCondition,
     chooseAction,
 });
-
-defineExpose({ title, helpText, chooseCondition, chooseAction });
 </script>
 
 <style scoped>

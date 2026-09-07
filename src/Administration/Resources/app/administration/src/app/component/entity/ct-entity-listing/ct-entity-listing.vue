@@ -1101,29 +1101,4 @@ ctDefinePublic({
     onClickBulkEdit,
     onCloseBulkEditModal,
 });
-
-defineExpose({
-    deleteId,
-    showBulkDeleteModal,
-    isBulkLoading,
-    page,
-    limit,
-    total,
-    lastSortedColumn,
-    detailPageLinkText,
-    createdComponent,
-    applyResult,
-    deleteItem,
-    deleteItems,
-    deleteItemsFinish,
-    doSearch,
-    save,
-    revert,
-    sort,
-    paginate,
-    showDelete,
-    closeModal,
-    onClickBulkEdit,
-    onCloseBulkEditModal,
-});
 </script>

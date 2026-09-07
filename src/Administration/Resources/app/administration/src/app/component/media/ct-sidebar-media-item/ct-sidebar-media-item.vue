@@ -256,33 +256,4 @@ ctDefinePublic({
     openContent,
     onNavigateToFolder,
 });
-
-defineExpose({
-    repositoryFactory,
-    isLoading,
-    mediaFolderId,
-    mediaItems,
-    subFolders,
-    page,
-    limit,
-    total,
-    term,
-    mediaRepository,
-    mediaFolderRepository,
-    showMore,
-    itemsLoaded,
-    createdComponent,
-    onSearchTermChange,
-    debouncedSearch,
-    initializeContent,
-    getSubFolders,
-    handleFolderGridItemDelete,
-    handleMediaGridItemDelete,
-    onLoadMore,
-    extendList,
-    getList,
-    getListingCriteria,
-    openContent,
-    onNavigateToFolder,
-});
 </script>

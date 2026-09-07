@@ -399,20 +399,4 @@ ctDefinePublic({
     constructDateWithTimezone,
     handleStringFormat,
 });
-
-defineExpose({
-    userLocale,
-    userTimeZone,
-    is24HourFormat,
-    formatterOptions,
-    datePickerFormat,
-    escapeDateFnsFormatLiteral,
-    customFormat,
-    formatDate,
-    getLocaleDatePattern,
-    getLocaleTimePeriods,
-    parseDateString,
-    constructDateWithTimezone,
-    handleStringFormat,
-});
 </script>

@@ -66,9 +66,4 @@ ctDefinePublic({
     assetFilter,
     routerGoBack,
 });
-
-defineExpose({
-    assetFilter,
-    routerGoBack,
-});
 </script>

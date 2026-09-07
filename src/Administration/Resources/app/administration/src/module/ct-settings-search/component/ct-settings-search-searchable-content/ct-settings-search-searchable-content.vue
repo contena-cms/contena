@@ -327,30 +327,4 @@ ctDefinePublic({
     saveConfig,
     deleteConfig,
 });
-
-defineExpose({
-    showExampleModal,
-    defaultTab,
-    tabNames,
-    isLoading,
-    isEnabledReset,
-    searchConfigFields,
-    fieldConfigs,
-    repository,
-    criteria,
-    isListEmpty,
-    columns,
-    searchableContentTabs,
-    onShowExampleModal,
-    onCloseExampleModal,
-    onAddNewConfig,
-    createNewConfigItem,
-    getConfigFieldDefault,
-    onResetToDefault,
-    onChangeTab,
-    loadData,
-    getBlogSearchFieldsList,
-    saveConfig,
-    deleteConfig,
-});
 </script>

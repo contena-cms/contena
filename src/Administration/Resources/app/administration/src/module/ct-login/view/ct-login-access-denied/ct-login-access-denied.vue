@@ -57,9 +57,4 @@ ctDefinePublic({
     email,
     loginWithDifferentAccount,
 });
-
-defineExpose({
-    email,
-    loginWithDifferentAccount,
-});
 </script>

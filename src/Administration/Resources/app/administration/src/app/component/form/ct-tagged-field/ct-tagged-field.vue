@@ -164,18 +164,4 @@ ctDefinePublic({
     setFocus,
     noTriggerKey,
 });
-
-defineExpose({
-    feature,
-    newTagName,
-    hasFocus,
-    hasValues,
-    taggedFieldClasses,
-    taggedFieldInputClasses,
-    dismissLastTag,
-    dismissTag,
-    performAddTag,
-    setFocus,
-    noTriggerKey,
-});
 </script>

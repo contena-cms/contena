@@ -322,33 +322,4 @@ ctDefinePublic({
 
 provide('setCtPageSidebarOffset', setSidebarOffset);
 provide('removeCtPageSidebarOffset', removeSidebarOffset);
-
-defineExpose({
-    module,
-    parentRoute,
-    previousPath,
-    previousRoute,
-    sidebarOffset,
-    scrollbarOffset,
-    hasFullWidthHeader,
-    languageId,
-    routerBack,
-    pageColor,
-    hasSideContentSlot,
-    hasSidebarSlot,
-    showHeadArea,
-    pageClasses,
-    pageContainerClasses,
-    pageContentClasses,
-    pageOffset,
-    createdComponent,
-    mountedComponent,
-    updatedComponent,
-    beforeDestroyComponent,
-    readScreenWidth,
-    setSidebarOffset,
-    removeSidebarOffset,
-    setScrollbarOffset,
-    initPage,
-});
 </script>

@@ -154,18 +154,6 @@ ctDefinePublic({
     onCheckedElementsCount,
     onDeleteCheckedRegions,
 });
-
-defineExpose({
-    checkedElementsCount,
-    getRegionName,
-    onLoadChildren,
-    onSelectRegion,
-    onAddChildRegion,
-    onDeleteRegion,
-    onBatchDelete,
-    onCheckedElementsCount,
-    onDeleteCheckedRegions,
-});
 </script>
 
 <style scoped lang="scss">

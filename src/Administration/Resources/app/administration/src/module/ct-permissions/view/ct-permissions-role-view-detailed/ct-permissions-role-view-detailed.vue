@@ -39,8 +39,4 @@ const acl = inject('acl');
 ctDefinePublic({
     acl,
 });
-
-defineExpose({
-    acl,
-});
 </script>

@@ -68,9 +68,4 @@ ctDefinePublic({
     showHelpSidebar,
     onVisibilityChange,
 });
-
-defineExpose({
-    showHelpSidebar,
-    onVisibilityChange,
-});
 </script>

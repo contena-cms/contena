@@ -330,28 +330,4 @@ ctDefinePublic({
     addAssignment,
     removeAssignment,
 });
-
-defineExpose({
-    repositoryFactory,
-    syncService,
-    acl,
-    tag,
-    isLoading,
-    assignmentsToBeAdded,
-    assignmentsToBeDeleted,
-    initialTab,
-    tagTabItems,
-    tagRepository,
-    tagDefinition,
-    tagNameError,
-    title,
-    allowSave,
-    computedCounts,
-    onTabChange,
-    createdComponent,
-    onSave,
-    onCancel,
-    addAssignment,
-    removeAssignment,
-});
 </script>

@@ -177,12 +177,4 @@ ctDefinePublic({
     cancelText,
     confirmButtonVariant,
 });
-
-defineExpose({
-    titleText,
-    descriptionText,
-    confirmText,
-    cancelText,
-    confirmButtonVariant,
-});
 </script>

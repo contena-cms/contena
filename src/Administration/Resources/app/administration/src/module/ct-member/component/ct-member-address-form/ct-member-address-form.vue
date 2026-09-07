@@ -204,19 +204,4 @@ ctDefinePublic({
     onCityRegionChange,
     onDistrictChange,
 });
-
-defineExpose({
-    provinceId,
-    cityRegionId,
-    districtId,
-    provinceCriteria,
-    cityRegionCriteria,
-    districtCriteria,
-    getApiError,
-    loadRegionPath,
-    onCountryChange,
-    onProvinceChange,
-    onCityRegionChange,
-    onDistrictChange,
-});
 </script>

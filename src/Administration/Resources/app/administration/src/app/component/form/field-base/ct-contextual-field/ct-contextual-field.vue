@@ -49,9 +49,4 @@ ctDefinePublic({
     hasPrefix,
     hasSuffix,
 });
-
-defineExpose({
-    hasPrefix,
-    hasSuffix,
-});
 </script>

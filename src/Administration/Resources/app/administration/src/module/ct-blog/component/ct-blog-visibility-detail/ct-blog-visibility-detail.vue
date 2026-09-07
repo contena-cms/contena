@@ -156,18 +156,4 @@ ctDefinePublic({
     onPageChange,
     changeVisibilityValue,
 });
-
-defineExpose({
-    items,
-    page,
-    limit,
-    total,
-    blog,
-    truncateFilter,
-    filteredItems,
-    names,
-    createdComponent,
-    onPageChange,
-    changeVisibilityValue,
-});
 </script>

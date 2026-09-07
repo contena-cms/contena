@@ -73,9 +73,4 @@ ctDefinePublic({
     feature,
     updateFilter,
 });
-
-defineExpose({
-    feature,
-    updateFilter,
-});
 </script>

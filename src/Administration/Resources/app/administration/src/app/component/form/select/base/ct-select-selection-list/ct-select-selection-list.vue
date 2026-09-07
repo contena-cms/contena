@@ -228,19 +228,4 @@ ctDefinePublic({
     select,
     getFocusEl,
 });
-
-defineExpose({
-    feature,
-    showPlaceholder,
-    isSelectionDisabled,
-    onClickInvisibleCount,
-    onSearchTermChange,
-    onKeyDownDelete,
-    onKeyDownEnter,
-    onClickDismiss,
-    focus,
-    blur,
-    select,
-    getFocusEl,
-});
 </script>

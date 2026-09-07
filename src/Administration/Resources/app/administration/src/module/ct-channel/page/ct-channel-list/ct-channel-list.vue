@@ -307,6 +307,4 @@ ctDefinePublic({
     onDeleteModalChange,
     deleteChannel,
 });
-
-defineExpose({ loadChannels, onAddChannel, statusLabel, isFavorite, deleteChannel, additionalContextButtons });
 </script>

@@ -65,9 +65,4 @@ ctDefinePublic({
     classes,
     createNewItem,
 });
-
-defineExpose({
-    classes,
-    createNewItem,
-});
 </script>

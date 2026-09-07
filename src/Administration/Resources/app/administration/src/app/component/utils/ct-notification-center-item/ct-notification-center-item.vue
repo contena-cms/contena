@@ -123,14 +123,6 @@ const handleAction = (action) => {
 };
 
 ctDefinePublic({
-    itemHeaderClass,
-    notificationActions,
-    isNotificationFromSameDay,
-    onDelete,
-    handleAction,
-});
-
-defineExpose({
     getTranslatedTitle,
     getTranslatedMessage,
     itemHeaderClass,

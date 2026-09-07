@@ -265,15 +265,4 @@ ctDefinePublic({
     onLinkToggle,
     emitValue,
 });
-
-defineExpose({
-    sides,
-    isLinked,
-    lastEmittedValue,
-    getSideInputId,
-    getSideAriaLabel,
-    onSideInput,
-    onLinkToggle,
-    emitValue,
-});
 </script>

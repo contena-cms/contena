@@ -208,20 +208,4 @@ ctDefinePublic({
     onOpenMcpModal,
     onCloseMcpModal,
 });
-
-defineExpose({
-    acl,
-    repositoryFactory,
-    mcpIntegrations,
-    showMcpModal,
-    roleNameError,
-    roleDescriptionError,
-    roleId,
-    integrationRepository,
-    isReadOnly,
-    shouldShowMcpHint,
-    loadMcpIntegrations,
-    onOpenMcpModal,
-    onCloseMcpModal,
-});
 </script>

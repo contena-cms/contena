@@ -53,6 +53,4 @@ ctDefinePublic({
     onCancel,
     onModalChange,
 });
-
-defineExpose({ tagId, title, onSave, onCancel, onModalChange });
 </script>

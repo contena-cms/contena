@@ -76,12 +76,4 @@ ctDefinePublic({
     setFocusClass,
     removeFocusClass,
 });
-
-defineExpose({
-    hasFocus,
-    ctBlockSize,
-    ctBlockFieldClasses,
-    setFocusClass,
-    removeFocusClass,
-});
 </script>

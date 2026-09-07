@@ -270,21 +270,4 @@ ctDefinePublic({
     closeMenu,
     removeClickEventListeners,
 });
-
-defineExpose({
-    feature,
-    showMenu,
-    menuStyles,
-    floatingUiOptions,
-    contextClass,
-    contextButtonClass,
-    contextMenuClass,
-    beforeUnmountComponent,
-    onClickButton,
-    openMenu,
-    handleOutsideClickEvent,
-    handleClickEvent,
-    closeMenu,
-    removeClickEventListeners,
-});
 </script>

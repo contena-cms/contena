@@ -312,41 +312,4 @@ ctDefinePublic({
 onBeforeRouteUpdate((to) => unsavedDataLeaveHandler.value(to));
 onBeforeRouteLeave((to) => unsavedDataLeaveHandler.value(to));
 usePageTitle();
-
-defineExpose({
-    blogSearchConfigs,
-    isLoading,
-    currentChannelId,
-    searchTerms,
-    searchResults,
-    defaultConfig,
-    isSaveSuccessful,
-    nextRoute,
-    isDisplayingLeavePageWarning,
-    leaveConfirmation,
-    isEditing,
-    blogSearchRepository,
-    blogSearchFieldRepository,
-    blogSearchConfigsCriteria,
-    blogDefaultConfigsCriteria,
-    allowSave,
-    settingsSearchTabs,
-    createdComponent,
-    getBlogSearchConfigs,
-    getDefaultSearchConfig,
-    createDefaultSearchConfig,
-    createConfigFields,
-    onSaveDefaultSearchConfig,
-    onChangeLanguage,
-    onTabChange,
-    onSaveSearchSettings,
-    saveFinish,
-    unsavedDataLeaveHandler,
-    onChannelChanged,
-    onLiveSearchResultsChanged,
-    onEditChanged,
-    onConfirmLeave,
-    onCloseLeaveModal,
-    onLeaveModalChange,
-});
 </script>

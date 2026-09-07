@@ -50,10 +50,4 @@ ctDefinePublic({
     mediaRepository,
     handleChange,
 });
-
-defineExpose({
-    repositoryFactory,
-    mediaRepository,
-    handleChange,
-});
 </script>

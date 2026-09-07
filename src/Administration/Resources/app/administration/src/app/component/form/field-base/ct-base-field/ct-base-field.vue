@@ -178,16 +178,4 @@ ctDefinePublic({
     ctFieldLabelClasses,
     showLabel,
 });
-
-defineExpose({
-    feature,
-    id,
-    identification,
-    hasLabel,
-    hasError,
-    hasHint,
-    ctFieldClasses,
-    ctFieldLabelClasses,
-    showLabel,
-});
 </script>

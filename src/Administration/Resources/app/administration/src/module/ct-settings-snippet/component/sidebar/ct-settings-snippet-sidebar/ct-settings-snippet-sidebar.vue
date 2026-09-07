@@ -158,17 +158,4 @@ ctDefinePublic({
     onRefresh,
     resetAll,
 });
-
-defineExpose({
-    filterSidebarItem,
-    activeFilterNumber,
-    isExpandedAuthorFilters,
-    isExpandedMoreFilters,
-    registerFilterSidebarItem,
-    closeContent,
-    openFilterSidebar,
-    onChange,
-    onRefresh,
-    resetAll,
-});
 </script>

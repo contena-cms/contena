@@ -294,32 +294,4 @@ ctDefinePublic({
     onMediaItemDragSort,
     updateMediaItemPositions,
 });
-
-defineExpose({
-    blog,
-    allowEdit,
-    showCoverLabel,
-    isMediaLoading,
-    globalIsArReady,
-    isLoading,
-    blogMediaRepository,
-    mediaRepository,
-    blogMedia,
-    mediaItems,
-    cover,
-    onOpenMedia,
-    createPlaceholderMedia,
-    createMediaAssociation,
-    successfulUpload,
-    onUploadFailed,
-    removeCover,
-    isCover,
-    isSpatial,
-    isArReady,
-    removeFile,
-    markMediaAsCover,
-    onDropMedia,
-    onMediaItemDragSort,
-    updateMediaItemPositions,
-});
 </script>

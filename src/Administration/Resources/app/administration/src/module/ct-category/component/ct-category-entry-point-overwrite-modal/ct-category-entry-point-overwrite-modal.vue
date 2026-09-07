@@ -51,9 +51,4 @@ ctDefinePublic({
     onCancel,
     onConfirm,
 });
-
-defineExpose({
-    onCancel,
-    onConfirm,
-});
 </script>

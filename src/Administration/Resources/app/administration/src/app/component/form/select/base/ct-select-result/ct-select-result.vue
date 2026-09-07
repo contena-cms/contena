@@ -176,18 +176,4 @@ ctDefinePublic({
     onClickResult,
     onMouseEnter,
 });
-
-defineExpose({
-    setActiveItemIndex,
-    feature,
-    active,
-    resultClasses,
-    hasDescriptionSlot,
-    createdComponent,
-    destroyedComponent,
-    checkIfSelected,
-    checkIfActive,
-    onClickResult,
-    onMouseEnter,
-});
 </script>

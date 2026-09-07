@@ -342,31 +342,4 @@ ctDefinePublic({
     onConfirmDelete,
     deleteRole,
 });
-
-defineExpose({
-    acl,
-    roles,
-    isLoading,
-    itemToDelete,
-    isConfirmDeleteModalOpen,
-    isRoleFormModalOpen,
-    roleFormRoleId,
-    permissionsRoleId,
-    rolesColumns,
-    roleCriteria,
-    showListingResults,
-    getList,
-    onSearch,
-    openCreateRole,
-    openEditRole,
-    closeRoleForm,
-    openPermissions,
-    closePermissions,
-    onRoleSaved,
-    formatUserName,
-    onDelete,
-    onCloseDeleteModal,
-    onConfirmDelete,
-    deleteRole,
-});
 </script>

@@ -268,26 +268,4 @@ ctDefinePublic({
 });
 
 provide('setActiveItemIndex', unref(setActiveItemIndex));
-
-defineExpose({
-    feature,
-    activeItemIndex,
-    emptyMessageText,
-    popoverClass,
-    createdComponent,
-    beforeDestroyedComponent,
-    setActiveItemIndex,
-    addEventListeners,
-    removeEventListeners,
-    onItemSelect,
-    emitActiveItemIndex,
-    checkOutsideClick,
-    navigate,
-    navigateNext,
-    navigatePrevious,
-    updateScrollPosition,
-    emitClicked,
-    onScroll,
-    getBottomDistance,
-});
 </script>

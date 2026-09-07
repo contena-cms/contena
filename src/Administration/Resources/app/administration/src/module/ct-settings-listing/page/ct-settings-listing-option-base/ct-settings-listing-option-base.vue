@@ -280,25 +280,4 @@ ctDefinePublic({
 });
 
 usePageTitle();
-
-defineExpose({
-    blogSortingEntity,
-    defaultSortingId,
-    toBeDeletedCriteriaIndex,
-    sortingOptionTechnicalNameError,
-    sortingOptionLabelError,
-    isLoading,
-    smartBarHeading,
-    isSaveButtonDisabled,
-    isDefaultSorting,
-    loadBlogSorting,
-    fetchDefaultSorting,
-    isValidSortingOption,
-    searchForAlreadyExistingKey,
-    onSave,
-    onDeleteCriteria,
-    onConfirmDeleteCriteria,
-    onChangeLanguage,
-    clearValidationErrors,
-});
 </script>

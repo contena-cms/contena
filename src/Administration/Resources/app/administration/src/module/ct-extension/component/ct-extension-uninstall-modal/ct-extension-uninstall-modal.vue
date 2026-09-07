@@ -88,11 +88,4 @@ ctDefinePublic({
     emitClose,
     emitUninstall,
 });
-
-defineExpose({
-    removePluginData,
-    title,
-    emitClose,
-    emitUninstall,
-});
 </script>

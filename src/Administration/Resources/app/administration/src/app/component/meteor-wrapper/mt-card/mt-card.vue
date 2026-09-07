@@ -67,8 +67,4 @@ const getFilteredSlots = () => {
 ctDefinePublic({
     getFilteredSlots,
 });
-
-defineExpose({
-    getFilteredSlots,
-});
 </script>

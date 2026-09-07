@@ -273,28 +273,4 @@ ctDefinePublic({
     changeActiveState,
     filterExtensionsByActiveState,
 });
-
-defineExpose({
-    contenaExtensionService,
-    filterByActiveState,
-    sortingOption,
-    isLoading,
-    myExtensions,
-    extensionList,
-    extensionListPaginated,
-    extensionListSearched,
-    total,
-    limit,
-    page,
-    term,
-    extensionManagementDisabled,
-    mountedComponent,
-    updateList,
-    updateRouteQuery,
-    changePage,
-    sortExtensions,
-    changeSortingOption,
-    changeActiveState,
-    filterExtensionsByActiveState,
-});
 </script>

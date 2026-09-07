@@ -106,12 +106,4 @@ ctDefinePublic({
     categoryViewTabs,
     ctCategoryViewError,
 });
-
-defineExpose({
-    category,
-    isCategoryColumn,
-    isPage,
-    categoryViewTabs,
-    ctCategoryViewError,
-});
 </script>

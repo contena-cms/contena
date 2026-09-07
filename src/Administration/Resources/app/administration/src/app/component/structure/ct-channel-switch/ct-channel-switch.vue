@@ -115,15 +115,4 @@ ctDefinePublic({
     onClickSaveChanges,
     onClickRevertUnsavedChanges,
 });
-
-defineExpose({
-    channelId,
-    newChannelId,
-    showUnsavedChangesModal,
-    channelCriteria,
-    onInput,
-    onCloseChangesModal,
-    onClickSaveChanges,
-    onClickRevertUnsavedChanges,
-});
 </script>

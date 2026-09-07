@@ -140,17 +140,4 @@ ctDefinePublic({
     onRemoveMediaItem,
     onMediaDropped,
 });
-
-defineExpose({
-    acl,
-    repositoryFactory,
-    showMediaModal,
-    reversedVisibility,
-    mediaItem,
-    mediaRepository,
-    onMediaSelectionChange,
-    onSetMediaItem,
-    onRemoveMediaItem,
-    onMediaDropped,
-});
 </script>

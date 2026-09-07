@@ -410,41 +410,6 @@ ctDefinePublic({
     onDeleteOrganization,
     deleteOrganizations,
 });
-
-defineExpose({
-    organizationRepository,
-    organizationUnitRepository,
-    term,
-    isLoading,
-    treeItems,
-    currentOrganization,
-    organizationUnits,
-    customFieldSets,
-    canCreate,
-    canEdit,
-    canDelete,
-    canAddOrganization,
-    canSaveCurrent,
-    selectedOrganizationId,
-    detailTitle,
-    createTooltip,
-    loadOrganizationUnits,
-    loadCustomFieldSets,
-    getCriteria,
-    resetTree,
-    loadTreeItems,
-    onSearch,
-    onChangeLanguage,
-    createOrganization,
-    onAddOrganization,
-    onAddChildOrganization,
-    onSelectOrganization,
-    onUpdateOrganization,
-    onSaveOrganization,
-    onCancelOrganization,
-    onDeleteOrganization,
-    deleteOrganizations,
-});
 </script>
 
 <style lang="scss">

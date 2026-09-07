@@ -466,31 +466,4 @@ ctDefinePublic({
     onClickCreateDomainForUnservedLanguage,
     isFavorite,
 });
-
-defineExpose({
-    disableEdit,
-    countryCriteria,
-    languageCriteria,
-    isWebChannel,
-    isDomainAware,
-    mainCategories,
-    footerCategories,
-    serviceCategories,
-    unservedLanguages,
-    unservedLanguageVariant,
-    unservedLanguageMessage,
-    maintenanceIpAllowlist,
-    createCategoryCollections,
-    onMainSelectionAdd,
-    onMainSelectionRemove,
-    onFooterSelectionAdd,
-    onFooterSelectionRemove,
-    onServiceSelectionAdd,
-    onServiceSelectionRemove,
-    onGenerateKey,
-    copyToClipboard,
-    validateMaintenanceIpCidr,
-    onClickCreateDomainForUnservedLanguage,
-    isFavorite,
-});
 </script>

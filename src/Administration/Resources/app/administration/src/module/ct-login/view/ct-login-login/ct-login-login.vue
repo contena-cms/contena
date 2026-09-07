@@ -304,16 +304,4 @@ ctDefinePublic({
     startRetryCountdown,
     stopRetryCountdown,
 });
-
-defineExpose({
-    username,
-    password,
-    rememberMe,
-    isLoggingIn,
-    error,
-    isRateLimited,
-    countdownLabel,
-    isDisabled,
-    onSubmit,
-});
 </script>

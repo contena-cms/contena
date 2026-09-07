@@ -122,16 +122,6 @@ ctDefinePublic({
     updateBranch,
     removeBranch,
 });
-
-defineExpose({
-    trueBlockClasses,
-    replaceSequence,
-    updateSequence,
-    removeSequence,
-    replaceBranch,
-    updateBranch,
-    removeBranch,
-});
 </script>
 
 <style scoped>
