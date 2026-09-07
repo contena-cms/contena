@@ -32,8 +32,8 @@ Their `*Entity` classes extend `AbstractContentLayoutAssignmentEntity`, but thei
 - Header/Footer: `UNIQUE (domain_id, channel_id)` — Frontend-only, registered in `Frontend/DependencyInjection/content-system.php`
 - Entity definitions registered in their owning domain's DI, not in `content-system.php`
 - Assignments are unidirectional — parent entities have no awareness of ContentSystem
-- Entity fallback inside the current platform or tenant scope: channel specific → default (null channel)
-- Header/footer fallback inside the current platform or tenant scope: domain+channel → channel → default; never cross into platform or another tenant
+- Entity fallback: channel specific → global (null)
+- Header/footer fallback: domain+channel → channel → global
 
 ## Quick Reference
 

@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Loader;
 
+use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\DatabaseTypeLoader;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\DatabaseTypeLoader;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -19,8 +19,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(DatabaseTypeLoader::class)]
 class DatabaseTypeLoaderTest extends TestCase
 {
-    #[TestDox('loads element type definitions from the database in production environment')]
-    public function testLoadsDefinitionsFromDatabaseInProductionEnvironment(): void
+    #[TestDox('loads element type definitions from the database in blogion environment')]
+    public function testLoadsDefinitionsFromDatabaseInBlogionEnvironment(): void
     {
         $schema = json_encode([
             'meta' => [

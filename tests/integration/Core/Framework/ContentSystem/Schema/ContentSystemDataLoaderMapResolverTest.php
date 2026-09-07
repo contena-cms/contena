@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Schema;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMapResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderSchemaGenerator;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -21,7 +21,7 @@ class ContentSystemDataLoaderMapResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    #[TestDox('the entity source can produce the channel blog entity')]
+    #[TestDox('the entity source can produce the sales-channel blog entity')]
     public function testGetSourcesForChannelBlogIncludesEntity(): void
     {
         $sources = $this->resolveMap()->getSourcesFor(ChannelBlogEntity::class);
@@ -29,7 +29,7 @@ class ContentSystemDataLoaderMapResolverTest extends TestCase
         static::assertContains(EntityLoader::SOURCE, $sources);
     }
 
-    #[TestDox('a base property type resolves to the entity source via the channel subclass producer')]
+    #[TestDox('a base property type resolves to the entity source via the sales-channel subclass producer')]
     public function testGetSourcesForBaseBlogEntityIsSubtypeMatched(): void
     {
         // The entity loader declares ChannelBlogEntity for "blog"; a property typed with the
@@ -39,7 +39,7 @@ class ContentSystemDataLoaderMapResolverTest extends TestCase
         static::assertContains(EntityLoader::SOURCE, $sources);
     }
 
-    #[TestDox('the entity_collection source can produce the channel blog collection')]
+    #[TestDox('the entity_collection source can produce the sales-channel blog collection')]
     public function testGetSourcesForChannelBlogCollectionIncludesEntityCollection(): void
     {
         $sources = $this->resolveMap()->getSourcesFor(ChannelBlogCollection::class);

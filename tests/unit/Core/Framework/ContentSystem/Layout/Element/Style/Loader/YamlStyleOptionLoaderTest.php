@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyle;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\StyleOptionSourceDirectory;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\YamlStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Validator\Validation;
 
@@ -176,6 +176,30 @@ class YamlStyleOptionLoaderTest extends TestCase
         $this->expectExceptionMessageMatches('/options\[broken-option\]\.type/');
 
         $loader->load();
+    }
+
+    #[TestDox('fails batch validation when a declaration carries an unknown kind, naming the option path')]
+    public function testFailsValidationForUnknownKind(): void
+    {
+        file_put_contents($this->tempDir . '/bad-kind.yaml', "type: string\nkind: inline-spacing\n");
+
+        $loader = $this->createLoader([new StyleOptionSourceDirectory('core', $this->tempDir)]);
+
+        $this->expectException(ContentSystemException::class);
+        $this->expectExceptionMessageMatches('/options\[bad-kind\]\.kind/');
+
+        $loader->load();
+    }
+
+    #[TestDox('loads a declaration whose kind is box-spacing')]
+    public function testLoadsBoxSpacingKind(): void
+    {
+        file_put_contents($this->tempDir . '/padding.yaml', "type: string\nkind: box-spacing\n");
+
+        $options = $this->createLoader([new StyleOptionSourceDirectory('core', $this->tempDir)])->load();
+
+        static::assertCount(1, $options);
+        static::assertSame('box-spacing', $options[0]->kind());
     }
 
     /**

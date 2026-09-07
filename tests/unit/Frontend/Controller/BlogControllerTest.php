@@ -2,17 +2,17 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
-use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
+use Contena\Core\Framework\ContentSystem\LayoutReference;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\BlogController;
 use Contena\Frontend\Page\Blog\BlogPage;
 use Contena\Frontend\Page\Blog\BlogPageLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -35,17 +35,13 @@ class BlogControllerTest extends TestCase
 
         $request = new Request();
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('layout-id', [], 'blog-layout', null);
-
-        $contentRoute = $this->createMock(AbstractContentRoute::class);
-        $contentRoute->expects($this->once())
-            ->method('load')
-            ->with('/blog/' . $blogId, $request, $context)
-            ->willReturn(new ContentRouteResponse($contentPage));
-
-        $controller = new BlogControllerTestClass($pageLoader, $contentRoute);
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'blog-layout', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
+        $controller = new BlogControllerTestClass($pageLoader);
+        $controller->contentPage = $contentPage;
         $controller->detail($request, $context);
 
+        static::assertSame('/blog/' . $blogId, $controller->loadedContentPath);
         static::assertSame('@Frontend/frontend/page/blog/detail.html.twig', $controller->renderFrontendView);
         static::assertSame($page, $controller->renderFrontendParameters['page']);
         static::assertSame($contentPage, $controller->renderFrontendParameters['contentPage']);

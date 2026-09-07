@@ -11,19 +11,7 @@ use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAss
  */
 class LandingPageContentLayoutEntity extends AbstractContentLayoutAssignmentEntity
 {
-    protected ?string $tenantId = null;
-
     protected string $landingPageId;
-
-    public function getTenantId(): ?string
-    {
-        return $this->tenantId;
-    }
-
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
-    }
 
     public function getLandingPageId(): string
     {

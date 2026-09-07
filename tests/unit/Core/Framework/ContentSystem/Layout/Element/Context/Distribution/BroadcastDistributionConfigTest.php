@@ -2,11 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Context\Distribution;
 
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\BroadcastDistributionConfig;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\BroadcastDistributionConfig;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**
@@ -77,15 +78,17 @@ class BroadcastDistributionConfigTest extends TestCase
         static::assertNull($config->getConsumerAlias());
     }
 
-    #[TestDox('creates config with null alias when consumerAlias is non-string in array data')]
-    public function testFromArrayWithNonStringConsumerAlias(): void
+    #[TestDox('rejects a present consumerAlias of the wrong type instead of substituting the default')]
+    public function testFromArrayRejectsANonStringConsumerAlias(): void
     {
-        $config = BroadcastDistributionConfig::fromArray([
+        $this->expectExceptionObject(
+            ContentSystemException::invalidFieldValueType('consumerAlias', 'string', 'int')
+        );
+
+        BroadcastDistributionConfig::fromArray([
             'distribution' => 'broadcast',
             'consumerAlias' => 42,
         ]);
-
-        static::assertNull($config->getConsumerAlias());
     }
 
     #[TestDox('returns constraint mapping with consumerAlias string type constraint')]

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Serialization;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 
 /**
  * @internal
@@ -143,5 +143,35 @@ class StyleOptionSpecificationSerializerTest extends TestCase
         $normalized = $this->serializer->normalize($this->serializer->denormalize(['type' => 'boolean']));
 
         static::assertArrayNotHasKey('breakpointAware', $normalized);
+    }
+
+    #[TestDox('denormalize maps a declared kind from the source array')]
+    public function testDenormalizeMapsKind(): void
+    {
+        $dto = $this->serializer->denormalize(['type' => 'string', 'kind' => 'box-spacing']);
+
+        static::assertSame('box-spacing', $dto->kind);
+    }
+
+    #[TestDox('denormalize yields a null kind when the key is absent')]
+    public function testDenormalizeKindAbsentYieldsNull(): void
+    {
+        static::assertNull($this->serializer->denormalize(['type' => 'string'])->kind);
+    }
+
+    #[TestDox('round-trips a declared kind through denormalize then normalize')]
+    public function testRoundTripPreservesKind(): void
+    {
+        $raw = ['type' => 'string', 'maxLength' => 64, 'kind' => 'box-spacing'];
+
+        static::assertSame($raw, $this->serializer->normalize($this->serializer->denormalize($raw)));
+    }
+
+    #[TestDox('normalize omits the kind key when it is null')]
+    public function testNormalizeOmitsKindWhenNull(): void
+    {
+        $normalized = $this->serializer->normalize($this->serializer->denormalize(['type' => 'string']));
+
+        static::assertArrayNotHasKey('kind', $normalized);
     }
 }

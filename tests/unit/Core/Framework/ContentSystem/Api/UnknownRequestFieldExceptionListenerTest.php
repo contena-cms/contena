@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Api;
 
+use Contena\Core\Framework\ContentSystem\Api\UnknownRequestFieldExceptionListener;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Api\UnknownRequestFieldExceptionListener;
-use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;

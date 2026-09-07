@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Entity;
 use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogContentLayoutCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutCollection;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingPageContentLayoutCollection;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
@@ -23,7 +23,7 @@ class ContentLayoutEntity extends Entity
     protected string $version;
 
     /**
-     * @var list<ContentElement>
+     * @var list<StoredElement>
      */
     protected array $layout;
 
@@ -68,7 +68,7 @@ class ContentLayoutEntity extends Entity
     }
 
     /**
-     * @return list<ContentElement>
+     * @return list<StoredElement>
      */
     public function getLayout(): array
     {
@@ -76,7 +76,7 @@ class ContentLayoutEntity extends Entity
     }
 
     /**
-     * @param list<ContentElement> $layout
+     * @param list<StoredElement> $layout
      */
     public function setLayout(array $layout): void
     {

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Cache;
 
+use Contena\Core\Framework\ContentSystem\Cache\EntityCacheTagResolver;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Cache\EntityCacheTagResolver;
-use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 
 /**
  * @internal
@@ -42,7 +42,7 @@ class EntityCacheTagResolverTest extends TestCase
     public function testReturnsNullForUnsupportedEntity(): void
     {
         $definition = static::createStub(EntityDefinition::class);
-        $definition->method('getEntityName')->willReturn('unsupported_entity');
+        $definition->method('getEntityName')->willReturn('order');
 
         $resolver = new EntityCacheTagResolver();
 

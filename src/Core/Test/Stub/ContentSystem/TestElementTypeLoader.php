@@ -13,19 +13,17 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
  * independent of the shipped type definitions: a property-free component that is resolvable against every binding,
  * a component with a required reference to {@see UnresolvableContextTarget} that is resolvable against none, and a
  * component with a required primitive carrying a type default (used to prove the write-boundary default seeding).
- * Wired only in the test environment via the content_system.type_loader tag in services_test.xml.
- *
- * @internal
+ * Wired only in the test environment via the content_system.type_loader tag in services_test.php.
  *
  * @final
  */
 class TestElementTypeLoader extends AbstractContentSystemElementTypeLoader
 {
-    public const RESOLVABLE = 'CT:Test:Resolvable';
+    public const RESOLVABLE = 'Sw:Test:Resolvable';
 
-    public const UNRESOLVABLE = 'CT:Test:RequiresEntity';
+    public const UNRESOLVABLE = 'Sw:Test:RequiresEntity';
 
-    public const DEFAULTED_PRIMITIVE = 'CT:Test:DefaultedPrimitive';
+    public const DEFAULTED_PRIMITIVE = 'Sw:Test:DefaultedPrimitive';
 
     public const SOURCE = 'test';
 

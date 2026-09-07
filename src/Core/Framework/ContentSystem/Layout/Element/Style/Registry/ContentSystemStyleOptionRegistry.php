@@ -7,6 +7,9 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\AbstractCon
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+/**
+ * @internal
+ */
 class ContentSystemStyleOptionRegistry extends AbstractContentSystemStyleOptionRegistry
 {
     /**

@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Registry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\AbstractContentSystemStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\ContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -18,7 +18,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 #[CoversClass(ContentSystemStyleOptionRegistry::class)]
 class ContentSystemStyleOptionRegistryTest extends TestCase
 {
-    #[TestDox('aggregates tags from every loader keyed by name')]
+    #[TestDox('aggregates options from every loader keyed by name')]
     public function testAggregatesOptionsFromAllLoaders(): void
     {
         $registry = new ContentSystemStyleOptionRegistry([
@@ -32,7 +32,7 @@ class ContentSystemStyleOptionRegistryTest extends TestCase
         static::assertSame('plugin:Acme', $all['brand-accent']->source());
     }
 
-    #[TestDox('aggregates non-colliding tags from every loader')]
+    #[TestDox('aggregates non-colliding options from every loader')]
     public function testAllResolvedAggregatesNonCollidingOptions(): void
     {
         $registry = new ContentSystemStyleOptionRegistry([
@@ -95,19 +95,19 @@ class ContentSystemStyleOptionRegistryTest extends TestCase
         return new StyleOptionSpecification($name, new StyleOptionValueType('integer', null, null, null, null), true, null, $source);
     }
 
-    private function loader(StyleOptionSpecification ...$tags): AbstractContentSystemStyleOptionLoader
+    private function loader(StyleOptionSpecification ...$options): AbstractContentSystemStyleOptionLoader
     {
-        return new class(array_values($tags)) extends AbstractContentSystemStyleOptionLoader {
+        return new class(array_values($options)) extends AbstractContentSystemStyleOptionLoader {
             /**
-             * @param list<StyleOptionSpecification> $tags
+             * @param list<StyleOptionSpecification> $options
              */
-            public function __construct(private readonly array $tags)
+            public function __construct(private readonly array $options)
             {
             }
 
             public function load(): array
             {
-                return $this->tags;
+                return $this->options;
             }
         };
     }

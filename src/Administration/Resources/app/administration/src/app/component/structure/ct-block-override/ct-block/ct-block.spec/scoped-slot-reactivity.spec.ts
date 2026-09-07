@@ -1,12 +1,8 @@
 import { mount } from '@vue/test-utils';
-import blockOverrideStore from '../../../../../store/block-override.store';
+import '../../../../../store/block-override.store';
 import createDataScopeFixture from '../../ct-block-override.spec/test-utils/create-data-scope-fixture';
 
 describe('src/app/component/structure/ct-block-override/ct-block: scoped slot reactivity', () => {
-    beforeAll(() => {
-        Contena.Store.register('blockOverride', blockOverrideStore);
-    });
-
     it('re-renders block content when only the surrounding slot scope changes', async () => {
         // A scoped slot's scope reaches the slot function as an argument, not as a
         // reactive read, so ct-block's computed template must be invalidated when

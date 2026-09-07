@@ -2,7 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -17,6 +20,10 @@ trait FrontendControllerMockTrait
      * @var array<string, mixed>
      */
     public array $renderFrontendParameters;
+
+    public ?ContentPage $contentPage = null;
+
+    public ?string $loadedContentPath = null;
 
     public string $forwardToRoute;
 
@@ -44,6 +51,13 @@ trait FrontendControllerMockTrait
     {
         $this->flashBag = [];
         $this->redirected = [];
+    }
+
+    protected function loadContentPage(string $path, Request $request, ChannelContext $context): ?ContentPage
+    {
+        $this->loadedContentPath = $path;
+
+        return $this->contentPage;
     }
 
     /**

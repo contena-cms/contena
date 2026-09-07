@@ -1,6 +1,6 @@
 # Context Path Resolution
 
-How a consumer addresses a nested property of the context an ancestor exposes.
+How a consumer addresses a nested property of the context an ancestor exposes, or of the layout's root-ambient context.
 
 Consumers can request nested properties from context using dot notation. When a provider exposes an entity like `blog`, consumers can access nested properties without loading the full entity themselves.
 
@@ -16,7 +16,7 @@ Consumers can request nested properties from context using dot notation. When a 
       "config": {
         "entity": "blog",
         "property": "blog",
-        "associations": ["cover.media", "categories"]
+        "associations": ["cover", "manufacturer"]
       }
     }
   },
@@ -39,10 +39,10 @@ Consumers can request nested properties from context using dot notation. When a 
         }
       },
       {
-        "id": "cover-url",
+        "id": "manufacturer-name",
         "component": "CT:Content:Text",
         "acceptsContext": {
-          "blog.cover.media.url": {
+          "blog.manufacturer.name": {
             "type": "single",
             "required": false
           }
@@ -56,10 +56,11 @@ Consumers can request nested properties from context using dot notation. When a 
 **Key points**:
 - Provider exposes full `blog` entity
 - `cover-image` receives only `blog.cover` (MediaEntity)
-- `cover-url` receives only `blog.cover.media.url` (string)
-- Supports arbitrary nesting depth: `blog.cover.media.url`
+- `manufacturer-name` receives only `blog.manufacturer.name` (string)
+- Supports arbitrary nesting depth: `blog.manufacturer.country.code`
 - Works only with Contena Struct objects (all DAL entities)
-- Path resolution happens automatically during context distribution
+- Path resolution happens automatically during context delivery
+- A `scope: "root"` consumer addresses the root-ambient context by the same rule: `blog.cover` resolves through the root `blog` struct exactly as it resolves through a delivered one
 
 **Required vs Optional**:
 - `required: true` - Throws exception if path cannot be resolved (property missing, intermediate null, non-Struct value)

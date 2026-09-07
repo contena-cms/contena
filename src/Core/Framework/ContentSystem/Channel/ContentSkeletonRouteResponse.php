@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\ContentSystem\Channel;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentSkeletonPage;
 
 /**
+ * @internal
+ *
  * @final
  */
 class ContentSkeletonRouteResponse extends AbstractContentRouteResponse

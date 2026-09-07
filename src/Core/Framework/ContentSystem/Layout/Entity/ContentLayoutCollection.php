@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
+ * @internal
+ *
  * @final
  *
  * @extends EntityCollection<ContentLayoutEntity>

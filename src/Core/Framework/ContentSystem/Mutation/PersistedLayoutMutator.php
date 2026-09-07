@@ -6,10 +6,9 @@ use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutAnalysis;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -31,7 +30,6 @@ class PersistedLayoutMutator
     public function __construct(
         private readonly LockFactory $lockFactory,
         private readonly EntityRepository $contentLayoutRepository,
-        private readonly ContentElementFieldSerializer $elementSerializer,
         private readonly RootSourceRegistry $rootSourceRegistry,
         private readonly LayoutDiagnostics $diagnostics,
     ) {
@@ -56,28 +54,19 @@ class PersistedLayoutMutator
                 throw ContentSystemException::layoutVersionConflict($layoutId);
             }
 
-            $mutated = $mutation->apply($layout->getLayout());
-            $affected = $mutation->affected();
+            // The entity holds the storage model the operations speak, so the loaded tree goes in as it is and the
+            // mutated one is handed to the write path the same way: the layout field's serializer takes stored
+            // elements directly.
+            $mutated = $mutation->apply(new StoredTree($layout->getLayout()));
 
             $this->contentLayoutRepository->update([[
                 'id' => $layoutId,
-                'layout' => array_map($this->elementSerializer->serializeContentElement(...), $mutated),
+                'layout' => $mutated->roots,
             ]], $context);
 
             $analysis = $this->diagnose($layout->getRootSource(), $mutated, $context);
 
-            // This MutationResult assembly is intentionally duplicated in MutationPipeline::run() (see the note
-            // there): sharing it would couple Mutation/ to a Diagnostics/LayoutAnalysis-shaped helper or require
-            // a banned static helper.
-            return new MutationResult(
-                $mutated,
-                array_intersect_key($analysis->resolutions, array_flip($affected)),
-                $analysis->report,
-                $affected,
-                $mutation->orphaned(),
-                $mutation->droppedWiring(),
-                $mutation->droppedProperties(),
-            );
+            return MutationResult::fromAnalyzedMutation($mutated, $analysis, $mutation);
         } finally {
             $lock->release();
         }
@@ -118,11 +107,11 @@ class PersistedLayoutMutator
      * membership of the committed root source and rejects a de-registered source as a clean unknownRootSource 400
      * before any commit. A membership gate in this method would instead fire after the commit (this diagnose()
      * runs after update() has already committed), so the preceding write gate is the correct and only check needed.
-     *
-     * @param list<ContentElement> $tree
      */
-    private function diagnose(string $rootSource, array $tree, Context $context): LayoutAnalysis
+    private function diagnose(string $rootSource, StoredTree $tree, Context $context): LayoutAnalysis
     {
-        return $this->diagnostics->analyze($tree, $this->rootSourceRegistry->resolve($rootSource, $context));
+        $rootContext = $this->rootSourceRegistry->resolve($rootSource, $context);
+
+        return $this->diagnostics->analyze($tree->roots, $rootContext);
     }
 }

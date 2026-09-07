@@ -3,20 +3,25 @@
 namespace Contena\Core\Framework\ContentSystem\Layout\Scaffolding;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextProvider;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\BroadcastDistributionConfig;
-use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Slot\SlotContent;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedElement;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
 
 /**
- * Handles virtual root wrapping and unwrapping for page-level context distribution.
+ * Wraps a layout's roots in one synthetic root before the render step and takes it off again after, a
+ * temporary structural modification (scaffolding) the stored forest carries only while it is being rendered.
  *
- * Virtual root is a temporary structural modification (scaffolding) that wraps actual layout
- * roots to enable page-level data requirements to be distributed as broadcast context.
+ * The wrapper has two roles and no third. It CARRIES the page-level placeholder values, so the ambient
+ * resolution of the page-level data requirements has an element to resolve its loader inputs against; and it
+ * is the SCAFFOLD the wrap/unwrap pair unwinds, which is what gives a multi-root layout a single node the
+ * partial prune can keep.
+ *
+ * Every method here is typed against one of the two split models, matching where in the pipeline it runs.
+ * `requiresWrapping()`, `wrap()` and `isVirtualRoot()` take {@see StoredElement}: {@see StoredTreePreparer}
+ * calls them while it holds the storage model — the wrap before the lowering, the identity check on the
+ * post-prune stored forest. `unwrap()` takes {@see RenderedElement}, because the pipeline reaches it after
+ * the render step, as one of the finishing steps on the rendered forest.
  *
  * @internal
  */
@@ -27,11 +32,13 @@ final class VirtualRootWrapper
     private const VIRTUAL_ROOT_SLOT_NAME = '__page_roots__';
 
     /**
-     * Determines if virtual root wrapping is required.
+     * Whether the render wraps at all: page-level data requirements exist AND the layout has roots to wrap.
      *
-     * Virtual root is needed when page-level data requirements exist and layout has content roots to wrap.
+     * Both halves are load-bearing, and neither is about distribution. Page-level requirements resolve their
+     * loader inputs against the placeholder values this wrapper carries, so with no requirements there is
+     * nothing to carry them for; with no roots there is nothing to wrap around and no forest to scaffold.
      *
-     * @param array<ContentElement> $elements
+     * @param list<StoredElement> $elements
      */
     public function requiresWrapping(RenderingSpecification $specification, array $elements): bool
     {
@@ -47,110 +54,64 @@ final class VirtualRootWrapper
     }
 
     /**
-     * Creates virtual root wrapper containing actual layout roots.
+     * Creates the virtual root wrapper holding the actual layout roots in a single slot.
      *
-     * Virtual root contains layout-level data requirements, exposes loaded data
-     * as broadcast context providers, and has actual roots as children in a single slot.
+     * It carries the placeholder values and nothing else (an empty data-requirement map and empty context
+     * definitions), so the page-level requirements load exactly once, through the ambient path, and no value
+     * is broadcast from here to the roots underneath.
      *
-     * @param array<ContentElement> $actualRoots
+     * The placeholder values arrive as raw scalars and are wrapped here, which makes this one of the
+     * sanctioned {@see StoredValue} mint sites. Their keys can never be numeric: `PlaceholderValues::from()`
+     * rejects a non-string key, and PHP casts a numeric-string key to an int before it gets there.
+     *
+     * @param list<StoredElement> $actualRoots
      */
-    public function wrap(array $actualRoots, RenderingSpecification $specification): ContentElement
+    public function wrap(array $actualRoots, RenderingSpecification $specification): StoredElement
     {
-        return new ContentElement(
+        return new StoredElement(
             self::VIRTUAL_ROOT_ID,
             self::VIRTUAL_ROOT_TYPE,
-            $this->indexDataRequirements($specification->dataRequirements),
-            $specification->placeholderValues->all(),
-            [self::VIRTUAL_ROOT_SLOT_NAME => new SlotContent($actualRoots)],
-            $this->createContextDefinitions($specification->dataRequirements)
+            [],
+            array_map(StoredValue::fromDecoded(...), $specification->placeholderValues->all()),
+            [self::VIRTUAL_ROOT_SLOT_NAME => $actualRoots],
         );
     }
 
     /**
-     * Extracts actual roots from virtual root wrapper with validation.
+     * Extracts the actual roots back out of the virtual root wrapper.
      *
-     * @throws ContentSystemException If element is not a virtual root or data integrity violated
+     * The caller establishes that this element is the wrapper, so identity is not re-checked here.
+     * A wrapper always holds at least one root — `requiresWrapping()` refuses an empty forest and the
+     * partial prune rebuilds the slot around the surviving child — so a wrapper whose roots slot is
+     * absent or empty is a corrupt tree, never an empty layout, and is rejected rather than reported
+     * as no roots.
      *
-     * @return list<ContentElement>
+     * @throws ContentSystemException If the roots slot holds no roots
+     *
+     * @return non-empty-list<RenderedElement>
      */
-    public function unwrap(ContentElement $virtualRoot): array
+    public function unwrap(RenderedElement $virtualRoot): array
     {
-        if ($virtualRoot->getId() !== self::VIRTUAL_ROOT_ID) {
-            throw ContentSystemException::pathIntegrityViolation(
-                \sprintf(
-                    'Expected virtual page context root with ID "%s", got element with ID "%s" and component "%s"',
-                    self::VIRTUAL_ROOT_ID,
-                    $virtualRoot->getId(),
-                    $virtualRoot->getComponent()
-                )
-            );
-        }
-
-        $slots = $virtualRoot->getSlots();
-        $pageRootsSlot = $slots[self::VIRTUAL_ROOT_SLOT_NAME] ?? null;
-
-        if ($pageRootsSlot === null) {
-            throw ContentSystemException::pathIntegrityViolation(
-                \sprintf(
-                    'Virtual page context root is missing required slot "%s"',
-                    self::VIRTUAL_ROOT_SLOT_NAME
-                )
-            );
-        }
-
-        $extractedRoots = $pageRootsSlot->getElements();
+        $pageRootsSlot = $virtualRoot->slots[self::VIRTUAL_ROOT_SLOT_NAME] ?? null;
+        $extractedRoots = $pageRootsSlot === null ? [] : array_values($pageRootsSlot);
 
         if ($extractedRoots === []) {
-            throw ContentSystemException::pathIntegrityViolation(
-                'Virtual page context root slot is empty - roots were lost during hydration'
+            throw ContentSystemException::invalidMapValue(
+                'Virtual page context root slot map',
+                self::VIRTUAL_ROOT_SLOT_NAME,
+                'a slot holding at least one root',
+                $pageRootsSlot === null ? 'no such slot' : 'an empty slot'
             );
         }
 
-        return array_values($extractedRoots);
+        return $extractedRoots;
     }
 
     /**
      * Checks if element is the virtual root wrapper.
      */
-    public function isVirtualRoot(ContentElement $element): bool
+    public function isVirtualRoot(StoredElement $element): bool
     {
-        return $element->getId() === self::VIRTUAL_ROOT_ID;
-    }
-
-    /**
-     * Index data requirements by key for O(1) lookups.
-     *
-     * @param array<DataRequirement> $requirements
-     *
-     * @return array<string, DataRequirement>
-     */
-    private function indexDataRequirements(array $requirements): array
-    {
-        $indexed = [];
-
-        foreach ($requirements as $requirement) {
-            $indexed[$requirement->key] = $requirement;
-        }
-
-        return $indexed;
-    }
-
-    /**
-     * Create broadcast providers for layout-level data requirements.
-     *
-     * @param array<DataRequirement> $layoutDataRequirements
-     */
-    private function createContextDefinitions(array $layoutDataRequirements): ContextDefinitions
-    {
-        $providers = [];
-
-        foreach ($layoutDataRequirements as $requirement) {
-            $providers[$requirement->key] = new ContextProvider(
-                ContextType::Single,
-                BroadcastDistributionConfig::simple()
-            );
-        }
-
-        return new ContextDefinitions($providers, []);
+        return $element->id === self::VIRTUAL_ROOT_ID;
     }
 }

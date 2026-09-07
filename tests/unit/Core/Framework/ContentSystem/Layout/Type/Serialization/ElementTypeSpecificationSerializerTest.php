@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Serialization;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\CopilotSpecificationDto;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\ElementTypeSpecificationDto;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\PropertySpecificationDto;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\SlotSpecificationDto;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -382,7 +382,7 @@ class ElementTypeSpecificationSerializerTest extends TestCase
     }
 
     /**
-     * Simulates the production round-trip for app element types:
+     * Simulates the blogion round-trip for app element types:
      * YAML file -> Yaml::parse -> denormalize -> DTO -> normalize -> json_encode (DB write)
      * -> json_decode (DB read) -> denormalize -> DTO -> Specification.
      *

@@ -2,6 +2,10 @@
 
 namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader;
 
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\System\Channel\ChannelContext;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -10,11 +14,6 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\PhpDocParser\ParserConfig;
-use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
-use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
 
@@ -23,8 +22,6 @@ use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
  * - ContentDataLoaderResult::notFound() → No data, page cacheable
  * - ContentDataLoaderResult::cached($data, ...$tags) → Data with cache tags
  * - ContentDataLoaderResult::cachedExternally($data) → Data, tags handled elsewhere
- *
- * @internal
  *
  * @template TData of Struct
  */
@@ -151,7 +148,7 @@ abstract class AbstractContentDataLoader
     }
 
     abstract public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request

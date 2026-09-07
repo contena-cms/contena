@@ -3,16 +3,19 @@
 namespace Contena\Core\Framework\ContentSystem\Resolution;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderTypeCapability;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Schema\AbstractContentSystemDataLoaderMapResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 
 /**
+ * @internal
+ *
  * @final
  */
 class ElementResolver
@@ -31,17 +34,17 @@ class ElementResolver
     /**
      * @return list<PropertyResolution>
      */
-    public function resolve(ContentElement|string $element, ResolutionContext $context): array
+    public function resolve(StoredElement|string $element, ResolutionContext $context): array
     {
-        $type = \is_string($element) ? $element : $element->getComponent();
+        $type = \is_string($element) ? $element : $element->component;
 
         if (!$this->registry->has($type)) {
             return [];
         }
 
-        // A string $element carries no stored wiring by design: only a ContentElement instance has
+        // A string $element carries no stored wiring by design: only a StoredElement instance has
         // dataRequirements, so a type-name-only resolve never produces a Stored candidate.
-        $storedRequirements = $element instanceof ContentElement ? $element->getDataRequirements() : [];
+        $storedRequirements = $element instanceof StoredElement ? $element->dataRequirements : [];
 
         $resolutions = [];
 
@@ -69,7 +72,7 @@ class ElementResolver
 
     private function resolveReference(string $key, string $fqcn, bool $required, ResolutionContext $context, ?DataRequirement $storedRequirement): PropertyResolution
     {
-        $parents = $this->parentCandidates($fqcn, $context);
+        $contextOffers = $this->contextCandidates($fqcn, $context);
         $loaders = $this->loaderCandidates($fqcn);
         $stored = $this->storedCandidate($fqcn, $storedRequirement);
 
@@ -78,8 +81,8 @@ class ElementResolver
             kind: PropertyKind::Reference,
             required: $required,
             fqcn: $fqcn,
-            resolved: $stored ?? $this->pickDefault($parents, $loaders),
-            candidates: [...$parents, ...$loaders],
+            resolved: $stored ?? $this->pickDefault($contextOffers, $loaders),
+            candidates: [...$contextOffers, ...$loaders],
         );
     }
 
@@ -114,9 +117,14 @@ class ElementResolver
     }
 
     /**
+     * Every available context entry whose FQCN fits, minted on the type match alone and blind to whether the
+     * element carries wiring for it: a candidate is an offer the writers below and any authoring UI act on, and
+     * gating it on existing wiring would hide the offer exactly where wiring does not exist yet. The entry's
+     * {@see ProvidedContext::$root} flag decides the origin, and both origins land in the one candidates list.
+     *
      * @return list<ResolutionCandidate>
      */
-    private function parentCandidates(string $fqcn, ResolutionContext $context): array
+    private function contextCandidates(string $fqcn, ResolutionContext $context): array
     {
         $candidates = [];
 
@@ -126,7 +134,7 @@ class ElementResolver
             }
 
             $candidates[] = new ResolutionCandidate(
-                origin: CandidateOrigin::Parent,
+                origin: $provided->root ? CandidateOrigin::Root : CandidateOrigin::Parent,
                 contextKey: $provided->contextKey,
                 providerElementId: $provided->providerElementId,
                 path: $provided->path,
@@ -185,20 +193,26 @@ class ElementResolver
     }
 
     /**
-     * Deterministic, conservative default selection. Returns null when no source is unambiguously correct;
-     * the diagnostics layer turns that into ambiguous_required / unresolved_required for required properties.
+     * Root outranks Parent (the page's root context is the more relevant source in the default frontend
+     * layouts), and ambiguity inside the preferred pool never falls through to the next one. Null means no
+     * source is unambiguously correct; the diagnostics layer turns that into ambiguous_required /
+     * unresolved_required for required properties.
      *
-     * @param list<ResolutionCandidate> $parents
+     * @param list<ResolutionCandidate> $contextOffers Root and Parent candidates, in availability order
      * @param list<ResolutionCandidate> $loaders
      */
-    private function pickDefault(array $parents, array $loaders): ?ResolutionCandidate
+    private function pickDefault(array $contextOffers, array $loaders): ?ResolutionCandidate
     {
-        if (\count($parents) === 1) {
-            return $parents[0];
+        $roots = $this->withOrigin($contextOffers, CandidateOrigin::Root);
+
+        if ($roots !== []) {
+            return \count($roots) === 1 ? $roots[0] : null;
         }
 
+        $parents = $this->withOrigin($contextOffers, CandidateOrigin::Parent);
+
         if ($parents !== []) {
-            return null;
+            return \count($parents) === 1 ? $parents[0] : null;
         }
 
         $completeLoaders = array_values(array_filter(
@@ -206,10 +220,19 @@ class ElementResolver
             static fn (ResolutionCandidate $candidate): bool => $candidate->configComplete,
         ));
 
-        if (\count($completeLoaders) === 1) {
-            return $completeLoaders[0];
-        }
+        return \count($completeLoaders) === 1 ? $completeLoaders[0] : null;
+    }
 
-        return null;
+    /**
+     * @param list<ResolutionCandidate> $candidates
+     *
+     * @return list<ResolutionCandidate>
+     */
+    private function withOrigin(array $candidates, CandidateOrigin $origin): array
+    {
+        return array_values(array_filter(
+            $candidates,
+            static fn (ResolutionCandidate $candidate): bool => $candidate->origin === $origin,
+        ));
     }
 }

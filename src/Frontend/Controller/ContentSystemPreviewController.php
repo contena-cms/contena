@@ -2,15 +2,15 @@
 
 namespace Contena\Frontend\Controller;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\ContentSystem\Api\ContentPreviewPageBuilder;
 use Contena\Core\Framework\ContentSystem\Api\ContentPreviewPayloadStore;
-use Contena\Core\Framework\ContentSystem\Api\ContentPreviewRequest;
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -37,13 +37,12 @@ class ContentSystemPreviewController extends FrontendController
         Request $request,
         ChannelContext $channelContext,
     ): Response {
-        $payloadData = $this->payloadStore->load($token);
+        $payload = $this->payloadStore->load($token);
 
-        if ($payloadData === null) {
+        if ($payload === null) {
             throw $this->createNotFoundException('Preview token not found or expired.');
         }
 
-        $payload = $this->deserializePayload($payloadData);
         $previewState = $this->previewPageBuilder->build($payload, $channelContext->getContext());
         $resolvedChannelContext = $previewState['channelContext'];
         $themeId = $this->resolveThemeId($resolvedChannelContext->getChannelId());
@@ -57,7 +56,7 @@ class ContentSystemPreviewController extends FrontendController
         }
 
         $response = $this->renderFrontend('@Frontend/frontend/page/content/preview.html.twig', [
-            'contentPage' => $previewState['contentPage'],
+            'contentPage' => ContentPage::fromRenderResult($previewState['result']),
             'headerParameters' => [],
         ]);
 
@@ -68,28 +67,6 @@ class ContentSystemPreviewController extends FrontendController
         $response->headers->set(PlatformRequest::HEADER_FRAME_OPTIONS, 'ALLOWALL');
 
         return $response;
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     */
-    private function deserializePayload(array $payload): ContentPreviewRequest
-    {
-        return new ContentPreviewRequest(
-            layout: \is_array($payload['layout'] ?? null) ? $payload['layout'] : [],
-            entityType: (string) ($payload['entityType'] ?? ''),
-            entityId: (string) ($payload['entityId'] ?? ''),
-            channelId: (string) ($payload['channelId'] ?? ''),
-            languageId: $this->nullableString($payload['languageId'] ?? null),
-            domainId: $this->nullableString($payload['domainId'] ?? null),
-            memberId: $this->nullableString($payload['memberId'] ?? null),
-            queryParameters: \is_array($payload['queryParameters'] ?? null) ? $payload['queryParameters'] : [],
-        );
-    }
-
-    private function nullableString(mixed $value): ?string
-    {
-        return \is_string($value) && $value !== '' ? $value : null;
     }
 
     private function resolveThemeId(string $channelId): ?string

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Schema;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Category\CategoryEntity;
@@ -17,6 +13,10 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecif
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderTypeCapability;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Tests\Unit\Core\Framework\ContentSystem\Fixture\LoaderConfigSpecificationFixture;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -104,9 +104,9 @@ class ContentSystemDataLoaderMapTest extends TestCase
      */
     public static function scansSubtypesProvider(): iterable
     {
-        yield 'a base property via a channel subclass producer' => [BlogEntity::class, ['entity']];
-        yield 'a channel property via an equal channel producer' => [ChannelBlogEntity::class, ['entity']];
-        yield 'a base property via an equal base producer (no channel variant)' => [MediaEntity::class, ['media']];
+        yield 'a base property via a sales-channel subclass producer' => [BlogEntity::class, ['entity']];
+        yield 'a sales-channel property via an equal sales-channel producer' => [ChannelBlogEntity::class, ['entity']];
+        yield 'a base property via an equal base producer (no sales-channel variant)' => [MediaEntity::class, ['media']];
         yield 'no source for an unrelated type' => [CategoryEntity::class, []];
     }
 

@@ -5,6 +5,13 @@
         "header": "页眉",
         "footer": "页脚"
       }
+    },
+    "detail": {
+      "elementPicker": {
+        "categoryHeadlines": {
+          "presets": "预设"
+        }
+      }
     }
   }
 }

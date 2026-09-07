@@ -8,7 +8,7 @@ use Contena\Core\Framework\ContentSystem\ContentPipeline;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\DraftLayoutChecker;
 use Contena\Core\Framework\ContentSystem\LayoutReference;
-use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\RenderableLayout;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 use Contena\Core\Framework\Context;
@@ -19,6 +19,9 @@ use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @internal
+ */
 class ContentPreviewPageBuilder
 {
     /**
@@ -34,18 +37,18 @@ class ContentPreviewPageBuilder
     }
 
     /**
-     * @return array{contentPage: ContentPage, channelContext: ChannelContext}
+     * @return array{result: RenderResult, channelContext: ChannelContext}
      */
     public function build(ContentPreviewRequest $payload, Context $context): array
     {
         $channelContext = $this->channelContextService->get(
             new ChannelContextServiceParameters(
-                $payload->channelId,
-                Random::getAlphanumericString(32),
-                $payload->languageId,
-                $payload->domainId,
-                $context,
-                $payload->memberId,
+                channelId: $payload->channelId,
+                token: Random::getAlphanumericString(32),
+                languageId: $payload->languageId,
+                domainId: $payload->domainId,
+                originalContext: $context,
+                memberId: $payload->memberId,
             )
         );
 
@@ -58,28 +61,30 @@ class ContentPreviewPageBuilder
             $channelContext,
         );
 
-        $elements = $this->decoder->decode($payload->layout);
+        $stored = $this->decoder->decode($payload->layout);
 
-        $violations = $this->layoutValidator->check($elements);
+        $violations = $this->layoutValidator->check($stored);
         if ($violations->count() > 0) {
             throw ContentSystemException::elementTypesInvalid($violations);
         }
 
         $renderableLayout = RenderableLayout::create(
             LayoutReference::create(Uuid::randomHex(), 'preview', null),
-            $elements,
+            $stored,
         );
 
-        $contentPage = $this->contentPipeline->load(
+        $result = $this->contentPipeline->load(
             $renderableLayout,
             $specification,
             new RenderingCacheContext(),
             RenderingMode::FULL,
+            // The preview serves the full format, which carries its property values inline.
+            false,
             $channelContext,
         );
 
         return [
-            'contentPage' => $contentPage,
+            'result' => $result,
             'channelContext' => $channelContext,
         ];
     }

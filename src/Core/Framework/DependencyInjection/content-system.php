@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\DomainAwareLayoutResolver;
@@ -24,6 +23,7 @@ use Contena\Core\Framework\ContentSystem\Api\UnknownRequestFieldExceptionListene
 use Contena\Core\Framework\ContentSystem\Binding\AttributionReconciler;
 use Contena\Core\Framework\ContentSystem\Binding\BindingApplicator;
 use Contena\Core\Framework\ContentSystem\Binding\DefaultBindingSpecificationSynthesizer;
+use Contena\Core\Framework\ContentSystem\Binding\Loader\DatabaseBindingSpecificationLoader;
 use Contena\Core\Framework\ContentSystem\Binding\Loader\YamlBindingSpecificationLoader;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\CachedContentSystemBindingSpecificationRegistry;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\ContentSystemBindingSpecificationRegistry;
@@ -38,16 +38,8 @@ use Contena\Core\Framework\ContentSystem\ContentPipeline;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Diagnostics\RootContextMapper;
 use Contena\Core\Framework\ContentSystem\DraftLayoutChecker;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PostHydration\PartialRenderingExtractionSubscriber;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PostHydration\VirtualRootCleanupSubscriber;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PreHydration\PartialRenderingPreparationSubscriber;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PreHydration\PlaceholderResolutionSubscriber;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PreHydration\RedistributeExpansionSubscriber;
-use Contena\Core\Framework\ContentSystem\Event\Listener\PreHydration\VirtualRootPreparationSubscriber;
 use Contena\Core\Framework\ContentSystem\Helper\ContentLayoutMetadataDeriver;
-use Contena\Core\Framework\ContentSystem\Hydration\ContentElementHydrator;
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextPathResolver;
-use Contena\Core\Framework\ContentSystem\Hydration\DataContext\DataContextResolver;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigCanonicalizer;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
@@ -55,7 +47,16 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityCollectionLo
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityCollectionLoader\EntityCollectionLoaderConfigSerializer;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfigSerializer;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputResolver;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\PropertyTypeConformanceValidator;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredElementCodec;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredTreeCodec;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredTreeConstraints;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDependencyAnalyzer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ProviderDeliveryKeyResolver;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\BoxSpacingNormalizer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyleNormalizer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\DatabaseStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\YamlStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\CachedContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\ContentSystemStyleOptionRegistry;
@@ -63,32 +64,49 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\Styl
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\StyleOptionCollisionDetector;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\StyleOptionConstraintDeriver;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutDefinition;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementListFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContextConsumersFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContextProvidersFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\DataRequirementsFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ElementSlotsFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ElementStyleFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListFieldSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
+use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteBoundary;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPresetPayloadCompiler;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\CachedContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\ContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\StoredTreePreparer;
 use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\DatabaseTypeLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeNameResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\YamlTypeLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Type\PrimitiveDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\CachedContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\ElementTypeCollisionDetector;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
 use Contena\Core\Framework\ContentSystem\Mutation\PageContextConsumerWiring;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
 use Contena\Core\Framework\ContentSystem\Output\ElementTreePruner;
+use Contena\Core\Framework\ContentSystem\Output\Encoder\ContentDataPageEncoder;
+use Contena\Core\Framework\ContentSystem\Output\Encoder\ContentDecomposedPageEncoder;
+use Contena\Core\Framework\ContentSystem\Output\Encoder\ContentPageEncoder;
+use Contena\Core\Framework\ContentSystem\Output\Encoder\ContentResponseEncodingListener;
+use Contena\Core\Framework\ContentSystem\Output\Encoder\ResolvedValueIndexEncoder;
 use Contena\Core\Framework\ContentSystem\Output\Format\DataResponseFactory;
 use Contena\Core\Framework\ContentSystem\Output\Format\DecomposedResponseFactory;
 use Contena\Core\Framework\ContentSystem\Output\Format\FullResponseFactory;
 use Contena\Core\Framework\ContentSystem\Output\Format\SkeletonResponseFactory;
+use Contena\Core\Framework\ContentSystem\Output\Index\LoaderValueIdentityFactory;
+use Contena\Core\Framework\ContentSystem\Output\Index\ResolvedValueIndexFactory;
+use Contena\Core\Framework\ContentSystem\Output\Index\ValueFingerprinter;
 use Contena\Core\Framework\ContentSystem\Output\PartialRenderer;
 use Contena\Core\Framework\ContentSystem\Output\SubTreeExtractor;
+use Contena\Core\Framework\ContentSystem\Rendering\ContextDeliveryResolver;
+use Contena\Core\Framework\ContentSystem\Rendering\ContextDistributor;
+use Contena\Core\Framework\ContentSystem\Rendering\ElementDataResolver;
+use Contena\Core\Framework\ContentSystem\Rendering\ElementLowering;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedElementFactory;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedTreeFactory;
+use Contena\Core\Framework\ContentSystem\Rendering\WiringPlanner;
 use Contena\Core\Framework\ContentSystem\Resolution\AvailableContextResolver;
 use Contena\Core\Framework\ContentSystem\Resolution\ElementResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMapResolver;
@@ -97,15 +115,17 @@ use Contena\Core\Framework\ContentSystem\Validation\ContentLayoutAssignmentWrite
 use Contena\Core\Framework\ContentSystem\Validation\ContentLayoutWriteValidator;
 use Contena\Core\Framework\ContentSystem\Validation\LayoutGate;
 use Contena\Core\Framework\ContentSystem\Validation\LayoutRootSourceReader;
-use Contena\Core\Framework\ContentSystem\Validation\LayoutTreeDecoder;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\System\Channel\Api\StructEncoder;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\abstract_arg;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
@@ -119,6 +139,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Scaffolding Services
     $services->set(VirtualRootWrapper::class);
+    $services->set(StoredTreePreparer::class)
+        ->args([
+            service(VirtualRootWrapper::class),
+            service(PartialRenderer::class),
+            service(DataLoaderConfigSerializerProvider::class),
+        ]);
 
     // Output Services
     $services->set(PartialRenderer::class)
@@ -128,101 +154,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SubTreeExtractor::class),
         ]);
 
-    // Event Listeners (Hydration Pipeline)
-    // Pre-Hydration Listeners
-    $services->set(VirtualRootPreparationSubscriber::class)
-        ->args([
-            service(VirtualRootWrapper::class),
-        ])
-        ->tag('kernel.event_listener');
-
-    $services->set(PlaceholderResolutionSubscriber::class)
-        ->tag('kernel.event_listener');
-
-    $services->set(RedistributeExpansionSubscriber::class)
-        ->tag('kernel.event_listener');
-
-    $services->set(PartialRenderingPreparationSubscriber::class)
-        ->args([
-            service(PartialRenderer::class),
-        ])
-        ->tag('kernel.event_listener');
-
-    // Post-Hydration Listeners
-    $services->set(VirtualRootCleanupSubscriber::class)
-        ->args([
-            service(VirtualRootWrapper::class),
-        ])
-        ->tag('kernel.event_listener');
-
-    $services->set(PartialRenderingExtractionSubscriber::class)
-        ->args([
-            service(PartialRenderer::class),
-        ])
-        ->tag('kernel.event_listener');
-
     // Field Serializers
-    $services->set(DataRequirementsFieldSerializer::class)
+    $services->set(StoredElementListFieldSerializer::class)
         ->args([
             service(ValidatorInterface::class),
             service(DefinitionInstanceRegistry::class),
+            service(StoredTreeCodec::class),
+            service(ViolationConstraintMapper::class),
+            service(LayoutWriteBoundary::class),
+            service(StoredTreeConstraints::class),
+        ])
+        ->tag('contena.field_serializer');
+
+    // Both directions of the stored forest's wire shape
+    $services->set(StoredElementCodec::class)
+        ->args([
             service(DataLoaderConfigSerializerProvider::class),
-        ])
-        ->tag('contena.field_serializer');
+        ]);
 
-    $services->set(ContextProvidersFieldSerializer::class)
+    $services->set(StoredTreeCodec::class)
         ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
-        ])
-        ->tag('contena.field_serializer');
+            service(StoredElementCodec::class),
+        ]);
 
-    $services->set(ContextConsumersFieldSerializer::class)
+    // The write-time constraint descriptor over that same wire shape
+    $services->set(StoredTreeConstraints::class)
         ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
-        ])
-        ->tag('contena.field_serializer');
-
-    $services->set(ElementSlotsFieldSerializer::class)
-        ->lazy()
-        ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
-            service(ContentElementFieldSerializer::class),
-        ])
-        ->tag('contena.field_serializer');
-
-    $services->set(ElementStyleFieldSerializer::class)
-        ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
             service(ContentSystemStyleOptionRegistry::class),
             service(StyleOptionConstraintDeriver::class),
-        ])
-        ->tag('contena.field_serializer');
+        ]);
 
-    $services->set(ContentElementFieldSerializer::class)
+    // The descriptor's one element-type-aware rule: a stored property value agrees with its declared type
+    $services->set(PropertyTypeConformanceValidator::class)
         ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
-            service(DataRequirementsFieldSerializer::class),
-            service(ContextProvidersFieldSerializer::class),
-            service(ContextConsumersFieldSerializer::class),
-            service(ElementSlotsFieldSerializer::class),
-            service(ElementStyleFieldSerializer::class),
+            service(ContentSystemElementTypeRegistry::class),
         ])
-        ->tag('contena.field_serializer');
-
-    $services->set(ContentElementListFieldSerializer::class)
-        ->args([
-            service(ValidatorInterface::class),
-            service(DefinitionInstanceRegistry::class),
-            service(ContentElementFieldSerializer::class),
-            service(LayoutDefaultSeeder::class),
-            service(AttributionReconciler::class),
-        ])
-        ->tag('contena.field_serializer');
+        ->tag('validator.constraint_validator');
 
     // Write-boundary default seeding (seeds type primitive defaults into every DAL write of the layout field)
     $services->set(PrimitiveDefaultProvider::class);
@@ -231,6 +198,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(ContentSystemElementTypeRegistry::class),
             service(PrimitiveDefaultProvider::class),
+        ]);
+
+    // The forest-wide style pass, shared by the write boundary and the draft decode so the two cannot drift
+    $services->set(StoredTreeStyleNormalizer::class)
+        ->args([
+            service(ElementStyleNormalizer::class),
+        ]);
+
+    // The single admission point for a layout write: seed type defaults, normalize style, reconcile attribution
+    $services->set(LayoutWriteBoundary::class)
+        ->args([
+            service(LayoutDefaultSeeder::class),
+            service(StoredTreeStyleNormalizer::class),
+            service(AttributionReconciler::class),
         ]);
 
     // Content Data Loaders
@@ -275,12 +256,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Config canonicalization for structural comparison (dedup hash, attribution reconciliation)
     $services->set(ConfigCanonicalizer::class);
 
-    // Data Context Resolution
-    $services->set(DataContextResolver::class)
-        ->args([
-            service(ContextPathResolver::class),
-        ]);
-
     // Context Path Resolver
     $services->set(ContextPathResolver::class);
 
@@ -302,14 +277,67 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('kernel.event_listener');
 
     // Hydration Services
-    $services->set(ContentElementHydrator::class)
+    $services->set(LoaderInputResolver::class);
+
+    // Render Layers (stored forest -> rendered forest)
+    $services->set(RenderedElementFactory::class)
+        ->args([
+            service(ContentSystemElementTypeRegistry::class),
+        ]);
+
+    $services->set(ElementDataResolver::class)
         ->args([
             service(DataLoaderProvider::class),
-            service(DataContextResolver::class),
+            service(LoaderInputResolver::class),
+            service(LoaderValueIdentityFactory::class),
+        ]);
+
+    $services->set(ValueFingerprinter::class);
+
+    $services->set(LoaderValueIdentityFactory::class)
+        ->args([
+            service(DataLoaderConfigSerializerProvider::class),
+            service(ConfigCanonicalizer::class),
+            service(ValueFingerprinter::class),
+        ]);
+
+    $services->set(ResolvedValueIndexFactory::class)
+        ->args([
+            service(ContentSystemElementTypeRegistry::class),
+            service(ValueFingerprinter::class),
+        ]);
+
+    $services->set(ContextDistributor::class)
+        ->args([
+            service(ContextPathResolver::class),
+        ]);
+
+    $services->set(ContextDeliveryResolver::class)
+        ->args([
+            service(ContextDistributor::class),
+            service(ContextPathResolver::class),
+        ]);
+
+    $services->set(RenderedTreeFactory::class)
+        ->args([
+            service(RenderedElementFactory::class),
+        ]);
+
+    $services->set(ElementLowering::class)
+        ->args([
+            service(ElementDataResolver::class),
+            service(ContextDeliveryResolver::class),
+            service(RenderedTreeFactory::class),
+        ]);
+
+    $services->set(WiringPlanner::class)
+        ->args([
+            service(ProviderDeliveryKeyResolver::class),
         ]);
 
     // Layout Context Utilities
     $services->set(ContextDependencyAnalyzer::class);
+    $services->set(ProviderDeliveryKeyResolver::class);
 
     // Output Services (Post-Hydration Processing)
     $services->set(ElementTreePruner::class);
@@ -335,8 +363,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ContentPipeline::class)
         ->public()
         ->args([
-            service(ContentElementHydrator::class),
             service('event_dispatcher'),
+            service(StoredTreePreparer::class),
+            service(WiringPlanner::class),
+            service(ElementLowering::class),
+            service(VirtualRootWrapper::class),
+            service(PartialRenderer::class),
+            service(ResolvedValueIndexFactory::class),
         ]);
 
     // Rendering Specification Factory
@@ -358,18 +391,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('content_system.output_format', ['format' => 'skeleton']);
 
     $services->set(DataResponseFactory::class)
-        ->args([
-            service(DataLoaderConfigSerializerProvider::class),
-            service(ConfigCanonicalizer::class),
-        ])
         ->tag('content_system.output_format', ['format' => 'data']);
 
     $services->set(DecomposedResponseFactory::class)
-        ->args([
-            service(DataLoaderConfigSerializerProvider::class),
-            service(ConfigCanonicalizer::class),
-        ])
         ->tag('content_system.output_format', ['format' => 'decomposed']);
+
+    // Response Encoding (module-owned wire shape)
+    $services->set(ContentPageEncoder::class)
+        ->args([
+            service(StructEncoder::class),
+        ]);
+
+    // The two index-reading formats (decomposed, data) share this encoding of the resolved value index
+    $services->set(ResolvedValueIndexEncoder::class)
+        ->args([
+            service(StructEncoder::class),
+        ]);
+
+    $services->set(ContentDecomposedPageEncoder::class)
+        ->args([
+            service(ResolvedValueIndexEncoder::class),
+        ]);
+
+    $services->set(ContentDataPageEncoder::class)
+        ->args([
+            service(ResolvedValueIndexEncoder::class),
+        ]);
+
+    $services->set(ContentResponseEncodingListener::class)
+        ->args([
+            service(ContentPageEncoder::class),
+            service(ContentDecomposedPageEncoder::class),
+            service(ContentDataPageEncoder::class),
+        ])
+        ->tag('kernel.event_subscriber');
 
     // Schema Services
     $services->set(ContentSystemDataLoaderMapResolver::class)
@@ -401,6 +456,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$directories', [])
         ->tag('content_system.type_loader');
 
+    $services->set(DatabaseTypeLoader::class)
+        ->args([
+            service(ElementTypeSpecificationSerializer::class),
+            service('validator'),
+            service(Connection::class),
+            param('kernel.environment'),
+            service('logger'),
+        ])
+        ->tag('content_system.type_loader');
+
     $services->set(ContentSystemElementTypeRegistry::class)
         ->args([
             tagged_iterator('content_system.type_loader'),
@@ -410,6 +475,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->decorate(ContentSystemElementTypeRegistry::class)
         ->args([
             service(CachedContentSystemElementTypeRegistry::class . '.inner'),
+            service('cache.system'),
+        ]);
+
+    $services->set(LayoutPresetPayloadCompiler::class)
+        ->args([
+            service(DraftLayoutDecoder::class),
+            service(StoredElementCodec::class),
+        ]);
+
+    $services->set(ContentSystemLayoutPresetRegistry::class)
+        ->args([
+            service(LayoutPresetPayloadCompiler::class),
+        ]);
+
+    $services->set(CachedContentSystemLayoutPresetRegistry::class)
+        ->decorate(ContentSystemLayoutPresetRegistry::class)
+        ->args([
+            service(CachedContentSystemLayoutPresetRegistry::class . '.inner'),
             service('cache.system'),
         ]);
 
@@ -431,6 +514,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$directories', [])
         ->tag('content_system.style_option_loader');
 
+    $services->set(DatabaseStyleOptionLoader::class)
+        ->args([
+            service(StyleOptionSpecificationSerializer::class),
+            service('validator'),
+            service(Connection::class),
+            param('kernel.environment'),
+            service('logger'),
+        ])
+        ->tag('content_system.style_option_loader');
+
     $services->set(ContentSystemStyleOptionRegistry::class)
         ->args([
             tagged_iterator('content_system.style_option_loader'),
@@ -441,6 +534,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(CachedContentSystemStyleOptionRegistry::class . '.inner'),
             service('cache.system'),
+        ]);
+
+    $services->set(BoxSpacingNormalizer::class);
+
+    $services->set(ElementStyleNormalizer::class)
+        ->args([
+            service(ContentSystemStyleOptionRegistry::class),
+            service(BoxSpacingNormalizer::class),
         ]);
 
     // Binding Specification System
@@ -465,6 +566,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$serializer', service(BindingSpecificationSerializer::class))
         ->arg('$canonicalizer', service(BindingSpecificationCanonicalizer::class))
         ->arg('$validator', service('validator'))
+        ->tag('content_system.binding_specification_loader');
+
+    $services->set(DatabaseBindingSpecificationLoader::class)
+        ->args([
+            param('kernel.environment'),
+            service(Connection::class),
+            service('logger'),
+            service(BindingSpecificationSerializer::class),
+            service('validator'),
+        ])
         ->tag('content_system.binding_specification_loader');
 
     $services->set(ContentSystemBindingSpecificationRegistry::class)
@@ -502,6 +613,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(DataLoaderConfigSerializerProvider::class),
         ]);
 
+    // What an element type stores (as opposed to its hydrated properties): the storageSchema introspection fold
+    $services->set(StoredSchemaResolver::class)
+        ->args([
+            service(ContentSystemBindingSpecificationRegistry::class),
+            service(DataLoaderProvider::class),
+        ]);
+
     // Root-source authority: the valid set of root sources (entity types + sections + none) and their resolution
     $services->set(NoneSpecificationSource::class);
 
@@ -525,6 +643,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(ContentSystemElementTypeRegistry::class),
             service(ElementResolver::class),
+            service(ProviderDeliveryKeyResolver::class),
+            service(ContextPathResolver::class),
         ]);
 
     $services->set(ElementResolver::class)
@@ -548,6 +668,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(RootContextMapper::class),
             service(ContentSystemDataLoaderMapResolver::class),
             service(DataLoaderConfigSerializerProvider::class),
+            service(ContentSystemStyleOptionRegistry::class),
+            service(ContextPathResolver::class),
         ]);
 
     $services->set(LayoutGate::class)
@@ -556,12 +678,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(ViolationConstraintMapper::class);
-
-    $services->set(LayoutTreeDecoder::class)
-        ->args([
-            service(ContentLayoutDefinition::class),
-            service(ContentElementListFieldSerializer::class),
-        ]);
 
     // Shared read of a layout's immutable root source (in-flight write batch first, then committed row)
     $services->set(LayoutRootSourceReader::class)
@@ -574,7 +690,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(LayoutGate::class),
             service(ViolationConstraintMapper::class),
-            service(LayoutTreeDecoder::class),
             service(RootSourceRegistry::class),
             service(LayoutRootSourceReader::class),
         ])
@@ -590,7 +705,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Shared draft-layout decode (structural gate) for the preview, diagnose and mutation routes
     $services->set(DraftLayoutDecoder::class)
         ->args([
-            service(ContentElementFieldSerializer::class),
+            service(StoredElementCodec::class),
+            service(StoredTreeStyleNormalizer::class),
+            service(ViolationConstraintMapper::class),
         ]);
 
     // Remaps the serializer's ExtraAttributesException to a content-system 400 for the strict-mapped admin routes
@@ -608,8 +725,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service(DraftLayoutDecoder::class),
-            service(LayoutDiagnostics::class),
             service(RootSourceRegistry::class),
+            service(LayoutDiagnostics::class),
         ]);
 
     $services->set(ContentPreviewPageBuilder::class)
@@ -631,7 +748,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service(ContentPreviewPageBuilder::class),
-            service(FullResponseFactory::class),
             service(ContentPreviewPayloadStore::class),
         ]);
 
@@ -652,9 +768,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(MutationPipeline::class),
             service(ContentSystemElementTypeRegistry::class),
             service(RootSourceRegistry::class),
-            service(ContentElementFieldSerializer::class),
+            service(StoredElementCodec::class),
             service(ContentSystemBindingSpecificationRegistry::class),
             service(BindingApplicator::class),
+            service(ContentSystemLayoutPresetRegistry::class),
         ]);
 
     // Persisted Layout Mutation (load by id, mutate, commit through the gates)
@@ -662,7 +779,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('lock.factory'),
             service('content_layout.repository'),
-            service(ContentElementFieldSerializer::class),
             service(RootSourceRegistry::class),
             service(LayoutDiagnostics::class),
         ]);
@@ -673,7 +789,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(PersistedLayoutMutator::class),
             service(ContentSystemElementTypeRegistry::class),
-            service(ContentElementFieldSerializer::class),
+            service(StoredElementCodec::class),
             service(DraftLayoutDecoder::class),
             service(ContentSystemBindingSpecificationRegistry::class),
             service(BindingApplicator::class),

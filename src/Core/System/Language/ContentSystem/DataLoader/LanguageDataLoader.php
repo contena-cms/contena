@@ -2,12 +2,13 @@
 
 namespace Contena\Core\System\Language\ContentSystem\DataLoader;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\Channel\ChannelContext;
@@ -46,22 +47,28 @@ class LanguageDataLoader extends AbstractContentDataLoader
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request
     ): ContentDataLoaderResult {
-        $config = $requirement->config;
-
         $criteria = new Criteria();
 
-        if ($config instanceof LanguageLoaderConfig) {
-            foreach ($config->associations as $association) {
-                $criteria->addAssociation($association);
-            }
+        foreach ($inputs->stringList('associations') as $association) {
+            $criteria->addAssociation($association);
         }
 
-        $response = $this->languageRoute->load($request, $context, $criteria);
+        // Any ContenaHttpException degrades the element to notFound(); everything else, such as a \TypeError
+        // or a database driver failure, propagates. Why the catch is the covering ancestor and never an
+        // enumerated union: src/Core/Framework/ContentSystem/Hydration/DataLoader/README.md#degradation-boundary
+        // No domain exception is reachable through this chain today (LanguageRoute::load() collects a cache
+        // tag, adds the translationCode association and runs one sales-channel repository search); the wrap
+        // is uniform across the loaders because the reachable set is open.
+        try {
+            $response = $this->languageRoute->load($request, $context, $criteria);
+        } catch (ContenaHttpException) {
+            return ContentDataLoaderResult::notFound();
+        }
 
         // LanguageRoute handles its own caching internally
         return ContentDataLoaderResult::cachedExternally($response->getLanguages());

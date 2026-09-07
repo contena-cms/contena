@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ContentElementNode } from '../../types/content-element.types';
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 import { getContentElementLabel } from '../../util/content-element-label.util';
 import type { ExperienceStudioElementTypeStore } from '../../store/experience-studio-element-type.store';
 import './ct-experience-studio-sidebar-tree-node.scss';

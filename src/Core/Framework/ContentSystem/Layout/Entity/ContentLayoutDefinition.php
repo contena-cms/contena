@@ -5,7 +5,8 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Entity;
 use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogContentLayoutDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutDefinition;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingPageContentLayoutDefinition;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementListField;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListField;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Immutable;
@@ -19,6 +20,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 /**
+ * @internal
+ *
  * @final
  */
 class ContentLayoutDefinition extends EntityDefinition
@@ -53,11 +56,12 @@ class ContentLayoutDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned content layout.'),
-            new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
-            new StringField('name', 'name', 255)->addFlags(new ApiAware(), new Required()),
-            new StringField('version', 'version', 20)->addFlags(new ApiAware(), new Required()),
-            new ContentElementListField(self::LAYOUT_FIELD, self::LAYOUT_FIELD)->addFlags(new ApiAware(), new Required()),
-            new StringField(self::ROOT_SOURCE_FIELD, 'rootSource')->addFlags(new ApiAware(), new Required(), new Immutable()),
+            new IdField('id', 'id')->addFlags(new ApiAware(AdminApiSource::class), new PrimaryKey(), new Required()),
+            new StringField('name', 'name', 255)->addFlags(new ApiAware(AdminApiSource::class), new Required()),
+            new StringField('version', 'version', 20)->addFlags(new ApiAware(AdminApiSource::class), new Required()),
+            new StoredElementListField(self::LAYOUT_FIELD, self::LAYOUT_FIELD)->addFlags(new ApiAware(AdminApiSource::class), new Required()),
+            new StringField(self::ROOT_SOURCE_FIELD, 'rootSource')->addFlags(new ApiAware(AdminApiSource::class), new Required(), new Immutable()),
+
             new OneToManyAssociationField('blogContentLayouts', BlogContentLayoutDefinition::class, 'content_layout_id', 'id')->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('categoryContentLayouts', CategoryContentLayoutDefinition::class, 'content_layout_id', 'id')->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('landingPageContentLayouts', LandingPageContentLayoutDefinition::class, 'content_layout_id', 'id')->addFlags(new RestrictDelete()),

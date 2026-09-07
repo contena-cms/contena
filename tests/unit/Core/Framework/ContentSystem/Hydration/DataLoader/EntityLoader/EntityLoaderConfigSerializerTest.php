@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\Attributes\TestWithJson;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfigSerializer;
 use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWithJson;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -50,11 +50,11 @@ class EntityLoaderConfigSerializerTest extends TestCase
         $result = $this->serializer->decode([
             'entity' => 'blog',
             'property' => 'blogId',
-            'associations' => ['tags', 'cover'],
+            'associations' => ['manufacturer', 'cover'],
         ]);
 
         static::assertInstanceOf(EntityLoaderConfig::class, $result);
-        static::assertSame(['tags', 'cover'], $result->associations);
+        static::assertSame(['manufacturer', 'cover'], $result->associations);
     }
 
     #[TestDox('decodes config with null associations into EntityLoaderConfig with empty associations')]
@@ -112,7 +112,7 @@ class EntityLoaderConfigSerializerTest extends TestCase
         $this->serializer->decode([
             'entity' => 'blog',
             'property' => 'blogId',
-            'associations' => 'tags',
+            'associations' => 'manufacturer',
         ]);
     }
 
@@ -157,14 +157,14 @@ class EntityLoaderConfigSerializerTest extends TestCase
     #[TestDox('encodes EntityLoaderConfig with associations into array including associations key')]
     public function testEncodeWithAssociationsIncludesAssociationsKey(): void
     {
-        $config = new EntityLoaderConfig('blog', 'blogId', ['tags', 'cover']);
+        $config = new EntityLoaderConfig('blog', 'blogId', ['manufacturer', 'cover']);
 
         $result = $this->serializer->encode($config);
 
         static::assertSame([
             'entity' => 'blog',
             'property' => 'blogId',
-            'associations' => ['tags', 'cover'],
+            'associations' => ['manufacturer', 'cover'],
         ], $result);
     }
 
@@ -184,7 +184,7 @@ class EntityLoaderConfigSerializerTest extends TestCase
         $original = [
             'entity' => 'blog',
             'property' => 'blogId',
-            'associations' => ['tags', 'cover'],
+            'associations' => ['manufacturer', 'cover'],
         ];
 
         $config = $this->serializer->decode($original);

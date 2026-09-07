@@ -4,17 +4,20 @@ namespace Contena\Core\Content\Category\ContentSystem\DataLoader;
 
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Content\Category\Tree\Tree;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+
+use function Symfony\Component\String\u;
 
 /**
  * Loads navigation tree data via NavigationLoaderInterface.
@@ -43,47 +46,55 @@ class NavigationDataLoader extends AbstractContentDataLoader
     public function configSpecification(): LoaderConfigSpecification
     {
         return new LoaderConfigSpecification([
-            new ConfigKeySpecification('rootId', ConfigKeyKind::Literal, 'string', required: false, hasDefault: true, default: null),
-            new ConfigKeySpecification('depth', ConfigKeyKind::Literal, 'integer', required: false, hasDefault: true, default: null),
+            new ConfigKeySpecification('rootId', ConfigKeyKind::Literal, 'string', required: false, hasDefault: true, default: 'main-navigation'),
+            new ConfigKeySpecification('depth', ConfigKeyKind::Literal, 'integer', required: false, hasDefault: false),
             new ConfigKeySpecification('activeProperty', ConfigKeyKind::PropertyReference, 'string', required: false, hasDefault: true, default: 'activeId'),
         ]);
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request
     ): ContentDataLoaderResult {
-        $config = $requirement->config;
+        $rootId = $this->aliasResolver->resolve($inputs->string('rootId'), $context);
+        $rootId = u($rootId)->lower()->toString();
 
-        if (!$config instanceof NavigationLoaderConfig) {
-            return ContentDataLoaderResult::notFound();
-        }
-
-        $rootId = $config->rootId ?? 'main-navigation';
-        $rootId = $this->aliasResolver->resolve($rootId, $context);
-
-        // A recognized alias still resolves to itself when the channel has no such category
+        // A recognized alias still resolves to itself when the sales channel has no such category
         // (service and footer navigation are both optional). Passing that on would reach
-        // Uuid::fromHexToBytes() in NavigationRoute and abort the whole render.
+        // Uuid::fromHexToBytes() in NavigationRoute and abort the whole render. Guard after the lowercase
+        // (Uuid::VALID_PATTERN is lowercase-only): NavigationLoaderConfigSerializer::decode() preserves the
+        // configured case, and an uppercase configured id works against the database.
         if (!Uuid::isValid($rootId)) {
             return ContentDataLoaderResult::notFound();
         }
 
-        // The property carries the "{{categoryId}}" placeholder by default, which stays literal on a
-        // layout not rooted on a category. Anything but an id therefore falls back rather than
-        // reaching Uuid::fromHexToBytes() in NavigationRoute.
-        $activeProperty = $config->activeProperty;
-        $activeId = $element->getProperty($activeProperty);
+        // The referenced property carries the "{{categoryId}}" placeholder by default, which stays literal on a
+        // layout not rooted on a category. Anything but an id falls back to the root rather than reaching
+        // Uuid::fromHexToBytes() in NavigationRoute; same lowercase-before-guard order as above.
+        $activeProperty = $inputs->stringOrNull('activeProperty');
+        $activeId = $activeProperty === null ? null : u($activeProperty)->lower()->toString();
 
-        if (!\is_string($activeId) || !Uuid::isValid($activeId)) {
+        if ($activeId === null || !Uuid::isValid($activeId)) {
             $activeId = $rootId;
         }
 
-        $depth = $config->depth ?? $context->getChannel()->getNavigationCategoryDepth();
+        // The one context-derived fallback: "depth" is declared without a default because the sales channel,
+        // not the specification, supplies it.
+        $depth = $inputs->intOrNull('depth') ?? $context->getChannel()->getNavigationCategoryDepth();
 
-        $tree = $this->navigationLoader->load($activeId, $context, $rootId, $depth);
+        // Any ContenaHttpException degrades the element to notFound(); everything else, such as a \TypeError
+        // or a database driver failure, propagates. Why the catch is the covering ancestor and never an
+        // enumerated union: src/Core/Framework/ContentSystem/Hydration/DataLoader/README.md#degradation-boundary
+        // Known local throws: NavigationLoader delegates through TreeBuildingNavigationRoute to
+        // NavigationRoute, which throws CategoryNotFoundException when the active or root category is
+        // missing from the tree.
+        try {
+            $tree = $this->navigationLoader->load($activeId, $context, $rootId, $depth);
+        } catch (ContenaHttpException) {
+            return ContentDataLoaderResult::notFound();
+        }
 
         return ContentDataLoaderResult::cachedExternally($tree);
     }

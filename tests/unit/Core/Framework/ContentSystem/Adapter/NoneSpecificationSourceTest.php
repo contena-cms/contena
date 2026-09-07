@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\NoneSpecificationSource;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelContext;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -8,7 +8,7 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * A navigation-shaped data loader: like the shipped `navigation` loader, its only `propertyReference`
  * key is defaulted, so a required reference wired through it resolves without ever demanding a stored input value;
- * it never raises `UnfilledRequiredInput`. Tagged `content_system.data_loader` in services_test.xml. It produces
- * `MediaEntity` so it can wire onto the shipped `CT:Media:Image` type's required `media` reference.
- *
- * @internal
+ * it never raises `UnfilledRequiredInput`. Tagged `content_system.data_loader` in services_test.php. It produces
+ * `MediaEntity` so it can wire onto the shipped `Sw:Media:Image` type's required `media` reference.
  *
  * @final
  *
@@ -27,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TestNavigationShapedLoader extends AbstractContentDataLoader
 {
-    public const string SOURCE = 'test_navigation_shaped';
+    public const SOURCE = 'test_navigation_shaped';
 
     public static function getRequirementType(): string
     {
@@ -49,7 +47,7 @@ class TestNavigationShapedLoader extends AbstractContentDataLoader
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request

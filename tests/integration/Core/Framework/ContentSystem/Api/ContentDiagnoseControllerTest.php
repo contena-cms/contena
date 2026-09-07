@@ -2,12 +2,13 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Api;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -46,6 +47,70 @@ class ContentDiagnoseControllerTest extends TestCase
         static::assertContains('unregistered_component', $codes);
     }
 
+    #[TestDox('reports an unregistered style option as an unknown_style_option violation keyed on the option name')]
+    public function testDiagnoseReportsUnknownStyleOption(): void
+    {
+        $element = $this->element($this->registeredComponent());
+        $element['style'] = ['definitely-not-a-style-option' => ['xs' => 'x']];
+
+        $body = $this->diagnose(['layout' => [$element]]);
+
+        static::assertFalse($body['diagnostics']['wellFormed']);
+
+        $violations = array_values(array_filter(
+            $body['diagnostics']['violations'],
+            static fn (array $violation): bool => $violation['code'] === 'unknown_style_option',
+        ));
+
+        static::assertCount(1, $violations);
+        static::assertSame('intrinsic', $violations[0]['scope']);
+        static::assertSame('error', $violations[0]['severity']);
+        static::assertSame('definitely-not-a-style-option', $violations[0]['key']);
+    }
+
+    /**
+     * The element-local client defects reach the route as catalogued client-defect codes, so the diagnose body
+     * reports each on the offending element instead of the request failing: the codec throws on decode, and the
+     * lintable decode collects a catalogued code as an `invalid_config` violation in a 200 body.
+     *
+     * The layout carries a well-formed sibling beside the defective element. Without it the attribution and the
+     * count assert nothing: one root yields at most one caught exception, and the lintable decode attributes to
+     * the id the pre-decode gate read off that same and only element, so both would hold whatever the route did.
+     *
+     * @param array<string, mixed> $defect
+     */
+    #[DataProvider('elementLocalClientDefectProvider')]
+    #[TestDox('reports $_dataName as an invalid_config violation attributed to the offending element')]
+    public function testDiagnoseReportsAnElementLocalClientDefect(array $defect, string $expectedMessage): void
+    {
+        $elementId = $this->ids->get('element');
+
+        $body = $this->diagnose(['layout' => [
+            [
+                'id' => $elementId,
+                'component' => $this->registeredComponent(),
+                'properties' => [],
+                ...$defect,
+            ],
+            [
+                'id' => $this->ids->get('well-formed-sibling'),
+                'component' => $this->registeredComponent(),
+                'properties' => [],
+            ],
+        ]]);
+
+        static::assertFalse($body['diagnostics']['wellFormed']);
+
+        $violations = array_values(array_filter(
+            $body['diagnostics']['violations'],
+            static fn (array $violation): bool => $violation['code'] === 'invalid_config',
+        ));
+
+        static::assertCount(1, $violations);
+        static::assertSame($elementId, $violations[0]['elementId']);
+        static::assertSame($expectedMessage, $violations[0]['message']);
+    }
+
     #[TestDox('resolves the root source from the rootSource field and returns a resolvability verdict')]
     public function testDiagnoseWithRootSource(): void
     {
@@ -55,6 +120,17 @@ class ContentDiagnoseControllerTest extends TestCase
         ]);
 
         static::assertArrayHasKey('resolvable', $body['diagnostics']);
+    }
+
+    #[TestDox('treats an empty rootSource as absent and reports intrinsic well-formedness without gating')]
+    public function testDiagnoseTreatsEmptyRootSourceAsAbsent(): void
+    {
+        $body = $this->diagnose([
+            'layout' => [$this->element($this->registeredComponent())],
+            'rootSource' => '',
+        ]);
+
+        static::assertTrue($body['diagnostics']['wellFormed']);
     }
 
     #[TestDox('rejects an unknown rootSource with a 400 and the unknownRootSource code, never reaching resolve')]
@@ -87,15 +163,38 @@ class ContentDiagnoseControllerTest extends TestCase
         static::assertContains(ContentSystemException::UNKNOWN_REQUEST_FIELD, array_column($body['errors'], 'code'));
     }
 
-    #[TestDox('treats an empty rootSource as absent and reports intrinsic well-formedness without gating')]
-    public function testDiagnoseTreatsEmptyRootSourceAsAbsent(): void
+    /**
+     * @return iterable<string, array{array<string, mixed>, string}>
+     */
+    public static function elementLocalClientDefectProvider(): iterable
     {
-        $body = $this->diagnose([
-            'layout' => [$this->element($this->registeredComponent())],
-            'rootSource' => '',
-        ]);
+        yield 'a numeric wiring key' => [
+            ['properties' => [1 => 'x']],
+            'Element property map key must be string, got int',
+        ];
 
-        static::assertTrue($body['diagnostics']['wellFormed']);
+        yield 'two consumers sharing one base key' => [
+            ['acceptsContext' => [
+                'blog' => ['type' => 'single', 'required' => false],
+                'category' => ['type' => 'single', 'required' => false, 'propertyAlias' => 'blog'],
+            ]],
+            'Property key "blog" is used by both context "blog" and "category". Each propertyAlias must be unique within an element.',
+        ];
+
+        yield 'a redistributing consumer keyed by a dotted path' => [
+            ['acceptsContext' => [
+                'blog.manufacturer' => ['type' => 'single', 'required' => false, 'redistribute' => true],
+            ]],
+            'Context key "blog.manufacturer" uses dot notation and cannot be redistributed. Only base keys support redistribution.',
+        ];
+
+        yield 'a redistributing consumer whose derived key an authored provider holds' => [
+            [
+                'providesContext' => ['blog' => ['type' => 'single', 'distribution' => 'broadcast']],
+                'acceptsContext' => ['blog' => ['type' => 'single', 'required' => false, 'redistribute' => true]],
+            ],
+            'Context key "blog" has both redistribute:true and explicit providesContext. Use one or the other.',
+        ];
     }
 
     /**

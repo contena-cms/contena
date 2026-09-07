@@ -4,9 +4,7 @@ namespace Contena\Core\Framework\ContentSystem\Output\Format;
 
 use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRouteResponse;
 use Contena\Core\Framework\ContentSystem\Channel\ContentDecomposedRouteResponse;
-use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigCanonicalizer;
-use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
-use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 
 /**
@@ -16,12 +14,6 @@ use Contena\Core\Framework\ContentSystem\RenderingMode;
  */
 class DecomposedResponseFactory extends AbstractResponseFactory
 {
-    public function __construct(
-        private readonly DataLoaderConfigSerializerProvider $configSerializerProvider,
-        private readonly ConfigCanonicalizer $configCanonicalizer,
-    ) {
-    }
-
     /**
      * @codeCoverageIgnore
      */
@@ -30,8 +22,13 @@ class DecomposedResponseFactory extends AbstractResponseFactory
         return RenderingMode::FULL;
     }
 
-    public function createResponse(ContentPage $contentPage): AbstractContentRouteResponse
+    public function collectsValueIndex(): bool
     {
-        return new ContentDecomposedRouteResponse($contentPage->getContentDecomposedPage($this->configSerializerProvider, $this->configCanonicalizer));
+        return true;
+    }
+
+    public function createResponse(RenderResult $result): AbstractContentRouteResponse
+    {
+        return new ContentDecomposedRouteResponse($result);
     }
 }

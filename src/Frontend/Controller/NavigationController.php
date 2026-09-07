@@ -40,7 +40,6 @@ class NavigationController extends FrontendController
         private readonly FooterPageletLoaderInterface $footerLoader,
         private readonly AbstractCategoryUrlGenerator $categoryUrlGenerator,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
-        private readonly AbstractContentRoute $contentRoute,
         private readonly AbstractContentRoute $headerContentRoute,
         private readonly AbstractContentRoute $footerContentRoute,
     ) {
@@ -93,7 +92,7 @@ class NavigationController extends FrontendController
     public function content(string $path, Request $request, ChannelContext $context): Response
     {
         $page = $this->navigationPageLoader->load($request, $context);
-        $contentPage = $this->loadRequiredContentPage($path, $request, $context);
+        $contentPage = $this->loadContentPage($path, $request, $context);
 
         return $this->renderFrontend('@Frontend/frontend/page/content/raw.html.twig', [
             'page' => $page,
@@ -140,7 +139,7 @@ class NavigationController extends FrontendController
         $header = $this->headerLoader->load($request, $context);
 
         $headerParameters = $request->query->all('headerParameters');
-        $contentPage = $this->loadContentPage($this->headerContentRoute, '', $request, $context);
+        $contentPage = $this->loadOptionalContentPage($this->headerContentRoute, '', $request, $context);
 
         if ($contentPage !== null || \array_key_exists('isNewContentStructure', $headerParameters)) {
             return $this->renderFrontend('@Frontend/frontend/page/content/header.html.twig', [
@@ -170,7 +169,7 @@ class NavigationController extends FrontendController
     public function footer(Request $request, ChannelContext $context): Response
     {
         $footer = $this->footerLoader->load($request, $context);
-        $contentPage = $this->loadContentPage($this->footerContentRoute, '', $request, $context);
+        $contentPage = $this->loadOptionalContentPage($this->footerContentRoute, '', $request, $context);
 
         return $this->renderFrontend('@Frontend/frontend/layout/footer.html.twig', [
             'footer' => $footer,
@@ -179,7 +178,7 @@ class NavigationController extends FrontendController
         ]);
     }
 
-    private function loadCategoryContentPage(NavigationPage $page, Request $request, ChannelContext $context): ContentPage
+    private function loadCategoryContentPage(NavigationPage $page, Request $request, ChannelContext $context): ?ContentPage
     {
         $category = $page->getCategory();
         \assert($category !== null);
@@ -187,18 +186,10 @@ class NavigationController extends FrontendController
         $categoryId = $category->getId();
         $path = '/category/' . $categoryId;
 
-        return $this->loadRequiredContentPage($path, $request, $context);
+        return $this->loadContentPage($path, $request, $context);
     }
 
-    private function loadRequiredContentPage(string $path, Request $request, ChannelContext $context): ContentPage
-    {
-        $response = $this->contentRoute->load($path, $request, $context);
-        \assert($response instanceof ContentRouteResponse);
-
-        return $response->getContentPage();
-    }
-
-    private function loadContentPage(
+    private function loadOptionalContentPage(
         AbstractContentRoute $contentRoute,
         string $path,
         Request $request,

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\StyleOptionCollisionDetector;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -60,13 +60,13 @@ class StyleOptionCollisionDetectorTest extends TestCase
      */
     private function detector(array $registered): StyleOptionCollisionDetector
     {
-        $tags = [];
+        $options = [];
         foreach ($registered as $name => $source) {
-            $tags[$name] = new StyleOptionSpecification($name, new StyleOptionValueType('integer', null, null, null, null), true, null, $source);
+            $options[$name] = new StyleOptionSpecification($name, new StyleOptionValueType('integer', null, null, null, null), true, null, $source);
         }
 
         $registry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);
-        $registry->method('all')->willReturn($tags);
+        $registry->method('all')->willReturn($options);
 
         return new StyleOptionCollisionDetector($registry);
     }

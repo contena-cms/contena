@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Loader;
 
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeNameResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeNameResolver;
 
 /**
  * @internal
@@ -27,13 +27,13 @@ class ElementTypeNameResolverTest extends TestCase
      */
     public static function resolvesFilePathToElementTypeNameProvider(): iterable
     {
-        yield 'simple file' => ['button.yaml', 'Sw', 'CT:Button'];
+        yield 'simple file' => ['button.yaml', 'CT', 'CT:Button'];
         yield 'yml extension' => ['quick-view.yml', 'AcmeBlogExtras', 'AcmeBlogExtras:QuickView'];
-        yield 'nested path' => ['blog/listing.yaml', 'Sw', 'CT:Blog:Listing'];
-        yield 'deep nesting' => ['filter/type/boolean-filter.yaml', 'Sw', 'CT:Filter:Type:BooleanFilter'];
+        yield 'nested path' => ['blog/listing.yaml', 'CT', 'CT:Blog:Listing'];
+        yield 'deep nesting' => ['filter/type/boolean-filter.yaml', 'CT', 'CT:Filter:Type:BooleanFilter'];
         yield 'single char segment' => ['a/b.yaml', 'Prefix', 'Prefix:A:B'];
         yield 'multi-hyphen' => ['my-long-name.yaml', 'X', 'X:MyLongName'];
-        yield 'numeric segments' => ['v2/widget.yaml', 'Sw', 'CT:V2:Widget'];
+        yield 'numeric segments' => ['v2/widget.yaml', 'CT', 'CT:V2:Widget'];
     }
 
     #[DataProvider('resolvesFilePathToElementTypeNameProvider')]
@@ -64,6 +64,6 @@ class ElementTypeNameResolverTest extends TestCase
         $this->expectExceptionObject(
             ContentSystemException::elementTypeInvalidFilename($expectedSegment, $relativePath)
         );
-        $this->resolver->resolve($relativePath, 'Sw');
+        $this->resolver->resolve($relativePath, 'CT');
     }
 }

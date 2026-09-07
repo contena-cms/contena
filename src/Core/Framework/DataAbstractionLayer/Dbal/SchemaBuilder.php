@@ -3,13 +3,7 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementListField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContextConsumersField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContextProvidersField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\DataRequirementsField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ElementSlotsField;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ElementStyleField;
+use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListField;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
@@ -104,13 +98,7 @@ class SchemaBuilder
         JsonField::class => Types::JSON,
         ListField::class => Types::JSON,
         ConfigJsonField::class => Types::JSON,
-        ContentElementField::class => Types::JSON,
-        ContentElementListField::class => Types::JSON,
-        ContextConsumersField::class => Types::JSON,
-        ContextProvidersField::class => Types::JSON,
-        DataRequirementsField::class => Types::JSON,
-        ElementSlotsField::class => Types::JSON,
-        ElementStyleField::class => Types::JSON,
+        StoredElementListField::class => Types::JSON,
         FlowTemplateConfigField::class => Types::JSON,
         CustomFields::class => Types::JSON,
         BreadcrumbField::class => Types::JSON,

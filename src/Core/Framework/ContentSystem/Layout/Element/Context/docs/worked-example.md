@@ -36,8 +36,8 @@ Provider distributing context to multiple consumer children:
         }
       },
       {
-        "id": "blog-excerpt",
-        "component": "CT:Blog:Excerpt",
+        "id": "blog-price",
+        "component": "CT:Blog:Price",
         "acceptsContext": {
           "blog": {
             "type": "single",
@@ -46,8 +46,8 @@ Provider distributing context to multiple consumer children:
         }
       },
       {
-        "id": "blog-cover",
-        "component": "CT:Blog:Cover",
+        "id": "blog-images",
+        "component": "CT:Blog:Images",
         "acceptsContext": {
           "blog": {
             "type": "single",
@@ -63,5 +63,5 @@ Provider distributing context to multiple consumer children:
 Process:
 1. Provider loads blog via `dataRequirements`
 2. Provider exposes blog as `"single"` context with `"broadcast"` distribution
-3. All three children (`title`, `excerpt`, `cover`) receive the same blog data
+3. All three children (`title`, `price`, `images`) receive the same blog data
 4. Each consumer declares context as `required: true`

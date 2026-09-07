@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\ContentSystem\Adapter\Entity;
 
+use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\ContentSystem\Helper\ContentLayoutMetadataDeriver;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
@@ -20,6 +21,10 @@ use Contena\Core\System\Channel\ChannelDefinition;
 
 /**
  * Shared field definitions and metadata derivation for content layout assignments.
+ *
+ * @internal
+ *
+ * @codeCoverageIgnore
  */
 abstract class AbstractContentLayoutAssignableDefinition extends EntityDefinition
 {
@@ -79,7 +84,7 @@ abstract class AbstractContentLayoutAssignableDefinition extends EntityDefinitio
      *
      * These requirements are loaded once per page and distributed to all
      * root elements via virtual root pattern during hydration. The requirement set is derived purely
-     * from the definition's entity type, so it needs no request or Channel state.
+     * from the definition's entity type, so it needs no request or sales-channel state.
      *
      * @return list<DataRequirement>
      */
@@ -113,7 +118,7 @@ abstract class AbstractContentLayoutAssignableDefinition extends EntityDefinitio
     }
 
     /**
-     * Returns the entity-specific ID field (e.g., product_id, category_id).
+     * Returns the entity-specific ID field (e.g., blog_id, category_id).
      */
     abstract protected function defineEntityIdField(): IdField;
 
@@ -121,12 +126,12 @@ abstract class AbstractContentLayoutAssignableDefinition extends EntityDefinitio
     {
         return new FieldCollection([
             new TenantField()->setDescription('Unique identity of the owning tenant.'),
-            new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
+            new IdField('id', 'id')->addFlags(new ApiAware(AdminApiSource::class), new PrimaryKey(), new Required()),
 
-            $this->defineEntityIdField()->addFlags(new ApiAware(), new Required()),
+            $this->defineEntityIdField()->addFlags(new ApiAware(AdminApiSource::class), new Required()),
 
-            new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware()),
-            new FkField('content_layout_id', 'contentLayoutId', ContentLayoutDefinition::class)->addFlags(new ApiAware(), new Required()),
+            new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware(AdminApiSource::class)),
+            new FkField('content_layout_id', 'contentLayoutId', ContentLayoutDefinition::class)->addFlags(new ApiAware(AdminApiSource::class), new Required()),
 
             new ManyToOneAssociationField('channel', 'channel_id', ChannelDefinition::class, 'id', false),
             new ManyToOneAssociationField('contentLayout', 'content_layout_id', ContentLayoutDefinition::class, 'id', false),

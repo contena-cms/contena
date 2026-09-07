@@ -23,7 +23,7 @@ class ContentSystemElementTypeSpecificationBuilder
     ) {
     }
 
-    public static function create(string $name = 'CT:Block', ?string $label = null): self
+    public static function create(string $name = 'Sw:Block', ?string $label = null): self
     {
         return new self($name, $label ?? $name);
     }
@@ -31,6 +31,20 @@ class ContentSystemElementTypeSpecificationBuilder
     public function primitive(string $key, string $type, bool $required = false, string|int|float|bool|null $default = null): self
     {
         $this->properties[$key] = new PropertySpecification('prop', new PropertyType($type, false, null, $default), $required, '', '', null);
+
+        return $this;
+    }
+
+    /**
+     * A property whose declared type is passed through verbatim, in either shape the YAML admits: a single
+     * type name (a primitive, `object`, or an FQCN) or a list of them for a union. For a test that varies the
+     * declaration itself rather than picking one of the named kinds above.
+     *
+     * @param string|list<string> $type
+     */
+    public function declared(string $key, string|array $type, bool $required = false): self
+    {
+        $this->properties[$key] = new PropertySpecification('prop', new PropertyType($type, false, null, null), $required, '', '', null);
 
         return $this;
     }

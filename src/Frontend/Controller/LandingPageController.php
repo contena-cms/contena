@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
-use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
@@ -22,10 +20,8 @@ class LandingPageController extends FrontendController
     /**
      * @internal
      */
-    public function __construct(
-        private readonly LandingPageLoader $landingPageLoader,
-        private readonly AbstractContentRoute $contentRoute,
-    ) {
+    public function __construct(private readonly LandingPageLoader $landingPageLoader)
+    {
     }
 
     #[Route(path: '/landingPage/{landingPageId}', name: LandingPageSeoUrlRoute::ROUTE_NAME, defaults: [PlatformRequest::ATTRIBUTE_HTTP_CACHE => true], methods: [Request::METHOD_GET])]
@@ -35,12 +31,11 @@ class LandingPageController extends FrontendController
         $landingPage = $page->getLandingPage();
         \assert($landingPage !== null);
 
-        $response = $this->contentRoute->load('/landing-page/' . $landingPage->getId(), $request, $context);
-        \assert($response instanceof ContentRouteResponse);
+        $contentPage = $this->loadContentPage('/landing-page/' . $landingPage->getId(), $request, $context);
 
         return $this->renderFrontend('@Frontend/frontend/page/landing-page/index.html.twig', [
             'page' => $page,
-            'contentPage' => $response->getContentPage(),
+            'contentPage' => $contentPage,
             'isNewContentStructure' => true,
         ]);
     }

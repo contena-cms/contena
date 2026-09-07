@@ -9,6 +9,7 @@ type ExperienceStudioStyleOptionState = {
 
 /**
  * @private
+ * @ct-package discovery
  */
 const experienceStudioStyleOptionStore = Contena.Store.register({
     id: 'experienceStudioStyleOption',

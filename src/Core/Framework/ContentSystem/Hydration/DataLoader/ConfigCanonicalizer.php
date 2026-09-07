@@ -3,14 +3,14 @@
 namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader;
 
 use Contena\Core\Framework\ContentSystem\Binding\AttributionReconciler;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Visitor\PropertiesExtractionVisitor;
+use Contena\Core\Framework\ContentSystem\Output\Index\LoaderValueIdentityFactory;
 
 /**
  * Canonicalizes an encoded data-loader config array into a stable shape for structural comparison: key-sorts
  * every map level and value-sorts every list level (e.g. an `associations` list), so two configs that differ
  * only in key or list order compare equal.
  *
- * Shared by {@see PropertiesExtractionVisitor} (dedup hash) and {@see AttributionReconciler} (honesty check).
+ * Shared by {@see LoaderValueIdentityFactory} (dedup hash) and {@see AttributionReconciler} (honesty check).
  *
  * @internal
  *

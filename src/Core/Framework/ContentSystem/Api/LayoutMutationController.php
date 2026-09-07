@@ -5,7 +5,9 @@ namespace Contena\Core\Framework\ContentSystem\Api;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\Binding\BindingApplicator;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemBindingSpecificationRegistry;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredElementCodec;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
@@ -13,6 +15,7 @@ use Contena\Core\Framework\ContentSystem\Mutation\Op\AttachElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\BindElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\DuplicateElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\InsertElement;
+use Contena\Core\Framework\ContentSystem\Mutation\Op\InsertPreset;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\MoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\RemoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\ReplaceElement;
@@ -31,6 +34,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * The stateless draft-tree counterpart to {@see ContentLayoutMutationController}.
  *
+ * @internal
+ *
  * @final
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
@@ -44,9 +49,10 @@ class LayoutMutationController
         private readonly MutationPipeline $pipeline,
         private readonly AbstractContentSystemElementTypeRegistry $registry,
         private readonly RootSourceRegistry $rootSourceRegistry,
-        private readonly ContentElementFieldSerializer $elementSerializer,
+        private readonly StoredElementCodec $elementCodec,
         private readonly AbstractContentSystemBindingSpecificationRegistry $bindingRegistry,
         private readonly BindingApplicator $bindingApplicator,
+        private readonly AbstractContentSystemLayoutPresetRegistry $presetRegistry,
     ) {
     }
 
@@ -132,6 +138,19 @@ class LayoutMutationController
         return $this->respond($mutation, $payload->layout, $payload->rootSource, $context);
     }
 
+    #[Route(path: '/api/_action/content-system/layout/insert-preset', name: 'api.action.content_system.layout.insert_preset', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['content_layout:read']], methods: [Request::METHOD_POST])]
+    public function insertPreset(
+        #[MapRequestPayload(serializationContext: [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false], validationFailedStatusCode: Response::HTTP_BAD_REQUEST)]
+        InsertPresetRequest $payload,
+        Context $context,
+    ): Response {
+        $preset = $this->presetRegistry->get($payload->presetId);
+        $elements = $this->decoder->decode($preset->payload);
+        $mutation = new InsertPreset($this->registry, $elements, $payload->parentElementId, $payload->slot);
+
+        return $this->respond($mutation, $payload->layout, $payload->rootSource, $context);
+    }
+
     #[Route(path: '/api/_action/content-system/layout/bind-element', name: 'api.action.content_system.layout.bind_element', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['content_layout:read']], methods: [Request::METHOD_POST])]
     public function bind(
         #[MapRequestPayload(serializationContext: [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false], validationFailedStatusCode: Response::HTTP_BAD_REQUEST)]
@@ -148,10 +167,10 @@ class LayoutMutationController
      */
     private function respond(LayoutMutation $mutation, array $layout, ?string $rootSource, Context $context): JsonResponse
     {
-        $tree = $this->decoder->decode($layout);
+        $tree = new StoredTree($this->decoder->decode($layout));
         $rootContext = $this->rootSourceRegistry->resolveGated($rootSource, $context);
         $result = $this->pipeline->run($mutation, $tree, $rootContext);
 
-        return new JsonResponse(MutationResponse::fromResult($result, $this->elementSerializer));
+        return new JsonResponse(MutationResponse::fromResult($result, $this->elementCodec));
     }
 }

@@ -6,24 +6,27 @@ use Contena\Core\Framework\ContentSystem\Binding\Loader\YamlBindingSpecification
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeSourceDirectory;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\YamlTypeLoader;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Discovers the element-type YAML directories from core, bundles, and plugins once and injects the resulting
- * directory set into both {@see YamlTypeLoader} and {@see YamlBindingSpecificationLoader}. The type loader scans
- * element-type definitions while the binding loader scans the same files for inline `bindings:` sections.
+ * Discovers the element-type YAML directories (core, bundles, plugins, and — in dev — apps) once and injects the
+ * resulting directory set into both {@see YamlTypeLoader} and {@see YamlBindingSpecificationLoader}: the type loader
+ * scans them for element-type definitions, the binding loader scans the same files for their inline `bindings:`
+ * sections. Each loader receives its own {@see ElementTypeSourceDirectory} definition instances.
  *
  * @internal
  */
 final class ContentSystemElementTypeCompilerPass implements CompilerPassInterface
 {
-    private const string STANDARD_TYPE_DIRECTORY = 'Resources/content-system/types';
+    private const STANDARD_TYPE_DIRECTORY = 'Resources/content-system/types';
 
-    private const string CORE_DEFINITIONS_DIRECTORY = __DIR__ . '/../../ContentSystem/Layout/Type/Definitions';
+    private const CORE_DEFINITIONS_DIRECTORY = __DIR__ . '/../../ContentSystem/Layout/Type/Definitions';
 
-    private const string CORE_PREFIX = 'Sw';
+    private const CORE_PREFIX = 'Sw';
 
     public function process(ContainerBuilder $container): void
     {
@@ -39,6 +42,11 @@ final class ContentSystemElementTypeCompilerPass implements CompilerPassInterfac
         $this->loadFromDirectory(self::CORE_DEFINITIONS_DIRECTORY, 'core', self::CORE_PREFIX, $directories);
         $this->loadFromBundleMetadata($container, $directories);
         $this->loadFromPlugins($container, $directories);
+
+        // In prod, app types/bindings are loaded from the database by DatabaseTypeLoader / DatabaseBindingSpecificationLoader instead
+        if ($container->getParameter('kernel.environment') === 'dev') {
+            $this->loadFromApps($container, $directories);
+        }
 
         if ($hasTypeLoader) {
             $container->getDefinition(YamlTypeLoader::class)->setArgument('$directories', $this->toDefinitions($directories));
@@ -140,6 +148,32 @@ final class ContentSystemElementTypeCompilerPass implements CompilerPassInterfac
         }
 
         return $result;
+    }
+
+    /**
+     * DBAL exceptions are silently swallowed because the compiler pass may run
+     * before the database exists (fresh install, CI).
+     *
+     * @param list<array{string, string, string}> $directories
+     */
+    private function loadFromApps(ContainerBuilder $container, array &$directories): void
+    {
+        $connection = $container->get(Connection::class);
+
+        try {
+            $apps = $connection->fetchAllAssociative('SELECT `path`, `name` FROM `app` WHERE `active` = 1');
+        } catch (Exception) {
+            return;
+        }
+
+        $projectDirectory = $container->getParameter('kernel.project_dir');
+        if (!\is_string($projectDirectory)) {
+            throw DependencyInjectionException::projectDirNotInContainer();
+        }
+
+        foreach ($apps as $app) {
+            $this->loadFromDirectory(\sprintf('%s/%s/%s', $projectDirectory, $app['path'], self::STANDARD_TYPE_DIRECTORY), 'app:' . $app['name'], $app['name'], $directories);
+        }
     }
 
     /**

@@ -16,7 +16,7 @@
                             "examples": {
                                 "minimal": {
                                     "summary": "Insert at the root",
-                                    "value": { "type": "CT:Content:Text" }
+                                    "value": { "type": "Sw:Content:Text" }
                                 },
                                 "withOptionalPlacement": {
                                     "summary": "Insert into a slot at a position, resolved against a blog root source",
@@ -24,18 +24,18 @@
                                         "layout": [
                                             { "id": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a3b", "component": "contena/container", "slots": { "content": [] } }
                                         ],
-                                        "type": "CT:Content:Text",
+                                        "type": "Sw:Content:Text",
                                         "parentElementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a3b",
                                         "slot": "content",
                                         "index": 0,
-                                        "rootSource": "product"
+                                        "rootSource": "blog"
                                     }
                                 },
                                 "withBinding": {
                                     "summary": "Insert an image and apply a binding specification atomically",
                                     "value": {
-                                        "type": "CT:Media:Image",
-                                        "bindingSpecificationId": "core:CT:Media:Image"
+                                        "type": "Sw:Media:Image",
+                                        "bindingSpecificationId": "core:Sw:Media:Image"
                                     }
                                 }
                             }
@@ -63,7 +63,7 @@
                                             "status": "409",
                                             "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                             "title": "Conflict",
-                                            "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                            "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                         }
                                     ]
                                 }
@@ -76,7 +76,7 @@
                                             "status": "409",
                                             "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                             "title": "Conflict",
-                                            "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                            "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                         }
                                     ]
                                 }
@@ -193,7 +193,7 @@
                                             { "id": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40", "component": "contena/blog-heading", "properties": { "tag": "h1" } }
                                         ],
                                         "elementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40",
-                                        "newType": "CT:Content:Text"
+                                        "newType": "Sw:Content:Text"
                                     }
                                 }
                             }
@@ -227,7 +227,7 @@
                                             "status": "409",
                                             "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                             "title": "Conflict",
-                                            "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                            "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                         }
                                     ]
                                 }
@@ -240,7 +240,7 @@
                                             "status": "409",
                                             "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                             "title": "Conflict",
-                                            "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                            "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                         }
                                     ]
                                 }
@@ -430,10 +430,10 @@
                                     "summary": "Bind a specification to an element",
                                     "value": {
                                         "layout": [
-                                            { "id": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40", "component": "CT:Media:Image", "properties": { "mediaId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a41" } }
+                                            { "id": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40", "component": "Sw:Media:Image", "properties": { "mediaId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a41" } }
                                         ],
                                         "elementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40",
-                                        "bindingSpecificationId": "core:CT:Media:Image"
+                                        "bindingSpecificationId": "core:Sw:Media:Image"
                                     }
                                 }
                             }

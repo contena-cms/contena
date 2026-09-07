@@ -6,6 +6,7 @@ import type {
 
 /**
  * @private
+ * @ct-package discovery
  */
 export type ElementPropertyControlType =
     | 'switch'
@@ -43,12 +44,12 @@ const ADMIN_UI_COMPONENT_CONTROL_MAP: Record<string, ElementPropertyControlType>
     'text-editor': 'richtext',
     'entity-single-select': 'entity',
     'ct-entity-single-select': 'entity',
-    'entity-multi': 'entity-multi',
-    'ct-entity-multi-id-select': 'entity-multi',
     'media-field': 'media',
     'ct-media-field': 'media',
     'media-collection': 'media-collection',
     'ct-media-list-selection-v2': 'media-collection',
+    'entity-multi': 'entity-multi',
+    'ct-entity-multi-id-select': 'entity-multi',
     'responsive-number': 'responsive-number',
     'box-spacing': 'box-spacing',
 };
@@ -61,6 +62,7 @@ const ADMIN_UI_COMPONENT_CONTROL_MAP: Record<string, ElementPropertyControlType>
  * separate storage property.
  *
  * @private
+ * @ct-package discovery
  */
 export function getElementPropertyStorageKey(
     typeSpecification: Pick<ContentSystemElementTypeSpecification, 'bindingSpecifications'>,
@@ -85,6 +87,7 @@ export function getElementPropertyStorageKey(
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function getPropertyControlType(property: ContentSystemElementTypeProperty): ElementPropertyControlType | null {
     const adminUiComponent = property.adminUI?.component;
@@ -121,6 +124,7 @@ export function getPropertyControlType(property: ContentSystemElementTypePropert
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function getAdminUiProps(property: ContentSystemElementTypeProperty): Record<string, unknown> {
     const props = property.adminUI?.props;
@@ -130,6 +134,7 @@ export function getAdminUiProps(property: ContentSystemElementTypeProperty): Rec
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function getAdminUiHelpText(property: ContentSystemElementTypeProperty): string | null {
     const helpText = property.adminUI?.helpText;
@@ -139,11 +144,16 @@ export function getAdminUiHelpText(property: ContentSystemElementTypeProperty): 
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function isPropertyVisible(
     property: ContentSystemElementTypeProperty,
     propertyValues: Record<string, unknown>,
 ): boolean {
+    if (property.adminUI?.hidden === true) {
+        return false;
+    }
+
     const visibleWhen = property.adminUI?.visibleWhen;
 
     if (!visibleWhen) {
@@ -167,6 +177,7 @@ export function isPropertyVisible(
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function getInitialPropertyValue(
     property: ContentSystemElementTypeProperty,

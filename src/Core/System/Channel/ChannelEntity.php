@@ -2,8 +2,11 @@
 
 namespace Contena\Core\System\Channel;
 
+use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogContentLayoutCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
+use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutCollection;
 use Contena\Core\Content\Category\CategoryEntity;
+use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingPageContentLayoutCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
@@ -126,6 +129,12 @@ class ChannelEntity extends Entity
     protected ?MemberCollection $members = null;
 
     protected ?BlogVisibilityCollection $blogVisibilities = null;
+
+    protected ?BlogContentLayoutCollection $blogContentLayouts = null;
+
+    protected ?CategoryContentLayoutCollection $categoryContentLayouts = null;
+
+    protected ?LandingPageContentLayoutCollection $landingPageContentLayouts = null;
 
     public function getChannelFiles(): ?ChannelFileCollection
     {
@@ -607,5 +616,35 @@ class ChannelEntity extends Entity
     public function setBlogVisibilities(BlogVisibilityCollection $blogVisibilities): void
     {
         $this->blogVisibilities = $blogVisibilities;
+    }
+
+    public function getBlogContentLayouts(): ?BlogContentLayoutCollection
+    {
+        return $this->blogContentLayouts;
+    }
+
+    public function setBlogContentLayouts(BlogContentLayoutCollection $blogContentLayouts): void
+    {
+        $this->blogContentLayouts = $blogContentLayouts;
+    }
+
+    public function getCategoryContentLayouts(): ?CategoryContentLayoutCollection
+    {
+        return $this->categoryContentLayouts;
+    }
+
+    public function setCategoryContentLayouts(CategoryContentLayoutCollection $categoryContentLayouts): void
+    {
+        $this->categoryContentLayouts = $categoryContentLayouts;
+    }
+
+    public function getLandingPageContentLayouts(): ?LandingPageContentLayoutCollection
+    {
+        return $this->landingPageContentLayouts;
+    }
+
+    public function setLandingPageContentLayouts(LandingPageContentLayoutCollection $landingPageContentLayouts): void
+    {
+        $this->landingPageContentLayouts = $landingPageContentLayouts;
     }
 }

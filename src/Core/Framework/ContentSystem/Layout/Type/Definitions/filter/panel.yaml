@@ -1,8 +1,8 @@
 meta:
   label: "Filter Panel"
-  description: "Content listing filter panel with sorting and layout switch actions."
+  description: "Blog listing filter panel with sorting and layout switch actions."
   icon: "regular-filter-s"
-  category: "content"
+  category: "commerce"
   copilot:
     summary: "Listing filter and sorting panel."
     hints:

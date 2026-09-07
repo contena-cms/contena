@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\ContentSystem\Output\Format;
 
 use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRouteResponse;
 use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
-use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 
 /**
@@ -22,8 +22,13 @@ class FullResponseFactory extends AbstractResponseFactory
         return RenderingMode::FULL;
     }
 
-    public function createResponse(ContentPage $contentPage): AbstractContentRouteResponse
+    public function collectsValueIndex(): bool
     {
-        return new ContentRouteResponse($contentPage);
+        return false;
+    }
+
+    public function createResponse(RenderResult $result): AbstractContentRouteResponse
+    {
+        return new ContentRouteResponse($result);
     }
 }

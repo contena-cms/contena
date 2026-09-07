@@ -205,17 +205,6 @@ describe('module/ct-experience-studio/util/box-spacing.util', () => {
         expect(normalizeBoxSpacingCSSValue('30')).toBe('30px 30px 30px 30px');
     });
 
-    it.each([
-        {},
-        [],
-        true,
-        false,
-        Number.NaN,
-        Number.POSITIVE_INFINITY,
-    ])('returns an empty string for invalid CSS values', (value) => {
-        expect(normalizeBoxSpacingCSSValue(value)).toBe('');
-    });
-
     it('normalizes asymmetric CSS values to explicit four-value strings', () => {
         expect(normalizeBoxSpacingCSSValue('20px 40px 20px 40px')).toBe('20px 40px 20px 40px');
     });

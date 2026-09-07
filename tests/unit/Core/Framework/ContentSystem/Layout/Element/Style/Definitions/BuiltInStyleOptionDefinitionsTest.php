@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Definitions;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Breakpoint;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\StyleOptionSourceDirectory;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\YamlStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -129,12 +129,12 @@ class BuiltInStyleOptionDefinitionsTest extends TestCase
             [new StyleOptionSourceDirectory('core', $this->definitionsDirectory())],
         );
 
-        $tags = [];
+        $options = [];
         foreach ($loader->load() as $option) {
-            $tags[$option->name()] = $option;
+            $options[$option->name()] = $option;
         }
 
-        return $tags;
+        return $options;
     }
 
     private function definitionsDirectory(): string
@@ -146,13 +146,13 @@ class BuiltInStyleOptionDefinitionsTest extends TestCase
     }
 
     /**
-     * @param array<string, StyleOptionSpecification> $tags
+     * @param array<string, StyleOptionSpecification> $options
      *
      * @return list<string>
      */
-    private function sortedNames(array $tags): array
+    private function sortedNames(array $options): array
     {
-        $names = array_keys($tags);
+        $names = array_keys($options);
         sort($names);
 
         return $names;

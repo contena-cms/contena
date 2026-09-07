@@ -103,7 +103,7 @@ class ContextPathResolver
      * Check if a consumer key matches or is a subpath of a provider key.
      *
      * Enables consumers to access nested properties via path resolution
-     * (provider 'product' satisfies consumer 'product.manufacturer.name').
+     * (provider 'blog' satisfies consumer 'blog.manufacturer.name').
      */
     public function matches(string $providerKey, string $consumerKey): bool
     {

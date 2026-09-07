@@ -6,7 +6,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail layout ty
         resetWrappers();
     });
 
-    it('keeps the upstream layout type order after mapping product to blog', async () => {
+    it('keeps the expected layout type order', async () => {
         const { wrapper } = await createWrapper();
 
         expect(wrapper.vm.layoutTypeOptions.map(({ value }: { value: string }) => value)).toEqual([

@@ -36,7 +36,7 @@ Blogs, Categories, and Landing Pages can render directly using ContentSystem lay
 {
   "id": "<uuid>",
   "blogId": "<blog-uuid>",
-  "channelId": "<channel-uuid>|null",
+  "channelId": "<sales-channel-uuid>|null",
   "contentLayoutId": "<layout-uuid>"
 }
 ```
@@ -46,7 +46,7 @@ Fields:
 - `channelId` - Channel scope (`null` = global)
 - `contentLayoutId` - Layout to use
 
-## Channel Resolution
+## Sales Channel Resolution
 
 Resolution priority: **channel specific** > **global** (null `channelId`).
 

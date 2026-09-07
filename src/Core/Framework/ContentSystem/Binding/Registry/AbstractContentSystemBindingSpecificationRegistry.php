@@ -5,6 +5,9 @@ namespace Contena\Core\Framework\ContentSystem\Binding\Registry;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+/**
+ * @internal
+ */
 abstract class AbstractContentSystemBindingSpecificationRegistry
 {
     abstract public function getDecorated(): AbstractContentSystemBindingSpecificationRegistry;

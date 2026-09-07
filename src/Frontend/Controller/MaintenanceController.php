@@ -4,8 +4,6 @@ namespace Contena\Frontend\Controller;
 
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Kernel\HttpCacheKernel;
-use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
-use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;
@@ -32,7 +30,6 @@ class MaintenanceController extends FrontendController
         private readonly SystemConfigService $systemConfigService,
         private readonly MaintenancePageLoader $maintenancePageLoader,
         private readonly MaintenanceModeResolver $maintenanceModeResolver,
-        private readonly AbstractContentRoute $contentRoute,
     ) {
     }
 
@@ -60,12 +57,11 @@ class MaintenanceController extends FrontendController
             $response = $this->renderFrontend('@Frontend/frontend/page/error/error-maintenance.html.twig');
         } else {
             $maintenancePage = $this->maintenancePageLoader->load($maintenanceLandingPageId, $request, $context);
-            $contentResponse = $this->contentRoute->load('/landing-page/' . $maintenanceLandingPageId, $request, $context);
-            \assert($contentResponse instanceof ContentRouteResponse);
+            $contentPage = $this->loadContentPage('/landing-page/' . $maintenanceLandingPageId, $request, $context);
 
             $response = $this->renderFrontend('@Frontend/frontend/page/error/error-maintenance.html.twig', [
                 'page' => $maintenancePage,
-                'contentPage' => $contentResponse->getContentPage(),
+                'contentPage' => $contentPage,
                 'isNewContentStructure' => true,
             ]);
         }
@@ -93,12 +89,11 @@ class MaintenanceController extends FrontendController
         }
 
         $page = $this->maintenancePageLoader->load($id, $request, $context);
-        $contentResponse = $this->contentRoute->load('/landing-page/' . $id, $request, $context);
-        \assert($contentResponse instanceof ContentRouteResponse);
+        $contentPage = $this->loadContentPage('/landing-page/' . $id, $request, $context);
 
         $response = $this->renderFrontend('@Frontend/frontend/page/landing-page/index.html.twig', [
             'page' => $page,
-            'contentPage' => $contentResponse->getContentPage(),
+            'contentPage' => $contentPage,
             'isNewContentStructure' => true,
         ]);
         $this->addAllowlistIpHeader($request, $response);

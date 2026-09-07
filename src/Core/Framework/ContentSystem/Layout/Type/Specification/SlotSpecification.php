@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
 
 /**
- * @internal
- *
  * @phpstan-type SlotSchema = array{name: string, maxElements: int|null, allowList: list<string>, description: string}
  */
 final readonly class SlotSpecification

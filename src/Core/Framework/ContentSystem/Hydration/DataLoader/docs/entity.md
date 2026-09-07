@@ -12,7 +12,7 @@ Loads a single entity by ID or property reference.
       "config": {
         "entity": "blog",
         "property": "blog",
-        "associations": ["cover.media", "categories", "tags"]
+        "associations": ["manufacturer", "cover", "categories"]
       }
     }
   }

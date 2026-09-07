@@ -2,14 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Validation;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
 use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -17,7 +14,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Proves end-to-end: the `content_layout` write gate blocks a save when a shipped `CT:Media:Image`
@@ -132,14 +132,14 @@ class MediaImageWriteGateTest extends TestCase
         ];
     }
 
-    private function boundImage(string $id, ?string $mediaId): ContentElement
+    private function boundImage(string $id, ?string $mediaId): StoredElement
     {
-        return new ContentElement(
-            $id,
-            'CT:Media:Image',
-            ['media' => new DataRequirement('media', 'entity', new EntityLoaderConfig('media', 'mediaId', []))],
-            $mediaId === null ? [] : ['mediaId' => $mediaId],
-        );
+        // A null mediaId drops the key entirely, matching the layout() payload above, so this is the absent-key
+        // case rather than an authored explicit null. Both read as "no value" for the gate.
+        return StoredElementBuilder::create('CT:Media:Image', $id)
+            ->withDataRequirement('media', 'entity', new EntityLoaderConfig('media', 'mediaId', []))
+            ->withProperties($mediaId === null ? [] : ['mediaId' => $mediaId])
+            ->build();
     }
 
     private function diagnostics(): LayoutDiagnostics

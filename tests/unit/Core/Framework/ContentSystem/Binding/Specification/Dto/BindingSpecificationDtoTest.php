@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Specification\Dto;
 
+use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
+use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
-use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 
 /**
  * @internal

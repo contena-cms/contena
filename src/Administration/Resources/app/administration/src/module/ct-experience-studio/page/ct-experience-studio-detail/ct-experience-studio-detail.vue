@@ -69,7 +69,6 @@
                                             :channel-id="previewChannelId"
                                             :entity-type="previewEntityType"
                                             :entity-id="previewEntityId"
-                                            :style-options="styleOptionStore.optionsByName"
                                             :suspend-auto-reload="isInlineEditing"
                                             @select-element="onSelectElement"
                                             @inline-edit-start="onInlineEditStart"
@@ -108,6 +107,7 @@
                                 :left="pickerLeft"
                                 @close="onCloseElementPicker"
                                 @select="onSelectElementType"
+                                @select-preset="onSelectPreset"
                             />
                         </template>
 
@@ -126,23 +126,25 @@ import type { ContentSystemElementTypeSpecification } from 'src/core/service/api
 import type {
     ContentLayoutDraftDuplicatePayload,
     ContentLayoutDraftInsertPayload,
+    ContentLayoutDraftInsertPresetPayload,
     ContentLayoutDraftMovePayload,
     ContentLayoutDraftMutationResponse,
     ContentLayoutDraftRemovePayload,
 } from 'src/core/service/api/content-system-layout-draft-mutation.api.service';
+import type { ContentSystemLayoutPreset } from 'src/core/service/api/content-system-layout-preset.api.service';
 import type { ExperienceStudioElementTypeStore } from 'src/module/ct-experience-studio/store/experience-studio-element-type.store';
+import type { ExperienceStudioLayoutPresetStore } from 'src/module/ct-experience-studio/store/experience-studio-layout-preset.store';
 import type { ExperienceStudioStyleOptionStore } from 'src/module/ct-experience-studio/store/experience-studio-style-option.store';
-import type { ContentElementNode } from 'src/module/ct-experience-studio/types/content-element.types';
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 import { getFrontendChannelCriteria } from 'src/module/ct-experience-studio/util/channel-criteria.util';
-import { castContentElementNodes } from 'src/module/ct-experience-studio/util/content-element-label.util';
 import {
     findElementLocation,
-    sanitizeContentElementLayoutForWrite,
     updateElementPropertiesInLayout,
     updateElementStyleInLayout,
 } from 'src/module/ct-experience-studio/util/content-element.util';
 import 'src/module/ct-experience-studio/store/experience-studio-editor.store';
 import 'src/module/ct-experience-studio/store/experience-studio-element-type.store';
+import 'src/module/ct-experience-studio/store/experience-studio-layout-preset.store';
 import 'src/module/ct-experience-studio/store/experience-studio-style-option.store';
 import './ct-experience-studio-detail.scss';
 const { Criteria } = Contena.Data;
@@ -160,6 +162,16 @@ type AddElementPayload = {
     anchorLeft: number;
 };
 
+type ElementPickerItem = {
+    name: string;
+    label: string;
+    icon: string | null;
+    category: string | null;
+    kind?: 'element' | 'preset';
+    id?: string;
+    description?: string | null;
+};
+
 type MoveElementPayload = {
     elementId: string;
     newParentElementId: string | null;
@@ -173,7 +185,7 @@ type LayoutAssignmentConfig = {
     entityIdField: 'blogId' | 'categoryId' | 'landingPageId';
 };
 
-type DraftMutationOperation = 'insert' | 'remove' | 'duplicate' | 'move';
+type DraftMutationOperation = 'insert' | 'remove' | 'duplicate' | 'move' | 'insert-preset';
 type LayoutMutator = (layoutValue: ContentElementNode[]) => LayoutMutationResult;
 type SelectedElementIdResolver = (response: ContentLayoutDraftMutationResponse) => string | null;
 type ContentSystemLayoutDraftMutationService = {
@@ -181,6 +193,7 @@ type ContentSystemLayoutDraftMutationService = {
     removeElement: (payload: ContentLayoutDraftRemovePayload) => Promise<ContentLayoutDraftMutationResponse>;
     duplicateElement: (payload: ContentLayoutDraftDuplicatePayload) => Promise<ContentLayoutDraftMutationResponse>;
     moveElement: (payload: ContentLayoutDraftMovePayload) => Promise<ContentLayoutDraftMutationResponse>;
+    insertPreset: (payload: ContentLayoutDraftInsertPresetPayload) => Promise<ContentLayoutDraftMutationResponse>;
 };
 type ContentSystemEntityTypeService = {
     getEntityTypes: () => Promise<string[]>;
@@ -382,6 +395,9 @@ const elementTypeStore = computed(() => {
 const styleOptionStore = computed(() => {
     return Contena.Store.get('experienceStudioStyleOption' as never) as ExperienceStudioStyleOptionStore;
 });
+const layoutPresetStore = computed(() => {
+    return Contena.Store.get('experienceStudioLayoutPreset' as never) as ExperienceStudioLayoutPresetStore;
+});
 const canUndo = computed(() => {
     return editorStore.value.canUndo;
 });
@@ -393,7 +409,7 @@ const selectedElement = computed(() => {
         return null;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const location = findElementLocation(layoutElements, selectedElementId.value);
 
     if (!location) {
@@ -410,22 +426,44 @@ const selectedElementType = computed(() => {
     return elementTypeStore.value.getByName(selectedElement.value.component);
 });
 const availablePickerElements = computed(() => {
-    const availableTypes = getAvailableTypesForPayload(pendingAddElementPayload.value);
+    const payload = pendingAddElementPayload.value;
+    const availableTypes = getAvailableTypesForPayload(payload);
 
-    return availableTypes.map((typeSpecification) => ({
+    const elementItems: ElementPickerItem[] = availableTypes.map((typeSpecification) => ({
         name: typeSpecification.name,
         label: typeSpecification.label,
         icon: typeSpecification.icon,
         category: typeSpecification.category,
+        kind: 'element',
     }));
+
+    if (!payload) {
+        return elementItems;
+    }
+
+    const allowedComponents = new Set(availableTypes.map((typeSpecification) => typeSpecification.name));
+
+    const presetItems: ElementPickerItem[] = layoutPresetStore.value.allPresets
+        .filter((preset) => isPresetAllowedForPayload(preset, payload, allowedComponents))
+        .map((preset) => ({
+            name: preset.id,
+            label: preset.name,
+            icon: preset.icon,
+            category: 'presets',
+            kind: 'preset',
+            id: preset.id,
+            description: preset.description,
+        }));
+
+    return [
+        ...elementItems,
+        ...presetItems,
+    ];
 });
 const isInlineEditing = computed(() => {
     return inlineEditSession.value?.isEditing ?? false;
 });
 
-const sanitizeLayoutForWrite = (layout: ContentElementNode[]) => {
-    return sanitizeContentElementLayoutForWrite(layout, styleOptionStore.value.optionsByName);
-};
 const loadLayout = async () => {
     isLoading.value = true;
 
@@ -632,6 +670,9 @@ const loadElementTypes = async () => {
 const loadStyleOptions = async () => {
     await styleOptionStore.value.loadStyleOptions();
 };
+const loadLayoutPresets = async () => {
+    await layoutPresetStore.value.loadPresets();
+};
 const entityTypeService = () => {
     return Contena.Service('contentSystemEntityTypeService') as ContentSystemEntityTypeService;
 };
@@ -788,7 +829,7 @@ const onSelectElementType = async (component: string) => {
             return;
         }
 
-        const parentLocation = findElementLocation(castContentElementNodes(layout.value.layout), payload.parentElementId);
+        const parentLocation = findElementLocation(layout.value.layout, payload.parentElementId);
         const parentElement = parentLocation ? parentLocation.elements[parentLocation.index] : null;
 
         if (!parentElement) {
@@ -805,7 +846,7 @@ const onSelectElementType = async (component: string) => {
         }
     }
 
-    const layoutElements = layout.value ? castContentElementNodes(layout.value.layout) : [];
+    const layoutElements = layout.value ? layout.value.layout : [];
     const insertPayload: Omit<ContentLayoutDraftInsertPayload, 'layout' | 'rootSource'> = {
         type: component,
     };
@@ -824,18 +865,44 @@ const onSelectElementType = async (component: string) => {
 
     onCloseElementPicker();
 };
+const onSelectPreset = async (presetId: string) => {
+    const payload = pendingAddElementPayload.value;
+
+    if (!payload || !layout.value) {
+        onCloseElementPicker();
+        return;
+    }
+
+    const insertPresetPayload: Omit<ContentLayoutDraftInsertPresetPayload, 'layout' | 'rootSource'> = {
+        presetId,
+    };
+
+    if (payload.parentElementId !== null) {
+        insertPresetPayload.parentElementId = payload.parentElementId;
+        insertPresetPayload.slot = payload.slotName;
+    }
+
+    await executeStructuralDraftMutation(
+        'insert-preset',
+        layout.value.layout,
+        insertPresetPayload,
+        (response) => response.affectedElementIds[0] ?? selectedElementId.value,
+    );
+
+    onCloseElementPicker();
+};
 const applyLayoutMutation = (mutator: LayoutMutator) => {
     if (!layout.value || !allowSave.value) {
         return;
     }
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const workingLayout = cloneDeep(layoutElements);
     const result = mutator(workingLayout);
     if (result === false) {
         return;
     }
     editorStore.value.pushToHistory(layoutElements, selectedElementId.value);
-    layout.value.layout = sanitizeLayoutForWrite(workingLayout);
+    layout.value.layout = workingLayout;
     if (result.selectedElementId !== undefined) {
         selectedElementId.value = result.selectedElementId;
     }
@@ -845,7 +912,7 @@ const onDuplicateElement = async (elementId: string) => {
         return;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
 
     await executeStructuralDraftMutation(
         'duplicate',
@@ -861,7 +928,7 @@ const onDeleteElement = async (elementId: string) => {
         return;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
 
     await executeStructuralDraftMutation(
         'remove',
@@ -874,10 +941,7 @@ const onDeleteElement = async (elementId: string) => {
                 return null;
             }
 
-            const selectedLocation = findElementLocation(
-                castContentElementNodes(response.layout as ContentElementNode[]),
-                selectedElementId.value,
-            );
+            const selectedLocation = findElementLocation(response.layout, selectedElementId.value);
 
             return selectedLocation ? selectedElementId.value : null;
         },
@@ -888,7 +952,7 @@ const onMoveElement = async (payload: MoveElementPayload) => {
         return;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const normalizedMoveIndex = normalizeMoveIndex(layoutElements, payload);
 
     await executeStructuralDraftMutation(
@@ -953,7 +1017,7 @@ const validateMoveTarget = (payload: MoveElementPayload) => {
         return false;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const draggedLocation = findElementLocation(layoutElements, payload.elementId);
     const draggedElement = draggedLocation ? draggedLocation.elements[draggedLocation.index] : null;
 
@@ -1048,7 +1112,7 @@ const notifyMutationError = (codes: string[]) => {
 };
 const createDraftMutationPayload = (layout: ContentElementNode[], operationPayload: Record<string, unknown>) => {
     return {
-        layout: sanitizeLayoutForWrite(layout),
+        layout,
         rootSource: resolveMutationRootSource(),
         ...operationPayload,
     };
@@ -1071,6 +1135,10 @@ const requestDraftMutation = async (
 
     if (operation === 'move') {
         return service.moveElement(payload as ContentLayoutDraftMovePayload);
+    }
+
+    if (operation === 'insert-preset') {
+        return service.insertPreset(payload as ContentLayoutDraftInsertPresetPayload);
     }
 
     return service.duplicateElement(payload as ContentLayoutDraftDuplicatePayload);
@@ -1100,7 +1168,7 @@ const executeStructuralDraftMutation = async (
         }
 
         editorStore.value.pushToHistory(currentLayout, previousSelectedElementId);
-        layout.value.layout = sanitizeLayoutForWrite(response.layout as ContentElementNode[]);
+        layout.value.layout = response.layout;
         selectedElementId.value = resolveSelectedElementId(response);
     } catch (error) {
         if (requestId !== latestMutationRequestId.value) {
@@ -1129,7 +1197,7 @@ const getAvailableTypesForPayload = (payload: AddElementPayload | null) => {
         return [];
     }
 
-    const parentLocation = findElementLocation(castContentElementNodes(layout.value.layout), payload.parentElementId);
+    const parentLocation = findElementLocation(layout.value.layout, payload.parentElementId);
     const parentElement = parentLocation ? parentLocation.elements[parentLocation.index] : null;
 
     if (!parentElement) {
@@ -1156,6 +1224,17 @@ const getAvailableTypesForPayload = (payload: AddElementPayload | null) => {
     return slotDefinition.allowList
         .map((typeName) => elementTypeStore.value.getByName(typeName))
         .filter((type): type is ContentSystemElementTypeSpecification => type !== null);
+};
+const isPresetAllowedForPayload = (
+    preset: ContentSystemLayoutPreset,
+    payload: AddElementPayload,
+    allowedComponents: Set<string>,
+) => {
+    if (payload.parentElementId === null) {
+        return true;
+    }
+
+    return preset.payload.every((rootElement) => allowedComponents.has(rootElement.component));
 };
 const canInsertIntoSlot = (
     parentComponent: string,
@@ -1208,7 +1287,7 @@ const findElementById = (elementId: string) => {
         return null;
     }
 
-    const location = findElementLocation(castContentElementNodes(layout.value.layout), elementId);
+    const location = findElementLocation(layout.value.layout, elementId);
 
     if (!location) {
         return null;
@@ -1245,7 +1324,7 @@ const onUndo = () => {
         return;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const previousEntry = editorStore.value.undo(layoutElements, selectedElementId.value);
 
     if (!previousEntry) {
@@ -1260,7 +1339,7 @@ const onRedo = () => {
         return;
     }
 
-    const layoutElements = castContentElementNodes(layout.value.layout);
+    const layoutElements = layout.value.layout;
     const nextEntry = editorStore.value.redo(layoutElements, selectedElementId.value);
 
     if (!nextEntry) {
@@ -1314,7 +1393,7 @@ const onSave = async () => {
         return;
     }
     const layoutValue = layout.value;
-    layoutValue.layout = sanitizeLayoutForWrite(castContentElementNodes(layoutValue.layout));
+    layoutValue.layout = cloneDeep(layoutValue.layout);
     isLoading.value = true;
     try {
         await layoutRepository.value.save(layoutValue, Contena.Context.api);
@@ -1343,6 +1422,7 @@ void loadLayout();
 void loadDefaultPreviewChannel();
 void loadElementTypes();
 void loadStyleOptions();
+void loadLayoutPresets();
 void loadLayoutTypes();
 
 onMounted(() => {
@@ -1407,13 +1487,13 @@ ctDefinePublic({
     editorStore,
     elementTypeStore,
     styleOptionStore,
+    layoutPresetStore,
     canUndo,
     canRedo,
     selectedElement,
     selectedElementType,
     availablePickerElements,
     isInlineEditing,
-    sanitizeLayoutForWrite,
     loadLayout,
     onClickBack,
     onViewportChange,
@@ -1433,6 +1513,7 @@ ctDefinePublic({
     resolvePreviewContext,
     loadElementTypes,
     loadStyleOptions,
+    loadLayoutPresets,
     entityTypeService,
     loadLayoutTypes,
     onPreviewChannelChange,
@@ -1447,6 +1528,7 @@ ctDefinePublic({
     onAddElement,
     onCloseElementPicker,
     onSelectElementType,
+    onSelectPreset,
     applyLayoutMutation,
     onDuplicateElement,
     onDeleteElement,
@@ -1463,6 +1545,7 @@ ctDefinePublic({
     createDraftMutationPayload,
     requestDraftMutation,
     executeStructuralDraftMutation,
+    isPresetAllowedForPayload,
     getAvailableTypesForPayload,
     canInsertIntoSlot,
     isElementInSubtree,
@@ -1525,13 +1608,13 @@ defineExpose({
     editorStore,
     elementTypeStore,
     styleOptionStore,
+    layoutPresetStore,
     canUndo,
     canRedo,
     selectedElement,
     selectedElementType,
     availablePickerElements,
     isInlineEditing,
-    sanitizeLayoutForWrite,
     loadLayout,
     onClickBack,
     onViewportChange,
@@ -1551,6 +1634,7 @@ defineExpose({
     resolvePreviewContext,
     loadElementTypes,
     loadStyleOptions,
+    loadLayoutPresets,
     entityTypeService,
     loadLayoutTypes,
     onPreviewChannelChange,
@@ -1565,6 +1649,7 @@ defineExpose({
     onAddElement,
     onCloseElementPicker,
     onSelectElementType,
+    onSelectPreset,
     applyLayoutMutation,
     onDuplicateElement,
     onDeleteElement,
@@ -1581,6 +1666,7 @@ defineExpose({
     createDraftMutationPayload,
     requestDraftMutation,
     executeStructuralDraftMutation,
+    isPresetAllowedForPayload,
     getAvailableTypesForPayload,
     canInsertIntoSlot,
     isElementInSubtree,

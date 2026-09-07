@@ -3,7 +3,10 @@
 namespace Contena\Core\Framework\ContentSystem\Mutation;
 
 use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutAnalysis;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
 
 /**
@@ -12,15 +15,14 @@ use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
 final readonly class MutationResult
 {
     /**
-     * @param list<ContentElement> $layout
      * @param array<string, list<PropertyResolution>> $resolutions keyed by element id
      * @param list<string> $affectedElementIds
-     * @param list<ContentElement> $orphaned subtrees detached by the op, returned so the caller can re-place them
+     * @param list<StoredElement> $orphaned subtrees detached by the op, returned so the caller can re-place them
      * @param list<string> $droppedWiring wiring keys the op dropped, reported so the caller can re-wire
-     * @param array<string, mixed> $droppedProperties static property values the op could not carry over, keyed by property key
+     * @param array<string, StoredValue> $droppedProperties static property values the op could not carry over, keyed by property key
      */
-    public function __construct(
-        public array $layout,
+    private function __construct(
+        public StoredTree $layout,
         public array $resolutions,
         public DiagnosticsReport $diagnostics,
         public array $affectedElementIds,
@@ -28,5 +30,43 @@ final readonly class MutationResult
         public array $droppedWiring = [],
         public array $droppedProperties = [],
     ) {
+    }
+
+    /**
+     * The single owner of the result assembly for a mutation that has been applied and diagnosed, so the rule
+     * restricting the carried resolutions to the affected set is stated once for every runner.
+     */
+    public static function fromAnalyzedMutation(StoredTree $mutated, LayoutAnalysis $analysis, LayoutMutation $mutation): self
+    {
+        $affected = $mutation->affected();
+
+        return new self(
+            $mutated,
+            array_intersect_key($analysis->resolutions, array_flip($affected)),
+            $analysis->report,
+            $affected,
+            $mutation->orphaned(),
+            $mutation->droppedWiring(),
+            $mutation->droppedProperties(),
+        );
+    }
+
+    /**
+     * @param array<string, list<PropertyResolution>> $resolutions keyed by element id
+     * @param list<string> $affectedElementIds
+     * @param list<StoredElement> $orphaned
+     * @param list<string> $droppedWiring
+     * @param array<string, StoredValue> $droppedProperties keyed by property key
+     */
+    public static function fromParts(
+        StoredTree $layout,
+        array $resolutions,
+        DiagnosticsReport $diagnostics,
+        array $affectedElementIds,
+        array $orphaned = [],
+        array $droppedWiring = [],
+        array $droppedProperties = [],
+    ): self {
+        return new self($layout, $resolutions, $diagnostics, $affectedElementIds, $orphaned, $droppedWiring, $droppedProperties);
     }
 }

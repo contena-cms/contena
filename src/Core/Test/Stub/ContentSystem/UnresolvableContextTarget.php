@@ -7,8 +7,6 @@ namespace Contena\Core\Test\Stub\ContentSystem;
  * context. A required element-type property of this type is therefore unresolvable against every binding,
  * which is exactly what the resolvability-gate tests need to force a binding-scope violation.
  *
- * @internal
- *
  * @final
  */
 class UnresolvableContextTarget

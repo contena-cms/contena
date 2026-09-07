@@ -4,9 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Type\Loader;
 
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 
-/**
- * @internal
- */
 abstract class AbstractContentSystemElementTypeLoader
 {
     /**

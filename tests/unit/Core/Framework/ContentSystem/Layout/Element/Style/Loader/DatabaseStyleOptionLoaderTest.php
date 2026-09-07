@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Loader;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\DatabaseStyleOptionLoader;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\DatabaseStyleOptionLoader;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -29,13 +29,13 @@ class DatabaseStyleOptionLoaderTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('warning');
 
-        $tags = $this->loader($connection, 'prod', $logger)->load();
+        $options = $this->loader($connection, 'prod', $logger)->load();
 
-        static::assertCount(1, $tags);
-        static::assertSame('col-span', $tags[0]->name());
-        static::assertSame('app:Acme', $tags[0]->source());
-        static::assertSame('integer', $tags[0]->valueType()->type());
-        static::assertTrue($tags[0]->breakpointAware());
+        static::assertCount(1, $options);
+        static::assertSame('col-span', $options[0]->name());
+        static::assertSame('app:Acme', $options[0]->source());
+        static::assertSame('integer', $options[0]->valueType()->type());
+        static::assertTrue($options[0]->breakpointAware());
     }
 
     #[TestDox('loads a flat option with breakpointAware=false when the schema column declares it')]
@@ -46,14 +46,14 @@ class DatabaseStyleOptionLoaderTest extends TestCase
             ['name' => 'brand-flat', 'schema' => json_encode(['type' => 'integer', 'breakpointAware' => false]), 'app_name' => 'Acme'],
         ]);
 
-        $tags = $this->loader($connection, 'prod')->load();
+        $options = $this->loader($connection, 'prod')->load();
 
-        static::assertCount(1, $tags);
-        static::assertSame('brand-flat', $tags[0]->name());
-        static::assertFalse($tags[0]->breakpointAware());
+        static::assertCount(1, $options);
+        static::assertSame('brand-flat', $options[0]->name());
+        static::assertFalse($options[0]->breakpointAware());
     }
 
-    #[TestDox('returns nothing in dev, where app tags load from the filesystem instead')]
+    #[TestDox('returns nothing in dev, where app options load from the filesystem instead')]
     public function testReturnsEmptyInDev(): void
     {
         $connection = $this->createMock(Connection::class);
@@ -78,9 +78,9 @@ class DatabaseStyleOptionLoaderTest extends TestCase
             ->method('warning')
             ->with(static::stringContains('app:Acme:col-span'));
 
-        $tags = $this->loader($connection, 'prod', $logger)->load();
+        $options = $this->loader($connection, 'prod', $logger)->load();
 
-        static::assertSame([], $tags);
+        static::assertSame([], $options);
     }
 
     #[TestDox('skips a row whose persisted schema is valid JSON but not a map and logs a warning')]
@@ -96,9 +96,9 @@ class DatabaseStyleOptionLoaderTest extends TestCase
             ->method('warning')
             ->with(static::stringContains('app:Acme:col-span'));
 
-        $tags = $this->loader($connection, 'prod', $logger)->load();
+        $options = $this->loader($connection, 'prod', $logger)->load();
 
-        static::assertSame([], $tags);
+        static::assertSame([], $options);
     }
 
     #[TestDox('skips a row that fails validation while a valid sibling row survives, and logs a warning')]
@@ -118,10 +118,10 @@ class DatabaseStyleOptionLoaderTest extends TestCase
                 static::stringContains('not a valid choice'),
             ));
 
-        $tags = $this->loader($connection, 'prod', $logger)->load();
+        $options = $this->loader($connection, 'prod', $logger)->load();
 
-        static::assertCount(1, $tags);
-        static::assertSame('col-span', $tags[0]->name());
+        static::assertCount(1, $options);
+        static::assertSame('col-span', $options[0]->name());
     }
 
     private function loader(Connection $connection, string $environment, ?LoggerInterface $logger = null): DatabaseStyleOptionLoader

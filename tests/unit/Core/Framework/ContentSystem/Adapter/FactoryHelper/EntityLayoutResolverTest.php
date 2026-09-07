@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter\FactoryHelper;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\EntityLayoutResolver;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderContentLayoutCollection;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderContentLayoutEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -29,15 +29,15 @@ class EntityLayoutResolverTest extends TestCase
         $this->resolver = new EntityLayoutResolver();
     }
 
-    #[TestDox('builds placeholder values from entity id field and scalar query parameters, ignoring non-scalar parameters')]
+    #[TestDox('builds placeholder values from entity type, entity id field and scalar query parameters, ignoring non-scalar parameters')]
     public function testResolvePlaceholdersMergesEntityIdWithScalarQueryParameters(): void
     {
         $request = new Request(['color' => 'red', 'tags' => ['a', 'b']]);
 
-        $result = $this->resolver->resolvePlaceholders('blogId', 'blog-id-1', $request);
+        $result = $this->resolver->resolvePlaceholders('blog', 'blogId', 'blog-id-1', $request);
 
         static::assertSame(
-            ['blogId' => 'blog-id-1', 'color' => 'red'],
+            ['entityType' => 'blog', 'entityIdField' => 'blogId', 'blogId' => 'blog-id-1', 'color' => 'red'],
             $result->all()
         );
     }

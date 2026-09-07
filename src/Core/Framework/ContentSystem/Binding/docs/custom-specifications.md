@@ -15,7 +15,7 @@ The simplest case needs no authored specification at all: declaring `resolvedBy`
 | Plugin | Types directory (`getContentTypeDirectory()`) |
 | App    | `Resources/content-system/types`              |
 
-The compiler pass discovers plugin YAML automatically, scanning the same types directory the element-type system uses. App YAML is validated at manifest time and persisted on install/update; in production, app bindings load from the database. No service registration needed.
+The compiler pass discovers plugin YAML automatically, scanning the same types directory the element-type system uses. App YAML is validated at manifest time and persisted on install/update; in blogion, app bindings load from the database. No service registration needed.
 
 ## Authoring Sugar
 
@@ -31,7 +31,7 @@ Tier A is closed: a bare string resolves only against the reference property's d
 
 ## Collision Detection
 
-Uniqueness is per source, not global: a duplicate bare id within one source is a load-time error, while two different sources may ship the same bare id. The registry keys specifications by their source-qualified id (`source:id`), which is also the wire identifier clients pass back as `bindingSpecificationId`. This is intentionally looser than the style-option system's flat global namespace: a binding is scoped to the element type it declares, not a Channel API wire key.
+Uniqueness is per source, not global: a duplicate bare id within one source is a load-time error, while two different sources may ship the same bare id. The registry keys specifications by their source-qualified id (`source:id`), which is also the wire identifier clients pass back as `bindingSpecificationId`. This is intentionally looser than the style-option system's flat global namespace: a binding is scoped to the element type it declares, not a Store-API wire key.
 
 ## App Lifecycle
 

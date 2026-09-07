@@ -44,7 +44,15 @@ class BlogSearchLoaderConfigSerializer extends AbstractContentDataLoaderConfigSe
             }
         }
 
-        return new BlogSearchLoaderConfig($searchTermProperty, $associations);
+        $associationOverride = null;
+        if (\array_key_exists('associationOverride', $data)) {
+            if (!\is_string($data['associationOverride']) || $data['associationOverride'] === '') {
+                throw BlogException::invalidFieldValueType('associationOverride', 'non-empty string', \gettype($data['associationOverride']));
+            }
+            $associationOverride = $data['associationOverride'];
+        }
+
+        return new BlogSearchLoaderConfig($searchTermProperty, $associations, $associationOverride);
     }
 
     /**

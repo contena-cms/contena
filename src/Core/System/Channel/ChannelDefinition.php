@@ -2,8 +2,11 @@
 
 namespace Contena\Core\System\Channel;
 
+use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogContentLayoutDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingPageContentLayoutDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
@@ -122,6 +125,9 @@ class ChannelDefinition extends EntityDefinition
             new OneToOneAssociationField('analytics', 'analytics_id', 'id', ChannelAnalyticsDefinition::class, false)->addFlags(new ApiAware(), new CascadeDelete()),
             new OneToManyAssociationField('members', MemberDefinition::class, 'channel_id', 'id'),
             new OneToManyAssociationField('blogVisibilities', BlogVisibilityDefinition::class, 'channel_id')->addFlags(new CascadeDelete()),
+            new OneToManyAssociationField('blogContentLayouts', BlogContentLayoutDefinition::class, 'channel_id', 'id'),
+            new OneToManyAssociationField('categoryContentLayouts', CategoryContentLayoutDefinition::class, 'channel_id', 'id'),
+            new OneToManyAssociationField('landingPageContentLayouts', LandingPageContentLayoutDefinition::class, 'channel_id', 'id'),
             new ManyToManyAssociationField('memberGroupsRegistrations', MemberGroupDefinition::class, MemberGroupRegistrationChannelDefinition::class, 'channel_id', 'member_group_id', 'id', 'id'),
         ]);
     }

@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Binding\Specification;
 
 /**
  * One `resolves` entry of a {@see BindingSpecification}. Becomes a `DataRequirement` downstream.
- *
- * @internal
  */
 final readonly class LoaderBinding
 {

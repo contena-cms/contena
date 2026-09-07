@@ -1,4 +1,8 @@
-import type { ContentElementNode } from '../types/content-element.types';
+/**
+ * @ct-package discovery
+ */
+
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 import { EXPERIENCE_STUDIO_MAX_HISTORY_SIZE } from '../constant/experience-studio-history.constant';
 import './experience-studio-editor.store';
 

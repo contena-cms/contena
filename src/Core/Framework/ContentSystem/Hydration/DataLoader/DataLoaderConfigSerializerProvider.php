@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\PlaceholderValues;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
@@ -24,10 +25,14 @@ class DataLoaderConfigSerializerProvider
     /**
      * @param array<string, mixed> $data
      */
-    public function decode(string $source, array $data): AbstractContentDataLoaderConfig
+    public function decode(string $source, array $data, ?PlaceholderValues $values = null): AbstractContentDataLoaderConfig
     {
         if (!$this->locator->has($source)) {
             throw ContentSystemException::configSerializerNotRegistered($source);
+        }
+
+        if ($values !== null) {
+            $data = $this->replacePlaceholders($data, $values);
         }
 
         try {
@@ -69,5 +74,26 @@ class DataLoaderConfigSerializerProvider
             // than the sibling escaping as an uncaught 500 on every content_layout write.
             throw ContentSystemException::invalidLoaderConfig($source, $e);
         }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function replacePlaceholders(array $data, PlaceholderValues $values): array
+    {
+        foreach ($data as $key => $value) {
+            if (\is_string($value)) {
+                foreach ($values->all() as $name => $replacement) {
+                    $value = \str_replace('{{' . $name . '}}', (string) $replacement, $value);
+                }
+                $data[$key] = $value;
+            } elseif (\is_array($value)) {
+                $data[$key] = $this->replacePlaceholders($value, $values);
+            }
+        }
+
+        return $data;
     }
 }

@@ -71,7 +71,9 @@ use Contena\Core\Framework\Api\Sync\SyncService;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\ContentSystemBindingSpecificationRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\ContentSystemStyleOptionRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\ContentSystemLayoutPresetRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderSchemaGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionValidator;
@@ -329,6 +331,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ContentSystemStyleOptionRegistry::class),
             service(RootSourceRegistry::class),
             service(ContentSystemBindingSpecificationRegistry::class),
+            service(StoredSchemaResolver::class),
+            service(ContentSystemLayoutPresetRegistry::class),
             service(PresignedMediaUploadService::class)->nullOnInvalid(),
             service(MediaFileExtensionListProvider::class),
             service(BusinessEventCollector::class),

@@ -2,14 +2,12 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
-use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
+use Contena\Core\Framework\ContentSystem\LayoutReference;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
@@ -20,6 +18,8 @@ use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Maintenance\MaintenancePage;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,7 +45,6 @@ class MaintenanceControllerTest extends TestCase
             static::createStub(SystemConfigService::class),
             static::createStub(MaintenancePageLoader::class),
             $maintenanceModeResolver,
-            static::createStub(AbstractContentRoute::class),
         );
 
         $router = $this->createMock(RouterInterface::class);
@@ -81,7 +80,6 @@ class MaintenanceControllerTest extends TestCase
             $systemConfig,
             static::createStub(MaintenancePageLoader::class),
             $resolver,
-            static::createStub(AbstractContentRoute::class),
         );
         $this->setRenderContainer($controller);
 
@@ -100,12 +98,12 @@ class MaintenanceControllerTest extends TestCase
         $pageLoader = static::createStub(MaintenancePageLoader::class);
         $page = static::createStub(MaintenancePage::class);
         $pageLoader->method('load')->willReturn($page);
-        $contentPage = new ContentPage('layout-id', [], 'maintenance', null);
-        $contentRoute = static::createStub(AbstractContentRoute::class);
-        $contentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'maintenance', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
         $resolver = static::createStub(MaintenanceModeResolver::class);
         $resolver->method('shouldRedirectToFrontend')->willReturn(false);
-        $controller = new MaintenanceControllerTestClass($systemConfig, $pageLoader, $resolver, $contentRoute);
+        $controller = new MaintenanceControllerTestClass($systemConfig, $pageLoader, $resolver);
+        $controller->contentPage = $contentPage;
         $this->setRenderContainer($controller, $context);
 
         $response = $controller->renderMaintenancePage(new Request(), $context);
@@ -123,7 +121,6 @@ class MaintenanceControllerTest extends TestCase
             static::createStub(SystemConfigService::class),
             static::createStub(MaintenancePageLoader::class),
             static::createStub(MaintenanceModeResolver::class),
-            static::createStub(AbstractContentRoute::class),
         );
 
         static::expectExceptionObject(RoutingException::missingRequestParameter('id'));
@@ -136,9 +133,9 @@ class MaintenanceControllerTest extends TestCase
         $resolver = static::createStub(MaintenanceModeResolver::class);
         $pageLoader = static::createStub(MaintenancePageLoader::class);
         $pageLoader->method('load')->willReturn(static::createStub(MaintenancePage::class));
-        $contentRoute = static::createStub(AbstractContentRoute::class);
-        $contentRoute->method('load')->willReturn(new ContentRouteResponse(new ContentPage('layout-id', [], 'maintenance', null)));
-        $controller = new MaintenanceControllerTestClass(static::createStub(SystemConfigService::class), $pageLoader, $resolver, $contentRoute);
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'maintenance', null), null);
+        $controller = new MaintenanceControllerTestClass(static::createStub(SystemConfigService::class), $pageLoader, $resolver);
+        $controller->contentPage = ContentPage::fromRenderResult($renderResult);
         $this->setRenderContainer($controller, $context);
         $request = new Request(attributes: [ChannelRequest::ATTRIBUTE_CHANNEL_MAINTENANCE_IP_ALLOWLIST => '["127.0.0.1","::1"]']);
 

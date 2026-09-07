@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**
- * Resolves navigation aliases to category IDs from sales channel configuration.
+ * Resolves navigation aliases to category IDs from channel configuration.
  *
  * Aliases:
  * - main-navigation → navigationCategoryId

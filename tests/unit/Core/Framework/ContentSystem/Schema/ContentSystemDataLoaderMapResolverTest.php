@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Schema;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoader;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecif
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderTypeCapability;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMapResolver;
 use Contena\Tests\Unit\Core\Framework\ContentSystem\Fixture\LoaderConfigSpecificationFixture;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**

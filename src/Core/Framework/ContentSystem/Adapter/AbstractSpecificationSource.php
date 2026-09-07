@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Called by RenderingSpecificationFactory to assemble a RenderingSpecification
  * from discrete resolution steps.
- *
- * @internal
  */
 abstract class AbstractSpecificationSource
 {
@@ -51,7 +49,7 @@ abstract class AbstractSpecificationSource
     /**
      * The root context this source supplies to a layout's top-level elements. Entity sources override it
      * with their page data requirements; header/footer sources expose no root-ambient context. Typed on
-     * Context (not ChannelContext): the mapping is config/type-only and reads no Channel state.
+     * Context (not ChannelContext): the mapping is config/type-only and reads no sales-channel state.
      *
      * @return list<ProvidedContext>
      */

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Loader;
 
+use Contena\Core\Framework\ContentSystem\Binding\Loader\DatabaseBindingSpecificationLoader;
+use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationSerializer;
+use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\ContentSystem\Binding\Loader\DatabaseBindingSpecificationLoader;
-use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationSerializer;
-use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

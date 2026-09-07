@@ -21,7 +21,7 @@ The `redistribute` flag on an `acceptsContext` entry, which lets a container pas
 
 Both produce identical results. The container automatically passes data to all children.
 
-The broadcast provider that `redistribute: true` stands for is generated at runtime from `ContextConsumer::$redistribute` by `RedistributeExpansionSubscriber`; it is never persisted with the layout.
+See [../AGENTS.md](../AGENTS.md#constraints) for where each rule above is enforced.
 
 ## Consumer Alias with Redistribution
 
@@ -47,6 +47,7 @@ Container accepts `featuredBlog`, children receive `blog`. Reuse the same blog c
 - `consumerAlias` on `acceptsContext` requires `redistribute: true`. Without redistribution, a consumer alias has no effect and will cause a validation error.
 - `redistribute: true` cannot be used with dotted context keys (e.g., `"blog.cover": {"redistribute": true}` is invalid). Use full `providesContext` configuration for nested path redistribution.
 - `redistribute: true` cannot coexist with an explicit `providesContext` entry for the same key on the same element.
+- `redistribute: true` cannot be combined with `scope: "root"`. A chain relays only what a consumer received off its parent, and it never carries the layout's root-ambient context; a descendant that needs root context declares its own `scope: "root"` consumer and receives it directly at any depth.
 
 **Property Alias vs Consumer Alias:**
 
@@ -72,7 +73,7 @@ Use `consumerAlias` when all children need the same rename. Use `propertyAlias` 
 
 ## Reusable Components in Nested Layouts
 
-**Real-world scenario:** You build a blog card component that shows title, excerpt, and cover. This card should work whether placed directly on a page, inside a grid, within a section, or nested in a slider. Each container just needs to pass the blog data through.
+**Real-world scenario:** You build a blog card component that shows title, price, and image. This card should work whether placed directly on a page, inside a grid, within a section, or nested in a slider. Each container just needs to pass the blog data through.
 
 **Build once, use anywhere:** Redistribution cascades through multiple container levels automatically. Your reusable components work in any context without reconfiguration.
 

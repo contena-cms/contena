@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\ContentSystem\Binding\DefaultBindingSpecificationSynthesizer;
 use Contena\Core\Framework\ContentSystem\Binding\Loader\YamlBindingSpecificationLoader;
@@ -24,6 +20,10 @@ use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -51,12 +51,12 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     #[TestDox('loads an inline binding whose implicit type is resolved from the file path and directory prefix')]
     public function testLoadsInlineBindingWithImplicitTypeFromPathAndPrefix(): void
     {
-        // A file media/image.yaml under prefix "Sw" yields type "CT:Media:Image" (ElementTypeNameResolver's
+        // A file media/image.yaml under prefix "CT" yields type "CT:Media:Image" (ElementTypeNameResolver's
         // kebab-to-PascalCase, colon-joined, prefixed rule).
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "meta:\n  label: Image\nbindings:\n  image-binding:\n    label: \"Image binding\"\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $specifications = $loader->load();
 
@@ -77,8 +77,8 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         file_put_contents($dirB . '/media/image.yaml', "bindings:\n  shared:\n    label: b\n");
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source-a', $dirA, 'Sw'),
-            new ElementTypeSourceDirectory('source-b', $dirB, 'Sw'),
+            new ElementTypeSourceDirectory('source-a', $dirA, 'CT'),
+            new ElementTypeSourceDirectory('source-b', $dirB, 'CT'),
         ]);
 
         $specifications = $loader->load();
@@ -93,7 +93,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "meta:\n  label: Image\nproperties:\n  mediaId:\n    type: string\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         static::assertSame([], $loader->load());
     }
@@ -101,7 +101,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     #[TestDox('returns an empty array for a non-existent directory')]
     public function testReturnsEmptyForMissingDirectory(): void
     {
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', '/path/does/not/exist', 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', '/path/does/not/exist', 'CT')]);
 
         static::assertSame([], $loader->load());
     }
@@ -111,7 +111,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     {
         file_put_contents($this->tempDir . '/notes.txt', 'not a yaml file');
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         static::assertSame([], $loader->load());
     }
@@ -123,7 +123,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  {$id}:\n    label: x\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $specifications = $loader->load();
 
@@ -141,7 +141,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         );
 
         $loader = new YamlBindingSpecificationLoader(
-            [new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')],
+            [new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')],
             new ElementTypeNameResolver(),
             new DefaultBindingSpecificationSynthesizer(),
             new BindingSpecificationSerializer(),
@@ -173,7 +173,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir(\dirname($fullPath), 0777, true);
         file_put_contents($fullPath, $body);
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $this->expectExceptionObject(
             ContentSystemException::bindingSpecificationLoadFailed($fullPath, $reason)
@@ -192,7 +192,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  shared:\n    label: a\n");
         file_put_contents($this->tempDir . '/media/banner.yml', "bindings:\n  shared: not-a-map\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $this->expectExceptionObject(ContentSystemException::bindingSpecificationDuplicate('shared', 'image.yaml', 'banner.yml'));
 
@@ -210,8 +210,8 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         file_put_contents($dirB . '/hero/banner.yaml', "bindings:\n  shared:\n    label: b\n");
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source-a', $dirA, 'Sw'),
-            new ElementTypeSourceDirectory('source-a', $dirB, 'Sw'),
+            new ElementTypeSourceDirectory('source-a', $dirA, 'CT'),
+            new ElementTypeSourceDirectory('source-a', $dirB, 'CT'),
         ]);
 
         $this->expectExceptionObject(
@@ -228,7 +228,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  image-binding:\n    {$forbiddenKey}: {$yamlValue}\n    label: x\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $this->expectExceptionObject(ContentSystemException::bindingSpecificationCanonicalizationFailed('image-binding', $expectedMessage));
 
@@ -241,7 +241,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/broken.yaml', "id: \"unterminated\n  bad: [");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $this->expectException(ContentSystemException::class);
         $this->expectExceptionMessageMatches('/Invalid YAML syntax/');
@@ -266,7 +266,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
             new ConstraintViolation('resolves entry "image" must declare a non-blank "loader"', null, [], null, 'bindings[broken].resolves[image].loader', null),
         ]));
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')], $failing);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')], $failing);
 
         $this->expectException(ContentSystemException::class);
         $this->expectExceptionMessageMatches('/bindings\[broken\]\.resolves\[image\]\.loader/');
@@ -283,7 +283,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  \"CT:Media:Image\":\n    label: x\n");
 
-        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')]);
+        $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $path = $this->tempDir . '/media/image.yaml';
         $this->expectExceptionObject(ContentSystemException::bindingSpecificationReservedId('CT:Media:Image', 'CT:Media:Image', $path));
@@ -307,7 +307,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/hero/banner.yml', "bindings:\n  \"CT:Media:Image\":\n    label: x\n");
 
         $loader = new YamlBindingSpecificationLoader(
-            [new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')],
+            [new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')],
             new ElementTypeNameResolver(),
             new DefaultBindingSpecificationSynthesizer(),
             new BindingSpecificationSerializer(),
@@ -335,7 +335,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         );
 
         $loader = new YamlBindingSpecificationLoader(
-            [new ElementTypeSourceDirectory('core', $this->tempDir, 'Sw')],
+            [new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')],
             new ElementTypeNameResolver(),
             new DefaultBindingSpecificationSynthesizer(),
             new BindingSpecificationSerializer(),

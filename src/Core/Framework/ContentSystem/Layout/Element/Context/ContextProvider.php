@@ -5,9 +5,6 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Element\Context;
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionConfig;
 
-/**
- * @internal
- */
 final readonly class ContextProvider implements \JsonSerializable
 {
     public function __construct(

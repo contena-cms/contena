@@ -2,7 +2,7 @@
 
 The plugin-facing guide to registering a new data source: what to extend, what to tag, the config and serializer pair it needs, and how it declares cache behavior.
 
-Data loaders fetch external data—APIs, computed values, aggregations. The built-in `entity` loader handles Contena entities; other built-in loaders handle known data structures like blog listings, search results, navigation, breadcrumbs, and languages.
+Data loaders fetch external data—APIs, computed values, aggregations. The built-in `entity` loader handles Contena entities; other built-in loaders handle known data structures like blog listing, navigation, breadcrumb, and language.
 
 A data loader consists of three classes:
 
@@ -59,12 +59,17 @@ final class WeatherLoader extends AbstractContentDataLoader
     public static function getRequirementType(): string
     { return 'weather'; /* Must match serializer's getSource() */ }
 
-    public function load(ContentElement $element, DataRequirement $requirement, ChannelContext $context, Request $request): ContentDataLoaderResult
+    public function configSpecification(): LoaderConfigSpecification
     {
-        $config = $requirement->config;
-        \assert($config instanceof WeatherLoaderConfig);
+        return new LoaderConfigSpecification([
+            new ConfigKeySpecification('location', ConfigKeyKind::Literal, 'string', required: true),
+            new ConfigKeySpecification('units', ConfigKeyKind::Literal, 'string', required: false, hasDefault: true, default: 'metric'),
+        ]);
+    }
 
-        $weather = $this->weatherClient->fetch($config->location);
+    public function load(LoaderInputs $inputs, DataRequirement $requirement, ChannelContext $context, Request $request): ContentDataLoaderResult
+    {
+        $weather = $this->weatherClient->fetch($inputs->string('location'), $inputs->string('units'));
         if ($weather === null) {
             return ContentDataLoaderResult::notFound();
         }
@@ -73,6 +78,8 @@ final class WeatherLoader extends AbstractContentDataLoader
     }
 }
 ```
+
+`load()` never reads the config or the element itself. `LoaderInputResolver` turns the decoded config and the element's stored properties into `LoaderInputs` before the call: every declared key is already present, dereferenced, and type-checked, and reading a key the loader did not declare throws. Declare the fallback in `configSpecification()` — an in-body `??` would drift from what the schema advertises.
 
 **Service registration:**
 
@@ -86,6 +93,8 @@ final class WeatherLoader extends AbstractContentDataLoader
     <tag name="content_system.data_loader"/>
 </service>
 ```
+
+A loader whose `PropertyReference` config key resolves to an entity id, and whose collaborator throws, additionally needs an id guard and a degradation wrap: [entity-id-guard-example.md](entity-id-guard-example.md).
 
 ## Cache Awareness
 
@@ -105,7 +114,7 @@ For entity-based data, provide cache tags that match Contena's existing invalida
 ```php
 // Use tag patterns matching Contena's cache invalidation system:
 // blog → 'blog-{id}', category → 'category-route-{id}',
-// landing_page → 'landing-page-route-{id}'
+// landing_page → 'landing-page-route-{id}', cms_page → 'cms-page-{id}'
 return ContentDataLoaderResult::cached($entity, 'blog-' . $entityId);
 ```
 

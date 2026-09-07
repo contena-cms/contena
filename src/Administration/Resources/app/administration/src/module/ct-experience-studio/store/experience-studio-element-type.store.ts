@@ -1,7 +1,4 @@
-import type ContentSystemElementTypeApiService from 'src/core/service/api/content-system-element-type.api.service';
 import type { ContentSystemElementTypeSpecification } from 'src/core/service/api/content-system-element-type.api.service';
-
-type ContentSystemElementTypeService = Pick<ContentSystemElementTypeApiService, 'getTypes'>;
 
 type ExperienceStudioElementTypeState = {
     isLoading: boolean;
@@ -12,6 +9,7 @@ type ExperienceStudioElementTypeState = {
 
 /**
  * @private
+ * @ct-package discovery
  */
 const experienceStudioElementTypeStore = Contena.Store.register({
     id: 'experienceStudioElementType',
@@ -49,7 +47,7 @@ const experienceStudioElementTypeStore = Contena.Store.register({
             this.loadError = null;
 
             try {
-                const service = Contena.Service('contentSystemElementTypeService') as ContentSystemElementTypeService;
+                const service = Contena.Service('contentSystemElementTypeService');
                 const types = await service.getTypes();
                 const nextMap: Record<string, ContentSystemElementTypeSpecification> = {};
 

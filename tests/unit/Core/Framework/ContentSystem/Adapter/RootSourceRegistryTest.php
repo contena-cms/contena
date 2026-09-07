@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\AbstractSpecificationSource;
 use Contena\Core\Framework\ContentSystem\Adapter\NoneSpecificationSource;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
@@ -14,6 +10,10 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
 use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
@@ -54,10 +54,14 @@ class RootSourceRegistryTest extends TestCase
         static::assertSame(['blog', 'category'], $registry->entityRootSources());
     }
 
-    #[TestDox('resolve returns the entity source root-ambient context for an entity type')]
+    /**
+     * An entry the source already marked root-ambient is handed back as the same instance, so the
+     * normalization below costs nothing for the mapping path that mints the flag itself.
+     */
+    #[TestDox('resolve returns the entity source root-ambient context unchanged when it is already marked')]
     public function testResolveReturnsEntitySourceContext(): void
     {
-        $rootContext = [$this->providedContext('blog')];
+        $rootContext = [$this->providedContext('blog', root: true)];
 
         $registry = new RootSourceRegistry(
             entityTypes: ['blog'],
@@ -67,6 +71,33 @@ class RootSourceRegistryTest extends TestCase
         );
 
         static::assertSame($rootContext, $registry->resolve('blog', Context::createDefaultContext()));
+    }
+
+    /**
+     * The flag is structural rather than something each hand-written providedRootContext() override has to
+     * remember: everything resolve() returns is root-ambient by definition, so an unmarked entry is marked
+     * here. Every other field is carried across, which is what separates normalization from re-minting.
+     */
+    #[TestDox('resolve marks an unflagged source entry as root-ambient and carries its other fields')]
+    public function testResolveNormalizesAnUnflaggedEntryToRootAmbient(): void
+    {
+        $registry = new RootSourceRegistry(
+            entityTypes: ['blog'],
+            sectionSources: $this->sectionLocator([]),
+            noneSource: new NoneSpecificationSource(),
+            entitySources: [$this->entitySource('blog', [$this->providedContext('blog')])],
+        );
+
+        $resolved = $registry->resolve('blog', Context::createDefaultContext());
+
+        static::assertCount(1, $resolved);
+        static::assertTrue($resolved[0]->root);
+        static::assertSame('blog', $resolved[0]->contextKey);
+        static::assertSame(\stdClass::class, $resolved[0]->fqcn);
+        static::assertSame(ContextType::Single, $resolved[0]->contextType);
+        static::assertSame(DistributionStrategy::Broadcast, $resolved[0]->distribution);
+        static::assertNull($resolved[0]->providerElementId);
+        static::assertNull($resolved[0]->path);
     }
 
     #[TestDox('resolve returns an empty list for a section source')]
@@ -127,7 +158,7 @@ class RootSourceRegistryTest extends TestCase
     #[TestDox('resolveGated resolves a member root source to its root-ambient context')]
     public function testResolveGatedResolvesMemberRootSource(): void
     {
-        $rootContext = [$this->providedContext('blog')];
+        $rootContext = [$this->providedContext('blog', root: true)];
 
         $registry = new RootSourceRegistry(
             entityTypes: ['blog'],
@@ -234,7 +265,7 @@ class RootSourceRegistryTest extends TestCase
         return new ServiceLocator($factories);
     }
 
-    private function providedContext(string $key): ProvidedContext
+    private function providedContext(string $key, bool $root = false): ProvidedContext
     {
         return new ProvidedContext(
             contextKey: $key,
@@ -242,6 +273,7 @@ class RootSourceRegistryTest extends TestCase
             contextType: ContextType::Single,
             providerElementId: null,
             distribution: DistributionStrategy::Broadcast,
+            root: $root,
         );
     }
 }

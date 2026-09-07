@@ -2,13 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Binding;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Controller\SyncController;
 use Contena\Core\Framework\ContentSystem\Binding\AttributionReconciler;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
 use Contena\Core\Framework\Context;
@@ -19,6 +17,9 @@ use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * The attribution round-trip at the content_layout write boundary: absent, populated, and stale
@@ -60,7 +61,7 @@ class BindingAttributionPersistenceTest extends TestCase
         ]], $context);
 
         static::assertArrayNotHasKey('attributedSpecifications', $this->rawLayoutElement($layoutId, 0));
-        static::assertSame([], $this->reload($layoutId)->getLayout()[0]->getAttributedSpecifications());
+        static::assertSame([], $this->reload($layoutId)->getLayout()[0]->attributedSpecifications);
     }
 
     #[TestDox('round-trips a populated attributedSpecifications map as an array with its entries intact when the wiring matches the specification')]
@@ -80,7 +81,7 @@ class BindingAttributionPersistenceTest extends TestCase
 
         static::assertSame(
             ['media' => self::CORE_MEDIA_BINDING_ID],
-            $this->reload($layoutId)->getLayout()[0]->getAttributedSpecifications()
+            $this->reload($layoutId)->getLayout()[0]->attributedSpecifications
         );
         static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $this->rawLayoutElement($layoutId, 0)['attributedSpecifications']);
     }
@@ -102,7 +103,7 @@ class BindingAttributionPersistenceTest extends TestCase
 
         static::assertSame(
             ['media' => self::CORE_MEDIA_BINDING_ID],
-            $this->reload($layoutId)->getLayout()[0]->getAttributedSpecifications()
+            $this->reload($layoutId)->getLayout()[0]->attributedSpecifications
         );
 
         $this->repository()->update([[
@@ -111,10 +112,10 @@ class BindingAttributionPersistenceTest extends TestCase
         ]], $context);
 
         $reconciled = $this->reload($layoutId)->getLayout()[0];
-        static::assertSame([], $reconciled->getAttributedSpecifications());
+        static::assertSame([], $reconciled->attributedSpecifications);
 
         // the wiring itself stays exactly as edited -- reconciliation drops the attribution, never the wiring
-        $requirement = $reconciled->getDataRequirements()['media'];
+        $requirement = $reconciled->dataRequirements['media'];
         static::assertInstanceOf(EntityLoaderConfig::class, $requirement->config);
         static::assertSame('somethingElse', $requirement->config->property);
     }
@@ -148,7 +149,7 @@ class BindingAttributionPersistenceTest extends TestCase
         $response = $this->getBrowser()->getResponse();
         static::assertSame(200, $response->getStatusCode(), (string) $response->getContent());
 
-        static::assertSame([], $this->reload($layoutId)->getLayout()[0]->getAttributedSpecifications());
+        static::assertSame([], $this->reload($layoutId)->getLayout()[0]->attributedSpecifications);
     }
 
     #[TestDox('drops a dangling attribution whose specification id no longer resolves from the registry, keeping the wiring intact')]
@@ -173,11 +174,11 @@ class BindingAttributionPersistenceTest extends TestCase
         ]], $context);
 
         $stored = $this->reload($layoutId)->getLayout()[0];
-        static::assertSame([], $stored->getAttributedSpecifications());
+        static::assertSame([], $stored->attributedSpecifications);
 
         // the wiring itself -- what actually makes the element serve -- stays untouched; only the dangling
         // attribution bookkeeping is dropped
-        $requirement = $stored->getDataRequirements()['media'];
+        $requirement = $stored->dataRequirements['media'];
         static::assertSame('entity', $requirement->source);
         static::assertInstanceOf(EntityLoaderConfig::class, $requirement->config);
         static::assertSame('media', $requirement->config->entity);
@@ -194,11 +195,11 @@ class BindingAttributionPersistenceTest extends TestCase
         // "depth" must be a positive int; NavigationLoaderConfigSerializer::decode() rejects this with a
         // CategoryException (a domain exception, not a ContentSystemException), which
         // DataLoaderConfigSerializerProvider reclassifies to a ContentSystemException client defect at the
-        // shared decode chokepoint. The content_layout write gate decodes the element's dataRequirements
-        // during validation, catches that reclassified client defect, and turns it into an invalid_config
-        // violation -- so the write comes back as a clean WriteException, never an uncaught domain exception
-        // surfacing as a 500. (AttributionReconciler's own decode-during-normalize drop-not-throw path is
-        // covered separately by AttributionReconcilerTest.)
+        // shared decode chokepoint. The layout field serializer decodes the element's dataRequirements while
+        // encoding the write payload, so that reclassified client defect surfaces there as a write-constraint
+        // violation carrying its own error code -- the write comes back as a clean WriteException, never an
+        // uncaught domain exception surfacing as a 500. (AttributionReconciler's own decode-during-normalize
+        // drop-not-throw path is covered separately by AttributionReconcilerTest.)
         $element = [
             'id' => $elementId,
             'component' => 'CT:Media:Image',
@@ -216,9 +217,13 @@ class BindingAttributionPersistenceTest extends TestCase
                 'rootSource' => 'none',
                 'layout' => [$element],
             ]], $context);
-            static::fail('Expected the well-formedness gate to reject the malformed domain-loader config.');
+            static::fail('Expected the write to reject the malformed domain-loader config.');
         } catch (WriteException $exception) {
             static::assertStringContainsString('depth', $exception->getMessage());
+            static::assertContains(
+                ContentSystemException::INVALID_FIELD_VALUE_TYPE,
+                array_column(iterator_to_array($exception->getErrors(), false), 'code')
+            );
         }
 
         static::assertNull($this->repository()->search(new Criteria([$layoutId]), $context)->getEntities()->first());
@@ -245,9 +250,7 @@ class BindingAttributionPersistenceTest extends TestCase
             ]],
         ]], $context);
 
-        $child = $this->reload($layoutId)->getLayout()[0]->getSlots()['content']->first();
-        static::assertInstanceOf(ContentElement::class, $child);
-        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $child->getAttributedSpecifications());
+        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $this->onlySlotChild($layoutId)->attributedSpecifications);
 
         $this->repository()->update([[
             'id' => $layoutId,
@@ -259,9 +262,7 @@ class BindingAttributionPersistenceTest extends TestCase
             ]],
         ]], $context);
 
-        $reconciledChild = $this->reload($layoutId)->getLayout()[0]->getSlots()['content']->first();
-        static::assertInstanceOf(ContentElement::class, $reconciledChild);
-        static::assertSame([], $reconciledChild->getAttributedSpecifications());
+        static::assertSame([], $this->onlySlotChild($layoutId)->attributedSpecifications);
     }
 
     /**
@@ -306,6 +307,19 @@ class BindingAttributionPersistenceTest extends TestCase
         static::assertIsArray($decoded[$index]);
 
         return $decoded[$index];
+    }
+
+    /**
+     * The single element in the root element's `content` slot, asserted to be exactly one so an indexed read
+     * cannot silently pick a different child than the fixture wrote.
+     */
+    private function onlySlotChild(string $layoutId): StoredElement
+    {
+        $root = $this->reload($layoutId)->getLayout()[0];
+        static::assertArrayHasKey('content', $root->slots);
+        static::assertCount(1, $root->slots['content']);
+
+        return $root->slots['content'][0];
     }
 
     private function reload(string $layoutId): ContentLayoutEntity

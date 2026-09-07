@@ -2,9 +2,8 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Layout\Field;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
 use Contena\Core\Framework\Context;
@@ -15,10 +14,13 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestStyleOptionLoader;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
- * End-to-end through the real DAL and the real style option registry: a valid style round-trips, an
- * empty style reads back empty, and a style violating the registry-derived constraints is rejected.
+ * End-to-end through the real DAL and the real style option registry: a valid style round-trips in the
+ * canonical form the write boundary stores, an empty style reads back empty, and a style violating the
+ * registry-derived constraints is rejected.
  *
  * @internal
  */
@@ -34,16 +36,25 @@ class ElementStylePersistenceTest extends TestCase
         $this->ids = new IdsCollection();
     }
 
-    #[TestDox('persists a valid style on an element and reads it back unchanged')]
+    #[TestDox('persists a valid style on an element and reads it back in the write-boundary canonical form')]
     public function testPersistsAndReadsBackValidStyle(): void
     {
         $context = Context::createDefaultContext();
         $id = $this->ids->get('layout');
+        // `display` declares a default, so the write boundary fills its unspecified breakpoints from it;
+        // `col-span` declares none, so its partial map is stored exactly as authored.
         $style = ['col-span' => ['md' => 6, 'lg' => 4], 'display' => ['xs' => false]];
+        $expected = [
+            'col-span' => ['md' => 6, 'lg' => 4],
+            'display' => ['xs' => false, 'sm' => true, 'md' => true, 'lg' => true, 'xl' => true, 'xxl' => true],
+        ];
 
         $this->repository()->create([$this->layout($id, $style)], $context);
 
-        static::assertEquals($style, $this->readElement($id, $context)->getStyle()->toArray());
+        static::assertSame(
+            $this->byKey($expected),
+            $this->byKey($this->readElement($id, $context)->style->toArray()),
+        );
     }
 
     #[TestDox('persists a flat option as a bare scalar beside a breakpoint-aware option and reads both back unchanged')]
@@ -57,7 +68,10 @@ class ElementStylePersistenceTest extends TestCase
 
         $this->repository()->create([$this->layout($id, $style)], $context);
 
-        static::assertEquals($style, $this->readElement($id, $context)->getStyle()->toArray());
+        static::assertSame(
+            $this->byKey($style),
+            $this->byKey($this->readElement($id, $context)->style->toArray()),
+        );
     }
 
     #[TestDox('reads back an empty style for an element written without one')]
@@ -68,7 +82,7 @@ class ElementStylePersistenceTest extends TestCase
 
         $this->repository()->create([$this->layout($id, null)], $context);
 
-        static::assertTrue($this->readElement($id, $context)->getStyle()->isEmpty());
+        static::assertTrue($this->readElement($id, $context)->style->isEmpty());
     }
 
     #[TestDox('rejects a write whose style references an option not in the registry')]
@@ -99,7 +113,54 @@ class ElementStylePersistenceTest extends TestCase
         }
     }
 
-    private function readElement(string $layoutId, Context $context): ContentElement
+    #[TestDox('rejects a write whose style carries a malformed shape and stores no row')]
+    public function testRejectsMalformedStyleShapeAndStoresNoRow(): void
+    {
+        $context = Context::createDefaultContext();
+        $layoutId = $this->ids->get('layout');
+
+        try {
+            // The decode gate runs before the constraint pass judges the tree; without the throw the write
+            // would succeed with the unknown breakpoint silently stripped.
+            $this->repository()->create([$this->layout($layoutId, ['col-span' => ['bogus-breakpoint' => 6]])], $context);
+            static::fail('Expected the decode gate to reject the unknown breakpoint key.');
+        } catch (WriteException $exception) {
+            static::assertSame(
+                ContentSystemException::INVALID_MAP_KEY,
+                iterator_to_array($exception->getErrors(), false)[0]['code'],
+            );
+        }
+
+        static::assertNull($this->repository()->searchIds(new Criteria([$layoutId]), $context)->firstId());
+    }
+
+    /**
+     * Key order in a stored JSON map is not part of the contract, and the two engines disagree about it:
+     * MySQL normalises object members by key length then bytewise, MariaDB preserves insertion order. So a
+     * `['md' => …, 'lg' => …]` map read back byte-for-byte is green locally and red on CI. Sorting both sides
+     * by key keeps the comparison on decoded structure while leaving values, types and list order strict.
+     *
+     * @param array<string, mixed> $style
+     *
+     * @return array<string, mixed>
+     */
+    private function byKey(array $style): array
+    {
+        ksort($style);
+
+        foreach ($style as $option => $value) {
+            if (!\is_array($value)) {
+                continue;
+            }
+
+            ksort($value);
+            $style[$option] = $value;
+        }
+
+        return $style;
+    }
+
+    private function readElement(string $layoutId, Context $context): StoredElement
     {
         $layout = $this->repository()->search(new Criteria([$layoutId]), $context)->getEntities()->first();
         static::assertInstanceOf(ContentLayoutEntity::class, $layout);

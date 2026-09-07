@@ -2,9 +2,13 @@
 
 namespace Contena\Core\Content\Seo\Channel;
 
+use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
+use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface as SeoUrlRouteConfigRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedElement;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
@@ -39,7 +43,8 @@ class ChannelApiSeoResolver implements EventSubscriberInterface
         private readonly ChannelRepository $channelRepository,
         private readonly DefinitionInstanceRegistry $definitionInstanceRegistry,
         private readonly ChannelDefinitionInstanceRegistry $channelDefinitionInstanceRegistry,
-        private readonly SeoUrlRouteRegistry $seoUrlRouteRegistry
+        private readonly SeoUrlRouteRegistry $seoUrlRouteRegistry,
+        private readonly EntityRouteResolver $entityRouteResolver
     ) {
     }
 
@@ -109,8 +114,14 @@ class ChannelApiSeoResolver implements EventSubscriberInterface
         $this->findStruct($data, $struct);
     }
 
-    private function findStruct(SeoResolverData $data, Struct $struct): void
+    private function findStruct(SeoResolverData $data, Struct|RenderedElement $struct): void
     {
+        if ($struct instanceof RenderedElement) {
+            $this->findRenderedElement($data, $struct);
+
+            return;
+        }
+
         if ($struct instanceof Entity) {
             $definition = $this->definitionInstanceRegistry->getByEntityClass($struct) ?? $this->channelDefinitionInstanceRegistry->getByEntityClass($struct);
 
@@ -124,12 +135,42 @@ class ChannelApiSeoResolver implements EventSubscriberInterface
                 $this->find($data, $item);
             } elseif ($item instanceof Collection || \is_array($item)) {
                 foreach ($item as $collectionItem) {
-                    if ($collectionItem instanceof Struct) {
+                    if ($collectionItem instanceof Struct || $collectionItem instanceof RenderedElement) {
                         $this->findStruct($data, $collectionItem);
                     }
                 }
-            } elseif ($item instanceof Struct) {
+            } elseif ($item instanceof Struct || $item instanceof RenderedElement) {
                 $this->findStruct($data, $item);
+            }
+        }
+    }
+
+    /**
+     * RenderedElement is not a Struct, so the regular struct walker cannot inspect its properties and slots.
+     */
+    private function findRenderedElement(SeoResolverData $data, RenderedElement $element): void
+    {
+        foreach ($element->properties as $value) {
+            if ($value instanceof Struct) {
+                $this->findStruct($data, $value);
+
+                continue;
+            }
+
+            if (!\is_array($value)) {
+                continue;
+            }
+
+            foreach ($value as $item) {
+                if ($item instanceof Struct) {
+                    $this->findStruct($data, $item);
+                }
+            }
+        }
+
+        foreach ($element->slots as $children) {
+            foreach ($children as $child) {
+                $this->findRenderedElement($data, $child);
             }
         }
     }
@@ -140,16 +181,14 @@ class ChannelApiSeoResolver implements EventSubscriberInterface
             $definition = (string) $definition;
 
             $ids = $data->getIds($definition);
-            $routes = $this->seoUrlRouteRegistry->findByDefinition($definition);
-            if ($routes === []) {
+            $routeNames = $this->getRouteNames($definition, $context);
+            if ($routeNames === []) {
                 continue;
             }
 
-            $routes = array_map(static fn (SeoUrlRouteConfigRoute $seoUrlRoute) => $seoUrlRoute->getConfig()->getRouteName(), $routes);
-
             $criteria = new Criteria();
             $criteria->addFilter(new EqualsFilter('isCanonical', true));
-            $criteria->addFilter(new EqualsAnyFilter('routeName', $routes));
+            $criteria->addFilter(new EqualsAnyFilter('routeName', $routeNames));
             $criteria->addFilter(new EqualsAnyFilter('foreignKey', $ids));
             $criteria->addFilter(new EqualsFilter('languageId', $context->getLanguageId()));
             $criteria->addSorting(new FieldSorting('channelId'));
@@ -174,6 +213,32 @@ class ChannelApiSeoResolver implements EventSubscriberInterface
                     $seoUrlCollection->add($url);
                 }
             }
+        }
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getRouteNames(string $entityName, ChannelContext $context): array
+    {
+        $routeNames = array_values(array_map(
+            static fn (SeoUrlRouteConfigRoute $seoUrlRoute) => $seoUrlRoute->getConfig()->getRouteName(),
+            $this->seoUrlRouteRegistry->findByDefinition($entityName)
+        ));
+
+        if ($context->getChannel()->getTypeId() !== Defaults::CHANNEL_TYPE_API) {
+            return $routeNames;
+        }
+
+        // Headless channels persist SEO URLs against the Channel API route family. Frontend route names remain
+        // in the filter as a fallback for entities without a Channel API counterpart.
+        try {
+            return array_values(array_unique([
+                $this->entityRouteResolver->getRouteNameForEntityName($entityName, $context->getChannel()->getTypeId()),
+                ...$routeNames,
+            ]));
+        } catch (SeoUrlRouteConfigException) {
+            return $routeNames;
         }
     }
 }

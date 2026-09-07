@@ -5,12 +5,14 @@ namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\StyleOptionSourceDirectory;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\YamlStyleOptionLoader;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * Discovers style option YAML directories from core, bundles, and plugins, and
+ * Discovers style option YAML directories from core, bundles, plugins, and (in dev) active apps, and
  * injects them into the YamlStyleOptionLoader.
  *
  * @internal
@@ -31,6 +33,11 @@ final class ContentSystemStyleOptionCompilerPass implements CompilerPassInterfac
 
         $this->addDirectory(self::CORE_DEFINITIONS_DIRECTORY, 'core', $directories);
         $this->loadFromBundleMetadata($container, $directories);
+
+        // In prod, app options are loaded from the database by DatabaseStyleOptionLoader instead
+        if ($container->getParameter('kernel.environment') === 'dev') {
+            $this->loadFromApps($container, $directories);
+        }
 
         $container->getDefinition(YamlStyleOptionLoader::class)->setArgument('$directories', $directories);
     }
@@ -77,6 +84,32 @@ final class ContentSystemStyleOptionCompilerPass implements CompilerPassInterfac
         }
 
         return $names;
+    }
+
+    /**
+     * DBAL exceptions are silently swallowed because the compiler pass may run before the database
+     * exists (fresh install, CI).
+     *
+     * @param list<Definition> $directories
+     */
+    private function loadFromApps(ContainerBuilder $container, array &$directories): void
+    {
+        $connection = $container->get(Connection::class);
+
+        try {
+            $apps = $connection->fetchAllAssociative('SELECT `path`, `name` FROM `app` WHERE `active` = 1');
+        } catch (Exception) {
+            return;
+        }
+
+        $projectDirectory = $container->getParameter('kernel.project_dir');
+        if (!\is_string($projectDirectory)) {
+            throw DependencyInjectionException::projectDirNotInContainer();
+        }
+
+        foreach ($apps as $app) {
+            $this->addDirectory(\sprintf('%s/%s/%s', $projectDirectory, $app['path'], self::STANDARD_STYLE_OPTION_DIRECTORY), 'app:' . $app['name'], $directories);
+        }
     }
 
     /**

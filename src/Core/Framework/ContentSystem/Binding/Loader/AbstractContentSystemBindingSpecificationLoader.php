@@ -4,9 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Binding\Loader;
 
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
 
-/**
- * @internal
- */
 abstract class AbstractContentSystemBindingSpecificationLoader
 {
     /**

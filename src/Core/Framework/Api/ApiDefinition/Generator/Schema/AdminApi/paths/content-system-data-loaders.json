@@ -72,11 +72,11 @@
                                                             "properties": {
                                                                 "producedType": {
                                                                     "type": "string",
-                                                                    "description": "Fully qualified class name of the produced type (Channel class where applicable)."
+                                                                    "description": "Fully qualified class name of the produced type (channel class where applicable)."
                                                                 },
                                                                 "configTemplate": {
                                                                     "type": "object",
-                                                                    "description": "Inferable config to produce this type, e.g. {\"entity\": \"product\"}. An empty template is serialized as [].",
+                                                                    "description": "Inferable config to produce this type, e.g. {\"entity\": \"blog\"}. An empty template is serialized as [].",
                                                                     "additionalProperties": true
                                                                 },
                                                                 "genericParameters": {

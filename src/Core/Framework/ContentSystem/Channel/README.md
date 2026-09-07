@@ -4,7 +4,7 @@ Channel API entry point. A single `ContentRoute` class serves all formats and co
 
 ## Key Classes
 
-- `AbstractContentRoute` - Decorator base for route extension
+- `AbstractContentRoute` - Base class of `ContentRoute`. Route decoration is not an offered extension surface
 - `ContentRoute` - DI-parameterized: `RenderingSpecificationResolver` + `ContentSection` + content-layout `EntityRepository` + `AbstractResponseFactory`
 
 ## Endpoints
@@ -14,6 +14,8 @@ All endpoints use HTTP GET with cache enabled. `?elementId` partial rendering is
 **Main section:** `/channel-api/content/{path}`, `/channel-api/content-decomposed/{path}`, `/channel-api/content-skeleton/{path}`, `/channel-api/content-data/{path}`
 
 **Header/Footer:** Same format variants at `/channel-api/content-header*` and `/channel-api/content-footer*`.
+
+Field selection is not supported on any of the twelve routes. A request carrying an `includes` or `excludes` parameter, in the attribute, query or request bag, is rejected with HTTP 400 (`CONTENT_SYSTEM__FIELD_SELECTION_NOT_SUPPORTED`) before the pipeline runs, in every format including skeleton. The parameter is named in the error message.
 
 Routes registered programmatically via `ContentRouteLoader` in Routing/, not via PHP attributes.
 

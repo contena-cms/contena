@@ -35,10 +35,10 @@
                             <button
                                 v-for="element in group.elements"
                                 :key="element.name"
-                                v-tooltip="{ message: element.label }"
+                                v-tooltip="itemTooltip(element)"
                                 class="ct-experience-studio-element-picker__item"
                                 type="button"
-                                @click="onSelect(element.name)"
+                                @click="onSelect(element)"
                             >
                                 <div class="ct-experience-studio-element-picker__icon-square">
                                     <mt-icon :name="element.icon || 'regular-square'" size="20px" />
@@ -83,14 +83,26 @@ const props = defineProps({
 const emit = defineEmits([
     'close',
     'select',
+    'select-preset',
 ]);
 
 import { ref, computed } from 'vue';
+
+type PickerItem = {
+    name: string;
+    label: string;
+    icon: string | null;
+    category?: string | null;
+    kind?: 'element' | 'preset';
+    id?: string;
+    description?: string | null;
+};
 
 const categoryOrder = ref([
     'layout',
     'content',
     'media',
+    'presets',
 ]);
 const fallbackCategoryKey = ref('other');
 
@@ -98,7 +110,7 @@ const groupedElements = computed(() => {
     type Group = {
         key: string;
         headlineSnippetKey: string;
-        elements: Array<{ name: string; label: string; icon: string | null }>;
+        elements: PickerItem[];
         firstSeenIndex: number;
     };
 
@@ -107,7 +119,7 @@ const groupedElements = computed(() => {
         const existingGroup = result.find((group) => group.key === categoryKey);
 
         if (existingGroup) {
-            existingGroup.elements.push(element as { name: string; label: string; icon: string | null });
+            existingGroup.elements.push(element as PickerItem);
 
             return result;
         }
@@ -115,7 +127,7 @@ const groupedElements = computed(() => {
         result.push({
             key: categoryKey,
             headlineSnippetKey: categoryHeadlineSnippetKey(categoryKey),
-            elements: [element as { name: string; label: string; icon: string | null }],
+            elements: [element as PickerItem],
             firstSeenIndex: index,
         });
 
@@ -164,8 +176,23 @@ const normalizeCategoryKey = (category: string | null) => {
 const categoryHeadlineSnippetKey = (categoryKey: string) => {
     return `ct-experience-studio.detail.elementPicker.categoryHeadlines.${categoryKey}`;
 };
-const onSelect = (component: string) => {
-    emit('select', component);
+const onSelect = (item: PickerItem) => {
+    if (item.kind === 'preset' && item.id) {
+        emit('select-preset', item.id);
+
+        return;
+    }
+
+    emit('select', item.name);
+};
+const itemTooltip = (item: PickerItem) => {
+    if (item.kind !== 'preset') {
+        return { message: item.label };
+    }
+
+    const description = item.description ? `<br>${item.description}` : '';
+
+    return { message: `<strong>${item.label}</strong>${description}` };
 };
 
 ctDefinePublic({
@@ -176,6 +203,7 @@ ctDefinePublic({
     normalizeCategoryKey,
     categoryHeadlineSnippetKey,
     onSelect,
+    itemTooltip,
 });
 
 defineExpose({
@@ -186,5 +214,6 @@ defineExpose({
     normalizeCategoryKey,
     categoryHeadlineSnippetKey,
     onSelect,
+    itemTooltip,
 });
 </script>

@@ -7,9 +7,10 @@ use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemB
 use Contena\Core\Framework\ContentSystem\Binding\ResolvedByLoaderBranch;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Slot\SlotContent;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\SlotSpecification;
@@ -38,7 +39,7 @@ final class ReplaceElement extends AbstractLayoutMutation
     ) {
     }
 
-    public function apply(array $tree): array
+    public function apply(StoredTree $tree): StoredTree
     {
         $this->requireRegistered($this->registry, $this->newType);
 
@@ -47,42 +48,40 @@ final class ReplaceElement extends AbstractLayoutMutation
         // load-bearing for correctness.
         $this->droppedProperties = [];
 
-        $node = $this->findNode($tree, $this->elementId);
+        $node = $tree->find($this->elementId);
 
         if ($node === null) {
             throw ContentSystemException::mutationTargetNotFound($this->elementId);
         }
 
         $properties = $this->registry->get($this->newType)->properties();
-        $contextDefinitions = $node->getContextDefinitions();
+        $contextDefinitions = $node->contextDefinitions;
         $default = $this->resolveDefaultSpecification($this->bindingRegistry, $this->newType);
 
-        $keptDataRequirements = $this->carryWiring($node->getDataRequirements(), $properties);
+        $keptDataRequirements = $this->carryWiring($node->dataRequirements, $properties);
         $keptProviders = $this->carryWiring($contextDefinitions->getAllProviders(), $properties);
         $keptConsumers = $this->carryWiring($contextDefinitions->getAllConsumers(), $properties);
-        $keptAttributedSpecifications = array_intersect_key($node->getAttributedSpecifications(), $keptDataRequirements);
+        $keptAttributedSpecifications = array_intersect_key($node->attributedSpecifications, $keptDataRequirements);
 
         $this->droppedWiring = $this->droppedWiringKeys(
-            [...array_keys($node->getDataRequirements()), ...array_keys($contextDefinitions->getAllProviders()), ...array_keys($contextDefinitions->getAllConsumers())],
+            [...array_keys($node->dataRequirements), ...array_keys($contextDefinitions->getAllProviders()), ...array_keys($contextDefinitions->getAllConsumers())],
             [...array_keys($keptDataRequirements), ...array_keys($keptProviders), ...array_keys($keptConsumers)],
         );
 
-        $replacement = new ContentElement(
-            $node->getId(),
-            $this->newType,
-            $keptDataRequirements,
+        // The id rides along untouched, and so does the style: it is universal and type-independent, so it carries
+        // over unconditionally on a type swap. Every field the swap does change is named below.
+        $replacement = $node
+            ->withComponent($this->newType)
+            ->withDataRequirements($keptDataRequirements)
             // Carried/authored values win; the new type's primitive defaults fill only the keys it does not carry
             // (absent, or dropped as type-incompatible) — mirroring scaffoldElement so a default is honored on
             // replace just as it is on insert.
-            $this->carryProperties($node->getProperties(), $properties, $default) + $this->primitiveDefaults($this->registry, $this->newType),
-            $this->carrySlots($node),
-            new ContextDefinitions($keptProviders, $keptConsumers),
-            // style is universal and type-independent, so it carries over unconditionally on a type swap
-            $node->getStyle(),
+            ->withProperties($this->carryProperties($node->properties(), $properties, $default) + $this->primitiveDefaults($this->registry, $this->newType))
+            ->withSlots($this->carrySlots($node))
+            ->withContextDefinitions(new ContextDefinitions($keptProviders, $keptConsumers))
             // attribution follows the carried data requirements, not the provider/consumer sets: an entry survives
             // only while the reference wiring it attributes still exists on the replacement
-            $keptAttributedSpecifications,
-        );
+            ->withAttributedSpecifications($keptAttributedSpecifications);
 
         if ($default !== null) {
             $replacement = $this->bindingApplicator->applyFillOnly($replacement, $default, $default->qualifiedId());
@@ -90,8 +89,10 @@ final class ReplaceElement extends AbstractLayoutMutation
 
         // Whole subtree, not just the replaced element: a kept descendant may re-resolve if the new type drops a provider it consumed.
         $this->affected = $this->subtreeIds($replacement);
+        // Carried-over children keep their nodes; only the replaced node itself is re-scaffolded.
+        $this->created = [$replacement->id];
 
-        return $this->replaceNode($tree, $this->elementId, $replacement);
+        return $tree->replace($this->elementId, $replacement);
     }
 
     /**
@@ -104,10 +105,10 @@ final class ReplaceElement extends AbstractLayoutMutation
      * coupling "declared string property" to "entity storage key" by shape coincidence would coincidentally match
      * a declared string property with the same name as an unrelated storage key.
      *
-     * @param array<string, mixed> $properties
+     * @param array<string, StoredValue> $properties
      * @param array<string, PropertySpecification> $newTypeProperties
      *
-     * @return array<string, mixed>
+     * @return array<string, StoredValue>
      */
     private function carryProperties(array $properties, array $newTypeProperties, ?BindingSpecification $default): array
     {
@@ -212,23 +213,23 @@ final class ReplaceElement extends AbstractLayoutMutation
     }
 
     /**
-     * @return array<string, SlotContent>
+     * @return array<string, list<StoredElement>>
      */
-    private function carrySlots(ContentElement $node): array
+    private function carrySlots(StoredElement $node): array
     {
         $slotNames = array_map(static fn (SlotSpecification $slot): string => $slot->name(), $this->registry->get($this->newType)->slots());
 
         $kept = [];
         $orphaned = [];
 
-        foreach ($node->getSlots() as $slotName => $slotContent) {
+        foreach ($node->slots as $slotName => $children) {
             if (\in_array($slotName, $slotNames, true)) {
-                $kept[$slotName] = $slotContent;
+                $kept[$slotName] = $children;
 
                 continue;
             }
 
-            foreach (array_values($slotContent->getElements()) as $child) {
+            foreach ($children as $child) {
                 $orphaned[] = $child;
             }
         }
@@ -238,13 +239,19 @@ final class ReplaceElement extends AbstractLayoutMutation
         return $kept;
     }
 
-    private function primitiveMatches(mixed $value, string $declaredType): bool
+    /**
+     * The declared primitive type judges the raw payload, so the stored value is unwrapped to compare against it.
+     * A list or map variant unwraps to an array and matches no primitive type, which is the intended answer.
+     */
+    private function primitiveMatches(StoredValue $value, string $declaredType): bool
     {
+        $raw = $value->jsonSerialize();
+
         return match ($declaredType) {
-            'string' => \is_string($value),
-            'integer' => \is_int($value),
-            'number' => \is_int($value) || \is_float($value),
-            'boolean' => \is_bool($value),
+            'string' => \is_string($raw),
+            'integer' => \is_int($raw),
+            'number' => \is_int($raw) || \is_float($raw),
+            'boolean' => \is_bool($raw),
             default => false,
         };
     }

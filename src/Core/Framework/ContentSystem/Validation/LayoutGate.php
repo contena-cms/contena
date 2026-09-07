@@ -4,12 +4,14 @@ namespace Contena\Core\Framework\ContentSystem\Validation;
 
 use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
 
 /**
  * The layout gate: the two gate predicates. It never throws — it returns a {@see DiagnosticsReport}.
  * Well-formedness gates persistence; resolvability for the declared root source gates serving.
+ *
+ * @internal
  */
 class LayoutGate
 {
@@ -31,7 +33,7 @@ class LayoutGate
     /**
      * Structural validity and validity of present wiring only — the persistence gate.
      *
-     * @param list<ContentElement> $tree
+     * @param list<StoredElement> $tree
      */
     public function wellFormedness(array $tree): DiagnosticsReport
     {
@@ -41,7 +43,7 @@ class LayoutGate
     /**
      * Full resolvability for a bound source's root context — the serving gate.
      *
-     * @param list<ContentElement> $tree
+     * @param list<StoredElement> $tree
      * @param list<ProvidedContext> $providedRootContext
      */
     public function resolvability(array $tree, array $providedRootContext): DiagnosticsReport

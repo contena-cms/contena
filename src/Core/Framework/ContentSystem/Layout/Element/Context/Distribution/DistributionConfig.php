@@ -13,8 +13,6 @@ use Symfony\Component\Validator\Constraint;
  *
  * @phpstan-type DistributionConfigData BroadcastDistributionConfigData|IndexedDistributionConfigData|IteratorDistributionConfigData|KeyedDistributionConfigData|SlicedDistributionConfigData
  * @phpstan-type ConsumerElementData array{component: string, properties: array<string, mixed>}
- *
- * @internal
  */
 interface DistributionConfig
 {

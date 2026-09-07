@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\ContentSystem\Cache;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\ContentSystem\ContentSection;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 /**

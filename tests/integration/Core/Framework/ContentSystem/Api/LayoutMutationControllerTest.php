@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Api;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -147,6 +147,43 @@ class LayoutMutationControllerTest extends TestCase
         static::assertNotSame('incoming', $body['affectedElementIds'][0]);
     }
 
+    #[TestDox('inserts a core preset subtree at the root in a single mutation with server-minted ids')]
+    public function testInsertPreset(): void
+    {
+        $body = $this->mutate('insert-preset', [
+            'layout' => [$this->element('block-a', TestElementTypeLoader::RESOLVABLE)],
+            'presetId' => 'core.media-and-text',
+        ]);
+
+        static::assertCount(2, $body['layout']);
+        static::assertSame('block-a', $body['layout'][0]['id']);
+
+        $container = $body['layout'][1];
+        static::assertSame('CT:Grid:Container', $container['component']);
+        static::assertCount(2, $container['slots']['content']);
+        static::assertSame('CT:Media:Image', $container['slots']['content'][0]['component']);
+        static::assertSame('CT:Content:Text', $container['slots']['content'][1]['component']);
+
+        static::assertSame($container['id'], $body['affectedElementIds'][0]);
+        static::assertNotContains('block-a', $body['affectedElementIds']);
+        static::assertArrayHasKey('resolutions', $body);
+    }
+
+    #[TestDox('rejects an unknown preset id with a 404')]
+    public function testInsertPresetRejectsUnknownPreset(): void
+    {
+        $this->getBrowser()->jsonRequest('POST', self::BASE_URL . 'insert-preset', [
+            'layout' => [$this->element('block-a', TestElementTypeLoader::RESOLVABLE)],
+            'presetId' => 'core.does-not-exist',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode(), (string) $response->getContent());
+
+        $body = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+        static::assertContains(ContentSystemException::LAYOUT_PRESET_NOT_FOUND, array_column($body['errors'], 'code'));
+    }
+
     #[TestDox('rejects a structural impossibility with a 400 without persisting')]
     public function testStructuralImpossibilityReturns400(): void
     {
@@ -158,6 +195,156 @@ class LayoutMutationControllerTest extends TestCase
         ]);
 
         static::assertSame(Response::HTTP_BAD_REQUEST, $this->getBrowser()->getResponse()->getStatusCode());
+    }
+
+    #[TestDox('rejects a numeric wiring key in the draft layout with a 400 invalidLayoutStructure before any mutation runs')]
+    public function testNumericWiringKeyReturns400(): void
+    {
+        $component = TestElementTypeLoader::RESOLVABLE;
+
+        $this->getBrowser()->jsonRequest('POST', self::BASE_URL . 'remove-element', [
+            'layout' => [[
+                'id' => 'block-a',
+                'component' => $component,
+                'properties' => [1 => 'x'],
+            ]],
+            'elementId' => 'block-a',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), (string) $response->getContent());
+
+        $body = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+        static::assertContains(ContentSystemException::INVALID_LAYOUT_STRUCTURE, array_column($body['errors'], 'code'));
+    }
+
+    #[TestDox('returns resolvability diagnostics in the body for an unresolvable root source rather than throwing')]
+    public function testResolvabilityDiagnosticsReturnedNotThrown(): void
+    {
+        // insert an element that cannot resolve against the blog root source (it requires an entity the source
+        // does not provide); the route must report resolvable=false in a 200 body, never throw a 500
+        $body = $this->mutate('insert-element', [
+            'layout' => [$this->element('block-a', TestElementTypeLoader::RESOLVABLE)],
+            'type' => TestElementTypeLoader::UNRESOLVABLE,
+            'rootSource' => 'blog',
+        ]);
+
+        static::assertFalse($body['diagnostics']['resolvable']);
+    }
+
+    #[TestDox('inlines the core CT:Media:Image default specification\'s wiring and attribution on a draft bind')]
+    public function testBindElementInlinesCoreSpecificationWiringAndAttribution(): void
+    {
+        $body = $this->mutate('bind-element', [
+            'layout' => [$this->element('img-1', 'CT:Media:Image')],
+            'elementId' => 'img-1',
+            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
+        ]);
+
+        $bound = $body['layout'][0];
+        static::assertSame('img-1', $bound['id']);
+        static::assertSame(
+            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
+            $bound['dataRequirements']['media']
+        );
+        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $bound['attributedSpecifications']);
+    }
+
+    #[TestDox('applies the core CT:Media:Image default specification atomically when inserting a fresh image on the draft route')]
+    public function testInsertElementAppliesCoreBindingWiringAndAttribution(): void
+    {
+        $body = $this->mutate('insert-element', [
+            'layout' => [],
+            'type' => 'CT:Media:Image',
+            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
+        ]);
+
+        $inserted = $body['layout'][0];
+        static::assertSame(
+            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
+            $inserted['dataRequirements']['media']
+        );
+        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $inserted['attributedSpecifications']);
+    }
+
+    #[TestDox('resolves the bound media reference via CandidateOrigin::Stored once mediaId is filled in on the bound draft')]
+    public function testBoundImageWithMediaIdFilledResolvesMediaViaStoredWiring(): void
+    {
+        $bound = $this->mutate('bind-element', [
+            'layout' => [$this->element('img-1', 'CT:Media:Image')],
+            'elementId' => 'img-1',
+            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
+        ])['layout'][0];
+
+        $bound['properties']['mediaId'] = 'a-media-id';
+
+        $this->getBrowser()->jsonRequest('POST', '/api/_action/content-system/layout/diagnose', ['layout' => [$bound]]);
+        $response = $this->getBrowser()->getResponse();
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+
+        $diagnosis = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+        $mediaResolution = $this->resolutionFor($diagnosis['resolutions']['img-1'], 'media');
+
+        static::assertNotNull($mediaResolution['resolved']);
+        static::assertSame('stored', $mediaResolution['resolved']['origin']);
+    }
+
+    #[TestDox('auto-applies the core CT:Media:Image default specification on a fresh image insert carrying no bindingSpecificationId')]
+    public function testInsertElementAutoAppliesCoreDefaultWithoutBindingSpecificationId(): void
+    {
+        // No bindingSpecificationId is sent, so the media wiring and attribution can only come from the type's
+        // auto-applied default (the byType()/isDefault() fill path), not from the overwriting apply() the explicit
+        // bindingSpecificationId tests drive: a wrong-result regression in that fill path leaves media unwired here.
+        $body = $this->mutate('insert-element', [
+            'layout' => [],
+            'type' => 'CT:Media:Image',
+        ]);
+
+        $inserted = $body['layout'][0];
+        static::assertSame(
+            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
+            $inserted['dataRequirements']['media']
+        );
+        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $inserted['attributedSpecifications']);
+    }
+
+    #[TestDox('reports an unregistered style option in the 200 diagnostics body rather than rejecting the mutation')]
+    public function testMutationReportsUnknownStyleOptionInDiagnostics(): void
+    {
+        $component = TestElementTypeLoader::RESOLVABLE;
+
+        $element = $this->element('block-a', $component);
+        $element['style'] = ['definitely-not-a-style-option' => ['xs' => 'x']];
+
+        $body = $this->mutate('remove-element', [
+            'layout' => [$element, $this->element('block-b', $component)],
+            'elementId' => 'block-b',
+        ]);
+
+        static::assertFalse($body['diagnostics']['wellFormed']);
+
+        $violations = array_values(array_filter(
+            $body['diagnostics']['violations'],
+            static fn (array $violation): bool => $violation['code'] === 'unknown_style_option',
+        ));
+
+        static::assertCount(1, $violations);
+        static::assertSame('block-a', $violations[0]['elementId']);
+        static::assertSame('definitely-not-a-style-option', $violations[0]['key']);
+    }
+
+    #[TestDox('treats an empty rootSource as absent and evaluates only well-formedness without gating')]
+    public function testTreatsEmptyRootSourceAsAbsent(): void
+    {
+        $component = TestElementTypeLoader::RESOLVABLE;
+
+        $body = $this->mutate('insert-element', [
+            'layout' => [$this->element('block-a', $component)],
+            'type' => $component,
+            'rootSource' => '',
+        ]);
+
+        static::assertTrue($body['diagnostics']['wellFormed']);
     }
 
     #[TestDox('rejects non-string wrap target ids at the request boundary with a 400')]
@@ -173,20 +360,6 @@ class LayoutMutationControllerTest extends TestCase
         ]);
 
         static::assertSame(Response::HTTP_BAD_REQUEST, $this->getBrowser()->getResponse()->getStatusCode());
-    }
-
-    #[TestDox('returns resolvability diagnostics in the body for an unresolvable root source rather than throwing')]
-    public function testResolvabilityDiagnosticsReturnedNotThrown(): void
-    {
-        // insert an element that cannot resolve against the blog root source (it requires an entity the source
-        // does not provide); the route must report resolvable=false in a 200 body, never throw a 500
-        $body = $this->mutate('insert-element', [
-            'layout' => [$this->element('block-a', TestElementTypeLoader::RESOLVABLE)],
-            'type' => TestElementTypeLoader::UNRESOLVABLE,
-            'rootSource' => 'blog',
-        ]);
-
-        static::assertFalse($body['diagnostics']['resolvable']);
     }
 
     #[TestDox('rejects an unknown rootSource with a 400 and the unknownRootSource code, never reaching resolve')]
@@ -225,10 +398,8 @@ class LayoutMutationControllerTest extends TestCase
         static::assertContains(ContentSystemException::UNKNOWN_REQUEST_FIELD, array_column($body['errors'], 'code'));
     }
 
-    // These two tests cover the negative paths that need no shipped specification, and double as the
-    // bind-element route-wiring check: a 400 with this app-level error code (not a Symfony 404
-    // route-not-found body) proves the request reached LayoutMutationController::bind(). The positive
-    // round trip against the real shipped core:CT:Media:Image default follows below.
+    // Doubles as the bind-element route-wiring check: a 400 with this app-level error code
+    // (not a Symfony 404 route-not-found body) proves the request reached LayoutMutationController::bind().
     #[TestDox('rejects an unknown bindingSpecificationId with a 400 and the bindingSpecificationNotFound code')]
     public function testBindElementRejectsUnknownBindingSpecification(): void
     {
@@ -247,82 +418,6 @@ class LayoutMutationControllerTest extends TestCase
         static::assertContains(ContentSystemException::BINDING_SPECIFICATION_NOT_FOUND, array_column($body['errors'], 'code'));
     }
 
-    #[TestDox('inlines the core CT:Media:Image default specification\'s wiring and attribution on a draft bind')]
-    public function testBindElementInlinesCoreSpecificationWiringAndAttribution(): void
-    {
-        $body = $this->mutate('bind-element', [
-            'layout' => [$this->element('img-1', 'CT:Media:Image')],
-            'elementId' => 'img-1',
-            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
-        ]);
-
-        $bound = $body['layout'][0];
-        static::assertSame('img-1', $bound['id']);
-        static::assertSame(
-            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
-            $bound['dataRequirements']['media']
-        );
-        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $bound['attributedSpecifications']);
-    }
-
-    #[TestDox('resolves the bound media reference via CandidateOrigin::Stored once mediaId is filled in on the bound draft')]
-    public function testBoundImageWithMediaIdFilledResolvesMediaViaStoredWiring(): void
-    {
-        $bound = $this->mutate('bind-element', [
-            'layout' => [$this->element('img-1', 'CT:Media:Image')],
-            'elementId' => 'img-1',
-            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
-        ])['layout'][0];
-
-        $bound['properties']['mediaId'] = 'a-media-id';
-
-        $this->getBrowser()->jsonRequest('POST', '/api/_action/content-system/layout/diagnose', ['layout' => [$bound]]);
-        $response = $this->getBrowser()->getResponse();
-        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
-
-        $diagnosis = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-        $mediaResolution = $this->resolutionFor($diagnosis['resolutions']['img-1'], 'media');
-
-        static::assertNotNull($mediaResolution['resolved']);
-        static::assertSame('stored', $mediaResolution['resolved']['origin']);
-    }
-
-    #[TestDox('applies the core CT:Media:Image default specification atomically when inserting a fresh image on the draft route')]
-    public function testInsertElementAppliesCoreBindingWiringAndAttribution(): void
-    {
-        $body = $this->mutate('insert-element', [
-            'layout' => [],
-            'type' => 'CT:Media:Image',
-            'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
-        ]);
-
-        $inserted = $body['layout'][0];
-        static::assertSame(
-            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
-            $inserted['dataRequirements']['media']
-        );
-        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $inserted['attributedSpecifications']);
-    }
-
-    #[TestDox('auto-applies the core CT:Media:Image default specification on a fresh image insert carrying no bindingSpecificationId')]
-    public function testInsertElementAutoAppliesCoreDefaultWithoutBindingSpecificationId(): void
-    {
-        // No bindingSpecificationId is sent, so the media wiring and attribution can only come from the type's
-        // auto-applied default (the byType()/isDefault() fill path), not from the overwriting apply() the explicit
-        // bindingSpecificationId tests drive: a wrong-result regression in that fill path leaves media unwired here.
-        $body = $this->mutate('insert-element', [
-            'layout' => [],
-            'type' => 'CT:Media:Image',
-        ]);
-
-        $inserted = $body['layout'][0];
-        static::assertSame(
-            ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
-            $inserted['dataRequirements']['media']
-        );
-        static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $inserted['attributedSpecifications']);
-    }
-
     #[TestDox('rejects an insert whose bindingSpecificationId type does not match the inserted type with a 400 bindingTypeMismatch')]
     public function testInsertElementRejectsMismatchedBindingType(): void
     {
@@ -337,20 +432,6 @@ class LayoutMutationControllerTest extends TestCase
 
         $body = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         static::assertContains(ContentSystemException::BINDING_TYPE_MISMATCH, array_column($body['errors'], 'code'));
-    }
-
-    #[TestDox('treats an empty rootSource as absent and evaluates only well-formedness without gating')]
-    public function testTreatsEmptyRootSourceAsAbsent(): void
-    {
-        $component = TestElementTypeLoader::RESOLVABLE;
-
-        $body = $this->mutate('insert-element', [
-            'layout' => [$this->element('block-a', $component)],
-            'type' => $component,
-            'rootSource' => '',
-        ]);
-
-        static::assertTrue($body['diagnostics']['wellFormed']);
     }
 
     /**

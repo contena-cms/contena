@@ -112,6 +112,7 @@
                     "content": "Content",
                     "layout": "Layout",
                     "media": "Media",
+                    "presets": "Presets",
                     "other": "Other"
                 }
             },

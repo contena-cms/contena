@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\ContentSystem;
 
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -27,7 +27,7 @@ class DraftLayoutChecker
     }
 
     /**
-     * @param list<ContentElement> $elements
+     * @param list<StoredElement> $elements
      */
     public function check(array $elements): ConstraintViolationListInterface
     {

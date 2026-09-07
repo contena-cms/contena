@@ -6,8 +6,6 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specificatio
  * Immutable value vocabulary of a single style option: a primitive type plus its declarative bounds
  * and an advisory default.
  *
- * @internal
- *
  * @phpstan-type StyleRange = array{min?: int|float, max?: int|float}
  * @phpstan-type StyleValueTypeSchema = array{
  *     type: string,

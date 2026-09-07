@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Mutation\Op;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Mutation\AbstractLayoutMutation;
 
 /**
@@ -20,7 +21,7 @@ final class DuplicateElement extends AbstractLayoutMutation
     ) {
     }
 
-    public function apply(array $tree): array
+    public function apply(StoredTree $tree): StoredTree
     {
         $location = $this->locate($tree, $this->elementId);
 
@@ -30,13 +31,14 @@ final class DuplicateElement extends AbstractLayoutMutation
 
         $clone = $this->cloneWithNewIds($location->node);
         $this->affected = $this->subtreeIds($clone);
+        $this->created = $this->affected;
 
         $index = $this->index ?? $location->index + 1;
 
         if ($location->parent === null) {
-            return $this->insertAtRoot($tree, $index, [$clone]);
+            return $tree->insertAtRoot($index, [$clone]);
         }
 
-        return $this->insertIntoSlot($tree, $location->parent->parentId, $location->parent->slot, $index, [$clone]);
+        return $tree->insertIntoSlot($location->parent->parentId, $location->parent->slot, $index, [$clone]);
     }
 }

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
@@ -18,9 +14,10 @@ use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
 use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
+use Contena\Core\Framework\ContentSystem\LayoutReference;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\NavigationController;
@@ -32,6 +29,10 @@ use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
 use Contena\Frontend\Pagelet\Header\HeaderPagelet;
 use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Contena\Frontend\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoaderInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,8 +55,6 @@ class NavigationControllerTest extends TestCase
     private AbstractCategoryUrlGenerator $categoryUrlGenerator;
 
     private SeoUrlPlaceholderHandlerInterface&Stub $seoUrlReplacer;
-
-    private AbstractContentRoute&Stub $contentRoute;
 
     private AbstractContentRoute&Stub $headerContentRoute;
 
@@ -83,7 +82,6 @@ class NavigationControllerTest extends TestCase
                 };
             });
         $this->categoryUrlGenerator = new CategoryUrlGenerator($entityRouteResolver);
-        $this->contentRoute = static::createStub(AbstractContentRoute::class);
         $this->headerContentRoute = static::createStub(AbstractContentRoute::class);
         $this->footerContentRoute = static::createStub(AbstractContentRoute::class);
         $this->headerContentRoute->method('load')->willThrowException(new \RuntimeException('No header layout assigned'));
@@ -96,7 +94,6 @@ class NavigationControllerTest extends TestCase
             $this->footerLoader,
             $this->categoryUrlGenerator,
             $this->seoUrlReplacer,
-            $this->contentRoute,
             $this->headerContentRoute,
             $this->footerContentRoute,
         );
@@ -116,8 +113,9 @@ class NavigationControllerTest extends TestCase
 
         $request = new Request();
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('layout-id', [], 'home-layout', null);
-        $this->contentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'home-layout', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
+        $this->controller->contentPage = $contentPage;
 
         $this->controller->home($request, $context);
         static::assertSame('@Frontend/frontend/page/content/page.html.twig', $this->controller->renderFrontendView);
@@ -140,8 +138,9 @@ class NavigationControllerTest extends TestCase
             'navigationId' => Uuid::randomHex(),
         ]);
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('layout-id', [], 'category-layout', null);
-        $this->contentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'category-layout', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
+        $this->controller->contentPage = $contentPage;
 
         $this->controller->index($context, $request);
         static::assertSame('@Frontend/frontend/page/content/page.html.twig', $this->controller->renderFrontendView);
@@ -161,19 +160,13 @@ class NavigationControllerTest extends TestCase
 
         $request = new Request(['navigationId' => $category->getId()]);
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('layout-id', [], 'category-layout', null);
-        $this->contentRoute->method('load')->willReturnCallback(
-            static function (string $path, Request $routeRequest, ChannelContext $routeContext) use ($category, $request, $context, $contentPage): ContentRouteResponse {
-                static::assertSame('/category/' . $category->getId(), $path);
-                static::assertSame($request, $routeRequest);
-                static::assertSame($context, $routeContext);
-
-                return new ContentRouteResponse($contentPage);
-            },
-        );
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'category-layout', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
+        $this->controller->contentPage = $contentPage;
 
         $this->controller->index($context, $request);
 
+        static::assertSame('/category/' . $category->getId(), $this->controller->loadedContentPath);
         static::assertSame('@Frontend/frontend/page/content/page.html.twig', $this->controller->renderFrontendView);
         static::assertSame($navigationPage, $this->controller->renderFrontendParameters['page']);
         static::assertSame($contentPage, $this->controller->renderFrontendParameters['contentPage']);
@@ -187,8 +180,9 @@ class NavigationControllerTest extends TestCase
 
         $request = new Request();
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('layout-id', [], 'raw-layout', null);
-        $this->contentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'raw-layout', null), null);
+        $contentPage = ContentPage::fromRenderResult($renderResult);
+        $this->controller->contentPage = $contentPage;
 
         $this->controller->content('standalone', $request, $context);
 
@@ -358,9 +352,11 @@ class NavigationControllerTest extends TestCase
     {
         $request = new Request();
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('header-layout', [], 'Header', null);
+        $renderResult = new RenderResult([], LayoutReference::create('header-layout', 'Header', null), null);
+        $contentResponse = new ContentRouteResponse($renderResult);
+        $contentPage = $contentResponse->getContentPage();
         $headerContentRoute = static::createStub(AbstractContentRoute::class);
-        $headerContentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $headerContentRoute->method('load')->willReturn($contentResponse);
 
         $this->controller = $this->buildController(headerContentRoute: $headerContentRoute);
         $this->controller->header($request, $context);
@@ -373,9 +369,11 @@ class NavigationControllerTest extends TestCase
     {
         $request = new Request();
         $context = Generator::generateChannelContext();
-        $contentPage = new ContentPage('footer-layout', [], 'Footer', null);
+        $renderResult = new RenderResult([], LayoutReference::create('footer-layout', 'Footer', null), null);
+        $contentResponse = new ContentRouteResponse($renderResult);
+        $contentPage = $contentResponse->getContentPage();
         $footerContentRoute = static::createStub(AbstractContentRoute::class);
-        $footerContentRoute->method('load')->willReturn(new ContentRouteResponse($contentPage));
+        $footerContentRoute->method('load')->willReturn($contentResponse);
 
         $this->controller = $this->buildController(footerContentRoute: $footerContentRoute);
         $this->controller->footer($request, $context);
@@ -397,7 +395,6 @@ class NavigationControllerTest extends TestCase
             $footerLoader ?? $this->footerLoader,
             $this->categoryUrlGenerator,
             $this->seoUrlReplacer,
-            $this->contentRoute,
             $headerContentRoute ?? $this->headerContentRoute,
             $footerContentRoute ?? $this->footerContentRoute,
         );

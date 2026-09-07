@@ -1,4 +1,5 @@
 /**
+ * @ct-package framework
  */
 
 import type { AxiosInstance } from 'axios';
@@ -14,9 +15,8 @@ type ContentSystemPreviewRequestPayload = {
     entityId: string;
     channelId: string;
     languageId?: string | null;
-    currencyId?: string | null;
     domainId?: string | null;
-    customerId?: string | null;
+    memberId?: string | null;
     queryParameters?: Record<string, unknown>;
 };
 
@@ -27,14 +27,6 @@ class ContentSystemPreviewApiService extends ApiService {
     constructor(httpClient: AxiosInstance, loginService: LoginService, apiEndpoint = 'content-system') {
         super(httpClient, loginService, apiEndpoint);
         this.name = 'contentSystemPreviewService';
-    }
-
-    previewEntity(payload: ContentSystemPreviewRequestPayload): Promise<Record<string, unknown>> {
-        return this.httpClient
-            .post<Record<string, unknown>>('/_action/content-system/preview/entity', payload, {
-                headers: this.getBasicHeaders(),
-            })
-            .then((response) => ApiService.handleResponse<Record<string, unknown>>(response));
     }
 
     previewEntityUrl(payload: ContentSystemPreviewRequestPayload): Promise<string> {

@@ -1,11 +1,10 @@
-import type { ContentSystemStyleOptionSpecification } from 'src/core/service/api/content-system-style-option.api.service';
-import type { ContentElementNode } from '../types/content-element.types';
-import { normalizeElementStyleForWrite } from './style-settings.util';
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 
 const { cloneDeep } = Contena.Utils.object;
 
 /**
  * @private
+ * @ct-package discovery
  */
 export interface ElementLocation {
     elements: ContentElementNode[];
@@ -14,6 +13,7 @@ export interface ElementLocation {
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function findElementLocation(layout: ContentElementNode[], elementId: string): ElementLocation | null {
     const rootIndex = layout.findIndex((element) => element.id === elementId);
@@ -38,38 +38,7 @@ export function findElementLocation(layout: ContentElementNode[], elementId: str
 
 /**
  * @private
- */
-export function sanitizeContentElementForWrite(
-    element: ContentElementNode,
-    styleOptions?: Record<string, ContentSystemStyleOptionSpecification>,
-): ContentElementNode {
-    const sanitized: ContentElementNode = {
-        id: element.id,
-        component: element.component,
-    };
-
-    copyWritableContentElementFields(
-        element,
-        sanitized,
-        (slotElements) => slotElements.map((slotElement) => sanitizeContentElementForWrite(slotElement, styleOptions)),
-        styleOptions,
-    );
-
-    return sanitized;
-}
-
-/**
- * @private
- */
-export function sanitizeContentElementLayoutForWrite(
-    layout: ContentElementNode[],
-    styleOptions?: Record<string, ContentSystemStyleOptionSpecification>,
-): ContentElementNode[] {
-    return layout.map((element) => sanitizeContentElementForWrite(element, styleOptions));
-}
-
-/**
- * @private
+ * @ct-package discovery
  */
 export function updateElementPropertiesInLayout(
     layout: ContentElementNode[],
@@ -98,6 +67,7 @@ export function updateElementPropertiesInLayout(
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function updateElementStyleInLayout(
     layout: ContentElementNode[],
@@ -135,49 +105,6 @@ export function updateElementStyleInLayout(
     }
 
     return true;
-}
-
-function copyWritableContentElementFields(
-    source: ContentElementNode,
-    target: ContentElementNode,
-    mapSlotElements: (slotElements: ContentElementNode[]) => ContentElementNode[],
-    styleOptions?: Record<string, ContentSystemStyleOptionSpecification>,
-): void {
-    if (source.properties !== undefined) {
-        target.properties = cloneDeep(source.properties);
-    }
-
-    if (source.style !== undefined) {
-        const style = cloneDeep(source.style);
-        const normalizedStyle = styleOptions ? normalizeElementStyleForWrite(style, styleOptions) : style;
-
-        if (normalizedStyle !== undefined) {
-            target.style = normalizedStyle;
-        }
-    }
-
-    if (source.dataRequirements !== undefined) {
-        target.dataRequirements = cloneDeep(source.dataRequirements);
-    }
-
-    if (source.providesContext !== undefined) {
-        target.providesContext = cloneDeep(source.providesContext);
-    }
-
-    if (source.acceptsContext !== undefined) {
-        target.acceptsContext = cloneDeep(source.acceptsContext);
-    }
-
-    if (source.slots) {
-        target.slots = {};
-
-        for (const [
-            slotName,
-            slotElements,
-        ] of Object.entries(source.slots)) {
-            target.slots[slotName] = mapSlotElements(slotElements);
-        }
-    }
 }
 
 function findElementLocationInElement(parent: ContentElementNode, elementId: string): ElementLocation | null {

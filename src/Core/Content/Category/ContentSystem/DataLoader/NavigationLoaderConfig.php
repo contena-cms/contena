@@ -19,7 +19,7 @@ final readonly class NavigationLoaderConfig extends AbstractContentDataLoaderCon
 {
     /**
      * @param non-empty-string|null $rootId Navigation root ID or alias (main-navigation, service-navigation, footer-navigation)
-     * @param positive-int|null $depth Navigation tree depth, null to follow the channel's navigationCategoryDepth
+     * @param positive-int|null $depth Navigation tree depth, null to follow the sales channel's navigationCategoryDepth
      * @param non-empty-string $activeProperty Element property name to read active category ID from
      */
     public function __construct(

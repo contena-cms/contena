@@ -9,7 +9,7 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
  * in the Channel API response — not what is stored in the database. This is the schema
  * for the API output.
  *
- * - FQCN-typed properties (e.g., ChannelProductEntity) are filled at runtime by
+ * - FQCN-typed properties (e.g., ChannelBlogEntity) are filled at runtime by
  *   the hydration pipeline (data loaders or context distribution).
  * - Primitive-typed properties (string, boolean, integer, number) are set statically
  *   at design time and persisted in the element's properties map.

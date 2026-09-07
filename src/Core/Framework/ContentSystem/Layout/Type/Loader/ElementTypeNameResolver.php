@@ -28,7 +28,7 @@ class ElementTypeNameResolver
                 throw ContentSystemException::elementTypeInvalidFilename($segment, $relativePath);
             }
 
-            // kebab-case to PascalCase: "product-card" -> camel "productCard" -> title "ProductCard"
+            // kebab-case to PascalCase: "blog-card" -> camel "blogCard" -> title "BlogCard"
             $resolved[] = u($segment)->camel()->title()->toString();
         }
 

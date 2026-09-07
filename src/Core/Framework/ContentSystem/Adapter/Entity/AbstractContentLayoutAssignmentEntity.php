@@ -8,7 +8,9 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\System\Channel\ChannelEntity;
 
 /**
- * Shared properties for sales channel and content layout across content layout assignments.
+ * Shared properties for channel and content layout across content layout assignments.
+ *
+ * @internal
  */
 abstract class AbstractContentLayoutAssignmentEntity extends Entity
 {

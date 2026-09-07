@@ -26,12 +26,12 @@
                             "examples": {
                                 "minimal": {
                                     "summary": "Insert at the root of a never-updated layout",
-                                    "value": { "type": "CT:Content:Text", "expectedVersion": null }
+                                    "value": { "type": "Sw:Content:Text", "expectedVersion": null }
                                 },
                                 "withOptionalPlacement": {
                                     "summary": "Insert into a slot at a position, with a version token",
                                     "value": {
-                                        "type": "CT:Content:Text",
+                                        "type": "Sw:Content:Text",
                                         "expectedVersion": "2026-06-22T10:00:00.000+00:00",
                                         "parentElementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a3b",
                                         "slot": "content",
@@ -41,8 +41,8 @@
                                 "withBinding": {
                                     "summary": "Insert an image and apply a binding specification atomically",
                                     "value": {
-                                        "type": "CT:Media:Image",
-                                        "bindingSpecificationId": "core:CT:Media:Image",
+                                        "type": "Sw:Media:Image",
+                                        "bindingSpecificationId": "core:Sw:Media:Image",
                                         "expectedVersion": "2026-06-22T10:00:00.000+00:00"
                                     }
                                 }
@@ -88,7 +88,7 @@
                                                     "status": "409",
                                                     "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                                     "title": "Conflict",
-                                                    "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                                    "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                                 }
                                             ]
                                         }
@@ -119,7 +119,7 @@
                                                     "status": "409",
                                                     "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                                     "title": "Conflict",
-                                                    "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                                    "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                                 }
                                             ]
                                         }
@@ -257,7 +257,7 @@
                                     "summary": "Replace an element's type",
                                     "value": {
                                         "elementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40",
-                                        "newType": "CT:Content:Text",
+                                        "newType": "Sw:Content:Text",
                                         "expectedVersion": "2026-06-22T10:00:00.000+00:00"
                                     }
                                 }
@@ -309,7 +309,7 @@
                                                     "status": "409",
                                                     "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                                     "title": "Conflict",
-                                                    "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                                    "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                                 }
                                             ]
                                         }
@@ -340,7 +340,7 @@
                                                     "status": "409",
                                                     "code": "CONTENT_SYSTEM__BINDING_SPECIFICATION_DEFAULT_AMBIGUOUS",
                                                     "title": "Conflict",
-                                                    "detail": "Element type \"CT:Media:Image\" has more than one default binding specification (core:CT:Media:Image, app:AcmeApp:CT:Media:Image), but at most one specification may be default per type."
+                                                    "detail": "Element type \"Sw:Media:Image\" has more than one default binding specification (core:Sw:Media:Image, app:AcmeApp:Sw:Media:Image), but at most one specification may be default per type."
                                                 }
                                             ]
                                         }
@@ -576,7 +576,7 @@
                                     "summary": "Bind a specification to an element",
                                     "value": {
                                         "elementId": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a40",
-                                        "bindingSpecificationId": "core:CT:Media:Image",
+                                        "bindingSpecificationId": "core:Sw:Media:Image",
                                         "expectedVersion": "2026-06-22T10:00:00.000+00:00"
                                     }
                                 }

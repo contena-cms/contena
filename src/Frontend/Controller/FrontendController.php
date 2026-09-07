@@ -6,6 +6,9 @@ use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
+use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
+use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
@@ -48,8 +51,24 @@ abstract class FrontendController extends AbstractController
         $services[MediaUrlPlaceholderHandlerInterface::class] = MediaUrlPlaceholderHandlerInterface::class;
         $services['translator'] = TranslatorInterface::class;
         $services[RequestTransformerInterface::class] = RequestTransformerInterface::class;
+        $services[AbstractContentRoute::class] = AbstractContentRoute::class;
 
         return $services;
+    }
+
+    protected function loadContentPage(string $path, Request $request, ChannelContext $context): ?ContentPage
+    {
+        try {
+            $contentPageResponse = $this->container->get(AbstractContentRoute::class)->load($path, $request, $context);
+        } catch (\Exception) {
+            return null;
+        }
+
+        if (!$contentPageResponse instanceof ContentRouteResponse) {
+            return null;
+        }
+
+        return $contentPageResponse->getContentPage();
     }
 
     /**

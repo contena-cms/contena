@@ -13,8 +13,6 @@ use Contena\Core\Framework\ContentSystem\Binding\AttributionReconciler;
  * via their canonicalized `encode(decode(...))`, so a serializer that violates this contract makes two
  * configs that carry the same authored wiring encode differently and drops an attribution that is in
  * fact still honest.
- *
- * @internal
  */
 abstract class AbstractContentDataLoaderConfigSerializer
 {

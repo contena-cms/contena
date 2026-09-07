@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Schema;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSe
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * The drift guard between each data loader's declared {@see LoaderConfigSpecification} and its
@@ -82,6 +82,20 @@ class LoaderConfigSpecificationContractTest extends TestCase
                 static::assertTrue(
                     $this->defaultMatchesDeclaredType($key),
                     \sprintf('The non-null default does not match the declared type "%s" in %s.', $key->type, $label),
+                );
+                static::assertContains(
+                    $key->referencedType,
+                    ConfigKeySpecification::REFERENCED_TYPES,
+                    \sprintf('Unknown declared referenced type "%s" in %s.', $key->referencedType, $label),
+                );
+                static::assertTrue(
+                    $this->referencedTypeIsPlaced($key),
+                    \sprintf('A non-propertyReference key must leave referencedType at "string" in %s.', $label),
+                );
+                static::assertSame(
+                    '',
+                    $this->mergeViolation($key, $spec),
+                    \sprintf('Invalid merge declaration in %s.', $label),
                 );
             }
         }
@@ -170,6 +184,53 @@ class LoaderConfigSpecificationContractTest extends TestCase
                 ),
             );
         }
+    }
+
+    /**
+     * `referencedType` defaults to `'string'`, so a `propertyReference` key pointing at a LIST value is
+     * silently wrong unless it declares one: the resolver type-checks the stored list against `'string'`,
+     * fails, and hands the loader an unresolvable input — for `entity_collection` that is an empty result
+     * for every layout, and no unit test of the loader would notice. The roster makes a new
+     * `propertyReference` key a conscious edit here rather than an inherited default, and it fails on a key
+     * added to an existing source as well as on a whole new source.
+     */
+    #[TestDox('every declared propertyReference key matches the referenced-value type roster')]
+    public function testEveryPropertyReferenceKeyMatchesTheReferencedTypeRoster(): void
+    {
+        $expected = [
+            'blog_listing.associationOverride' => 'list<string>',
+            'blog_listing.property' => 'string',
+            'blog_search.associationOverride' => 'list<string>',
+            'blog_search.searchTermProperty' => 'string',
+            'blog_suggest.associationOverride' => 'list<string>',
+            'blog_suggest.searchTermProperty' => 'string',
+            'breadcrumb.property' => 'string',
+            'breadcrumb.referrerCategoryProperty' => 'string',
+            'entity.property' => 'string',
+            'entity_collection.property' => 'list<string>',
+            'navigation.activeProperty' => 'string',
+            'test_multi_reference_gating.activeProperty' => 'string',
+            'test_multi_reference_gating.property' => 'string',
+            'test_multi_reference_gating.secondProperty' => 'string',
+            'test_navigation_shaped.activeProperty' => 'string',
+        ];
+
+        $actual = [];
+        foreach ($this->dataLoaderProvider()->getSources() as $source) {
+            foreach ($this->specificationFor($source)->keysOfKind(ConfigKeyKind::PropertyReference) as $key) {
+                $actual[$source . '.' . $key->name] = $key->referencedType;
+            }
+        }
+
+        ksort($actual);
+
+        static::assertSame(
+            $expected,
+            $actual,
+            'The propertyReference roster changed. A key pointing at a list value MUST declare '
+            . 'referencedType: \'list<string>\'; a scalar reference stays \'string\'. Decide which this key is, '
+            . 'then update this roster.',
+        );
     }
 
     #[TestDox('no source passes an undeclared config key through its serializer')]
@@ -307,6 +368,52 @@ class LoaderConfigSpecificationContractTest extends TestCase
         }
 
         return true;
+    }
+
+    private function referencedTypeIsPlaced(ConfigKeySpecification $key): bool
+    {
+        if ($key->kind === ConfigKeyKind::PropertyReference) {
+            return true;
+        }
+
+        return $key->referencedType === 'string';
+    }
+
+    /**
+     * The empty string means "no violation"; anything else names what is wrong, so the assertion message
+     * carries the reason the way the compiler pass's exception message does.
+     */
+    private function mergeViolation(ConfigKeySpecification $key, LoaderConfigSpecification $spec): string
+    {
+        if ($key->mergesInto === null) {
+            return '';
+        }
+
+        if ($key->kind !== ConfigKeyKind::PropertyReference) {
+            return \sprintf('only a propertyReference key can merge, this one has kind "%s"', $key->kind->value);
+        }
+
+        if ($key->referencedType !== 'list<string>') {
+            return \sprintf('a merging key must reference a "list<string>" value, this one references "%s"', $key->referencedType);
+        }
+
+        if ($key->mergesInto === $key->name) {
+            return 'a key cannot merge into itself';
+        }
+
+        foreach ($spec->keys as $candidate) {
+            if ($candidate->name !== $key->mergesInto) {
+                continue;
+            }
+
+            if ($candidate->kind !== ConfigKeyKind::Literal || $candidate->type !== 'list<string>') {
+                return \sprintf('the merge target "%s" must be a literal key of type "list<string>"', $candidate->name);
+            }
+
+            return '';
+        }
+
+        return \sprintf('the merge target "%s" is not declared in the same specification', $key->mergesInto);
     }
 
     private function missingDefaultIsNull(ConfigKeySpecification $key): bool

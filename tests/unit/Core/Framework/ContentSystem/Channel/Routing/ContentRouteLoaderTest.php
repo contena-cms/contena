@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Channel\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Channel\Routing\ContentRouteDefinition;
 use Contena\Core\Framework\ContentSystem\Channel\Routing\ContentRouteLoader;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader;
 
 /**
  * The semantics of one config key of a {@see LoaderConfigSpecification}: what the stored value names.
- *
- * @internal
  */
 enum ConfigKeyKind: string
 {

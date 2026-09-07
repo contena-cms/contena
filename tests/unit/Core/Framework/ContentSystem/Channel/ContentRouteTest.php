@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\ContentSystem\Adapter\RenderingSpecificationResolver;
 use Contena\Core\Framework\ContentSystem\Cache\CacheFinalizer;
@@ -17,18 +13,25 @@ use Contena\Core\Framework\ContentSystem\ContentSection;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
+use Contena\Core\Framework\ContentSystem\LayoutReference;
 use Contena\Core\Framework\ContentSystem\Output\Format\AbstractResponseFactory;
-use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
+use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\PlaceholderValues;
 use Contena\Core\Framework\ContentSystem\RenderableLayout;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedElement;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
 use Contena\Core\Framework\ContentSystem\ResolvedContentLayout;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,7 +60,8 @@ class ContentRouteTest extends TestCase
     public function testLoadReturnsContentPageAndCollectsCacheTags(): void
     {
         $request = new Request();
-        $contentPage = new ContentPage('layout-1', [ContentElementBuilder::create('root')->build()], 'Test', null);
+        $root = new RenderedElement('root', 'section');
+        $renderResult = $this->createRenderResult([$root]);
 
         $collectedTags = [];
         $this->cacheTagCollector->method('addTag')
@@ -67,15 +71,17 @@ class ContentRouteTest extends TestCase
 
         $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request, ['blog-abc']));
         $this->responseFactory->method('getRenderingMode')->willReturn(RenderingMode::FULL);
-        $this->contentPipeline->method('load')->willReturn($contentPage);
-        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($contentPage));
+        $this->contentPipeline->method('load')->willReturn($renderResult);
+        $this->responseFactory->method('createResponse')
+            ->willReturnCallback(fn (RenderResult $passed): ContentRouteResponse => new ContentRouteResponse($passed));
 
         $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
 
         $result = $route->load('/blog/abc', $request, Generator::generateChannelContext());
 
         static::assertInstanceOf(ContentRouteResponse::class, $result);
-        static::assertSame($contentPage, $result->getContentPage());
+        static::assertSame('layout-1', $result->getContentPage()->id);
+        static::assertSame([$root], $result->getContentPage()->elements);
         static::assertContains('content-layout-layout-1', $collectedTags);
         static::assertContains('blog-abc', $collectedTags);
     }
@@ -84,24 +90,51 @@ class ContentRouteTest extends TestCase
     public function testLoadDisablesHttpCacheWhenPipelineDisablesCacheContext(): void
     {
         $request = new Request();
-        $contentPage = new ContentPage('layout-1', [ContentElementBuilder::create('root')->build()], 'Test', null);
 
         $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request));
         $this->responseFactory->method('getRenderingMode')->willReturn(RenderingMode::FULL);
         $this->contentPipeline->method('load')->willReturnCallback(
-            function (RenderableLayout $layout, RenderingSpecification $specification, RenderingCacheContext $cacheContext) use ($contentPage): ContentPage {
+            function (RenderableLayout $layout, RenderingSpecification $specification, RenderingCacheContext $cacheContext): RenderResult {
                 $cacheContext->disable();
 
-                return $contentPage;
+                return $this->createRenderResult();
             }
         );
-        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($contentPage));
+        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($this->createRenderResult()));
 
         $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
 
         $route->load('/blog/abc', $request, Generator::generateChannelContext());
 
         static::assertFalse($request->attributes->get(PlatformRequest::ATTRIBUTE_HTTP_CACHE));
+    }
+
+    #[TestDox('hands the pipeline both answers the format gives: its rendering mode and whether it collects a value index')]
+    public function testLoadPassesTheFormatsModeAndIndexCollectionToThePipeline(): void
+    {
+        $request = new Request();
+
+        $this->specificationResolver->method('resolve')->willReturn($this->createResolved($request));
+        // Deliberately an unusual pair no shipped format uses, so a route reading one answer off the other
+        // cannot pass: the two questions are independent.
+        $this->responseFactory->method('getRenderingMode')->willReturn(RenderingMode::SKELETON);
+        $this->responseFactory->method('collectsValueIndex')->willReturn(true);
+        $this->responseFactory->method('createResponse')->willReturn(new ContentRouteResponse($this->createRenderResult()));
+
+        $observed = [];
+        $this->contentPipeline->method('load')->willReturnCallback(
+            function (RenderableLayout $layout, RenderingSpecification $specification, RenderingCacheContext $cacheContext, RenderingMode $mode, bool $collectValueIndex) use (&$observed): RenderResult {
+                $observed = [$mode, $collectValueIndex];
+
+                return $this->createRenderResult();
+            }
+        );
+
+        $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
+
+        $route->load('/blog/abc', $request, Generator::generateChannelContext());
+
+        static::assertSame([RenderingMode::SKELETON, true], $observed);
     }
 
     #[TestDox('throws layout not found when the resolved layout does not exist')]
@@ -116,6 +149,41 @@ class ContentRouteTest extends TestCase
         $this->expectExceptionObject(ContentSystemException::layoutNotFound('layout-1'));
 
         $route->load('/blog/abc', $request, Generator::generateChannelContext());
+    }
+
+    /**
+     * @param 'attributes'|'query'|'request' $bag
+     */
+    #[DataProvider('fieldSelectionProvider')]
+    #[TestDox('rejects a $parameter parameter arriving in the $bag bag, naming it, before specification resolution runs')]
+    public function testLoadRejectsFieldSelectionFromEveryBag(string $bag, string $parameter): void
+    {
+        $request = new Request();
+        $request->{$bag}->set($parameter, ['content_page' => ['elements']]);
+
+        // The refusal has to happen at admission: a resolver that runs at all fails the test rather than
+        // letting a later throw stand in for the early one.
+        $this->specificationResolver->method('resolve')
+            ->willThrowException(new \LogicException('Specification resolution must not run for a rejected request.'));
+
+        $route = $this->createRoute($this->createLayoutRepository($this->createLayoutEntity()));
+
+        $this->expectExceptionObject(ContentSystemException::fieldSelectionNotSupported($parameter));
+
+        $route->load('/blog/abc', $request, Generator::generateChannelContext());
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function fieldSelectionProvider(): iterable
+    {
+        yield 'includes in attributes' => ['attributes', 'includes'];
+        yield 'includes in query' => ['query', 'includes'];
+        yield 'includes in request' => ['request', 'includes'];
+        yield 'excludes in attributes' => ['attributes', 'excludes'];
+        yield 'excludes in query' => ['query', 'excludes'];
+        yield 'excludes in request' => ['request', 'excludes'];
     }
 
     #[TestDox('throws DecorationPatternException from getDecorated')]
@@ -140,6 +208,14 @@ class ContentRouteTest extends TestCase
             $this->contentPipeline,
             new CacheFinalizer($this->cacheTagCollector),
         );
+    }
+
+    /**
+     * @param list<RenderedElement> $tree
+     */
+    private function createRenderResult(array $tree = []): RenderResult
+    {
+        return new RenderResult($tree, LayoutReference::create('layout-1', 'Test', null), null);
     }
 
     /**
@@ -170,7 +246,7 @@ class ContentRouteTest extends TestCase
         $entity->setId($id);
         $entity->setName($name);
         $entity->setVersion('1.0');
-        $entity->setLayout([ContentElementBuilder::create('root')->build()]);
+        $entity->setLayout([StoredElementBuilder::create('root')->build()]);
 
         return $entity;
     }

@@ -7,6 +7,9 @@ use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecificat
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+/**
+ * @internal
+ */
 class ContentSystemBindingSpecificationRegistry extends AbstractContentSystemBindingSpecificationRegistry
 {
     /**

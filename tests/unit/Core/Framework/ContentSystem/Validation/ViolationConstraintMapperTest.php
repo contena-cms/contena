@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
 use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

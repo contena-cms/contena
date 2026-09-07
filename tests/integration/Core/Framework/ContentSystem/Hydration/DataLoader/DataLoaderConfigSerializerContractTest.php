@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Hydration\DataLoader;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogListingDataLoader;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSearchDataLoader;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSuggestDataLoader;
@@ -20,6 +17,9 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Language\ContentSystem\DataLoader\LanguageDataLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestNavigationShapedLoader;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
@@ -100,15 +100,15 @@ class DataLoaderConfigSerializerContractTest extends TestCase
         ];
         yield BlogListingDataLoader::SOURCE => [
             'source' => BlogListingDataLoader::SOURCE,
-            'config' => ['property' => 'navigationId', 'associations' => ['tags']],
+            'config' => ['property' => 'navigationId', 'associations' => ['manufacturer']],
         ];
         yield BlogSearchDataLoader::SOURCE => [
             'source' => BlogSearchDataLoader::SOURCE,
-            'config' => ['searchTermProperty' => 'searchTerm', 'associations' => ['tags']],
+            'config' => ['searchTermProperty' => 'searchTerm', 'associations' => ['manufacturer']],
         ];
         yield BlogSuggestDataLoader::SOURCE => [
             'source' => BlogSuggestDataLoader::SOURCE,
-            'config' => ['searchTermProperty' => 'searchTerm', 'associations' => ['tags']],
+            'config' => ['searchTermProperty' => 'searchTerm', 'associations' => ['manufacturer']],
         ];
         yield LanguageDataLoader::SOURCE => [
             'source' => LanguageDataLoader::SOURCE,
@@ -116,11 +116,11 @@ class DataLoaderConfigSerializerContractTest extends TestCase
         ];
         yield EntityLoader::SOURCE => [
             'source' => EntityLoader::SOURCE,
-            'config' => ['entity' => 'blog', 'property' => 'name', 'associations' => ['tags']],
+            'config' => ['entity' => 'blog', 'property' => 'name', 'associations' => ['manufacturer']],
         ];
         yield EntityCollectionLoader::SOURCE => [
             'source' => EntityCollectionLoader::SOURCE,
-            'config' => ['entity' => 'blog', 'property' => 'name', 'associations' => ['tags']],
+            'config' => ['entity' => 'blog', 'property' => 'name', 'associations' => ['manufacturer']],
         ];
         yield TestMultiReferenceGatingLoader::SOURCE => [
             'source' => TestMultiReferenceGatingLoader::SOURCE,

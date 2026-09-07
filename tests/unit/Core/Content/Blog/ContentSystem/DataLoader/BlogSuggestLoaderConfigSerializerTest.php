@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\ContentSystem\DataLoader;
 
+use Contena\Core\Content\Blog\BlogException;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSuggestLoaderConfig;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSuggestLoaderConfigSerializer;
+use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWithJson;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\BlogException;
-use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSuggestLoaderConfig;
-use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSuggestLoaderConfigSerializer;
-use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 
 /**
  * @internal
@@ -31,14 +31,15 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
         static::assertSame('blog_suggest', BlogSuggestLoaderConfigSerializer::getSource());
     }
 
-    #[TestDox('decodes empty array into BlogSuggestLoaderConfig with null searchTermProperty')]
-    public function testDecodeEmptyArrayReturnsConfigWithNullSearchTermProperty(): void
+    #[TestDox('decodes empty array into BlogSuggestLoaderConfig with every field at its default')]
+    public function testDecodeEmptyArrayReturnsConfigWithAllDefaults(): void
     {
         $result = $this->serializer->decode([]);
 
         static::assertInstanceOf(BlogSuggestLoaderConfig::class, $result);
         static::assertNull($result->searchTermProperty);
         static::assertSame([], $result->associations);
+        static::assertNull($result->associationOverride);
     }
 
     #[TestDox('decodes config with valid searchTermProperty into config with property set')]
@@ -54,11 +55,11 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
     #[TestDox('decodes config with valid associations into config with associations set')]
     public function testDecodeWithValidAssociationsSetsAssociations(): void
     {
-        $result = $this->serializer->decode(['associations' => ['tags', 'categories']]);
+        $result = $this->serializer->decode(['associations' => ['manufacturer', 'categories']]);
 
         static::assertInstanceOf(BlogSuggestLoaderConfig::class, $result);
         static::assertNull($result->searchTermProperty);
-        static::assertSame(['tags', 'categories'], $result->associations);
+        static::assertSame(['manufacturer', 'categories'], $result->associations);
     }
 
     #[TestDox('decodes config with both searchTermProperty and associations into config with all values')]
@@ -66,12 +67,12 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
     {
         $result = $this->serializer->decode([
             'searchTermProperty' => 'suggestQuery',
-            'associations' => ['media', 'tags'],
+            'associations' => ['media', 'options'],
         ]);
 
         static::assertInstanceOf(BlogSuggestLoaderConfig::class, $result);
         static::assertSame('suggestQuery', $result->searchTermProperty);
-        static::assertSame(['media', 'tags'], $result->associations);
+        static::assertSame(['media', 'options'], $result->associations);
     }
 
     #[TestDox('decodes null associations into config with empty associations')]
@@ -105,7 +106,7 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
             BlogException::invalidFieldValueType('associations', 'array', 'string')
         );
 
-        $this->serializer->decode(['associations' => 'tags']);
+        $this->serializer->decode(['associations' => 'manufacturer']);
     }
 
     /**
@@ -131,7 +132,7 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
             ['associations' => ['']], 'associations.0', 'string',
         ];
         yield 'non-zero index correctly reported in field path' => [
-            ['associations' => ['tags', '']], 'associations.1', 'string',
+            ['associations' => ['manufacturer', '']], 'associations.1', 'string',
         ];
         yield 'non-string type triggers type guard' => [
             ['associations' => [42]], 'associations.0', 'integer',
@@ -161,11 +162,11 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
     #[TestDox('encodes config with associations into array containing associations key')]
     public function testEncodeConfigWithAssociationsIncludesAssociationsKey(): void
     {
-        $config = new BlogSuggestLoaderConfig(associations: ['media', 'tags']);
+        $config = new BlogSuggestLoaderConfig(associations: ['media', 'options']);
 
         $result = $this->serializer->encode($config);
 
-        static::assertSame(['associations' => ['media', 'tags']], $result);
+        static::assertSame(['associations' => ['media', 'options']], $result);
     }
 
     #[TestDox('encodes config with searchTermProperty and associations into full array')]
@@ -173,15 +174,39 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
     {
         $config = new BlogSuggestLoaderConfig(
             searchTermProperty: 'query',
-            associations: ['tags', 'categories'],
+            associations: ['manufacturer', 'categories'],
         );
 
         $result = $this->serializer->encode($config);
 
         static::assertSame([
             'searchTermProperty' => 'query',
-            'associations' => ['tags', 'categories'],
+            'associations' => ['manufacturer', 'categories'],
         ], $result);
+    }
+
+    #[TestDox('decodes a valid associationOverride into the config')]
+    public function testDecodeWithValidAssociationOverrideSetsAssociationOverride(): void
+    {
+        $result = $this->serializer->decode(['associationOverride' => 'extraAssociations']);
+
+        static::assertInstanceOf(BlogSuggestLoaderConfig::class, $result);
+        static::assertSame('extraAssociations', $result->associationOverride);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    #[TestWithJson('[{"associationOverride": ""}, "string"]', 'associationOverride is empty string')]
+    #[TestWithJson('[{"associationOverride": 42}, "integer"]', 'associationOverride is non-string type')]
+    #[TestDox('throws exception when associationOverride is invalid')]
+    public function testDecodeWithInvalidAssociationOverrideThrowsException(array $data, string $actualType): void
+    {
+        $this->expectExceptionObject(
+            BlogException::invalidFieldValueType('associationOverride', 'non-empty string', $actualType)
+        );
+
+        $this->serializer->decode($data);
     }
 
     /**
@@ -204,9 +229,10 @@ class BlogSuggestLoaderConfigSerializerTest extends TestCase
     {
         yield 'empty config' => [[]];
         yield 'searchTermProperty only' => [['searchTermProperty' => 'query']];
-        yield 'associations only' => [['associations' => ['tags', 'cover']]];
+        yield 'associations only' => [['associations' => ['options', 'cover']]];
+        yield 'association override only' => [['associationOverride' => 'extraAssociations']];
         yield 'full config' => [
-            ['searchTermProperty' => 'myQuery', 'associations' => ['tags', 'media']],
+            ['searchTermProperty' => 'myQuery', 'associations' => ['manufacturer', 'media']],
         ];
     }
 

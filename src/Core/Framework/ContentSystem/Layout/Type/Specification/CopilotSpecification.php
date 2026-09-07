@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
 
 /**
- * @internal
- *
  * @phpstan-type CopilotSchema = array{summary: string, hints: list<string>}
  */
 final readonly class CopilotSpecification

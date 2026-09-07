@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
 
 /**
- * @internal
- *
  * @phpstan-type PropertySchema = array{
  *     type: string|list<string>,
  *     translatable: bool,

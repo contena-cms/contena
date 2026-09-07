@@ -1,0 +1,54 @@
+meta:
+  label: "Breadcrumb"
+  description: "Renders the breadcrumb path of the current blog or category page."
+  icon: "double-chevron-right-s"
+  category: "content"
+  copilot:
+    summary: "Breadcrumb element for blog and category pages."
+    hints:
+      - "Place inside a blog or category page layout; the breadcrumb path is resolved from the page's entity automatically."
+
+properties:
+  breadcrumb:
+    type: Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection
+    required: false
+    title: "Breadcrumb"
+    description: "Breadcrumb path of the current blog or category page, resolved by the breadcrumb data loader from the page entity's id."
+    resolvedBy:
+      breadcrumb:
+        type: "{{entityType}}"
+        property: "{{entityIdField}}"
+        referrerCategoryProperty: referrerCategoryId
+
+  showHome:
+    type: boolean
+    title: "Show home link"
+    description: "Prepend a link to the shop home page in front of the breadcrumb path."
+    default: false
+    adminUI:
+      component: "switch"
+
+  referrerCategoryId:
+    type: string
+    required: false
+    title: "Referrer category ID"
+    description: "Category the visitor navigated from. When present, the breadcrumb follows that category's path; otherwise it falls back to the page entity's own default path. Filled per request from the referrerCategoryId query parameter, so it needs no editorial input."
+    default: "{{referrerCategoryId}}"
+    adminUI:
+      hidden: true
+
+  blogId:
+    type: string
+    title: "Blog entity ID"
+    description: "Id of the current blog page's entity. Resolved per request from the layout root, so it needs no editorial input."
+    default: "{{blogId}}"
+    adminUI:
+      hidden: true
+
+  categoryId:
+    type: string
+    title: "Category entity ID"
+    description: "Id of the current category page's entity. Resolved per request from the layout root, so it needs no editorial input."
+    default: "{{categoryId}}"
+    adminUI:
+      hidden: true

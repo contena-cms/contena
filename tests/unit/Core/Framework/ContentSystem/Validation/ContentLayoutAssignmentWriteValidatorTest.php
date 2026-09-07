@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAssignableDefinition;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Validation\ContentLayoutAssignmentWriteValidator;
@@ -17,6 +14,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidat
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Context;
 
+use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDependencyAnalyzer;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDependencyAnalyzer;
-use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
 
 /**
  * @internal
@@ -25,7 +25,7 @@ class ContextDependencyAnalyzerTest extends TestCase
     #[TestDox('returns true when element accepts context')]
     public function testRequiresParentDataReturnsTrueWhenElementAcceptsContext(): void
     {
-        $element = ContentElementBuilder::create('my-component')
+        $element = StoredElementBuilder::create('my-component')
             ->withConsumer('blog', ContextType::Single)
             ->build();
 
@@ -35,7 +35,7 @@ class ContextDependencyAnalyzerTest extends TestCase
     #[TestDox('returns false when element has no consumers')]
     public function testRequiresParentDataReturnsFalseWhenElementHasNoConsumers(): void
     {
-        $element = ContentElementBuilder::create('my-component')
+        $element = StoredElementBuilder::create('my-component')
             ->build();
 
         static::assertFalse($this->analyzer->requiresParentData($element));
@@ -44,9 +44,9 @@ class ContextDependencyAnalyzerTest extends TestCase
     #[TestDox('returns the index of the last non-consumer element')]
     public function testFindDataRootIndexReturnsLastNonConsumerIndex(): void
     {
-        $firstNonConsumer = ContentElementBuilder::create('root')->build();
-        $lastNonConsumer = ContentElementBuilder::create('middle')->build();
-        $consumerLeaf = ContentElementBuilder::create('leaf')
+        $firstNonConsumer = StoredElementBuilder::create('root')->build();
+        $lastNonConsumer = StoredElementBuilder::create('middle')->build();
+        $consumerLeaf = StoredElementBuilder::create('leaf')
             ->withConsumer('blog', ContextType::Single)
             ->build();
 
@@ -56,10 +56,10 @@ class ContextDependencyAnalyzerTest extends TestCase
     #[TestDox('returns zero when all elements require parent data')]
     public function testFindDataRootIndexReturnsZeroWhenAllElementsRequireParentData(): void
     {
-        $root = ContentElementBuilder::create('root')
+        $root = StoredElementBuilder::create('root')
             ->withConsumer('category', ContextType::Single)
             ->build();
-        $child = ContentElementBuilder::create('child')
+        $child = StoredElementBuilder::create('child')
             ->withConsumer('blog', ContextType::Collection)
             ->build();
 

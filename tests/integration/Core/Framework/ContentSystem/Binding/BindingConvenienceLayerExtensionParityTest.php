@@ -2,18 +2,18 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Binding;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationCanonicalizer;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
 use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoaderConfig;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Proves extension parity end to end. {@see TestMultiReferenceGatingLoader} is a data loader
@@ -123,14 +123,12 @@ class BindingConvenienceLayerExtensionParityTest extends TestCase
     /**
      * @param array<string, mixed> $properties
      */
-    private function wiredImage(array $properties): ContentElement
+    private function wiredImage(array $properties): StoredElement
     {
-        return new ContentElement(
-            'el-1',
-            'CT:Media:Image',
-            ['media' => new DataRequirement('media', TestMultiReferenceGatingLoader::SOURCE, new TestMultiReferenceGatingLoaderConfig('media', 'maxImageWidth', 'height', 'fetchpriority'))],
-            $properties,
-        );
+        return StoredElementBuilder::create('CT:Media:Image', 'el-1')
+            ->withDataRequirement('media', TestMultiReferenceGatingLoader::SOURCE, new TestMultiReferenceGatingLoaderConfig('media', 'maxImageWidth', 'height', 'fetchpriority'))
+            ->withProperties($properties)
+            ->build();
     }
 
     private function canonicalizer(): BindingSpecificationCanonicalizer

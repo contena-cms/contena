@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * No ChannelContext is built; diagnosis needs only the admin Context, passed straight through.
  *
+ * @internal
+ *
  * @final
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
@@ -28,8 +30,8 @@ class ContentDiagnoseController
      */
     public function __construct(
         private readonly DraftLayoutDecoder $decoder,
-        private readonly LayoutDiagnostics $diagnostics,
         private readonly RootSourceRegistry $rootSourceRegistry,
+        private readonly LayoutDiagnostics $diagnostics,
     ) {
     }
 
@@ -42,6 +44,7 @@ class ContentDiagnoseController
         [$tree, $decodeViolations] = $this->decoder->decodeLintable($payload->layout);
 
         $rootContext = $this->rootSourceRegistry->resolveGated($payload->rootSource, $context);
+
         $analysis = $this->diagnostics->analyze($tree, $rootContext);
 
         $report = new DiagnosticsReport([...$decodeViolations, ...$analysis->report->violations]);

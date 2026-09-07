@@ -16,15 +16,15 @@ The property key is the connecting identifier across all systems:
 
 - Type spec: `properties.blog` — "this element has a property called `blog`"
 - Element storage: `dataRequirements.blog` — "load `blog` via this data loader"
-- Element storage: `acceptsContext.blog` — "receive `blog` from a parent"
-- Hydrator: `$element->setProperty('blog', $data)` — "store loaded data under key `blog`"
+- Element storage: `acceptsContext.blog`: "receive `blog` from a parent, or from the layout's root-ambient context under `scope: root`"
+- Render step: `RenderedElementFactory` writes the resolved loader value onto the rendered element under key `blog`
 - API output: `properties.blog` — serialized ChannelBlogEntity
 
 The type spec declares WHAT properties exist and their types. The element instance declares HOW each non-primitive property gets its value (via `dataRequirements` or `acceptsContext`). These are different concerns with different structures, connected by the shared property key.
 
 **Alias and path variations:** The direct key match is the common case. Two exceptions:
 - Context consumers may use `propertyAlias` to store received data under a different key than the consumer key (e.g., `acceptsContext.blog` with `propertyAlias: "item"` stores data under `properties.item`).
-- Path-based consumers (e.g., `acceptsContext: blog.cover`) receive a resolved sub-property from the parent's `blog` context, stored under the consumer key or its property alias.
+- Path-based consumers (e.g., `acceptsContext: blog.cover`) receive a resolved sub-property from the `blog` context they match, the parent's or the root-ambient one, stored under the consumer key or its property alias.
 
 ## Type-to-Loader Bridge
 

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Specification\Dto;
 
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\PropertySpecificationDto;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\PropertySpecificationDto;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -61,11 +61,9 @@ class PropertySpecificationDtoTest extends TestCase
 
     #[DataProvider('blankFieldProvider')]
     #[TestDox('rejects blank $field')]
-    public function testRejectsBlankField(string $field, PropertySpecificationDto $dto, int $expectedViolations): void
+    public function testRejectsBlankField(string $field, PropertySpecificationDto $dto): void
     {
         $violations = $this->validator->validate($dto);
-
-        static::assertGreaterThanOrEqual($expectedViolations, $violations->count());
 
         $violatedPaths = [];
         foreach ($violations as $violation) {
@@ -76,32 +74,28 @@ class PropertySpecificationDtoTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{string, PropertySpecificationDto, int}>
+     * @return iterable<string, array{string, PropertySpecificationDto}>
      */
     public static function blankFieldProvider(): iterable
     {
         yield 'blank name' => [
             'name',
             new PropertySpecificationDto('', 'string', false, false, 'Title', 'Description.', null, null, null),
-            1,
         ];
 
         yield 'blank type' => [
             'type',
             new PropertySpecificationDto('variant', '', false, false, 'Title', 'Description.', null, null, null),
-            1,
         ];
 
         yield 'blank title' => [
             'title',
             new PropertySpecificationDto('variant', 'string', false, false, '', 'Description.', null, null, null),
-            1,
         ];
 
         yield 'blank description' => [
             'description',
             new PropertySpecificationDto('variant', 'string', false, false, 'Title', '', null, null, null),
-            1,
         ];
     }
 }

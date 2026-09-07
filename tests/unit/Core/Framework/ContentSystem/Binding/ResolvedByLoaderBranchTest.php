@@ -2,16 +2,17 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\ContentSystem\Binding\ResolvedByLoaderBranch;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityCollectionLoader\EntityCollectionLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoader;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\Struct\Struct;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -44,7 +45,7 @@ class ResolvedByLoaderBranchTest extends TestCase
     #[TestDox('validates stored value matches branch shape: $_dataName')]
     public function testMatchesStoredValueShape(ResolvedByLoaderBranch $branch, mixed $value, bool $expected): void
     {
-        static::assertSame($expected, $branch->matchesStoredValueShape($value));
+        static::assertSame($expected, $branch->matchesStoredValueShape(StoredValue::fromDecoded($value)));
     }
 
     /**

@@ -16,7 +16,8 @@ HTTP cache integration for content system routes. Manages cache tag collection d
 | blog        | `blog-{id}`            |
 | category       | `category-route-{id}`     |
 | landing_page   | `landing-page-route-{id}` |
-| content_layout | `content-layout-{id}`      |
+| cms_page       | `cms-page-{id}`           |
+| blog_stream | `blog-stream-{id}`     |
 
 Unsupported entities return null → page becomes uncacheable.
 

@@ -13,13 +13,18 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
 use Contena\Core\Framework\Api\Route\ApiRouteInfoResolver;
 use Contena\Core\Framework\Api\Route\RouteInfo;
+use Contena\Core\Framework\ContentSystem\Adapter\NoneSpecificationSource;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemBindingSpecificationRegistry;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPreset;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
+use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderSchemaGenerator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\BusinessEventCollector;
@@ -40,6 +45,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * @phpstan-import-type StyleOptionSchema from StyleOptionSpecification
  * @phpstan-import-type BindingSpecificationSchema from BindingSpecification
+ * @phpstan-import-type StoredSchemaEntry from StoredSchemaResolver
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class InfoController extends AbstractController
@@ -60,6 +66,8 @@ class InfoController extends AbstractController
         private readonly AbstractContentSystemStyleOptionRegistry $styleOptionRegistry,
         private readonly RootSourceRegistry $rootSourceRegistry,
         private readonly AbstractContentSystemBindingSpecificationRegistry $bindingSpecificationRegistry,
+        private readonly StoredSchemaResolver $storedSchemaResolver,
+        private readonly AbstractContentSystemLayoutPresetRegistry $layoutPresetRegistry,
         private readonly ?PresignedMediaUploadService $presignedMediaUploadService,
         private readonly MediaFileExtensionListProvider $mediaFileExtensionListProvider,
         private readonly BusinessEventCollector $businessEventCollector,
@@ -128,6 +136,29 @@ class InfoController extends AbstractController
     public function contentSystemEntityTypes(): JsonResponse
     {
         return new JsonResponse(['entityTypes' => $this->rootSourceRegistry->entityRootSources()]);
+    }
+
+    #[Route(path: '/api/_info/content-system-root-sources.json', name: 'api.info.content-system-root-sources', methods: ['GET'])]
+    public function contentSystemRootSources(Context $context): JsonResponse
+    {
+        $rootSources = array_map(
+            fn (string $rootSource): array => [
+                'id' => $rootSource,
+                'kind' => $this->contentSystemRootSourceKind($rootSource),
+                'providedContext' => array_map(
+                    static fn (ProvidedContext $provided): array => [
+                        'contextKey' => $provided->contextKey,
+                        'fqcn' => $provided->fqcn,
+                        'contextType' => $provided->contextType->value,
+                        'distribution' => $provided->distribution->value,
+                    ],
+                    $this->rootSourceRegistry->resolve($rootSource, $context)
+                ),
+            ],
+            $this->rootSourceRegistry->knownRootSources()
+        );
+
+        return new JsonResponse(['rootSources' => $rootSources]);
     }
 
     #[Route(path: '/api/_info/events.json', name: 'api.info.business-events', methods: ['GET'])]
@@ -247,16 +278,33 @@ class InfoController extends AbstractController
         return new JsonResponse(['styleOptions' => (object) $this->styleOptionSchemas()]);
     }
 
+    #[Route(path: '/api/_info/content-system-layout-presets.json', name: 'api.info.content-system-layout-presets', methods: ['GET'])]
+    public function getContentSystemLayoutPresets(): JsonResponse
+    {
+        $presets = array_map(
+            static fn (LayoutPreset $preset) => $preset->toArray(),
+            array_values($this->layoutPresetRegistry->all())
+        );
+
+        return new JsonResponse(['presets' => $presets]);
+    }
+
     /**
      * bindingSpecifications are folded into each type entry (mirrors the styleOptions precedent), keyed by
      * source-qualified id. Cast to an object so a type with none serializes {} (the OpenAPI type: object), not [].
      *
-     * @return array<string, mixed> the type's ElementTypeSchema plus the folded bindingSpecifications object
+     * storageSchema is folded in the same way, keyed by stored key: what an element of this type stores, as
+     * opposed to the spec's own properties, which is the hydrated output schema. Cast to an object so a type
+     * that stores nothing serializes {} (the OpenAPI type: object), not [].
+     *
+     * @return array<string, mixed> the type's ElementTypeSchema plus the folded bindingSpecifications and
+     *                              storageSchema objects
      */
     private function elementTypeSchema(ContentSystemElementTypeSpecification $def): array
     {
         $schema = $def->toSchema();
         $schema['bindingSpecifications'] = (object) $this->bindingSpecificationSchemasForType($def->name());
+        $schema['storageSchema'] = (object) $this->storedSchemaResolver->resolve($def);
 
         return $schema;
     }
@@ -284,6 +332,23 @@ class InfoController extends AbstractController
         }
 
         return $schemas;
+    }
+
+    /**
+     * "none" for the NoneSpecificationSource id, "entity" for an entity-type root source, "section" for the rest
+     * (the section keys header and footer).
+     */
+    private function contentSystemRootSourceKind(string $rootSource): string
+    {
+        if ($rootSource === NoneSpecificationSource::ROOT_SOURCE) {
+            return 'none';
+        }
+
+        if (\in_array($rootSource, $this->rootSourceRegistry->entityRootSources(), true)) {
+            return 'entity';
+        }
+
+        return 'section';
     }
 
     /**

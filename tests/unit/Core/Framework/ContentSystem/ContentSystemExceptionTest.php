@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem;
 
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -37,16 +37,29 @@ class ContentSystemExceptionTest extends TestCase
         static::assertSame($isClientDefect, ContentSystemException::isClientDefect($exception));
     }
 
+    /**
+     * The expected side is spelled as the literal wire strings rather than as the class constants the catalogue
+     * itself is built from. Reading both sides off the same constants would make the assertion self-referential:
+     * renaming a code's value would keep it green while breaking the error-code contract clients match on.
+     */
     #[TestDox('pins the catalogue of client-defect error codes')]
     public function testClientDefectCodes(): void
     {
         $expected = [
-            ContentSystemException::DATA_LOADER_NOT_REGISTERED,
-            ContentSystemException::CONFIG_SERIALIZER_NOT_REGISTERED,
-            ContentSystemException::UNKNOWN_LOADER_ENTITY,
-            ContentSystemException::INVALID_FIELD_VALUE_TYPE,
-            ContentSystemException::CONSUMER_ALIAS_WITHOUT_REDISTRIBUTE,
-            ContentSystemException::PROPERTY_ALIAS_WITH_DOT_NOTATION,
+            'CONTENT_SYSTEM__DATA_LOADER_NOT_REGISTERED',
+            'CONTENT_SYSTEM__CONFIG_SERIALIZER_NOT_REGISTERED',
+            'CONTENT_SYSTEM__UNKNOWN_LOADER_ENTITY',
+            'CONTENT_SYSTEM__INVALID_FIELD_VALUE_TYPE',
+            'CONTENT_SYSTEM__INVALID_FIELD_VALUE_RANGE',
+            'CONTENT_SYSTEM__CONSUMER_ALIAS_WITHOUT_REDISTRIBUTE',
+            'CONTENT_SYSTEM__PROPERTY_ALIAS_WITH_DOT_NOTATION',
+            'CONTENT_SYSTEM__PROPERTY_ALIAS_COLLISION',
+            'CONTENT_SYSTEM__REDISTRIBUTE_DOTTED_PATH',
+            'CONTENT_SYSTEM__REDISTRIBUTE_CONFLICT',
+            'CONTENT_SYSTEM__ROOT_SCOPE_WITH_REDISTRIBUTE',
+            'CONTENT_SYSTEM__PROVIDER_DELIVERY_COLLISION',
+            'CONTENT_SYSTEM__INVALID_MAP_KEY',
+            'CONTENT_SYSTEM__INVALID_ELEMENT_ID',
         ];
 
         $actual = ContentSystemException::CLIENT_DEFECT_CODES;
@@ -60,6 +73,17 @@ class ContentSystemExceptionTest extends TestCase
     public function testForeignThrowableIsNotAClientDefect(): void
     {
         static::assertFalse(ContentSystemException::isClientDefect(new \RuntimeException('boom')));
+    }
+
+    #[DataProvider('configSerializerMessageFormProvider')]
+    #[TestDox('formats the message for $_dataName')]
+    public function testConfigSerializerNotRegisteredMessageForm(string $source, ?string $elementId, string $expectedMessage): void
+    {
+        $exception = ContentSystemException::configSerializerNotRegistered($source, $elementId);
+
+        static::assertSame($expectedMessage, $exception->getMessage());
+        static::assertSame(ContentSystemException::CONFIG_SERIALIZER_NOT_REGISTERED, $exception->getErrorCode());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
     }
 
     #[TestDox('propagates previous throwable when loading element type fails')]
@@ -89,8 +113,16 @@ class ContentSystemExceptionTest extends TestCase
         // so a client typo must become an invalid_config diagnostic, not a 500 that aborts the write. The exact
         // catalogue membership is pinned by a separate test.
         yield 'a code in the client-defect catalogue as a client defect' => [ContentSystemException::unknownLoaderEntity('prodct'), true];
+        yield 'a provider delivery collision as a client defect' => [ContentSystemException::providerDeliveryCollision('item', 'blog', 'category', 'el-1'), true];
+        yield 'a root scope combined with redistribute as a client defect' => [ContentSystemException::rootScopeWithRedistribute('blog'), true];
         // A code outside the catalogue is an internal fault that must propagate, never relabelled as the client's mistake.
         yield 'a code outside the client-defect catalogue as an internal fault' => [ContentSystemException::invalidFieldType('A', 'B'), false];
+        // A served layout is stored data, not client input, so a corrupt forest is an internal fault.
+        yield 'a duplicate element id as an internal fault' => [ContentSystemException::duplicateElementId('repeated-id'), false];
+        // The two halves of the split: an HTTP 500 that is nonetheless a client defect, so the strict draft
+        // decode turns it into a 400 and the lintable one collects it as a 200 violation, while the
+        // stored-column read keeps the fault status.
+        yield 'an invalid element id as a client defect despite its 500' => [ContentSystemException::invalidElementId('12', 'PHP casts it to an integer array key'), true];
     }
 
     /**
@@ -103,6 +135,32 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'CONTENT_SYSTEM__DATA_LOADER_NOT_REGISTERED',
             'blog',
+        ];
+
+        // 500 while still a client-defect code, the split invalidFieldValueType and invalidMapKey take: the
+        // DAL write wraps it into an unconditional 400 and the draft routes answer 400 or 200 by catalogue
+        // membership, so the one path where this status IS the response is the stored-column read.
+        yield 'invalid element id' => [
+            ContentSystemException::invalidElementId('12', 'PHP casts it to an integer array key'),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            'CONTENT_SYSTEM__INVALID_ELEMENT_ID',
+            '12',
+        ];
+
+        // An element-definition wiring defect the client authored and can correct, so a 400 like its five
+        // siblings rather than the 500 the two rows above take.
+        yield 'root scope with redistribute' => [
+            ContentSystemException::rootScopeWithRedistribute('blog'),
+            Response::HTTP_BAD_REQUEST,
+            'CONTENT_SYSTEM__ROOT_SCOPE_WITH_REDISTRIBUTE',
+            'blog',
+        ];
+
+        yield 'preview payload invalid' => [
+            ContentSystemException::previewPayloadInvalid('layout', 'array', 'string'),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            'CONTENT_SYSTEM__PREVIEW_PAYLOAD_INVALID',
+            'layout',
         ];
 
         yield 'config serializer not registered' => [
@@ -147,6 +205,13 @@ class ContentSystemExceptionTest extends TestCase
             'foo',
         ];
 
+        yield 'duplicate element id' => [
+            ContentSystemException::duplicateElementId('repeated-id'),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            'CONTENT_SYSTEM__DUPLICATE_ELEMENT_ID',
+            'repeated-id',
+        ];
+
         yield 'layout assignment not found' => [
             ContentSystemException::layoutAssignmentNotFound('blog', 'prod-1', 'sc-1'),
             Response::HTTP_NOT_FOUND,
@@ -166,13 +231,6 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_NOT_FOUND,
             'CONTENT_SYSTEM__ELEMENT_NOT_FOUND',
             'elem-1',
-        ];
-
-        yield 'path integrity violation' => [
-            ContentSystemException::pathIntegrityViolation('duplicate key'),
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            'CONTENT_SYSTEM__PATH_INTEGRITY_VIOLATION',
-            'duplicate key',
         ];
 
         yield 'no factory can handle' => [
@@ -236,6 +294,13 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_BAD_REQUEST,
             'CONTENT_SYSTEM__PROPERTY_ALIAS_COLLISION',
             'Each propertyAlias must be unique within an element',
+        ];
+
+        yield 'provider delivery collision' => [
+            ContentSystemException::providerDeliveryCollision('item', 'blog', 'category', 'el-1'),
+            Response::HTTP_BAD_REQUEST,
+            'CONTENT_SYSTEM__PROVIDER_DELIVERY_COLLISION',
+            'Each child-facing key must be unique within an element',
         ];
 
         yield 'missing extends annotation' => [
@@ -369,6 +434,19 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_BAD_REQUEST,
             'CONTENT_SYSTEM__BINDING_TYPE_MISMATCH',
             'CT:Media:Image',
+        ];
+    }
+
+    /**
+     * @return iterable<string, array{string, string|null, string}>
+     */
+    public static function configSerializerMessageFormProvider(): iterable
+    {
+        yield 'without element id' => [
+            'yaml', null, 'Config serializer for source "yaml" is not registered',
+        ];
+        yield 'with element id' => [
+            'yaml', 'elem-1', 'Config serializer for source "yaml" is not registered. Element ID: "elem-1"',
         ];
     }
 }

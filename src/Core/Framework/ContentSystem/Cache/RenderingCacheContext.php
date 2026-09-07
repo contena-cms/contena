@@ -6,8 +6,6 @@ namespace Contena\Core\Framework\ContentSystem\Cache;
  * Passed through the pipeline and filled by data loaders.
  * Routes read the final state to determine caching behavior.
  *
- * @internal
- *
  * @final
  */
 class RenderingCacheContext

@@ -5,5 +5,5 @@
 ## Constraints
 
 - `RenderingCacheContext` created in route, passed through pipeline — tags accumulate, `disable()` is irreversible
-- Supported entities: blog, category, landing_page, content_layout — all others cause uncacheable
+- Supported entities: blog, category, landing_page, cms_page, blog_stream — all others cause uncacheable
 - Invalidation triggers: `EntityWrittenContainerEvent` for content_layout + all 5 assignment tables

@@ -1,10 +1,12 @@
 /**
  * @private
+ * @ct-package discovery
  */
 export type BoxSpacingSide = 'top' | 'right' | 'bottom' | 'left';
 
 /**
  * @private
+ * @ct-package discovery
  */
 export type BoxSpacingSides = Record<BoxSpacingSide, string>;
 
@@ -24,6 +26,7 @@ const HAS_CSS_UNIT_PATTERN = /^-?(\d+(\.\d+)?|\.\d+)[a-z%]+$/i;
  * Strips auto-added `px` for display in side inputs. User-provided units (% , rem, etc.) are kept.
  *
  * @private
+ * @ct-package discovery
  */
 export function formatBoxSpacingSideForInput(value: string): string {
     const trimmed = value.trim();
@@ -43,6 +46,7 @@ export function formatBoxSpacingSideForInput(value: string): string {
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function normalizeBoxSpacingUnit(value: string): string {
     const trimmed = value.trim();
@@ -68,6 +72,7 @@ export function normalizeBoxSpacingUnit(value: string): string {
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function normalizeBoxSpacingSide(value: string): string {
     const trimmed = value.trim();
@@ -90,6 +95,7 @@ function toInputSides(sides: BoxSpacingSides): BoxSpacingSides {
 
 /**
  * @private
+ * @ct-package discovery
  */
 export function parseBoxSpacing(value: string | null | undefined): BoxSpacingSides {
     if (value === null || value === undefined) {
@@ -156,6 +162,7 @@ export function parseBoxSpacing(value: string | null | undefined): BoxSpacingSid
 
 /**
  * @private
+ * @ct-package discovery
  */
 export type SerializeBoxSpacingOptions = {
     linked?: boolean;
@@ -164,21 +171,7 @@ export type SerializeBoxSpacingOptions = {
 
 /**
  * @private
- */
-export function isBoxSpacingStyleOption(
-    option:
-        | {
-              adminUI?: {
-                  component?: string;
-              } | null;
-          }
-        | undefined,
-): boolean {
-    return option?.adminUI?.component === 'box-spacing';
-}
-
-/**
- * @private
+ * @ct-package discovery
  */
 export function normalizeBoxSpacingCSSValue(value: unknown): string {
     if (value === null || value === undefined) {
@@ -204,27 +197,7 @@ export function normalizeBoxSpacingCSSValue(value: unknown): string {
 
 /**
  * @private
- */
-export function normalizeBoxSpacingStyleValueForWrite(value: unknown): unknown {
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-        return Object.fromEntries(
-            Object.entries(value).map(
-                ([
-                    breakpoint,
-                    entryValue,
-                ]) => [
-                    breakpoint,
-                    normalizeBoxSpacingCSSValue(entryValue),
-                ],
-            ),
-        );
-    }
-
-    return normalizeBoxSpacingCSSValue(value);
-}
-
-/**
- * @private
+ * @ct-package discovery
  */
 export function serializeBoxSpacing(sides: BoxSpacingSides, options: SerializeBoxSpacingOptions = {}): string {
     const hasAnyInput = [

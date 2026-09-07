@@ -1,5 +1,6 @@
 import { shallowMount, type VueWrapper } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
+import type { ExperienceStudioLayoutPresetStore } from 'src/module/ct-experience-studio/store/experience-studio-layout-preset.store';
 import detailComponent from '../index';
 
 const originalService = Contena.Service;
@@ -59,6 +60,7 @@ export async function createWrapper(
     const defaultServices = {
         contentSystemElementTypeService: { getTypes: jest.fn().mockResolvedValue([]) },
         contentSystemStyleOptionService: { getStyleOptions: jest.fn().mockResolvedValue({}) },
+        contentSystemLayoutPresetService: { getPresets: jest.fn().mockResolvedValue([]) },
         contentSystemEntityTypeService: {
             getEntityTypes: jest.fn().mockResolvedValue([
                 'category',
@@ -97,5 +99,9 @@ export async function createWrapper(
 /** @private */
 export function resetWrappers(): void {
     wrappers.splice(0).forEach((wrapper) => wrapper.unmount());
+    const layoutPresetStore = Contena.Store.get(
+        'experienceStudioLayoutPreset' as never,
+    ) as ExperienceStudioLayoutPresetStore;
+    layoutPresetStore.$reset();
     Contena.Service = originalService;
 }

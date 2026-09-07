@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Mutation\Op;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Slot\SlotContent;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\CopilotSpecification;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\WrapElements;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -19,55 +19,70 @@ use Contena\Core\Framework\ContentSystem\Mutation\Op\WrapElements;
 #[CoversClass(WrapElements::class)]
 class WrapElementsTest extends TestCase
 {
-    use AssertsImmutableInput;
-
     #[TestDox('wraps root siblings into a freshly minted container at the first target position, preserving slot order and reporting the container and wrapped ids as affected')]
     public function testWrapMovesSiblingsIntoContainer(): void
     {
-        $tree = [
-            new ContentElement('x', 'CT:Block'),
-            new ContentElement('a', 'CT:Block'),
-            new ContentElement('b', 'CT:Block'),
-            new ContentElement('y', 'CT:Block'),
-        ];
+        $tree = new StoredTree([
+            new StoredElement('x', 'CT:Block'),
+            new StoredElement('a', 'CT:Block'),
+            new StoredElement('b', 'CT:Block'),
+            new StoredElement('y', 'CT:Block'),
+        ]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['b', 'a'], 'CT:Container', 'content');
         $result = $wrap->apply($tree);
 
-        static::assertCount(3, $result);
-        static::assertSame(['x', 'CT:Container', 'y'], [$result[0]->getId(), $result[1]->getComponent(), $result[2]->getId()]);
-        $wrapped = array_values($result[1]->getSlots()['content']->getElements());
-        static::assertSame(['a', 'b'], array_map(static fn (ContentElement $e): string => $e->getId(), $wrapped));
-        static::assertSame([$result[1]->getId(), 'b', 'a'], $wrap->affected());
+        static::assertCount(3, $result->roots);
+        static::assertSame(['x', 'CT:Container', 'y'], [$result->roots[0]->id, $result->roots[1]->component, $result->roots[2]->id]);
+        static::assertSame(['a', 'b'], array_map(static fn (StoredElement $e): string => $e->id, $result->roots[1]->slots['content']));
+        static::assertSame([$result->roots[1]->id, 'b', 'a'], $wrap->affected());
     }
 
-    #[TestDox('wraps nested siblings inside their parent slot without mutating the input tree')]
+    #[TestDox('reports only the minted container as created, never the wrapped targets it moved')]
+    public function testCreatedIsTheContainerOnly(): void
+    {
+        $tree = new StoredTree([new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Block')]);
+
+        $wrap = new WrapElements($this->registry('CT:Container'), ['a', 'b'], 'CT:Container', 'content');
+        $result = $wrap->apply($tree);
+
+        static::assertSame([$result->roots[0]->id], $wrap->created());
+        static::assertSame('CT:Container', $result->roots[0]->component);
+    }
+
+    #[TestDox('wraps nested siblings inside their parent slot')]
     public function testWrapNestedSiblings(): void
     {
-        $tree = [new ContentElement('parent', 'CT:Block', [], ['title' => 'Section'], [
-            'content' => new SlotContent([new ContentElement('a', 'CT:Block'), new ContentElement('b', 'CT:Block')]),
-        ])];
-        $before = $this->snapshotTree($tree);
+        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
+            'content' => [new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Block')],
+        ])]);
 
         $result = new WrapElements($this->registry('CT:Container'), ['a', 'b'], 'CT:Container', 'items')->apply($tree);
 
-        $parentChildren = array_values($result[0]->getSlots()['content']->getElements());
+        $parentChildren = $result->roots[0]->slots['content'];
         static::assertCount(1, $parentChildren);
-        static::assertSame('CT:Container', $parentChildren[0]->getComponent());
-        $wrapped = array_values($parentChildren[0]->getSlots()['items']->getElements());
-        static::assertSame(['a', 'b'], array_map(static fn (ContentElement $e): string => $e->getId(), $wrapped));
-        $this->assertInputTreeUnmutated($before, $tree);
+        static::assertSame('CT:Container', $parentChildren[0]->component);
+        static::assertSame(['a', 'b'], array_map(static fn (StoredElement $e): string => $e->id, $parentChildren[0]->slots['items']));
+    }
+
+    #[TestDox('rejects wrapping an empty target list with a 400')]
+    public function testWrapEmptyTargetsRejected(): void
+    {
+        $wrap = new WrapElements($this->registry('CT:Container'), [], 'CT:Container', 'content');
+
+        $this->expectExceptionObject(ContentSystemException::mutationInvalidWrapTargets('at least one element is required'));
+        $wrap->apply(new StoredTree([new StoredElement('a', 'CT:Block')]));
     }
 
     #[TestDox('rejects wrapping non-sibling elements with a 400')]
     public function testWrapNonSiblingsRejected(): void
     {
-        $tree = [
-            new ContentElement('a', 'CT:Block'),
-            new ContentElement('parent', 'CT:Block', [], [], [
-                'content' => new SlotContent([new ContentElement('b', 'CT:Block')]),
+        $tree = new StoredTree([
+            new StoredElement('a', 'CT:Block'),
+            new StoredElement('parent', 'CT:Block', [], [], [
+                'content' => [new StoredElement('b', 'CT:Block')],
             ]),
-        ];
+        ]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['a', 'b'], 'CT:Container', 'content');
 
@@ -78,7 +93,7 @@ class WrapElementsTest extends TestCase
     #[TestDox('rejects an unregistered container type with a 400')]
     public function testWrapUnknownContainerTypeRejected(): void
     {
-        $tree = [new ContentElement('a', 'CT:Block')];
+        $tree = new StoredTree([new StoredElement('a', 'CT:Block')]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['a'], 'CT:Ghost', 'content');
 
@@ -89,7 +104,7 @@ class WrapElementsTest extends TestCase
     #[TestDox('rejects wrapping without a container slot with a 400')]
     public function testWrapWithoutSlotRejected(): void
     {
-        $tree = [new ContentElement('a', 'CT:Block')];
+        $tree = new StoredTree([new StoredElement('a', 'CT:Block')]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['a'], 'CT:Container', null);
 
@@ -100,7 +115,7 @@ class WrapElementsTest extends TestCase
     #[TestDox('rejects wrapping when a target is missing from the tree with a 400')]
     public function testWrapMissingElementRejected(): void
     {
-        $tree = [new ContentElement('a', 'CT:Block')];
+        $tree = new StoredTree([new StoredElement('a', 'CT:Block')]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['a', 'ghost'], 'CT:Container', 'content');
 
@@ -108,22 +123,13 @@ class WrapElementsTest extends TestCase
         $wrap->apply($tree);
     }
 
-    #[TestDox('rejects wrapping an empty target list with a 400')]
-    public function testWrapEmptyTargetsRejected(): void
-    {
-        $wrap = new WrapElements($this->registry('CT:Container'), [], 'CT:Container', 'content');
-
-        $this->expectExceptionObject(ContentSystemException::mutationInvalidWrapTargets('at least one element is required'));
-        $wrap->apply([new ContentElement('a', 'CT:Block')]);
-    }
-
     #[TestDox('rejects wrapping elements that share a parent but sit in different slots with a 400')]
     public function testWrapSameParentDifferentSlotRejected(): void
     {
-        $tree = [new ContentElement('parent', 'CT:Block', [], [], [
-            'left' => new SlotContent([new ContentElement('a', 'CT:Block')]),
-            'right' => new SlotContent([new ContentElement('b', 'CT:Block')]),
-        ])];
+        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
+            'left' => [new StoredElement('a', 'CT:Block')],
+            'right' => [new StoredElement('b', 'CT:Block')],
+        ])]);
 
         $wrap = new WrapElements($this->registry('CT:Container'), ['a', 'b'], 'CT:Container', 'content');
 
@@ -137,7 +143,7 @@ class WrapElementsTest extends TestCase
         $wrap = new WrapElements($this->registry('CT:Container'), ['a', 'a'], 'CT:Container', 'content');
 
         $this->expectExceptionObject(ContentSystemException::mutationInvalidWrapTargets('they must be distinct'));
-        $wrap->apply([new ContentElement('a', 'CT:Block'), new ContentElement('b', 'CT:Block')]);
+        $wrap->apply(new StoredTree([new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Block')]));
     }
 
     private function registry(string $type): AbstractContentSystemElementTypeRegistry

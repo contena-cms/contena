@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\ContentSystem;
 
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
 
 final readonly class RenderableLayout
 {
     /**
-     * @param list<ContentElement> $elements
+     * @param list<StoredElement> $elements
      */
     private function __construct(
         public LayoutReference $reference,
@@ -17,7 +17,7 @@ final readonly class RenderableLayout
     }
 
     /**
-     * @param list<ContentElement> $elements
+     * @param list<StoredElement> $elements
      */
     public static function create(LayoutReference $reference, array $elements): self
     {
@@ -26,6 +26,9 @@ final readonly class RenderableLayout
 
     public static function fromEntity(ContentLayoutEntity $entity): self
     {
-        return self::create(LayoutReference::fromEntity($entity), $entity->getLayout());
+        return self::create(
+            LayoutReference::fromEntity($entity),
+            $entity->getLayout()
+        );
     }
 }

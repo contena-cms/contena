@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
@@ -48,6 +46,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Twig\Environment;
 
@@ -221,6 +221,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(DefinitionInstanceRegistry::class),
             service(ChannelDefinitionInstanceRegistry::class),
             service(SeoUrlRouteRegistry::class),
+            service(EntityRouteResolver::class),
         ])
         ->tag('kernel.event_subscriber');
 

@@ -2,7 +2,8 @@
 
 namespace Contena\Core\Framework\ContentSystem\Api;
 
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredElementCodec;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationResult;
 
 /**
@@ -12,6 +13,8 @@ use Contena\Core\Framework\ContentSystem\Mutation\MutationResult;
  * StructNormalizer::denormalize(). jsonSerialize() casts the map-typed fields (resolutions/droppedProperties)
  * to {} when empty; the element tree's own maps stay [] (the shape every other read path emits). Safe only on
  * this path; a future requirement that caches or reconstructs this object must revisit it.
+ *
+ * @internal
  *
  * @final
  */
@@ -37,18 +40,23 @@ class MutationResponse implements \JsonSerializable
     ) {
     }
 
-    public static function fromResult(MutationResult $result, ContentElementFieldSerializer $elementSerializer): self
+    /**
+     * Elements go out through the codec, the same encode the storage column uses, so the response and the stored
+     * shape cannot drift. Dropped property values are unwrapped out of their storage envelope here, at the wire
+     * boundary: the wire contract carries the raw authored value, unchanged by the storage model's arrival.
+     */
+    public static function fromResult(MutationResult $result, StoredElementCodec $elementCodec): self
     {
         $normalizer = new LayoutDiagnosticsResultNormalizer();
 
         return new self(
-            array_map($elementSerializer->serializeContentElement(...), $result->layout),
+            array_map($elementCodec->encode(...), $result->layout->roots),
             $normalizer->normalizeResolutions($result->resolutions),
             $normalizer->normalizeReport($result->diagnostics),
             $result->affectedElementIds,
-            array_map($elementSerializer->serializeContentElement(...), $result->orphaned),
+            array_map($elementCodec->encode(...), $result->orphaned),
             $result->droppedWiring,
-            $result->droppedProperties,
+            array_map(static fn (StoredValue $value): mixed => $value->jsonSerialize(), $result->droppedProperties),
         );
     }
 

@@ -7,8 +7,6 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDat
 /**
  * The config object of {@see TestNavigationShapedLoader}: an entity name and one optional defaulted property
  * reference. It carries no required property reference, which is what makes the loader never gate.
- *
- * @internal
  */
 final readonly class TestNavigationShapedLoaderConfig extends AbstractContentDataLoaderConfig
 {

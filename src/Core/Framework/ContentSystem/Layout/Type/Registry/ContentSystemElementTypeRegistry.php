@@ -7,6 +7,9 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\AbstractContentSyste
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+/**
+ * @internal
+ */
 class ContentSystemElementTypeRegistry extends AbstractContentSystemElementTypeRegistry
 {
     /**

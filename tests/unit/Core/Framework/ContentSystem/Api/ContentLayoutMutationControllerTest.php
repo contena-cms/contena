@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Api\ContentLayoutAttachRequest;
 use Contena\Core\Framework\ContentSystem\Api\ContentLayoutDuplicateRequest;
 use Contena\Core\Framework\ContentSystem\Api\ContentLayoutInsertRequest;
@@ -21,8 +17,14 @@ use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemB
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Codec\StoredElementCodec;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\BoxSpacingNormalizer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyleNormalizer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationResult;
@@ -35,7 +37,12 @@ use Contena\Core\Framework\ContentSystem\Mutation\Op\ReplaceElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\UnwrapElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\WrapElements;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
+use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -47,7 +54,7 @@ class ContentLayoutMutationControllerTest extends TestCase
     #[TestDox('serializes the persisted mutation result into the layout, resolutions, diagnostics and affected ids')]
     public function testInsertSerializesMutationResult(): void
     {
-        $result = new MutationResult([new ContentElement('el-1', 'CT:Card')], ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
+        $result = MutationResult::fromParts(new StoredTree([new StoredElement('el-1', 'CT:Card')]), ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
         $controller = $this->controller($this->mutatorReturning($result));
 
         $response = $controller->insert('layout-1', new ContentLayoutInsertRequest('CT:Card', null), Context::createDefaultContext());
@@ -71,7 +78,7 @@ class ContentLayoutMutationControllerTest extends TestCase
                 $capturedId = $layoutId;
                 $capturedVersion = $expectedVersion;
 
-                return new MutationResult([], [], new DiagnosticsReport([]), []);
+                return MutationResult::fromParts(new StoredTree([]), [], new DiagnosticsReport([]), []);
             }
         );
 
@@ -95,7 +102,7 @@ class ContentLayoutMutationControllerTest extends TestCase
             function (string $layoutId, ?string $expectedVersion, LayoutMutation $mutation) use (&$captured): MutationResult {
                 $captured = $mutation;
 
-                return new MutationResult([], [], new DiagnosticsReport([]), []);
+                return MutationResult::fromParts(new StoredTree([]), [], new DiagnosticsReport([]), []);
             }
         );
 
@@ -141,21 +148,21 @@ class ContentLayoutMutationControllerTest extends TestCase
     public static function serializesOptionalReplaceFieldsProvider(): iterable
     {
         yield 'orphaned subtrees surface for re-attachment' => [
-            new MutationResult([new ContentElement('el', 'CT:New')], [], new DiagnosticsReport([]), ['el'], [new ContentElement('orphan', 'CT:Block')]),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [new StoredElement('orphan', 'CT:Block')]),
             static function (array $body): void {
                 static::assertSame('orphan', $body['orphaned'][0]['id']);
             },
         ];
 
         yield 'dropped wiring keys are reported' => [
-            new MutationResult([new ContentElement('el', 'CT:New')], [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
             static function (array $body): void {
                 static::assertSame(['legacy'], $body['droppedWiring']);
             },
         ];
 
         yield 'dropped property values are reported' => [
-            new MutationResult([new ContentElement('el', 'CT:New')], [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => 'Old headline']),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => StoredValue::ofString('Old headline')]),
             static function (array $body): void {
                 static::assertSame('Old headline', $body['droppedProperties']['headline']);
             },
@@ -165,7 +172,7 @@ class ContentLayoutMutationControllerTest extends TestCase
     #[TestDox('encodes an empty resolutions map as a JSON object, not an array')]
     public function testEmptyResolutionsEncodeAsJsonObject(): void
     {
-        $controller = $this->controller($this->mutatorReturning(new MutationResult([], [], new DiagnosticsReport([]), [])));
+        $controller = $this->controller($this->mutatorReturning(MutationResult::fromParts(new StoredTree([]), [], new DiagnosticsReport([]), [])));
 
         $response = $controller->remove('layout-1', new ContentLayoutRemoveRequest('el', null), Context::createDefaultContext());
 
@@ -223,7 +230,7 @@ class ContentLayoutMutationControllerTest extends TestCase
         return new ContentLayoutMutationController(
             $mutator,
             static::createStub(AbstractContentSystemElementTypeRegistry::class),
-            $this->elementSerializer(),
+            $this->elementCodec(),
             $this->decoder(),
             static::createStub(AbstractContentSystemBindingSpecificationRegistry::class),
             // BindingApplicator is final: a real instance over a stubbed serializer provider.
@@ -233,15 +240,13 @@ class ContentLayoutMutationControllerTest extends TestCase
 
     private function decoder(): DraftLayoutDecoder
     {
-        $serializer = static::createStub(ContentElementFieldSerializer::class);
-        $serializer->method('decodeElement')->willReturnCallback(
-            static fn (array $raw): ContentElement => new ContentElement(
-                \is_string($raw['id'] ?? null) ? $raw['id'] : 'incoming',
-                \is_string($raw['component'] ?? null) ? $raw['component'] : 'CT:Card',
+        return new DraftLayoutDecoder(
+            $this->elementCodec(),
+            new StoredTreeStyleNormalizer(
+                new ElementStyleNormalizer(static::createStub(AbstractContentSystemStyleOptionRegistry::class), new BoxSpacingNormalizer())
             ),
+            new ViolationConstraintMapper(),
         );
-
-        return new DraftLayoutDecoder($serializer);
     }
 
     private function mutatorReturning(MutationResult $result): PersistedLayoutMutator
@@ -252,14 +257,9 @@ class ContentLayoutMutationControllerTest extends TestCase
         return $mutator;
     }
 
-    private function elementSerializer(): ContentElementFieldSerializer
+    private function elementCodec(): StoredElementCodec
     {
-        $serializer = static::createStub(ContentElementFieldSerializer::class);
-        $serializer->method('serializeContentElement')->willReturnCallback(
-            static fn (ContentElement $element): array => ['id' => $element->getId(), 'component' => $element->getComponent(), 'properties' => []],
-        );
-
-        return $serializer;
+        return new StoredElementCodec(static::createStub(DataLoaderConfigSerializerProvider::class));
     }
 
     /**

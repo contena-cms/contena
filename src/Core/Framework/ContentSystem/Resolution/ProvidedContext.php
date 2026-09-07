@@ -8,7 +8,8 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\Dis
 /**
  * A single context value available at an element's position: a provider's key/FQCN plus how it is distributed.
  *
- * @internal
+ * `$root` marks the entry as root-ambient: supplied by the layout's bound root source rather than by an
+ * element. The root-source registry sets the flag on every entry it resolves.
  */
 final readonly class ProvidedContext
 {
@@ -19,6 +20,7 @@ final readonly class ProvidedContext
         public ?string $providerElementId,
         public DistributionStrategy $distribution,
         public ?string $path = null,
+        public bool $root = false,
     ) {
     }
 }

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
@@ -17,22 +13,29 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderR
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfigSerializer;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Struct\ArrayEntity;
+use Contena\Core\Framework\Uuid\UuidException;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Exception\ChannelRepositoryNotFoundException;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
 use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticChannelRepository;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,6 +51,15 @@ class EntityLoaderTest extends TestCase
     {
         parent::setUp();
         $this->ids = new IdsCollection();
+    }
+
+    /**
+     * @return iterable<string, array{list<EntityDefinition>, EntityDefinition, class-string, array<string, mixed>}>
+     */
+    public static function declaresProducibleTypeProvider(): iterable
+    {
+        yield 'an entity with a sales-channel variant' => [[new ChannelBlogDefinition()], new BlogDefinition(), ChannelBlogEntity::class, ['entity' => 'blog']];
+        yield 'an entity without a sales-channel variant' => [[], new MediaDefinition(), MediaEntity::class, ['entity' => 'media']];
     }
 
     /**
@@ -116,7 +128,7 @@ class EntityLoaderTest extends TestCase
         static::assertSame(MediaEntity::class, $capabilities[0]->producedType);
     }
 
-    #[TestDox('resolves the channel entity class for a config naming an entity with a variant')]
+    #[TestDox('resolves the sales-channel entity class for a config naming an entity with a variant')]
     public function testResolveProducedTypeReturnsChannelClass(): void
     {
         $loader = $this->blogEntityLoader();
@@ -193,11 +205,8 @@ class EntityLoaderTest extends TestCase
         $blogId = $this->ids->get('blog');
         $entity = $this->createEntityWithId($blogId);
 
-        $cacheTagResolver = static::createStub(EntityCacheTagResolver::class);
-        $cacheTagResolver->method('resolve')->willReturn('blog-' . $blogId);
-
-        $loader = $this->createLoaderWithChannelRepo('blog', new EntityCollection([$entity]), $cacheTagResolver);
-        $result = $this->loadEntity($loader, 'blog', 'blogId', $blogId);
+        $loader = $this->createLoaderWithChannelRepo('blog', new EntityCollection([$entity]), new EntityCacheTagResolver());
+        $result = $this->loadEntity($loader, 'blog', $blogId);
 
         static::assertSame($entity, $result->data);
         static::assertTrue($result->isCacheAware());
@@ -216,9 +225,6 @@ class EntityLoaderTest extends TestCase
         $definition = static::createStub(EntityDefinition::class);
         $definition->method('getEntityName')->willReturn('category');
 
-        $cacheTagResolver = static::createStub(EntityCacheTagResolver::class);
-        $cacheTagResolver->method('resolve')->willReturn('category-route-' . $categoryId);
-
         $scDefRegistry = static::createStub(ChannelDefinitionInstanceRegistry::class);
         $scDefRegistry->method('getChannelRepository')
             ->willThrowException(new ChannelRepositoryNotFoundException('category'));
@@ -228,8 +234,8 @@ class EntityLoaderTest extends TestCase
         $defRegistry->method('getRepository')->willReturn($plainRepo);
         $defRegistry->method('getByEntityName')->willReturn($definition);
 
-        $loader = new EntityLoader($scDefRegistry, $defRegistry, $cacheTagResolver);
-        $result = $this->loadEntity($loader, 'category', 'categoryId', $categoryId);
+        $loader = new EntityLoader($scDefRegistry, $defRegistry, new EntityCacheTagResolver());
+        $result = $this->loadEntity($loader, 'category', $categoryId);
 
         static::assertSame($entity, $result->data);
         static::assertTrue($result->isCacheAware());
@@ -246,7 +252,7 @@ class EntityLoaderTest extends TestCase
         $cacheTagResolver->method('resolve')->willReturn(null);
 
         $loader = $this->createLoaderWithChannelRepo('blog', new EntityCollection([$entity]), $cacheTagResolver);
-        $result = $this->loadEntity($loader, 'blog', 'blogId', $blogId);
+        $result = $this->loadEntity($loader, 'blog', $blogId);
 
         static::assertSame($entity, $result->data);
         static::assertFalse($result->isCacheAware());
@@ -267,7 +273,7 @@ class EntityLoaderTest extends TestCase
             return new EntityCollection();
         });
 
-        $this->loadEntity($loader, 'blog', 'blogId', $upperCaseId);
+        $this->loadEntity($loader, 'blog', $upperCaseId);
 
         static::assertInstanceOf(Criteria::class, $capturedCriteria);
         static::assertSame([$blogId], $capturedCriteria->getIds());
@@ -287,64 +293,31 @@ class EntityLoaderTest extends TestCase
             return new EntityCollection();
         });
 
-        $config = new EntityLoaderConfig('blog', 'blogId', ['tags', 'cover']);
-        $requirement = new DataRequirement('blog', 'entity', $config);
-        $element = ContentElementBuilder::create('blog-detail')
-            ->withProperty('blogId', $blogId)
-            ->build();
+        $inputs = new LoaderInputs([
+            'entity' => 'blog',
+            'property' => $blogId,
+            'associations' => ['manufacturer', 'cover'],
+        ]);
 
-        $loader->load($element, $requirement, Generator::generateChannelContext(), new Request());
+        $loader->load($inputs, self::requirement(), Generator::generateChannelContext(), new Request());
 
         static::assertInstanceOf(Criteria::class, $capturedCriteria);
-        static::assertArrayHasKey('tags', $capturedCriteria->getAssociations());
+        static::assertArrayHasKey('manufacturer', $capturedCriteria->getAssociations());
         static::assertArrayHasKey('cover', $capturedCriteria->getAssociations());
         static::assertCount(2, $capturedCriteria->getAssociations());
     }
 
-    #[TestDox('uses property name from config to look up element property')]
-    public function testLoadUsesPropertyNameFromConfigToLookUpElementProperty(): void
+    #[TestDox('returns notFound result when the property input is unresolved')]
+    public function testLoadReturnsNotFoundWhenPropertyInputIsUnresolved(): void
     {
-        $blogId = $this->ids->get('blog');
-        $entity = $this->createEntityWithId($blogId);
+        $inputs = new LoaderInputs(['entity' => 'blog', 'property' => null, 'associations' => []]);
 
-        $cacheTagResolver = static::createStub(EntityCacheTagResolver::class);
-        $cacheTagResolver->method('resolve')->willReturn('blog-' . $blogId);
-
-        $loader = $this->createLoaderWithChannelRepo('blog', new EntityCollection([$entity]), $cacheTagResolver);
-
-        $config = new EntityLoaderConfig('blog', 'customPropName', []);
-        $requirement = new DataRequirement('blog', 'entity', $config);
-        $element = ContentElementBuilder::create('blog-detail')
-            ->withProperty('customPropName', $blogId)
-            ->build();
-
-        $result = $loader->load($element, $requirement, Generator::generateChannelContext(), new Request());
-
-        static::assertSame($entity, $result->data);
-        static::assertTrue($result->isCacheAware());
-    }
-
-    #[TestDox('returns notFound result when config is not EntityLoaderConfig instance')]
-    public function testLoadReturnsNotFoundWhenConfigIsWrongType(): void
-    {
-        $requirement = new DataRequirement('blog', 'entity', new StubLoaderConfig());
-        $element = ContentElementBuilder::create('blog-detail')->build();
-
-        $result = $this->createMinimalLoader()->load($element, $requirement, Generator::generateChannelContext(), new Request());
-
-        $this->assertNotFoundResult($result);
-    }
-
-    #[TestDox('returns notFound result when element property is not a string')]
-    public function testLoadReturnsNotFoundWhenPropertyIsNotString(): void
-    {
-        $config = new EntityLoaderConfig('blog', 'blogId', []);
-        $requirement = new DataRequirement('blogId', 'entity', $config);
-        $element = ContentElementBuilder::create('blog-detail')
-            ->withProperty('blogId', 42)
-            ->build();
-
-        $result = $this->createMinimalLoader()->load($element, $requirement, Generator::generateChannelContext(), new Request());
+        $result = $this->createMinimalLoader()->load(
+            $inputs,
+            self::requirement(),
+            Generator::generateChannelContext(),
+            new Request(),
+        );
 
         $this->assertNotFoundResult($result);
     }
@@ -354,7 +327,7 @@ class EntityLoaderTest extends TestCase
     {
         $cacheTagResolver = static::createStub(EntityCacheTagResolver::class);
         $loader = $this->createLoaderWithChannelRepo('blog', new EntityCollection(), $cacheTagResolver);
-        $result = $this->loadEntity($loader, 'blog', 'blogId', 'blog-id');
+        $result = $this->loadEntity($loader, 'blog', $this->ids->get('blog'));
 
         $this->assertNotFoundResult($result);
     }
@@ -368,18 +341,113 @@ class EntityLoaderTest extends TestCase
         $defRegistry = static::createStub(DefinitionInstanceRegistry::class);
         $loader = new EntityLoader($scDefRegistry, $defRegistry, static::createStub(EntityCacheTagResolver::class));
 
-        $result = $this->loadEntity($loader, 'ghost', 'ghostId', 'some-id');
+        // A valid uuid, so the entity-registration short-circuit is the only thing this can be proving.
+        $result = $this->loadEntity($loader, 'ghost', $this->ids->get('ghost'));
 
         $this->assertNotFoundResult($result);
     }
 
-    /**
-     * @return iterable<string, array{list<EntityDefinition>, EntityDefinition, class-string, array<string, mixed>}>
-     */
-    public static function declaresProducibleTypeProvider(): iterable
+    #[TestDox('returns notFound result without reaching a repository when the resolved property is not a valid uuid')]
+    public function testLoadReturnsNotFoundWhenPropertyIsNotValidUuid(): void
     {
-        yield 'an entity with a channel variant' => [[new ChannelBlogDefinition()], new BlogDefinition(), ChannelBlogEntity::class, ['entity' => 'blog']];
-        yield 'an entity without a channel variant' => [[], new MediaDefinition(), MediaEntity::class, ['entity' => 'media']];
+        $scDefRegistry = $this->createMock(ChannelDefinitionInstanceRegistry::class);
+        $scDefRegistry->expects($this->never())->method('getChannelRepository');
+
+        $defRegistry = $this->createMock(DefinitionInstanceRegistry::class);
+        $defRegistry->method('has')->willReturn(true);
+        $defRegistry->expects($this->never())->method('getRepository');
+
+        $loader = new EntityLoader($scDefRegistry, $defRegistry, static::createStub(EntityCacheTagResolver::class));
+
+        $result = $this->loadEntity($loader, 'blog', '{{blogId}}');
+
+        $this->assertNotFoundResult($result);
+    }
+
+    #[TestDox('degrades to notFound when the post-load definition lookup throws')]
+    public function testLoadReturnsNotFoundWhenDefinitionLookupThrows(): void
+    {
+        $blogId = $this->ids->get('blog');
+        $scRepo = new StaticChannelRepository([
+            new EntityCollection([$this->createEntityWithId($blogId)]),
+        ]);
+
+        $scDefRegistry = static::createStub(ChannelDefinitionInstanceRegistry::class);
+        $scDefRegistry->method('getChannelRepository')->willReturn($scRepo);
+
+        // has() is an isset on the registry's entity-name map, so it stays true while the mapped definition
+        // service is absent from the container, which is the state getByEntityName() reports by throwing.
+        $defRegistry = static::createStub(DefinitionInstanceRegistry::class);
+        $defRegistry->method('has')->willReturn(true);
+        $defRegistry->method('getByEntityName')
+            ->willThrowException(DataAbstractionLayerException::definitionNotFound('blog'));
+
+        $loader = new EntityLoader($scDefRegistry, $defRegistry, static::createStub(EntityCacheTagResolver::class));
+
+        $result = $this->loadEntity($loader, 'blog', $blogId);
+
+        $this->assertNotFoundResult($result);
+    }
+
+    #[DataProvider('sampleDomainExceptionProvider')]
+    #[TestDox('degrades to notFound when the repository throws the Contena exception $_dataName')]
+    public function testLoadReturnsNotFoundWhenRepositoryThrows(\Throwable $exception): void
+    {
+        $loader = $this->createLoaderWithCallableRepo('blog', static function () use ($exception): never {
+            throw $exception;
+        });
+
+        $result = $this->loadEntity($loader, 'blog', $this->ids->get('blog'));
+
+        $this->assertNotFoundResult($result);
+    }
+
+    #[TestDox('lets a TypeError from the repository propagate instead of degrading')]
+    public function testLoadLetsThrowableOutsideContenaHttpExceptionPropagate(): void
+    {
+        $typeError = new \TypeError('Argument #1 ($criteria) must be of type Criteria, null given');
+
+        $loader = $this->createLoaderWithCallableRepo('blog', static function () use ($typeError): never {
+            throw $typeError;
+        });
+
+        // expectExceptionObject() compares class, message and code, not identity. This test asserts the
+        // *same instance* propagated out of load() unmodified, which that helper cannot express.
+        try {
+            $this->loadEntity($loader, 'blog', $this->ids->get('blog'));
+
+            static::fail('Expected the TypeError to propagate out of load() instead of degrading to notFound');
+        } catch (\TypeError $caught) {
+            static::assertSame($typeError, $caught);
+        }
+    }
+
+    /**
+     * Sample domain exceptions, not one row per catch arm: the loader catches the single covering ancestor
+     * `ContenaHttpException`, so no row maps to a clause of its own. This loader searches an arbitrary
+     * registered entity, so the reachable set cannot be enumerated from the loader at all.
+     *
+     * @return iterable<string, array{\Throwable}>
+     */
+    public static function sampleDomainExceptionProvider(): iterable
+    {
+        // EntityDefinitionQueryHelper::addIdCondition() converts every criteria id with Uuid::fromHexToBytes().
+        // The guard above keeps a malformed id away from it; this row states that a repository reaching it
+        // anyway still degrades. InvalidUuidException extends ContenaHttpException directly.
+        yield 'an id the DAL rejects when building the criteria condition' => [
+            UuidException::invalidUuid('not-a-uuid'),
+        ];
+
+        // DataAbstractionLayerException extends HttpException, which extends ContenaHttpException.
+        yield 'a DAL failure reached through HttpException' => [
+            DataAbstractionLayerException::invalidCriteriaIds(['bad-id'], 'reason'),
+        ];
+
+        // Not a reachability claim: this row pins the clause to the ancestor rather than to any one branch of
+        // the inheritance line.
+        yield 'a class outside the chain that extends ContenaHttpException directly' => [
+            new DecorationPatternException(EntityLoader::class),
+        ];
     }
 
     private function assertNotFoundResult(ContentDataLoaderResult $result): void
@@ -391,21 +459,20 @@ class EntityLoaderTest extends TestCase
 
     /**
      * @param non-empty-string $entityName
-     * @param non-empty-string $propertyName
      */
     private function loadEntity(
         EntityLoader $loader,
         string $entityName,
-        string $propertyName,
-        string $propertyValue,
+        string $entityId,
     ): ContentDataLoaderResult {
-        $config = new EntityLoaderConfig($entityName, $propertyName, []);
-        $requirement = new DataRequirement($propertyName, 'entity', $config);
-        $element = ContentElementBuilder::create($entityName . '-detail')
-            ->withProperty($propertyName, $propertyValue)
-            ->build();
+        $inputs = new LoaderInputs(['entity' => $entityName, 'property' => $entityId, 'associations' => []]);
 
-        return $loader->load($element, $requirement, Generator::generateChannelContext(), new Request());
+        return $loader->load($inputs, self::requirement(), Generator::generateChannelContext(), new Request());
+    }
+
+    private static function requirement(): DataRequirement
+    {
+        return new DataRequirement('blog', 'entity', new EntityLoaderConfig('blog', 'blogId', []));
     }
 
     /**

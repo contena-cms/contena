@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelContext;
@@ -11,6 +10,7 @@ use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\System\Member\MemberEntity;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -57,6 +57,7 @@ class Generator extends TestCase
         if (!$channel) {
             $channel = new ChannelEntity();
             $channel->setId(TestDefaults::CHANNEL);
+            $channel->setTypeId(Defaults::CHANNEL_TYPE_WEB);
         }
 
         $channel->setLanguageId(Defaults::LANGUAGE_SYSTEM);

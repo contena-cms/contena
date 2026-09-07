@@ -47,8 +47,8 @@ class LayoutRootSourceReader
         }
 
         // The 16-byte branch normalizes the binary FK payload the assignment validators pass, while the write
-        // validator already passes the decoded hex primary key. Same idiom as ProductStream's
-        // ProductStreamWriteResultHelper::normalizeStreamId (which additionally Uuid::isValid-guards) — consolidate
+        // validator already passes the decoded hex primary key. Same idiom as BlogStream's
+        // BlogStreamWriteResultHelper::normalizeStreamId (which additionally Uuid::isValid-guards) — consolidate
         // into a shared Uuid helper, reconciling that guard difference, if a third copy appears.
         return \strlen($contentLayoutId) === 16 ? Uuid::fromBytesToHex($contentLayoutId) : $contentLayoutId;
     }

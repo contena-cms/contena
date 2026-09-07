@@ -8,22 +8,20 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * A data loader proving the binding convenience layer treats an extension-registered loader exactly like a shipped
- * one. Tagged `content_system.data_loader` in services_test.xml so the whole subsystem discovers it
- * through the production seam: the compiler pass dry-runs its `configSpecification()`/`@extends`, and the
+ * one. Tagged `content_system.data_loader` in services_test.php so the whole subsystem discovers it
+ * through the blogion seam: the compiler pass dry-runs its `configSpecification()`/`@extends`, and the
  * canonicalizer and diagnostics see it through the real data-loader map.
- * It produces `MediaEntity` so its `entityName` key is FQCN-derivable and it wires onto the shipped `CT:Media:Image`
+ * It produces `MediaEntity` so its `entityName` key is FQCN-derivable and it wires onto the shipped `Sw:Media:Image`
  * type, and declares two required `propertyReference` keys plus a defaulted one, exercising multi-reference input
  * synthesis, the derived `required` flag, and per-key `UnfilledRequiredInput` gating, with zero changes to
  * `Binding/` or `Diagnostics/`.
- *
- * @internal
  *
  * @final
  *
@@ -31,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TestMultiReferenceGatingLoader extends AbstractContentDataLoader
 {
-    public const string SOURCE = 'test_multi_reference_gating';
+    public const SOURCE = 'test_multi_reference_gating';
 
     public static function getRequirementType(): string
     {
@@ -55,7 +53,7 @@ class TestMultiReferenceGatingLoader extends AbstractContentDataLoader
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request

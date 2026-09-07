@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Serialization;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
@@ -35,6 +31,10 @@ use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -181,7 +181,7 @@ class BindingSpecificationCanonicalizerTest extends TestCase
         );
     }
 
-    #[TestDox('FQCN derivation: uses the channel produced class for an entity with a channel definition')]
+    #[TestDox('FQCN derivation: uses the sales-channel produced class for an entity with a sales-channel definition')]
     public function testDerivationUsesChannelProducedClass(): void
     {
         $channelDefinition = static::createStub(ChannelBlogDefinition::class);
@@ -247,7 +247,7 @@ class BindingSpecificationCanonicalizerTest extends TestCase
         static::assertStringContainsString('no registered entity', $exception->getMessage());
     }
 
-    #[TestDox('tier A: collection derivation uses the channel produced collection class for an entity with a channel definition')]
+    #[TestDox('tier A: collection derivation uses the sales-channel produced collection class for an entity with a sales-channel definition')]
     public function testTierACollectionDerivationUsesChannelCollectionClass(): void
     {
         $channelDefinition = static::createStub(ChannelBlogDefinition::class);
@@ -272,11 +272,11 @@ class BindingSpecificationCanonicalizerTest extends TestCase
         );
     }
 
-    #[TestDox('tier A: collection derivation skips a definition whose bare collection class is the base EntityCollection, before its channel class is consulted')]
+    #[TestDox('tier A: collection derivation skips a definition whose bare collection class is the base EntityCollection, before its sales-channel class is consulted')]
     public function testTierACollectionDerivationSkipsBareEntityCollection(): void
     {
         // The plain definition produces the bare EntityCollection (unaddressable); the skip drops it before its
-        // channel collection class would satisfy the reference, so derivation finds nothing and fails rather
+        // sales-channel collection class would satisfy the reference, so derivation finds nothing and fails rather
         // than wiring an unaddressable definition.
         $channelDefinition = static::createStub(ChannelBlogDefinition::class);
         $channelDefinition->method('getCollectionClass')->willReturn(MediaCollection::class);

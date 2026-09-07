@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { castContentElementNodes } from '../../util/content-element-label.util';
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 import './ct-experience-studio-sidebar-tree.scss';
 interface AddElementPayload {
     parentElementId: string | null;
@@ -105,7 +105,7 @@ const acl = inject('acl');
 const layoutElements = computed(() => {
     const layout = props.layout as Entity<'content_layout'> | null;
 
-    return castContentElementNodes(layout?.layout);
+    return (layout?.layout ?? []) as ContentElementNode[];
 });
 const hasElements = computed(() => {
     return layoutElements.value.length > 0;

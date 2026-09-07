@@ -2,21 +2,18 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
 use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutDefinition;
+use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteContext;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Validation\ContentLayoutWriteValidator;
 use Contena\Core\Framework\ContentSystem\Validation\LayoutGate;
 use Contena\Core\Framework\ContentSystem\Validation\LayoutRootSourceReader;
-use Contena\Core\Framework\ContentSystem\Validation\LayoutTreeDecoder;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
@@ -29,6 +26,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -90,6 +91,82 @@ class ContentLayoutWriteValidatorTest extends TestCase
         static::assertCount(0, $event->getExceptions()->getExceptions());
     }
 
+    #[TestDox('bypasses every check and drains memo when skip flag is set')]
+    public function testSkipFlagBypassesValidationAndDrainsMemo(): void
+    {
+        $gate = $this->createMock(LayoutGate::class);
+        $gate->expects($this->never())->method('wellFormedness');
+        $gate->expects($this->never())->method('resolvability');
+
+        $registry = $this->createMock(RootSourceRegistry::class);
+        $registry->expects($this->never())->method('knownRootSources');
+        $registry->expects($this->never())->method('resolve');
+
+        $validator = $this->validator($gate, $registry);
+
+        $command = $this->layoutCreate(['layout' => [], 'root_source' => 'bogus']);
+        $context = $this->contextWithMemoFor([$command]);
+        $context->addState(LayoutGate::SKIP_VALIDATION_STATE);
+
+        $event = new PreWriteValidationEvent(WriteContext::createFromContext($context), [$command]);
+        $validator->preValidate($event);
+
+        static::assertCount(0, $event->getExceptions()->getExceptions());
+        static::assertTrue($this->memoOf($context)->isEmpty());
+    }
+
+    #[TestDox('leaves nothing memoized behind after a validated write')]
+    public function testValidatedWriteEmptiesTheMemo(): void
+    {
+        $validator = $this->validator();
+
+        $command = $this->layoutCreate(['layout' => [], 'root_source' => 'none']);
+        $context = $this->contextWithMemoFor([$command]);
+
+        $validator->preValidate(new PreWriteValidationEvent(WriteContext::createFromContext($context), [$command]));
+
+        static::assertTrue($this->memoOf($context)->isEmpty());
+    }
+
+    #[TestDox('leaves the memo untouched for a command that writes neither the layout nor the root source')]
+    public function testCommandTouchingNeitherFieldConsumesNothing(): void
+    {
+        $gate = $this->createMock(LayoutGate::class);
+        $gate->expects($this->never())->method('wellFormedness');
+
+        $validator = $this->validator($gate);
+
+        $command = $this->layoutUpdate(['name' => 'renamed']);
+        $context = Context::createDefaultContext();
+        $memo = new LayoutWriteContext();
+        $memo->remember($command->getEntityName(), $command->getDecodedPrimaryKey()['id'], $this->tree());
+        $context->addExtension(LayoutWriteContext::EXTENSION_NAME, $memo);
+
+        $validator->preValidate(new PreWriteValidationEvent(WriteContext::createFromContext($context), [$command]));
+
+        static::assertFalse($memo->isEmpty());
+    }
+
+    #[TestDox('runs the membership check only for a root-source-only command, consuming no memo entry')]
+    public function testRootSourceOnlyCommandRunsMembershipOnly(): void
+    {
+        $gate = $this->createMock(LayoutGate::class);
+        $gate->expects($this->never())->method('wellFormedness');
+        $gate->expects($this->never())->method('resolvability');
+
+        $validator = $this->validator($gate, $this->registryKnowing(['blog']));
+
+        // No memo entry exists for this command; the gate must not look for one, or it would fail hard.
+        $command = $this->layoutCreate(['root_source' => 'blog']);
+        $context = Context::createDefaultContext();
+        $context->addExtension(LayoutWriteContext::EXTENSION_NAME, new LayoutWriteContext());
+
+        $event = new PreWriteValidationEvent(WriteContext::createFromContext($context), [$command]);
+        $validator->preValidate($event);
+
+        static::assertCount(0, $event->getExceptions()->getExceptions());
+    }
+
     #[TestDox('runs resolvability against the declared root source on creation and records a binding error')]
     public function testKnownRootSourceRunsResolvabilityOnCreation(): void
     {
@@ -111,30 +188,19 @@ class ContentLayoutWriteValidatorTest extends TestCase
         static::assertSame(ViolationCode::UnresolvedRequired->value, $violation->getCode());
     }
 
-    #[TestDox('bypasses every check when the write context carries the skip flag')]
-    public function testSkipFlagBypassesValidation(): void
+    #[TestDox('fails hard when a command writes the layout column but no tree was memoized for it')]
+    public function testLayoutCommandWithoutAMemoEntryFailsHard(): void
     {
-        $gate = $this->createMock(LayoutGate::class);
-        $gate->expects($this->never())->method('wellFormedness');
-        $gate->expects($this->never())->method('resolvability');
+        $validator = $this->validator();
 
-        $registry = $this->createMock(RootSourceRegistry::class);
-        $registry->expects($this->never())->method('knownRootSources');
-        $registry->expects($this->never())->method('resolve');
-
-        $validator = $this->validator($gate, $registry);
-
+        $command = $this->layoutCreate(['layout' => [], 'root_source' => 'none']);
         $context = Context::createDefaultContext();
-        $context->addState(LayoutGate::SKIP_VALIDATION_STATE);
 
-        $event = new PreWriteValidationEvent(
-            WriteContext::createFromContext($context),
-            [$this->layoutCreate(['layout' => [], 'root_source' => 'bogus'])],
+        $this->expectExceptionObject(
+            ContentSystemException::layoutWriteMemoMissing(ContentLayoutDefinition::ENTITY_NAME, '/insert')
         );
 
-        $validator->preValidate($event);
-
-        static::assertCount(0, $event->getExceptions()->getExceptions());
+        $validator->preValidate(new PreWriteValidationEvent(WriteContext::createFromContext($context), [$command]));
     }
 
     #[TestDox('rejects an unregistered root source on creation with unknownRootSource and never reaches resolve')]
@@ -196,55 +262,14 @@ class ContentLayoutWriteValidatorTest extends TestCase
         static::assertSame(ContentSystemException::UNKNOWN_ROOT_SOURCE, $violation->getCode());
     }
 
-    #[TestDox('records an invalid_config violation when the layout tree is an undecodable client defect')]
-    public function testRecordsInvalidConfigViolationWhenLayoutTreeIsUndecodableClientDefect(): void
-    {
-        $expected = ContentSystemException::invalidFieldValueType('layout', 'array', 'string');
-
-        $decoder = static::createStub(LayoutTreeDecoder::class);
-        $decoder->method('decode')->willThrowException($expected);
-
-        $gate = $this->createMock(LayoutGate::class);
-        $gate->expects($this->never())->method('wellFormedness');
-        $gate->expects($this->never())->method('resolvability');
-
-        $validator = $this->validator($gate, decoder: $decoder);
-
-        $event = $this->event([$this->layoutUpdate(['layout' => 'not-decodable'])]);
-        $validator->preValidate($event);
-
-        $violation = $this->onlyViolation($event);
-        static::assertSame(ViolationCode::InvalidConfig->value, $violation->getCode());
-        static::assertSame($expected->getMessage(), $violation->getMessage());
-    }
-
-    #[TestDox('rethrows a non-client-defect decode failure unchanged')]
-    public function testRethrowsNonClientDefectDecodeFailureUnchanged(): void
-    {
-        $expected = ContentSystemException::invalidMapKey('someMap', 'int');
-
-        $decoder = static::createStub(LayoutTreeDecoder::class);
-        $decoder->method('decode')->willThrowException($expected);
-
-        $validator = $this->validator(decoder: $decoder);
-
-        $this->expectExceptionObject($expected);
-
-        $validator->preValidate($this->event([$this->layoutUpdate(['layout' => 'not-decodable'])]));
-    }
-
     private function validator(
         ?LayoutGate $gate = null,
         ?RootSourceRegistry $registry = null,
         ?LayoutRootSourceReader $reader = null,
-        ?LayoutTreeDecoder $decoder = null,
     ): ContentLayoutWriteValidator {
-        $decoder ??= $this->decoderReturning([new ContentElement('el-1', 'CT:Block')]);
-
         return new ContentLayoutWriteValidator(
             $gate ?? $this->cleanGate(),
             new ViolationConstraintMapper(),
-            $decoder,
             $registry ?? $this->registryKnowing(['blog', 'category', 'none']),
             $reader ?? static::createStub(LayoutRootSourceReader::class),
         );
@@ -289,22 +314,51 @@ class ContentLayoutWriteValidatorTest extends TestCase
     }
 
     /**
-     * @param list<ContentElement> $tree
-     */
-    private function decoderReturning(array $tree): LayoutTreeDecoder
-    {
-        $decoder = static::createStub(LayoutTreeDecoder::class);
-        $decoder->method('decode')->willReturn($tree);
-
-        return $decoder;
-    }
-
-    /**
      * @param list<WriteCommand> $commands
      */
     private function event(array $commands): PreWriteValidationEvent
     {
-        return new PreWriteValidationEvent(WriteContext::createFromContext(Context::createDefaultContext()), $commands);
+        return new PreWriteValidationEvent(
+            WriteContext::createFromContext($this->contextWithMemoFor($commands)),
+            $commands
+        );
+    }
+
+    /**
+     * A context carrying what the layout field serializer would have left on it: one memoized tree per command
+     * that writes the layout column.
+     *
+     * @param list<WriteCommand> $commands
+     */
+    private function contextWithMemoFor(array $commands): Context
+    {
+        $context = Context::createDefaultContext();
+        $memo = new LayoutWriteContext();
+
+        foreach ($commands as $command) {
+            if (!$command->hasField(ContentLayoutDefinition::LAYOUT_FIELD)) {
+                continue;
+            }
+
+            $memo->remember($command->getEntityName(), $command->getDecodedPrimaryKey()['id'], $this->tree());
+        }
+
+        $context->addExtension(LayoutWriteContext::EXTENSION_NAME, $memo);
+
+        return $context;
+    }
+
+    private function memoOf(Context $context): LayoutWriteContext
+    {
+        $memo = $context->getExtension(LayoutWriteContext::EXTENSION_NAME);
+        static::assertInstanceOf(LayoutWriteContext::class, $memo);
+
+        return $memo;
+    }
+
+    private function tree(): StoredTree
+    {
+        return new StoredTree([new StoredElement('el-1', 'CT:Block')]);
     }
 
     /**

@@ -4,9 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Element\Context;
 
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 
-/**
- * @internal
- */
 final readonly class ContextConsumer implements \JsonSerializable
 {
     public function __construct(
@@ -14,7 +11,8 @@ final readonly class ContextConsumer implements \JsonSerializable
         public bool $required,
         public bool $redistribute = false,
         public ?string $consumerAlias = null,
-        public ?string $propertyAlias = null
+        public ?string $propertyAlias = null,
+        public ConsumerScope $scope = ConsumerScope::Parent
     ) {
     }
 
@@ -38,6 +36,10 @@ final readonly class ContextConsumer implements \JsonSerializable
 
         if ($this->propertyAlias !== null) {
             $data['propertyAlias'] = $this->propertyAlias;
+        }
+
+        if ($this->scope !== ConsumerScope::Parent) {
+            $data['scope'] = $this->scope->value;
         }
 
         return $data;

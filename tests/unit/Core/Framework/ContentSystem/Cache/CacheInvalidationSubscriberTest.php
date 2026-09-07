@@ -2,13 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Cache;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\ContentSystem\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\ContentSystem\Cache\EntityCacheTagResolver;
@@ -21,6 +14,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -169,7 +169,7 @@ class CacheInvalidationSubscriberTest extends TestCase
     #[TestDox('skips cache invalidation when no relevant entities are written')]
     public function testSkipsCacheInvalidationWhenNoRelevantEntitiesWritten(): void
     {
-        $event = $this->createWrittenEvent('unsupported_entity', 'entity-id');
+        $event = $this->createWrittenEvent('order', 'order-id');
 
         $this->cacheInvalidator->expects($this->never())
             ->method('invalidate');

@@ -1,6 +1,6 @@
 # Blog Listing Loader (`source: "blog_listing"`)
 
-Loads blog listings for a navigation or category. Filters, sorting, and pagination are controlled through request parameters.
+Loads blog listings for a navigation/category. Filters, sorting, and pagination are controlled via request parameters.
 
 ```json
 {
@@ -14,7 +14,7 @@ Loads blog listings for a navigation or category. Filters, sorting, and paginati
       "source": "blog_listing",
       "config": {
         "property": "navigationId",
-        "associations": ["cover.media", "categories", "tags"]
+        "associations": ["cover", "manufacturer"]
       }
     }
   }
@@ -22,10 +22,10 @@ Loads blog listings for a navigation or category. Filters, sorting, and paginati
 ```
 
 Config fields:
+- `property` (optional) - Property on this element containing the navigation/category ID. Defaults to `"navigationId"` if not specified.
+- `associations` (optional) - List of associations to load with the blogs
+- `associationOverride` (optional) - Names an element property holding a `list<string>` of further associations. `LoaderInputResolver` merges that list into `associations` before `load()` runs, so the loader reads the merged list under the `associations` key alone. Defaults to the property name `"associations"`
 
-- `property` (optional) - Property on this element containing the navigation or category ID. Defaults to `"navigationId"`.
-- `associations` (optional) - Associations to load with the blogs.
+After loading, access via element's `listing` property (the requirement key).
 
-After loading, access the result through the element's `listing` property (the requirement key).
-
-Pagination, filters, and sorting are controlled through request parameters rather than loader config. See [Additional Parameters](../../../Adapter/docs/placeholders.md#additional-parameters).
+Pagination, filters, and sorting are controlled via request parameters (query string), not config. See [Additional Parameters](../../../Adapter/docs/placeholders.md#additional-parameters) for details.

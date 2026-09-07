@@ -8,9 +8,7 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDat
 
 /**
  * The config serializer of {@see TestNavigationShapedLoader}, tagged `content_system.config_serializer` in
- * services_test.xml.
- *
- * @internal
+ * services_test.php.
  *
  * @final
  */

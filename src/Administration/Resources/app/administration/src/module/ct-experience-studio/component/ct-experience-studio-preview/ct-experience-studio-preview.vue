@@ -54,11 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ContentSystemStyleOptionSpecification } from 'src/core/service/api/content-system-style-option.api.service';
 import type ContentSystemPreviewApiService from 'src/core/service/api/content-system-preview.api.service';
-import type { ContentElementNode } from 'src/module/ct-experience-studio/types/content-element.types';
-import { sanitizeContentElementLayoutForWrite } from 'src/module/ct-experience-studio/util/content-element.util';
 import './ct-experience-studio-preview.scss';
+
+const { cloneDeep } = Contena.Utils.object;
+
 type Viewport = 'mobile' | 'tablet-landscape' | 'desktop';
 type PreviewMessagePayload = {
     source?: string;
@@ -105,11 +105,6 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    styleOptions: {
-        type: Object as PropType<Record<string, ContentSystemStyleOptionSpecification>>,
-        required: false,
-        default: () => ({}),
-    },
 });
 const emit = defineEmits([
     'select-element',
@@ -119,7 +114,7 @@ const emit = defineEmits([
     'inline-edit-cancel',
 ]);
 
-import { type PropType, ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -431,8 +426,7 @@ const loadPreview = async () => {
     previewLoadError.value = null;
 
     try {
-        const styleOptions = props.styleOptions;
-        const previewLayout = sanitizeContentElementLayoutForWrite(serializedLayout as ContentElementNode[], styleOptions);
+        const previewLayout = cloneDeep(serializedLayout);
 
         const previewUrl = await previewService.previewEntityUrl({
             layout: previewLayout,

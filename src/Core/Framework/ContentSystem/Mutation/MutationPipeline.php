@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Mutation;
 
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
 
 /**
@@ -20,31 +20,22 @@ class MutationPipeline
     }
 
     /**
-     * @param list<ContentElement> $tree the decoded draft tree
+     * @param StoredTree $tree the decoded draft tree
      * @param list<ProvidedContext>|null $rootContext the bound source's root-ambient context, or null for the well-formedness subset
      */
-    public function run(LayoutMutation $mutation, array $tree, ?array $rootContext): MutationResult
+    public function run(LayoutMutation $mutation, StoredTree $tree, ?array $rootContext): MutationResult
     {
         $mutated = $mutation->apply($tree);
-        $affected = $mutation->affected();
 
-        $analysis = $this->diagnostics->analyze($mutated, $rootContext);
+        $analysis = $this->diagnostics->analyze($mutated->roots, $rootContext);
 
-        // Wire page-context consumers into the mutated tree so the returned layout carries the
-        // distribution wiring required by every consumer.
-        $this->contextWiring->apply($mutated, $analysis->resolutions, $rootContext ?? []);
+        $wired = $this->contextWiring->apply($mutated, $analysis->resolutions, $mutation->created());
 
-        // This MutationResult assembly is intentionally duplicated in PersistedLayoutMutator::mutate(): sharing it
-        // would couple Mutation/ to a Diagnostics/LayoutAnalysis-shaped helper or require a banned static helper,
-        // so each runner assembles its own result from its own analysis.
-        return new MutationResult(
-            $mutated,
-            array_intersect_key($analysis->resolutions, array_flip($affected)),
-            $analysis->report,
-            $affected,
-            $mutation->orphaned(),
-            $mutation->droppedWiring(),
-            $mutation->droppedProperties(),
-        );
+        // Re-analyze only when the wiring changed the tree, so the returned diagnostics and resolutions describe the returned tree.
+        if ($wired !== $mutated) {
+            $analysis = $this->diagnostics->analyze($wired->roots, $rootContext);
+        }
+
+        return MutationResult::fromAnalyzedMutation($wired, $analysis, $mutation);
     }
 }

@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader;
 /**
  * The declared config contract of one data loader: the in-memory specification of its config keys.
  * The wire schema is generated elsewhere.
- *
- * @internal
  */
 final readonly class LoaderConfigSpecification
 {

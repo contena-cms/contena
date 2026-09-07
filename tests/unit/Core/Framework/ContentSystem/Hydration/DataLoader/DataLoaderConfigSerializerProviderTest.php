@@ -2,14 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataLoader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoaderConfig;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoaderConfigSerializer;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
+use Contena\Core\Framework\ContentSystem\PlaceholderValues;
 use Contena\Core\Framework\HttpException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,6 +34,58 @@ class DataLoaderConfigSerializerProviderTest extends TestCase
         $result = $provider->decode('entity', ['key' => 'value']);
 
         static::assertSame($config, $result);
+    }
+
+    #[TestDox('resolves placeholder tokens in the raw config before decoding when values are provided')]
+    public function testDecodeResolvesPlaceholdersWhenValuesProvided(): void
+    {
+        $config = static::createStub(AbstractContentDataLoaderConfig::class);
+        $captured = null;
+        $serializer = static::createStub(AbstractContentDataLoaderConfigSerializer::class);
+        $serializer->method('decode')->willReturnCallback(
+            static function (array $data) use (&$captured, $config): AbstractContentDataLoaderConfig {
+                $captured = $data;
+
+                return $config;
+            }
+        );
+
+        $locator = new ServiceLocator(['breadcrumb' => fn () => $serializer]);
+        $provider = new DataLoaderConfigSerializerProvider($locator);
+
+        $result = $provider->decode(
+            'breadcrumb',
+            ['type' => '{{entityType}}', 'nested' => ['id' => '{{blogId}}'], 'keep' => 'static'],
+            PlaceholderValues::from(['entityType' => 'category', 'blogId' => 'p-1']),
+        );
+
+        static::assertSame($config, $result);
+        static::assertSame(
+            ['type' => 'category', 'nested' => ['id' => 'p-1'], 'keep' => 'static'],
+            $captured,
+        );
+    }
+
+    #[TestDox('leaves the raw config untouched when no placeholder values are provided')]
+    public function testDecodeLeavesConfigUntouchedWithoutValues(): void
+    {
+        $config = static::createStub(AbstractContentDataLoaderConfig::class);
+        $captured = null;
+        $serializer = static::createStub(AbstractContentDataLoaderConfigSerializer::class);
+        $serializer->method('decode')->willReturnCallback(
+            static function (array $data) use (&$captured, $config): AbstractContentDataLoaderConfig {
+                $captured = $data;
+
+                return $config;
+            }
+        );
+
+        $locator = new ServiceLocator(['entity' => fn () => $serializer]);
+        $provider = new DataLoaderConfigSerializerProvider($locator);
+
+        $provider->decode('entity', ['type' => '{{entityType}}']);
+
+        static::assertSame(['type' => '{{entityType}}'], $captured);
     }
 
     #[TestDox('routes encode to the correct serializer and returns its result')]

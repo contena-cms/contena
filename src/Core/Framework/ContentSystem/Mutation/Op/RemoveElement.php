@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Mutation\Op;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Mutation\AbstractLayoutMutation;
 
 /**
@@ -18,12 +19,12 @@ final class RemoveElement extends AbstractLayoutMutation
     ) {
     }
 
-    public function apply(array $tree): array
+    public function apply(StoredTree $tree): StoredTree
     {
-        if ($this->findNode($tree, $this->elementId) === null) {
+        if ($tree->find($this->elementId) === null) {
             throw ContentSystemException::mutationTargetNotFound($this->elementId);
         }
 
-        return $this->removeSubtree($tree, $this->elementId);
+        return $tree->remove($this->elementId);
     }
 }

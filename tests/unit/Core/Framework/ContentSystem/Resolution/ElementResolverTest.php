@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Resolution;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Category\CategoryEntity;
@@ -29,9 +26,12 @@ use Contena\Core\Framework\ContentSystem\Resolution\ResolutionContext;
 use Contena\Core\Framework\ContentSystem\Schema\AbstractContentSystemDataLoaderMapResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\Test\Stub\ContentSystem\ContentElementBuilder;
 use Contena\Core\Test\Stub\ContentSystem\ContentSystemElementTypeSpecificationBuilder;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Tests\Unit\Core\Framework\ContentSystem\Fixture\LoaderConfigSpecificationFixture;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -85,6 +85,79 @@ class ElementResolverTest extends TestCase
         static::assertCount(2, $resolutions[0]->candidates);
     }
 
+    #[TestDox('mints a Root candidate for an available entry flagged root-ambient and resolves the reference to it')]
+    public function testRootFlaggedContextMintsRootOriginCandidate(): void
+    {
+        $resolutions = $this->resolve(
+            ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', BlogEntity::class, required: true)->build(),
+            new ResolutionContext('el-1', [$this->provided(root: true)]),
+            new ContentSystemDataLoaderMap([], []),
+        );
+
+        static::assertCount(1, $resolutions[0]->candidates);
+        static::assertSame(CandidateOrigin::Root, $resolutions[0]->candidates[0]->origin);
+        static::assertNotNull($resolutions[0]->resolved);
+        static::assertSame(CandidateOrigin::Root, $resolutions[0]->resolved->origin);
+    }
+
+    #[TestDox('prefers the single Root candidate over a coexisting Parent candidate')]
+    public function testRootCandidateOutranksParentCandidate(): void
+    {
+        $resolutions = $this->resolve(
+            ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', BlogEntity::class, required: true)->build(),
+            new ResolutionContext('el-1', [
+                $this->provided(root: false, providerElementId: 'root-1'),
+                $this->provided(root: true),
+            ]),
+            new ContentSystemDataLoaderMap([], []),
+        );
+
+        static::assertCount(2, $resolutions[0]->candidates);
+        static::assertNotNull($resolutions[0]->resolved);
+        static::assertSame(CandidateOrigin::Root, $resolutions[0]->resolved->origin);
+        static::assertNull($resolutions[0]->resolved->providerElementId);
+    }
+
+    #[TestDox('leaves a reference unresolved when two Root candidates compete, never falling back to a lone Parent candidate')]
+    public function testTwoRootCandidatesStayAmbiguousDespiteALoneParent(): void
+    {
+        // Ambiguity inside the preferred pool is still ambiguity. A fallback to the single Parent candidate
+        // would resolve here, which is exactly the silent pick the three-tier order forbids.
+        $resolutions = $this->resolve(
+            ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', BlogEntity::class, required: true)->build(),
+            new ResolutionContext('el-1', [
+                $this->provided(root: true, contextKey: 'blog'),
+                $this->provided(root: true, contextKey: 'featuredBlog'),
+                $this->provided(root: false, providerElementId: 'root-1'),
+            ]),
+            new ContentSystemDataLoaderMap([], []),
+        );
+
+        static::assertNull($resolutions[0]->resolved);
+        // Pins that the fixture is actually two Roots and one Parent. Without it the test also passes when the
+        // flag mapping misclassifies every offer as Parent, which is a different bug with the same outcome.
+        static::assertSame(
+            [CandidateOrigin::Root, CandidateOrigin::Root, CandidateOrigin::Parent],
+            array_map(static fn (ResolutionCandidate $candidate): CandidateOrigin => $candidate->origin, $resolutions[0]->candidates),
+        );
+    }
+
+    #[TestDox('leaves a reference unresolved when two Parent candidates compete and no Root candidate exists')]
+    public function testTwoParentCandidatesStayAmbiguous(): void
+    {
+        $resolutions = $this->resolve(
+            ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', BlogEntity::class, required: true)->build(),
+            new ResolutionContext('el-1', [
+                $this->provided(root: false, providerElementId: 'root-1', contextKey: 'blog'),
+                $this->provided(root: false, providerElementId: 'level-2', contextKey: 'item'),
+            ]),
+            new ContentSystemDataLoaderMap([], []),
+        );
+
+        static::assertNull($resolutions[0]->resolved);
+        static::assertCount(2, $resolutions[0]->candidates);
+    }
+
     #[TestDox('resolves a reference via the single complete loader when no provider is available')]
     public function testReferenceResolvesViaCompleteLoader(): void
     {
@@ -123,6 +196,25 @@ class ElementResolverTest extends TestCase
         static::assertSame(['entity' => 'blog'], $resolutions[0]->candidates[0]->configTemplate);
     }
 
+    #[TestDox('leaves a reference unresolved with an incomplete candidate when its only loader\'s config fails to decode as a client defect')]
+    public function testReferenceWithLoaderConfigDecodeFailureIsIncomplete(): void
+    {
+        $resolutions = $this->resolve(
+            ContentSystemElementTypeSpecificationBuilder::create()->reference('category', CategoryEntity::class, required: true)->build(),
+            new ResolutionContext('el-1', []),
+            new ContentSystemDataLoaderMap(
+                ['category_fixed' => [new LoaderTypeCapability(CategoryEntity::class)]],
+                ['category_fixed' => new LoaderConfigSpecification([])],
+            ),
+            $this->serializersDecoding(succeeds: false),
+        );
+
+        static::assertNull($resolutions[0]->resolved);
+        static::assertCount(1, $resolutions[0]->candidates);
+        static::assertSame(CandidateOrigin::Loader, $resolutions[0]->candidates[0]->origin);
+        static::assertFalse($resolutions[0]->candidates[0]->configComplete);
+    }
+
     #[TestDox('leaves a reference unresolved and lists every candidate when multiple complete loaders match')]
     public function testReferenceWithMultipleSourcesIsAmbiguous(): void
     {
@@ -159,22 +251,6 @@ class ElementResolverTest extends TestCase
         static::assertSame([], $resolutions[0]->candidates);
     }
 
-    #[TestDox('yields no resolutions for an unregistered element type, leaving the defect to the diagnostics layer')]
-    public function testUnregisteredTypeYieldsNoResolutions(): void
-    {
-        $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
-        $registry->method('has')->willReturn(false);
-
-        $resolver = new ElementResolver(
-            $registry,
-            $this->typeResolver(new ContentSystemDataLoaderMap([], [])),
-            static::createStub(DataLoaderConfigSerializerProvider::class),
-            static::createStub(DataLoaderProvider::class),
-        );
-
-        static::assertSame([], $resolver->resolve('CT:Unknown', new ResolutionContext('el-1', [])));
-    }
-
     #[TestDox('resolves a required reference to the applied Stored candidate over a deterministic environment default, leaving the environment candidates list unchanged')]
     public function testAppliedStoredWiringTakesPrecedenceOverEnvironmentDefault(): void
     {
@@ -186,7 +262,7 @@ class ElementResolverTest extends TestCase
             distribution: DistributionStrategy::Broadcast,
         )];
 
-        $element = ContentElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('CT:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -218,7 +294,7 @@ class ElementResolverTest extends TestCase
             distribution: DistributionStrategy::Broadcast,
         )];
 
-        $element = ContentElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('CT:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -233,10 +309,26 @@ class ElementResolverTest extends TestCase
         static::assertSame(CandidateOrigin::Parent, $resolutions[0]->resolved->origin);
     }
 
+    #[TestDox('yields no resolutions for an unregistered element type, leaving the defect to the diagnostics layer')]
+    public function testUnregisteredTypeYieldsNoResolutions(): void
+    {
+        $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $registry->method('has')->willReturn(false);
+
+        $resolver = new ElementResolver(
+            $registry,
+            $this->typeResolver(new ContentSystemDataLoaderMap([], [])),
+            static::createStub(DataLoaderConfigSerializerProvider::class),
+            static::createStub(DataLoaderProvider::class),
+        );
+
+        static::assertSame([], $resolver->resolve('CT:Unknown', new ResolutionContext('el-1', [])));
+    }
+
     #[TestDox('yields no Stored resolution when applied wiring resolution throws a client-defect exception')]
     public function testClientDefectDuringAppliedWiringYieldsNoStoredResolution(): void
     {
-        $element = ContentElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('CT:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -253,7 +345,7 @@ class ElementResolverTest extends TestCase
     #[TestDox('propagates a non-client-defect exception raised while resolving applied wiring\'s produced type')]
     public function testNonClientDefectDuringAppliedWiringPropagates(): void
     {
-        $element = ContentElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('CT:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -267,6 +359,18 @@ class ElementResolverTest extends TestCase
         $this->expectExceptionObject($exception);
 
         $resolver->resolve($element, new ResolutionContext('el-1', []));
+    }
+
+    private function provided(bool $root, ?string $providerElementId = null, string $contextKey = 'blog'): ProvidedContext
+    {
+        return new ProvidedContext(
+            contextKey: $contextKey,
+            fqcn: ChannelBlogEntity::class,
+            contextType: ContextType::Single,
+            providerElementId: $providerElementId,
+            distribution: DistributionStrategy::Broadcast,
+            root: $root,
+        );
     }
 
     /**

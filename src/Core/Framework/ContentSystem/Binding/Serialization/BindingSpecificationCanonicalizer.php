@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\ContentSystem\Binding\Serialization;
 use Contena\Core\Framework\ContentSystem\Binding\ResolvedByLoaderBranch;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
+use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
@@ -13,6 +14,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpeci
 use Contena\Core\Framework\ContentSystem\Schema\AbstractContentSystemDataLoaderMapResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
@@ -268,8 +270,8 @@ final class BindingSpecificationCanonicalizer
     }
 
     /**
-     * The tier-A closed classification: a property FQCN subclassing {@see \Contena\Core\Framework\DataAbstractionLayer\Entity}
-     * or {@see \Contena\Core\Framework\DataAbstractionLayer\EntityCollection} resolves to its built-in
+     * The tier-A closed classification: a property FQCN subclassing {@see Entity}
+     * or {@see EntityCollection} resolves to its built-in
      * resolvedBy loader directly; no loader search runs, and installing an extension loader cannot change
      * or invalidate the result.
      *
@@ -380,7 +382,7 @@ final class BindingSpecificationCanonicalizer
 
     /**
      * Derives the entity name a reference FQCN resolves to by walking the registered definitions for the one whose
-     * produced class — its Channel counterpart's where one exists — equals the FQCN. The branch selects what
+     * produced class — its sales-channel counterpart's where one exists — equals the FQCN. The branch selects what
      * "produced class" means: {@see ResolvedByLoaderBranch::Entity} matches on the produced entity class,
      * {@see ResolvedByLoaderBranch::EntityCollection} on the produced collection class, the same registry walk the two
      * built-in loaders perform in the forward direction. A {@see MappingEntityDefinition}, or a definition producing
@@ -437,7 +439,7 @@ final class BindingSpecificationCanonicalizer
     /**
      * The declared reference FQCN for a type's property, or null when the key is not a declared property or the
      * property is not a single-FQCN reference (primitive, union, or `object`). Mirrors the derivation
-     * {@see \Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics} uses.
+     * {@see LayoutDiagnostics} uses.
      */
     private function declaredReferenceFqcn(ContentSystemElementTypeSpecification $type, string $key): ?string
     {

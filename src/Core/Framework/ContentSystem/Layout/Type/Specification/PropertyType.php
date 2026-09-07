@@ -2,9 +2,10 @@
 
 namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
 
+use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TranslatableTypeValidator;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnumValidator;
+
 /**
- * @internal
- *
  * $type accepts primitives (`string`, `integer`, `boolean`, `number`), `object`,
  * class-string<Struct> FQCNs, and lists for union-like declarations.
  * `enum` and `translatable` are ignored for non-primitive types. {@see TypedEnumValidator} {@see TranslatableTypeValidator}

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataLoader;
 
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigCanonicalizer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigCanonicalizer;
 
 /**
  * @internal
@@ -27,7 +27,7 @@ class ConfigCanonicalizerTest extends TestCase
     public static function canonicalizesProvider(): iterable
     {
         yield 'flat map' => [['limit' => 5, 'associations' => 'media'], ['associations' => 'media', 'limit' => 5]];
-        yield 'list values' => [['associations' => ['media', 'tags']], ['associations' => ['media', 'tags']]];
+        yield 'list values' => [['associations' => ['media', 'manufacturer']], ['associations' => ['manufacturer', 'media']]];
         yield 'nested map' => [['filters' => ['status' => 'active', 'limit' => 10]], ['filters' => ['limit' => 10, 'status' => 'active']]];
         yield 'empty config' => [[], []];
         yield 'list of maps' => [
@@ -55,12 +55,12 @@ class ConfigCanonicalizerTest extends TestCase
     public function testTwoConfigsDifferingOnlyInOrderCanonicalizeEqual(): void
     {
         $first = [
-            'associations' => ['media', 'tags'],
+            'associations' => ['media', 'manufacturer'],
             'filters' => ['status' => 'active', 'limit' => 10],
         ];
         $second = [
             'filters' => ['limit' => 10, 'status' => 'active'],
-            'associations' => ['tags', 'media'],
+            'associations' => ['manufacturer', 'media'],
         ];
 
         static::assertSame(

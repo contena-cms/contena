@@ -1,3 +1,7 @@
+/**
+ * @ct-package framework
+ */
+
 import type { AxiosInstance } from 'axios';
 import type { LoginService } from '../login.service';
 import type { ContentSystemElementTypePropertyAdminUi } from './content-system-element-type.api.service';

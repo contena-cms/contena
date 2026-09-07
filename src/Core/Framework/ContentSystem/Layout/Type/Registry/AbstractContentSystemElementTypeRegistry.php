@@ -5,6 +5,9 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Type\Registry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+/**
+ * @internal
+ */
 abstract class AbstractContentSystemElementTypeRegistry
 {
     abstract public function getDecorated(): AbstractContentSystemElementTypeRegistry;

@@ -7,6 +7,8 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * Single authority over the universal style option set, read by both validation and introspection.
+ *
+ * @internal
  */
 abstract class AbstractContentSystemStyleOptionRegistry
 {

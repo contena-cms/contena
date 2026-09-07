@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Specification;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
 
 /**
  * @internal

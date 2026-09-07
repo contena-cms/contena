@@ -1,6 +1,6 @@
 import { EXPERIENCE_STUDIO_MAX_HISTORY_SIZE } from '../constant/experience-studio-history.constant';
 import type { EditorHistoryEntry } from '../types/editor-history.types';
-import type { ContentElementNode } from '../types/content-element.types';
+import type { ContentElementNode } from 'src/core/service/content-element.types';
 import { createEditorHistoryEntry, trimHistoryStack } from '../util/editor-history.util';
 
 type ExperienceStudioEditorState = {
@@ -11,6 +11,7 @@ type ExperienceStudioEditorState = {
 
 /**
  * @private
+ * @ct-package discovery
  */
 const experienceStudioEditorStore = Contena.Store.register({
     id: 'experienceStudioEditor',

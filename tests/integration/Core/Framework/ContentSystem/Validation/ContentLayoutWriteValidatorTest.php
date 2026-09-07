@@ -2,11 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Validation;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
+use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
 use Contena\Core\Framework\ContentSystem\Validation\LayoutGate;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -15,6 +14,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -38,6 +40,43 @@ class ContentLayoutWriteValidatorTest extends TestCase
         $id = $this->ids->get('layout');
 
         $this->repository()->create([$this->layout('category', TestElementTypeLoader::RESOLVABLE, $id)], $context);
+
+        static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
+    }
+
+    #[TestDox('accepts a none-rooted layout that needs no root context')]
+    public function testAcceptsNoneRootedResolvableLayout(): void
+    {
+        $context = Context::createDefaultContext();
+        $id = $this->ids->get('layout');
+
+        $this->repository()->create([$this->layout('none', TestElementTypeLoader::RESOLVABLE, $id)], $context);
+
+        static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
+    }
+
+    #[TestDox('accepts an edit that keeps the layout resolvable for its committed root source')]
+    public function testAcceptsResolvableEdit(): void
+    {
+        $context = Context::createDefaultContext();
+        $layoutId = $this->ids->get('layout');
+        $this->repository()->create([$this->layout('category', TestElementTypeLoader::RESOLVABLE, $layoutId)], $context);
+
+        $this->repository()->update([['id' => $layoutId, 'name' => 'renamed-layout', 'layout' => $this->tree(TestElementTypeLoader::RESOLVABLE)]], $context);
+
+        $layout = $this->repository()->search(new Criteria([$layoutId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ContentLayoutEntity::class, $layout);
+        static::assertSame('renamed-layout', $layout->getName());
+    }
+
+    #[TestDox('bypasses every check when the write context carries the skip flag')]
+    public function testSkipFlagBypassesGate(): void
+    {
+        $context = Context::createDefaultContext();
+        $context->addState(LayoutGate::SKIP_VALIDATION_STATE);
+        $id = $this->ids->get('layout');
+
+        $this->repository()->create([$this->layout('category', 'CT:Test:DefinitelyUnregistered', $id)], $context);
 
         static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
     }
@@ -71,17 +110,6 @@ class ContentLayoutWriteValidatorTest extends TestCase
         }
     }
 
-    #[TestDox('accepts a none-rooted layout that needs no root context')]
-    public function testAcceptsNoneRootedResolvableLayout(): void
-    {
-        $context = Context::createDefaultContext();
-        $id = $this->ids->get('layout');
-
-        $this->repository()->create([$this->layout('none', TestElementTypeLoader::RESOLVABLE, $id)], $context);
-
-        static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
-    }
-
     #[TestDox('rejects an unregistered root source on creation with a membership violation')]
     public function testRejectsUnknownRootSource(): void
     {
@@ -109,16 +137,59 @@ class ContentLayoutWriteValidatorTest extends TestCase
         }
     }
 
-    #[TestDox('bypasses every check when the write context carries the skip flag')]
-    public function testSkipFlagBypassesGate(): void
+    #[TestDox('rejects a layout whose element carries the reserved virtual-root id and stores no row')]
+    public function testRejectsReservedElementIdOnWrite(): void
     {
         $context = Context::createDefaultContext();
-        $context->addState(LayoutGate::SKIP_VALIDATION_STATE);
-        $id = $this->ids->get('layout');
+        $layoutId = $this->ids->get('layout');
 
-        $this->repository()->create([$this->layout('category', 'CT:Test:DefinitelyUnregistered', $id)], $context);
+        $payload = $this->layout('category', TestElementTypeLoader::RESOLVABLE, $layoutId);
+        $payload['layout'] = [
+            ['id' => VirtualRootWrapper::VIRTUAL_ROOT_ID, 'component' => TestElementTypeLoader::RESOLVABLE, 'properties' => []],
+        ];
 
-        static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
+        try {
+            $this->repository()->create([$payload], $context);
+            static::fail('Expected the decode gate to reject the reserved virtual-root id.');
+        } catch (WriteException $exception) {
+            static::assertSame(ContentSystemException::INVALID_ELEMENT_ID, iterator_to_array($exception->getErrors(), false)[0]['code']);
+        }
+
+        static::assertNull($this->repository()->searchIds(new Criteria([$layoutId]), $context)->firstId());
+    }
+
+    /**
+     * The element-local wiring rules, rejected on the write rather than at the first render: the codec throws
+     * inside the layout field's normalize, which remaps it onto the write as a constraint violation carrying
+     * the codec's own error code, so the caller sees a 400 and no row is stored.
+     *
+     * @param array<string, mixed> $wiring
+     */
+    #[DataProvider('elementLocalWiringDefectProvider')]
+    #[TestDox('rejects a layout carrying $_dataName and stores no row')]
+    public function testRejectsAnElementLocalWiringDefectOnWrite(array $wiring, string $expectedErrorCode): void
+    {
+        $context = Context::createDefaultContext();
+        $layoutId = $this->ids->get('layout');
+
+        $payload = $this->layout('category', TestElementTypeLoader::RESOLVABLE, $layoutId);
+        $payload['layout'] = [
+            [
+                'id' => $this->ids->get('element'),
+                'component' => TestElementTypeLoader::RESOLVABLE,
+                'properties' => [],
+                ...$wiring,
+            ],
+        ];
+
+        try {
+            $this->repository()->create([$payload], $context);
+            static::fail('Expected the write to reject the element-local wiring defect.');
+        } catch (WriteException $exception) {
+            static::assertSame($expectedErrorCode, iterator_to_array($exception->getErrors(), false)[0]['code']);
+        }
+
+        static::assertNull($this->repository()->searchIds(new Criteria([$layoutId]), $context)->firstId());
     }
 
     #[TestDox('rejects an edit that makes the layout unresolvable for its committed root source')]
@@ -134,20 +205,6 @@ class ContentLayoutWriteValidatorTest extends TestCase
         } catch (WriteException $exception) {
             static::assertStringContainsString('Required property "target" is not deterministically resolvable', $exception->getMessage());
         }
-    }
-
-    #[TestDox('accepts an edit that keeps the layout resolvable for its committed root source')]
-    public function testAcceptsResolvableEdit(): void
-    {
-        $context = Context::createDefaultContext();
-        $layoutId = $this->ids->get('layout');
-        $this->repository()->create([$this->layout('category', TestElementTypeLoader::RESOLVABLE, $layoutId)], $context);
-
-        $this->repository()->update([['id' => $layoutId, 'name' => 'renamed-layout', 'layout' => $this->tree(TestElementTypeLoader::RESOLVABLE)]], $context);
-
-        $layout = $this->repository()->search(new Criteria([$layoutId]), $context)->getEntities()->first();
-        static::assertInstanceOf(ContentLayoutEntity::class, $layout);
-        static::assertSame('renamed-layout', $layout->getName());
     }
 
     #[TestDox('rejects an update that changes the immutable root source and leaves the stored value unchanged')]
@@ -171,6 +228,35 @@ class ContentLayoutWriteValidatorTest extends TestCase
         $persisted = $this->repository()->search(new Criteria([$layoutId]), $context)->getEntities()->first();
         static::assertInstanceOf(ContentLayoutEntity::class, $persisted);
         static::assertSame('category', $persisted->getRootSource());
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>, string}>
+     */
+    public static function elementLocalWiringDefectProvider(): iterable
+    {
+        yield 'two consumers sharing one base key' => [
+            ['acceptsContext' => [
+                'blog' => ['type' => 'single', 'required' => false],
+                'category' => ['type' => 'single', 'required' => false, 'propertyAlias' => 'blog'],
+            ]],
+            ContentSystemException::PROPERTY_ALIAS_COLLISION,
+        ];
+
+        yield 'a redistributing consumer keyed by a dotted path' => [
+            ['acceptsContext' => [
+                'blog.manufacturer' => ['type' => 'single', 'required' => false, 'redistribute' => true],
+            ]],
+            ContentSystemException::REDISTRIBUTE_DOTTED_PATH,
+        ];
+
+        yield 'a redistributing consumer whose derived key an authored provider holds' => [
+            [
+                'providesContext' => ['blog' => ['type' => 'single', 'distribution' => 'broadcast']],
+                'acceptsContext' => ['blog' => ['type' => 'single', 'required' => false, 'redistribute' => true]],
+            ],
+            ContentSystemException::REDISTRIBUTE_CONFLICT,
+        ];
     }
 
     /**

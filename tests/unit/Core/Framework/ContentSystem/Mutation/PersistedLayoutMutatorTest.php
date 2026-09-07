@@ -2,22 +2,17 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Mutation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutAnalysis;
 use Contena\Core\Framework\ContentSystem\Diagnostics\LayoutDiagnostics;
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutCollection;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
-use Contena\Core\Framework\ContentSystem\Layout\Field\ContentElementFieldSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\RemoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
@@ -27,8 +22,15 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
+use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 
@@ -48,35 +50,42 @@ class PersistedLayoutMutatorTest extends TestCase
         $this->ids = new IdsCollection();
     }
 
-    #[TestDox('persists an orphaning mutation and reports the detached subtree for re-attachment')]
+    #[TestDox('persists an orphaning mutation without the detached subtree and reports it for re-attachment')]
     public function testPersistsOrphaningMutationAndReportsOrphans(): void
     {
         $id = $this->ids->get('layout');
-        $repository = $this->staticRepository($this->entity($id, null));
+        $context = Context::createDefaultContext();
+        $repository = $this->staticRepository($this->entity($id, null), $id, $context);
 
-        $orphaning = $this->orphaningMutation('detached-child');
+        $orphaning = $this->orphaningMutation('block-a');
 
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $this->registry(), $this->diagnostics());
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->registry(), $this->diagnostics());
 
-        $result = $mutator->mutate($id, null, $orphaning, Context::createDefaultContext());
+        $result = $mutator->mutate($id, null, $orphaning, $context);
 
         static::assertCount(1, $result->orphaned);
-        static::assertSame('detached-child', $result->orphaned[0]->getId());
+        static::assertSame('block-a', $result->orphaned[0]->id);
+        // The detached element is gone from the committed payload, so a mutator that keeps the pre-mutation tree
+        // (or skips the write) fails here rather than passing on the double's orphaned() report alone.
+        $persisted = $repository->updates[0][0]['layout'];
+        static::assertIsArray($persisted);
+        static::assertSame(['block-b'], array_column($persisted, 'id'));
     }
 
     #[TestDox('persists the mutated tree to the repository and returns the re-resolved layout')]
     public function testPersistsMutatedTreeAndReturnsReResolvedLayout(): void
     {
         $id = $this->ids->get('layout');
-        $repository = $this->staticRepository($this->entity($id, self::VERSION));
+        $context = Context::createDefaultContext();
+        $repository = $this->staticRepository($this->entity($id, self::VERSION), $id, $context);
 
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $this->registry(), $this->diagnostics());
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->registry(), $this->diagnostics());
 
-        $result = $mutator->mutate($id, self::VERSION, new RemoveElement('block-a'), Context::createDefaultContext());
+        $result = $mutator->mutate($id, self::VERSION, new RemoveElement('block-a'), $context);
 
         static::assertSame($id, $repository->updates[0][0]['id']);
         static::assertCount(1, $repository->updates[0][0]['layout']);
-        static::assertSame(['block-b'], array_map(static fn (ContentElement $e): string => $e->getId(), $result->layout));
+        static::assertSame(['block-b'], array_map(static fn (StoredElement $e): string => $e->id, $result->layout->roots));
     }
 
     #[DataProvider('diagnosesAgainstRootSourceProvider')]
@@ -84,7 +93,8 @@ class PersistedLayoutMutatorTest extends TestCase
     public function testDiagnosesAgainstResolvedRootSource(string $rootSource, bool $rooted): void
     {
         $id = $this->ids->get('layout');
-        $repository = $this->staticRepository($this->entity($id, null, $rootSource));
+        $context = Context::createDefaultContext();
+        $repository = $this->staticRepository($this->entity($id, null, $rootSource), $id, $context);
 
         $rootContext = $rooted ? [$this->providedContext()] : [];
 
@@ -95,12 +105,21 @@ class PersistedLayoutMutatorTest extends TestCase
         $diagnostics = $this->createMock(LayoutDiagnostics::class);
         $diagnostics->expects($this->once())
             ->method('analyze')
-            ->with(static::anything(), static::identicalTo($rootContext))
+            // The mutated stored roots go in unconverted: block-a is the removed element, so a tree still carrying
+            // it (or carrying anything but stored elements) fails here rather than passing on an anything() match.
+            ->with(
+                static::callback(static function (array $tree): bool {
+                    static::assertSame(['block-b'], array_map(static fn (StoredElement $element): string => $element->id, $tree));
+
+                    return true;
+                }),
+                static::identicalTo($rootContext),
+            )
             ->willReturn(new LayoutAnalysis($report, []));
 
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $registry, $diagnostics);
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $registry, $diagnostics);
 
-        $result = $mutator->mutate($id, null, new RemoveElement('block-a'), Context::createDefaultContext());
+        $result = $mutator->mutate($id, null, new RemoveElement('block-a'), $context);
 
         static::assertSame($report, $result->diagnostics);
     }
@@ -109,13 +128,30 @@ class PersistedLayoutMutatorTest extends TestCase
     public function testAcceptsTokenMatchingToTheMillisecond(): void
     {
         $id = $this->ids->get('layout');
-        $repository = $this->staticRepository($this->entity($id, '2026-06-22T10:00:00.123456+00:00'));
+        $context = Context::createDefaultContext();
+        $repository = $this->staticRepository($this->entity($id, '2026-06-22T10:00:00.123456+00:00'), $id, $context);
 
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $this->registry(), $this->diagnostics());
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->registry(), $this->diagnostics());
 
-        $result = $mutator->mutate($id, '2026-06-22T10:00:00.123000+00:00', new RemoveElement('block-a'), Context::createDefaultContext());
+        $result = $mutator->mutate($id, '2026-06-22T10:00:00.123000+00:00', new RemoveElement('block-a'), $context);
 
-        static::assertSame(['block-b'], array_map(static fn (ContentElement $e): string => $e->getId(), $result->layout));
+        static::assertSame(['block-b'], array_map(static fn (StoredElement $e): string => $e->id, $result->layout->roots));
+    }
+
+    #[TestDox('propagates a WriteException from the committing write without swallowing it')]
+    public function testPropagatesWriteGateRejection(): void
+    {
+        $id = $this->ids->get('layout');
+        $repository = $this->repository($this->entity($id, null));
+
+        $writeException = new WriteException()->add(new \RuntimeException('binding broke resolvability'));
+        $repository->method('update')->willThrowException($writeException);
+
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->registry(), $this->diagnostics());
+
+        $this->expectExceptionObject($writeException);
+
+        $mutator->mutate($id, null, new RemoveElement('block-a'), Context::createDefaultContext());
     }
 
     #[TestDox('throws layoutNotFound and never writes when the layout does not exist')]
@@ -157,22 +193,6 @@ class PersistedLayoutMutatorTest extends TestCase
         );
     }
 
-    #[TestDox('propagates a WriteException from the committing write without swallowing it')]
-    public function testPropagatesWriteGateRejection(): void
-    {
-        $id = $this->ids->get('layout');
-        $repository = $this->repository($this->entity($id, null));
-
-        $writeException = new WriteException()->add(new \RuntimeException('binding broke resolvability'));
-        $repository->method('update')->willThrowException($writeException);
-
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $this->registry(), $this->diagnostics());
-
-        $this->expectExceptionObject($writeException);
-
-        $mutator->mutate($id, null, new RemoveElement('block-a'), Context::createDefaultContext());
-    }
-
     /**
      * @return iterable<string, array{string, bool}>
      */
@@ -202,11 +222,12 @@ class PersistedLayoutMutatorTest extends TestCase
         ?string $token,
         ContentSystemException $expected,
     ): void {
-        $repository = $this->staticRepository($entity);
-        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->elementSerializer(), $this->registry(), $this->diagnostics());
+        $context = Context::createDefaultContext();
+        $repository = $this->staticRepository($entity, $layoutId, $context);
+        $mutator = new PersistedLayoutMutator($this->lockFactory(), $repository, $this->registry(), $this->diagnostics());
 
         try {
-            $mutator->mutate($layoutId, $token, new RemoveElement('block-a'), Context::createDefaultContext());
+            $mutator->mutate($layoutId, $token, new RemoveElement('block-a'), $context);
             static::fail('Expected a ' . $expected->getErrorCode() . ' exception, but none was thrown.');
         } catch (ContentSystemException $exception) {
             static::assertSame($expected->getErrorCode(), $exception->getErrorCode());
@@ -232,14 +253,24 @@ class PersistedLayoutMutatorTest extends TestCase
     }
 
     /**
+     * The search is served through the callable form so the load is pinned: the queued-value form ignores the
+     * Criteria and the Context entirely, and would answer a lookup by any id, in any context, with this row.
+     *
      * @return StaticEntityRepository<ContentLayoutCollection>
      */
-    private function staticRepository(?ContentLayoutEntity $entity): StaticEntityRepository
+    private function staticRepository(?ContentLayoutEntity $entity, string $expectedLayoutId, Context $expectedContext): StaticEntityRepository
     {
         $collection = new ContentLayoutCollection($entity === null ? [] : [$entity]);
 
         /** @var StaticEntityRepository<ContentLayoutCollection> $repository */
-        $repository = new StaticEntityRepository([$collection]);
+        $repository = new StaticEntityRepository([
+            static function (Criteria $criteria, Context $context) use ($collection, $expectedLayoutId, $expectedContext): ContentLayoutCollection {
+                static::assertSame([$expectedLayoutId], array_values($criteria->getIds()));
+                static::assertSame($expectedContext, $context);
+
+                return $collection;
+            },
+        ]);
 
         return $repository;
     }
@@ -250,7 +281,10 @@ class PersistedLayoutMutatorTest extends TestCase
         $entity->setId($id);
         $entity->setUniqueIdentifier($id);
         $entity->setRootSource($rootSource);
-        $entity->setLayout([new ContentElement('block-a', 'CT:Card'), new ContentElement('block-b', 'CT:Card')]);
+        $entity->setLayout([
+            StoredElementBuilder::create('CT:Card', 'block-a')->build(),
+            StoredElementBuilder::create('CT:Card', 'block-b')->build(),
+        ]);
 
         if ($updatedAt !== null) {
             $entity->setUpdatedAt(new \DateTimeImmutable($updatedAt));
@@ -280,16 +314,6 @@ class PersistedLayoutMutatorTest extends TestCase
         return $diagnostics;
     }
 
-    private function elementSerializer(): ContentElementFieldSerializer
-    {
-        $serializer = static::createStub(ContentElementFieldSerializer::class);
-        $serializer->method('serializeContentElement')->willReturnCallback(
-            static fn (ContentElement $element): array => ['id' => $element->getId(), 'component' => $element->getComponent(), 'properties' => []],
-        );
-
-        return $serializer;
-    }
-
     private function providedContext(): ProvidedContext
     {
         return new ProvidedContext(
@@ -304,13 +328,28 @@ class PersistedLayoutMutatorTest extends TestCase
     private function orphaningMutation(string $orphanId): LayoutMutation
     {
         return new class($orphanId) implements LayoutMutation {
+            /**
+             * @var list<StoredElement>
+             */
+            private array $detached = [];
+
             public function __construct(private readonly string $orphanId)
             {
             }
 
-            public function apply(array $tree): array
+            public function apply(StoredTree $tree): StoredTree
             {
-                return $tree;
+                $node = $tree->find($this->orphanId);
+
+                Assert::assertInstanceOf(
+                    StoredElement::class,
+                    $node,
+                    \sprintf('The orphaning double expects "%s" in the tree.', $this->orphanId)
+                );
+
+                $this->detached = [$node];
+
+                return $tree->remove($this->orphanId);
             }
 
             public function affected(): array
@@ -318,9 +357,14 @@ class PersistedLayoutMutatorTest extends TestCase
                 return [];
             }
 
+            public function created(): array
+            {
+                return [];
+            }
+
             public function orphaned(): array
             {
-                return [new ContentElement($this->orphanId, 'CT:Block')];
+                return $this->detached;
             }
 
             public function droppedWiring(): array

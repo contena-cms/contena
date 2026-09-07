@@ -12,6 +12,8 @@ use Contena\Core\Framework\ContentSystem\Resolution\PropertyResolution;
  * StructNormalizer::denormalize(). The transforming jsonSerialize() (empty map cast to {}) is safe only on this
  * path; a future requirement that caches or reconstructs this object must revisit it.
  *
+ * @internal
+ *
  * @final
  */
 class DiagnoseResponse implements \JsonSerializable

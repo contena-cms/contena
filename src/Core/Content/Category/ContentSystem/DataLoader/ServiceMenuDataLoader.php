@@ -3,19 +3,22 @@
 namespace Contena\Core\Content\Category\ContentSystem\DataLoader;
 
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Content\Category\Tree\TreeItem;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoader;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+
+use function Symfony\Component\String\u;
 
 /**
  * @internal
@@ -42,23 +45,17 @@ class ServiceMenuDataLoader extends AbstractContentDataLoader
     public function configSpecification(): LoaderConfigSpecification
     {
         return new LoaderConfigSpecification([
-            new ConfigKeySpecification('rootId', ConfigKeyKind::Literal, 'string', required: false, hasDefault: true, default: null),
+            new ConfigKeySpecification('rootId', ConfigKeyKind::Literal, 'string', required: false, hasDefault: true, default: 'service-navigation'),
         ]);
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request
     ): ContentDataLoaderResult {
-        $config = $requirement->config;
-
-        if (!$config instanceof ServiceMenuLoaderConfig) {
-            return ContentDataLoaderResult::notFound();
-        }
-
-        $alias = $config->rootId ?? 'service-navigation';
+        $alias = $inputs->string('rootId');
         $rootId = $this->aliasResolver->resolve($alias, $context);
 
         // If the alias was not resolved (service category not configured), return empty collection
@@ -66,9 +63,30 @@ class ServiceMenuDataLoader extends AbstractContentDataLoader
             return ContentDataLoaderResult::cachedExternally(new CategoryCollection());
         }
 
+        // Alias resolution above runs on the raw configured value: NavigationAliasResolver matches its alias
+        // constants case-sensitively, so normalizing first would turn an uppercase rendering of a built-in
+        // alias into the recognized literal and change which branch runs.
+        $rootId = u($rootId)->lower()->toString();
+
+        // The early return above covers exactly one case: the built-in `service-navigation` alias on a sales
+        // channel with no service category. Every other unresolved value arrives here intact, because
+        // NavigationAliasResolver returns an unrecognized literal unchanged and hands back `footer-navigation`
+        // itself when that optional category is unset. Passing one on would reach Uuid::fromHexToBytes() in
+        // NavigationRoute::getCategoryMetaInfo() and abort the whole render. Guard after the lowercase:
+        // Uuid::VALID_PATTERN is lowercase-only, and an uppercase configured id works against the database.
+        if (!Uuid::isValid($rootId)) {
+            return ContentDataLoaderResult::notFound();
+        }
+
+        // Any ContenaHttpException degrades the element to notFound(); everything else, such as a \TypeError
+        // or a database driver failure, propagates. Why the catch is the covering ancestor and never an
+        // enumerated union: src/Core/Framework/ContentSystem/Hydration/DataLoader/README.md#degradation-boundary
+        // Known local throws: NavigationLoader delegates through TreeBuildingNavigationRoute to
+        // NavigationRoute, which throws CategoryNotFoundException when the root category is missing from
+        // the tree.
         try {
             $tree = $this->navigationLoader->load($rootId, $context, $rootId, 1);
-        } catch (CategoryNotFoundException) {
+        } catch (ContenaHttpException) {
             return ContentDataLoaderResult::notFound();
         }
 

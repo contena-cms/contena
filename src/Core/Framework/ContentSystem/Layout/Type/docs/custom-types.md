@@ -39,15 +39,15 @@ meta:
       - "Use inside blog listings"
 
 properties:
-  blogId:
+  mediaId:
     type: string
     required: true
-    title: "Blog ID"
-    description: "UUID of the blog to preview"
-  showExcerpt:
+    title: "Media ID"
+    description: "UUID of the media to display"
+  showCaption:
     type: boolean
     default: true
-    title: "Show excerpt"
+    title: "Show Caption"
 
 slots:
   - name: actions
@@ -55,7 +55,7 @@ slots:
     maxElements: 3
     allowList:
       - "CT:Content:Button"
-      - "AcmeStore:Blog:Share"
+      - "AcmeStore:OpenMedia"
 ```
 
 **`meta`** (required): `label`, `description` are required. `icon`, `category`, `copilot` are optional.

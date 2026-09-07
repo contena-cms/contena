@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityCollectionLoader;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\ContentSystem\Cache\EntityCacheTagResolver;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\AbstractContentDataLoader;
@@ -11,8 +12,8 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecifica
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\EntityLoader\EntityLoaderConfig;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderConfigSpecification;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderInputs;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\LoaderTypeCapability;
-use Contena\Core\Framework\ContentSystem\Layout\Element\ContentElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -21,6 +22,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Exception\ChannelRepositoryNotFoundException;
@@ -100,49 +102,58 @@ class EntityCollectionLoader extends AbstractContentDataLoader
     {
         return new LoaderConfigSpecification([
             new ConfigKeySpecification('entity', ConfigKeyKind::EntityName, 'string', required: true),
-            new ConfigKeySpecification('property', ConfigKeyKind::PropertyReference, 'string', required: true),
+            new ConfigKeySpecification('property', ConfigKeyKind::PropertyReference, 'string', required: true, referencedType: 'list<string>'),
             new ConfigKeySpecification('associations', ConfigKeyKind::Literal, 'list<string>', required: false, hasDefault: true, default: []),
         ]);
     }
 
     public function load(
-        ContentElement $element,
+        LoaderInputs $inputs,
         DataRequirement $requirement,
         ChannelContext $context,
         Request $request
     ): ContentDataLoaderResult {
-        $config = $requirement->config;
+        $entityName = $inputs->string('entity');
 
-        if (!$config instanceof EntityLoaderConfig) {
+        if (!$this->definitionRegistry->has($entityName)) {
             return ContentDataLoaderResult::notFound();
         }
 
-        if (!$this->definitionRegistry->has($config->entity)) {
+        $entityIds = $inputs->stringListOrNull('property');
+
+        if ($entityIds === null || $entityIds === []) {
+            return $this->emptyCollectionResult($entityName);
+        }
+
+        $entityIds = \array_map(static fn (string $entityId) => u($entityId)->lower()->toString(), $entityIds);
+
+        // An unsubstituted placeholder left literal in the stored list passes LoaderInputResolver::dereference()
+        // untouched; guard after the lowercase (Uuid::VALID_PATTERN is lowercase-only) instead of reaching
+        // Uuid::fromHexToBytes() in EntityDefinitionQueryHelper::addIdCondition(). One bad entry degrades the
+        // whole element rather than being filtered out: a malformed string means broken authoring, and a
+        // silently shortened collection would hide it.
+        foreach ($entityIds as $entityId) {
+            if (!Uuid::isValid($entityId)) {
+                return ContentDataLoaderResult::notFound();
+            }
+        }
+
+        // Any ContenaHttpException degrades the element to notFound(); everything else, such as a \TypeError
+        // or a database driver failure, propagates. Why the catch is the covering ancestor and never an
+        // enumerated union: src/Core/Framework/ContentSystem/Hydration/DataLoader/README.md#degradation-boundary
+        // The set is fully open here: this loader searches an arbitrary registered entity.
+        try {
+            $entities = $this->loadEntities($entityName, $entityIds, $inputs->stringList('associations'), $context);
+
+            // The has() check above only proves the entity name is in the registry's map
+            // (DefinitionInstanceRegistry::has() is an isset on it); getByEntityName() still throws
+            // DefinitionNotFoundException when the mapped definition service is absent from the container, so
+            // it sits inside the catch rather than after it.
+            $definition = $this->definitionRegistry->getByEntityName($entityName);
+        } catch (ContenaHttpException) {
             return ContentDataLoaderResult::notFound();
         }
 
-        $propertyName = $config->property ?? $config->entity . 'Ids';
-        $entityIds = $element->getProperty($propertyName);
-
-        if ($entityIds === null) {
-            return $this->emptyCollectionResult($config->entity);
-        }
-
-        if (!\is_array($entityIds)) {
-            return ContentDataLoaderResult::notFound();
-        }
-
-        $entityIds = \array_filter($entityIds, static fn ($id) => \is_string($id));
-        $entityIds = \array_map(static fn ($entityId) => u($entityId)->lower()->toString(), $entityIds);
-        $entityIds = \array_values($entityIds);
-
-        if ($entityIds === []) {
-            return $this->emptyCollectionResult($config->entity);
-        }
-
-        $entities = $this->loadEntities($config->entity, $entityIds, $config->associations, $context);
-
-        $definition = $this->definitionRegistry->getByEntityName($config->entity);
         $tags = [];
 
         foreach ($entities as $entity) {
@@ -158,16 +169,25 @@ class EntityCollectionLoader extends AbstractContentDataLoader
         return ContentDataLoaderResult::cached($entities, ...$tags);
     }
 
+    /**
+     * Degrades rather than propagating: resolveDefinition() throws DefinitionNotFoundException when the
+     * mapped definition service is absent from the container. resolveDefinition() itself stays throwing,
+     * because resolveProducedType() is an introspection path that must fail hard on an unknown entity.
+     */
     private function emptyCollectionResult(string $entityName): ContentDataLoaderResult
     {
-        /** @var class-string<EntityCollection<Entity>> $collectionClass */
-        $collectionClass = $this->resolveDefinition($entityName)->getCollectionClass();
+        try {
+            /** @var class-string<EntityCollection<Entity>> $collectionClass */
+            $collectionClass = $this->resolveDefinition($entityName)->getCollectionClass();
+        } catch (ContenaHttpException) {
+            return ContentDataLoaderResult::notFound();
+        }
 
         return ContentDataLoaderResult::cached(new $collectionClass());
     }
 
     /**
-     * The Channel definition for the entity where one exists, otherwise the base definition.
+     * The sales-channel definition for the entity where one exists, otherwise the base definition.
      */
     private function resolveDefinition(string $entityName): EntityDefinition
     {
@@ -197,9 +217,7 @@ class EntityCollectionLoader extends AbstractContentDataLoader
         $criteria = new Criteria($entityIds);
 
         foreach ($associations as $association) {
-            if (\is_string($association)) {
-                $criteria->addAssociation($association);
-            }
+            $criteria->addAssociation($association);
         }
 
         try {

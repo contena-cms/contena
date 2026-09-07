@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution;
 
-/**
- * @internal
- */
 enum DistributionStrategy: string
 {
     case Broadcast = 'broadcast';
