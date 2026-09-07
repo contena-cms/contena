@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
@@ -11,12 +9,18 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityReader;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Extension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Struct\ArrayEntity;
@@ -35,6 +39,9 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Transl
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\TranslatableTestTranslationDefinition;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -125,17 +132,76 @@ class EntityHydratorTest extends TestCase
             ],
         ];
 
-        $container = new ContainerBuilder();
-        $hydrator = new TranslatableTestHydrator($container);
-        $container->set(TranslatableTestHydrator::class, $hydrator);
-
-        $structs = $hydrator->hydrate(new EntityCollection(), $definition->getEntityClass(), $definition, $rows, 'test', Context::createDefaultContext());
+        $structs = $this->createTranslatableHydrator()
+            ->hydrate(new EntityCollection(), $definition->getEntityClass(), $definition, $rows, 'test', Context::createDefaultContext());
         static::assertCount(1, $structs);
 
         $first = $structs->first();
         static::assertNotNull($first);
         static::assertSame('0', $first->get('name'));
         static::assertSame('0', $first->getTranslation('name'));
+    }
+
+    #[TestDox('Translated fields are resolved per definition instance, not per entity name')]
+    public function testTranslatedFieldsAreNotSharedBetweenDefinitionInstances(): void
+    {
+        $id = Uuid::randomBytes();
+        $rows = [
+            [
+                'test.id' => $id,
+                'test.name' => '12.5',
+                'test.translation.name' => '12.5',
+            ],
+        ];
+
+        // prime the hydrator with a definition instance that types "name" as a string
+        $stringDefinition = $this->definitionInstanceRegistry->get(TranslatableTestDefinition::class);
+        $structs = $this->createTranslatableHydrator()
+            ->hydrate(new EntityCollection(), $stringDefinition->getEntityClass(), $stringDefinition, $rows, 'test', Context::createDefaultContext());
+        $first = $structs->first();
+        static::assertNotNull($first);
+        static::assertSame('12.5', $first->getTranslation('name'));
+
+        // a second registry compiles its own definition instances for the same entity name,
+        // typing "name" as a float (mirrors a rebooted test kernel with changed custom fields)
+        $floatRegistry = new StaticDefinitionInstanceRegistry(
+            [
+                TranslatableFloatTestDefinition::class,
+                TranslatableFloatTestTranslationDefinition::class,
+            ],
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+        $floatDefinition = $floatRegistry->get(TranslatableFloatTestDefinition::class);
+
+        $structs = $this->createTranslatableHydrator()
+            ->hydrate(new EntityCollection(), $floatDefinition->getEntityClass(), $floatDefinition, $rows, 'test', Context::createDefaultContext());
+        $first = $structs->first();
+        static::assertNotNull($first);
+        static::assertSame(12.5, $first->getTranslation('name'));
+    }
+
+    #[TestDox('A repeated translated-field lookup for the same definition instance is served from the cache')]
+    public function testRepeatedTranslatedFieldLookupIsServedFromTheCache(): void
+    {
+        $registry = new StaticDefinitionInstanceRegistry(
+            [
+                TranslatableFloatTestDefinition::class,
+                TranslatableFloatTestTranslationDefinition::class,
+            ],
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+        $definition = $registry->get(TranslatableFloatTestDefinition::class);
+        $hydrator = new ExposedTranslatableTestHydrator(new ContainerBuilder());
+
+        $firstLookup = $hydrator->exposeTranslatedFields($definition, $definition->getTranslatedFields());
+
+        // the field list of a later lookup is ignored; actually resolving this one would throw
+        $secondLookup = $hydrator->exposeTranslatedFields($definition, [new TranslatedField('unknown')]);
+
+        static::assertSame($firstLookup, $secondLookup);
+        static::assertArrayHasKey('name', $firstLookup);
     }
 
     public function testCustomFieldHydrationWithoutTranslationWithoutInheritance(): void
@@ -415,6 +481,15 @@ class EntityHydratorTest extends TestCase
         static::assertNull($first->all()['toMany']);
     }
 
+    private function createTranslatableHydrator(): TranslatableTestHydrator
+    {
+        $container = new ContainerBuilder();
+        $hydrator = new TranslatableTestHydrator($container);
+        $container->set(TranslatableTestHydrator::class, $hydrator);
+
+        return $hydrator;
+    }
+
     /**
      * @param list<non-empty-string> $additionalLanguages
      */
@@ -450,6 +525,72 @@ class FkExtensionFieldTest extends EntityDefinition
             new FkField('normal_fk', 'normalFk', DateDefinition::class)->addFlags(new ApiAware()),
 
             new FkField('extended_fk', 'extendedFk', DateDefinition::class)->addFlags(new ApiAware(), new Extension()),
+        ]);
+    }
+}
+
+/**
+ * @internal
+ */
+class ExposedTranslatableTestHydrator extends TranslatableTestHydrator
+{
+    /**
+     * @param array<Field> $fields
+     *
+     * @return array<string, Field>
+     */
+    public function exposeTranslatedFields(EntityDefinition $definition, array $fields): array
+    {
+        return $this->getTranslatedFields($definition, $fields);
+    }
+}
+
+/**
+ * @internal
+ */
+class TranslatableFloatTestDefinition extends EntityDefinition
+{
+    public function getEntityName(): string
+    {
+        return TranslatableTestDefinition::ENTITY_NAME;
+    }
+
+    public function getHydratorClass(): string
+    {
+        return TranslatableTestHydrator::class;
+    }
+
+    protected function defineFields(): FieldCollection
+    {
+        return new FieldCollection([
+            new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey()),
+
+            new TranslatedField('name')->addFlags(new ApiAware()),
+
+            new TranslationsAssociationField(TranslatableFloatTestTranslationDefinition::class, 'translatable_test_id')->addFlags(new Required()),
+        ]);
+    }
+}
+
+/**
+ * @internal
+ */
+class TranslatableFloatTestTranslationDefinition extends EntityTranslationDefinition
+{
+    public function getEntityName(): string
+    {
+        return TranslatableTestTranslationDefinition::ENTITY_NAME;
+    }
+
+    protected function getParentDefinitionClass(): string
+    {
+        return TranslatableFloatTestDefinition::class;
+    }
+
+    protected function defineFields(): FieldCollection
+    {
+        return new FieldCollection([
+            new FloatField('name', 'name')->addFlags(new ApiAware(), new Required()),
         ]);
     }
 }
