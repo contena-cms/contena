@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import 'src/app/component/structure/ct-search-bar-item';
 import 'src/app/component/base/ct-highlight-text';
 import RecentlySearchService from 'src/app/service/recently-search.service';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 import { routerKey } from 'vue-router';
 
 const searchTypeServiceTypes = {
@@ -98,5 +99,49 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
         });
 
         expect(wrapper.vm.mediaNameFilter).toEqual(expect.any(Function));
+    });
+
+    describe('module icon colors', () => {
+        const moduleItem = {
+            entityIconName: 'regular-image',
+            entityIconColor: 'var(--color-module-blue-default)',
+            column: 1,
+            index: 1,
+            type: 'module',
+            item: {
+                name: 'ct-theme-manager',
+                color: 'var(--color-module-purple-default)',
+                icon: 'regular-paint-brush',
+                route: 'ct.theme.manager.index',
+            },
+        };
+
+        afterEach(() => {
+            useModuleIconColors().enabled.value = false;
+        });
+
+        it('should use the neutral icon color by default', async () => {
+            wrapper = await createWrapper(moduleItem);
+
+            expect(wrapper.vm.iconColor).toBe('var(--color-icon-primary-default)');
+        });
+
+        it('should use the module color when the preference is enabled', async () => {
+            useModuleIconColors().enabled.value = true;
+            wrapper = await createWrapper(moduleItem);
+
+            expect(wrapper.vm.iconColor).toBe('var(--color-module-purple-default)');
+        });
+
+        it('should fall back to the entity icon color for entity results', async () => {
+            useModuleIconColors().enabled.value = true;
+            wrapper = await createWrapper({
+                ...moduleItem,
+                type: 'media',
+                item: { id: 'mediaId', fileName: 'example', fileExtension: 'png' },
+            });
+
+            expect(wrapper.vm.iconColor).toBe('var(--color-module-blue-default)');
+        });
     });
 });

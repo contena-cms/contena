@@ -37,8 +37,8 @@ Module.register('ct-settings-custom-field', {
     name: 'settings-custom-field',
     title: 'ct-settings-custom-field.general.mainMenuItemGeneral',
     description: 'ct-settings-custom-field.general.description',
-    color: '#9AA8B5',
-    icon: 'solid-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-bars-square',
     favicon: 'icon-module-settings.png',
     entity: 'custom-field-set',
 

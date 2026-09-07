@@ -10,10 +10,19 @@
                 <ct-block name="ct_media_folder_item_preview">
                     <span
                         class="ct-media-folder-item__folder-symbol"
-                        :class="{ 'is--parent': isParent, 'is--default': !!item.defaultFolderId }"
+                        :class="{
+                            'is--parent': isParent,
+                            'is--default': !!item.defaultFolderId,
+                            'is--colored': !!folderColor,
+                        }"
+                        :style="folderColor ? { '--ct-media-folder-color': folderColor } : null"
                         aria-hidden="true"
                     >
-                        <mt-icon :name="isParent ? 'regular-chevron-left' : 'regular-folder'" size="20px" />
+                        <mt-icon
+                            :name="isParent ? 'regular-chevron-left' : 'regular-folder'"
+                            :color="moduleIconColor"
+                            size="20px"
+                        />
                     </span>
                 </ct-block>
             </template>
@@ -164,12 +173,13 @@
 
 <script setup>
 import './ct-media-folder-item.scss';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 const { Application, Context } = Contena;
 const { warn } = Contena.Utils.debug;
 
 defineOptions({ inheritAttrs: false });
 
-defineProps({
+const props = defineProps({
     isParent: {
         type: Boolean,
         required: false,
@@ -204,7 +214,7 @@ const showDeleteModal = ref(false);
 const lastDefaultFolderId = ref(null);
 const iconConfig = ref({
     name: '',
-    color: 'inherit',
+    color: '',
 });
 
 const mediaFolderRepository = computed(() => {
@@ -232,6 +242,15 @@ const iconName = computed(() => {
         default:
             return 'multicolor-folder-thumbnail';
     }
+});
+// Module color of a default folder while the user has module colors enabled
+const folderColor = computed(() => {
+    return !props.isParent && useModuleIconColors().enabled.value && iconConfig.value.color
+        ? iconConfig.value.color
+        : undefined;
+});
+const moduleIconColor = computed(() => {
+    return folderColor.value ?? 'var(--color-icon-secondary-default)';
 });
 const assetFilter = computed(() => {
     return Contena.Filter.getByName('asset');
@@ -261,7 +280,7 @@ const getIconConfigFromFolder = async () => {
 
     iconConfig.value = {
         name: module.manifest?.icon ?? '',
-        color: module.manifest?.color ?? '#000000',
+        color: module.manifest?.color ?? '',
     };
 };
 const createdComponent = () => {
@@ -401,6 +420,8 @@ ctDefinePublic({
     moduleFactory,
     mediaFolder,
     iconName,
+    folderColor,
+    moduleIconColor,
     assetFilter,
     createdComponent,
     getIconConfigFromFolder,
@@ -435,6 +456,8 @@ defineExpose({
     moduleFactory,
     mediaFolder,
     iconName,
+    folderColor,
+    moduleIconColor,
     assetFilter,
     createdComponent,
     getIconConfigFromFolder,

@@ -1,5 +1,7 @@
+import { nextTick } from 'vue';
 import initializeUserContext from 'src/app/init-post/user-information.init';
 import { initializeUserNotifications } from 'src/app/store/notification.store';
+import useTheme, { USER_THEME_CONFIG_KEY } from 'src/app/composables/use-theme';
 
 jest.mock('src/app/store/notification.store', () => ({
     initializeUserNotifications: jest.fn(),
@@ -8,6 +10,7 @@ jest.mock('src/app/store/notification.store', () => ({
 describe('src/app/init-post/user-information.init.ts', () => {
     let isLoggedIn = true;
     const logoutMock = jest.fn(() => true);
+    const onLoginListeners = [];
     const userConfigSearchMock = jest.fn(() => Promise.resolve({ data: {} }));
     const userConfigUpsertMock = jest.fn(() => Promise.resolve());
     let userData = {
@@ -22,7 +25,7 @@ describe('src/app/init-post/user-information.init.ts', () => {
             return {
                 isLoggedIn: () => isLoggedIn,
                 logout: logoutMock,
-                addOnLoginListener: jest.fn(),
+                addOnLoginListener: (listener) => onLoginListeners.push(listener),
             };
         });
 
@@ -44,6 +47,7 @@ describe('src/app/init-post/user-information.init.ts', () => {
         logoutMock.mockClear();
         userConfigSearchMock.mockClear();
         userConfigUpsertMock.mockClear();
+        onLoginListeners.length = 0;
         isLoggedIn = true;
         userData = {
             data: {
@@ -51,6 +55,13 @@ describe('src/app/init-post/user-information.init.ts', () => {
                 password: 'my-strong-password',
             },
         };
+    });
+
+    afterEach(async () => {
+        useTheme().setTheme('system');
+        await nextTick();
+
+        localStorage.removeItem('mt-theme');
     });
 
     it('should init the user context service correctly when user is logged in', async () => {
@@ -93,5 +104,60 @@ describe('src/app/init-post/user-information.init.ts', () => {
         expect(logoutMock).toHaveBeenCalled();
         expect(initializeUserNotifications).not.toHaveBeenCalled();
         expect(Contena.Store.get('session').currentUser).toBeUndefined();
+    });
+
+    it('should apply the persisted theme preference when the user is logged in', async () => {
+        userConfigSearchMock.mockResolvedValueOnce({
+            data: {
+                [USER_THEME_CONFIG_KEY]: { theme: 'dark' },
+            },
+        });
+
+        await initializeUserContext();
+        await flushPromises();
+
+        expect(userConfigSearchMock).toHaveBeenCalledWith([
+            USER_THEME_CONFIG_KEY,
+        ]);
+        expect(useTheme().theme.value).toBe('dark');
+    });
+
+    it('should keep the local theme preference when the user has not persisted one', async () => {
+        useTheme().setTheme('light');
+
+        await initializeUserContext();
+        await flushPromises();
+
+        expect(useTheme().theme.value).toBe('light');
+    });
+
+    it('should not load the theme preference when the user is not logged in', async () => {
+        isLoggedIn = false;
+
+        await initializeUserContext();
+        await flushPromises();
+
+        expect(userConfigSearchMock).not.toHaveBeenCalled();
+    });
+
+    it('should load the theme preference after a fresh login', async () => {
+        isLoggedIn = false;
+
+        await initializeUserContext();
+        await flushPromises();
+
+        expect(userConfigSearchMock).not.toHaveBeenCalled();
+        expect(onLoginListeners).toHaveLength(1);
+
+        userConfigSearchMock.mockResolvedValueOnce({
+            data: {
+                [USER_THEME_CONFIG_KEY]: { theme: 'dark' },
+            },
+        });
+
+        onLoginListeners[0]();
+        await flushPromises();
+
+        expect(useTheme().theme.value).toBe('dark');
     });
 });

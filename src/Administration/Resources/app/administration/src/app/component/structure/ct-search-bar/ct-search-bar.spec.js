@@ -5,6 +5,7 @@ import { routeLocationKey, routerKey } from 'vue-router';
 import 'src/app/component/structure/ct-search-bar';
 import 'src/app/component/structure/ct-search-bar-item';
 import Criteria from 'src/core/data/criteria.data';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 const { Module } = Contena;
 const register = Module.register;
@@ -828,7 +829,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     it('should search for module and action with a default module', async () => {
         register('ct-order', {
             title: 'Orders',
-            color: 'var(--color-purple-500)',
+            color: 'var(--color-module-purple-default)',
             icon: 'regular-shopping-bag',
             entity: 'order',
 
@@ -889,7 +890,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     it('should search for module and action with config module', async () => {
         register('ct-category', {
             title: 'Categories',
-            color: '#57D9A3',
+            color: 'var(--color-module-green-default)',
             icon: 'regular-products',
             entity: 'category',
 
@@ -980,7 +981,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         it(`should search for module and action with the term "${term}" when the ACL privilege is missing`, async () => {
             register(`ct-${term}`, {
                 title: `${term}s`,
-                color: 'var(--color-purple-500)',
+                color: 'var(--color-module-purple-default)',
                 icon: 'regular-shopping-bag',
                 entity: term,
 
@@ -1038,7 +1039,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         it(`should search for module and action with the term "${term}" when the ACL is can view`, async () => {
             register(`ct-${term}`, {
                 title: `${term}s`,
-                color: 'var(--color-purple-500)',
+                color: 'var(--color-module-purple-default)',
                 icon: 'regular-shopping-bag',
                 entity: term,
 
@@ -1090,7 +1091,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
             expect(module.total).toBe(1);
 
             expect(module.entities[0].icon).toBe('regular-shopping-bag');
-            expect(module.entities[0].color).toBe('var(--color-purple-500)');
+            expect(module.entities[0].color).toBe('var(--color-module-purple-default)');
             expect(module.entities[0].label).toBe(`${term}s`);
             expect(module.entities[0].entity).toBe(term);
             expect(module.entities[0].route.name).toBe(`ct.${term}.index`);
@@ -1347,7 +1348,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     it('should always show frequently used searches correctly', async () => {
         register('ct-dashboard', {
             title: 'ct-dashboard.general.mainMenuItemGeneral',
-            color: '#6AD6F0',
+            color: 'var(--color-module-brand-default)',
             icon: 'regular-dashboard',
             name: 'dashboard',
 
@@ -1405,7 +1406,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
 
         const { route, ...frequently } = frequentlyUsed.entities[0];
         expect(frequently).toEqual({
-            color: '#6AD6F0',
+            color: 'var(--color-module-brand-default)',
             icon: 'regular-dashboard',
             title: 'ct-dashboard.general.mainMenuItemGeneral',
             name: 'dashboard',
@@ -1426,7 +1427,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     it('should always show recently searches correctly', async () => {
         register('ct-dashboard', {
             title: 'ct-dashboard.general.mainMenuItemGeneral',
-            color: '#6AD6F0',
+            color: 'var(--color-module-brand-default)',
             icon: 'regular-dashboard',
             name: 'dashboard',
             routes: {
@@ -1516,7 +1517,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
     it('should render the correct fallback icon when no entity icon exists', async () => {
         register('ct-dashboard', {
             title: 'ct-dashboard.general.mainMenuItemGeneral',
-            color: '#6AD6F0',
+            color: 'var(--color-module-brand-default)',
             icon: 'regular-dashboard',
             name: 'dashboard',
 
@@ -1573,7 +1574,7 @@ describe('src/app/component/structure/ct-search-bar', () => {
         const term = 'customer';
         register(`ct-${term}`, {
             title: `${term}s`,
-            color: 'var(--color-purple-500)',
+            color: 'var(--color-module-purple-default)',
             icon: 'regular-shopping-bag',
             entity: term,
 
@@ -1792,5 +1793,96 @@ describe('src/app/component/structure/ct-search-bar', () => {
         expect(moduleLookup).toHaveBeenCalledWith('name', 'moduleValid');
         expect(moduleLookup).toHaveBeenCalledWith('name', 'moduleInvalid');
         expect(moduleLookup).toHaveBeenCalledWith('name', 'moduleValid2');
+    });
+
+    describe('module icon colors', () => {
+        afterEach(() => {
+            useModuleIconColors().enabled.value = false;
+        });
+
+        it('should use the neutral icon color for the module filter icons by default', async () => {
+            wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.vm.getTypeIconColor('media')).toBe('var(--color-icon-primary-default)');
+        });
+
+        it('should use the module color for the module filter icons when the preference is enabled', async () => {
+            register('ct-media-module-colors-test', {
+                title: 'Media',
+                color: 'var(--color-module-blue-default)',
+                icon: 'regular-image',
+                entity: 'media',
+                routes: {
+                    index: {
+                        component: 'ct-media-list',
+                        path: 'index',
+                    },
+                },
+            });
+
+            useModuleIconColors().enabled.value = true;
+            wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.vm.getTypeIconColor('media')).toBe('var(--color-module-blue-default)');
+        });
+
+        it('should show no icon in the search type button while searching in all types', async () => {
+            wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.vm.searchTypeIcon).toBeNull();
+            expect(wrapper.find('.ct-search-bar__type--v2 .ct-search-bar__type-icon').exists()).toBe(false);
+        });
+
+        it('should show the solid module icon in the search type button without a color by default', async () => {
+            register('ct-category-module-colors-test', {
+                title: 'Categories',
+                color: 'var(--color-module-purple-default)',
+                icon: 'regular-folder-tree',
+                entity: 'category',
+                routes: {
+                    index: {
+                        component: 'ct-category-list',
+                        path: 'index',
+                    },
+                },
+            });
+
+            wrapper = await createWrapper({ initialSearchType: 'category' });
+            await flushPromises();
+
+            const icon = wrapper.findComponent('.ct-search-bar__type--v2 .ct-search-bar__type-icon');
+
+            expect(wrapper.vm.searchTypeColor).toBeNull();
+            expect(icon.props('name')).toBe('solid-folder-tree');
+            expect(icon.props('color')).toBeUndefined();
+        });
+
+        it('should paint the search type icon in the module color when the preference is enabled', async () => {
+            register('ct-category-module-colors-enabled-test', {
+                title: 'Categories',
+                color: 'var(--color-module-purple-default)',
+                icon: 'regular-folder-tree',
+                entity: 'category',
+                routes: {
+                    index: {
+                        component: 'ct-category-list',
+                        path: 'index',
+                    },
+                },
+            });
+
+            useModuleIconColors().enabled.value = true;
+            wrapper = await createWrapper({ initialSearchType: 'category' });
+            await flushPromises();
+
+            const button = wrapper.find('.ct-search-bar__type--v2');
+            const icon = wrapper.findComponent('.ct-search-bar__type--v2 .ct-search-bar__type-icon');
+
+            expect(icon.props('color')).toBe('var(--color-module-purple-default)');
+            expect(button.attributes('style')).toBeUndefined();
+        });
     });
 });

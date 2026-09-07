@@ -43,8 +43,8 @@ Module.register('ct-category', {
     description: 'ct-category.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-purple-500)',
-    icon: 'regular-sitemap',
+    color: 'var(--color-module-green-default)',
+    icon: 'regular-folder-open',
     favicon: 'icon-module-content.png',
     entity: 'category',
     snippets: {
@@ -186,6 +186,7 @@ Module.register('ct-category', {
             id: 'ct-category',
             path: 'ct.category.index',
             label: 'ct-category.general.mainMenuItemIndex',
+            color: 'var(--color-module-green-default)',
             parent: 'ct-content',
             privilege: 'category.viewer',
             position: 20,

@@ -14,7 +14,7 @@ Module.register('ct-settings', {
     type: 'core',
     name: 'settings',
     title: 'ct-settings.general.mainMenuItemGeneral',
-    color: '#9AA8B5',
+    color: 'var(--color-module-neutral-default)',
     icon: 'regular-cog',
     favicon: 'icon-module-settings.png',
 
@@ -56,7 +56,7 @@ Module.register('ct-settings', {
         {
             id: 'ct-settings',
             label: 'global.ct-admin-menu.navigation.mainMenuItemSettings',
-            color: '#9AA8B5',
+            color: 'var(--color-module-neutral-default)',
             icon: 'regular-cog',
             path: 'ct.settings.index',
             position: 90,

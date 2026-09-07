@@ -17,8 +17,8 @@ Module.register('ct-settings-logging', {
     name: 'settings-logging',
     title: 'ct-settings-logging.general.mainMenuItemGeneral',
     description: 'Log viewer',
-    color: '#9AA8B5',
-    icon: 'regular-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-server',
     favicon: 'icon-module-settings.png',
     entity: 'log_entry',
 

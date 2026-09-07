@@ -1,6 +1,11 @@
 import { mount } from '@vue/test-utils';
 import selectMtSelectOptionByText from 'test/_helper_/select-mt-select-by-text';
 
+const userConfigService = {
+    search: jest.fn(() => Promise.resolve({ data: {} })),
+    upsert: jest.fn(() => Promise.resolve()),
+};
+
 async function createWrapper(privileges = []) {
     return mount(await wrapTestComponent('ct-profile-index-general', { sync: true }), {
         global: {
@@ -85,6 +90,15 @@ async function createWrapper(privileges = []) {
 }
 
 describe('src/module/ct-profile/view/ct-profile-index-general', () => {
+    beforeAll(() => {
+        Contena.Service().register('userConfigService', () => userConfigService);
+    });
+
+    beforeEach(() => {
+        userConfigService.search.mockClear();
+        userConfigService.upsert.mockClear();
+    });
+
     it('should be able to change new password', async () => {
         const wrapper = await createWrapper(['user.update_profile']);
         await flushPromises();
@@ -152,5 +166,44 @@ describe('src/module/ct-profile/view/ct-profile-index-general', () => {
         await selectMtSelectOptionByText(wrapper, 'UTC', '.ct-profile--timezone input');
 
         expect(wrapper.props('user').timeZone).toBe('UTC');
+    });
+
+    describe('module icon colors', () => {
+        it('should show the module icon color selection', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.find('.ct-profile--module-icon-colors').exists()).toBe(true);
+        });
+
+        it('should emit the chosen preference without applying it', async () => {
+            const wrapper = await createWrapper(['user.update_profile']);
+            await flushPromises();
+
+            await selectMtSelectOptionByText(
+                wrapper,
+                'ct-profile.index.optionModuleIconColorsColored',
+                '.ct-profile--module-icon-colors input',
+            );
+
+            expect(wrapper.emitted('user-module-icon-colors-change')[0][0]).toBe(true);
+            expect(Contena.Service('userConfigService').upsert).not.toHaveBeenCalled();
+        });
+
+        it('should preselect the neutral option', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.vm.computedUserModuleIconColors).toBe('neutral');
+        });
+    });
+
+    describe('theme selection', () => {
+        it('should show the theme selection', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            expect(wrapper.find('.ct-profile--theme').exists()).toBe(true);
+        });
     });
 });

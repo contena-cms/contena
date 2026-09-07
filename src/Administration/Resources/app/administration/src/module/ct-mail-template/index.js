@@ -24,7 +24,7 @@ Module.register('ct-mail-template', {
     name: 'mail-template',
     title: 'ct-mail-template.general.mainMenuItemGeneral',
     description: 'ct-mail-template.general.description',
-    color: '#9AA8B5',
+    color: 'var(--color-module-neutral-default)',
     icon: 'regular-envelope',
     entity: 'mail_template',
 

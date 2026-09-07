@@ -8,7 +8,7 @@ Contena.Module.register('ct-settings-mailer', {
     name: 'settings-mailer',
     title: 'ct-settings-mailer.general.title',
     description: 'ct-settings-mailer.general.description',
-    color: '#9AA8B5',
+    color: 'var(--color-module-neutral-default)',
     icon: 'regular-envelope',
 
     routes: {

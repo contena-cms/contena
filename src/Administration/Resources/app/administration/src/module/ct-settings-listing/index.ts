@@ -21,7 +21,7 @@ Module.register('ct-settings-listing', {
     name: 'settings-listing',
     title: 'ct-settings-listing.general.mainMenuItemGeneral',
     description: 'ct-settings-listing.general.description',
-    color: '#9AA8B5',
+    color: 'var(--color-module-neutral-default)',
     icon: 'regular-sort',
     favicon: 'icon-module-settings.png',
     entity: 'blog_sorting',

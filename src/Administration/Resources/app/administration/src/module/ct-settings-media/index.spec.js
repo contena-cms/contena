@@ -16,8 +16,8 @@ describe('src/module/ct-settings-media/index.js', () => {
             name: 'settings-media',
             title: 'ct-settings-media.general.title',
             description: 'ct-settings-media.general.description',
-            color: '#9AA8B5',
-            icon: 'regular-cog',
+            color: 'var(--color-module-neutral-default)',
+            icon: 'regular-image',
             favicon: 'icon-module-settings.png',
             routes: expect.any(Object),
             settingsItem: [
@@ -42,7 +42,7 @@ describe('src/module/ct-settings-media/index.js', () => {
     it('should register module routes', () => {
         const routes = {
             'ct.settings.media.index': {
-                path: '/sw/settings/media/index',
+                path: '/ct/settings/media/index',
                 components: { default: 'ct-settings-media' },
             },
         };

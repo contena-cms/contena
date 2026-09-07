@@ -4,6 +4,7 @@
             v-if="showMenuItem && hasCollapsibleSubtree"
             as="li"
             :class="collapsibleLiClass"
+            :style="moduleColorStyle"
             :aria-current="rowActive ? 'page' : 'false'"
             :open="collapsibleOpen"
             @update:open="onCollapsibleOpenUpdate"
@@ -29,6 +30,7 @@
                                 :size="iconSize"
                                 class="ct-admin-menu__navigation-link-icon"
                                 :name="navigationIconName"
+                                :color="navigationIconColor"
                             />
                         </ct-block>
 
@@ -70,6 +72,7 @@
                             :size="iconSize"
                             class="ct-admin-menu__navigation-link-icon"
                             :name="navigationIconName"
+                            :color="navigationIconColor"
                         />
                     </ct-block>
 
@@ -141,6 +144,7 @@
                                     :size="iconSize"
                                     class="ct-admin-menu__navigation-link-icon"
                                     :name="navigationIconName"
+                                    :color="navigationIconColor"
                                 />
 
                                 <span
@@ -169,6 +173,7 @@
                                     :size="iconSize"
                                     class="ct-admin-menu__navigation-link-icon"
                                     :name="navigationIconName"
+                                    :color="navigationIconColor"
                                 />
 
                                 <span
@@ -194,6 +199,7 @@
                                     :size="iconSize"
                                     class="ct-admin-menu__navigation-link-icon"
                                     :name="navigationIconName"
+                                    :color="navigationIconColor"
                                 />
 
                                 <span
@@ -216,6 +222,7 @@
 
 <script setup>
 import { getActiveRouteNames, isEntryOnActiveRoute, entryParamsMatchRoute } from './menu-item-active.helper';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 import './ct-admin-menu-item.scss';
 const TOOLTIP_OPEN_TRIGGER_PROPS = [
     'onMouseover',
@@ -418,6 +425,7 @@ const collapsibleLiClass = computed(() => {
             'is--entry-expanded': collapsibleOpen.value,
             'is--child-active': childRouteActive.value,
             'is--flyout-enabled': props.flyoutActive,
+            'is--module-colored': !!navigationIconColor.value,
         },
     ];
 });
@@ -425,13 +433,25 @@ const leafLiClass = computed(() => {
     return [
         'ct-admin-menu__navigation-list-item',
         getElementClasses(props.entry.id || entryPath.value),
-        { 'is--entry-expanded': submenuVisuallyOpen.value, 'is--child-active': childRouteActive.value },
+        {
+            'is--entry-expanded': submenuVisuallyOpen.value,
+            'is--child-active': childRouteActive.value,
+            'is--module-colored': !!navigationIconColor.value,
+        },
     ];
 });
 const navigationIconName = computed(() => {
     const isActive = rowActive.value || childRouteActive.value;
 
     return getIconName(props.entry.icon, isActive);
+});
+const navigationIconColor = computed(() => {
+    // Undefined leaves the icon to the stylesheet, which also owns the active state color
+    return useModuleIconColors().enabled.value ? props.entry.color : undefined;
+});
+const moduleColorStyle = computed(() => {
+    // Inherited by the sub items, which mark their active state with the parent module color
+    return navigationIconColor.value ? { '--ct-admin-menu-module-color': navigationIconColor.value } : null;
 });
 const childRouteActive = computed(() => {
     return children.value.length > 0 && submenuVisuallyOpen.value && hasActiveChild.value;
@@ -602,6 +622,8 @@ ctDefinePublic({
     collapsibleLiClass,
     leafLiClass,
     navigationIconName,
+    navigationIconColor,
+    moduleColorStyle,
     childRouteActive,
     collapsedFlyoutAria,
     collapsedAriaLabel,
@@ -643,6 +665,8 @@ defineExpose({
     collapsibleLiClass,
     leafLiClass,
     navigationIconName,
+    navigationIconColor,
+    moduleColorStyle,
     childRouteActive,
     collapsedFlyoutAria,
     collapsedAriaLabel,

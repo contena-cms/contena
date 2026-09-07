@@ -75,6 +75,30 @@
                             />
                         </ct-block>
                     </ct-container>
+
+                    <ct-container v-bind="{ columns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0 30px' }">
+                        <ct-block name="ct_profile_index_general_information_theme">
+                            <mt-theme-select
+                                v-model="computedUserTheme"
+                                name="ct-field--user-theme"
+                                class="ct-profile--theme"
+                                :label="$t('ct-profile.index.labelThemeField')"
+                                :disabled="!acl.can('user.update_profile')"
+                            />
+                        </ct-block>
+
+                        <ct-block name="ct_profile_index_general_information_module_icon_colors">
+                            <mt-select
+                                v-model="computedUserModuleIconColors"
+                                name="ct-field--user-moduleIconColors"
+                                class="ct-profile--module-icon-colors"
+                                :label="$t('ct-profile.index.labelModuleIconColorsField')"
+                                :options="moduleIconColorsOptions"
+                                :disabled="!acl.can('user.update_profile')"
+                                hide-clearable-button
+                            />
+                        </ct-block>
+                    </ct-container>
                 </mt-card>
             </ct-block>
 
@@ -188,18 +212,32 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    userTheme: {
+        type: String,
+        required: false,
+        default: 'system',
+    },
+    userModuleIconColors: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 const emit = defineEmits([
     'new-password-change',
     'new-password-confirm-change',
+    'user-theme-change',
+    'user-module-icon-colors-change',
     'media-upload',
     'media-remove',
     'media-open',
 ]);
 
 import { computed, inject } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const user = computed(() => props.user);
+const { t } = useI18n();
 
 const acl = inject('acl');
 
@@ -227,6 +265,34 @@ const computedNewPasswordConfirm = computed({
     },
     set: (newPasswordConfirm) => {
         emit('new-password-confirm-change', newPasswordConfirm);
+    },
+});
+const computedUserTheme = computed({
+    get: () => {
+        return props.userTheme;
+    },
+    set: (nextUserTheme) => {
+        emit('user-theme-change', nextUserTheme);
+    },
+});
+const moduleIconColorsOptions = computed(() => {
+    return [
+        {
+            value: 'neutral',
+            label: t('ct-profile.index.optionModuleIconColorsNeutral'),
+        },
+        {
+            value: 'module',
+            label: t('ct-profile.index.optionModuleIconColorsColored'),
+        },
+    ];
+});
+const computedUserModuleIconColors = computed({
+    get: () => {
+        return props.userModuleIconColors ? 'module' : 'neutral';
+    },
+    set: (value) => {
+        emit('user-module-icon-colors-change', value === 'module');
     },
 });
 const localeOptions = computed(() => {
@@ -257,6 +323,9 @@ ctDefinePublic({
     userPasswordError,
     computedNewPassword,
     computedNewPasswordConfirm,
+    computedUserTheme,
+    moduleIconColorsOptions,
+    computedUserModuleIconColors,
     localeOptions,
     onUploadMedia,
     onDropMedia,
@@ -269,6 +338,9 @@ defineExpose({
     userPasswordError,
     computedNewPassword,
     computedNewPasswordConfirm,
+    computedUserTheme,
+    moduleIconColorsOptions,
+    computedUserModuleIconColors,
     localeOptions,
     onUploadMedia,
     onDropMedia,

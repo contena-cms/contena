@@ -59,9 +59,13 @@
                                         languageId,
                                         isDisabled,
                                         userRepository,
+                                        userTheme,
+                                        userModuleIconColors,
                                     }"
                                     @new-password-change="onChangeNewPassword"
                                     @new-password-confirm-change="onChangeNewPasswordConfirm"
+                                    @user-theme-change="onChangeUserTheme"
+                                    @user-module-icon-colors-change="onChangeUserModuleIconColors"
                                     @media-upload="setMediaItem"
                                     @media-remove="onUnlinkAvatar"
                                     @media-open="openMediaModal"
@@ -99,6 +103,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNotification } from 'src/app/composables/use-notification';
 import { usePageTitle } from 'src/app/composables/use-page-title';
+import useTheme from 'src/app/composables/use-theme';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 const router = useRouter();
 const route = useRoute();
@@ -129,6 +135,8 @@ const mediaDefaultFolderId = ref(null);
 const showMediaModal = ref(false);
 const timezoneOptions = ref([]);
 const userPromise = ref(Promise.resolve(null));
+const userTheme = ref(useTheme().theme.value);
+const userModuleIconColors = ref(useModuleIconColors().enabled.value);
 
 const minSearchTermLength = computed(() => {
     return Store.get('ctProfile').minSearchTermLength;
@@ -353,6 +361,8 @@ const saveUser = (context) => {
                 }
 
                 await updateCurrentUser();
+                await saveUserTheme();
+                await saveUserModuleIconColors();
 
                 isLoading.value = false;
                 isSaveSuccessful.value = true;
@@ -389,6 +399,8 @@ const saveUser = (context) => {
             }
 
             await updateCurrentUser();
+            await saveUserTheme();
+            await saveUserModuleIconColors();
             Contena.Service('localeHelper').setLocaleWithId(user.value.localeId);
 
             isLoading.value = false;
@@ -443,6 +455,26 @@ const onChangeNewPassword = (newPasswordValue) => {
 };
 const onChangeNewPasswordConfirm = (newPasswordConfirmValue) => {
     newPasswordConfirm.value = newPasswordConfirmValue;
+};
+const onChangeUserTheme = (nextUserTheme) => {
+    userTheme.value = nextUserTheme;
+};
+const onChangeUserModuleIconColors = (nextUserModuleIconColors) => {
+    userModuleIconColors.value = nextUserModuleIconColors;
+};
+const saveUserTheme = () => {
+    return useTheme()
+        .saveUserTheme(userTheme.value)
+        .catch(() => {
+            createErrorMessage(t('ct-profile.index.notificationSaveErrorMessage'));
+        });
+};
+const saveUserModuleIconColors = () => {
+    return useModuleIconColors()
+        .saveUserModuleIconColors(userModuleIconColors.value)
+        .catch(() => {
+            createErrorMessage(t('ct-profile.index.notificationSaveErrorMessage'));
+        });
 };
 const onMediaSelectionChange = ([mediaEntity]) => {
     avatarMediaItem.value = mediaEntity;
@@ -539,6 +571,8 @@ ctDefinePublic({
     showMediaModal,
     timezoneOptions,
     userPromise,
+    userTheme,
+    userModuleIconColors,
     minSearchTermLength,
     searchPreferences,
     userEmailError,
@@ -571,6 +605,10 @@ ctDefinePublic({
     handleUserSaveError,
     onChangeNewPassword,
     onChangeNewPasswordConfirm,
+    onChangeUserTheme,
+    onChangeUserModuleIconColors,
+    saveUserTheme,
+    saveUserModuleIconColors,
     onMediaSelectionChange,
     getMediaDefaultFolderId,
     saveMinSearchTermLength,
@@ -602,6 +640,8 @@ defineExpose({
     showMediaModal,
     timezoneOptions,
     userPromise,
+    userTheme,
+    userModuleIconColors,
     minSearchTermLength,
     searchPreferences,
     userEmailError,
@@ -634,6 +674,10 @@ defineExpose({
     handleUserSaveError,
     onChangeNewPassword,
     onChangeNewPasswordConfirm,
+    onChangeUserTheme,
+    onChangeUserModuleIconColors,
+    saveUserTheme,
+    saveUserModuleIconColors,
     onMediaSelectionChange,
     getMediaDefaultFolderId,
     saveMinSearchTermLength,

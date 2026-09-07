@@ -12,7 +12,7 @@ Module.register('ct-landing-page', {
     title: 'ct-landing-page.general.mainMenuItemIndex',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: '#57D9A3',
+    color: 'var(--color-module-green-default)',
     icon: 'regular-file',
     favicon: 'icon-module-content.png',
     entity: 'landing_page',

@@ -9,8 +9,8 @@ Module.register('ct-settings-media', {
     name: 'settings-media',
     title: 'ct-settings-media.general.title',
     description: 'ct-settings-media.general.description',
-    color: '#9AA8B5',
-    icon: 'regular-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-image',
     favicon: 'icon-module-settings.png',
 
     routes: {

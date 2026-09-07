@@ -107,7 +107,7 @@ Contena.Module.register('ct-experience-studio', {
     name: 'experience-studio',
     title: 'ct-experience-studio.general.mainMenuItemGeneral',
     description: 'ct-experience-studio.general.descriptionTextModule',
-    color: 'var(--color-pink-500)',
+    color: 'var(--color-module-pink-default)',
     icon: 'regular-layout',
     favicon: 'icon-module-content.png',
     entity: 'content_layout',
@@ -143,7 +143,7 @@ Contena.Module.register('ct-experience-studio', {
         {
             id: 'ct-experience-studio',
             label: 'ct-experience-studio.general.mainMenuItemGeneral',
-            color: 'var(--color-pink-500)',
+            color: 'var(--color-module-pink-default)',
             path: 'ct.experience.studio.index',
             icon: 'regular-layout',
             position: 5,

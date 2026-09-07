@@ -17,6 +17,12 @@
             border-color: var(--color-border-secondary-default);
             background: var(--color-background-secondary-default);
         }
+
+        &.is--colored {
+            color: var(--ct-media-folder-color);
+            border-color: var(--ct-media-folder-color);
+            background: color-mix(in srgb, var(--ct-media-folder-color) 12%, var(--color-background-secondary-default));
+        }
     }
 
     &.is--list {

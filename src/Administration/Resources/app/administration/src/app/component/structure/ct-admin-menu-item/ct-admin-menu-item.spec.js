@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 async function createWrapper(
     entry = {},
@@ -33,6 +34,9 @@ async function createWrapper(
                         'data',
                     ],
                     template: '<div><slot /></div>',
+                },
+                'mt-tooltip': {
+                    template: '<div><slot v-bind="{ onMouseover: () => {}, onMouseleave: () => {} }" /></div>',
                 },
             },
         },
@@ -114,5 +118,87 @@ describe('src/app/component/structure/ct-admin-menu-item', () => {
 
         expect(wrapper.vm.manualNestedOpen).toBe(true);
         expect(wrapper.emitted('branch-toggle')).toBeUndefined();
+    });
+
+    describe('module icon colors', () => {
+        const blogEntry = {
+            id: 'ct-blog',
+            label: 'ct-blog.general.mainMenuItemGeneral',
+            color: 'var(--color-module-green-default)',
+            path: 'ct.blog.index',
+            icon: 'regular-file-text',
+            position: 10,
+            level: 1,
+            moduleType: 'core',
+            children: [],
+        };
+
+        afterEach(() => {
+            useModuleIconColors().enabled.value = false;
+        });
+
+        it('should leave the icon color to the stylesheet by default', async () => {
+            const wrapper = await createWrapper(blogEntry);
+
+            expect(wrapper.vm.navigationIconColor).toBeUndefined();
+            expect(wrapper.find('.ct-admin-menu__navigation-link-icon').attributes('style')).not.toContain('color');
+        });
+
+        it('should paint the icon in the module color when the preference is enabled', async () => {
+            useModuleIconColors().enabled.value = true;
+
+            const wrapper = await createWrapper(blogEntry);
+
+            expect(wrapper.vm.navigationIconColor).toBe('var(--color-module-green-default)');
+            expect(wrapper.find('.ct-admin-menu__navigation-link-icon').attributes('style')).toContain(
+                'color: var(--color-module-green-default)',
+            );
+        });
+
+        it('should not mark the row as module colored by default', async () => {
+            const wrapper = await createWrapper(blogEntry);
+
+            expect(wrapper.find('.ct-admin-menu__navigation-list-item').classes()).not.toContain('is--module-colored');
+        });
+
+        it('should mark the row as module colored so the active state drops the brand tint', async () => {
+            useModuleIconColors().enabled.value = true;
+
+            const wrapper = await createWrapper(blogEntry);
+
+            expect(wrapper.find('.ct-admin-menu__navigation-list-item').classes()).toContain('is--module-colored');
+        });
+
+        it('should expose the module color to sub items as a custom property', async () => {
+            useModuleIconColors().enabled.value = true;
+
+            const wrapper = await createWrapper({
+                ...blogEntry,
+                children: [{ id: 'ct-blog-list', path: 'ct.blog.index' }],
+            });
+            await flushPromises();
+
+            expect(wrapper.find('.ct-admin-menu__navigation-list-item').attributes('style')).toContain(
+                '--ct-admin-menu-module-color: var(--color-module-green-default)',
+            );
+        });
+
+        it('should not expose a module color while the preference is off', async () => {
+            const wrapper = await createWrapper({
+                ...blogEntry,
+                children: [{ id: 'ct-blog-list', path: 'ct.blog.index' }],
+            });
+            await flushPromises();
+
+            expect(wrapper.find('.ct-admin-menu__navigation-list-item').attributes('style')).toBeUndefined();
+        });
+
+        it('should not mark rows without a module color', async () => {
+            useModuleIconColors().enabled.value = true;
+
+            const wrapper = await createWrapper({ ...blogEntry, color: undefined });
+
+            expect(wrapper.find('.ct-admin-menu__navigation-list-item').classes()).not.toContain('is--module-colored');
+        });
     });
 });

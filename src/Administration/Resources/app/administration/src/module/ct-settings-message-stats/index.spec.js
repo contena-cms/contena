@@ -18,8 +18,8 @@ describe('src/module/ct-settings-message-stats/index.js', () => {
             description: 'ct-settings-message-stats.general.descriptionTextModule',
             version: '1.0.0',
             targetVersion: '1.0.0',
-            color: '#9AA8B5',
-            icon: 'regular-cog',
+            color: 'var(--color-module-neutral-default)',
+            icon: 'regular-bars-square',
             favicon: 'icon-module-settings.png',
             routes: expect.any(Object),
             settingsItem: [
@@ -48,7 +48,7 @@ describe('src/module/ct-settings-message-stats/index.js', () => {
 
         const route = module.routes.get('ct.settings.message.stats.index');
         expect(route !== undefined).toBe(true);
-        expect(route.path).toBe('/sw/settings/message/stats/index');
+        expect(route.path).toBe('/ct/settings/message/stats/index');
         expect(route.meta).toEqual({
             parentPath: 'ct.settings.index.system',
             privilege: 'system.system_config',

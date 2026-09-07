@@ -1,7 +1,16 @@
+/* eslint-disable ct-test-rules/test-file-max-lines-warning */
+
 import { mount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
 import EntityCollection from 'src/core/data/entity-collection.data';
 import TimezoneService from 'src/core/service/timezone.service';
+import useTheme, { USER_THEME_CONFIG_KEY } from 'src/app/composables/use-theme';
+import useModuleIconColors, { USER_MODULE_ICON_COLORS_CONFIG_KEY } from 'src/app/composables/use-module-icon-colors';
+
+const userConfigService = {
+    search: jest.fn(() => Promise.resolve({ data: {} })),
+    upsert: jest.fn(() => Promise.resolve()),
+};
 
 async function createWrapper(
     privileges = [],
@@ -101,14 +110,7 @@ async function createWrapper(
                         return term && term.trim().length >= 1;
                     },
                 },
-                userConfigService: {
-                    upsert: () => {
-                        return Promise.resolve();
-                    },
-                    search: () => {
-                        return Promise.resolve();
-                    },
-                },
+                userConfigService,
                 validationApiService: {
                     validateEmailAddress: () => {
                         return Promise.resolve(true);
@@ -121,6 +123,8 @@ async function createWrapper(
 
 describe('src/module/ct-profile/page/ct-profile-index', () => {
     beforeAll(() => {
+        Contena.Service().register('userConfigService', () => userConfigService);
+
         Contena.Service().register('timezoneService', () => {
             return new TimezoneService();
         });
@@ -130,6 +134,16 @@ describe('src/module/ct-profile/page/ct-profile-index', () => {
                 setLocaleWithId: jest.fn(),
             };
         });
+    });
+
+    beforeEach(() => {
+        userConfigService.search.mockClear();
+        userConfigService.upsert.mockClear();
+    });
+
+    afterEach(() => {
+        useTheme().setTheme('light');
+        useModuleIconColors().enabled.value = false;
     });
 
     it('should not be able to save own user', async () => {
@@ -260,6 +274,61 @@ describe('src/module/ct-profile/page/ct-profile-index', () => {
         await flushPromises();
 
         expect(updateFunction).toHaveBeenCalled();
+    });
+
+    describe('theme selection', () => {
+        it('should apply and persist the chosen theme on save', async () => {
+            const wrapper = await createWrapper(['user.update_profile']);
+            await flushPromises();
+
+            wrapper.vm.onChangeUserTheme('dark');
+
+            await wrapper.find('.ct-profile__save-action').trigger('click');
+            await flushPromises();
+
+            expect(useTheme().theme.value).toBe('dark');
+            expect(Contena.Service('userConfigService').upsert).toHaveBeenCalledWith({
+                [USER_THEME_CONFIG_KEY]: { theme: 'dark' },
+            });
+        });
+
+        it('should not persist the theme before saving', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            wrapper.vm.onChangeUserTheme('dark');
+            await flushPromises();
+
+            expect(Contena.Service('userConfigService').upsert).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('module icon colors', () => {
+        it('should apply and persist the chosen preference on save', async () => {
+            const wrapper = await createWrapper(['user.update_profile']);
+            await flushPromises();
+
+            wrapper.vm.onChangeUserModuleIconColors(true);
+
+            await wrapper.find('.ct-profile__save-action').trigger('click');
+            await flushPromises();
+
+            expect(useModuleIconColors().enabled.value).toBe(true);
+            expect(Contena.Service('userConfigService').upsert).toHaveBeenCalledWith({
+                [USER_MODULE_ICON_COLORS_CONFIG_KEY]: { enabled: true },
+            });
+        });
+
+        it('should not persist the preference before saving', async () => {
+            const wrapper = await createWrapper();
+            await flushPromises();
+
+            wrapper.vm.onChangeUserModuleIconColors(true);
+            await flushPromises();
+
+            expect(useModuleIconColors().enabled.value).toBe(false);
+            expect(Contena.Service('userConfigService').upsert).not.toHaveBeenCalled();
+        });
     });
 
     it('should save minSearchTermLength and userSearchPreferences', async () => {
@@ -456,14 +525,16 @@ describe('src/module/ct-profile/page/ct-profile-index', () => {
         await wrapper.vm.$nextTick();
 
         wrapper.vm.updateCurrentUser = jest.fn(async () => {});
-        wrapper.vm.handleUserSaveError = jest.fn();
+        const notificationSpy = jest
+            .spyOn(Contena.Store.get('notification'), 'createNotification')
+            .mockImplementation(() => null);
 
         wrapper.vm.saveUser({});
         await flushPromises();
 
         expect(loginByUsername).toHaveBeenCalledWith('admin', 'NewPassword123');
         expect(logout).toHaveBeenCalled();
-        expect(wrapper.vm.handleUserSaveError).not.toHaveBeenCalled();
+        expect(notificationSpy).not.toHaveBeenCalled();
     });
 
     it('should log out and not show a save error when re-login fails after password change (non-user:editor path)', async () => {

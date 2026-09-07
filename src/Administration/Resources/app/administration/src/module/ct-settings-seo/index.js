@@ -13,8 +13,8 @@ Module.register('ct-settings-seo', {
     name: 'settings-seo',
     title: 'ct-settings-seo.general.mainMenuItemGeneral',
     description: 'SEO section in the settings module',
-    color: '#9AA8B5',
-    icon: 'regular-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-search',
     favicon: 'icon-module-settings.png',
     entity: 'seo',
 

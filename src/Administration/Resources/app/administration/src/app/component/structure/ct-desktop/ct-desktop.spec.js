@@ -24,7 +24,7 @@ const routes = [
             $module: {
                 entity: 'product',
                 icon: 'default-symbol-products',
-                color: '#57D9A3',
+                color: 'var(--color-module-green-default)',
                 title: 'ct-product.general.mainMenuItemGeneral',
                 name: 'product',
                 routes: { index: { name: 'ct.product.index' } },
@@ -41,7 +41,7 @@ const routes = [
             $module: {
                 entity: 'product',
                 icon: 'default-symbol-products',
-                color: '#57D9A3',
+                color: 'var(--color-module-green-default)',
                 title: 'ct-product.general.mainMenuItemGeneral',
                 name: 'product',
                 routes: {
@@ -76,7 +76,7 @@ const routes = [
             $module: {
                 entity: 'product',
                 icon: 'default-symbol-products',
-                color: '#57D9A3',
+                color: 'var(--color-module-green-default)',
                 title: 'ct-product.general.mainMenuItemGeneral',
                 name: 'product',
                 routes: {
@@ -163,7 +163,7 @@ describe('src/app/component/structure/ct-desktop', () => {
 
         expect(wrapper.vm.userActivityApiService.increment).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.getModuleMetadata()).toEqual({
-            color: '#57D9A3',
+            color: 'var(--color-module-green-default)',
             entity: 'product',
             icon: 'default-symbol-products',
             name: 'product',
@@ -182,9 +182,13 @@ describe('src/app/component/structure/ct-desktop', () => {
         expect(wrapper.vm.getModuleMetadata()).toEqual({
             name: 'product',
             icon: 'default-symbol-products',
-            color: '#57D9A3',
+            color: 'var(--color-module-green-default)',
             entity: 'product',
-            route: { name: 'ct.product.create' },
+            privilege: undefined,
+            route: {
+                children: [{ name: 'ct.product.create.base' }],
+                name: 'ct.product.create',
+            },
             action: true,
         });
     });

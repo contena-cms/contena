@@ -16,7 +16,7 @@ Contena.Module.register('ct-dashboard', {
     description: 'ct-dashboard.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: '#6AD6F0',
+    color: 'var(--color-module-brand-default)',
     icon: 'regular-dashboard',
     favicon: 'icon-module-dashboard.png',
     snippets: {
@@ -37,7 +37,7 @@ Contena.Module.register('ct-dashboard', {
         {
             id: 'ct-home',
             label: 'global.ct-admin-menu.navigation.mainMenuItemHome',
-            color: '#6AD6F0',
+            color: 'var(--color-module-brand-default)',
             icon: 'regular-dashboard',
             path: 'ct.dashboard.index',
             position: 10,

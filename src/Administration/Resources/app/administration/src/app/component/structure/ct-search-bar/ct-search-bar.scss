@@ -124,6 +124,10 @@ $ct-search-bar-types-item-border-radius: $border-radius-default;
                 outline: var(--scale-size-2) solid var(--color-border-brand-default);
             }
         }
+
+        &-icon {
+            flex-shrink: 0;
+        }
     }
 
     &__footer,

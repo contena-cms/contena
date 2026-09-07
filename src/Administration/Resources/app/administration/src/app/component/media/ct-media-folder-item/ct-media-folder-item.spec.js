@@ -1,4 +1,6 @@
 import { mount } from '@vue/test-utils';
+import { routerKey } from 'vue-router';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 const { Module } = Contena;
 
@@ -6,6 +8,7 @@ const { Module } = Contena;
 const modulesToCreate = new Map();
 modulesToCreate.set('ct-user-media', {
     icon: 'regular-user',
+    color: 'var(--color-module-blue-default)',
     entity: 'user',
 });
 modulesToCreate.set('ct-plugin-media', {
@@ -18,6 +21,7 @@ Array.from(modulesToCreate.keys()).forEach((moduleName) => {
 
     Module.register(moduleName, {
         icon: currentModuleValues.icon,
+        color: currentModuleValues.color,
         entity: currentModuleValues.entity,
         routes: {
             index: {
@@ -96,6 +100,9 @@ async function createWrapper(defaultFolderId, privileges = []) {
                 },
             },
             provide: {
+                [routerKey]: {
+                    push: jest.fn(),
+                },
                 repositoryFactory: {
                     create: () => repositoryFactoryMock,
                 },
@@ -148,6 +155,10 @@ async function createWrapper(defaultFolderId, privileges = []) {
 }
 
 describe('components/media/ct-media-folder-item', () => {
+    afterEach(() => {
+        useModuleIconColors().enabled.value = false;
+    });
+
     it('should provide the fallback folder color for a user folder', async () => {
         const wrapper = await createWrapper(ID_USER_FOLDER);
         await wrapper.vm.$nextTick();
@@ -167,6 +178,42 @@ describe('components/media/ct-media-folder-item', () => {
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.iconName).toBe('multicolor-folder-thumbnail');
+    });
+
+    it('should color the module icon with the neutral token by default', async () => {
+        const wrapper = await createWrapper(ID_USER_FOLDER);
+        await flushPromises();
+
+        expect(wrapper.vm.folderColor).toBeUndefined();
+        expect(wrapper.vm.moduleIconColor).toBe('var(--color-icon-secondary-default)');
+    });
+
+    it('should paint the default folder and its icon in the module color when module colors are enabled', async () => {
+        useModuleIconColors().enabled.value = true;
+        const wrapper = await createWrapper(ID_USER_FOLDER);
+        await flushPromises();
+
+        expect(wrapper.vm.folderColor).toBe('var(--color-module-blue-default)');
+        expect(wrapper.vm.moduleIconColor).toBe('var(--color-module-blue-default)');
+    });
+
+    it('should keep the folder neutral for a module without a color when module colors are enabled', async () => {
+        useModuleIconColors().enabled.value = true;
+        const wrapper = await createWrapper(ID_PLUGIN_FOLDER);
+        await flushPromises();
+
+        expect(wrapper.vm.folderColor).toBeUndefined();
+        expect(wrapper.vm.moduleIconColor).toBe('var(--color-icon-secondary-default)');
+    });
+
+    it('should switch the folder color when the user toggles module colors', async () => {
+        const wrapper = await createWrapper(ID_USER_FOLDER);
+        await flushPromises();
+
+        useModuleIconColors().enabled.value = true;
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.folderColor).toBe('var(--color-module-blue-default)');
     });
 
     it('should not be able to delete', async () => {

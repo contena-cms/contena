@@ -48,6 +48,13 @@
                                         @click.stop="onOpenModuleFiltersDropDown"
                                         @keydown.enter="onOpenModuleFiltersDropDown"
                                     >
+                                        <mt-icon
+                                            v-if="searchTypeIcon"
+                                            class="ct-search-bar__type-icon"
+                                            :name="searchTypeIcon"
+                                            :color="searchTypeColor || undefined"
+                                            size="var(--scale-size-16)"
+                                        />
                                         {{ getLabelSearchType() }}
                                         <mt-icon name="regular-chevron-down-xxs" />
                                     </span>
@@ -263,7 +270,7 @@
                                             <mt-icon
                                                 class="ct-search-bar__type-item-icon"
                                                 size="12px"
-                                                :style="{ color: getEntityIconColor(type.entityName) }"
+                                                :color="getTypeIconColor(type.entityName)"
                                                 :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
                                             />
 
@@ -325,7 +332,7 @@
                                             <mt-icon
                                                 class="ct-search-bar__type-item-icon"
                                                 size="14px"
-                                                :style="{ color: getEntityIconColor(type.entityName) }"
+                                                :color="getTypeIconColor(type.entityName)"
                                                 :name="type.entityName ? getEntityIcon(type.entityName) : 'regular-circle'"
                                             />
                                             {{
@@ -501,6 +508,7 @@ const emit = defineEmits([
 import { ref, computed, inject, watch, nextTick, provide, getCurrentInstance, onBeforeUnmount } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 const $route = useRoute();
 // vue-i18n exposes methods bound to its composer; the template and computed state use them as callbacks.
@@ -598,6 +606,18 @@ const criteriaCollection = computed(() => {
 });
 const currentUser = computed(() => {
     return Contena.Store.get('session').currentUser;
+});
+const searchTypeColor = computed(() => {
+    return useModuleIconColors().enabled.value ? getEntityIconColor(currentSearchType.value) : null;
+});
+const searchTypeIcon = computed(() => {
+    if (!currentSearchType.value) {
+        return null;
+    }
+
+    const icon = getSearchTypeManifest(currentSearchType.value)?.icon ?? 'regular-books';
+
+    return icon.startsWith('regular-') ? icon.replace('regular-', 'solid-') : icon;
 });
 
 const clearSearchTerm = () => {
@@ -1075,13 +1095,28 @@ const getEntityIconColor = (entityName) => {
         return props.entitySearchColor;
     }
 
+    return getSearchTypeManifest(entityName)?.color || '#5C738A';
+};
+const getSearchTypeManifest = (entityName) => {
     const module = moduleFactory.value.getModuleByEntityName(entityName);
 
-    if (!module) {
-        return '#5C738A';
+    if (module) {
+        return module.manifest;
     }
 
-    return module.manifest.color || '#5C738A';
+    // List pages may pass an alias instead of their entity, so fall back to the current module
+    if (entityName && entityName === props.initialSearchType) {
+        return $route?.meta?.$module;
+    }
+
+    return undefined;
+};
+const getTypeIconColor = (entityName) => {
+    if (!useModuleIconColors().enabled.value) {
+        return 'var(--color-icon-primary-default)';
+    }
+
+    return getEntityIconColor(entityName);
 };
 const getEntityIcon = (entityName) => {
     const module = moduleFactory.value.getModuleByEntityName(entityName);
@@ -1381,6 +1416,8 @@ ctDefinePublic({
     searchableModules,
     criteriaCollection,
     currentUser,
+    searchTypeColor,
+    searchTypeIcon,
     createdComponent,
     destroyedComponent,
     registerListener,
@@ -1421,6 +1458,8 @@ ctDefinePublic({
     getSearchTypeProperty,
     getEntityIconName,
     getEntityIconColor,
+    getSearchTypeManifest,
+    getTypeIconColor,
     getEntityIcon,
     isResultEmpty,
     onMouseEnterSearchType,
@@ -1473,6 +1512,8 @@ defineExpose({
     searchableModules,
     criteriaCollection,
     currentUser,
+    searchTypeColor,
+    searchTypeIcon,
     createdComponent,
     destroyedComponent,
     registerListener,
@@ -1513,6 +1554,8 @@ defineExpose({
     getSearchTypeProperty,
     getEntityIconName,
     getEntityIconColor,
+    getSearchTypeManifest,
+    getTypeIconColor,
     getEntityIcon,
     isResultEmpty,
     onMouseEnterSearchType,

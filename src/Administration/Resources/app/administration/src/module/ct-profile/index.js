@@ -17,7 +17,7 @@ Module.register('ct-profile', {
     name: 'profile',
     title: 'ct-profile.general.headlineProfile',
     description: 'ct-profile.general.description',
-    color: '#9AA8B5',
+    color: 'var(--color-module-neutral-default)',
     icon: 'regular-user',
     entity: 'user',
 

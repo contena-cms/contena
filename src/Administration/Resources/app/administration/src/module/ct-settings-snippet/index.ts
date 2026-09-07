@@ -22,8 +22,8 @@ Module.register('ct-settings-snippet', {
     description: 'ct-settings-snippet.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-icon-secondary-default)',
-    icon: 'regular-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-globe-stand',
     favicon: 'icon-module-settings.svg',
     entity: 'snippet',
 

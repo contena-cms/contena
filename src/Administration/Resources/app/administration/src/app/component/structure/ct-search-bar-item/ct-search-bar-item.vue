@@ -68,6 +68,7 @@
 
 <script setup>
 import './ct-search-bar-item.scss';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 const { Application } = Contena;
 
 const props = defineProps({
@@ -181,6 +182,10 @@ const iconName = computed(() => {
         : props.entityIconName;
 });
 const iconColor = computed(() => {
+    if (!useModuleIconColors().enabled.value) {
+        return 'var(--color-icon-primary-default)';
+    }
+
     return [
         'module',
         'frequently_used',

@@ -22,11 +22,11 @@ describe('src/module/ct-mail-template', () => {
             redirect: { name: 'ct.mail.template.index.templates' },
         });
         expect(module.routes.get('ct.mail.template.index.templates')).toMatchObject({
-            path: '/sw/mail/template/index/templates',
+            path: '/ct/mail/template/index/templates',
             meta: { privilege: 'mail_templates.viewer' },
         });
         expect(module.routes.get('ct.mail.template.index.header_footer')).toMatchObject({
-            path: '/sw/mail/template/index/header-footer',
+            path: '/ct/mail/template/index/header-footer',
             meta: { privilege: 'mail_templates.viewer' },
         });
         expect(module.routes.get('ct.mail.template.create')).toMatchObject({

@@ -68,7 +68,7 @@ Contena.Module.register('ct-blog', {
     description: 'ct-blog.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-green-500)',
+    color: 'var(--color-module-green-default)',
     icon: 'regular-file-text',
     favicon: 'icon-module-content.png',
     entity: 'blog',
@@ -127,7 +127,7 @@ Contena.Module.register('ct-blog', {
         {
             id: 'ct-blog',
             label: 'ct-blog.general.mainMenuItemGeneral',
-            color: 'var(--color-module-green-500)',
+            color: 'var(--color-module-green-default)',
             path: 'ct.blog.index',
             icon: 'regular-file-text',
             parent: 'ct-content',

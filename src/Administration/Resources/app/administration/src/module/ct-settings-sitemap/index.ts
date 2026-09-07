@@ -9,8 +9,8 @@ Contena.Module.register('ct-settings-sitemap', {
     description: 'ct-settings-sitemap.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-icon-secondary-default)',
-    icon: 'regular-cog',
+    color: 'var(--color-module-neutral-default)',
+    icon: 'regular-sitemap',
     favicon: 'icon-module-settings.svg',
 
     routes: {
@@ -27,7 +27,7 @@ Contena.Module.register('ct-settings-sitemap', {
     settingsItem: {
         group: 'content',
         to: 'ct.settings.sitemap.index',
-        icon: 'regular-map',
+        icon: 'regular-sitemap',
         privilege: 'system.system_config',
     },
 });
