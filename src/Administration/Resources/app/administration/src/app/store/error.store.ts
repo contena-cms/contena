@@ -165,8 +165,8 @@ const errorStore = Contena.Store.register({
         },
 
         getSystemConfigApiError() {
-            return (entityName: string, saleChannelId: string, key: string) => {
-                const errors = this.getErrorsForEntity(entityName, saleChannelId);
+            return (entityName: string, channelId: EntityKey<'channel'>, key: string) => {
+                const errors = this.getErrorsForEntity(entityName, channelId);
 
                 if (errors === null) {
                     return null;

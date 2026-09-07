@@ -23,7 +23,7 @@ interface WrapperOptions {
 async function createWrapper({ aclCan = true, getList, repositoryOverrides = {} }: WrapperOptions = {}) {
     const themeRepository = {
         delete: jest.fn(() => Promise.resolve()),
-        create: jest.fn(() => createTheme({ id: 'new-theme-id' })),
+        create: jest.fn(() => createTheme({ id: 'new-theme-id' as EntityKey<'theme'> })),
         save: jest.fn(() => Promise.resolve()),
         ...repositoryOverrides,
     };
@@ -216,11 +216,11 @@ describe('ct-theme-manager/composable/use-theme', () => {
         const { wrapper, router, themeRepository } = await createWrapper();
         const routerPush = jest.spyOn(router, 'push');
         const parentTheme = createTheme({
-            id: 'parent-id',
+            id: 'parent-id' as EntityKey<'theme'>,
             author: 'author',
             description: 'description',
             customFields: { custom: true },
-            previewMediaId: 'media-id',
+            previewMediaId: 'media-id' as EntityKey<'media'>,
         });
 
         wrapper.vm.duplicateTheme(parentTheme, 'New theme');

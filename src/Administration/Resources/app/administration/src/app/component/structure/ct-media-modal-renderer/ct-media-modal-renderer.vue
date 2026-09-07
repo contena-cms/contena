@@ -103,7 +103,7 @@ function setValueByPath(obj: unknown, path: string, value: unknown) {
     const finalSegment = parts[parts.length - 1];
     currentContext[finalSegment] = value;
 }
-const onSaveMedia = (params: { fileName: string; folderId: string; mediaId?: string }) => {
+const onSaveMedia = (params: { fileName: string; folderId: EntityKey<'media_folder'>; mediaId?: EntityKey<'media'> }) => {
     if (saveMediaModal.value && typeof saveMediaModal.value.callback === 'function') {
         saveMediaModal.value.callback(params);
     }

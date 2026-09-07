@@ -20,7 +20,7 @@ function setCurrentSeoPathInfo(seoPathInfo: string | null): void {
         routeName: 'frontend.blog.detail.page',
         pathInfo: '/blog/blog-1',
         seoPathInfo,
-    } as EntitySchema.Entities['seo_url'];
+    } as unknown as Entity<'seo_url'>;
 }
 
 function createWrapper(props: Record<string, unknown> = {}): VueWrapper<SeoUrlVm> {

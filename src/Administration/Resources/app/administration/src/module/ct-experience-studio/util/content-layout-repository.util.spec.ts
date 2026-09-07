@@ -3,6 +3,7 @@ import type { ContentElementNode } from 'src/core/service/content-element.types'
 import { createContentLayoutRepository } from './content-layout-repository.util';
 
 const { Criteria } = Contena.Data;
+const LAYOUT_ID = 'layout-1' as EntityKey<'content_layout'>;
 
 function createStoredEntity(elements: ContentElementNode[]): unknown {
     return {
@@ -45,7 +46,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
         };
         const repository = createContentLayoutRepository(createFakeRepository(createStoredEntity([section])));
 
-        const entity = await repository.get('layout-1', Contena.Context.api, new Criteria(1, 1));
+        const entity = await repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1));
 
         expect(entity?.layout).toEqual([section]);
         expect(entity?.layout[0].slots?.main[0].component).toBe('CT:Content:Text');
@@ -66,7 +67,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
         };
         const repository = createContentLayoutRepository(createFakeRepository(createStoredEntity([attributedElement])));
 
-        const entity = await repository.get('layout-1', Contena.Context.api, new Criteria(1, 1));
+        const entity = await repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1));
 
         expect(entity?.layout[0].attributedSpecifications).toEqual({
             blog: 'binding-blog-detail',
@@ -78,7 +79,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
             createFakeRepository(createStoredEntity('not-an-array' as unknown as ContentElementNode[])),
         );
 
-        await expect(repository.get('layout-1', Contena.Context.api, new Criteria(1, 1))).rejects.toThrow(
+        await expect(repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1))).rejects.toThrow(
             'content_layout entity "layout-1" has a non-array layout: expected an array, received string.',
         );
     });
@@ -92,7 +93,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
         };
         const repository = createContentLayoutRepository(createFakeRepository(entityWithoutLayout));
 
-        const entity = await repository.get('layout-1', Contena.Context.api, new Criteria(1, 1));
+        const entity = await repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1));
 
         expect(entity?.layout).toBeUndefined();
     });
@@ -102,7 +103,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
             createFakeRepository(createStoredEntity(null as unknown as ContentElementNode[])),
         );
 
-        const entity = await repository.get('layout-1', Contena.Context.api, new Criteria(1, 1));
+        const entity = await repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1));
 
         expect(entity?.layout).toBeNull();
     });
@@ -112,7 +113,7 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
         const criteria = new Criteria(1, 1);
         const repository = createContentLayoutRepository(createFakeRepository(createStoredEntity([]), readCalls));
 
-        await repository.get('layout-1', Contena.Context.api, criteria);
+        await repository.get(LAYOUT_ID, Contena.Context.api, criteria);
 
         expect(readCalls).toEqual([
             [

@@ -3,17 +3,17 @@ const ctSeoUrlStore = Contena.Store.register({
 
     state() {
         return {
-            channelCollection: null as EntitySchema.EntityCollection<'channel'> | null,
-            seoUrlCollection: null as EntitySchema.EntityCollection<'seo_url'> | null,
-            originalSeoUrls: [] as EntitySchema.Entities['seo_url'][],
-            defaultSeoUrl: null as EntitySchema.Entities['seo_url'] | null,
-            currentSeoUrl: null as EntitySchema.Entities['seo_url'] | null,
+            channelCollection: null as EntityCollection<'channel'> | null,
+            seoUrlCollection: null as EntityCollection<'seo_url'> | null,
+            originalSeoUrls: [] as Entity<'seo_url'>[],
+            defaultSeoUrl: null as Entity<'seo_url'> | null,
+            currentSeoUrl: null as Entity<'seo_url'> | null,
         };
     },
 
     getters: {
         newOrModifiedUrls() {
-            const seoUrls: EntitySchema.Entities['seo_url'][] = [];
+            const seoUrls: Entity<'seo_url'>[] = [];
 
             this.seoUrlCollection?.forEach((seoUrl) => {
                 if (seoUrl.seoPathInfo === null) {

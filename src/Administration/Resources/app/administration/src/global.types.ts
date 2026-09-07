@@ -128,6 +128,7 @@ declare global {
      */
     const Contena: ContenaClass & CustomContenaProperties;
 
+    type EntityKey<K extends keyof EntitySchema.EntityKeys> = EntitySchema.EntityKeys[K];
     type Entity<EntityName extends keyof EntitySchema.Entities> = EntitySchema.Entity<EntityName>;
     type EntityCollection<EntityName extends keyof EntitySchema.Entities> = EntitySchema.EntityCollection<EntityName>;
 

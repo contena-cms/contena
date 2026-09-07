@@ -33,7 +33,7 @@ export default function initializeUserContext() {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 delete data.password;
 
-                Contena.Store.get('session').setCurrentUser(data as EntitySchema.user);
+                Contena.Store.get('session').setCurrentUser(data as Entity<'user'>);
                 initializeUserNotifications();
                 resolve();
             })

@@ -18,7 +18,11 @@ export type ContentLayoutEntity = Omit<Entity<'content_layout'>, 'layout'> & {
  */
 export type ContentLayoutRepository = {
     create: (context: apiContext) => ContentLayoutEntity;
-    get: (id: string, context: apiContext, criteria: CriteriaType) => Promise<ContentLayoutEntity | null>;
+    get: (
+        id: EntityKey<'content_layout'>,
+        context: apiContext,
+        criteria: CriteriaType,
+    ) => Promise<ContentLayoutEntity | null>;
     save: (layout: ContentLayoutEntity, context: apiContext) => Promise<void>;
 };
 
@@ -36,7 +40,11 @@ export function createContentLayoutRepository(repository: Repository<'content_la
             return repository.create(context) as ContentLayoutEntity;
         },
 
-        async get(id: string, context: apiContext, criteria: CriteriaType): Promise<ContentLayoutEntity | null> {
+        async get(
+            id: EntityKey<'content_layout'>,
+            context: apiContext,
+            criteria: CriteriaType,
+        ): Promise<ContentLayoutEntity | null> {
             const entity = (await repository.get(id, context, criteria)) as ContentLayoutEntity | null;
 
             if (entity && entity.layout !== undefined && entity.layout !== null && !Array.isArray(entity.layout)) {

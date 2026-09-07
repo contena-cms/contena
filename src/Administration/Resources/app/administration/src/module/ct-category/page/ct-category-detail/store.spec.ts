@@ -4,23 +4,23 @@ import type { ContextStore } from '../../../../app/store/context.store';
 import './store';
 
 const newLandingPageMock = {
-    id: '12345',
+    id: '12345' as EntityKey<'landing_page'>,
 };
 
 const existingLandingPageMock = {
-    id: '67890',
+    id: '67890' as EntityKey<'landing_page'>,
 };
 
 const categoriesMock: Record<string, Partial<EntitySchema.Entities['category']>> = {
     'without-parent': {
-        id: '12345',
+        id: '12345' as EntityKey<'category'>,
     },
     'with-parent': {
-        id: '67890',
-        parentId: 'parent',
+        id: '67890' as EntityKey<'category'>,
+        parentId: 'parent' as EntityKey<'category'>,
     },
     parent: {
-        id: '111213',
+        id: '111213' as EntityKey<'category'>,
         footerChannels: [{ typeId: '12345' }] as EntitySchema.EntityCollection<'channel'>,
     },
 };
@@ -35,7 +35,7 @@ const landingPageRepositoryMock = {
 } as unknown as Repository<'landing_page'>;
 
 const categoryRepositoryMock = {
-    get: jest.fn((id: string) => Promise.resolve({ ...categoriesMock[id] })),
+    get: jest.fn((id: EntityKey<'category'>) => Promise.resolve({ ...categoriesMock[id] })),
 } as unknown as Repository<'category'>;
 
 describe('ct-category.store', () => {
@@ -58,7 +58,7 @@ describe('ct-category.store', () => {
         const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
         await ctCategoryDetailStore.loadActiveLandingPage({
-            id: 'create',
+            id: 'create' as EntityKey<'landing_page'>,
             repository: landingPageRepositoryMock,
             apiContext: apiContextMock,
         });
@@ -72,7 +72,7 @@ describe('ct-category.store', () => {
         const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
         await ctCategoryDetailStore.loadActiveLandingPage({
-            id: '67890',
+            id: '67890' as EntityKey<'landing_page'>,
             repository: landingPageRepositoryMock,
             apiContext: apiContextMock,
         });
@@ -86,7 +86,7 @@ describe('ct-category.store', () => {
         const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
         await ctCategoryDetailStore.loadActiveCategory({
-            id: 'without-parent',
+            id: 'without-parent' as EntityKey<'category'>,
             repository: categoryRepositoryMock,
             apiContext: apiContextMock,
         });
@@ -101,7 +101,7 @@ describe('ct-category.store', () => {
         const ctCategoryDetailStore = Contena.Store.get('ctCategoryDetail');
 
         await ctCategoryDetailStore.loadActiveCategory({
-            id: 'with-parent',
+            id: 'with-parent' as EntityKey<'category'>,
             repository: categoryRepositoryMock,
             apiContext: apiContextMock,
         });

@@ -33,7 +33,7 @@ describe('src/app/state/session.store.js', () => {
                     ],
                 },
             ],
-        } as EntitySchema.user);
+        } as Entity<'user'>);
 
         expect(session.userPrivileges.value).toContain('system.core_update');
         expect(session.userPrivileges.value).toContain('system:core:update');

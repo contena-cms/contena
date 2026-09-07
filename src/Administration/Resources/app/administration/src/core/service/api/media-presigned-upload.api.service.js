@@ -44,7 +44,7 @@ class MediaPresignedUploadApiService extends ApiService {
     }
 
     /**
-     * @returns {Promise<{mediaId: string, url: string, path: string, expiresAt: string, isDuplicate: boolean}>}
+     * @returns {Promise<{mediaId: EntityKey<'media'>, url: string, path: string, expiresAt: string, isDuplicate: boolean}>}
      */
     prepareUpload({ fileName, extension, mimeType, mediaFolderId = null, isPrivate = false, mediaId = null }) {
         return this.httpClient
@@ -87,7 +87,7 @@ class MediaPresignedUploadApiService extends ApiService {
     }
 
     /**
-     * @returns {Promise<{mediaId: string}>}
+     * @returns {Promise<{mediaId: EntityKey<'media'>}>}
      */
     finalizeUpload(mediaId, { fileName, extension, mimeType, path, width = null, height = null }) {
         const body = { fileName, extension, mimeType, path };

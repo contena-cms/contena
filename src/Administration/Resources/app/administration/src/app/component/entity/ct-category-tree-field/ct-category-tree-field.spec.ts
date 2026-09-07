@@ -190,7 +190,7 @@ describe('src/app/component/entity/ct-category-tree-field', () => {
         wrapper.vm.onCheckItem({
             id: 'categoryId-0',
             checked: true,
-            data: { id: 'categoryId-0', translated: { name: 'some-data' } },
+            data: { id: 'categoryId-0' as EntityKey<'category'>, translated: { name: 'some-data' } },
         });
         await flushPromises();
 
@@ -200,13 +200,13 @@ describe('src/app/component/entity/ct-category-tree-field', () => {
     it('should remove the category item', async () => {
         const initialCategories = [
             {
-                id: 'categoryId-0',
+                id: 'categoryId-0' as EntityKey<'category'>,
                 attributes: { id: 'categoryId-0' },
                 translated: { name: 'categoryName-0' },
                 relationships: {},
             },
             {
-                id: 'categoryId-1',
+                id: 'categoryId-1' as EntityKey<'category'>,
                 attributes: { id: 'categoryId-1' },
                 translated: { name: 'categoryName-1' },
                 relationships: {},

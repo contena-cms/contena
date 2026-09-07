@@ -5,8 +5,8 @@ import type { TelemetryEvent, EventTypes as TelemetryEventTypes } from '../../te
  * The pattern for event names = component name in kebab case followed by the event
  */
 interface Events extends Record<string | symbol, unknown> {
-    'ct-language-switch-change-application-language': { languageId: string };
-    'ct-media-library-item-updated': string;
+    'ct-language-switch-change-application-language': { languageId: EntityKey<'language'> };
+    'ct-media-library-item-updated': EntityKey<'media'>;
     'ct-admin-menu/toggle-offcanvas': boolean;
     telemetry: TelemetryEvent<TelemetryEventTypes>;
 }

@@ -204,11 +204,11 @@ class ContenaClass implements CustomContenaProperties {
     };
 
     public Defaults = {
-        systemLanguageId: '2fbb5fe2e29a4d70aa5854ce7ce3e20b',
-        defaultLanguageIds: ['2fbb5fe2e29a4d70aa5854ce7ce3e20b'],
-        versionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-        apiChannelTypeId: 'f183ee5650cf4bdb8a774337575067a6',
-        webChannelTypeId: '8a243080f92e4c719546314b577cf82b',
+        systemLanguageId: '2fbb5fe2e29a4d70aa5854ce7ce3e20b' as EntityKey<'language'>,
+        defaultLanguageIds: ['2fbb5fe2e29a4d70aa5854ce7ce3e20b'] as EntityKey<'language'>[],
+        versionId: '0fa91ce3e96a4bc2be4bd9ce752c3425' as EntityKey<'version'>,
+        apiChannelTypeId: 'f183ee5650cf4bdb8a774337575067a6' as EntityKey<'channel_type'>,
+        webChannelTypeId: '8a243080f92e4c719546314b577cf82b' as EntityKey<'channel_type'>,
     };
 
     public Data = data;

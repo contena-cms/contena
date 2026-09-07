@@ -60,7 +60,7 @@ export class Telemetry {
         });
     }
 
-    private waitForCurrentUser(): Promise<EntitySchema.user> {
+    private waitForCurrentUser(): Promise<Entity<'user'>> {
         const session = Contena.Store.get('session');
 
         if (session.currentUser) {

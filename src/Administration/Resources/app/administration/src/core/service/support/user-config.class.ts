@@ -96,8 +96,8 @@ abstract class UserConfigClass {
         return criteria;
     }
 
-    private getCurrentUserId(): string {
-        return Contena.Store.get('session').currentUser?.id ?? '';
+    private getCurrentUserId(): EntityKey<'user'> {
+        return Contena.Store.get('session').currentUser?.id ?? ('' as EntityKey<'user'>);
     }
 }
 

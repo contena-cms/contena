@@ -104,8 +104,8 @@ async function createWrapper(privileges: string[] = [], saveError = false) {
 
 describe('ct-settings-search', () => {
     beforeEach(() => {
-        Contena.Context.api.languageId = 'current-language';
-        Contena.Context.api.systemLanguageId = 'system-language';
+        Contena.Context.api.languageId = 'current-language' as EntityKey<'language'>;
+        Contena.Context.api.systemLanguageId = 'system-language' as EntityKey<'language'>;
     });
 
     afterEach(() => {

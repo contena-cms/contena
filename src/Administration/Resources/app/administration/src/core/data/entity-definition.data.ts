@@ -43,7 +43,7 @@ export function getJsonTypes() {
 }
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
-export default class EntityDefinition<EntityName extends keyof EntitySchema.Entities> {
+export default class EntityDefinition<EntityName extends keyof EntitySchema.EntityKeys> {
     readonly entity: Entity<EntityName>;
 
     readonly properties: Properties;

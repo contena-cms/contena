@@ -165,11 +165,9 @@ export default {
 
 /**
  * Returns an uuid string in hex format.
- *
- * @returns { String }
  */
-function createId(): string {
-    return uuidv7().replace(/-/g, '');
+function createId<UUID extends string>(): UUID {
+    return uuidv7().replace(/-/g, '') as UUID;
 }
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations

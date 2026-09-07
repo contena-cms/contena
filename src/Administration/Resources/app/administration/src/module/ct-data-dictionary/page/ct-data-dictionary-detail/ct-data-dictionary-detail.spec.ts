@@ -159,7 +159,11 @@ describe('module/ct-data-dictionary/page/ct-data-dictionary-detail', () => {
 
     it('deletes a persisted branch child-first and removes it from the editor', async () => {
         const root = createEntity('root', { code: 'root', label: 'Root' });
-        const child = createEntity('child', { parentId: 'root', code: 'child', label: 'Child' });
+        const child = createEntity('child', {
+            parentId: 'root' as EntityKey<'data_dictionary_item'>,
+            code: 'child',
+            label: 'Child',
+        });
         root.isNew = jest.fn(() => false);
         child.isNew = jest.fn(() => false);
         const result = await createWrapper({
@@ -215,7 +219,12 @@ describe('module/ct-data-dictionary/page/ct-data-dictionary-detail', () => {
 
     it('persists a dragged node parent and sibling order in the local tree state', async () => {
         const root = createEntity('root', { code: 'root', label: 'Root', position: 1 });
-        const child = createEntity('child', { code: 'child', label: 'Child', parentId: 'root', position: 1 });
+        const child = createEntity('child', {
+            code: 'child',
+            label: 'Child',
+            parentId: 'root' as EntityKey<'data_dictionary_item'>,
+            position: 1,
+        });
         const result = await createWrapper({
             items: [
                 root,

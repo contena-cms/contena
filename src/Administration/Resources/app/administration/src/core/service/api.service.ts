@@ -103,7 +103,7 @@ class ApiService {
         return parseJsonApi(data) as T;
     }
 
-    static getVersionHeader(versionId: string): { 'ct-version-id': string } {
+    static getVersionHeader(versionId: EntityKey<'version'>): { 'ct-version-id': EntityKey<'version'> } {
         return { 'ct-version-id': versionId };
     }
 

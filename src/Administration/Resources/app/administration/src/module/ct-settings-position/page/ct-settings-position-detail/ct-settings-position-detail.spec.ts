@@ -118,8 +118,8 @@ describe('module/ct-settings-position/page/ct-settings-position-detail', () => {
         const languageChange = jest.spyOn(Contena.Utils.EventBus, 'emit');
 
         try {
-            Contena.Context.api.languageId = 'secondary-language-id';
-            Contena.Context.api.systemLanguageId = 'system-language-id';
+            Contena.Context.api.languageId = 'secondary-language-id' as EntityKey<'language'>;
+            Contena.Context.api.systemLanguageId = 'system-language-id' as EntityKey<'language'>;
             const { wrapper, positionRepository, router, newPosition } = await createWrapper({
                 createMode: true,
                 privileges: ['position.creator'],

@@ -29,8 +29,12 @@ export function mapPropertyErrors<T extends string, K extends string>(
 }
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
-export function mapSystemConfigErrors(entityName: string, saleChannelId: string | null, key: string = ''): $TSFixMe {
-    return Contena.Store.get('error').getSystemConfigApiError(entityName, saleChannelId!, key);
+export function mapSystemConfigErrors(
+    entityName: string,
+    channelId: EntityKey<'channel'> | null,
+    key: string = '',
+): $TSFixMe {
+    return Contena.Store.get('error').getSystemConfigApiError(entityName, channelId!, key);
 }
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
