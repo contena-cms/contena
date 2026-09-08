@@ -1358,6 +1358,17 @@ const onRouteChange = (newValue) => {
 
 watch(() => ({ ...$route, params: { ...$route.params }, query: { ...$route.query } }), onRouteChange);
 watch(
+    () => props.initialSearch,
+    (newValue) => {
+        // Do not modify the search term when the user is currently typing
+        if (isActive.value) {
+            return;
+        }
+
+        searchTerm.value = newValue;
+    },
+);
+watch(
     () => $route.name,
     (to, from) => {
         if (from === undefined || to === from) {

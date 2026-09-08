@@ -531,6 +531,29 @@ describe('src/app/component/structure/ct-search-bar', () => {
         expect(wrapper.vm.searchTerm).toBe('shirt');
     });
 
+    it('should reset the search term when the listing clears its term', async () => {
+        wrapper = await createWrapper({
+            initialSearchType: 'blog',
+            initialSearch: 'article',
+        });
+
+        await wrapper.setProps({ initialSearch: '' });
+
+        expect(wrapper.vm.searchTerm).toBe('');
+    });
+
+    it('should not reset the search term when the user is currently typing', async () => {
+        wrapper = await createWrapper({
+            initialSearchType: 'blog',
+            initialSearch: 'article',
+        });
+
+        await wrapper.find('.mt-search__input').trigger('focusin');
+        await wrapper.setProps({ initialSearch: '' });
+
+        expect(wrapper.vm.searchTerm).toBe('article');
+    });
+
     it('should isolate a module search field from route search terms when requested', async () => {
         wrapper = await createWrapper({
             initialSearchType: 'product',

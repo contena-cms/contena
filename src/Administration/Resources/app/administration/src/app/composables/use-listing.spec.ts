@@ -131,6 +131,22 @@ describe('src/app/composables/use-listing', () => {
         expect(getList).toHaveBeenCalledTimes(1);
     });
 
+    it('resets the search term when the same listing route is opened again without a query', async () => {
+        await createWrapper({ disableRouteParams: false });
+
+        listing.vm.onSearch('article');
+        await flushPromises();
+        expect(listing.vm.term).toBe('article');
+
+        // Opening the already active admin menu item navigates to the listing route without a query.
+        await router.push({ name: 'listing' });
+        await flushPromises();
+
+        expect(listing.vm.term).toBeUndefined();
+        expect(listing.vm.page).toBe(1);
+        expect(router.currentRoute.value.query.term).toBeUndefined();
+    });
+
     it('toggles the current sort direction for local listings', async () => {
         await createWrapper();
         getList.mockClear();

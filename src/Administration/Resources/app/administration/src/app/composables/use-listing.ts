@@ -181,13 +181,12 @@ export function useListing() {
     }
 
     function resetListing(): void {
+        page.value = 1;
+        term.value = undefined;
+
         updateRoute({
-            limit: limit.value,
             page: page.value,
             term: term.value,
-            sortBy: sortBy.value ?? undefined,
-            sortDirection: sortDirection.value,
-            naturalSorting: naturalSorting.value,
         });
     }
 
