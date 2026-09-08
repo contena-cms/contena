@@ -16,6 +16,7 @@ export default function initializeRepositoryFactory(container: InitContainer) {
         })
         .then(({ data }) => {
             const entityDefinitionFactory = factoryContainer.entityDefinition;
+            const customEntityDefinitionService = serviceContainer.customEntityDefinitionService;
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             Object.entries(data).forEach(
@@ -24,6 +25,11 @@ export default function initializeRepositoryFactory(container: InitContainer) {
                     value,
                 ]) => {
                     entityDefinitionFactory.add(key, value);
+
+                    if (key.startsWith('custom_entity_') || key.startsWith('ce_')) {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        customEntityDefinitionService.addDefinition(value as $TSFixMe);
+                    }
                 },
             );
 

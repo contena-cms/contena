@@ -33,6 +33,9 @@ import FileValidationService from 'src/app/service/file-validation.service';
 import DataDictionaryService from 'src/app/service/data-dictionary.service';
 import CacheService from 'src/app/service/cache.service';
 import createShortcutService from 'src/app/service/shortcut.service';
+import AppAclService from 'src/app/service/app-acl.service';
+import CustomEntityDefinitionService from 'src/app/service/custom-entity-definition.service';
+import AppCmsService from 'src/app/service/app-cms.service';
 
 /** Import Feature */
 import Feature from 'src/core/feature';
@@ -93,6 +96,9 @@ Object.keys(postInitializer).forEach((key) => {
 Application.addServiceProvider('feature', () => {
     return new FeatureService(Feature);
 })
+    .addServiceProvider('customEntityDefinitionService', () => {
+        return new CustomEntityDefinitionService();
+    })
     .addServiceProvider('menuService', () => {
         return new MenuService(factoryContainer.module);
     })
@@ -167,6 +173,16 @@ Application.addServiceProvider('feature', () => {
     })
     .addServiceProvider('mediaDefaultFolderService', () => {
         return MediaDefaultFolderService();
+    })
+    .addServiceProvider('appAclService', () => {
+        return new AppAclService({
+            privileges: Contena.Service('privileges'),
+            appRepository: Contena.Service('repositoryFactory').create('app' as $TSFixMe),
+        });
+    })
+    .addServiceProvider('appCmsService', (container: $TSFixMe) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        return new AppCmsService(container.appCmsBlocks, adapter);
     })
     .addServiceProvider('searchRankingService', () => {
         return new SearchRankingService();

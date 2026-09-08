@@ -81,6 +81,12 @@ import type BlogTypeApiService from './app/service/blog-type.api.service';
 import type MediaService from './core/service/api/media.api.service';
 import type ShortcutFactory from './core/factory/shortcut.factory';
 import type createShortcutService from './app/service/shortcut.service';
+import type AppAclService from './app/service/app-acl.service';
+import type CustomEntityDefinitionService from './app/service/custom-entity-definition.service';
+import type AppCmsService from './app/service/app-cms.service';
+import type AppModulesService from './core/service/api/app-modules.service';
+import type AppActionButtonService from './core/service/api/app-action-button.service';
+import type AppCmsBlocksService from './core/service/api/app-cms-blocks.service';
 // trick to make it an "external module" to support global type extension
 
 // base methods for subContainer
@@ -208,6 +214,12 @@ declare global {
         userConfigService: UserConfigService;
         validationService: $TSFixMe;
         validationApiService: ValidationApiService;
+        appAclService: AppAclService;
+        appCmsService: AppCmsService;
+        customEntityDefinitionService: CustomEntityDefinitionService;
+        appModulesService: AppModulesService;
+        appActionButtonService: AppActionButtonService;
+        appCmsBlocks: AppCmsBlocksService;
     }
 
     interface MixinContainer {
