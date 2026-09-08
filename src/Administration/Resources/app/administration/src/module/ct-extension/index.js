@@ -18,6 +18,7 @@ Contena.Component.register(
 );
 Contena.Component.register('ct-extension-removal-modal', () => import('./component/ct-extension-removal-modal'));
 Contena.Component.register('ct-extension-uninstall-modal', () => import('./component/ct-extension-uninstall-modal'));
+Contena.Component.register('ct-extension-app-module-page', () => import('./page/ct-extension-app-module-page'));
 /* eslint-enable ct-deprecation-rules/private-feature-declarations */
 
 /**
@@ -101,8 +102,13 @@ Contena.Module.register('ct-extension', {
         'store.landing-page': {
             path: 'store/landing-page',
             component: 'ct-extension-store-landing-page',
+            },
         },
-    },
+        module: {
+            path: 'module/:appName/:moduleName?',
+            component: 'ct-extension-app-module-page',
+            props: true,
+        },
 
     navigation: [
         {
