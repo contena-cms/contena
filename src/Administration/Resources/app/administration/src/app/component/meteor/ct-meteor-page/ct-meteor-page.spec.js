@@ -24,7 +24,7 @@ async function createWrapper(slotsData = {}, { routeName = undefined } = {}) {
                         $module: {
                             icon: 'regular-plug',
                             title: 'ct.example.title',
-                            color: 'var(--color-module-brand-default)',
+                            color: 'var(--ct-color-module-brand-default)',
                         },
                     },
                 },
@@ -72,7 +72,7 @@ async function createWrapper(slotsData = {}, { routeName = undefined } = {}) {
                         $module: {
                             icon: 'regular-plug',
                             title: 'ct.example.title',
-                            color: 'var(--color-module-brand-default)',
+                            color: 'var(--ct-color-module-brand-default)',
                         },
                     },
                 },
@@ -139,7 +139,7 @@ describe('src/app/component/meteor/ct-meteor-page', () => {
 
         const iconComponent = wrapper.findComponent('.mt-icon');
         expect(iconComponent.vm.name).toContain('regular-plug');
-        expect(iconComponent.vm.color).toBe('var(--color-module-brand-default)');
+        expect(iconComponent.vm.color).toBe('var(--ct-color-module-brand-default)');
     });
 
     [

@@ -103,16 +103,16 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
 
     describe('module icon colors', () => {
         const moduleItem = {
-            entityIconName: 'regular-image',
-            entityIconColor: 'var(--color-module-blue-default)',
+            entityIconName: 'regular-file-text',
+            entityIconColor: 'var(--ct-color-module-green-default)',
             column: 1,
             index: 1,
             type: 'module',
             item: {
-                name: 'ct-theme-manager',
-                color: 'var(--color-module-purple-default)',
-                icon: 'regular-paint-brush',
-                route: 'ct.theme.manager.index',
+                name: 'ct-blog',
+                color: 'var(--ct-color-module-green-default)',
+                icon: 'regular-file-text',
+                route: 'ct.blog.index',
             },
         };
 
@@ -130,18 +130,18 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
             useModuleIconColors().enabled.value = true;
             wrapper = await createWrapper(moduleItem);
 
-            expect(wrapper.vm.iconColor).toBe('var(--color-module-purple-default)');
+            expect(wrapper.vm.iconColor).toBe('var(--ct-color-module-green-default)');
         });
 
         it('should fall back to the entity icon color for entity results', async () => {
             useModuleIconColors().enabled.value = true;
             wrapper = await createWrapper({
                 ...moduleItem,
-                type: 'media',
-                item: { id: 'mediaId', fileName: 'example', fileExtension: 'png' },
+                type: 'blog',
+                item: { id: 'blogId', title: 'Example' },
             });
 
-            expect(wrapper.vm.iconColor).toBe('var(--color-module-blue-default)');
+            expect(wrapper.vm.iconColor).toBe('var(--ct-color-module-green-default)');
         });
     });
 });

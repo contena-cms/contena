@@ -53,7 +53,7 @@ Module.register('ct-settings-search', {
     name: 'settings-blog-search-config',
     title: 'ct-settings-search.general.mainMenuItemGeneral',
     description: 'ct-settings-search.general.mainMenuItemGeneral',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-search',
     version: '1.0.0',
     targetVersion: '1.0.0',

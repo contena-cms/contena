@@ -8,7 +8,7 @@ Contena.Module.register('ct-settings-message-stats', {
     description: 'ct-settings-message-stats.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-bars-square',
     favicon: 'icon-module-settings.png',
 

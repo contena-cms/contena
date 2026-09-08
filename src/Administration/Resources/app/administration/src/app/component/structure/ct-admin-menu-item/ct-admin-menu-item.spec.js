@@ -124,7 +124,7 @@ describe('src/app/component/structure/ct-admin-menu-item', () => {
         const blogEntry = {
             id: 'ct-blog',
             label: 'ct-blog.general.mainMenuItemGeneral',
-            color: 'var(--color-module-green-default)',
+            color: 'var(--ct-color-module-green-default)',
             path: 'ct.blog.index',
             icon: 'regular-file-text',
             position: 10,
@@ -149,9 +149,9 @@ describe('src/app/component/structure/ct-admin-menu-item', () => {
 
             const wrapper = await createWrapper(blogEntry);
 
-            expect(wrapper.vm.navigationIconColor).toBe('var(--color-module-green-default)');
+            expect(wrapper.vm.navigationIconColor).toBe('var(--ct-color-module-green-default)');
             expect(wrapper.find('.ct-admin-menu__navigation-link-icon').attributes('style')).toContain(
-                'color: var(--color-module-green-default)',
+                'color: var(--ct-color-module-green-default)',
             );
         });
 
@@ -179,7 +179,7 @@ describe('src/app/component/structure/ct-admin-menu-item', () => {
             await flushPromises();
 
             expect(wrapper.find('.ct-admin-menu__navigation-list-item').attributes('style')).toContain(
-                '--ct-admin-menu-module-color: var(--color-module-green-default)',
+                '--ct-admin-menu-module-color: var(--ct-color-module-green-default)',
             );
         });
 

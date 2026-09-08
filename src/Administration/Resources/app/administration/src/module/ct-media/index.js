@@ -34,7 +34,7 @@ Module.register('ct-media', {
     description: 'ct-media.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-pink-default)',
+    color: 'var(--ct-color-module-pink-default)',
     icon: 'regular-image',
     favicon: 'icon-module-content.png',
     entity: 'media',
@@ -62,7 +62,7 @@ Module.register('ct-media', {
         {
             id: 'ct-media',
             label: 'ct-media.general.mainMenuItemGeneral',
-            color: 'var(--color-module-pink-default)',
+            color: 'var(--ct-color-module-pink-default)',
             icon: 'regular-image',
             path: 'ct.media.index',
             parent: ADMIN_MENU_ROOTS.content,

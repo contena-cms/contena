@@ -17,7 +17,7 @@ Module.register('ct-settings-tag', {
     name: 'settings-tag',
     title: 'ct-settings-tag.general.mainMenuItemGeneral',
     description: 'Tag section in the settings module',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-tag',
     favicon: 'icon-module-settings.png',
     entity: 'tag',

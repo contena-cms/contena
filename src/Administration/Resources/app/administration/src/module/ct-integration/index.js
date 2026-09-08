@@ -16,7 +16,7 @@ Module.register('ct-integration', {
     description: 'The module for managing integrations.',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-key',
     favicon: 'icon-module-settings.png',
     entity: 'integration',

@@ -19,7 +19,7 @@ Module.register('ct-settings-country', {
     name: 'settings-country',
     title: 'ct-settings-country.general.mainMenuItemGeneral',
     description: 'Country section in the settings module',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-map',
     favicon: 'icon-module-settings.png',
     entity: 'country',

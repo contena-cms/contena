@@ -24,7 +24,7 @@ Module.register('ct-theme-manager', {
     description: 'ct-theme-manager.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-pink-default)',
+    color: 'var(--ct-color-module-pink-default)',
     icon: 'regular-tools',
     favicon: 'icon-module-content.png',
     entity: 'theme',
@@ -51,7 +51,7 @@ Module.register('ct-theme-manager', {
         {
             id: 'ct-theme-manager',
             label: 'ct-theme-manager.general.mainMenuItemGeneral',
-            color: 'var(--color-module-pink-default)',
+            color: 'var(--ct-color-module-pink-default)',
             icon: 'regular-tools',
             path: 'ct.theme.manager.index',
             privilege: 'theme.viewer',

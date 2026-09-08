@@ -16,7 +16,7 @@ describe('src/module/ct-settings-media/index.js', () => {
             name: 'settings-media',
             title: 'ct-settings-media.general.title',
             description: 'ct-settings-media.general.description',
-            color: 'var(--color-module-neutral-default)',
+            color: 'var(--ct-color-module-neutral-default)',
             icon: 'regular-image',
             favicon: 'icon-module-settings.png',
             routes: expect.any(Object),

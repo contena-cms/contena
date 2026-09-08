@@ -17,7 +17,7 @@ Contena.Module.register('ct-settings-member-group', {
     description: 'ct-settings-member-group.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-users',
     favicon: 'icon-module-settings.png',
     entity: 'member_group',

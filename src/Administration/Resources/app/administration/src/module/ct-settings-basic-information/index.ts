@@ -18,7 +18,7 @@ Contena.Module.register('ct-settings-basic-information', {
     description: 'ct-settings-basic-information.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-bars',
     favicon: 'icon-module-settings.svg',
 

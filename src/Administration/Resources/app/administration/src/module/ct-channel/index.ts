@@ -39,7 +39,7 @@ Contena.Module.register('ct-channel', {
     description: 'ct-channel.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-brand-default)',
+    color: 'var(--ct-color-module-brand-default)',
     icon: 'regular-storefront',
     entity: 'channel',
 

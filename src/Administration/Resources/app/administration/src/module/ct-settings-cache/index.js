@@ -15,7 +15,7 @@ Module.register('ct-settings-cache', {
     description: 'ct-settings-cache.general.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-neutral-default)',
+    color: 'var(--ct-color-module-neutral-default)',
     icon: 'regular-files',
     favicon: 'icon-module-settings.png',
 

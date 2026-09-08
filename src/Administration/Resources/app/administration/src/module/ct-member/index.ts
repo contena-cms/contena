@@ -31,7 +31,7 @@ Contena.Module.register('ct-member', {
     description: 'ct-member.general.descriptionTextModule',
     version: '1.0.0',
     targetVersion: '1.0.0',
-    color: 'var(--color-module-orange-default)',
+    color: 'var(--ct-color-module-orange-default)',
     icon: 'regular-users',
     favicon: 'icon-module-customers.png',
     entity: 'member',
@@ -89,7 +89,7 @@ Contena.Module.register('ct-member', {
         {
             id: 'ct-member',
             label: 'ct-member.general.mainMenuItemGeneral',
-            color: 'var(--color-module-orange-default)',
+            color: 'var(--ct-color-module-orange-default)',
             icon: 'regular-users',
             position: 40,
             privilege: 'member.viewer',

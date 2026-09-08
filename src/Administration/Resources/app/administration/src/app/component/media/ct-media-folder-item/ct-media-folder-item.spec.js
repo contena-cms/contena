@@ -6,10 +6,10 @@ const { Module } = Contena;
 
 // mocking modules
 const modulesToCreate = new Map();
-modulesToCreate.set('ct-user-media', {
-    icon: 'regular-user',
-    color: 'var(--color-module-blue-default)',
-    entity: 'user',
+modulesToCreate.set('ct-blog-media', {
+    icon: 'regular-file-text',
+    color: 'var(--ct-color-module-green-default)',
+    entity: 'blog',
 });
 modulesToCreate.set('ct-plugin-media', {
     icon: 'regular-cog',
@@ -33,7 +33,7 @@ Array.from(modulesToCreate.keys()).forEach((moduleName) => {
 });
 
 const ID_PLUGIN_FOLDER = '4006d6aa64ce409692ac2b952fa56ade';
-const ID_USER_FOLDER = '0e6b005ca7a1440b8e87ac3d45ed5c9f';
+const ID_BLOG_FOLDER = '0e6b005ca7a1440b8e87ac3d45ed5c9f';
 
 async function createWrapper(defaultFolderId, privileges = []) {
     const repositoryFactoryMock = {
@@ -48,9 +48,9 @@ async function createWrapper(defaultFolderId, privileges = []) {
             }),
         get: (folderId) => {
             switch (folderId) {
-                case ID_USER_FOLDER:
+                case ID_BLOG_FOLDER:
                     return {
-                        entity: 'user',
+                        entity: 'blog',
                         isNew: () => false,
                     };
                 case ID_PLUGIN_FOLDER:
@@ -159,8 +159,8 @@ describe('components/media/ct-media-folder-item', () => {
         useModuleIconColors().enabled.value = false;
     });
 
-    it('should provide the fallback folder color for a user folder', async () => {
-        const wrapper = await createWrapper(ID_USER_FOLDER);
+    it('should provide the fallback folder color for a blog folder', async () => {
+        const wrapper = await createWrapper(ID_BLOG_FOLDER);
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.iconName).toBe('multicolor-folder-thumbnail');
@@ -181,7 +181,7 @@ describe('components/media/ct-media-folder-item', () => {
     });
 
     it('should color the module icon with the neutral token by default', async () => {
-        const wrapper = await createWrapper(ID_USER_FOLDER);
+        const wrapper = await createWrapper(ID_BLOG_FOLDER);
         await flushPromises();
 
         expect(wrapper.vm.folderColor).toBeUndefined();
@@ -190,11 +190,11 @@ describe('components/media/ct-media-folder-item', () => {
 
     it('should paint the default folder and its icon in the module color when module colors are enabled', async () => {
         useModuleIconColors().enabled.value = true;
-        const wrapper = await createWrapper(ID_USER_FOLDER);
+        const wrapper = await createWrapper(ID_BLOG_FOLDER);
         await flushPromises();
 
-        expect(wrapper.vm.folderColor).toBe('var(--color-module-blue-default)');
-        expect(wrapper.vm.moduleIconColor).toBe('var(--color-module-blue-default)');
+        expect(wrapper.vm.folderColor).toBe('var(--ct-color-module-green-default)');
+        expect(wrapper.vm.moduleIconColor).toBe('var(--ct-color-module-green-default)');
     });
 
     it('should keep the folder neutral for a module without a color when module colors are enabled', async () => {
@@ -207,13 +207,13 @@ describe('components/media/ct-media-folder-item', () => {
     });
 
     it('should switch the folder color when the user toggles module colors', async () => {
-        const wrapper = await createWrapper(ID_USER_FOLDER);
+        const wrapper = await createWrapper(ID_BLOG_FOLDER);
         await flushPromises();
 
         useModuleIconColors().enabled.value = true;
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.folderColor).toBe('var(--color-module-blue-default)');
+        expect(wrapper.vm.folderColor).toBe('var(--ct-color-module-green-default)');
     });
 
     it('should not be able to delete', async () => {
@@ -343,7 +343,7 @@ describe('components/media/ct-media-folder-item', () => {
     });
 
     it('should call the api get default folder if default folder id exists', async () => {
-        const wrapper = await createWrapper(ID_USER_FOLDER);
+        const wrapper = await createWrapper(ID_BLOG_FOLDER);
         Object.assign(wrapper.vm, {
             lastDefaultFolderId: '',
         });
