@@ -226,6 +226,7 @@ declare global {
         appActionButtonService: AppActionButtonService;
         appCmsBlocks: AppCmsBlocksService;
         extensionSdkService: ExtensionSdkService;
+        cmsService: $TSFixMe;
     }
 
     interface MixinContainer {
