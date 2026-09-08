@@ -1,5 +1,5 @@
 {
-    "title": "CT/Form/RadioGroup",
+    "title": "Ct/Form/RadioGroup",
     "parameters": {
         "server": {
             "id": "CT:Form:RadioGroup"

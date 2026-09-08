@@ -1,5 +1,5 @@
 {
-    "title": "CT/Form/Select",
+    "title": "Ct/Form/Select",
     "parameters": {
         "server": {
             "id": "CT:Form:Select"

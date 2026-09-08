@@ -1,5 +1,5 @@
 {
-    "title": "CT/Form/Textarea",
+    "title": "Ct/Form/Textarea",
     "parameters": {
         "server": {
             "id": "CT:Form:Textarea"

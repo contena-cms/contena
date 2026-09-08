@@ -1,5 +1,5 @@
 {
-    "title": "CT/Form/BirthdaySelect",
+    "title": "Ct/Form/BirthdaySelect",
     "parameters": {
         "server": {
             "id": "CT:Form:BirthdaySelect"

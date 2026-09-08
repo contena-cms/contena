@@ -1,5 +1,5 @@
 {
-    "title": "Sw/Navigation/Breadcrumb",
+    "title": "Ct/Navigation/Breadcrumb",
     "parameters": {
         "server": {
             "id": "CT:Navigation:Breadcrumb"
@@ -9,7 +9,7 @@
     "argTypes": {
         "breadcrumb": {
             "control": "object",
-            "description": "The product's category path as a BreadcrumbCollection (resolved by the breadcrumb data loader).",
+            "description": "The blog's category path as a BreadcrumbCollection (resolved by the breadcrumb data loader).",
             "required": true,
             "type": "BreadcrumbCollection",
             "table": {
