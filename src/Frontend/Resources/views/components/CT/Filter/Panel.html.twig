@@ -13,6 +13,8 @@
     displayType = 'dropdown',
 %}
 
+{% set offcanvasId = 'filter-offcanvas-' ~ random() %}
+
 {% set filterPanelOptions = {
     visibleFilterCount: visibleFilterCount,
 } %}
@@ -47,7 +49,7 @@
         {% endblock %}
     {% endset %}
 
-    <twig:CT:Content:Offcanvas id="filter-offcanvas" title="{{ 'listing.filterTitle'|trans|sw_sanitize }}">
+    <twig:CT:Content:Offcanvas :id="offcanvasId" title="{{ 'listing.filterTitle'|trans|sw_sanitize }}">
         <div class="ct-filter-panel__filter">
 
             <twig:Slot name="additional-filters-start"></twig:Slot>
@@ -74,9 +76,9 @@
     <twig:CT:Button
         variant="filter"
         class="d-block d-md-none"
-        aria-controls="filter-offcanvas"
+        aria-controls="{{ offcanvasId }}"
         data-bs-toggle="offcanvas"
-        data-bs-target="#filter-offcanvas">
+        data-bs-target="#{{ offcanvasId }}">
         {{ 'listing.filterTitle'|trans|sw_sanitize }} <twig:CT:Icon name="sliders-horizontal" size="xs" />
     </twig:CT:Button>
 
