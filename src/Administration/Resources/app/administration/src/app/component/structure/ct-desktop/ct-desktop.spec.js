@@ -1,5 +1,18 @@
 import { mount, config } from '@vue/test-utils';
 import { createRouter, createWebHashHistory, routeLocationKey, routerKey } from 'vue-router';
+import useTheme from 'src/app/composables/use-theme';
+
+const mockUseShortcut = jest.fn();
+
+jest.mock('src/app/composables/use-shortcut', () => ({
+    __esModule: true,
+    default: (...args) => mockUseShortcut(...args),
+}));
+
+const userConfigService = {
+    search: jest.fn().mockResolvedValue({ data: {} }),
+    upsert: jest.fn().mockResolvedValue(undefined),
+};
 
 const routes = [
     {
@@ -145,7 +158,15 @@ async function createWrapper() {
 }
 
 describe('src/app/component/structure/ct-desktop', () => {
+    beforeAll(() => {
+        Contena.Service().register('userConfigService', () => userConfigService);
+    });
+
     beforeEach(async () => {
+        mockUseShortcut.mockClear();
+        userConfigService.upsert.mockReset().mockResolvedValue(undefined);
+        useTheme().setTheme('system');
+
         Contena.Store.get('session').setCurrentUser({
             id: 'id',
         });
@@ -153,6 +174,11 @@ describe('src/app/component/structure/ct-desktop', () => {
         Contena.Store.get('context').app.config.settings = {
             enableStagingMode: false,
         };
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+        localStorage.removeItem('mt-theme');
     });
 
     it('should be update userConfig when at index route', async () => {
@@ -220,5 +246,53 @@ describe('src/app/component/structure/ct-desktop', () => {
         const wrapper = await createWrapper();
         expect(wrapper.vm).toBeTruthy();
         expect(wrapper.find('.ct-staging-bar').exists()).toBeFalsy();
+    });
+
+    it('cycles the theme with the C T shortcut and confirms the change', async () => {
+        const createNotification = jest
+            .spyOn(Contena.Store.get('notification'), 'createNotification')
+            .mockReturnValue('notification-id');
+        const wrapper = await createWrapper();
+
+        expect(mockUseShortcut).toHaveBeenCalledWith('CT', expect.any(Function));
+
+        await wrapper.vm.onCycleTheme();
+        expect(useTheme().theme.value).toBe('light');
+
+        await wrapper.vm.onCycleTheme();
+        expect(useTheme().theme.value).toBe('dark');
+
+        await wrapper.vm.onCycleTheme();
+        expect(useTheme().theme.value).toBe('system');
+
+        expect(userConfigService.upsert).toHaveBeenLastCalledWith({
+            'core.userTheme': { theme: 'system' },
+        });
+        expect(createNotification).toHaveBeenCalledTimes(3);
+        expect(createNotification).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                message: 'global.ct-desktop.theme.changed',
+                variant: 'success',
+            }),
+        );
+    });
+
+    it('restores the theme and shows an error when the preference cannot be saved', async () => {
+        userConfigService.upsert.mockRejectedValueOnce(new Error('failed'));
+        const createNotification = jest
+            .spyOn(Contena.Store.get('notification'), 'createNotification')
+            .mockReturnValue('notification-id');
+        const wrapper = await createWrapper();
+
+        await wrapper.vm.onCycleTheme();
+
+        expect(useTheme().theme.value).toBe('system');
+        expect(createNotification).toHaveBeenCalledTimes(1);
+        expect(createNotification).toHaveBeenCalledWith(
+            expect.objectContaining({
+                message: 'global.ct-desktop.theme.saveError',
+                variant: 'error',
+            }),
+        );
     });
 });

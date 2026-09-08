@@ -32,6 +32,7 @@ import EntityValidationService from 'src/app/service/entity-validation.service';
 import FileValidationService from 'src/app/service/file-validation.service';
 import DataDictionaryService from 'src/app/service/data-dictionary.service';
 import CacheService from 'src/app/service/cache.service';
+import createShortcutService from 'src/app/service/shortcut.service';
 
 /** Import Feature */
 import Feature from 'src/core/feature';
@@ -108,6 +109,9 @@ Application.addServiceProvider('feature', () => {
     })
     .addServiceProvider('cacheService', () => {
         return new CacheService();
+    })
+    .addServiceProvider('shortcutService', () => {
+        return createShortcutService(factoryContainer.shortcut);
     })
     .addServiceProvider('jsonApiParserService', () => {
         return JsonApiParser;

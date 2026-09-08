@@ -31,11 +31,26 @@ defineProps({});
 import { ref, computed, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import useShortcut from 'src/app/composables/use-shortcut';
+import useTheme from 'src/app/composables/use-theme';
+import { useNotification } from 'src/app/composables/use-notification';
+
+const THEME_CYCLE = [
+    'system',
+    'light',
+    'dark',
+];
+const THEME_LABELS = {
+    system: 'global.ct-desktop.theme.names.system',
+    light: 'global.ct-desktop.theme.names.light',
+    dark: 'global.ct-desktop.theme.names.dark',
+};
 
 const $route = useRoute();
 // vue-i18n exposes methods bound to its composer; the template and computed state use them as callbacks.
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, te } = useI18n();
+const { createNotificationError, createNotificationSuccess } = useNotification();
 
 const userActivityApiService = inject('userActivityApiService');
 
@@ -57,6 +72,25 @@ const isStaging = computed(() => {
 const createdComponent = () => {
     checkRouteSettings();
 };
+const onCycleTheme = async () => {
+    const theme = useTheme();
+    const currentTheme = theme.theme.value;
+    const nextTheme = THEME_CYCLE[(THEME_CYCLE.indexOf(currentTheme) + 1) % THEME_CYCLE.length];
+
+    try {
+        await theme.saveUserTheme(nextTheme);
+    } catch {
+        theme.setTheme(currentTheme);
+        createNotificationError({ message: t('global.ct-desktop.theme.saveError') });
+
+        return;
+    }
+
+    createNotificationSuccess({
+        message: t('global.ct-desktop.theme.changed', { theme: t(THEME_LABELS[nextTheme]) }),
+    });
+};
+useShortcut('CT', () => void onCycleTheme());
 function checkRouteSettings() {
     if ($route.meta && hasOwnProperty($route.meta, 'noNav')) {
         noNavigation.value = $route.meta.noNav;
@@ -164,6 +198,7 @@ ctDefinePublic({
     currentUser,
     isStaging,
     createdComponent,
+    onCycleTheme,
     checkRouteSettings,
     onUpdateSearchFrequently,
     getModuleMetadata,

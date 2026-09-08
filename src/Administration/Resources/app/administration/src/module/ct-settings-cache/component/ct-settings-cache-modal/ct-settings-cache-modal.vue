@@ -29,6 +29,7 @@ import { inject, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useNotification } from 'src/app/composables/use-notification';
+import useShortcut from 'src/app/composables/use-shortcut';
 import type AclService from 'src/app/service/acl.service';
 
 type CacheApiService = {
@@ -99,6 +100,8 @@ const onModalChange = (isOpen: boolean): void => {
     }
 };
 
+useShortcut('SYSTEMKEY+C', () => void openModal());
+
 ctDefinePublic({
     open,
     keydownEventListener,
@@ -108,8 +111,8 @@ ctDefinePublic({
     onModalChange,
 });
 
-onMounted(() => document.addEventListener('keydown', keydownEventListener.value));
-onBeforeUnmount(() => document.removeEventListener('keydown', keydownEventListener.value));
+onMounted(() => document.addEventListener('keydown', keydownEventListener));
+onBeforeUnmount(() => document.removeEventListener('keydown', keydownEventListener));
 </script>
 
 <style scoped>

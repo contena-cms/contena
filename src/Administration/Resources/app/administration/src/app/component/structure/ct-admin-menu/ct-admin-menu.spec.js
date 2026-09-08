@@ -1,6 +1,13 @@
 import { shallowMount } from '@vue/test-utils';
 import { routeLocationKey, routerKey } from 'vue-router';
 
+const mockUseShortcut = jest.fn();
+
+jest.mock('src/app/composables/use-shortcut', () => ({
+    __esModule: true,
+    default: (...args) => mockUseShortcut(...args),
+}));
+
 async function createWrapper(
     navigation = [],
     route = { name: '', path: '/', fullPath: '/', matched: [], meta: {} },
@@ -57,6 +64,7 @@ async function createWrapper(
 
 describe('src/app/component/structure/ct-admin-menu', () => {
     afterEach(() => {
+        mockUseShortcut.mockClear();
         jest.useRealTimers();
         document.body.innerHTML = '';
     });
@@ -265,5 +273,27 @@ describe('src/app/component/structure/ct-admin-menu', () => {
 
         expect(wrapper.find('.ct-admin-menu__edition').exists()).toBe(false);
         expect(wrapper.find('.ct-admin-menu__shop-name').exists()).toBe(true);
+    });
+
+    it('toggles the sidebar with the S shortcut on desktop viewports only', async () => {
+        const wrapper = await createWrapper();
+        const [
+            key,
+            handler,
+            options,
+        ] = mockUseShortcut.mock.calls.at(-1);
+        const adminMenuStore = Contena.Store.get('adminMenu');
+
+        expect(key).toBe('S');
+
+        wrapper.vm.viewportWidth = 1920;
+        expect(options.active()).toBe(true);
+
+        adminMenuStore.isExpanded = true;
+        handler();
+        expect(adminMenuStore.isExpanded).toBe(false);
+
+        wrapper.vm.viewportWidth = 1280;
+        expect(options.active()).toBe(false);
     });
 });

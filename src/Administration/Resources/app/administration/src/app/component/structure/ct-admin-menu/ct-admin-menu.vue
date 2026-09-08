@@ -298,6 +298,7 @@ defineProps({});
 import { ref, computed, inject, watch, nextTick, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import useShortcut from 'src/app/composables/use-shortcut';
 
 const route = useRoute();
 const router = useRouter();
@@ -640,6 +641,7 @@ const onToggleSidebar = () => {
 
     toggleSidebar();
 };
+useShortcut('S', onToggleSidebar, { active: () => !isMobileViewport.value });
 const startSidebarToggleWindow = () => {
     isTogglingSidebar.value = true;
 

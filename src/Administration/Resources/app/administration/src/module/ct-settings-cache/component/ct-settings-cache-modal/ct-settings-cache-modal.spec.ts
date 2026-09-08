@@ -7,8 +7,10 @@ type ModalVm = {
     openModal: () => Promise<void>;
 };
 
+const wrappers: Array<{ unmount: () => void }> = [];
+
 function createWrapper(canClearCache = true, clear = jest.fn(() => Promise.resolve())) {
-    return mount(component, {
+    const wrapper = mount(component, {
         global: {
             provide: {
                 acl: { can: jest.fn(() => canClearCache) },
@@ -28,9 +30,21 @@ function createWrapper(canClearCache = true, clear = jest.fn(() => Promise.resol
             },
         },
     });
+
+    wrappers.push(wrapper);
+
+    return wrapper;
 }
 
 describe('module/ct-settings-cache/component/ct-settings-cache-modal', () => {
+    beforeAll(() => {
+        Object.defineProperty(window.navigator, 'platform', { value: 'MacIntel', configurable: true });
+    });
+
+    afterEach(() => {
+        wrappers.splice(0).forEach((wrapper) => wrapper.unmount());
+    });
+
     it('opens only for users allowed to clear the cache', async () => {
         const allowed = createWrapper();
         const denied = createWrapper(false);
@@ -63,5 +77,15 @@ describe('module/ct-settings-cache/component/ct-settings-cache-modal', () => {
         wrapper.unmount();
 
         expect(removeEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
+    });
+
+    it('opens from the system-key C shortcut', async () => {
+        const wrapper = createWrapper();
+        const vm = wrapper.vm as unknown as ModalVm;
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, bubbles: true }));
+        await flushPromises();
+
+        expect(vm.open).toBe(true);
     });
 });

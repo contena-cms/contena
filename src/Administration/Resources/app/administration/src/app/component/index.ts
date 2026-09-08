@@ -213,6 +213,11 @@ export default () => {
     Contena.Component.register('ct-button-process', () => import('src/app/component/base/ct-button-process/index'));
     Contena.Component.register('ct-button-group', () => import('src/app/component/base/ct-button-group/index'));
     Contena.Component.register('ct-help-center-v2', () => import('src/app/component/utils/ct-help-center'));
+    Contena.Component.register(
+        'ct-shortcut-overview-item',
+        () => import('src/app/component/utils/ct-shortcut-overview-item'),
+    );
+    Contena.Component.register('ct-shortcut-overview', () => import('src/app/component/utils/ct-shortcut-overview'));
     Contena.Component.register('ct-image-slider', () => import('src/app/component/media/ct-image-slider'));
     Contena.Component.register(
         'ct-media-add-thumbnail-form',

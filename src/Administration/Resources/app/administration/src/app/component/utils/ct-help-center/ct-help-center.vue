@@ -42,17 +42,33 @@
                                     <ct-block name="ct_help_sidebar_support_placeholder"> </ct-block>
                                 </mt-action-menu-group>
                             </ct-block>
+
+                            <ct-block name="ct_help_sidebar_shortcuts">
+                                <mt-action-menu-group>
+                                    <mt-action-menu-item
+                                        icon="keyboard"
+                                        :shortcut="{ modifiers: ['shift'], key: '?' }"
+                                        @select="openShortcutModal"
+                                    >
+                                        {{ $t('ct-shortcut-overview.title') }}
+                                    </mt-action-menu-item>
+                                </mt-action-menu-group>
+                            </ct-block>
                         </mt-action-menu>
                     </ct-block>
                 </mt-dropdown-menu-portal>
             </mt-dropdown-menu-root>
+
+            <ct-shortcut-overview
+                :show-modal="showShortcutModal"
+                @shortcut-open="openShortcutModal"
+                @shortcut-close="closeShortcutModal"
+            />
         </div>
     </ct-block>
 </template>
 
 <script setup lang="ts">
-import './ct-help-center.scss';
-
 defineProps({});
 
 import { computed } from 'vue';
@@ -60,12 +76,36 @@ import { computed } from 'vue';
 const showHelpSidebar = computed(() => {
     return Contena.Store.get('adminHelpCenter').showHelpSidebar;
 });
+const showShortcutModal = computed(() => {
+    return Contena.Store.get('adminHelpCenter').showShortcutModal;
+});
 const onVisibilityChange = (isOpened: boolean) => {
     Contena.Store.get('adminHelpCenter').showHelpSidebar = isOpened;
+};
+const openShortcutModal = (): void => {
+    Contena.Store.get('adminHelpCenter').showShortcutModal = true;
+};
+const closeShortcutModal = (): void => {
+    Contena.Store.get('adminHelpCenter').showShortcutModal = false;
 };
 
 ctDefinePublic({
     showHelpSidebar,
+    showShortcutModal,
     onVisibilityChange,
+    openShortcutModal,
+    closeShortcutModal,
 });
 </script>
+
+<style lang="scss">
+@import '~scss/variables';
+
+.ct-help-center__button[data-state='open'] {
+    background-color: var(--color-interaction-secondary-hover);
+}
+
+.ct-help-center__menu {
+    z-index: $z-index-context-menu;
+}
+</style>

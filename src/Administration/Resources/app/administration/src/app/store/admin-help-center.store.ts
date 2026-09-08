@@ -4,6 +4,7 @@ const adminHelpCenterStore = Contena.Store.register({
     state: () => {
         return {
             showHelpSidebar: false,
+            showShortcutModal: false,
         };
     },
 });

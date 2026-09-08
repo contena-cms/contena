@@ -110,6 +110,8 @@ const componentNames = [
     'ct-button-process',
     'ct-button-group',
     'ct-help-center-v2',
+    'ct-shortcut-overview-item',
+    'ct-shortcut-overview',
     'ct-image-slider',
     'ct-media-add-thumbnail-form',
     'ct-media-base-item',

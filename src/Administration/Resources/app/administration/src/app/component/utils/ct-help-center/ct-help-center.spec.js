@@ -3,6 +3,14 @@ import { DOMWrapper, mount } from '@vue/test-utils';
 async function createWrapper() {
     return mount(await wrapTestComponent('ct-help-center-v2', { sync: true }), {
         attachTo: document.body,
+        global: {
+            stubs: {
+                'ct-shortcut-overview': {
+                    props: ['showModal'],
+                    template: '<div class="ct-shortcut-overview-stub" />',
+                },
+            },
+        },
     });
 }
 
@@ -16,6 +24,7 @@ describe('src/app/component/utils/ct-help-center', () => {
     beforeEach(() => {
         const store = Contena.Store.get('adminHelpCenter');
         store.showHelpSidebar = false;
+        store.showShortcutModal = false;
     });
 
     afterEach(() => {
@@ -35,5 +44,19 @@ describe('src/app/component/utils/ct-help-center', () => {
 
         expect(Contena.Store.get('adminHelpCenter').showHelpSidebar).toBe(true);
         expect(menuItems().length).toBeGreaterThan(0);
+    });
+
+    it('opens and closes the keyboard shortcut overview', async () => {
+        wrapper = await createWrapper();
+
+        wrapper.vm.openShortcutModal();
+        await wrapper.vm.$nextTick();
+
+        expect(Contena.Store.get('adminHelpCenter').showShortcutModal).toBe(true);
+
+        wrapper.vm.closeShortcutModal();
+        await wrapper.vm.$nextTick();
+
+        expect(Contena.Store.get('adminHelpCenter').showShortcutModal).toBe(false);
     });
 });

@@ -14,6 +14,7 @@ import MixinFactory from 'src/core/factory/mixin.factory';
 import FilterFactory from 'src/core/factory/filter.factory';
 import DirectiveFactory from 'src/core/factory/directive.factory';
 import LocaleFactory from 'src/core/factory/locale.factory';
+import ShortcutFactory from 'src/core/factory/shortcut.factory';
 import PluginBootFactory from 'src/core/factory/plugin-boot.factory';
 import ApiServiceFactory from 'src/core/factory/api-service.factory';
 import EntityDefinitionFactory from 'src/core/factory/entity-definition.factory';
@@ -85,6 +86,9 @@ application
     })
     .addFactory('locale', () => {
         return LocaleFactory;
+    })
+    .addFactory('shortcut', () => {
+        return ShortcutFactory;
     })
     .addFactory('plugin', () => {
         return PluginBootFactory;

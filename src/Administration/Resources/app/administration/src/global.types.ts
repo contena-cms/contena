@@ -78,6 +78,8 @@ import type ChannelApiService from './core/service/api/channel.api.service';
 import type MemberGroupRegistrationApiService from './core/service/api/member-group-registration.api.service';
 import type BlogTypeApiService from './app/service/blog-type.api.service';
 import type MediaService from './core/service/api/media.api.service';
+import type ShortcutFactory from './core/factory/shortcut.factory';
+import type createShortcutService from './app/service/shortcut.service';
 // trick to make it an "external module" to support global type extension
 
 // base methods for subContainer
@@ -195,6 +197,7 @@ declare global {
         seoUrlTemplateService: $TSFixMe;
         snippetService: SnippetApiService;
         snippetSetService: SnippetSetApiService;
+        shortcutService: ReturnType<typeof createShortcutService>;
         stateStyleDataProviderService: StateStyleService;
         systemConfigApiService: SystemConfigApiService;
         timezoneService: $TSFixMe;
@@ -232,6 +235,7 @@ declare global {
         directive: typeof DirectiveFactory;
         filter: typeof FilterFactory;
         locale: typeof LocaleFactory;
+        shortcut: typeof ShortcutFactory;
         plugin: $TSFixMe;
         apiService: typeof ApiServiceFactory;
         entityDefinition: typeof EntityDefinitionFactory;
@@ -371,6 +375,15 @@ declare module '@vue/runtime-core' {
     interface ComponentCustomProperties extends CustomProperties {}
 
     interface ComponentCustomOptions {
+        shortcuts?: {
+            [key: string]:
+                | string
+                | {
+                      active: boolean | ((this: App) => boolean);
+                      method: string;
+                  };
+        };
+
         extensionApiDevtoolInformation?: {
             property?: string;
             method?: string;

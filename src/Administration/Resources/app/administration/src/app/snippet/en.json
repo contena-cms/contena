@@ -57,7 +57,16 @@
       "notificationLoadingDataErrorMessage": "Error loading data"
     },
     "ct-desktop": {
-      "stagingBarText": "The system is in staging mode."
+      "stagingBarText": "The system is in staging mode.",
+      "theme": {
+        "changed": "Appearance changed to \"{theme}\"",
+        "saveError": "The appearance could not be changed",
+        "names": {
+          "system": "System",
+          "light": "Light",
+          "dark": "Dark"
+        }
+      }
     },
     "ct-skip-link": {
       "label": "Skip to content"
@@ -675,6 +684,69 @@
   "sidebar": {
     "ariaLabelButtonClose": "Close sidebar",
     "ariaLabelButtonOpen": "Open sidebar"
+  },
+  "ct-shortcut-overview": {
+    "title": "Keyboard shortcuts",
+    "modalTitle": "Keyboard shortcuts",
+    "sectionGeneralShortcuts": "General shortcuts",
+    "sectionAddingItems": "Adding items",
+    "sectionNavigation": "Navigation",
+    "sectionAccessibility": "Accessibility",
+    "disableShortcuts": "Disable keyboard shortcuts",
+    "functionAddBlog": "Add blog",
+    "keyboardShortcutAddBlog": "A P",
+    "functionAddCategory": "Add category",
+    "keyboardShortcutAddCategory": "A C",
+    "functionAddMember": "Add member",
+    "keyboardShortcutAddMember": "A U",
+    "functionAddRule": "Add rule",
+    "keyboardShortcutAddRule": "A R",
+    "functionGoToDashboard": "Open dashboard",
+    "keyboardShortcutGoToDashboard": "G H",
+    "functionGoToBlogs": "Open blogs",
+    "keyboardShortcutGoToBlogs": "G P",
+    "functionGoToCategories": "Open categories",
+    "keyboardShortcutGoToCategories": "G C",
+    "functionGoToMembers": "Open members",
+    "keyboardShortcutGoToMembers": "G U",
+    "functionGoToExperienceStudio": "Open Experience Studio",
+    "keyboardShortcutGoToExperienceStudio": "G E",
+    "functionGoToMedia": "Open media",
+    "keyboardShortcutGoToMedia": "G M E",
+    "functionGoToSettingsListing": "Open settings",
+    "keyboardShortcutGoToSettingsListing": "G S",
+    "functionGoToSnippets": "Open snippets",
+    "keyboardShortcutGoToSnippets": "G S N",
+    "functionGoToRuleBuilder": "Open rules",
+    "keyboardShortcutGoToRuleBuilder": "G S R",
+    "functionGoToPlugins": "Open plugins",
+    "keyboardShortcutGoToPlugins": "G A",
+    "functionAccessibilitySkipToContent": "Skip to content",
+    "keyboardShortcutAccessibilitySkipToContent": "Tab Enter",
+    "functionAccessibilityMoveFocusForward": "Move to next focusable element",
+    "keyboardShortcutAccessibilityMoveFocusForward": "Tab",
+    "functionAccessibilityMoveFocusBackward": "Move to previous focusable element",
+    "keyboardShortcutAccessibilityMoveFocusBackward": "Shift-Tab",
+    "functionAccessibilityCloseDialog": "Close dialog",
+    "keyboardShortcutAccessibilityCloseDialog": "Esc",
+    "functionSpecialShortcutFocusSearch": "Focus search",
+    "keyboardShortcutSpecialShortcutFocusSearch": "F",
+    "functionSpecialShortcutOpenFilters": "Open filters",
+    "keyboardShortcutSpecialShortcutOpenFilters": "O F",
+    "functionSpecialShortcutToggleNavigation": "Toggle navigation",
+    "keyboardShortcutSpecialShortcutToggleNavigation": "S",
+    "functionSpecialShortcutCycleTheme": "Switch appearance",
+    "keyboardShortcutSpecialShortcutCycleTheme": "C T",
+    "functionSpecialShortcutShortcutListing": "Keyboard shortcuts",
+    "keyboardShortcutSpecialShortcutShortcutListing": "Shift-?",
+    "functionSpecialShortcutSaveDetailView": "Save current view",
+    "keyboardShortcutSpecialShortcutSaveDetailViewWindows": "ALT-S",
+    "keyboardShortcutSpecialShortcutSaveDetailViewMac": "CONTROL-S",
+    "keyboardShortcutSpecialShortcutSaveDetailViewLinux": "ALT-S",
+    "functionSpecialShortcutClearCache": "Clear cache",
+    "keyboardShortcutSpecialShortcutClearCacheWindows": "ALT-C",
+    "keyboardShortcutSpecialShortcutClearCacheMac": "CONTROL-C",
+    "keyboardShortcutSpecialShortcutClearCacheLinux": "ALT-C"
   },
   "help-center": {
     "sidebar": {

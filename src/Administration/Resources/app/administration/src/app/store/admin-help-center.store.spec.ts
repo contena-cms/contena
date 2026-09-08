@@ -11,5 +11,6 @@ describe('admin-help-center', () => {
 
     it('has initial state', () => {
         expect(store.showHelpSidebar).toBe(false);
+        expect(store.showShortcutModal).toBe(false);
     });
 });
