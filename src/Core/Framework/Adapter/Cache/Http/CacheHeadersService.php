@@ -33,11 +33,7 @@ class CacheHeadersService
     {
         $response->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, $context->getLanguageId());
 
-        $vary = array_merge($response->getVary(), [
-            PlatformRequest::HEADER_ACCESS_KEY,
-            PlatformRequest::HEADER_LANGUAGE_ID,
-            HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE,
-        ]);
+        $vary = array_merge($response->getVary(), HttpCacheVariantHeaders::HEADERS);
         $vary = array_unique(array_map(static fn (string $value): string => \trim($value), $vary));
 
         $response->setVary($vary);
@@ -109,6 +105,17 @@ class CacheHeadersService
     private function isCacheHashRequired(Request $request, ChannelContext $channelContext): bool
     {
         if ($channelContext->getMember() !== null) {
+            return true;
+        }
+
+        // Frontend language is already encoded in the resolved domain URL, while Channel API can serve different
+        // languages for the same URL through a language persisted via the context switch route or
+        // dynamically defined in the ct-language-id header. The header language override is part of the cache key/vary
+        // header, so only persisted context language should influence the hash.
+        if ($this->isChannelApi($request)
+            && $channelContext->getLanguageId() !== $channelContext->getChannel()->getLanguageId()
+            && $channelContext->getLanguageId() !== (string) $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID, '')
+        ) {
             return true;
         }
 

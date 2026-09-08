@@ -2,13 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 
+use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
+use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
+use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
+use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
+use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
-use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
-use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,6 +73,68 @@ class HttpCacheKeyGeneratorTest extends TestCase
         static::assertTrue($keyB->isCacheable);
     }
 
+    public function testNonCacheableCacheCookieSetsNoCacheOnCacheKey(): void
+    {
+        $request = Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => HttpCacheCookieEvent::NOT_CACHEABLE]);
+
+        $key = $this->cacheKeyGenerator->generate($request);
+
+        static::assertFalse($key->isCacheable);
+    }
+
+    public function testNonCacheableCacheHashHeaderSetsNoCacheOnCacheKey(): void
+    {
+        $request = Request::create('https://domain.com/method');
+        $request->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, HttpCacheCookieEvent::NOT_CACHEABLE);
+
+        $key = $this->cacheKeyGenerator->generate($request);
+
+        static::assertFalse($key->isCacheable);
+    }
+
+    public function testCacheHashHeaderIsEquivalentToCacheHashCookie(): void
+    {
+        $cookieRequest = Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']);
+
+        $headerRequest = Request::create('https://domain.com/method');
+        $headerRequest->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'foo');
+
+        static::assertSame(
+            $this->cacheKeyGenerator->generate($cookieRequest)->key,
+            $this->cacheKeyGenerator->generate($headerRequest)->key
+        );
+    }
+
+    public function testCacheHashHeaderTakesPrecedenceOverRequestCookie(): void
+    {
+        $cookieAndHeaderRequest = Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']);
+        $cookieAndHeaderRequest->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'bar');
+
+        $headerOnlyRequest = Request::create('https://domain.com/method');
+        $headerOnlyRequest->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'bar');
+
+        static::assertSame(
+            $this->cacheKeyGenerator->generate($headerOnlyRequest)->key,
+            $this->cacheKeyGenerator->generate($cookieAndHeaderRequest)->key
+        );
+    }
+
+    public function testResponseCookieTakesPrecedenceOverCacheHashHeader(): void
+    {
+        $headerRequest = Request::create('https://domain.com/method');
+        $headerRequest->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'bar');
+
+        $response = new Response();
+        $response->headers->setCookie(new Cookie(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'baz'));
+
+        $cookieOnlyRequest = Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'baz']);
+
+        static::assertSame(
+            $this->cacheKeyGenerator->generate($cookieOnlyRequest)->key,
+            $this->cacheKeyGenerator->generate($headerRequest, $response)->key
+        );
+    }
+
     public function testCacheKeyStaysTheSameIfEventPartsAreSortedDifferently(): void
     {
         $request = Request::create('https://domain.com/method');
@@ -125,6 +189,16 @@ class HttpCacheKeyGeneratorTest extends TestCase
             Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']),
             Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']),
         ];
+
+        yield 'same Url with identical ct-language-id header' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-a']),
+        ];
+
+        yield 'same Url with empty ct-language-id header treated as absent' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => '']),
+            Request::create('https://domain.com/method'),
+        ];
     }
 
     public static function differentKeyProvider(): \Generator
@@ -143,5 +217,73 @@ class HttpCacheKeyGeneratorTest extends TestCase
             Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']),
             Request::create('https://domain.com/method', 'GET', [], [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'bar']),
         ];
+
+        yield 'same Url with different ct-language-id headers' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-b']),
+        ];
+
+        yield 'same Url with ct-language-id differing only in letter case (matched byte-exact)' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'LANGUAGE-A']),
+        ];
+
+        yield 'same Url with ct-access-key differing only in letter case (case-sensitive credential)' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_ACCESS_KEY => 'access-key-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_ACCESS_KEY => 'ACCESS-KEY-A']),
+        ];
+
+        yield 'same Url with and without ct-language-id header' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_LANGUAGE_ID => 'language-a']),
+            Request::create('https://domain.com/method'),
+        ];
+
+        yield 'same Url with different ct-access-key headers' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_ACCESS_KEY => 'access-key-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_ACCESS_KEY => 'access-key-b']),
+        ];
+
+        yield 'same Url with and without ct-access-key header' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_ACCESS_KEY => 'access-key-a']),
+            Request::create('https://domain.com/method'),
+        ];
+
+        yield 'same Url with different channel base urls (frontend language/domain selector)' => [
+            self::createRequestWithBaseUrl('https://domain.com/method', '/de'),
+            self::createRequestWithBaseUrl('https://domain.com/method', '/en'),
+        ];
+
+        yield 'same Url with and without channel base url' => [
+            self::createRequestWithBaseUrl('https://domain.com/method', '/de'),
+            Request::create('https://domain.com/method'),
+        ];
+
+        yield 'same Url with different ct-cache-hash headers and no cookies' => [
+            self::createRequestWithHeaders('https://domain.com/method', [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'foo']),
+            self::createRequestWithHeaders('https://domain.com/method', [HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE => 'bar']),
+        ];
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    private static function createRequestWithHeaders(string $uri, array $headers): Request
+    {
+        $request = Request::create($uri);
+        foreach ($headers as $name => $value) {
+            $request->headers->set($name, $value);
+        }
+
+        return $request;
+    }
+
+    private static function createRequestWithBaseUrl(string $uri, string $baseUrl): Request
+    {
+        $request = Request::create($uri);
+        // \Contena\Frontend\Framework\Routing\RequestTransformer::CHANNEL_BASE_URL,
+        // \Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator::CHANNEL_BASE_URL
+        $request->attributes->set('ct-channel-base-url', $baseUrl);
+
+        return $request;
     }
 }

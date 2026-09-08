@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheHeadersService;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheRelevantRulesResolver;
@@ -19,6 +16,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,6 +118,66 @@ class CacheHeadersServiceTest extends TestCase
 
         static::assertInstanceOf(HttpCacheCookieEvent::class, $event);
         static::assertSame('language-a', $event->get(HttpCacheCookieEvent::LANGUAGE_ID));
+    }
+
+    public function testChannelApiNonDefaultLanguageRequiresCacheHash(): void
+    {
+        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]]);
+
+        $event = $this->cacheHeadersService->applyCacheHash(
+            $request,
+            $this->createCacheHashContext('language-a'),
+            new Response()
+        );
+
+        static::assertInstanceOf(HttpCacheCookieEvent::class, $event);
+        static::assertSame('language-a', $event->get(HttpCacheCookieEvent::LANGUAGE_ID));
+    }
+
+    public function testChannelApiHeaderProvidedLanguageDoesNotRequireCacheHash(): void
+    {
+        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]]);
+        // the header carries the effective language, it is part of the cache key instead of the hash
+        $request->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, 'language-a');
+
+        $event = $this->cacheHeadersService->applyCacheHash(
+            $request,
+            $this->createCacheHashContext('language-a'),
+            new Response()
+        );
+
+        static::assertNull($event);
+    }
+
+    public function testChannelApiHeaderWithDifferentCasingRequiresCacheHash(): void
+    {
+        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]]);
+        // language ids are matched byte-exact; a differently cased header is a different value,
+        // so it does not represent the correct language and the hash is required
+        $request->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, 'LANGUAGE-A');
+
+        $event = $this->cacheHeadersService->applyCacheHash(
+            $request,
+            $this->createCacheHashContext('language-a'),
+            new Response()
+        );
+
+        static::assertInstanceOf(HttpCacheCookieEvent::class, $event);
+        static::assertSame('language-a', $event->get(HttpCacheCookieEvent::LANGUAGE_ID));
+    }
+
+    public function testFrontendNonDefaultLanguageDoesNotRequireCacheHash(): void
+    {
+        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]]);
+
+        $event = $this->cacheHeadersService->applyCacheHash(
+            $request,
+            $this->createCacheHashContext('language-a'),
+            new Response()
+        );
+
+        // frontend language is carried by the domain URL, so custom language should not trigger hash generation
+        static::assertNull($event);
     }
 
     public function testCacheCookieStaysTheSameIfEventPartsAreSortedDifferently(): void
