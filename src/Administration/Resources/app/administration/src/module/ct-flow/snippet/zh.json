@@ -54,6 +54,8 @@
             "active": "启用",
             "inactive": "停用",
             "recovery": "找回",
+            "password": "密码",
+            "confirm": "确认",
             "request": "请求",
             "media": "媒体",
             "uploaded": "已上传"

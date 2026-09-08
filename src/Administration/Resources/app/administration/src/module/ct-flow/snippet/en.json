@@ -54,6 +54,8 @@
             "active": "Active",
             "inactive": "Inactive",
             "recovery": "Recovery",
+            "password": "Password",
+            "confirm": "Confirmation",
             "request": "Request",
             "media": "Media",
             "uploaded": "Uploaded"
