@@ -17,6 +17,7 @@ import initComponents from 'src/app/init/component.init';
 import initFilterFactory from 'src/app/init/filter-factory.init';
 import initializeTheme from 'src/app/init/theme.init';
 import initializeShortcutService from 'src/app/init/shortcut.init';
+import initializeAppModules from 'src/app/init/app-modules.init';
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
 export default {
@@ -34,4 +35,5 @@ export default {
     filterFactory: initFilterFactory,
     theme: initializeTheme,
     shortcut: initializeShortcutService,
+    appModules: initializeAppModules,
 };

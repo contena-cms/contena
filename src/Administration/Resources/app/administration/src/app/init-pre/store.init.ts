@@ -11,6 +11,10 @@ import 'src/app/store/system.store';
 import 'src/app/store/session.store';
 import 'src/app/store/ct-bulk-edit.store';
 import 'src/app/store/media-modal.store';
+import 'src/app/store/contena-apps.store';
+import 'src/app/store/extension-sdk-module.store';
+import 'src/app/store/extension-main-modules.store';
+import 'src/app/store/action-buttons.store';
 
 /**
  * @private

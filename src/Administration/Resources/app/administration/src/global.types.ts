@@ -63,6 +63,10 @@ import type { ContextStore } from './app/store/context.store';
 import type { SettingsItems } from './app/store/settings-item.store';
 import type { System } from './app/store/system.store';
 import type { MediaModalStore } from './app/store/media-modal.store';
+import type { ContenaApps } from './app/store/contena-apps.store';
+import type { ExtensionSdkModules } from './app/store/extension-sdk-module.store';
+import type { ExtensionMainModules } from './app/store/extension-main-modules.store';
+import type { ActionButtonsStore } from './app/store/action-buttons.store';
 import type { NotificationStore } from './app/store/notification.store';
 import type { SessionStore } from './app/store/session.store';
 import type { ContenaExtensionsStore } from './module/ct-extension/store/extensions.store';
@@ -87,6 +91,7 @@ import type AppCmsService from './app/service/app-cms.service';
 import type AppModulesService from './core/service/api/app-modules.service';
 import type AppActionButtonService from './core/service/api/app-action-button.service';
 import type AppCmsBlocksService from './core/service/api/app-cms-blocks.service';
+import type ExtensionSdkService from './core/service/api/extension-sdk.service';
 // trick to make it an "external module" to support global type extension
 
 // base methods for subContainer
@@ -220,6 +225,7 @@ declare global {
         appModulesService: AppModulesService;
         appActionButtonService: AppActionButtonService;
         appCmsBlocks: AppCmsBlocksService;
+        extensionSdkService: ExtensionSdkService;
     }
 
     interface MixinContainer {
@@ -295,6 +301,10 @@ declare global {
         ctProfile: CtProfileStore;
         ctBulkEdit: CtBulkStore;
         mediaModal: MediaModalStore;
+        contenaApps: ContenaApps;
+        extensionSdkModules: ExtensionSdkModules;
+        extensionMainModules: ExtensionMainModules;
+        actionButtons: ActionButtonsStore;
     }
 
     type PropType<T> = VuePropType<T>;
