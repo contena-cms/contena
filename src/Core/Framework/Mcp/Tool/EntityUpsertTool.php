@@ -2,13 +2,14 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Doctrine\DBAL\Connection;
+use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 
 #[McpTool(
     name: 'contena-entity-upsert',
@@ -30,8 +31,14 @@ class EntityUpsertTool extends McpToolResponse
     ) {
     }
 
-    public function __invoke(string $entity, string $payload, bool $dryRun = true): string
-    {
+    public function __invoke(
+        #[Schema(description: 'Entity name to write, e.g. "blog" or "category". See the contena://entities resource for the full list.')]
+        string $entity,
+        #[Schema(description: 'The entity\'s fields as a JSON string: one OBJECT, or an ARRAY of objects to write several records in a single call. Include "id" on a record to UPDATE it, omit it to CREATE one — e.g. {"id":"...","name":"News"} renames an existing category, and [{...},{...}] upserts both. contena-entity-schema lists the field names and which are required.')]
+        string $payload,
+        #[Schema(description: 'Validate without writing. Leave true first, then call again with false to persist.')]
+        bool $dryRun = true,
+    ): string {
         $context = $this->contextProvider->getContext();
 
         if (!$this->registry->has($entity)) {

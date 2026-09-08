@@ -2,13 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -20,6 +19,9 @@ use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntityReadTool;
 use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
 use Contena\Core\Framework\Struct\ArrayEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -221,5 +223,70 @@ class EntityReadToolTest extends TestCase
         static::assertFalse($data['success']);
         static::assertStringContainsString('unknown_entity', $data['error']);
         static::assertStringContainsString('contena://entities', $data['error']);
+    }
+
+    #[TestDox('A malformed "includes" that makes the builder throw the base DataAbstractionLayerException is answered with its detail')]
+    public function testAMalformedCriteriaIsAnsweredWithTheParserDetail(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $registry = static::createStub(DefinitionInstanceRegistry::class);
+        $registry->method('has')->willReturn(true);
+        $registry->method('getByEntityName')->willReturn(static::createStub(EntityDefinition::class));
+        $registry->method('getRepository')->willReturn(static::createStub(EntityRepository::class));
+
+        $criteriaBuilder = static::createStub(RequestCriteriaBuilder::class);
+        $criteriaBuilder->method('fromArray')->willThrowException(
+            DataAbstractionLayerException::expectedArrayWithType('includes', 'string')
+        );
+
+        $contextProvider = static::createStub(McpContextProvider::class);
+        $contextProvider->method('getContext')->willReturn($context);
+
+        $tool = new EntityReadTool(
+            $registry,
+            $criteriaBuilder,
+            $contextProvider,
+            static::createStub(JsonEntityEncoder::class),
+            static::createStub(AclCriteriaValidator::class),
+        );
+
+        $data = json_decode(
+            ($tool)('blog', 'blog-123', '{"includes":"id"}'),
+            true,
+            512,
+            \JSON_THROW_ON_ERROR
+        );
+
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('includes', $data['error']);
+    }
+
+    public function testAnUnexpectedThrowableStillPropagates(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $registry = static::createStub(DefinitionInstanceRegistry::class);
+        $registry->method('has')->willReturn(true);
+        $registry->method('getByEntityName')->willReturn(static::createStub(EntityDefinition::class));
+        $registry->method('getRepository')->willReturn(static::createStub(EntityRepository::class));
+
+        $criteriaBuilder = static::createStub(RequestCriteriaBuilder::class);
+        $criteriaBuilder->method('fromArray')->willThrowException(new \RuntimeException('bug, not bad input'));
+
+        $contextProvider = static::createStub(McpContextProvider::class);
+        $contextProvider->method('getContext')->willReturn($context);
+
+        $tool = new EntityReadTool(
+            $registry,
+            $criteriaBuilder,
+            $contextProvider,
+            static::createStub(JsonEntityEncoder::class),
+            static::createStub(AclCriteriaValidator::class),
+        );
+
+        $this->expectExceptionObject(new \RuntimeException('bug, not bad input'));
+
+        ($tool)('blog', 'blog-123');
     }
 }

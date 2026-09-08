@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
@@ -11,6 +9,9 @@ use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\McpToolResponse;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\ThemeService;
+use Doctrine\DBAL\Connection;
+use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 
 /**
  * This tool lives in the Frontend bundle because it depends on ThemeService,
@@ -43,9 +44,13 @@ class ThemeConfigTool extends McpToolResponse
     }
 
     public function __invoke(
+        #[Schema(description: 'The channel\'s UUID, or its name as shown in the admin, e.g. "Web". See the contena://channels resource.')]
         string $channelId = '',
+        #[Schema(description: '"get" to read the current theme config, "update" to change it.')]
         string $action = 'get',
+        #[Schema(description: 'A JSON OBJECT of theme config values to write, as a string — keyed by config field name, e.g. {"ct-color-brand-primary":{"value":"#189eff"}}. Only read by action "update"; call "get" first to see the field names and their current shape.')]
         string $config = '{}',
+        #[Schema(description: 'Preview the change without writing. Leave true first, then call again with false to persist.')]
         bool $dryRun = true,
     ): string {
         if ($action !== 'get' && $action !== 'update') {

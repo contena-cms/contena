@@ -2,21 +2,24 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
 
 #[McpTool(
     name: 'contena-entity-search',
     title: 'Entity Search',
-    description: 'Search and filter Contena entities with Admin API criteria JSON. For count, sum, or average reporting use contena-entity-aggregate; this tool returns records and pagination metadata. Use contena-entity-schema first when field names are unknown.'
+    description: 'Search, list and filter Contena entities of any type — blogs, members, categories, channels and the rest. Use this to LIST or page through records ("the last 10 blogs", "all active members"), and to look one up by title or any other exact field value. Sort with criteria.sort, e.g. [{"field":"createdAt","order":"DESC"}]. For count/sum/average reporting, use contena-entity-aggregate instead (the _meta.total here is pagination metadata, not a reporting count). Accepts Admin API criteria JSON. Returns {success, data: [...], _meta: {total, page, limit}}. If you don\'t already know the field names, contena-entity-schema will tell you.'
 )]
 #[McpToolDependsOn('contena-entity-schema')]
 #[McpToolGroup('entity')]
@@ -37,8 +40,18 @@ class EntitySearchTool extends McpToolResponse
     ) {
     }
 
-    public function __invoke(string $entity, string $criteria = '{}', int $limit = 25, int $page = 1, string $term = ''): string
-    {
+    public function __invoke(
+        #[Schema(description: 'Entity name to search, e.g. "blog", "member" or "category". See the contena://entities resource for the full list.')]
+        string $entity,
+        #[Schema(description: 'A JSON OBJECT of Admin API criteria, as a string — "filter", "sort", "associations", "includes". E.g. {"sort":[{"field":"createdAt","order":"DESC"}]} for the most recent first, or {"filter":[{"type":"equals","field":"active","value":true}]} to narrow the result. Defaults to no criteria.')]
+        string $criteria = '{}',
+        #[Schema(description: 'Records per page, 1-500.')]
+        int $limit = 25,
+        #[Schema(description: 'Page number, starting at 1.')]
+        int $page = 1,
+        #[Schema(description: 'Free-text search across the entity\'s searchable fields. Prefer an exact "filter" in `criteria` when you know the field.')]
+        string $term = '',
+    ): string {
         $context = $this->contextProvider->getContext();
 
         if (!$this->registry->has($entity)) {
@@ -66,12 +79,16 @@ class EntitySearchTool extends McpToolResponse
             $payload['term'] = $term;
         }
 
-        $criteriaObj = $this->criteriaBuilder->fromArray(
-            $payload,
-            new Criteria(),
-            $definition,
-            $context,
-        );
+        try {
+            $criteriaObj = $this->criteriaBuilder->fromArray(
+                $payload,
+                new Criteria(),
+                $definition,
+                $context,
+            );
+        } catch (SearchRequestException|DataAbstractionLayerException $e) {
+            return $this->invalidCriteriaError($e);
+        }
 
         // Criteria can reference associated entities that require their own read privileges
         // (same association ACL model as the Admin API).

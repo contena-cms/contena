@@ -17,6 +17,10 @@ Each file in this directory implements one action an AI client can invoke.
 
 The `description` is a routing contract. Lead with the user's likely trigger phrases, distinguish similar tools explicitly, and keep optional parameters genuinely optional. Do not describe workflows or entities that are not part of generic Contena Administration.
 
+### Parameter descriptions
+
+Parameter contracts belong in `#[Schema(description: ...)]` (`Mcp\Capability\Attribute\Schema`) on the `__invoke()` parameter, not in docblock `@param` tags. The SDK renders them into the tool's public `inputSchema`, so they are part of the routing surface the agent reads when it fills in arguments. Do not add `@param` blocks that only restate the native type; keep docblocks for what static analysis needs (array shapes). The same `cache:clear` caveat as for tool descriptions applies.
+
 ## Response conventions
 
 Successful responses contain `success: true` and `data`; optional `_meta` carries pagination, dry-run, or response-size information. Errors contain `success: false` and a human-readable `error`. Oversized responses are stored in the session-scoped result cache and returned through `contena://tool-result/{id}`.

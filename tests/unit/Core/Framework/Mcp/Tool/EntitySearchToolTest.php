@@ -2,23 +2,26 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntitySearchTool;
 use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -446,5 +449,77 @@ class EntitySearchToolTest extends TestCase
         static::assertFalse($data['success']);
         static::assertStringContainsString('unknown_entity', $data['error']);
         static::assertStringContainsString('contena://entities', $data['error']);
+    }
+
+    #[TestDox('A rejected filter is answered with the parser pointer and detail instead of escaping to the SDK\'s generic error')]
+    public function testAMalformedCriteriaIsAnsweredWithTheParserDetail(): void
+    {
+        $context = Context::createDefaultContext();
+        $definition = static::createStub(EntityDefinition::class);
+
+        $registry = static::createStub(DefinitionInstanceRegistry::class);
+        $registry->method('has')->willReturn(true);
+        $registry->method('getByEntityName')->willReturn($definition);
+        $registry->method('getRepository')->willReturn(static::createStub(EntityRepository::class));
+
+        $exception = new SearchRequestException();
+        $exception->add(
+            DataAbstractionLayerException::invalidFilterQuery('The filter should contain a "field".', '/filter/0/equals/field'),
+            '/filter/0/equals/field'
+        );
+
+        $criteriaBuilder = static::createStub(RequestCriteriaBuilder::class);
+        $criteriaBuilder->method('fromArray')->willThrowException($exception);
+
+        $contextProvider = static::createStub(McpContextProvider::class);
+        $contextProvider->method('getContext')->willReturn($context);
+
+        $tool = new EntitySearchTool(
+            $registry,
+            $criteriaBuilder,
+            $contextProvider,
+            static::createStub(JsonEntityEncoder::class),
+            static::createStub(AclCriteriaValidator::class),
+        );
+
+        $data = json_decode(
+            ($tool)('blog', '{"filter":[{"type":"equals"}]}'),
+            true,
+            512,
+            \JSON_THROW_ON_ERROR
+        );
+
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('/filter/0/equals/field', $data['error']);
+        static::assertStringContainsString('The filter should contain a "field".', $data['error']);
+    }
+
+    #[TestDox('Only criteria-parsing exceptions are answered; any other throwable is a bug and still propagates')]
+    public function testAnUnexpectedThrowableStillPropagates(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $registry = static::createStub(DefinitionInstanceRegistry::class);
+        $registry->method('has')->willReturn(true);
+        $registry->method('getByEntityName')->willReturn(static::createStub(EntityDefinition::class));
+        $registry->method('getRepository')->willReturn(static::createStub(EntityRepository::class));
+
+        $criteriaBuilder = static::createStub(RequestCriteriaBuilder::class);
+        $criteriaBuilder->method('fromArray')->willThrowException(new \RuntimeException('bug, not bad input'));
+
+        $contextProvider = static::createStub(McpContextProvider::class);
+        $contextProvider->method('getContext')->willReturn($context);
+
+        $tool = new EntitySearchTool(
+            $registry,
+            $criteriaBuilder,
+            $contextProvider,
+            static::createStub(JsonEntityEncoder::class),
+            static::createStub(AclCriteriaValidator::class),
+        );
+
+        $this->expectExceptionObject(new \RuntimeException('bug, not bad input'));
+
+        ($tool)('blog');
     }
 }

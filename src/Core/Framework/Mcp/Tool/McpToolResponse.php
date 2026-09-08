@@ -2,13 +2,15 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\Util\Json;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -117,6 +119,40 @@ abstract class McpToolResponse
     protected function error(string $message): string
     {
         return Json::encode(['success' => false, 'error' => $message]);
+    }
+
+    /**
+     * Renders a `RequestCriteriaBuilder::fromArray()` failure as an error the
+     * caller can act on, instead of letting it escape to the SDK's generic
+     * "Error while executing tool".
+     *
+     * `SearchRequestException` carries one entry per rejected pointer, so each
+     * detail is prefixed with it: "/aggregations/0/avg/field" names the element
+     * that is wrong. The base `DataAbstractionLayerException` is accepted, not
+     * only its InvalidFilterQuery / InvalidAggregationQuery subclasses, because
+     * the builder throws the base class directly for some input errors, e.g.
+     * `expectedArrayWithType()` for `{"includes":"id"}`.
+     */
+    protected function invalidCriteriaError(SearchRequestException|DataAbstractionLayerException $e): string
+    {
+        if (!$e instanceof SearchRequestException) {
+            return $this->error($e->getMessage());
+        }
+
+        $details = [];
+        foreach ($e->getErrors() as $error) {
+            $pointer = $error['source']['pointer'];
+            $details[] = $pointer === '' ? $error['detail'] : \sprintf('%s: %s', $pointer, $error['detail']);
+        }
+
+        // An empty exception is not thrown by tryToThrow(), but getErrors() is a
+        // generator over caller-supplied state and a message with nothing after
+        // the colon would be worse than the generic one it replaces.
+        if ($details === []) {
+            return $this->error($e->getMessage());
+        }
+
+        return $this->error(\sprintf('Invalid criteria: %s', \implode('; ', $details)));
     }
 
     /**
