@@ -7,14 +7,14 @@
             "StoredContentElement": {
                 "title": "Stored content element",
                 "type": "object",
-                "description": "A single node of the STORAGE model: what the admin edits, what validation and mutation operate on, and what the layout column holds. The same shape is accepted on input (the request `layout` and the attach `element`) and returned on output (the response `layout` and `orphaned`). Nodes nest recursively through `slots`. It carries the authoring wiring — data requirements, provided and accepted context, and binding attribution — none of which appears on a rendered response body; the rendered counterpart is the Store API's `ContentElement`. On input, only `id` and `component` are mandatory and the remaining members default to empty. On output `id`, `component` and `properties` are always present, and every other member is omitted entirely when empty rather than serialized as an empty container, so a bare element is a three-key object. Every empty map that IS serialized is emitted as `[]`, never as `{}`.",
+                "description": "A single node of the STORAGE model: what the admin edits, what validation and mutation operate on, and what the layout column holds. The same shape is accepted on input (the request `layout` and the attach `element`) and returned on output (the response `layout` and `orphaned`). Nodes nest recursively through `slots`. It carries the authoring wiring — data requirements, provided and accepted context, and binding attribution — none of which appears on a rendered response body; the rendered counterpart is the Channel API's `ContentElement`. On input, only `id` and `component` are mandatory and the remaining members default to empty. On output `id`, `component` and `properties` are always present, and every other member is omitted entirely when empty rather than serialized as an empty container, so a bare element is a three-key object. Every empty map that IS serialized is emitted as `[]`, never as `{}`.",
                 "required": ["id", "component"],
                 "properties": {
                     "id": {
-                        "type": "string",
-                        "minLength": 1,
-                        "description": "Element identifier. Any non-empty string is accepted except the reserved root literal `__page_context_root__` and strings PHP casts to integers (`0`, `12`, `-3`); apart from those two exclusions the id is stored verbatim, with no format, length or character-set requirement, so an author-supplied id such as `el-1` is as valid as a generated hex id. Element ids must be unique across every root of a layout. The mutation operations mint fresh ids server-side (for example `attach-element` re-mints every id in the spliced subtree); the minted ids are reported in the response `affectedElementIds`.",
-                        "example": "0188fa1b2c3d4e5f6a7b8c9d0e1f2a3b"
+                        "allOf": [
+                            { "$ref": "#/components/schemas/ContentElementId" }
+                        ],
+                        "description": "Element ids must be unique across every root of a layout. The mutation operations mint fresh ids server-side (for example `attach-element` re-mints every id in the spliced subtree); the minted ids are reported in the response `affectedElementIds`."
                     },
                     "component": {
                         "type": "string",
@@ -84,7 +84,7 @@
                         "additionalProperties": {
                             "type": "string"
                         },
-                        "example": { "media": "core:Sw:Media:Image" }
+                        "example": { "media": "core:CT:Media:Image" }
                     }
                 },
                 "example": {

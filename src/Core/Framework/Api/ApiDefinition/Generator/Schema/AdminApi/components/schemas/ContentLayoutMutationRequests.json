@@ -51,11 +51,13 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to insert (becomes the new element's `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`.",
-                                "example": "Sw:Content:Text"
+                                "example": "CT:Content:Text"
                             },
                             "parentElementId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the parent element to insert into; the element is inserted at the root when omitted.",
                                 "default": null
                             },
@@ -74,7 +76,7 @@
                                 "type": ["string", "null"],
                                 "description": "Optional source-qualified id (`source:id`) of a binding specification to apply onto the inserted element atomically after scaffold (data requirements, seeded input defaults, and attribution), in the same edit. A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`. The specification's declared `type` must equal `type` (else `400 bindingTypeMismatch`); an unregistered id is rejected with `400 bindingSpecificationNotFound`, and nothing is inserted on either failure.",
                                 "default": null,
-                                "example": "core:Sw:Media:Image"
+                                "example": "core:CT:Media:Image"
                             }
                         }
                     }
@@ -90,8 +92,9 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to remove. Its subtree is removed with it."
                             }
                         }
@@ -108,13 +111,16 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to move."
                             },
                             "newParentId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the new parent element; moves to the root when omitted. Moving an element into itself or a descendant is rejected with `400`.",
                                 "default": null
                             },
@@ -143,15 +149,16 @@
                         "required": ["elementId", "newType"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to replace."
                             },
                             "newType": {
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to replace it with (becomes the element's new `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`. Children, wiring, and property values the new type cannot hold are reported back in `orphaned`, `droppedWiring`, and `droppedProperties`.",
-                                "example": "Sw:Content:Text"
+                                "example": "CT:Content:Text"
                             }
                         }
                     }
@@ -167,8 +174,9 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to duplicate. The copy and its subtree receive freshly minted ids, returned in `affectedElementIds`."
                             },
                             "index": {
@@ -194,9 +202,7 @@
                                 "type": "array",
                                 "description": "Ids of the elements to wrap. They must be siblings in one slot, or all root-level. Must be non-empty and contain no duplicates.",
                                 "items": {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "pattern": "^[0-9a-f]{32}$"
+                                    "$ref": "#/components/schemas/ContentElementId"
                                 },
                                 "minItems": 1,
                                 "uniqueItems": true
@@ -226,8 +232,9 @@
                         "required": ["containerElementId"],
                         "properties": {
                             "containerElementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the container element to unwrap. Its children take its place and the container is removed."
                             }
                         }
@@ -250,8 +257,10 @@
                                 "description": "The element subtree to splice in (for example an `orphaned` subtree from an earlier edit, or a copy). Every id in it is re-minted server-side; the placed ids are returned in `affectedElementIds`."
                             },
                             "parentElementId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the parent element to attach into; attaches at the root when omitted.",
                                 "default": null
                             },
@@ -280,15 +289,16 @@
                         "required": ["elementId", "bindingSpecificationId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to bind the specification onto."
                             },
                             "bindingSpecificationId": {
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "Source-qualified id of the binding specification to apply (`source:id`). A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`.",
-                                "example": "core:Sw:Media:Image"
+                                "example": "core:CT:Media:Image"
                             }
                         }
                     }
@@ -307,11 +317,13 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to insert (becomes the new element's `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`.",
-                                "example": "Sw:Content:Text"
+                                "example": "CT:Content:Text"
                             },
                             "parentElementId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the parent element to insert into; the element is inserted at the root when omitted.",
                                 "default": null
                             },
@@ -330,7 +342,7 @@
                                 "type": ["string", "null"],
                                 "description": "Optional source-qualified id (`source:id`) of a binding specification to apply onto the inserted element atomically after scaffold, in the same committed edit. A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`. The specification's declared `type` must equal `type` (else `400 bindingTypeMismatch`); an unregistered id is rejected with `400 bindingSpecificationNotFound`. The op throws before the repository write, so nothing is persisted on either failure.",
                                 "default": null,
-                                "example": "core:Sw:Media:Image"
+                                "example": "core:CT:Media:Image"
                             }
                         }
                     }
@@ -346,8 +358,9 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to remove. Its subtree is removed with it."
                             }
                         }
@@ -364,13 +377,16 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to move."
                             },
                             "newParentId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the new parent element; moves to the root when omitted. Moving an element into itself or a descendant is rejected with `400`.",
                                 "default": null
                             },
@@ -399,15 +415,16 @@
                         "required": ["elementId", "newType"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to replace."
                             },
                             "newType": {
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to replace it with (becomes the element's new `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`. Children, wiring, and property values the new type cannot hold are reported back in `orphaned`, `droppedWiring`, and `droppedProperties`.",
-                                "example": "Sw:Content:Text"
+                                "example": "CT:Content:Text"
                             }
                         }
                     }
@@ -423,8 +440,9 @@
                         "required": ["elementId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to duplicate. The copy and its subtree receive freshly minted ids, returned in `affectedElementIds`."
                             },
                             "index": {
@@ -450,9 +468,7 @@
                                 "type": "array",
                                 "description": "Ids of the elements to wrap. They must be siblings in one slot, or all root-level. Must be non-empty and contain no duplicates.",
                                 "items": {
-                                    "type": "string",
-                                    "minLength": 1,
-                                    "pattern": "^[0-9a-f]{32}$"
+                                    "$ref": "#/components/schemas/ContentElementId"
                                 },
                                 "minItems": 1,
                                 "uniqueItems": true
@@ -482,8 +498,9 @@
                         "required": ["containerElementId"],
                         "properties": {
                             "containerElementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the container element to unwrap. Its children take its place and the container is removed."
                             }
                         }
@@ -506,8 +523,10 @@
                                 "description": "The element subtree to splice in (for example an `orphaned` subtree from an earlier edit, or a copy). Every id in it is re-minted server-side; the placed ids are returned in `affectedElementIds`."
                             },
                             "parentElementId": {
-                                "type": ["string", "null"],
-                                "pattern": "^[0-9a-f]{32}$",
+                                "anyOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" },
+                                    { "type": "null" }
+                                ],
                                 "description": "Id of the parent element to attach into; attaches at the root when omitted.",
                                 "default": null
                             },
@@ -536,15 +555,16 @@
                         "required": ["elementId", "bindingSpecificationId"],
                         "properties": {
                             "elementId": {
-                                "type": "string",
-                                "pattern": "^[0-9a-f]{32}$",
+                                "allOf": [
+                                    { "$ref": "#/components/schemas/ContentElementId" }
+                                ],
                                 "description": "Id of the element to bind the specification onto."
                             },
                             "bindingSpecificationId": {
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "Source-qualified id of the binding specification to apply (`source:id`). A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`.",
-                                "example": "core:Sw:Media:Image"
+                                "example": "core:CT:Media:Image"
                             }
                         }
                     }
@@ -553,8 +573,8 @@
             "ContentPreviewEntityRequest": {
                 "title": "Content preview request",
                 "type": "object",
-                "description": "An unsaved draft layout plus the real entity and channel context to render it against.",
-                "required": ["layout", "entityType", "entityId", "channelId"],
+                "description": "An unsaved draft layout plus the real entity and sales-channel context to render it against.",
+                "required": ["layout", "entityType", "entityId", "salesChannelId"],
                 "properties": {
                     "layout": {
                         "type": "array",
@@ -575,27 +595,33 @@
                         "pattern": "^[0-9a-f]{32}$",
                         "description": "Id of the entity to hydrate against; the entity must exist."
                     },
-                    "channelId": {
+                    "salesChannelId": {
                         "type": "string",
                         "pattern": "^[0-9a-f]{32}$",
-                        "description": "Channel whose context is synthesized for rendering."
+                        "description": "Sales channel whose context is synthesized for rendering."
                     },
                     "languageId": {
                         "type": ["string", "null"],
                         "pattern": "^[0-9a-f]{32}$",
-                        "description": "Optional language id overriding the synthesized channel context.",
+                        "description": "Optional language id overriding the synthesized sales-channel context.",
+                        "default": null
+                    },
+                    "currencyId": {
+                        "type": ["string", "null"],
+                        "pattern": "^[0-9a-f]{32}$",
+                        "description": "Optional currency id overriding the synthesized sales-channel context.",
                         "default": null
                     },
                     "domainId": {
                         "type": ["string", "null"],
                         "pattern": "^[0-9a-f]{32}$",
-                        "description": "Optional domain id overriding the synthesized channel context.",
+                        "description": "Optional domain id overriding the synthesized sales-channel context.",
                         "default": null
                     },
-                    "memberId": {
+                    "customerId": {
                         "type": ["string", "null"],
                         "pattern": "^[0-9a-f]{32}$",
-                        "description": "Optional member id overriding the synthesized channel context.",
+                        "description": "Optional customer id overriding the synthesized sales-channel context.",
                         "default": null
                     },
                     "queryParameters": {
