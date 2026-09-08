@@ -1,0 +1,36 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    fieldId = null,
+    label = null,
+    required = false,
+    variant = 'default',
+%}
+
+{% set labelCVA = cva({
+    base: 'ct-form-label',
+    variants: {
+        variant: {
+            default: 'form-label',
+            check: 'form-check-label',
+        },
+    },
+}) %}
+
+{% set attributeDefaults = {
+    class: labelCVA.apply({ variant }),
+    for: fieldId is not null ? fieldId : false,
+} %}
+
+{% if label is not empty %}
+    <label {{ attributes.defaults(attributeDefaults) }}>
+        {% block content %}{{ label|sw_sanitize|raw }}{% endblock %}
+
+        {% if required %}
+            {% block required_marker %}
+                <span class="ct-form-label__required form-required-label" aria-hidden="true">{{ 'general.required'|trans|sw_sanitize }}</span>
+            {% endblock %}
+        {% endif %}
+    </label>
+{% endif %}
