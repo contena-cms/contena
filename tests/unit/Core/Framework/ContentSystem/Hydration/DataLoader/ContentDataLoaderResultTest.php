@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataLoader;
 
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
+use Contena\Core\Framework\Struct\ArrayStruct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ContentDataLoaderResult;
-use Contena\Core\Framework\Struct\ArrayStruct;
 
 /**
  * @internal

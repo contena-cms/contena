@@ -4,13 +4,13 @@ namespace Contena\Core\System\Member\Event;
 
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\EventData\ObjectType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\MemberAware;
-use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\MemberEntity;
 use Symfony\Contracts\EventDispatcher\Event;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
@@ -50,6 +49,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Serializer\SerializerInterface;

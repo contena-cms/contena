@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel;
 
+use Contena\Core\System\Channel\ChannelEntity;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Channel\ChannelEntity;
 
 /**
  * @internal

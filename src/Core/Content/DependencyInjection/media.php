@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Media\Aggregate\MediaDefaultFolder\MediaDefaultFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationDefinition;
@@ -88,6 +85,9 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
@@ -23,6 +20,9 @@ use Contena\Core\Framework\Mcp\Tool\McpToolResponse;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

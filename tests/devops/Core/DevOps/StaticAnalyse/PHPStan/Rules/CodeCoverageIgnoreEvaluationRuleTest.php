@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnoreEvaluationRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnoreEvaluationRule;
 
 /**
  * @internal

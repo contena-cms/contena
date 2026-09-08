@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Controller;
 
+use Contena\Core\Framework\Mcp\Controller\McpToolListController;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Page;
 use Mcp\Schema\Prompt;
@@ -10,8 +12,6 @@ use Mcp\Schema\Tool;
 use Mcp\Server;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Controller\McpToolListController;
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Telemetry;
 
+use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Mail\Payload\MailPayload;
@@ -17,6 +16,7 @@ use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Transport;
 
-use League\Flysystem\FilesystemOperator;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Content\Mail\Transport\MailerTransportDecorator;
@@ -15,6 +11,10 @@ use Contena\Core\Content\Mail\Transport\SmtpOauthTransportFactoryDecorator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use Symfony\Component\Mailer\Transport\NullTransportFactory;

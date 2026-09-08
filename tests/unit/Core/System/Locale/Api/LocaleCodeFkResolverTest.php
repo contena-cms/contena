@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Locale\Api;
 
+use Contena\Core\Framework\Api\Sync\FkReference;
+use Contena\Core\System\Locale\Api\LocaleCodeFkResolver;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\Sync\FkReference;
-use Contena\Core\System\Locale\Api\LocaleCodeFkResolver;
 
 /**
  * @internal

@@ -2,6 +2,9 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests;
 
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\Struct\Struct;
 use GuzzleHttp\Client;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -15,9 +18,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 

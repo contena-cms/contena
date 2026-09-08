@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Integration\Core\System\SystemConfig\Validation;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\Validation\SystemConfigValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

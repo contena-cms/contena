@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Mcp;
 
+use Contena\Core\Defaults;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
 
 /**
  * Persists enabled MCP toolsets for the duration of one MCP session.

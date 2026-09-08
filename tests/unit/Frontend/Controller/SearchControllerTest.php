@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Search\AbstractBlogSearchRoute;
@@ -22,6 +19,9 @@ use Contena\Frontend\Page\Search\SearchPage;
 use Contena\Frontend\Page\Search\SearchPageLoader;
 use Contena\Frontend\Page\Suggest\SuggestPage;
 use Contena\Frontend\Page\Suggest\SuggestPageLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Service;
 
-use League\Flysystem\FilesystemOperator;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporter;
 use Contena\Core\Content\Sitemap\Service\SitemapHandleFactoryInterface;
@@ -29,6 +24,11 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Generator;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

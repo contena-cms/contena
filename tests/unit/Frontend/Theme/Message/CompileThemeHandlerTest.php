@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Message;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -22,6 +20,8 @@ use Contena\Frontend\Theme\Message\CompileThemeHandler;
 use Contena\Frontend\Theme\Message\CompileThemeMessage;
 use Contena\Frontend\Theme\ThemeCompiler;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

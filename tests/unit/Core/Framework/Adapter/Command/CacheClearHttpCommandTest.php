@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Command\CacheClearAllCommand;
 use Contena\Core\Framework\Adapter\Command\CacheClearHttpCommand;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

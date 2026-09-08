@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Installer\Configuration;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Installer\Controller\SystemConfigurationController;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 
 /**
  * @internal

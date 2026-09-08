@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Subscriber;
 
+use Contena\Core\Content\Mail\Subscriber\FailedMessageSubscriber;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Mail\Subscriber\FailedMessageSubscriber;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Mailer\Event\FailedMessageEvent;
 use Symfony\Component\Mime\RawMessage;

@@ -3,13 +3,13 @@
 namespace Contena\Tests\Unit\Administration;
 
 use Composer\Autoload\ClassLoader;
-use Pentatrion\ViteBundle\PentatrionViteBundle;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Administration;
 use Contena\Administration\DependencyInjection\AdministrationMigrationCompilerPass;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
+use Pentatrion\ViteBundle\PentatrionViteBundle;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

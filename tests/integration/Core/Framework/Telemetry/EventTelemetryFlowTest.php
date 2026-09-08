@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Telemetry;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -17,6 +15,8 @@ use Contena\Core\Framework\Test\Telemetry\Transport\TraceableTransport;
 use Contena\Core\Framework\Test\TestKernel;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Tests\Integration\Core\Framework\Trait\CustomKernelTestBehavior;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

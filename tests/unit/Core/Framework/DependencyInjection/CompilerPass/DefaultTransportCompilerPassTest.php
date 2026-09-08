@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
+use Contena\Core\Framework\DependencyInjection\CompilerPass\DefaultTransportCompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\DefaultTransportCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

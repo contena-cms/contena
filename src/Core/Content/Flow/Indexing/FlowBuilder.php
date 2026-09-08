@@ -101,6 +101,7 @@ class FlowBuilder
                 $currentSequence->flowId,
                 $currentSequence->sequenceId,
                 $currentSequence->config,
+                $currentSequence->appFlowActionId,
             );
         }
 
@@ -111,6 +112,7 @@ class FlowBuilder
                 $currentSequence->flowId,
                 $currentSequence->sequenceId,
                 $currentSequence->config,
+                $currentSequence->appFlowActionId,
             );
         }
 
@@ -122,6 +124,7 @@ class FlowBuilder
             $currentSequence->flowId,
             $currentSequence->sequenceId,
             $currentSequence->config,
+            $currentSequence->appFlowActionId,
         );
     }
 

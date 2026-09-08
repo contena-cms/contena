@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Mcp\Controller;
 
-use Mcp\Server\Builder;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
+use Mcp\Server\Builder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 

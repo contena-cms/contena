@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme\Subscriber;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Plugin;
@@ -23,6 +22,7 @@ use Contena\Frontend\Theme\Subscriber\PluginLifecycleSubscriber;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use CtTestPlugin\CtTestPlugin;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomField\Xml\CustomFieldTypes;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypeNotFoundException;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\CustomFieldTypeFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

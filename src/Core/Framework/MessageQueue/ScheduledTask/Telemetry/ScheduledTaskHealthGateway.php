@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

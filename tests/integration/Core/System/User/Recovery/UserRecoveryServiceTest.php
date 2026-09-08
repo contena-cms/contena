@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\User\Recovery;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -17,6 +15,8 @@ use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
 use Contena\Core\System\User\Recovery\UserRecoveryService;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

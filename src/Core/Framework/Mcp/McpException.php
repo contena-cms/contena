@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Mcp\Exception\ResourceNotFoundException;
 use Contena\Core\Framework\HttpException;
+use Mcp\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 class McpException extends HttpException

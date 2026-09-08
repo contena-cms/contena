@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Indexing;
 
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 
 /**
  * @phpstan-type MessageData array{

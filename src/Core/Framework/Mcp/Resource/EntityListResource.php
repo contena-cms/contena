@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Mcp\Resource;
 
-use Mcp\Capability\Attribute\McpResource;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Util\Json;
+use Mcp\Capability\Attribute\McpResource;
 
 #[McpResource(
     uri: 'contena://entities',

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Twig\Extension;
 
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Twig\Loader\ArrayLoader;
 
 /**

@@ -2,10 +2,6 @@
 
 namespace Contena\Core\System\Snippet;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use League\Flysystem\FilesystemOperator;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
@@ -20,6 +16,10 @@ use Contena\Core\System\Snippet\Files\AbstractSnippetFile;
 use Contena\Core\System\Snippet\Files\RemoteSnippetFile;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Filter\SnippetFilterFactory;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemOperator;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 

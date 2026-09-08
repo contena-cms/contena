@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\MailTemplate\Service;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Payload\MailPayload;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeEntity;
@@ -15,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mime\Email;
 
 /**

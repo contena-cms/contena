@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\Event\MemberLoginEvent;
 use Contena\Core\System\Member\MemberEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

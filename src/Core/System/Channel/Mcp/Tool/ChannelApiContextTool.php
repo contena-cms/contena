@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\Channel\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Context\ChannelApiMcpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\McpToolResponse;
+use Mcp\Capability\Attribute\McpTool;
 
 /**
  * @internal

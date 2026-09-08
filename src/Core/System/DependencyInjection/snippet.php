@@ -2,10 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use GuzzleHttp\Client;
-use League\Flysystem\FilesystemOperator;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
 use Contena\Core\Framework\Adapter\Translation\Translator;
@@ -37,6 +33,10 @@ use Contena\Core\System\Snippet\SnippetValidator;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\Snippet\Subscriber\CustomFieldSubscriber;
 use Contena\Core\System\Snippet\Subscriber\LanguageDeletionSubscriber;
+use Doctrine\DBAL\Connection;
+use GuzzleHttp\Client;
+use League\Flysystem\FilesystemOperator;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;

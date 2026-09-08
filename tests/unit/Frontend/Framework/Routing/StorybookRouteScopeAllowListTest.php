@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Controller\StorybookController;
 use Contena\Frontend\Framework\Routing\StorybookRouteScopeAllowList;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

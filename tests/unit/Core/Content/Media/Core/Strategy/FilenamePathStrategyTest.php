@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Core\Strategy;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
 use Contena\Core\Content\Media\Core\Strategy\FilenamePathStrategy;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

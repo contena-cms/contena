@@ -4,10 +4,10 @@ namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
 use AsyncAws\Core\Result;
 use AsyncAws\S3\S3Client;
-use League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter;
-use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\WriteBatchInterface;
+use League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter;
+use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
 
 class AsyncAwsS3WriteBatchAdapter extends AsyncAwsS3Adapter implements WriteBatchInterface
 {

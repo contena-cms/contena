@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Increment;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Increment\AbstractIncrementer;
 use Contena\Core\Framework\Increment\ArrayIncrementer;
 use Contena\Core\Framework\Increment\IncrementerGatewayCompilerPass;
 use Contena\Core\Framework\Increment\MySQLIncrementer;
 use Contena\Core\Framework\Increment\RedisIncrementer;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Guard;
 
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Test\Generator;
+use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -11,9 +14,6 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\Test\Generator;
-use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\SharedLockInterface;

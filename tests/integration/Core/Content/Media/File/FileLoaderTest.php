@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\File;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\FileFetcher;
 use Contena\Core\Content\Media\File\FileLoader;
 use Contena\Core\Content\Media\File\FileSaver;
@@ -14,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

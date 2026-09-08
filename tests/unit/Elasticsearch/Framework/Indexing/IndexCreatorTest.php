@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
-use OpenSearch\Client;
-use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Contena\Elasticsearch\ElasticsearchException;
@@ -15,6 +10,11 @@ use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexConfigEvent
 use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexCreatedEvent;
 use Contena\Elasticsearch\Framework\Indexing\IndexCreator;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingProvider;
+use OpenSearch\Client;
+use OpenSearch\Namespaces\IndicesNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

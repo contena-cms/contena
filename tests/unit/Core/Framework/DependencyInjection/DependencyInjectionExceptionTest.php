@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection;
 
+use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 
 /**
  * @internal

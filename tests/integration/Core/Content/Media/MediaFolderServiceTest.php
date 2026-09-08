@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderEntity;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationCollection;
@@ -17,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

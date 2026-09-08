@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Telemetry;
 
+use Contena\Core\Defaults;
+use Contena\Core\System\Channel\Telemetry\ChannelTypeResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
-use Contena\Core\System\Channel\Telemetry\ChannelTypeResolver;
 
 /**
  * @internal

@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Media;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Core\Params\UrlParamsSource;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Profiling\Profiler;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 class MediaUrlPlaceholderHandler implements MediaUrlPlaceholderHandlerInterface
 {

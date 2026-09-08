@@ -2,6 +2,8 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\Adapter\Cache\Event\AddCacheTagEvent;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
@@ -10,8 +12,6 @@ use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
-use Contena\Core\Framework\Adapter\Cache\Event\AddCacheTagEvent;
 
 /**
  * This rule prevents the individual usage of the AddCacheTagEvent and promotes the use of the CacheTagCollector->addTag method.

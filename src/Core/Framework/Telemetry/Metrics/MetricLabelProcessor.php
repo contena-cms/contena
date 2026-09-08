@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
 use Contena\Core\Framework\Telemetry\TelemetryException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

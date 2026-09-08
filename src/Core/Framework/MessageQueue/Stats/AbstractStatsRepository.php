@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\MessageQueue\Stats;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsEntity;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Clock\NativeClock;
 
 /**

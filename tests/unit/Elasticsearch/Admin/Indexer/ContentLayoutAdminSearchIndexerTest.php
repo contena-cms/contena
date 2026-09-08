@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutDefinition;
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutEntity;
 use Contena\Core\Framework\Context;
@@ -20,6 +17,9 @@ use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Admin\Indexer\ContentLayoutAdminSearchIndexer;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

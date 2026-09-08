@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Symplify\NoReturnSetterMethodWithFluentSettersRule;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Symplify\NoReturnSetterMethodWithFluentSettersRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Symplify\NoReturnSetterMethodWithFluentSettersRule;
 use Symplify\PHPStanRules\Rules\NoReturnSetterMethodRule;
 
 /**

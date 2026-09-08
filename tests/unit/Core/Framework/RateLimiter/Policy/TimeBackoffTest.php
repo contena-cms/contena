@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\RateLimiter\Policy;
 
+use Contena\Core\Framework\RateLimiter\Policy\TimeBackoff;
+use Contena\Core\Framework\RateLimiter\RateLimiterException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\RateLimiter\Policy\TimeBackoff;
-use Contena\Core\Framework\RateLimiter\RateLimiterException;
 
 /**
  * @internal

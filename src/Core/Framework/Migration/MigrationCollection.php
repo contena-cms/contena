@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Migration;
 
+use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 
 class MigrationCollection
 {

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\System\Snippet;
 
+use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\System\Snippet\Struct\TranslationConfig;
 
 /**
  * Controls the mocked translation HTTP client (`contena.translation.client`) in integration tests,

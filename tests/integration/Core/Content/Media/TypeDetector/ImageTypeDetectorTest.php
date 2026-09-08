@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\TypeDetector;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaType\ImageType;
@@ -11,6 +9,8 @@ use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\TypeDetector\ImageTypeDetector;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

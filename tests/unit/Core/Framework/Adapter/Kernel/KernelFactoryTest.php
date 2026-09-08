@@ -4,12 +4,12 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Kernel;
 
 use Composer\Autoload\ClassLoader;
 use Composer\InstalledVersions;
-use Doctrine\DBAL\Driver\Middleware;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
 use Contena\Core\Kernel;
 use Contena\Core\Profiling\Doctrine\ProfilingMiddleware;
+use Doctrine\DBAL\Driver\Middleware;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

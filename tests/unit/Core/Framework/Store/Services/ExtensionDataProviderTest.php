@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Store\Services;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

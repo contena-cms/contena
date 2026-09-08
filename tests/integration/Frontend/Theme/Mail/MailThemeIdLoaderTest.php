@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme\Mail;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\Mail\MailThemeIdLoader;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

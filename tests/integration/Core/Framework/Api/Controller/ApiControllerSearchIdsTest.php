@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

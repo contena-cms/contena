@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Services;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Store\Event\ExtensionLoadedEvent;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

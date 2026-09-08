@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\MailStorer;
 use Contena\Core\Framework\Context;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\Event\MemberBeforeLoginEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

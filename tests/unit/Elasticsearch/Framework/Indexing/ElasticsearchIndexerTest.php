@@ -2,14 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
-use Doctrine\DBAL\Connection;
-use OpenSearch\Client;
-use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
@@ -26,6 +18,14 @@ use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexIteratorEve
 use Contena\Elasticsearch\Framework\Indexing\IndexCreator;
 use Contena\Elasticsearch\Framework\Indexing\IndexerOffset;
 use Contena\Elasticsearch\Framework\Indexing\IndexingDto;
+use Doctrine\DBAL\Connection;
+use OpenSearch\Client;
+use OpenSearch\Namespaces\IndicesNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

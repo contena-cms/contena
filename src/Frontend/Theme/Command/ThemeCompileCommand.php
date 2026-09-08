@@ -2,12 +2,12 @@
 
 namespace Contena\Frontend\Theme\Command;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\ConfigLoader\AbstractAvailableThemeProvider;
 use Contena\Frontend\Theme\ThemeService;
 use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

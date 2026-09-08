@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\TypeDetector;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 use Contena\Core\Content\Media\TypeDetector\SpatialObjectTypeDetector;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

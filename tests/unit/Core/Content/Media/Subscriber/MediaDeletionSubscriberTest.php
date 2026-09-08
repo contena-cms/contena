@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition;
@@ -32,6 +26,12 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

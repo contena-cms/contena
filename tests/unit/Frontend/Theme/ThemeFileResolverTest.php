@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
@@ -24,6 +22,8 @@ use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithFrontendBootstrapScss\Th
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithFrontendSkinScss\ThemeWithFrontendSkinScss;
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithInvalidBundleReference\ThemeWithInvalidBundleReference;
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

@@ -2,6 +2,8 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\PlatformRequest;
 use Doctrine\DBAL\Connection;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Exception;
@@ -9,8 +11,6 @@ use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Test\Media;
 
-use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeEntity;
 use Contena\Core\Content\Media\MediaEntity;
@@ -15,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
+use PHPUnit\Framework\Attributes\Before;
 
 /**
  * @internal

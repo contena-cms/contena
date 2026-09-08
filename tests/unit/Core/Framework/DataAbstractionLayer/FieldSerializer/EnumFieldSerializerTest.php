@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\FieldSerializer;
 
-use Doctrine\DBAL\Types\Types;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -25,6 +19,12 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\DateDe
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestIntegerEnum;
 use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestStringEnum;
+use Doctrine\DBAL\Types\Types;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Context\ExecutionContextFactory;
 use Symfony\Component\Validator\Mapping\Factory\BlackHoleMetadataFactory;

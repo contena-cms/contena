@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\DataAbstractionLayer;
 
+use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchTokenizer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchTokenizer;
 
 /**
  * @internal

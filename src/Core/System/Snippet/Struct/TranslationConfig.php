@@ -2,12 +2,12 @@
 
 namespace Contena\Core\System\Snippet\Struct;
 
-use GuzzleHttp\Psr7\Uri;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;
 use Contena\Core\System\Snippet\SnippetException;
+use GuzzleHttp\Psr7\Uri;
 
 class TranslationConfig extends Struct
 {

@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber;
 
-use PHPUnit\Event\TestRunner\ExecutionFinished;
-use PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\Gateway\DatadogGateway;
+use PHPUnit\Event\TestRunner\ExecutionFinished;
+use PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber;
 
 /**
  * @internal

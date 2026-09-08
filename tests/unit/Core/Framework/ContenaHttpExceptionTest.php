@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework;
 
+use Contena\Core\Framework\ContenaHttpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Struct;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Struct\AssignArrayTrait;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\AssignTestCollection;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\AssignTestStruct;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -24,6 +20,10 @@ use Contena\Frontend\Page\Account\Login\AccountLoginPage;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Page\Account\MemberGroupRegistration\AbstractMemberGroupRegistrationPageLoader;
 use Contena\Frontend\Page\Account\MemberGroupRegistration\MemberGroupRegistrationPage;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

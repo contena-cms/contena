@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\Subscriber;
 
+use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 use PHPUnit\Event\Test\BeforeTestMethodCalled;
 use PHPUnit\Event\Test\BeforeTestMethodCalledSubscriber as BeforeTestMethodCalledSubscriberInterface;
-use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 
 /**
  * @internal

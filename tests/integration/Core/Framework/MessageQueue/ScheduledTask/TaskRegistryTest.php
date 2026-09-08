@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\MessageQueue\ScheduledTask;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\FooMessage;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 

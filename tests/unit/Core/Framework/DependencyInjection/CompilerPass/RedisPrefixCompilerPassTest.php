@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
+use Contena\Core\Framework\DependencyInjection\CompilerPass\RedisPrefixCompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\RedisPrefixCompilerPass;
 use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

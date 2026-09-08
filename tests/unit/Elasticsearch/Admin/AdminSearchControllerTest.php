@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Admin\AdminSearchController;
 use Contena\Elasticsearch\Admin\AdminSearcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

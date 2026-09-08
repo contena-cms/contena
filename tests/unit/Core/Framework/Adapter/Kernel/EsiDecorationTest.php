@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Kernel;
 
+use Contena\Core\Framework\Adapter\AdapterException;
+use Contena\Core\Framework\Adapter\Kernel\EsiDecoration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Adapter\Kernel\EsiDecoration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;

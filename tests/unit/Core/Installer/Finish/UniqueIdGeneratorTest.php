@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Finish;
 
+use Contena\Core\Installer\Finish\UniqueIdGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Finish\UniqueIdGenerator;
 
 /**
  * @internal

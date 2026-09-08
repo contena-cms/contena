@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Channel;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
@@ -15,6 +12,9 @@ use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\System\Member\Channel\ChangeMemberProfileRoute;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\Generator;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,6 +18,7 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Controller\AddressController;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\Subscriber\LanguageDeletionSubscriber;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

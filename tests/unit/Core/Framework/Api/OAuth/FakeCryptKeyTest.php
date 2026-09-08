@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\FakeCryptKey;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\OAuth\FakeCryptKey;
 
 /**
  * @internal

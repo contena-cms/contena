@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Media\Upload;
 
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\Core\Event\UpdateMediaPathEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
@@ -29,6 +27,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

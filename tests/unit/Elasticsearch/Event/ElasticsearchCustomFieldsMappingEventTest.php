@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

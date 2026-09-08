@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\InvalidateCacheTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry\ScheduledTaskMetricsSubscriber;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry\TaskNameResolver
 use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;

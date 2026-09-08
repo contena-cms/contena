@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\TimezoneStorer;
 use Contena\Core\Framework\Context;
@@ -12,6 +9,9 @@ use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\MailAwareEvent;
 use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\NonMailAwareEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

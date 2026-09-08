@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Exception;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidEntityUuidException;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

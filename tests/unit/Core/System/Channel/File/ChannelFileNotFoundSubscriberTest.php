@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Kernel;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -12,6 +10,8 @@ use Contena\Core\System\Channel\File\ChannelFileNotFoundSubscriber;
 use Contena\Core\System\Channel\File\ChannelFileRequestPathResolver;
 use Contena\Core\System\Channel\File\Loader\ChannelFileLoader;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderResult;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;

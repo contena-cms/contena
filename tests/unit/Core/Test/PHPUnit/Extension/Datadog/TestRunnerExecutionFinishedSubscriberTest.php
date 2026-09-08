@@ -2,6 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Test\PHPUnit\Extension\Datadog;
 
+use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\Gateway\DatadogGateway;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestRunnerExecutionFinishedSubscriber;
 use PHPUnit\Event\Telemetry\Duration;
 use PHPUnit\Event\Telemetry\GarbageCollectorStatus;
 use PHPUnit\Event\Telemetry\HRTime;
@@ -12,10 +16,6 @@ use PHPUnit\Event\TestRunner\ExecutionFinished;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\Gateway\DatadogGateway;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestRunnerExecutionFinishedSubscriber;
 
 /**
  * @internal

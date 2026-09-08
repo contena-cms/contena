@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -13,6 +11,8 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\Theme\Subscriber\UnusedMediaSubscriber;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

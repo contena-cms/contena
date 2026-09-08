@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching;
 
-use Doctrine\DBAL\Connection;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Struct\ActionSequence;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
@@ -13,6 +11,8 @@ use Contena\Core\Content\Flow\Extension\FlowExecutorExtension;
 use Contena\Core\Content\Flow\Rule\MemberRuleScope;
 use Contena\Core\Content\Flow\Telemetry\FlowMetricsInstrumentor;
 use Contena\Core\Content\Rule\AbstractRuleLoader;
+use Contena\Core\Framework\App\Event\AppFlowActionEvent;
+use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\Event\ChannelContextAware;
 use Contena\Core\Framework\Event\MemberAware;
@@ -24,6 +24,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Rule\UserRuleScope;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -39,6 +42,8 @@ class FlowExecutor
      * @param iterable<string, FlowAction> $actions
      */
     public function __construct(
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly AppFlowActionProvider $appFlowActionProvider,
         private readonly AbstractRuleLoader $ruleLoader,
         private readonly Connection $connection,
         private readonly ExtensionDispatcher $extensions,
@@ -99,11 +104,21 @@ class FlowExecutor
         }
 
         $event->setConfig($sequence->config);
-        $action = $this->actions[$sequence->action] ?? null;
-        if ($action instanceof TransactionalAction) {
-            RetryableTransaction::transactional($this->connection, static fn () => $action->handleFlow($event));
-        } elseif ($action instanceof FlowAction) {
-            $action->handleFlow($event);
+        if ($sequence->appFlowActionId !== null) {
+            $eventData = $this->appFlowActionProvider->getWebhookPayloadAndHeaders($event, $sequence->appFlowActionId);
+            if ($eventData !== []) {
+                $this->dispatcher->dispatch(
+                    new AppFlowActionEvent($sequence->action, $eventData['headers'], $eventData['payload']),
+                    $sequence->action,
+                );
+            }
+        } else {
+            $action = $this->actions[$sequence->action] ?? null;
+            if ($action instanceof TransactionalAction) {
+                RetryableTransaction::transactional($this->connection, static fn () => $action->handleFlow($event));
+            } elseif ($action instanceof FlowAction) {
+                $action->handleFlow($event);
+            }
         }
 
         $this->executeSequence($sequence->nextAction, $event);

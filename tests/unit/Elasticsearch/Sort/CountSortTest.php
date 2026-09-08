@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Sort;
 
+use Contena\Elasticsearch\Sort\CountSort;
 use OpenSearchDSL\Sort\FieldSort;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Sort\CountSort;
 
 /**
  * @internal

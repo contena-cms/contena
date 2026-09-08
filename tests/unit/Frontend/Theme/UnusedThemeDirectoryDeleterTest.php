@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
+use Contena\Frontend\Theme\AbstractThemePathBuilder;
+use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
 use Doctrine\DBAL\Connection;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\DirectoryListing;
@@ -10,8 +12,6 @@ use League\Flysystem\FilesystemOperator;
 use League\Flysystem\FilesystemReader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\AbstractThemePathBuilder;
-use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
 use Symfony\Component\Clock\NativeClock;
 
 /**

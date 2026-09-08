@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ScheduledTaskExecutorCompilerPass;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
+use Psr\Log\LoggerInterface;
 
 abstract class ScheduledTaskHandler
 {

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Term;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 
 /**
  * @internal

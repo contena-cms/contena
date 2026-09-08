@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber;
 
-use PHPUnit\Event\Telemetry\HRTime;
-use PHPUnit\Event\Test\Failed;
-use PHPUnit\Event\Test\FailedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
+use PHPUnit\Event\Telemetry\HRTime;
+use PHPUnit\Event\Test\Failed;
+use PHPUnit\Event\Test\FailedSubscriber;
 
 /**
  * @internal

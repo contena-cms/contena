@@ -2,8 +2,8 @@
 
 namespace Contena\Frontend\Theme\Mail;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

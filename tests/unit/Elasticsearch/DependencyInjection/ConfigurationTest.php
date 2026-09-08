@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\DependencyInjection;
 
+use Contena\Elasticsearch\DependencyInjection\Configuration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\DependencyInjection\Configuration;
 
 /**
  * @internal

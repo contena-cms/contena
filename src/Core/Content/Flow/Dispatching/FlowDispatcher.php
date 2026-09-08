@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Content\Flow\Dispatching;
 
-use Psr\EventDispatcher\StoppableEventInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowEventAware;
+use Psr\EventDispatcher\StoppableEventInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

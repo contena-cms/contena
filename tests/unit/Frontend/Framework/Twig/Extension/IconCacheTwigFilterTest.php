@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Twig\Extension;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
@@ -21,6 +19,8 @@ use Contena\Frontend\Framework\Twig\Extension\IconCacheTwigFilter;
 use Contena\Frontend\Framework\Twig\IconExtension;
 use Contena\Frontend\Frontend;
 use Contena\Tests\Unit\Frontend\Controller\fixtures\TestFrontendController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;

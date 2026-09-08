@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**

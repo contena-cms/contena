@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationCollection;
 use Contena\Core\Content\Test\Media\MediaFixtures;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

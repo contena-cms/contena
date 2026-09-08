@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Log\Monolog;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Level;
 use Monolog\LogRecord;
 use Psr\Log\LogLevel;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
 class ErrorCodeLogLevelHandler extends AbstractHandler

@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Controller;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Controller\HealthCheckController;
 use Contena\Core\Framework\Api\HealthCheck\Event\HealthCheckEvent;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
@@ -15,6 +10,11 @@ use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\SystemChecker;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

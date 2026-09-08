@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexingMessage;
 use Contena\Core\Content\Flow\Indexing\FlowIndexingMessage;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\MessageQueue\IterateEnt
 use Contena\Core\Framework\MessageQueue\Telemetry\MessageGroupResolver;
 use Contena\Core\Framework\Telemetry\Metrics\ScheduledTask\CollectPeriodicMetricsTask;
 use Contena\Frontend\Theme\Message\CompileThemeMessage;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Messenger\SendEmailMessage;
 
 /**

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Requirements;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Installer\Requirements\FilesystemRequirementsValidator;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

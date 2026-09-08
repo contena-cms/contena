@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -12,6 +10,8 @@ use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileEntity;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

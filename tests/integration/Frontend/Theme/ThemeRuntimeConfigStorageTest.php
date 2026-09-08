@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeRuntimeConfig;
 use Contena\Frontend\Theme\ThemeRuntimeConfigStorage;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

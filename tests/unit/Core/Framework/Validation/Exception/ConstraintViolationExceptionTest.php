@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Validation\Exception;
 
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;

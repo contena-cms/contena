@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Diagnostics;
 
+use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
+use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
+use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Diagnostics\DiagnosticsReport;
-use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
-use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 
 /**
  * @internal

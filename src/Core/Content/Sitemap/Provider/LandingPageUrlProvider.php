@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Provider;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class LandingPageUrlProvider extends AbstractUrlProvider

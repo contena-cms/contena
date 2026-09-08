@@ -6,13 +6,13 @@ use AsyncAws\S3\Input\DeleteObjectRequest;
 use AsyncAws\S3\Input\HeadObjectRequest;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\File\FileInfoHelper;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\S3ClientFactory;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Migration;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

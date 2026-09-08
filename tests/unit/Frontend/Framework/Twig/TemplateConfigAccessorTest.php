@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Twig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Framework\Twig\TemplateConfigAccessor;
 use Contena\Frontend\Theme\ThemeConfigValueAccessor;
 use Contena\Frontend\Theme\ThemeScripts;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;

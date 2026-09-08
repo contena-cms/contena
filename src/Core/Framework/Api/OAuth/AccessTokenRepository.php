@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {

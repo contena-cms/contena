@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Validation\Api;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

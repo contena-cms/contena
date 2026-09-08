@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Installer\Controller;
 
+use Contena\Core\Installer\Finish\SystemLocker;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Installer\Finish\SystemLocker;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Command;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;

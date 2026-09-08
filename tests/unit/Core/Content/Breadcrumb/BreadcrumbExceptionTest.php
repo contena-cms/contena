@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Breadcrumb;
 
+use Contena\Core\Content\Breadcrumb\BreadcrumbException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Breadcrumb\BreadcrumbException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

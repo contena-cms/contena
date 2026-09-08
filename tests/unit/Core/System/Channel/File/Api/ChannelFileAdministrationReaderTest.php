@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileEntity;
@@ -16,6 +14,8 @@ use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 

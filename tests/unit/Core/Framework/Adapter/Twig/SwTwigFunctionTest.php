@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
 
+use Contena\Core\Framework\Adapter\Twig\SwTwigFunction;
+use Contena\Core\Framework\Struct\ArrayStruct;
+use Contena\Core\Framework\Struct\Struct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Twig\SwTwigFunction;
-use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\Framework\Struct\Struct;
 use Twig\Environment;
 use Twig\Source;
 

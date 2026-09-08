@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -14,6 +12,8 @@ use Contena\Frontend\Controller\RegionController;
 use Contena\Frontend\Pagelet\Region\RegionDataPagelet;
 use Contena\Frontend\Pagelet\Region\RegionDataPageletCriteriaEvent;
 use Contena\Frontend\Pagelet\Region\RegionDataPageletLoadedEvent;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 

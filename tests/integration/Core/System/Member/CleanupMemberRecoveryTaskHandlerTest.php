@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\CleanupMemberRecoveryTaskHandler;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\MockClock;
 
 /**

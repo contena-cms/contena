@@ -2,9 +2,9 @@
 
 namespace Contena\Frontend\Framework\SystemCheck\Util;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

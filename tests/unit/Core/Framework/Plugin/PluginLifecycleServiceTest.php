@@ -3,11 +3,6 @@
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
 use Composer\Autoload\ClassLoader;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemPoolInterface;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -48,6 +43,11 @@ use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\System\Command;
 
+use Contena\Core\DevOps\System\Command\SyncComposerVersionCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\System\Command\SyncComposerVersionCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;

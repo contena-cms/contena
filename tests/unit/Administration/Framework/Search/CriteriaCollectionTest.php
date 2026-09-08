@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Administration\Framework\Search;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Search\CriteriaCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\Notification\NotificationEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

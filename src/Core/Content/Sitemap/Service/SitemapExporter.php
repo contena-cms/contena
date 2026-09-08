@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Service;
 
-use League\Flysystem\FilesystemOperator;
-use Psr\Cache\CacheItemPoolInterface;
 use Contena\Core\Content\Sitemap\Event\SitemapGeneratedEvent;
 use Contena\Core\Content\Sitemap\Event\SitemapGenerationStartEvent;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
@@ -12,6 +10,8 @@ use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
+use League\Flysystem\FilesystemOperator;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SitemapExporter implements SitemapExporterInterface

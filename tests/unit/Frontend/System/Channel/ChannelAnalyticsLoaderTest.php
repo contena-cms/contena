@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\System\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsEntity;
@@ -12,6 +10,8 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\System\Channel\ChannelAnalyticsLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Redis;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionsCompilerPass;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;

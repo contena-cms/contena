@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Telemetry;
 
+use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 
 /**
  * @internal

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\MockingSimpleObjects;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\System\Tag\TagEntity;
+use PHPUnit\Framework\TestCase;
 
 class CommercialBarFixture extends TestCase
 {

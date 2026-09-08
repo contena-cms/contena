@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 
+use Contena\Core\Framework\Api\Serializer\JsonApiDecoder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\Serializer\JsonApiDecoder;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 

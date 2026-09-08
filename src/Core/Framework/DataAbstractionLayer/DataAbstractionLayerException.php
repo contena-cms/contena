@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\ParentAssociationCanNotBeFetched;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityRepositoryNotFoundException;
@@ -25,7 +26,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\ExpectedArr
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolation;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraint;

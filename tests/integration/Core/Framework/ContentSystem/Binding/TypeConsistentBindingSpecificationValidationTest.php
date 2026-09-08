@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Binding;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Binding\DefaultBindingSpecificationSynthesizer;
 use Contena\Core\Framework\ContentSystem\Binding\Loader\YamlBindingSpecificationLoader;
 use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationCanonicalizer;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecif
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeNameResolver;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;

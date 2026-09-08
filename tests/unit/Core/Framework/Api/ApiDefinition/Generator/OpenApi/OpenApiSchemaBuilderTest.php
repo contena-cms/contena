@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi;
 
+use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder;
 use OpenApi\Annotations\Components;
 use OpenApi\Annotations\OpenApi;
 use OpenApi\Annotations\Response as OpenApiResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

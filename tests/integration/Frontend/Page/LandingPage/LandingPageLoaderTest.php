@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Page\LandingPage;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Content\LandingPage\LandingPageException;
 use Contena\Core\Framework\Context;
@@ -14,6 +13,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Frontend\Page\LandingPage\LandingPageLoadedEvent;
 use Contena\Frontend\Page\LandingPage\LandingPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

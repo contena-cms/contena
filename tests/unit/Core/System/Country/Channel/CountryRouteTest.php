@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Country\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
@@ -17,6 +15,8 @@ use Contena\Core\System\Country\Channel\CountryRoute;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\Event\CountryCriteriaEvent;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Category\Validation;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PostWriteValida
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Tests\Integration\Core\Content\Category\Validation\EntryPointValidatorTest;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;

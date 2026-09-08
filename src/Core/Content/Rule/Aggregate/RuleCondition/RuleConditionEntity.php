@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Rule\Aggregate\RuleCondition;
 
 use Contena\Core\Content\Rule\RuleEntity;
+use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
@@ -19,6 +20,8 @@ class RuleConditionEntity extends Entity implements IdAware
 
     protected string $ruleId;
 
+    protected ?string $scriptId = null;
+
     protected ?string $parentId = null;
 
     /**
@@ -27,6 +30,8 @@ class RuleConditionEntity extends Entity implements IdAware
     protected ?array $value = null;
 
     protected ?RuleEntity $rule = null;
+
+    protected ?AppScriptConditionEntity $appScriptCondition = null;
 
     protected ?RuleConditionCollection $children = null;
 
@@ -64,6 +69,16 @@ class RuleConditionEntity extends Entity implements IdAware
         $this->ruleId = $ruleId;
     }
 
+    public function getScriptId(): ?string
+    {
+        return $this->scriptId;
+    }
+
+    public function setScriptId(?string $scriptId): void
+    {
+        $this->scriptId = $scriptId;
+    }
+
     public function getParentId(): ?string
     {
         return $this->parentId;
@@ -98,6 +113,16 @@ class RuleConditionEntity extends Entity implements IdAware
     public function setRule(?RuleEntity $rule): void
     {
         $this->rule = $rule;
+    }
+
+    public function getAppScriptCondition(): ?AppScriptConditionEntity
+    {
+        return $this->appScriptCondition;
+    }
+
+    public function setAppScriptCondition(?AppScriptConditionEntity $appScriptCondition): void
+    {
+        $this->appScriptCondition = $appScriptCondition;
     }
 
     public function getChildren(): ?RuleConditionCollection

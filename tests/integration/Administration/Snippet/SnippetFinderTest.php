@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Administration\Snippet;
 
-use League\Flysystem\Filesystem as Flysystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Administration\Snippet\SnippetFinder;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -13,6 +9,10 @@ use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPath;
 use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPathCollection;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Tests\Unit\Core\System\Snippet\Service\TestableTranslationConfigLoader;
+use League\Flysystem\Filesystem as Flysystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;

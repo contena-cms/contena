@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
+use Contena\Core\Framework\Util\Database\TableHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Table;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
-use Contena\Core\Framework\Util\Database\TableHelper;
 
 /**
  * @internal

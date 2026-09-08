@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Category\CategoryDefinition;
@@ -14,6 +12,8 @@ use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tag\TagEntity;
 use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestAttributeEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

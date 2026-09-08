@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\Extension;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ExtendsTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\IncludeTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ReturnNodeTokenParser;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Twig\TokenParser\TokenParserInterface;
 
 /**

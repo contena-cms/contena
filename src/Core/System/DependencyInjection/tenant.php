@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\System\Tenant\Resolver\SubdomainTenantResolver;
 use Contena\Core\System\Tenant\Resolver\TenantResolverChain;
 use Contena\Core\System\Tenant\Subscriber\ResolvedTenantSubscriber;
 use Contena\Core\System\Tenant\Subscriber\TenantCodeImmutableSubscriber;
 use Contena\Core\System\Tenant\TenantEntity;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

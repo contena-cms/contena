@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Resource;
 
+use Contena\Core\Framework\Mcp\Resource\ToolResultResource;
+use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
+use Contena\Core\Framework\Uuid\Uuid;
 use Mcp\Exception\ResourceNotFoundException;
 use Mcp\Schema\JsonRpc\Request as JsonRpcRequest;
 use Mcp\Server\RequestContext;
 use Mcp\Server\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Resource\ToolResultResource;
-use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Uid\Uuid as SymfonyUuid;
 
 /**

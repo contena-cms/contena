@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Command;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\JsonUpdateCommand;
@@ -13,6 +12,7 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryDefinition;
 use Contena\Core\System\Region\RegionDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

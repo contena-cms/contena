@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\InvalidatorStorage\Message;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
 use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFoldersHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

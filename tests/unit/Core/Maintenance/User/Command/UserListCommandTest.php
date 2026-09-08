@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Maintenance\User\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -12,6 +10,8 @@ use Contena\Core\Maintenance\User\Command\UserListCommand;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

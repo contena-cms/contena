@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginZipDetector;
 use Contena\Core\Framework\Plugin\Util\ZipUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

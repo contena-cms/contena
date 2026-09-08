@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Core\Application\MediaPathStorage;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 /**
  * @codeCoverageIgnore

@@ -2,8 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationIndexerSafeguard\UnrelatedTable\V6_90;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * Fixture for MigrationIndexerSafeguardTest — regex-parsed, never executed.

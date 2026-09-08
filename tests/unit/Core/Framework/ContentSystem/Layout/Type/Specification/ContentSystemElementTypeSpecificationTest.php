@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Specification;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\CopilotSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\SlotSpecification;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

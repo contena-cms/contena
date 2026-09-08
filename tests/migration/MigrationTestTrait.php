@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Migration;
 
+use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
-use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 
 /**
  * @internal

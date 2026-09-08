@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
 use Contena\Core\Content\Media\MediaEntity;
@@ -26,6 +24,8 @@ use Contena\Frontend\Frontend;
 use Contena\Frontend\Theme\AbstractResolvedConfigLoader;
 use Contena\Frontend\Theme\ThemeConfigValueAccessor;
 use Contena\Frontend\Theme\ThemeScripts;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

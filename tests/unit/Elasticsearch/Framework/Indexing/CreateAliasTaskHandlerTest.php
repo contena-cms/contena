@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
+use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexAliasSwitchedEvent;
 use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Elasticsearch\Framework\ElasticsearchHelper;
-use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
-use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexAliasSwitchedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

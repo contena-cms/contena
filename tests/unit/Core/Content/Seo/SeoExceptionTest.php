@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

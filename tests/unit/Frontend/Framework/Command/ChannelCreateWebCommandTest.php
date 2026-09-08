@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -11,6 +9,8 @@ use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\Framework\Command\ChannelCreateWebCommand;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

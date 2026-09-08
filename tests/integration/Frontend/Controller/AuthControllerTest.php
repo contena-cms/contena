@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
@@ -31,6 +30,7 @@ use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

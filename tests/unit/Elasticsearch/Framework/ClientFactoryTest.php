@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework;
 
+use Contena\Elasticsearch\Framework\ClientFactory;
+use Contena\Elasticsearch\Profiler\ClientProfiler;
 use GuzzleHttp\Client as GuzzleClient;
 use OpenSearch\Client;
 use OpenSearch\HttpTransport;
@@ -9,8 +11,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\NullLogger;
-use Contena\Elasticsearch\Framework\ClientFactory;
-use Contena\Elasticsearch\Profiler\ClientProfiler;
 
 /**
  * @internal

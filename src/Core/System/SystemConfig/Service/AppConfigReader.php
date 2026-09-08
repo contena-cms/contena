@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\SystemConfig\Service;
+
+use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\App\Source\SourceResolver;
+use Contena\Core\System\SystemConfig\Util\ConfigReader;
+
+/**
+ * @internal
+ */
+class AppConfigReader
+{
+    public function __construct(private readonly SourceResolver $sourceResolver, private readonly ConfigReader $configReader)
+    {
+    }
+
+    /**
+     * @return array<array<string, mixed>>|null
+     */
+    public function read(AppEntity $app): ?array
+    {
+        $fs = $this->sourceResolver->filesystemForApp($app);
+        if (!$fs->has('Resources/config/config.xml')) {
+            return null;
+        }
+
+        return $this->configReader->read($fs->path('Resources/config/config.xml'));
+    }
+}

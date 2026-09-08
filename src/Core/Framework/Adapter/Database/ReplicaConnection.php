@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Adapter\Database;
 
-use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 use Contena\Core\Kernel;
+use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 
 /**
  * @internal

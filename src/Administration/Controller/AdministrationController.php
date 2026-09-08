@@ -2,10 +2,6 @@
 
 namespace Contena\Administration\Controller;
 
-use Doctrine\DBAL\Connection;
-use League\Flysystem\FilesystemException;
-use League\Flysystem\FilesystemOperator;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Administration\Events\PreResetExcludedSearchTermEvent;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollectorInterface;
@@ -25,6 +21,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

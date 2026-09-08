@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
+use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 
 /**
  * @internal

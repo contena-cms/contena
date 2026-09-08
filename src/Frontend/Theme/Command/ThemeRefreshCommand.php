@@ -2,9 +2,9 @@
 
 namespace Contena\Frontend\Theme\Command;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\ThemeLifecycleService;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

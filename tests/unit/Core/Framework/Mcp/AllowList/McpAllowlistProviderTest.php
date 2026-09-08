@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\AllowList;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\PlatformRequest;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

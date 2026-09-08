@@ -4,8 +4,8 @@ namespace Contena\Core\System\Member\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 
 class AddressListingCriteriaEvent extends NestedEvent implements ContenaChannelEvent

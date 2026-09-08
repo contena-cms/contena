@@ -2,6 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Test\PHPUnit\Extension\Datadog;
 
+use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
+use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestErroredSubscriber;
 use PHPUnit\Event\Code\Phpt;
 use PHPUnit\Event\Code\Throwable;
 use PHPUnit\Event\Telemetry\Duration;
@@ -13,10 +17,6 @@ use PHPUnit\Event\Telemetry\Snapshot;
 use PHPUnit\Event\Test\Errored;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayload;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\DatadogPayloadCollection;
-use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestErroredSubscriber;
 
 /**
  * @internal

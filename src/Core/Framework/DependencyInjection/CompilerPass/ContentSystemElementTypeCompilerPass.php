@@ -26,7 +26,7 @@ final class ContentSystemElementTypeCompilerPass implements CompilerPassInterfac
 
     private const CORE_DEFINITIONS_DIRECTORY = __DIR__ . '/../../ContentSystem/Layout/Type/Definitions';
 
-    private const CORE_PREFIX = 'Sw';
+    private const string CORE_PREFIX = 'Ct';
 
     public function process(ContainerBuilder $container): void
     {

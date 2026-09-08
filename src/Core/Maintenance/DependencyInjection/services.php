@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Maintenance\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Installer\Finish\SystemLocker;
@@ -28,6 +26,8 @@ use Contena\Core\Maintenance\User\Command\UserListCommand;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Dotenv\Command\DotenvDumpCommand;
 

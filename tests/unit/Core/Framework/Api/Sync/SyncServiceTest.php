@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Sync;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
@@ -37,6 +35,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
 use Contena\Core\Framework\Event\NestedEventDispatcher;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

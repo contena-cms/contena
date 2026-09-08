@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Administration\Command;
 
+use Contena\Administration\Command\DeleteAdminFilesAfterBuildCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Command\DeleteAdminFilesAfterBuildCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 

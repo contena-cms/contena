@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
 
+use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
 
 /**
  * @internal

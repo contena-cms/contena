@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Serialization;
 
+use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationSerializer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Binding\Serialization\BindingSpecificationSerializer;
 
 /**
  * @internal

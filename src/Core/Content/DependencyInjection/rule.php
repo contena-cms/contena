@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition;
 use Contena\Core\Content\Rule\Aggregate\RuleTag\RuleTagDefinition;
@@ -25,12 +23,15 @@ use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Container\XorRule;
 use Contena\Core\Framework\Rule\DateRangeRule;
+use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Rule\SimpleRule;
 use Contena\Core\Framework\Rule\TimeRangeRule;
 use Contena\Core\Framework\Rule\WeekdayRule;
 use Contena\Core\System\Language\Rule\LanguageRule;
 use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
 use Contena\Core\System\User\Rule\DaysSinceLastLoginRule;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -43,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RuleConditionDefinition::class)->tag('contena.entity.definition');
     $services->set(RuleTagDefinition::class)->tag('contena.entity.definition');
 
-    foreach ([AndRule::class, OrRule::class, NotRule::class, XorRule::class, DateRangeRule::class, TimeRangeRule::class, WeekdayRule::class, SimpleRule::class, ChannelRule::class, LanguageRule::class, DaysSinceFirstLoginRule::class, DaysSinceLastLoginRule::class] as $rule) {
+    foreach ([AndRule::class, OrRule::class, NotRule::class, XorRule::class, DateRangeRule::class, TimeRangeRule::class, WeekdayRule::class, SimpleRule::class, ChannelRule::class, LanguageRule::class, DaysSinceFirstLoginRule::class, DaysSinceLastLoginRule::class, ScriptRule::class] as $rule) {
         $services->set($rule)->tag('contena.rule.condition');
     }
 
@@ -52,9 +53,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         service('validator'),
         service(RuleConditionRegistry::class),
         service('rule_condition.repository'),
+        service('app_script_condition.repository'),
     ])->tag('kernel.event_subscriber');
-    $services->set(RulePayloadUpdater::class)->args([service(Connection::class), service(RuleConditionRegistry::class), service(ClockInterface::class)]);
-    $services->set(RulePayloadSubscriber::class)->args([service(RulePayloadUpdater::class)])->tag('kernel.event_subscriber');
+    $services->set(RulePayloadUpdater::class)->args([service(Connection::class), service(RuleConditionRegistry::class), service(ClockInterface::class)])->tag('kernel.event_subscriber');
+    $services->set(RulePayloadSubscriber::class)->args([service(RulePayloadUpdater::class), service('service_container')])->tag('kernel.event_subscriber');
     $services->set(RuleAreaUpdater::class)->args([
         service(Connection::class),
         service(RuleDefinition::class),

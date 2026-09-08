@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Feature;
 
+use Contena\Core\Framework\Feature\FeatureException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Feature\FeatureException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

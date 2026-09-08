@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Util;
 
+use Contena\Core\Framework\Api\ApiException;
+use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 
 /**
  * @internal

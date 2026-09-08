@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\MessageQueue\Api;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

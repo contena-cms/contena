@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\System\Member\MemberDefinition;
 use Contena\Core\System\Member\Validation\MemberProfileValidationFactory;
@@ -12,6 +9,9 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;

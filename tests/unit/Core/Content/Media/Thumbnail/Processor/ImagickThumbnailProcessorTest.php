@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Thumbnail\Processor;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\Thumbnail\Processor\ImagickThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

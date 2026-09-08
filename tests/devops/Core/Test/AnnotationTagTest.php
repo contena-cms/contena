@@ -3,10 +3,10 @@
 namespace Contena\Tests\DevOps\Core\Test;
 
 use Composer\InstalledVersions;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Test\AnnotationTagTester;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Kernel;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
 /**

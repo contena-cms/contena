@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

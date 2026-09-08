@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Test\Filesystem\Adapter;
 
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 
 /**
  * @internal

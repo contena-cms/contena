@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Command;
 
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\Process\Process;
 
 /**

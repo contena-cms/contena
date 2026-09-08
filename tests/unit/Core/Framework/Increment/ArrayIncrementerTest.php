@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Increment;
 
+use Contena\Core\Framework\Increment\ArrayIncrementer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Increment\ArrayIncrementer;
 
 /**
  * @internal

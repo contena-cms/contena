@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent\Service;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
@@ -23,6 +20,9 @@ use Contena\Core\System\Consent\Event\ConsentRevokedEvent;
 use Contena\Core\System\Consent\Service\ConsentService;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

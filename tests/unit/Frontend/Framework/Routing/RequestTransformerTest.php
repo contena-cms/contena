@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Content\Seo\AbstractSeoResolver;
 use Contena\Core\Content\Seo\ResolvedSeoUrl;
@@ -20,6 +16,10 @@ use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
 use Contena\Frontend\Framework\Routing\TenantDefaultDomainLoader;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

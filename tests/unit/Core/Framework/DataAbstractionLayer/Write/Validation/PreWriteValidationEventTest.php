@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
@@ -20,6 +17,9 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\EmailD
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ListDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

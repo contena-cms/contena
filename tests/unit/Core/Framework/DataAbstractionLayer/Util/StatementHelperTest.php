@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Util;
 
+use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 
 /**
  * @internal

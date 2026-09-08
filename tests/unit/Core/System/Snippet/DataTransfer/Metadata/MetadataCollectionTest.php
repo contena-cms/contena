@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\DataTransfer\Metadata;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

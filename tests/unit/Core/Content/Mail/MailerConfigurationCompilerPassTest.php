@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\MailerConfigurationCompilerPass;
 use Contena\Core\Content\Mail\Service\MailSender;
 use Contena\Core\Content\Mail\Transport\MailerTransportLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;

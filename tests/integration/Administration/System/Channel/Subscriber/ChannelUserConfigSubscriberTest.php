@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Administration\System\Channel\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\System\Channel\Subscriber\ChannelUserConfigSubscriber;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

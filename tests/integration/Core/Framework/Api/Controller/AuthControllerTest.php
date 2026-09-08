@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 
-use Doctrine\DBAL\Connection;
-use Lcobucci\JWT\UnencryptedToken;
-use League\OAuth2\Server\Exception\OAuthServerException;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
@@ -14,6 +10,10 @@ use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use Lcobucci\JWT\UnencryptedToken;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

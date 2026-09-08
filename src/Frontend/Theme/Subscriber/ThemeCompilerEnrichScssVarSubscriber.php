@@ -2,12 +2,12 @@
 
 namespace Contena\Frontend\Theme\Subscriber;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Util\IOStreamHelper;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Frontend\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Doctrine\DBAL\Exception as DBALException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

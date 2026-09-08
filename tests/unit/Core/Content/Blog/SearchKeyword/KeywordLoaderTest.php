@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\SearchKeyword;
 
+use Contena\Core\Content\Blog\SearchKeyword\KeywordLoader;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\SearchKeyword\KeywordLoader;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Uuid\Uuid;
 
 /**
  * @internal

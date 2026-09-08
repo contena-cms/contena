@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\FileFetcher;
 use Contena\Core\Content\Media\File\FileService;
 use Contena\Core\Content\Media\File\FileUrlValidatorInterface;
 use Contena\Core\Content\Media\MediaException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 

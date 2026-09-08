@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework;
 
+use Contena\Elasticsearch\Framework\ElasticsearchRangeAggregation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Framework\ElasticsearchRangeAggregation;
 
 /**
  * @internal

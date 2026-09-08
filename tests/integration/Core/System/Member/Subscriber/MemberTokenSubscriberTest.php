@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -17,6 +15,8 @@ use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;

@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\MessageQueue\Stats;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsEntity;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsCollection;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsEntity;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

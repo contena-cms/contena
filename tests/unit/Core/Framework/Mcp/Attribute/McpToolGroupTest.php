@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Attribute;
 
+use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 
 /**
  * @internal

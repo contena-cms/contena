@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
@@ -33,6 +28,11 @@ use Contena\Core\Framework\Migration\MigrationInfo;
 use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent\Log;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Consent\ConsentScope;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Event\ConsentAcceptedEvent;
 use Contena\Core\System\Consent\Event\ConsentRevokedEvent;
 use Contena\Core\System\Consent\Log\ConsentChangedSubscriber;
 use Contena\Core\System\Consent\Log\ConsentLogInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

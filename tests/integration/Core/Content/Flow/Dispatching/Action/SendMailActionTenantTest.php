@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Flow\Dispatching\Action;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Mail\Payload\MailPayload;
@@ -23,6 +19,10 @@ use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

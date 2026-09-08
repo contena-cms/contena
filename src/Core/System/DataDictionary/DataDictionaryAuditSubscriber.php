@@ -2,8 +2,8 @@
 
 namespace Contena\Core\System\DataDictionary;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

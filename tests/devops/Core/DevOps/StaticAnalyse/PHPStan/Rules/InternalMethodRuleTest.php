@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Internal\InternalMethodRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Symfony\XmlServiceMapFactory;
 use PHPStan\Testing\RuleTestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Internal\InternalMethodRule;
 
 /**
  * @internal

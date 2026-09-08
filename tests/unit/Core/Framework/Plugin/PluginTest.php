@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
+use CtTestPlugin\CtTestPlugin;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use CtTestPlugin\CtTestPlugin;
 
 /**
  * @internal

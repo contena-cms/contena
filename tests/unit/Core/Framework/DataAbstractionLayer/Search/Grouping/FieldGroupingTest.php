@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Grouping;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 
 /**
  * @internal

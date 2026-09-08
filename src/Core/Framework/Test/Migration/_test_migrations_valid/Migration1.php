@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Test\Migration\_test_migrations_valid;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

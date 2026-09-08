@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Captcha;
 
+use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

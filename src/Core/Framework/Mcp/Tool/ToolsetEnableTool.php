@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
+use Mcp\Capability\Attribute\McpTool;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 #[McpTool(name: McpToolsetRegistry::ENABLE_TOOLSET_TOOL, title: 'Enable Toolset', description: 'Enable one MCP toolset for the current session and ask the client to refresh tools/list. The toolset remains enabled only for this MCP session.')]

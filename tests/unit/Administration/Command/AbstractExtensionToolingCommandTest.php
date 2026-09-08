@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Administration\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Command\AbstractExtensionToolingCommand;
 use Contena\Administration\Command\CheckExtensionsCommand;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

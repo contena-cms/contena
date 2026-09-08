@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Controller\ErrorController;
 use Contena\Frontend\Framework\Twig\ErrorTemplateResolver;
 use Contena\Frontend\Page\Navigation\Error\ErrorPageLoaderInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,31 +2,40 @@
 
 namespace Contena\Core\Content\Rule\DataAbstractionLayer;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Rule\DataAbstractionLayer\Indexing\ConditionTypeNotFound;
 use Contena\Core\Content\Rule\RuleException;
 use Contena\Core\Defaults;
+use Contena\Core\Framework\App\Event\AppScriptConditionEvents;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\ContainerInterface;
 use Contena\Core\Framework\Rule\Rule;
+use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @internal
  */
-class RulePayloadUpdater
+class RulePayloadUpdater implements EventSubscriberInterface
 {
     public function __construct(
         private readonly Connection $connection,
         private readonly RuleConditionRegistry $ruleConditionRegistry,
         private readonly ClockInterface $clock,
     ) {
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [AppScriptConditionEvents::APP_SCRIPT_CONDITION_WRITTEN_EVENT => 'updatePayloads'];
     }
 
     /**
@@ -52,7 +61,11 @@ class RulePayloadUpdater
         }
 
         $conditions = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(rule_id)) AS array_key, id, rule_id, parent_id, type, value, position FROM rule_condition WHERE rule_id IN (:ids) AND ' . $tenantCondition . ' ORDER BY rule_id, position',
+            'SELECT LOWER(HEX(rc.rule_id)) AS array_key, rc.id, rc.rule_id, rc.parent_id, rc.type, rc.value, rc.position,
+                rs.script, rs.identifier, rs.updated_at AS lastModified
+             FROM rule_condition rc
+             LEFT JOIN app_script_condition rs ON rc.script_id = rs.id AND rs.active = 1
+             WHERE rc.rule_id IN (:ids) AND ' . str_replace('`tenant_id`', 'rc.`tenant_id`', $tenantCondition) . ' ORDER BY rc.rule_id, rc.position',
             ['ids' => Uuid::fromHexToBytesList($eligibleIds), ...$tenantParameters],
             ['ids' => ArrayParameterType::BINARY],
         );
@@ -84,6 +97,25 @@ class RulePayloadUpdater
         }
 
         return $updated;
+    }
+
+    public function updatePayloads(EntityWrittenEvent $event): void
+    {
+        $scriptIds = array_values(array_filter($event->getIds(), 'is_string'));
+        if ($scriptIds === []) {
+            return;
+        }
+
+        $ruleIds = $this->connection->fetchFirstColumn(
+            'SELECT DISTINCT rc.rule_id FROM rule_condition rc INNER JOIN app_script_condition rs ON rc.script_id = rs.id WHERE rs.id IN (:ids)',
+            ['ids' => Uuid::fromHexToBytesList($scriptIds)],
+            ['ids' => ArrayParameterType::BINARY],
+        );
+        if ($ruleIds === []) {
+            return;
+        }
+
+        $this->updateAllScopes(array_values(Uuid::fromBytesToHexList($ruleIds)));
     }
 
     /**
@@ -127,6 +159,18 @@ class RulePayloadUpdater
 
             $class = $this->ruleConditionRegistry->getRuleClass($type);
             $rule = new $class();
+            if ($rule instanceof ScriptRule) {
+                $rule->assign([
+                    'script' => $condition['script'] ?? '',
+                    'lastModified' => $condition['lastModified'] !== null ? new \DateTimeImmutable((string) $condition['lastModified']) : null,
+                    'identifier' => $condition['identifier'] ?? null,
+                    'values' => $condition['value'] !== null ? json_decode((string) $condition['value'], true, 512, \JSON_THROW_ON_ERROR) : [],
+                ]);
+                $nested[] = $rule;
+
+                continue;
+            }
+
             if ($condition['value'] !== null) {
                 $value = json_decode((string) $condition['value'], true, 512, \JSON_THROW_ON_ERROR);
                 if (\is_array($value)) {

@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Twig;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\File\Event\ChannelFileTemplateResolveEvent;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilderInterface;
 use Contena\Frontend\Theme\Twig\ThemeNamespaceHierarchyBuilder;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

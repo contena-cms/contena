@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\ScheduledTask;
 
+use Contena\Core\Framework\Telemetry\Metrics\ScheduledTask\CollectPeriodicMetricsTask;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Telemetry\Metrics\ScheduledTask\CollectPeriodicMetricsTask;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**

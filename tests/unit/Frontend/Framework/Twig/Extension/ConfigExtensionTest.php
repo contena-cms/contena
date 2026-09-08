@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Twig\Extension;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Framework\Twig\Extension\ConfigExtension;
 use Contena\Frontend\Framework\Twig\TemplateConfigAccessor;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Twig\TwigFunction;
 
 /**

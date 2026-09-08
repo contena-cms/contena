@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Validation\Constraint;
 
+use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 
 /**
  * @internal

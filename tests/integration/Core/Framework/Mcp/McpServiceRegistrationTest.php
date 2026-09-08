@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Mcp;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
 use Contena\Core\Framework\Mcp\Context\ChannelApiMcpContextProvider;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
@@ -43,6 +41,8 @@ use Contena\Core\System\Channel\Mcp\Tool\ChannelApiContextTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetEnableTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetsListTool;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

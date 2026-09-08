@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\System\Command;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
@@ -12,6 +11,7 @@ use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Test\Assert;
 
+use Contena\Core\Test\Assert\StrictEmpty;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\Assert\StrictEmpty;
 
 /**
  * @internal

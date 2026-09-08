@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
+use Contena\Elasticsearch\Blog\SearchFieldConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Blog\SearchFieldConfig;
 
 /**
  * @internal

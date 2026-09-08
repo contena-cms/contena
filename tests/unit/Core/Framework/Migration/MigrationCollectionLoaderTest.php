@@ -2,17 +2,17 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
+use Contena\Core\Framework\Migration\MigrationException;
+use Contena\Core\Framework\Migration\MigrationRuntime;
+use Contena\Core\Framework\Migration\MigrationSource;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Migration\MigrationException;
-use Contena\Core\Framework\Migration\MigrationRuntime;
-use Contena\Core\Framework\Migration\MigrationSource;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

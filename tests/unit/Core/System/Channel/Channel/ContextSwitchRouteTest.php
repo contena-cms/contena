@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
@@ -14,6 +12,8 @@ use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\Event\ChannelContextSwitchEvent;
 use Contena\Core\System\Channel\Event\SwitchContextEvent;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

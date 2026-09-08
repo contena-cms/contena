@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\Seo;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,6 +18,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\Container;
 

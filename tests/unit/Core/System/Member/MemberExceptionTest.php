@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Member;
 
+use Contena\Core\System\Member\MemberException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Member\MemberException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

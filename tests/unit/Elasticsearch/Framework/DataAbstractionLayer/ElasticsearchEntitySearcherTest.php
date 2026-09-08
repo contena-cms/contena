@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\DataAbstractionLayer;
 
-use OpenSearch\Client;
-use OpenSearch\Exception\RuntimeException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
@@ -20,6 +16,10 @@ use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntitySear
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntitySearcherSearchedEvent;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntitySearcherSearchEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use OpenSearch\Client;
+use OpenSearch\Exception\RuntimeException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

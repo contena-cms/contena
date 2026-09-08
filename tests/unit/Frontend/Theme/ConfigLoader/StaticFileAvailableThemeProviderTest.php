@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\ConfigLoader;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Frontend\Theme\ConfigLoader\StaticFileAvailableThemeProvider;
 use Contena\Frontend\Theme\Exception\ThemeException;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

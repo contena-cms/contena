@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Tenant\Resolver;
 
+use Contena\Core\System\Tenant\Resolver\SubdomainTenantResolver;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Tenant\Resolver\SubdomainTenantResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

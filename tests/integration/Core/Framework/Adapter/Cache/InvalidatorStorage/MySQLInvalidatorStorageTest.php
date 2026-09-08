@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
+use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\MySQLInvalidatorStorage;
+use Contena\Core\Framework\Adapter\Database\MySQLFactory;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\RetryableException;
 use Doctrine\DBAL\Statement;
@@ -9,9 +12,6 @@ use Doctrine\DBAL\TransactionIsolationLevel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\MySQLInvalidatorStorage;
-use Contena\Core\Framework\Adapter\Database\MySQLFactory;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

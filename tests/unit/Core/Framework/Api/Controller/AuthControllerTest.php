@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Controller;
 
+use Contena\Core\Framework\Api\ApiException;
+use Contena\Core\Framework\Api\Controller\AuthController;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
+use Contena\Core\Framework\RateLimiter\RateLimiter;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use League\OAuth2\Server\AuthorizationServer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Api\Controller\AuthController;
-use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
-use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request;
 

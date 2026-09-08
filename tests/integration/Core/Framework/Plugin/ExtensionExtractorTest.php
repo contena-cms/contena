@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Plugin;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\ExtensionExtractor;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 

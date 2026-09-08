@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Log\ScheduledTask;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -20,6 +17,9 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\MockClock;
 
 /**

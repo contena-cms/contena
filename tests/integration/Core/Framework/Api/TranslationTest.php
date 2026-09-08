@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingSystemTranslationException;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Language\TranslationValidator;
 use Contena\Core\System\Locale\LocaleEntity;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

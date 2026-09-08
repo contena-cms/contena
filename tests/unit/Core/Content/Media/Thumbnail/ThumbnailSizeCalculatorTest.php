@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Content\Media\Thumbnail;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeEntity;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailSizeCalculator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

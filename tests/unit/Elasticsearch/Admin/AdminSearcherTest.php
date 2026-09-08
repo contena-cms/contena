@@ -2,13 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
-use Doctrine\DBAL\Connection;
-use OpenSearch\Client;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Flow\FlowCollection;
 use Contena\Core\Content\Flow\FlowDefinition;
@@ -30,6 +23,13 @@ use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchSearchHydrator;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use Doctrine\DBAL\Connection;
+use OpenSearch\Client;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * @internal

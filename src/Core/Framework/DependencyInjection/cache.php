@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use GuzzleHttp\Client;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -28,6 +24,8 @@ use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGatewa
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCache;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\VarnishReverseProxyGateway;
+use Contena\Core\Framework\Adapter\Cache\Script\Facade\CacheInvalidatorFacadeHookFactory;
+use Contena\Core\Framework\Adapter\Cache\Script\ScriptCacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\StampedeProtectionConfigurator;
 use Contena\Core\Framework\Adapter\Cache\Telemetry\CacheTelemetrySubscriber;
 use Contena\Core\Framework\Adapter\Command\CacheClearAllCommand;
@@ -41,9 +39,14 @@ use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
+use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\System\SystemConfig\Event\SystemConfigMultipleChangedEvent;
+use Doctrine\DBAL\Connection;
+use GuzzleHttp\Client;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
@@ -114,6 +117,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ClockInterface::class),
             service(AbstractReverseProxyGateway::class)->nullOnInvalid(),
         ]);
+
+    $services->set(CacheInvalidatorFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service(CacheInvalidator::class),
+        ]);
+
+    $services->set(ScriptCacheInvalidationSubscriber::class)
+        ->args([
+            service(ScriptExecutor::class),
+        ])
+        ->tag('kernel.event_subscriber');
 
     $services->set(InvalidateCacheTask::class)
         ->tag('contena.scheduled.task');

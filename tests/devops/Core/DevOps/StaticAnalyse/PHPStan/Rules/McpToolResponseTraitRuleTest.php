@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\McpToolResponseRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\McpToolResponseRule;
 
 /**
  * @internal

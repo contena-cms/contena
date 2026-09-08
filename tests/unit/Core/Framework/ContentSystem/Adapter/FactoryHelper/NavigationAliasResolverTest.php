@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter\FactoryHelper;
 
+use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver;
+use Contena\Core\Test\Generator;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver;
-use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**
  * @internal

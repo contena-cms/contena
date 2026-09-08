@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\SystemConfig\AbstractSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Api\SystemConfigController;
@@ -13,7 +12,9 @@ use Contena\Core\System\SystemConfig\Channel\SiteSettingsRoute;
 use Contena\Core\System\SystemConfig\Command\ConfigGet;
 use Contena\Core\System\SystemConfig\Command\ConfigSet;
 use Contena\Core\System\SystemConfig\ConfiguredSystemConfigLoader;
+use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
 use Contena\Core\System\SystemConfig\MemoizedSystemConfigLoader;
+use Contena\Core\System\SystemConfig\Service\AppConfigReader;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\Store\MemoizedSystemConfigStore;
 use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
@@ -22,6 +23,8 @@ use Contena\Core\System\SystemConfig\SystemConfigLoader;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\System\SystemConfig\Validation\SystemConfigValidator;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -44,10 +47,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('kernel.bundles', \Iterator::class)
         ->factory([service('kernel'), 'getBundles']);
 
+    $services->set(AppConfigReader::class)
+        ->args([
+            service(SourceResolver::class),
+            service(ConfigReader::class),
+        ]);
+
     $services->set(ConfigurationService::class)
         ->args([
             service('kernel.bundles'),
             service(ConfigReader::class),
+            service(AppConfigReader::class),
+            service('app.repository'),
             service(SystemConfigService::class),
             service('logger'),
         ]);
@@ -120,6 +131,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(MemoizedSystemConfigLoader::class . '.inner'),
             service(MemoizedSystemConfigStore::class),
+        ]);
+
+    $services->set(SystemConfigFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service(SystemConfigService::class),
+            service(Connection::class),
         ]);
 
     $services->alias(AbstractSystemConfigLoader::class, SystemConfigLoader::class);

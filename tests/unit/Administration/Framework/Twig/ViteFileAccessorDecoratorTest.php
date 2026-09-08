@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Administration\Framework\Twig;
 
+use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
+use Contena\Core\Test\Stub\Framework\BundleFixture;
+use Contena\Core\Test\Stub\Symfony\StubKernel;
 use Pentatrion\ViteBundle\Service\FileAccessor;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
-use Contena\Core\Test\Stub\Framework\BundleFixture;
-use Contena\Core\Test\Stub\Symfony\StubKernel;
 use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Filesystem\Filesystem;

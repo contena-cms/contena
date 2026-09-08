@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Frontend;
@@ -18,6 +17,7 @@ use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleTheme\SimpleTheme;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithoutFrontend\ThemeWithoutFrontend;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

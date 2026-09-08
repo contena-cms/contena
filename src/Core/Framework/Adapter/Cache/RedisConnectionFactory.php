@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Adapter\Cache;
 
+use Contena\Core\Framework\Util\Hasher;
 use Predis\ClientInterface;
 use Relay\Cluster;
 use Relay\Relay;
-use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**

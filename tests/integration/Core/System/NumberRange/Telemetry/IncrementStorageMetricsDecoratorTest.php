@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\NumberRange\Telemetry;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\NumberRange\Telemetry\IncrementStorageMetricsDecorator;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Proves the two things the unit test cannot: that the metrics decorator is actually wired around the

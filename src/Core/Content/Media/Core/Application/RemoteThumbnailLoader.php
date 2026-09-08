@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\Content\Media\Core\Application;
 
-use Doctrine\DBAL\Connection;
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
@@ -15,6 +13,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

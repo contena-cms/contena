@@ -3,12 +3,12 @@
 namespace Contena\Core;
 
 use Composer\Autoload\ClassLoader;
-use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\StaticAnalyze\StaticAnalyzeKernel;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\DbalKernelPluginLoader;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;

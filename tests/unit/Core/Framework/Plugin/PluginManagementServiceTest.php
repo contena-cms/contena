@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\ExtensionExtractor;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Plugin\PluginZipDetector;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

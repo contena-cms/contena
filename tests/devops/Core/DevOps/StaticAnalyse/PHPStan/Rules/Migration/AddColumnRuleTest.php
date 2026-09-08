@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Migration;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\AddColumnRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\AddColumnRule;
 
 /**
  * @internal

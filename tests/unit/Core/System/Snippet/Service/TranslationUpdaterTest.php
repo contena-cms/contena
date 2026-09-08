@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Service;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\Service\TranslationUpdater;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

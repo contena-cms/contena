@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Channel\Context;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
@@ -11,6 +10,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

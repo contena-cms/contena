@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\Tenant;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\System\Tenant\TenantScopeContextProviderTest;
+use Doctrine\DBAL\Connection;
 
 /**
  * Provides every business-data context with the platform scope first.

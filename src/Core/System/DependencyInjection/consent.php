@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\System\Consent\Api\ConsentController;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\ConsentRepository;
@@ -12,6 +10,8 @@ use Contena\Core\System\Consent\Log\ConsentLogInterface;
 use Contena\Core\System\Consent\Log\DatabaseLog;
 use Contena\Core\System\Consent\Service\ConsentService;
 use Contena\Core\System\Consent\Subscriber\SetupStagingEventSubscriber;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

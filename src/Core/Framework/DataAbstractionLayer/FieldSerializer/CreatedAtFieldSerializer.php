@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

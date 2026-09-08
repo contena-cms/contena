@@ -2,6 +2,7 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\Extensions\Extension;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -9,7 +10,6 @@ use PHPStan\Reflection\MissingConstantFromReflectionException;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Extensions\Extension;
 
 /**
  * @implements Rule<InClassNode>

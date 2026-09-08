@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Maintenance\System\Command;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

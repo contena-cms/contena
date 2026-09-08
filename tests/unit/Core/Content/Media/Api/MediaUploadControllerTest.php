@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Api\MediaUploadController;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\File\FileSaver;
@@ -15,6 +12,9 @@ use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

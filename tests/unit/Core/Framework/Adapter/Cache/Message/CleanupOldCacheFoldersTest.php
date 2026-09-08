@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Message;
 
+use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
 
 /**
  * @internal

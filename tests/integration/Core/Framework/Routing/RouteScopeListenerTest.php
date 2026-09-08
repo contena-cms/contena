@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Controller\ApiController;
@@ -13,6 +12,7 @@ use Contena\Core\Framework\Routing\RouteScopeListener;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

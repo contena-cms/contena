@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask\Scheduler;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskRunner;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

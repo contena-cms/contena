@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Content\Breadcrumb\ContentSystem\DataLoader;
 
+use Contena\Core\Content\Breadcrumb\BreadcrumbException;
+use Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbLoaderConfig;
+use Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbLoaderConfigSerializer;
+use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWithJson;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Breadcrumb\BreadcrumbException;
-use Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbLoaderConfig;
-use Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbLoaderConfigSerializer;
-use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 
 /**
  * @internal

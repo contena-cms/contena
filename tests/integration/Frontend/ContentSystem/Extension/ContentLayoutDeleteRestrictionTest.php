@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\ContentSystem\Extension;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncService;
@@ -18,6 +16,8 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
 use Contena\Frontend\ContentSystem\Extension\ContentLayoutExtension;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Proves the header/footer associations contributed by {@see ContentLayoutExtension}

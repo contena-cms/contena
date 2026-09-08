@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Consent\Api\ConsentController;
@@ -12,6 +9,9 @@ use Contena\Core\System\Consent\ConsentScope;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\DTO\ConsentState;
 use Contena\Core\System\Consent\Service\ConsentService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

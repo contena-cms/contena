@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Cookie\ScheduledTask;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Contena\Tests\Integration\Core\Content\Cookie\ScheduledTask\CleanupCookieConsentLogTaskHandlerTest;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

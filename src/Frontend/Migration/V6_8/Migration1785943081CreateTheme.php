@@ -2,10 +2,10 @@
 
 namespace Contena\Frontend\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 /**
  * Development-baseline schema for the Frontend Theme aggregate.

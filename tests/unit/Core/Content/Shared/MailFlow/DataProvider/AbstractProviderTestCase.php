@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\AbstractProvider;
 use Contena\Core\Content\Shared\MailFlow\Event\MailFlowDataCriteriaEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

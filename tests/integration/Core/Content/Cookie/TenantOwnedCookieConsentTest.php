@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Cookie;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Channel\CookieConsentLogRoute;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -18,6 +16,8 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

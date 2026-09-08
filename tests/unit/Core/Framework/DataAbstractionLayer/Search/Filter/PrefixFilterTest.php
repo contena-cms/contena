@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Filter;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter;
 
 /**
  * @internal

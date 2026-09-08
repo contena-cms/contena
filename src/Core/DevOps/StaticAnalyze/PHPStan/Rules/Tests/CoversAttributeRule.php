@@ -2,6 +2,7 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -11,7 +12,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversNothing;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 
 /**
  * @internal

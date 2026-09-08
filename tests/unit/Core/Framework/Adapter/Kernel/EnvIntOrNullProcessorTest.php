@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Kernel;
 
+use Contena\Core\Framework\Adapter\Kernel\EnvIntOrNullProcessor;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Kernel\EnvIntOrNullProcessor;
 
 /**
  * @internal

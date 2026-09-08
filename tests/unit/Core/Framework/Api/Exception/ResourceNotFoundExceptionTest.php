@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Exception;
 
+use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

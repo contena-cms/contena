@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Category\Util;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Util\CategoryBreadcrumbHelper;
 use Contena\Core\System\Channel\ChannelEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

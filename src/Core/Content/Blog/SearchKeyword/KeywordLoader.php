@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Content\Blog\SearchKeyword;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 class KeywordLoader
 {

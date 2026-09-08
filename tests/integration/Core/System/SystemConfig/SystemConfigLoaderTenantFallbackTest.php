@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\System\SystemConfig;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

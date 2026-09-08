@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Command;
 
+use Contena\Elasticsearch\Framework\Command\ElasticsearchTestAnalyzerCommand;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Framework\Command\ElasticsearchTestAnalyzerCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

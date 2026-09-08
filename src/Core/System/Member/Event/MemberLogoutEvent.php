@@ -4,13 +4,13 @@ namespace Contena\Core\System\Member\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ChannelAware;
+use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\MemberAware;
-use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\MemberDefinition;
 use Contena\Core\System\Member\MemberEntity;

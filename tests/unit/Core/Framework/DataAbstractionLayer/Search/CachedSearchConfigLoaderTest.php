@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CachedSearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**

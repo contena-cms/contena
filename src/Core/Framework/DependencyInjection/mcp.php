@@ -1,10 +1,5 @@
 <?php declare(strict_types=1);
 
-use Doctrine\DBAL\Connection;
-use Mcp\Capability\Registry;
-use Mcp\Server as McpServer;
-use Mcp\Server\Builder as McpServerBuilder;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
@@ -67,6 +62,11 @@ use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetEnableTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetsListTool;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use Mcp\Capability\Registry;
+use Mcp\Server as McpServer;
+use Mcp\Server\Builder as McpServerBuilder;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

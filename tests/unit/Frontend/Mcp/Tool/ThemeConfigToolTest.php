@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolAttributeReader;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Contena\Frontend\Theme\ThemeService;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

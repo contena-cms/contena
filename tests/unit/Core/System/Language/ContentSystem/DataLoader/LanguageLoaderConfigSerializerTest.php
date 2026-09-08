@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Language\ContentSystem\DataLoader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\Attributes\TestWithJson;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Language\ContentSystem\DataLoader\LanguageLoaderConfig;
 use Contena\Core\System\Language\ContentSystem\DataLoader\LanguageLoaderConfigSerializer;
 use Contena\Core\System\Language\LanguageException;
 use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWithJson;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

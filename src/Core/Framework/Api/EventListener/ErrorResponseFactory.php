@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Api\EventListener;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\ContenaHttpException;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;

@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Mail\Transport;
 
-use Doctrine\DBAL\Exception\DriverException;
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Exception\DriverException;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\TransportInterface;

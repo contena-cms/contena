@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Language;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\CascadeDeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PostWriteValida
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;

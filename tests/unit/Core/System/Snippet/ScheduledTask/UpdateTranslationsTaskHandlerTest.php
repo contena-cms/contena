@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\ScheduledTask;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -18,6 +14,10 @@ use Contena\Core\System\Snippet\DataTransfer\TranslationUpdate\TranslationUpdate
 use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTaskHandler;
 use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

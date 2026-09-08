@@ -2,6 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo;
 
+use Contena\Core\Content\Seo\SeoResolver;
+use Contena\Core\Content\Seo\SeoUrlRequestContext;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -10,10 +14,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\SeoResolver;
-use Contena\Core\Content\Seo\SeoUrlRequestContext;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;
 
 /**
  * @internal

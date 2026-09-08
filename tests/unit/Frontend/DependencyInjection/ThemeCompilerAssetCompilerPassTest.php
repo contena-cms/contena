@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\DependencyInjection\ThemeCompilerAssetCompilerPass;
 use Contena\Frontend\Theme\ThemeCompiler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Sync\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncResult;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Api\Sync\Telemetry\SyncMetricsInstrumentor;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

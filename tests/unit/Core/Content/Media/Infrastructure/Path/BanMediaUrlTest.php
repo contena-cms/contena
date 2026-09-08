@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Infrastructure\Path;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\MediaReverseProxy;
 use Contena\Core\Content\Media\Event\MediaPathChangedEvent;
 use Contena\Core\Content\Media\Infrastructure\Path\BanMediaUrl;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

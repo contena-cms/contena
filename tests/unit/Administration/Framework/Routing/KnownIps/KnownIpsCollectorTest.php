@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Framework\Routing\KnownIps;
 
+use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

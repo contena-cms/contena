@@ -2,6 +2,8 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Content\Flow\Dispatching\StorableFlow;
+use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -9,8 +11,6 @@ use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
 
 /**
  * @implements Rule<MethodCall>

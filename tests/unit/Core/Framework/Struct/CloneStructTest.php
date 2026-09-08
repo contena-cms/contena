@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Struct;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Struct\CloneTrait;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\CloneStruct;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\CloneStructBackedEnum;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\CloneStructUnitEnum;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

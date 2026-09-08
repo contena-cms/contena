@@ -3,8 +3,6 @@
 namespace Contena\Core;
 
 use Composer\Autoload\ClassLoader;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Api\Controller\FallbackController;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\IOStreamHelper;
 use Contena\Core\Framework\Util\VersionParser;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception as DBALException;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Loader\LoaderInterface;

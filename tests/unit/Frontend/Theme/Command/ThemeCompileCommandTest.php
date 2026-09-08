@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\Command\ThemeCompileCommand;
 use Contena\Frontend\Theme\ConfigLoader\AbstractAvailableThemeProvider;
 use Contena\Frontend\Theme\ThemeService;
 use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Console\Tester\CommandTester;
 

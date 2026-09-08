@@ -2,17 +2,17 @@
 
 namespace Contena\Core\Framework\Mcp\Command;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
+use Contena\Core\Framework\Util\Json;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\ResourceTemplate;
 use Mcp\Schema\Tool;
 use Mcp\Server\Builder;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
-use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\ChannelApiRouteScope;
-use Contena\Core\Framework\Util\Json;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;

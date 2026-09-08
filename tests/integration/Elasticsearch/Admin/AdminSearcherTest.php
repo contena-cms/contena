@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Elasticsearch\Admin;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
@@ -15,6 +13,8 @@ use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
 use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

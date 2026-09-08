@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Routing\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

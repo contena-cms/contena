@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Core\Event;
 
+use Contena\Core\Content\Media\Core\Event\UpdateThumbnailPathEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Core\Event\UpdateThumbnailPathEvent;
 
 /**
  * @internal

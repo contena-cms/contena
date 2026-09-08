@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use League\OAuth2\Server\AuthorizationServer;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
+use League\OAuth2\Server\AuthorizationServer;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

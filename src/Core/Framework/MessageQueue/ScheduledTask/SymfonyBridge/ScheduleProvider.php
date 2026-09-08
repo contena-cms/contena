@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\SymfonyBridge;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule;

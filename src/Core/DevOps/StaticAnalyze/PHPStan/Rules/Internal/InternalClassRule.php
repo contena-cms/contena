@@ -2,6 +2,11 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Internal;
 
+use Contena\Core\Framework\Bundle;
+use Contena\Core\Framework\DataAbstractionLayer\Command\RefreshIndexCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
+use Contena\Core\Framework\Migration\MigrationStep;
+use Contena\Core\Framework\Plugin;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -10,11 +15,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\DataAbstractionLayer\Command\RefreshIndexCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Core\Framework\Migration\MigrationStep;
-use Contena\Core\Framework\Plugin;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

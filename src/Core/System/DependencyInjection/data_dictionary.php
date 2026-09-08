@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Monolog\Logger;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
@@ -19,6 +17,8 @@ use Contena\Core\System\DataDictionary\DataDictionaryLoader;
 use Contena\Core\System\DataDictionary\DataDictionaryLoaderInterface;
 use Contena\Core\System\DataDictionary\DataDictionaryWriteValidator;
 use Contena\Core\System\User\Validator\UserGenderValidator;
+use Doctrine\DBAL\Connection;
+use Monolog\Logger;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

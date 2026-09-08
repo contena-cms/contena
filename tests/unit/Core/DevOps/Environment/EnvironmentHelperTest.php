@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\Environment;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerData;
+use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerInterface;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerData;
-use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerInterface;
 
 /**
  * @internal

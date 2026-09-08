@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Sitemap\ConfigHandler;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\ConfigHandler\File;
 use Contena\Core\Content\Sitemap\Service\ConfigHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

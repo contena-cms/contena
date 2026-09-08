@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
+use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueStatsSubscriber;
+use Contena\Core\Framework\Test\TestCaseHelper\StopWorkerWhenIdleListener;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
-use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueStatsSubscriber;
-use Contena\Core\Framework\Test\TestCaseHelper\StopWorkerWhenIdleListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

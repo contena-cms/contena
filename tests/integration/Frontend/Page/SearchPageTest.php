@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Frontend\Page;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Page\Search\SearchPageLoadedEvent;
 use Contena\Frontend\Page\Search\SearchPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

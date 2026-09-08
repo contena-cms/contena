@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\CustomField;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationCollection;
 use Contena\Core\System\CustomField\Xml\CustomFields;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

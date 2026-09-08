@@ -2,8 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationRuntime;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * Fixture for MigrationRuntimeTest — fails with a foreign-key-violation message

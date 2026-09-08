@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\System\Language\LanguageLoader;
 use Contena\Core\System\Locale\Aggregate\LocaleTranslation\LocaleTranslationDefinition;
 use Contena\Core\System\Locale\Api\LocaleCodeFkResolver;
@@ -10,6 +9,7 @@ use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\Subscriber\LocaleValidator;
 use Contena\Core\System\Locale\SystemCheck\LocalesReadinessCheck;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

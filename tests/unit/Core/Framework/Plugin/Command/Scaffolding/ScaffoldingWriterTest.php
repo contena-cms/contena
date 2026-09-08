@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Command\Scaffolding;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingWriter;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
 use Contena\Core\Test\Stub\Framework\Util\InMemoryUtilFilesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Controller\ApiController;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
@@ -27,6 +25,8 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Tests\Unit\Core\Framework\Api\Controller\Fixtures\ApiController\ChildDefinition;
 use Contena\Tests\Unit\Core\Framework\Api\Controller\Fixtures\ApiController\ParentDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

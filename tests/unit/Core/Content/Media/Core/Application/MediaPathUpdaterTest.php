@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Core\Application;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\MediaLocationBuilder;
 use Contena\Core\Content\Media\Core\Application\MediaPathStorage;
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
@@ -11,6 +9,8 @@ use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

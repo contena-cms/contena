@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
+use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage;
+use Contena\Core\Test\Stub\Redis\RedisStub;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage;
-use Contena\Core\Test\Stub\Redis\RedisStub;
 
 /**
  * @internal

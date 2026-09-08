@@ -2,10 +2,10 @@
 
 namespace Contena\Frontend\Test\Controller;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

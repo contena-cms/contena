@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Maintenance\Channel\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\Channel\Command\ChannelCreateCommand;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

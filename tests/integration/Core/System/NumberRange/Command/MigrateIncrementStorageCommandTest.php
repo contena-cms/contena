@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Integration\Core\System\NumberRange\Command;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\Command\MigrateIncrementStorageCommand;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementSqlStorage;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementStorageRegistry;
 use Contena\Core\Test\Stub\System\NumberRange\ValueGenerator\IncrementArrayStorage;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ServiceLocator;

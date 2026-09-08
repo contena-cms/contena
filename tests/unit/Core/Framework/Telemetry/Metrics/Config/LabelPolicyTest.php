@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Config;
 
+use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 
 /**
  * @internal

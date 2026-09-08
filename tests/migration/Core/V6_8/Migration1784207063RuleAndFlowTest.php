@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Migration\Core\V6_8;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_8\Migration1784207063CreateRule;
@@ -13,6 +10,9 @@ use Contena\Core\Migration\V6_8\Migration1784207065CreateRuleTag;
 use Contena\Core\Migration\V6_8\Migration1784207066CreateFlow;
 use Contena\Core\Migration\V6_8\Migration1784207067CreateFlowSequence;
 use Contena\Core\Migration\V6_8\Migration1784207068CreateFlowTemplate;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

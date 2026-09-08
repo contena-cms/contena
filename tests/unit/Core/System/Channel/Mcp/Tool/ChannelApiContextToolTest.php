@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\Context\ChannelApiMcpContextProvider;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiContextTool;
 use Contena\Core\System\Member\MemberEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

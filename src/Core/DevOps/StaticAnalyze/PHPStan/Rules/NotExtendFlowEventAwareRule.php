@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\Event\FlowEventAware;
 use PHPat\Selector\Selector;
 use PHPat\Test\Attributes\TestRule;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
-use Contena\Core\Framework\Event\FlowEventAware;
 
 /**
  * @internal

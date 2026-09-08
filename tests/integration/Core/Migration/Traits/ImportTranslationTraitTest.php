@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Migration\Traits;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
@@ -11,6 +10,7 @@ use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Tests\Migration\MigrationTestTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

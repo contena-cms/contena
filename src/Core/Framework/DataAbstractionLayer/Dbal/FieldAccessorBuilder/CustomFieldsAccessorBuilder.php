@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\System\CustomField\CustomFieldService;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

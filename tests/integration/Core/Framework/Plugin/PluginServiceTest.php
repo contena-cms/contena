@@ -3,10 +3,9 @@
 namespace Contena\Tests\Integration\Core\Framework\Plugin;
 
 use Composer\IO\NullIO;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -17,7 +16,6 @@ use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -25,6 +23,8 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleEntity;
 use CtTestNoDefaultLang\CtTestNoDefaultLang;
 use CtTestPlugin\CtTestPlugin;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

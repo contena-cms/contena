@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
+use Contena\Elasticsearch\Admin\AdminSearchIndexingMessage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Admin\AdminSearchIndexingMessage;
 
 /**
  * @phpstan-type MessageData array{

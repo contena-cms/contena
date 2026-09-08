@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework\CustomField\Api;
 
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

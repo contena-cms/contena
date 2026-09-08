@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Maintenance\Channel\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Maintenance\Channel\Command\ChannelMaintenanceDisableCommand;
 use Contena\Core\Maintenance\Channel\Command\ChannelMaintenanceEnableCommand;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

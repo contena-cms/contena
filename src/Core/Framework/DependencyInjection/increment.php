@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Increment\ArrayIncrementer;
 use Contena\Core\Framework\Increment\Controller\IncrementApiController;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Increment\MySQLIncrementer;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Routing\Validation\Constraint\RouteNotBlocked;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 

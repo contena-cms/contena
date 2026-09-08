@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Transport;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Config\TransportConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Config\TransportConfigProvider;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Telemetry\Metrics\Factory\MetricTransportFactoryInter
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

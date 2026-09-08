@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\DevOps\Core\Installer;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Installer\Controller\SystemConfigurationController;
 use Contena\Core\Installer\Installer;
 use Contena\Core\Installer\InstallerKernel;
 use Contena\Core\TestBootstrapper;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 

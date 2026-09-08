@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Service;
 
-use League\Flysystem\Filesystem;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Sitemap\Service\SitemapHandle;
 use Contena\Core\Content\Sitemap\Struct\Url;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Generator;
+use League\Flysystem\Filesystem;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
@@ -26,6 +25,7 @@ use Contena\Frontend\Controller\AuthController;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;

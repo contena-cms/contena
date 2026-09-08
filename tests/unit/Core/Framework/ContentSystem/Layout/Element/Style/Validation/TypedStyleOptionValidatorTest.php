@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\Validation;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\Dto\StyleOptionSpecificationDto;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\TypedStyleOption;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\TypedStyleOptionValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\Dto\StyleOptionSpecificationDto;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\TypedStyleOption;
-use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\TypedStyleOptionValidator;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;

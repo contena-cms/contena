@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Channel\AbstractCookieConsentLogRoute;
 use Contena\Core\Content\Cookie\Channel\AbstractCookieRoute;
 use Contena\Core\Content\Cookie\Channel\CookieRouteResponse;
@@ -12,6 +10,8 @@ use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\CookieController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

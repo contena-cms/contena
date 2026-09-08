@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Validation;
 
+use Contena\Core\Framework\Validation\HappyPathValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Validation\HappyPathValidator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;

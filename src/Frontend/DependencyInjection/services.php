@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
@@ -157,6 +155,8 @@ use Contena\Frontend\System\Member\MemberGroupSubscriber;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Contena\Frontend\Theme\ThemeRuntimeConfigStorage;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;

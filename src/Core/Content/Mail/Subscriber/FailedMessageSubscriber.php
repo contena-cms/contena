@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Mail\Subscriber;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Monolog\Level;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\FailedMessageEvent;
 

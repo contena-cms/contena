@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Mail;
 
-use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 
 class MailException extends HttpException

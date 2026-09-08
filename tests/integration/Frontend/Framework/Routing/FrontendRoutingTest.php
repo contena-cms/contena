@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoResolver;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Defaults;
@@ -22,6 +20,8 @@ use Contena\Frontend\Framework\Routing\DomainLoader;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\Router;
 use Contena\Frontend\Framework\Routing\TenantDefaultDomainLoader;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RequestContext;

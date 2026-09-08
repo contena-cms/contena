@@ -2,8 +2,8 @@
 
 namespace Contena\Core\System\Language;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

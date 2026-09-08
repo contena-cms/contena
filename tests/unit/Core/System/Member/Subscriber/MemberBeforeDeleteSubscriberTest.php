@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
@@ -28,6 +26,8 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\Member\Subscriber\MemberBeforeDeleteSubscriber;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Serializer\Serializer;
 

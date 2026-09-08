@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Administration\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

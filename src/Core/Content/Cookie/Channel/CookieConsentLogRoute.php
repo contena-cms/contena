@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Cookie\Channel;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Cookie\CookieException;
 use Contena\Core\Content\Cookie\Event\CookieConsentLoggedEvent;
 use Contena\Core\Defaults;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\NoContentResponse;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

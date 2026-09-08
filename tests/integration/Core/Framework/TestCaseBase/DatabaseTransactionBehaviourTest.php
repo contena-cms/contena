@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\Framework\TestCaseBase;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

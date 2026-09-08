@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -14,6 +12,8 @@ use Contena\Frontend\Framework\Routing\CachedDomainLoader;
 use Contena\Frontend\Framework\Routing\CachedDomainLoaderInvalidator;
 use Contena\Frontend\Theme\Aggregate\ThemeChannelDefinition;
 use Contena\Tests\Unit\Frontend\Theme\MockedCacheInvalidator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

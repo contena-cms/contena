@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Media;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Framework\Media\FrontendMediaUploader;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorRegistry;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

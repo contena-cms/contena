@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Integration\Core\Framework\Plugin\KernelPluginLoader;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Composer\ComposerInfoProvider;
 use Contena\Core\Framework\Adapter\Composer\ComposerPackage;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\ComposerPluginLoader;
 use Contena\Core\Framework\Test\Plugin\PluginIntegrationTestBehaviour;
 use CtTestComposerLoaded\CtTestComposerLoaded;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

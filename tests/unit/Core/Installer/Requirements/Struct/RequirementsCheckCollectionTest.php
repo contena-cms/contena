@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Requirements\Struct;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
 use Contena\Core\Installer\Requirements\Struct\SystemCheck;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

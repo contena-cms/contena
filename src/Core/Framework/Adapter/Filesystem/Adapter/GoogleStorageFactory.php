@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
+use Contena\Core\Framework\Adapter\AdapterException;
 use Google\Cloud\Storage\StorageClient;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\GoogleCloudStorage\GoogleCloudStorageAdapter;
-use Contena\Core\Framework\Adapter\AdapterException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GoogleStorageFactory implements AdapterFactoryInterface

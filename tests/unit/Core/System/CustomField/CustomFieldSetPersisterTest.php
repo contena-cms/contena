@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomField;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
@@ -15,6 +11,10 @@ use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

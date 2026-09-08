@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\DataAbstractionLayer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\DataAbstractionLayer\MemberIndexer;
 use Contena\Core\System\Member\DataAbstractionLayer\MemberIndexingMessage;
 use Contena\Core\System\Member\Event\MemberIndexerEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

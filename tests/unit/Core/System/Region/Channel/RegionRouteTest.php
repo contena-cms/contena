@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Region\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -12,6 +10,8 @@ use Contena\Core\System\Region\Channel\RegionRoute;
 use Contena\Core\System\Region\Event\RegionCriteriaEvent;
 use Contena\Core\System\Region\RegionCollection;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

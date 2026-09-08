@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncodingResult;
 use Contena\Core\Framework\Api\Serializer\Record;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

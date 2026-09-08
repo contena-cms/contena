@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
@@ -16,6 +14,8 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\Member\Struct\ImitateMemberToken;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

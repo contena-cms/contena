@@ -2,14 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Files;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryException;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Uri;
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
@@ -33,9 +25,17 @@ use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Tests\Unit\Administration\Snippet\SnippetFileTrait;
 use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\BaseSnippetSet\BaseSnippetSet;
-use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\SnippetSet\SnippetSet;
 use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\ContenaBundleWithSnippets\ContenaBundleWithSnippets;
+use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\SnippetSet\SnippetSet;
 use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryException;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Uri;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 

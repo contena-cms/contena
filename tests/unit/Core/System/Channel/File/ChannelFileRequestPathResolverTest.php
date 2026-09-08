@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\File\ChannelFileRequestPathResolver;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

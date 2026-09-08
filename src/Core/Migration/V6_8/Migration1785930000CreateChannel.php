@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Doctrine\DBAL\Connection;
 
 /**
  * Development-baseline schema for Channel and MemberGroup.

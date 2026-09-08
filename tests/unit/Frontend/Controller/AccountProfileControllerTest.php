@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
@@ -20,6 +16,10 @@ use Contena\Frontend\Controller\FrontendController;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
 use Contena\Tests\Unit\Frontend\Controller\Stub\AccountProfileControllerStub;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 

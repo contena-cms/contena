@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
-use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

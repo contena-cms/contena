@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Telemetry;
 
+use Contena\Core\Framework\MessageQueue\Telemetry\MessengerQueueDepthCollector;
+use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\MessageQueue\Telemetry\MessengerQueueDepthCollector;
-use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;

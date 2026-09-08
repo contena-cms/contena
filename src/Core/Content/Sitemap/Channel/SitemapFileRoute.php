@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Channel;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Content\Sitemap\Extension\SitemapFileExtension;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

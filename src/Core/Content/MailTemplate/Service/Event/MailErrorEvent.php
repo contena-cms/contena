@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\MailTemplate\Service\Event;
 
-use Monolog\Level;
 use Contena\Core\Framework\Context;
+use Monolog\Level;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class MailErrorEvent extends Event

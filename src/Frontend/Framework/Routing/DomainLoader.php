@@ -2,12 +2,12 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
+use Doctrine\DBAL\Connection;
 
 class DomainLoader extends AbstractDomainLoader
 {

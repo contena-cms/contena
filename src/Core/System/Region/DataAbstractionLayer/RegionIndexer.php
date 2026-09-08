@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Region\DataAbstractionLayer;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Region\Event\RegionIndexerEvent;
 use Contena\Core\System\Region\RegionCollection;
 use Contena\Core\System\Region\RegionDefinition;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

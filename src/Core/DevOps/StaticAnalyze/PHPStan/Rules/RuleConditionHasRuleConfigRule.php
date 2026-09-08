@@ -2,12 +2,6 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
-use PhpParser\Node;
-use PHPStan\Analyser\Scope;
-use PHPStan\Node\InClassNode;
-use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleError;
-use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Rule\Container\FilterRule;
@@ -19,6 +13,12 @@ use Contena\Core\Framework\Rule\Rule as ContenaRule;
 use Contena\Core\Framework\Rule\SimpleRule;
 use Contena\Core\Framework\Rule\TimeRangeRule;
 use Contena\Core\System\Member\Rule\MemberCustomFieldRule;
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassNode;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleError;
+use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * @implements Rule<InClassNode>

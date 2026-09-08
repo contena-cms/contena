@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeState\NumberRangeStateDefinition;
@@ -24,6 +22,8 @@ use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\Incr
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternDate;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternIncrement;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternRegistry;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

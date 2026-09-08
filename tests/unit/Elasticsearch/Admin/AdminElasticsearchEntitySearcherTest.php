@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
@@ -24,6 +22,8 @@ use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

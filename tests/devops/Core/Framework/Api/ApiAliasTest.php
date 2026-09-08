@@ -3,7 +3,6 @@
 namespace Contena\Tests\Devops\Core\Framework\Api;
 
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Aggrega
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

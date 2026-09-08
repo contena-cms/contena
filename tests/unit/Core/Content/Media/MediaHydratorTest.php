@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTranslation\MediaTranslationDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterfac
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

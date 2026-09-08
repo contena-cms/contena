@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Page;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -13,6 +12,7 @@ use Contena\Frontend\Page\Blog\BlogPageCriteriaEvent;
 use Contena\Frontend\Page\Blog\BlogPageLoadedEvent;
 use Contena\Frontend\Page\Blog\BlogPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 
 class SeoResolver extends AbstractSeoResolver

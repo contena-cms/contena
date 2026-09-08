@@ -4,12 +4,12 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem\Adapter;
 
 use AsyncAws\Core\AbstractApi;
 use AsyncAws\S3\S3Client;
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\AsyncAwsS3WriteBatchAdapter;
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\AwsS3v3Factory;
 use League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter;
 use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Filesystem\Adapter\AsyncAwsS3WriteBatchAdapter;
-use Contena\Core\Framework\Adapter\Filesystem\Adapter\AwsS3v3Factory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**

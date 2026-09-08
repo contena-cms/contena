@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
@@ -15,6 +13,8 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Integration\Traits\SnapshotTesting;
 use Contena\Tests\Integration\Core\Framework\fixtures\QueryParameterAllowList;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;

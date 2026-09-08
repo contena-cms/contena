@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\System\Consent\Log;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Log\DatabaseLog;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 
 /**

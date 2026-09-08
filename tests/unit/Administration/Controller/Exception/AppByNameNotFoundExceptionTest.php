@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Controller\Exception;
 
+use Contena\Administration\Controller\Exception\AppByNameNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Controller\Exception\AppByNameNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

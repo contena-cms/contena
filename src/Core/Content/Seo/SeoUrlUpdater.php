@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntitySeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
@@ -14,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Language\LanguageCollection;
+use Doctrine\DBAL\Connection;
 
 /**
  * This class can be used to regenerate the SEO URLs for a route and a set of ids.

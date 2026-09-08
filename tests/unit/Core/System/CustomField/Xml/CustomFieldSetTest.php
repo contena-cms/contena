@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomField\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFieldSet;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

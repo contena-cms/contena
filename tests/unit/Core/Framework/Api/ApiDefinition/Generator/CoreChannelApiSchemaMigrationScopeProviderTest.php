@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator;
 
+use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreChannelApiSchemaMigrationScopeProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreChannelApiSchemaMigrationScopeProvider;
 
 /**
  * @internal

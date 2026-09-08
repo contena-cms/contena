@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Upload;
 
+use Contena\Core\Content\Media\Upload\PresignedUploadFinalizePayload;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Upload\PresignedUploadFinalizePayload;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

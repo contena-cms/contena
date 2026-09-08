@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\ScheduledTask;
 
+use Contena\Core\Framework\Mcp\ScheduledTask\McpToolsetSessionCleanupTask;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\ScheduledTask\McpToolsetSessionCleanupTask;
 
 /**
  * @internal

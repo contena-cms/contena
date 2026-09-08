@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\Datadog;
 
-use PHPUnit\Runner\Extension\Extension;
-use PHPUnit\Runner\Extension\Facade;
-use PHPUnit\Runner\Extension\ParameterCollection;
-use PHPUnit\TextUI\Configuration\Configuration;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\Gateway\DatadogGateway;
@@ -14,6 +10,10 @@ use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestFailedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestFinishedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestPreparedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber\TestRunnerExecutionFinishedSubscriber;
+use PHPUnit\Runner\Extension\Extension;
+use PHPUnit\Runner\Extension\Facade;
+use PHPUnit\Runner\Extension\ParameterCollection;
+use PHPUnit\TextUI\Configuration\Configuration;
 
 /**
  * @internal

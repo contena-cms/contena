@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\System\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\System\Command\OpenApiValidationCommand;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;

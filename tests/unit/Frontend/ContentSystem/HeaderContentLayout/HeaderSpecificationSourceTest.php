@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\ContentSystem\HeaderContentLayout;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAssignmentEntity;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\DomainAwareLayoutResolver;
 use Contena\Core\Framework\ContentSystem\ContentSection;
@@ -15,6 +11,10 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderContentLayoutCollection;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderSpecificationSource;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

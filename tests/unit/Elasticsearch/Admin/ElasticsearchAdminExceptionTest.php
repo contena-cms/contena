@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
+use Contena\Elasticsearch\Admin\ElasticsearchAdminException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Admin\ElasticsearchAdminException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

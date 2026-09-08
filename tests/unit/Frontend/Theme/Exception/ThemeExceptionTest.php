@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Exception;
 
+use Contena\Frontend\Theme\Exception\ThemeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\Exception\ThemeException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

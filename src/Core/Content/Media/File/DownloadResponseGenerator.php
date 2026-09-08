@@ -2,12 +2,6 @@
 
 namespace Contena\Core\Content\Media\File;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToGenerateTemporaryUrl;
-use Psr\Clock\ClockInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Exception\IllegalFileNameException;
@@ -16,6 +10,12 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Framework\Context;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
+use Psr\Clock\ClockInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

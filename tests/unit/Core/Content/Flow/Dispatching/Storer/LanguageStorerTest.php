@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\LanguageStorer;
 use Contena\Core\Framework\Context;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Event\LanguageAware;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\LanguageAwareEvent;
 use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\NonLanguageAwareEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

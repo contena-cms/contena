@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Validation\Constraint;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Member\MemberException;
@@ -12,6 +10,8 @@ use Contena\Core\System\Member\Validation\Constraint\MemberEmailUniqueValidator;
 use Contena\Core\System\Member\Validation\MemberEmailUniqueCheck;
 use Contena\Core\System\Member\Validation\MemberEmailUniqueChecker;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;

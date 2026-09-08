@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Validation\Constraint;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Member\Validation\Constraint\MemberEmailUnique;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

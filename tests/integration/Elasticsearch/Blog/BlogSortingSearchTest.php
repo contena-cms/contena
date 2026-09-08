@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Elasticsearch\Blog;
 
-use Doctrine\DBAL\Connection;
-use OpenSearch\Client;
-use PHPUnit\Framework\Attributes\AfterClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
@@ -28,6 +24,10 @@ use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
 use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
+use Doctrine\DBAL\Connection;
+use OpenSearch\Client;
+use PHPUnit\Framework\Attributes\AfterClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Robots\Parser;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Page\Robots\Event\RobotsDirectiveParsingEvent;
 use Contena\Frontend\Page\Robots\Event\RobotsUnknownDirectiveEvent;
@@ -13,6 +11,8 @@ use Contena\Frontend\Page\Robots\Parser\ParseIssueSeverity;
 use Contena\Frontend\Page\Robots\Parser\RobotsDirectiveParser;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

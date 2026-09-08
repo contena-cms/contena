@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Store\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Store\Api\ExtensionStoreDataController;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

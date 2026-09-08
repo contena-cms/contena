@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\ReverseProxy;
 
+use Contena\Core\Framework\Adapter\Cache\ReverseProxy\VarnishReverseProxyGateway;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
@@ -14,8 +16,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Adapter\Cache\ReverseProxy\VarnishReverseProxyGateway;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

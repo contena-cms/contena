@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
+use Contena\Core\Framework\Api\OAuth\ClientRepository;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -9,9 +12,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
-use Contena\Core\Framework\Api\OAuth\ClientRepository;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 
 /**

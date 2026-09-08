@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\Command\PluginCreateCommand;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingCollector;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingWriter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;

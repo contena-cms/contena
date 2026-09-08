@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Database;
 
+use Contena\Core\Installer\Database\MigrationCollectionFactory;
+use Contena\Core\TestBootstrapper;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Database\MigrationCollectionFactory;
-use Contena\Core\TestBootstrapper;
 
 /**
  * @internal

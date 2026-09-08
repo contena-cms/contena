@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
@@ -11,6 +10,7 @@ use Contena\Core\System\Organization\Aggregate\OrganizationUnit\OrganizationUnit
 use Contena\Core\System\Organization\Aggregate\OrganizationUnitTranslation\OrganizationUnitTranslationDefinition;
 use Contena\Core\System\Organization\DataAbstractionLayer\OrganizationIndexer;
 use Contena\Core\System\Organization\OrganizationDefinition;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

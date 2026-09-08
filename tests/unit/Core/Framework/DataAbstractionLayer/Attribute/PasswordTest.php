@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Attribute;
 
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\Password;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\Password;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Member\Service;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -15,6 +14,7 @@ use Contena\Core\System\Member\Event\MemberDoubleOptInRegistrationEvent;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Clock\ClockInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DoubleOptInService

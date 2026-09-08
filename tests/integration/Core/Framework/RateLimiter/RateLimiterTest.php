@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\RateLimiter;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
-use League\OAuth2\Server\AuthorizationServer;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\Api\Controller\AuthController as AdminAuthController;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
@@ -20,6 +15,11 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\Api\UserRecoveryController;
 use Contena\Core\System\User\Recovery\UserRecoveryService;
 use Contena\Core\System\User\UserEntity;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\ServerRequest;
+use League\OAuth2\Server\AuthorizationServer;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\NativeClock;

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\File\ChannelFileCacheInvalidator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

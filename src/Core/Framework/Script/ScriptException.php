@@ -1,0 +1,95 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Script;
+
+use Contena\Core\Framework\HttpException;
+use Contena\Core\Framework\Script\Exception\ScriptExecutionFailedException;
+use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
+use Symfony\Component\HttpFoundation\Response;
+
+class ScriptException extends HttpException
+{
+    public const string ACCESS_FROM_SCRIPT_EXECUTION_NOT_ALLOWED = 'FRAMEWORK__ACCESS_FROM_SCRIPT_EXECUTION_NOT_ALLOWED';
+    public const string FUNCTION_DOES_NOT_EXIST_IN_INTERFACE_HOOK = 'FRAMEWORK__FUNCTION_DOES_NOT_EXIST_IN_INTERFACE_HOOK';
+    public const string NO_HOOK_SERVICE_FACTORY = 'FRAMEWORK__NO_HOOK_SERVICE_FACTORY';
+    public const string SERVICE_NOT_AVAILABLE_IN_HOOK = 'FRAMEWORK__SERVICE_NOT_AVAILABLE_IN_HOOK';
+    public const string SERVICE_ALREADY_EXISTS = 'FRAMEWORK__SCRIPT_SERVICE_ALREADY_EXISTS';
+    public const string INTERFACE_HOOK_EXECUTION_NOT_ALLOWED = 'FRAMEWORK__INTERFACE_HOOK_EXECUTION_NOT_ALLOWED';
+    public const string REQUIRED_FUNCTION_MISSING_IN_INTERFACE_HOOK = 'FRAMEWORK__REQUIRED_FUNCTION_MISSING_IN_INTERFACE_HOOK';
+
+    public static function scriptExecutionFailed(string $hook, string $scriptName, \Throwable $previous): self
+    {
+        // use own exception class so it can be catched properly
+        return new ScriptExecutionFailedException($hook, $scriptName, $previous);
+    }
+
+    public static function accessFromScriptExecutionContextNotAllowed(string $class, string $method): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::ACCESS_FROM_SCRIPT_EXECUTION_NOT_ALLOWED,
+            'Method "{{ method }}" of class "{{ class }}" can not be called from inside a script.',
+            ['method' => $method, 'class' => $class]
+        );
+    }
+
+    public static function functionDoesNotExistInInterfaceHook(string $class, string $function): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::FUNCTION_DOES_NOT_EXIST_IN_INTERFACE_HOOK,
+            'Function "{{ function }}" does not exist for InterfaceHook "{{ class }}".',
+            ['function' => $function, 'class' => $class]
+        );
+    }
+
+    public static function noHookServiceFactory(string $class): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::NO_HOOK_SERVICE_FACTORY,
+            'Service "{{ class }}" must extend the abstract "{{ base }}" so that this service may also be used in scripts.',
+            ['class' => $class, 'base' => HookServiceFactory::class]
+        );
+    }
+
+    public static function serviceNotAvailableInHook(string $class, string $hook): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::SERVICE_NOT_AVAILABLE_IN_HOOK,
+            'The service `{{ class }}` is not available in `{{ hook }}`-hook.',
+            ['class' => $class, 'hook' => $hook]
+        );
+    }
+
+    public static function serviceAlreadyExists(string $class): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::SERVICE_ALREADY_EXISTS,
+            'Service with name "{{ class }}" already exists',
+            ['class' => $class]
+        );
+    }
+
+    public static function interfaceHookExecutionNotAllowed(string $class): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::INTERFACE_HOOK_EXECUTION_NOT_ALLOWED,
+            'Tried to execute InterfaceHook "{{ class }}", but InterfaceHooks should not be executed, execute the functions of the hook instead',
+            ['class' => $class]
+        );
+    }
+
+    public static function requiredFunctionMissingInInterfaceHook(string $functionName, string $scriptName): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::REQUIRED_FUNCTION_MISSING_IN_INTERFACE_HOOK,
+            'Required function "{{ functionName }}" missing in script "{{ scriptName }}", please make sure you add the required block in your script.',
+            ['functionName' => $functionName, 'scriptName' => $scriptName]
+        );
+    }
+}

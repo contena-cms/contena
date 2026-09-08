@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Payload;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Payload\MailPayloadFactory;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

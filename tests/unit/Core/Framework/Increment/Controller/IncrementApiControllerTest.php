@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Increment\Controller;
 
+use Contena\Core\Framework\Increment\Controller\IncrementApiController;
+use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Increment\Controller\IncrementApiController;
-use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 
 /**

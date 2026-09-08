@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\SeoUrlRoute;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageChannelApiUrlRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\System\Channel\ChannelEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

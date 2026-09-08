@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Routing\Telemetry;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
 use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
 use Contena\Core\Framework\Routing\Telemetry\DomainResolver;
@@ -16,6 +12,10 @@ use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Telemetry;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Context;
 
+use Contena\Core\Framework\Api\Context\AdminApiSource;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\Context\AdminApiSource;
 
 /**
  * @internal

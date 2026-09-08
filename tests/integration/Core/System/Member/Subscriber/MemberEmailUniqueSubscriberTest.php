@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -15,6 +14,7 @@ use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\Validation\Constraint\MemberEmailUnique;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

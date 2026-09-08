@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Helper;
 
+use Contena\Core\Installer\Helper\InstallerRedirectHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Helper\InstallerRedirectHelper;
 
 /**
  * @internal

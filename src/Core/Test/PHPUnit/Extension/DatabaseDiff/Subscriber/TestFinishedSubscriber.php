@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\Subscriber;
 
+use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 use PHPUnit\Event\Test\Finished;
 use PHPUnit\Event\Test\FinishedSubscriber;
-use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 
 /**
  * @internal

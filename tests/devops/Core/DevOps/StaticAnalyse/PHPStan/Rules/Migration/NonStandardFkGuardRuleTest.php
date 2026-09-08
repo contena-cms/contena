@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Migration;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\NonStandardFkGuardRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\NonStandardFkGuardRule;
 
 /**
  * @internal

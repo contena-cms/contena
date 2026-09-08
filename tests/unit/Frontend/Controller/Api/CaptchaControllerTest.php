@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Controller\Api\CaptchaController;
 use Contena\Frontend\Framework\Captcha\AbstractCaptcha;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

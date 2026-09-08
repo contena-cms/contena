@@ -2,8 +2,10 @@
 
 namespace Contena\Core\System\CustomField\Aggregate\CustomFieldSet;
 
+use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Immutable;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -11,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -55,10 +58,12 @@ class CustomFieldSetDefinition extends EntityDefinition
             new BoolField('active', 'active')->setDescription('When boolean value is `true`, the custom field set is enabled for use.'),
             new BoolField('global', 'global')->setDescription('When set to `true`, the custom field set is available system-wide.'),
             new IntField('position', 'position')->setDescription('The order of the tabs of your defined custom field set to be displayed.'),
+            new FkField('app_id', 'appId', AppDefinition::class)->setDescription('Unique identity of an app.'),
             new StringField('extension_name', 'extensionName')->setDescription('Name of the plugin that owns this custom field set.'),
 
             new OneToManyAssociationField('customFields', CustomFieldDefinition::class, 'set_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('relations', CustomFieldSetRelationDefinition::class, 'set_id')->addFlags(new CascadeDelete()),
+            new ManyToOneAssociationField('app', 'app_id', AppDefinition::class),
         ]);
     }
 }

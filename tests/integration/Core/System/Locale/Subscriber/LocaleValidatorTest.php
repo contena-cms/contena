@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Locale\Subscriber;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,6 +18,7 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\Locale\Subscriber\LocaleValidator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

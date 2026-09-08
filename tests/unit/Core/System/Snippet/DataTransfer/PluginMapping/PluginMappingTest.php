@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\DataTransfer\PluginMapping;
 
+use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
 
 /**
  * @internal

@@ -2,13 +2,13 @@
 
 namespace Contena\Frontend\Theme\ConfigLoader;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\File;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
+use League\Flysystem\FilesystemOperator;
 
 class StaticFileConfigLoader extends AbstractConfigLoader
 {

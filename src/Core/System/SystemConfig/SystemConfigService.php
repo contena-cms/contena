@@ -2,9 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Bundle;
@@ -20,6 +17,9 @@ use Contena\Core\System\SystemConfig\Event\SystemConfigDomainLoadedEvent;
 use Contena\Core\System\SystemConfig\Event\SystemConfigMultipleChangedEvent;
 use Contena\Core\System\SystemConfig\Exception\BundleConfigNotFoundException;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

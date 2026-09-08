@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
+use Mcp\Capability\Attribute\McpTool;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 #[McpTool(name: McpToolsetRegistry::LIST_TOOLSETS_TOOL, title: 'List Toolsets', description: 'List MCP toolsets that can be enabled for the current session. Use this first for any task: no domain tools are advertised until you enable their toolset.')]

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Twig\Extension\CoreExtension;
 use Twig\Loader\ArrayLoader;
 use Twig\Runtime\EscaperRuntime;

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Plugin;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
@@ -32,6 +29,9 @@ use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use CtTestPlugin\CtTestPlugin;
 use CtTestSkipRebuild\CtTestSkipRebuild;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\TestContainer;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\NativeClock;

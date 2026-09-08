@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\DependencyInjection\TwigComponentBundlePass;
 use Contena\Frontend\Framework\Twig\Components\TwigComponentRenderEventListener;
 use Contena\Frontend\Frontend;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

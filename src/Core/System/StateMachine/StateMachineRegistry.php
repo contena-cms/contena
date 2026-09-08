@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\StateMachine;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -25,6 +24,7 @@ use Contena\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use Contena\Core\System\StateMachine\Event\StateMachineTransitionEvent;
 use Contena\Core\System\StateMachine\Exception\IllegalTransitionException;
 use Contena\Core\System\StateMachine\Exception\UnnecessaryTransitionException;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Api;
 
-use GuzzleHttp\Psr7\Uri;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Snippet\Api\TranslationController;
@@ -20,6 +17,9 @@ use Contena\Core\System\Snippet\Service\TranslationRemover;
 use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

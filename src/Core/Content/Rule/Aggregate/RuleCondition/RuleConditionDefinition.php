@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Rule\Aggregate\RuleCondition;
 
 use Contena\Core\Content\Rule\RuleDefinition;
+use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
@@ -50,10 +51,12 @@ class RuleConditionDefinition extends EntityDefinition
             new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned rule condition.'),
             new StringField('type', 'type')->addFlags(new Required()),
             new FkField('rule_id', 'ruleId', RuleDefinition::class)->addFlags(new Required()),
+            new FkField('script_id', 'scriptId', AppScriptConditionDefinition::class),
             new ParentFkField(self::class),
             new JsonField('value', 'value'),
             new IntField('position', 'position'),
             new ManyToOneAssociationField('rule', 'rule_id', RuleDefinition::class, 'id'),
+            new ManyToOneAssociationField('appScriptCondition', 'script_id', AppScriptConditionDefinition::class, 'id'),
             new ParentAssociationField(self::class, 'id'),
             new ChildrenAssociationField(self::class),
             new CustomFields(),

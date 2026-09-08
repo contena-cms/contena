@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueSizeRestrictListener;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\SendMessageToTransportsEvent;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;

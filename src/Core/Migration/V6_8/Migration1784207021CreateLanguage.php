@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

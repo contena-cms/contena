@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -10,6 +9,7 @@ use Contena\Core\System\NumberRange\NumberRangeEvents;
 use Contena\Core\System\NumberRange\NumberRangeException;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternRegistry;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

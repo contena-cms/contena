@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Contena\Frontend\Theme\ScheduledTask;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

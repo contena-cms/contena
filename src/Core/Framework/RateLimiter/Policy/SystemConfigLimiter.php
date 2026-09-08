@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\RateLimiter\Policy;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\NoLock;

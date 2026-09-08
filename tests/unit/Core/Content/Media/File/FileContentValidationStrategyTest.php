@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\AbstractFileContentValidator;
 use Contena\Core\Content\Media\File\FileContentValidationStrategy;
 use Contena\Core\Content\Media\File\MediaFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

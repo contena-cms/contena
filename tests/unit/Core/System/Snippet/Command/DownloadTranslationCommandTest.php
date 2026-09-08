@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Command;
 
-use GuzzleHttp\Psr7\Uri;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Command\DownloadTranslationCommand;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

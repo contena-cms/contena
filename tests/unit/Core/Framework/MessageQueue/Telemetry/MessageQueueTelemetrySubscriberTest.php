@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Contena\Core\Framework\MessageQueue\Telemetry\MessageGroupResolver;
 use Contena\Core\Framework\MessageQueue\Telemetry\MessageQueueTelemetrySubscriber;
 use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;

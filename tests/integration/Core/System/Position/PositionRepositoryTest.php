@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Position;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Position\PositionCollection;
 use Contena\Core\System\Position\PositionEntity;
 use Contena\Core\System\User\UserCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

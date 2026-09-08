@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Cache;
 
+use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
 
 /**
  * @internal

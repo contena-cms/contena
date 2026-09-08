@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Configuration;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Installer\Configuration\AdminConfigurationService;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\Test\Stub\Doctrine\FakeQueryBuilder;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 
 /**

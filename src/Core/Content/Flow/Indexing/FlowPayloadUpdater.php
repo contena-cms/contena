@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Indexing;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Flow\Dispatching\CachedFlowLoader;
 use Contena\Core\Content\Flow\Indexing\FlowBuilder\Sequence;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 class FlowPayloadUpdater
 {
@@ -42,6 +42,7 @@ class FlowPayloadUpdater
             LOWER(HEX(`flow_sequence`.`id`)) as `sequence_id`,
             LOWER(HEX(`flow_sequence`.`parent_id`)) as `parent_id`,
             LOWER(HEX(`flow_sequence`.`rule_id`)) as `rule_id`,
+            LOWER(HEX(`flow_sequence`.`app_flow_action_id`)) as `app_flow_action_id`,
             `flow_sequence`.`display_group` as `display_group`,
             `flow_sequence`.`position` as `position`,
             `flow_sequence`.`action_name` as `action_name`,

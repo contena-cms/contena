@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -16,6 +14,8 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

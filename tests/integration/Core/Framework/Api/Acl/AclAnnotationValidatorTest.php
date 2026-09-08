@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Acl;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\AclAnnotationValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Test\Api\Acl\fixtures\AclTestController;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Kernel;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 

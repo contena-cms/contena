@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\Content\Flow\Dispatching\AbstractFlowLoader;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlow;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
@@ -12,6 +9,9 @@ use Contena\Core\Content\Flow\Dispatching\BufferedFlowQueue;
 use Contena\Core\Content\Flow\Dispatching\FlowExecutor;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * @internal

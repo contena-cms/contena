@@ -2,6 +2,7 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
@@ -19,7 +20,6 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 
 /**
  * Static guard for the PHPUnit 12+ "no expectations configured for mock … use a test stub" notice: flags a

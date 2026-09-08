@@ -2,6 +2,8 @@
 
 namespace Contena\Core\Framework\Mcp\AllowList;
 
+use Contena\Core\Framework\Mcp\McpToolsetRegistry;
+use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Exception\InvalidCursorException;
 use Mcp\Schema\JsonRpc\Request;
@@ -18,8 +20,6 @@ use Mcp\Schema\Result\ListToolsResult;
 use Mcp\Schema\Tool;
 use Mcp\Server\Handler\Request\RequestHandlerInterface;
 use Mcp\Server\Session\SessionInterface;
-use Contena\Core\Framework\Mcp\McpToolsetRegistry;
-use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Service;
 
-use Doctrine\DBAL\Connection;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\MailTemplate\MailTemplateCollection;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * This class is responsible for sending mail using user-defined mail templates.

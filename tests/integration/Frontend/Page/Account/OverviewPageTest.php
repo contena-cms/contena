@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Page\Account;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -14,6 +13,7 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoadedEvent;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

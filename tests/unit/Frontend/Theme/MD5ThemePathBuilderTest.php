@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
+use Contena\Frontend\Theme\MD5ThemePathBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\MD5ThemePathBuilder;
 
 /**
  * @internal

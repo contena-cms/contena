@@ -2,6 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Command;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
@@ -9,10 +13,6 @@ use Mcp\Schema\Tool;
 use Mcp\Server;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
-use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

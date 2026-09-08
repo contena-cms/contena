@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Upload;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Event\MediaFileExtensionWhitelistEvent;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

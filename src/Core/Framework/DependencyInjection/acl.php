@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Acl\AclAnnotationValidator;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Acl\AclWriteValidator;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\Acl\Role\AclUserRoleDefinition;
 use Contena\Core\Framework\Api\Controller\AclController;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

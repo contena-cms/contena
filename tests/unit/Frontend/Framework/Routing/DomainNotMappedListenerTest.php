@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Framework\Routing\DomainNotMappedListener;
 use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

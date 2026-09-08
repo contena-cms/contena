@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Sitemap\Service;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\System\Channel\ChannelContext;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SitemapHandleFactory implements SitemapHandleFactoryInterface

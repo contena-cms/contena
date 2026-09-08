@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Event\MediaUploadedEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

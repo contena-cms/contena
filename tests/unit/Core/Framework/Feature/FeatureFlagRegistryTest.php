@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Feature;
 
-use Doctrine\DBAL\Exception\ConnectionException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\Event\BeforeFeatureFlagToggleEvent;
@@ -13,6 +9,10 @@ use Contena\Core\Framework\Feature\Event\FeatureFlagToggledEvent;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
+use Doctrine\DBAL\Exception\ConnectionException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

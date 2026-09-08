@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Adapter\Filesystem\Plugin;
 
-use League\Flysystem\Visibility;
 use Contena\Core\Framework\Adapter\AdapterException;
+use League\Flysystem\Visibility;
 
 /**
  * @final

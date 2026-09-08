@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
-use OpenSearchDSL\Query\Joining\NestedQuery;
-use OpenSearchDSL\Query\TermLevel\TermQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Elasticsearch\AbstractFieldQueryBuilder;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 use Contena\Elasticsearch\NestedFieldQueryBuilder;
 use Contena\Elasticsearch\ResolvedField;
+use OpenSearchDSL\Query\Joining\NestedQuery;
+use OpenSearchDSL\Query\TermLevel\TermQuery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

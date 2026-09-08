@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Stats;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsEntity;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsCollection;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsEntity;
 use Contena\Core\Framework\MessageQueue\Stats\MySQLStatsRepository;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Messenger\Envelope;

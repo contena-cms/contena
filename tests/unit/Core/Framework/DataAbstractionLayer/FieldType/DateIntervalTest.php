@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\FieldType;
 
+use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;
 
 /**
  * @internal

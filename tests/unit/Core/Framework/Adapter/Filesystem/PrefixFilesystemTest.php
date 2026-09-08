@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem;
 
+use Contena\Core\Framework\Adapter\AdapterException;
+use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\StorageAttributes;
@@ -9,8 +11,6 @@ use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 
 /**
  * @internal

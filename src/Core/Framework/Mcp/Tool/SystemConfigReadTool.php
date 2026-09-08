@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Mcp\Capability\Attribute\McpTool;
 
 #[McpTool(
     name: 'contena-system-config-read',

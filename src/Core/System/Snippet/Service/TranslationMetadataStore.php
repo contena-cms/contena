@@ -2,15 +2,15 @@
 
 namespace Contena\Core\System\Snippet\Service;
 
+use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
+use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
+use Contena\Core\System\Snippet\SnippetException;
+use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
-use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
-use Contena\Core\System\Snippet\SnippetException;
-use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Cache\CacheInterface;

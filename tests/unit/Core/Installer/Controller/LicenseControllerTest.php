@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Controller;
 
+use Contena\Core\Installer\Controller\LicenseController;
+use Contena\Core\Installer\License\LicenseFetcher;
 use GuzzleHttp\Exception\TransferException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Controller\LicenseController;
-use Contena\Core\Installer\License\LicenseFetcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

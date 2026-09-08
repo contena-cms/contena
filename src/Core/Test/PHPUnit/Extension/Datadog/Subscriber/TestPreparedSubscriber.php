@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\Datadog\Subscriber;
 
+use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 use PHPUnit\Event\Test\Prepared;
 use PHPUnit\Event\Test\PreparedSubscriber;
-use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 
 /**
  * @internal

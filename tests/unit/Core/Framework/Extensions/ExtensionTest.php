@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Extensions;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Extensions\Extension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

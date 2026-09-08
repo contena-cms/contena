@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Member\Channel;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -20,6 +19,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\Aggregate\MemberRecovery\MemberRecoveryCollection;
 use Contena\Core\System\Member\Aggregate\MemberRecovery\MemberRecoveryEntity;
 use Contena\Core\System\Member\MemberException;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;

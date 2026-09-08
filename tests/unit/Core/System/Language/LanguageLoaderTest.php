@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\Language;
 
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
+use Contena\Core\System\Language\LanguageLoader;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Contena\Core\System\Language\LanguageLoader;
 
 /**
  * @internal

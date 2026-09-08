@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\Core\Application;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\MediaLocationBuilder;
 use Contena\Core\Content\Media\Core\Application\MediaPathStorage;
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
@@ -13,6 +10,9 @@ use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

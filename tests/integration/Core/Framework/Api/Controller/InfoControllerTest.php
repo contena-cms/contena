@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Event\MediaFileExtensionWhitelistEvent;
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

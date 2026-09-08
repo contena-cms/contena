@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Channel\Context;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
@@ -15,6 +13,8 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

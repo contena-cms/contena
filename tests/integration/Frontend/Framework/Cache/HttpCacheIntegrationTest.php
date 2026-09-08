@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Cache;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Adapter\Kernel\HttpCacheKernel;
@@ -12,6 +9,9 @@ use Contena\Core\Framework\Routing\RequestTransformerInterface;
 use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

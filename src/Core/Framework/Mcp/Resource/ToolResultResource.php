@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Resource;
 
-use Mcp\Capability\Attribute\McpResourceTemplate;
-use Mcp\Server\RequestContext;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
+use Mcp\Capability\Attribute\McpResourceTemplate;
+use Mcp\Server\RequestContext;
 
 /**
  * Serves a large tool result that was stored during the current MCP session.

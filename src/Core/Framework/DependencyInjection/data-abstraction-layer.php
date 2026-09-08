@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Sync\SyncFkResolver;
 use Contena\Core\Framework\Api\Sync\SyncService;
@@ -41,6 +39,9 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionValidator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryWriterFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\BlobFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\BoolFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ConfigJsonFieldSerializer;
@@ -125,12 +126,16 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\ParentRelationV
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\TenantForeignKeyValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteCommandExtractor;
 use Contena\Core\Framework\Migration\IndexerQueuer;
+use Contena\Core\Framework\Script\AppContextCreator;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Util\HtmlSanitizer;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\Language\LanguageLoader;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -278,6 +283,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(AggregationParser::class);
+
+    $services->set(RepositoryFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service(AppContextCreator::class),
+            service(RequestCriteriaBuilder::class),
+            service(AclCriteriaValidator::class),
+        ]);
+
+    $services->set(RepositoryWriterFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service(AppContextCreator::class),
+            service(SyncService::class),
+        ]);
+
+    $services->set(ChannelRepositoryFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service(ChannelDefinitionInstanceRegistry::class),
+            service(RequestCriteriaBuilder::class),
+        ]);
 
     // EntityDefinition[]
     $services->set(EntityReaderInterface::class, EntityReader::class)

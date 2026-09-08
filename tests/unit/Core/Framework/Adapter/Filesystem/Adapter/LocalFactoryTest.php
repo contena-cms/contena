@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem\Adapter;
 
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\LocalFactory;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Filesystem\Adapter\LocalFactory;
 
 /**
  * @internal

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Maintenance\System\Command;
 
+use Contena\Core\Maintenance\System\Command\SystemSetupCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Maintenance\System\Command\SystemSetupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\ApplicationTester;

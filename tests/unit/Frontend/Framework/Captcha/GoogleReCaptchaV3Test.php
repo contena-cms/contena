@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Captcha;
 
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -12,9 +15,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
-use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver as CoreMaintenanceModeResolver;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Controller\ErrorController;
 use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

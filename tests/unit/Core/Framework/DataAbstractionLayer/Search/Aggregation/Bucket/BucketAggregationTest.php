@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\BucketAggregation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\BucketAggregation;
 
 /**
  * @internal

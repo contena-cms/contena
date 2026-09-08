@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Validation;
 
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\PropertySpecificationDto;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnum;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnumValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\PropertySpecificationDto;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnum;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnumValidator;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;

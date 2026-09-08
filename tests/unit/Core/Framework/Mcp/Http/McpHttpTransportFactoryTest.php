@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Http;
 
+use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
+use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
+use Contena\Core\PlatformRequest;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
-use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
-use Contena\Core\PlatformRequest;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 

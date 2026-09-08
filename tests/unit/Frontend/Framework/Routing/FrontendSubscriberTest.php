@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
@@ -19,6 +16,9 @@ use Contena\Frontend\Event\MaintenanceRedirectEvent;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Routing\FrontendSubscriber;
 use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

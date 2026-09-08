@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Command;
 
+use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

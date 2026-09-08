@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
@@ -15,7 +16,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme\Command;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
@@ -18,6 +14,10 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeFileResolver;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;

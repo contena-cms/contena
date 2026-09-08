@@ -3,8 +3,8 @@
 namespace Contena\Frontend\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

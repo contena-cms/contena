@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Captcha\BasicCaptcha;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha\BasicCaptchaGenerator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Doctrine\DBAL\Exception\DriverException;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
+use Doctrine\DBAL\Exception\DriverException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

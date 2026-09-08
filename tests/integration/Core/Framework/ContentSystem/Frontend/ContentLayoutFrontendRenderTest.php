@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Frontend;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -33,8 +33,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ContentLayoutFrontendRenderTest extends TestCase
 {
-    use IntegrationTestBehaviour;
     use FrontendControllerTestBehaviour;
+    use IntegrationTestBehaviour;
 
     private const MEDIA_FILE_NAME = 'frontend-render-probe';
 
@@ -107,7 +107,7 @@ class ContentLayoutFrontendRenderTest extends TestCase
 
         static::assertTrue($loaded);
 
-        $nodes = (new \DOMXPath($document))->query(
+        $nodes = new \DOMXPath($document)->query(
             \sprintf('//img[@data-element-id="%s"]', $this->ids->get('image'))
         );
 

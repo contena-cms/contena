@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Elasticsearch\Blog\BlogUpdater;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

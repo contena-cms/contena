@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Member\Channel;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -16,6 +15,7 @@ use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\Member\MemberException;
 use Contena\Core\System\Member\Service\DoubleOptInService;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

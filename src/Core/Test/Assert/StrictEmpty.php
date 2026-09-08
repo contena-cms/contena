@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Test\Assert;
 
+use Contena\Core\Test\Constraint\StrictIsEmpty;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\LogicalNot;
-use Contena\Core\Test\Constraint\StrictIsEmpty;
 
 /**
  * @internal

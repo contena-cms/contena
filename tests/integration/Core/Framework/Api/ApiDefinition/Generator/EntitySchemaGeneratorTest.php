@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\Generator;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\EntityDefinition\SimpleDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

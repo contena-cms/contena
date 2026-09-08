@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Maintenance\System;
 
+use Contena\Core\Maintenance\MaintenanceException;
 use PHPUnit\Event\Telemetry\System;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Maintenance\MaintenanceException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

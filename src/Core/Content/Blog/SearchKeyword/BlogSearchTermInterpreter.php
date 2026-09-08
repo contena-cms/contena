@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\SearchKeyword;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
 use Contena\Core\Framework\Util\ArrayNormalizer;
+use Psr\Log\LoggerInterface;
 
 class BlogSearchTermInterpreter implements BlogSearchTermInterpreterInterface
 {

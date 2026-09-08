@@ -1,0 +1,225 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook\Service;
+
+use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
+use Contena\Core\Framework\Webhook\Health\EndpointState;
+use Contena\Core\Framework\Webhook\Health\ErrorClassification;
+use Contena\Core\Framework\Webhook\Health\HttpErrorClassifier;
+use Contena\Core\Framework\Webhook\Message\HeldDeliveryStamp;
+use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
+use Contena\Core\Framework\Webhook\Outbox\DeliveryResponse;
+use Contena\Core\Framework\Webhook\Outbox\OutboxEntry;
+use Contena\Core\Framework\Webhook\Outbox\RetryDelayCalculator;
+use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;
+use Doctrine\DBAL\Exception as DBALException;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+
+/**
+ * @internal
+ */
+class WebhookDeliveryService
+{
+    public const HEADER_EVENT_ID = 'X-Contena-Event-Id';
+    public const HEADER_SEQUENCE = 'X-Contena-Sequence';
+    public const HEADER_ATTEMPT = 'X-Contena-Attempt';
+
+    // Matches RetryDelayCalculator::RETRY_DELAYS_IN_SECONDS; attempt 6 is terminal.
+    public const MAX_RETRIES = 5;
+
+    public function __construct(
+        private readonly WebhookClient $webhookClient,
+        private readonly AppPayloadServiceHelper $appPayloadServiceHelper,
+        private readonly WebhookSigningSecretResolver $signingSecretResolver,
+        private readonly WebhookOutboxStore $webhookOutboxStore,
+        private readonly RetryDelayCalculator $retryDelayCalculator,
+        private readonly MessageBusInterface $bus,
+        private readonly WebhookHealthService $webhookHealthService,
+        private readonly LoggerInterface $logger,
+        private readonly HttpErrorClassifier $errorClassifier,
+    ) {
+    }
+
+    /**
+     * @param list<WebhookEventMessage> $messages
+     */
+    public function process(array $messages): void
+    {
+        foreach ($messages as $message) {
+            $this->bus->dispatch($message);
+        }
+    }
+
+    /**
+     * @param list<WebhookEventMessage> $messages
+     */
+    public function hold(array $messages): void
+    {
+        foreach ($messages as $message) {
+            $this->bus->dispatch($message, [new HeldDeliveryStamp()]);
+        }
+    }
+
+    public function deliver(WebhookEventMessage $message): void
+    {
+        try {
+            $entry = $this->webhookOutboxStore->markRunning($message->getWebhookEventId());
+            if ($entry === null) {
+                // Under StreamLease, this should be rare — signals lease loss or crash-recovery re-claim.
+                $this->logger->warning('Skipping webhook delivery: lease lost for event {eventId}', [
+                    'eventId' => $message->getWebhookEventId(),
+                    'webhookId' => $message->getWebhookId(),
+                ]);
+
+                return;
+            }
+
+            $request = $this->buildRequest($message, $entry);
+            $httpResult = $this->webhookClient->send($request);
+            $this->handleResult($message->getWebhookId(), $entry, $request, $httpResult);
+        } catch (DBALException $e) {
+            // DB is unavailable — this record will be stuck as RUNNING until next retry.
+            $this->logger->error('Webhook delivery persistence failed for event {eventId}', [
+                'eventId' => $message->getWebhookEventId(),
+                'webhookId' => $message->getWebhookId(),
+                'exception' => $e,
+            ]);
+        }
+    }
+
+    public function buildRequest(WebhookEventMessage $message, OutboxEntry $entry): WebhookRequest
+    {
+        $payload = $message->getPayload();
+        $headers = $message->getWebhookHeaders();
+        $headers = array_filter(
+            $headers,
+            static fn (string $headerName): bool => !\in_array(strtolower($headerName), [
+                strtolower(self::HEADER_EVENT_ID),
+                strtolower(self::HEADER_SEQUENCE),
+                strtolower(self::HEADER_ATTEMPT),
+            ], true),
+            \ARRAY_FILTER_USE_KEY
+        );
+        $headers[self::HEADER_EVENT_ID] = $message->getWebhookEventId();
+        $headers[self::HEADER_SEQUENCE] = (string) $entry->sequence;
+        $headers[self::HEADER_ATTEMPT] = (string) max(0, $entry->executionCount - 1);
+
+        if (isset($payload['source']) && \is_array($payload['source'])) {
+            $payload['source']['sequence'] = $entry->sequence;
+        }
+
+        return $this->appPayloadServiceHelper->createWebhookRequest(
+            $payload,
+            $message->getUrl(),
+            $message->getContenaVersion(),
+            WebhookClient::CONNECT_TIMEOUT,
+            WebhookClient::REQUEST_TIMEOUT,
+            $this->signingSecretResolver->resolve($message),
+            $message->getLanguageId(),
+            $message->getUserLocale(),
+            $headers,
+        );
+    }
+
+    private function handleResult(string $webhookId, OutboxEntry $entry, WebhookRequest $request, WebhookResult $result): void
+    {
+        $response = DeliveryResponse::from($request, $result);
+        $this->handleHealthResult($webhookId, $entry, $response, $result);
+    }
+
+    private function handleHealthResult(string $webhookId, OutboxEntry $entry, DeliveryResponse $response, WebhookResult $result): void
+    {
+        $classification = $this->errorClassifier->classify($result->statusCode ?? 0);
+
+        if ($result->successful() && $classification === ErrorClassification::Success) {
+            if ($this->webhookOutboxStore->markSuccess($entry, $response)) {
+                $this->webhookHealthService->recordSuccess($webhookId);
+
+                return;
+            }
+
+            $this->logger->warning('Lease lost after successful webhook delivery for event {eventId}', [
+                'eventId' => $entry->webhookEventId,
+                'webhookId' => $webhookId,
+                'sequence' => $entry->sequence,
+                'executionCount' => $entry->executionCount,
+            ]);
+
+            return;
+        }
+
+        // A reclaimed attempt no longer owns either the row or its health evidence.
+        if (!$this->webhookOutboxStore->ownsRunningAttempt($entry)) {
+            $this->logLeaseLost($webhookId, $entry);
+
+            return;
+        }
+
+        $state = $this->webhookHealthService->recordFailure($webhookId, $classification, $entry->executionCount);
+        $retryAfter = $classification === ErrorClassification::TransientRateLimit
+            ? $this->retryAfterHeader($result)
+            : null;
+
+        $this->placeFailedRow($webhookId, $entry, $response, $classification, $state, $retryAfter);
+    }
+
+    private function placeFailedRow(
+        string $webhookId,
+        OutboxEntry $entry,
+        DeliveryResponse $response,
+        ErrorClassification $classification,
+        EndpointState $state,
+        ?string $retryAfter,
+    ): void {
+        // Payload-specific failures, rows of a disabled webhook, and unfollowed redirects on a healthy endpoint are final.
+        if (!$classification->isTransient() || $state === EndpointState::Disabled || ($state === EndpointState::Healthy && $classification === ErrorClassification::TransientRedirect)) {
+            $this->webhookOutboxStore->markFailed($entry, $response);
+
+            return;
+        }
+
+        // Inside an incident the ladder owns re-timing: the row is re-held, not retried.
+        if ($state !== EndpointState::Healthy) {
+            $this->webhookOutboxStore->markPaused($entry, $response);
+
+            return;
+        }
+
+        if (!$this->persistFailureOutcome($entry, $response, $retryAfter)) {
+            $this->logLeaseLost($webhookId, $entry);
+        }
+    }
+
+    private function retryAfterHeader(WebhookResult $result): ?string
+    {
+        foreach ($result->headers ?? [] as $name => $values) {
+            if (strcasecmp($name, 'Retry-After') === 0) {
+                return $values[0] ?? null;
+            }
+        }
+
+        return null;
+    }
+
+    private function logLeaseLost(string $webhookId, OutboxEntry $entry): void
+    {
+        $this->logger->warning('Lease lost while recording webhook failure for event {eventId}', [
+            'eventId' => $entry->webhookEventId,
+            'webhookId' => $webhookId,
+            'sequence' => $entry->sequence,
+            'executionCount' => $entry->executionCount,
+        ]);
+    }
+
+    private function persistFailureOutcome(OutboxEntry $entry, ?DeliveryResponse $response = null, ?string $retryAfter = null): bool
+    {
+        if ($entry->executionCount > self::MAX_RETRIES) {
+            return $this->webhookOutboxStore->markFailed($entry, $response);
+        }
+
+        $retryAt = $this->retryDelayCalculator->computeNextRetryAt(max(1, $entry->executionCount), $retryAfter);
+
+        return $this->webhookOutboxStore->markPendingRetry($entry, $retryAt, $response);
+    }
+}

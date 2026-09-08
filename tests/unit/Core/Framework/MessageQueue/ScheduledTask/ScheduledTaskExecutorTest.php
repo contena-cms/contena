@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\DynamicallyScheduledTaskHandler;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
@@ -15,6 +12,9 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskExecutor;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\MockClock;
 
 /**

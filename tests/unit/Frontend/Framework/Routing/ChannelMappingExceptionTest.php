@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
+use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
 
 /**
  * @internal

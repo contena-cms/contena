@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework\TestCaseBase;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

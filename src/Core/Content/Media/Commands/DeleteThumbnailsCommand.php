@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Media\Commands;
 
-use Doctrine\DBAL\Connection;
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
 use Contena\Core\Framework\Context;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

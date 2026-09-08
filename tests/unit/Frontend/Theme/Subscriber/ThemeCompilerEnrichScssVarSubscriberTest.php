@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Subscriber;
 
-use Doctrine\DBAL\Exception as DBALException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
@@ -15,6 +11,10 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\Subscriber\ThemeCompilerEnrichScssVarSubscriber;
+use Doctrine\DBAL\Exception as DBALException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

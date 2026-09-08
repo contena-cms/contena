@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Doctrine;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ParameterType;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 
 /**
  * @phpstan-type DataRow array{data: array<string, mixed>, types: array<string, ParameterType>|null}

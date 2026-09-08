@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Content\Media\Metadata;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\AudioType;
 use Contena\Core\Content\Media\MediaType\BinaryType;
@@ -18,6 +15,9 @@ use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\Metadata\MetadataLoader;
 use Contena\Core\Content\Media\Metadata\MetadataLoader\ImageMetadataLoader;
 use Contena\Core\Framework\Util\Hasher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

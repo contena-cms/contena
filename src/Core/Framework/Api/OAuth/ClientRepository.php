@@ -2,15 +2,15 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
+use Contena\Core\Framework\Api\Util\AccessKeyHelper;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
-use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Uuid\Uuid;
 
 class ClientRepository implements ClientRepositoryInterface
 {

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Test\PHPUnit\Extension\Common;
 
+use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 use PHPUnit\Event\Telemetry\HRTime;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\PHPUnit\Extension\Common\TimeKeeper;
 
 /**
  * @internal

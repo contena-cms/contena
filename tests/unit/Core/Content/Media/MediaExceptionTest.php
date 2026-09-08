@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media;
 
+use Contena\Core\Content\Media\MediaException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\MediaException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

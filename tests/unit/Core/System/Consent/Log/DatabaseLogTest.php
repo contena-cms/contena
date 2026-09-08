@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent\Log;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Log\DatabaseLog;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 
 /**

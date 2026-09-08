@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Subscriber\TelemetryFlushListener;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\HttpKernel\KernelEvents;

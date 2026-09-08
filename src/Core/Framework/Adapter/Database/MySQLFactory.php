@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\Adapter\Database;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
@@ -9,7 +10,6 @@ use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Pdo\Mysql;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
+use Mcp\Capability\Attribute\McpTool;
 
 /**
  * @internal

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Robots\Struct;
 
+use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
+use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
-use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
 
 /**
  * @internal

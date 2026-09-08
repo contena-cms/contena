@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Validation\Constraint;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfoValidator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
 use Symfony\Component\Validator\ConstraintValidatorInterface;

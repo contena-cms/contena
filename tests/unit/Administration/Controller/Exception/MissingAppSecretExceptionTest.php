@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Controller\Exception;
 
+use Contena\Administration\Controller\Exception\MissingAppSecretException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Controller\Exception\MissingAppSecretException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

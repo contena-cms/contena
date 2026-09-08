@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Country;
 
+use Contena\Core\System\Country\CountryException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Country\CountryException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

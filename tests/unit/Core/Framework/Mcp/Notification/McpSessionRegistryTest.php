@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Notification;
 
+use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Lock\LockFactory;

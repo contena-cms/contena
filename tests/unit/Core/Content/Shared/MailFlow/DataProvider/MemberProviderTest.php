@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\MemberProvider;
 use Contena\Core\System\Member\MemberDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

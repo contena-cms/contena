@@ -1,8 +1,5 @@
 <?php declare(strict_types=1);
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -76,6 +73,9 @@ use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilder;
 use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilderInterface;
 use Contena\Frontend\Theme\Twig\ThemeNamespaceHierarchyBuilder;
 use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

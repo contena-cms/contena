@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Action;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\Action\AddUserTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\AssignUserStatusAction;
 use Contena\Core\Content\Flow\Dispatching\Action\CreateNotificationAction;
@@ -24,6 +20,10 @@ use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

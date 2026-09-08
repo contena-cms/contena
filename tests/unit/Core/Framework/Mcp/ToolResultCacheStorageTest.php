@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
+use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 
 /**

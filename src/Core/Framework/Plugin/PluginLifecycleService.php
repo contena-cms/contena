@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\Plugin;
 use Composer\InstalledVersions;
 use Composer\IO\NullIO;
 use Composer\Semver\Comparator;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
@@ -45,10 +43,14 @@ use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackExceptio
 use Contena\Core\Framework\Plugin\Requirement\RequirementsValidator;
 use Contena\Core\Framework\Plugin\Util\AssetService;
 use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
+use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -92,6 +94,8 @@ class PluginLifecycleService
         private readonly CacheItemPoolInterface $restartSignalCachePool,
         private readonly string $contenaVersion,
         private readonly SystemConfigService $systemConfigService,
+        private readonly CustomEntityPersister $customEntityPersister,
+        private readonly CustomEntitySchemaUpdater $customEntitySchemaUpdater,
         private readonly PluginService $pluginService,
         private readonly VersionSanitizer $versionSanitizer,
         private readonly DefinitionInstanceRegistry $definitionRegistry,
@@ -242,6 +246,7 @@ class PluginLifecycleService
         $plugin->setInstalledAt(null);
 
         if (!$uninstallContext->keepUserData()) {
+            $this->removeCustomEntities($plugin->getId());
             $this->removePluginCustomFields($pluginBaseClass, $contenaContext);
         }
 
@@ -579,6 +584,12 @@ class PluginLifecycleService
     private function removePluginCustomFields(Plugin $pluginBaseClass, Context $context): void
     {
         $this->customFieldSetPersister->sync(CustomFields::fromArray([]), $pluginBaseClass->getName(), $context);
+    }
+
+    private function removeCustomEntities(string $pluginId): void
+    {
+        $this->customEntityPersister->update([], PluginEntity::class, $pluginId);
+        $this->customEntitySchemaUpdater->update();
     }
 
     private function getPluginBaseClass(string $pluginBaseClassString): Plugin

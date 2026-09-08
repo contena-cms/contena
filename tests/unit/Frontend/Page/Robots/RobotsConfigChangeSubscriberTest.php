@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Robots;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
 use Contena\Frontend\Page\Robots\Parser\ParseIssue;
 use Contena\Frontend\Page\Robots\Parser\ParseIssueSeverity;
 use Contena\Frontend\Page\Robots\Parser\RobotsDirectiveParser;
 use Contena\Frontend\Page\Robots\RobotsConfigChangeSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

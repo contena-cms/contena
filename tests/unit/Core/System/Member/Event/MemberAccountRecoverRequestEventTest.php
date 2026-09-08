@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
 use Contena\Core\Framework\Context;
@@ -11,6 +9,8 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Member\Aggregate\MemberRecovery\MemberRecoveryEntity;
 use Contena\Core\System\Member\Event\MemberAccountRecoverRequestEvent;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -16,6 +15,7 @@ use Contena\Core\System\Member\Event\MemberGroupRegistrationAccepted;
 use Contena\Core\System\Member\Event\MemberGroupRegistrationDeclined;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

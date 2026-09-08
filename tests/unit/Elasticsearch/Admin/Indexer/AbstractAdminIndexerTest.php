@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\LastIdQuery;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Doctrine\FakeConnection;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

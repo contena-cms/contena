@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\CustomField;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -13,6 +12,7 @@ use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetColle
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationDefinition;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

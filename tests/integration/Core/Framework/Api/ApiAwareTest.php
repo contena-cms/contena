@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Frontend\Theme\ThemeDefinition;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
+use Contena\Core\Framework\Adapter\AdapterException;
 use League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter;
 use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
 use League\Flysystem\FilesystemAdapter;
-use Contena\Core\Framework\Adapter\AdapterException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AwsS3v3Factory implements AdapterFactoryInterface

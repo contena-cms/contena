@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Consent\Service;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Consent\ConsentDefinition;
@@ -15,6 +14,7 @@ use Contena\Core\System\Consent\DTO\ConsentState;
 use Contena\Core\System\Consent\DTO\ConsentStateRecord;
 use Contena\Core\System\Consent\Event\ConsentAcceptedEvent;
 use Contena\Core\System\Consent\Event\ConsentRevokedEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

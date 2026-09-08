@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\ScheduledTask;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Sitemap\Event\SitemapChannelCriteriaEvent;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
@@ -16,6 +15,7 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

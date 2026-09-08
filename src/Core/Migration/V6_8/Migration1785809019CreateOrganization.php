@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Migration\Traits\ImportTranslationsTrait;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

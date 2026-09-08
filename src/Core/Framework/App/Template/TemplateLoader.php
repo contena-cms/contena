@@ -1,0 +1,67 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\App\Template;
+
+use Contena\Core\Framework\App\AppException;
+use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\App\Source\SourceResolver;
+use Symfony\Component\Finder\Finder;
+
+/**
+ * @internal only for use by the app-system
+ */
+class TemplateLoader extends AbstractTemplateLoader
+{
+    private const TEMPLATE_DIR = '/Resources/views';
+
+    private const ALLOWED_TEMPLATE_DIRS = [
+        'frontend',
+        'documents',
+        'components',
+        'files',
+    ];
+
+    private const ALLOWED_FILE_EXTENSIONS = '*.twig';
+
+    public function __construct(private readonly SourceResolver $sourceResolver)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePathsForApp(Manifest $app): array
+    {
+        $fs = $this->sourceResolver->filesystemForManifest($app);
+
+        if (!$fs->has(self::TEMPLATE_DIR)) {
+            return [];
+        }
+
+        $viewDirectory = $fs->path(self::TEMPLATE_DIR);
+
+        $finder = new Finder();
+        $finder->files()
+            ->in($viewDirectory)
+            ->name(self::ALLOWED_FILE_EXTENSIONS)
+            ->path(self::ALLOWED_TEMPLATE_DIRS)
+            ->ignoreDotFiles(false)
+            ->ignoreUnreadableDirs();
+
+        return array_values(array_map(static fn (\SplFileInfo $file): string => ltrim(mb_substr($file->getPathname(), mb_strlen($viewDirectory)), '/'), iterator_to_array($finder)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateContent(string $path, Manifest $app): string
+    {
+        $fs = $this->sourceResolver->filesystemForManifest($app);
+
+        if (!$fs->has(self::TEMPLATE_DIR, $path)) {
+            throw AppException::cannotReadFile($fs->path(self::TEMPLATE_DIR, $path));
+        }
+
+        return $fs->read(self::TEMPLATE_DIR, $path);
+    }
+}

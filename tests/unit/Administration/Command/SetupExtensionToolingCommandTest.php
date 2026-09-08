@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Command;
 
+use Contena\Administration\Command\SetupExtensionToolingCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Command\SetupExtensionToolingCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

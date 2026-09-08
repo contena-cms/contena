@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Acl;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Acl\Event\CommandAclValidationEvent;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\Acl\Role\AclUserRoleDefinition;
@@ -16,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

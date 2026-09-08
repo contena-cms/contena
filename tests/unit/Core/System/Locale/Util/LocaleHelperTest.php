@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Locale\Util;
 
+use Contena\Core\System\Locale\Util\LocaleHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Locale\Util\LocaleHelper;
 
 /**
  * @internal

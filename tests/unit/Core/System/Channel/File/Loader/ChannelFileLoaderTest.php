@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -15,6 +13,8 @@ use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
 use Contena\Core\System\Channel\File\Loader\ChannelFileLoader;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

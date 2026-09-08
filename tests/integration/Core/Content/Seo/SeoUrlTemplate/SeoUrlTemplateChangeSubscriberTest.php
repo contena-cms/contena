@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Seo\SeoUrlTemplate;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
@@ -23,6 +20,9 @@ use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Regression test for issue #4116 / NEXT-30478:

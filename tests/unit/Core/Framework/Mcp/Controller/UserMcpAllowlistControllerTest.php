@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Mcp\Controller\UserMcpAllowlistController;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

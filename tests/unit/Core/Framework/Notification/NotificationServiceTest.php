@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Notification;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
 use Contena\Core\Framework\Api\Context\SystemSource;
@@ -16,6 +13,9 @@ use Contena\Core\Framework\Notification\NotificationCollection;
 use Contena\Core\Framework\Notification\NotificationEntity;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

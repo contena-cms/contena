@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
+use Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry\TaskNameResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry\TaskNameResolver;
 
 /**
  * @internal

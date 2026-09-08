@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Translation;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Translation\Translator;
@@ -16,6 +13,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\Test\Generator;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

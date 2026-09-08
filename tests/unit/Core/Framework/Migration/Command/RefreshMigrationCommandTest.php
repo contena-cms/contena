@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\Command\RefreshMigrationCommand;
 use Contena\Core\Framework\Migration\MigrationException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

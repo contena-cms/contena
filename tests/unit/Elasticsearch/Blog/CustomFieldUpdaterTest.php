@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -19,6 +16,9 @@ use Contena\Elasticsearch\Blog\CustomFieldSetGateway;
 use Contena\Elasticsearch\Blog\CustomFieldUpdater;
 use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 // Covers also ElasticsearchCustomFieldsMappingHelper for mapping tests
 

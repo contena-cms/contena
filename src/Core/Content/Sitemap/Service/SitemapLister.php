@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Sitemap\Service;
 
-use League\Flysystem\FilesystemOperator;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Sitemap\Struct\Sitemap;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
+use League\Flysystem\FilesystemOperator;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Asset\Package;
 
 class SitemapLister implements SitemapListerInterface

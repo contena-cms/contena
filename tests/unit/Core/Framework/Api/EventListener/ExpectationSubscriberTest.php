@@ -3,15 +3,15 @@
 namespace Contena\Tests\Unit\Core\Framework\Api\EventListener;
 
 use Composer\InstalledVersions;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\EventListener\ExpectationSubscriber;
 use Contena\Core\Framework\Api\Exception\ExpectationFailedException;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Kernel;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;

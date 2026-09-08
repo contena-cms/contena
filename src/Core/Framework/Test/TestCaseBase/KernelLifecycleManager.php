@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Composer\Autoload\ClassLoader;
-use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Framework\Test\Filesystem\Adapter\MemoryAdapterFactory;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Kernel;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

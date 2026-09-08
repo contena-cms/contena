@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheKey;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Adapter\Cache\Http\CacheStore;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Cache\CacheItem;

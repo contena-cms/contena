@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Flow;
 
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
+use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -24,6 +25,10 @@ class FlowEntity extends Entity
     protected bool $active = false;
 
     protected int $priority = 1;
+
+    protected ?string $appFlowEventId = null;
+
+    protected ?AppFlowEventEntity $appFlowEvent = null;
 
     protected string|Flow|null $payload = null;
 
@@ -121,5 +126,25 @@ class FlowEntity extends Entity
     public function setSequences(FlowSequenceCollection $sequences): void
     {
         $this->sequences = $sequences;
+    }
+
+    public function getAppFlowEvent(): ?AppFlowEventEntity
+    {
+        return $this->appFlowEvent;
+    }
+
+    public function setAppFlowEvent(?AppFlowEventEntity $appFlowEvent): void
+    {
+        $this->appFlowEvent = $appFlowEvent;
+    }
+
+    public function getAppFlowEventId(): ?string
+    {
+        return $this->appFlowEventId;
+    }
+
+    public function setAppFlowEventId(?string $appFlowEventId): void
+    {
+        $this->appFlowEventId = $appFlowEventId;
     }
 }

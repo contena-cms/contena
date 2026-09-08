@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Member\Event\MemberLoginEvent;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\Member\Subscriber\MemberRemoteAddressSubscriber;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -5,6 +5,9 @@ namespace Contena\Core\Content\Rule;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
+use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCollection;
+use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
@@ -15,6 +18,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidat
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\Exception\InvalidConditionException;
+use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,11 +37,13 @@ class RuleValidator implements EventSubscriberInterface
      * @internal
      *
      * @param EntityRepository<RuleConditionCollection> $ruleConditionRepository
+     * @param EntityRepository<AppScriptConditionCollection> $appScriptConditionRepository
      */
     public function __construct(
         private readonly ValidatorInterface $validator,
         private readonly RuleConditionRegistry $ruleConditionRegistry,
         private readonly EntityRepository $ruleConditionRepository,
+        private readonly EntityRepository $appScriptConditionRepository,
     ) {
     }
 
@@ -57,7 +63,7 @@ class RuleValidator implements EventSubscriberInterface
             }
 
             if ($command instanceof InsertCommand) {
-                $this->validateCondition(null, $command, $writeException);
+                $this->validateCondition(null, $command, $writeException, $event->getContext());
                 continue;
             }
 
@@ -78,6 +84,7 @@ class RuleValidator implements EventSubscriberInterface
         ?RuleConditionEntity $condition,
         WriteCommand $command,
         WriteException $writeException,
+        Context $context,
     ): void {
         $payload = $command->getPayload();
         $violations = new ConstraintViolationList();
@@ -101,7 +108,7 @@ class RuleValidator implements EventSubscriberInterface
         }
 
         $value = $this->getConditionValue($condition, $payload);
-        $missingProperties = array_filter(
+        $missingProperties = $rule instanceof ScriptRule ? [] : array_filter(
             $value,
             static fn (string $key): bool => !property_exists($rule, $key) && !\array_key_exists($key, $rule->getConstraints()),
             \ARRAY_FILTER_USE_KEY
@@ -116,7 +123,12 @@ class RuleValidator implements EventSubscriberInterface
         }
 
         $value = array_diff_key($value, $missingProperties);
-        $rule->assign($value);
+        if ($rule instanceof ScriptRule) {
+            $rule->assignValues($value);
+            $this->setScriptConstraints($rule, $condition, $payload, $context);
+        } else {
+            $rule->assign($value);
+        }
         $this->validateConsistency($rule->getConstraints(), $value, $violations, $missingProperties);
 
         if ($violations->count() > 0) {
@@ -191,11 +203,32 @@ class RuleValidator implements EventSubscriberInterface
             static fn (UpdateCommand $command): string => Uuid::fromBytesToHex($command->getPrimaryKey()['id']),
             $commands
         );
-        $conditions = $this->ruleConditionRepository->search(new Criteria($ids), $event->getContext())->getEntities();
+        $criteria = new Criteria($ids);
+        $criteria->addAssociation('appScriptCondition');
+        $criteria->setLimit(null);
+        $conditions = $this->ruleConditionRepository->search($criteria, $event->getContext())->getEntities();
 
         foreach ($commands as $command) {
             $id = Uuid::fromBytesToHex($command->getPrimaryKey()['id']);
-            $this->validateCondition($conditions->get($id), $command, $writeException);
+            $this->validateCondition($conditions->get($id), $command, $writeException, $event->getContext());
+        }
+    }
+
+    /**
+     * @param array<mixed> $payload
+     */
+    private function setScriptConstraints(ScriptRule $rule, ?RuleConditionEntity $condition, array $payload, Context $context): void
+    {
+        $script = null;
+        if (isset($payload['script_id']) && \is_string($payload['script_id'])) {
+            $scriptId = Uuid::fromBytesToHex($payload['script_id']);
+            $script = $this->appScriptConditionRepository->search(new Criteria([$scriptId]), $context)->getEntities()->first();
+        } elseif ($condition?->getAppScriptCondition() instanceof AppScriptConditionEntity) {
+            $script = $condition->getAppScriptCondition();
+        }
+
+        if ($script instanceof AppScriptConditionEntity && \is_array($script->getConstraints())) {
+            $rule->setConstraints($script->getConstraints());
         }
     }
 

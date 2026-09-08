@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Health\Util;
 
+use Contena\Frontend\Framework\SystemCheck\Util\FrontendHealthCheckResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Framework\SystemCheck\Util\FrontendHealthCheckResult;
 
 /**
  * @internal

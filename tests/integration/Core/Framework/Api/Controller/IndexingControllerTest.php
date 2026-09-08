@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexingMessage;
 use Contena\Core\Framework\Api\Controller\IndexingController;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

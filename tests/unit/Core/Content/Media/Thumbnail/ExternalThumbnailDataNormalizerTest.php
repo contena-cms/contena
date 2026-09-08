@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Thumbnail;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailData;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailDataNormalizer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**

@@ -2,9 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Service;
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -23,6 +20,9 @@ use Contena\Core\System\Snippet\Event\TranslationLoadedEvent;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\SnippetPatterns;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Service\ResetInterface;

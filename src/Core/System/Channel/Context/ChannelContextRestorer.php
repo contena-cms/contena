@@ -2,12 +2,12 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
 class ChannelContextRestorer
 {

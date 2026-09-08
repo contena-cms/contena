@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Redis;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Contena\Core\Framework\Increment\RedisIncrementer;
 use Contena\Core\Framework\Test\TestKernel;
 use Contena\Tests\Integration\Core\Framework\Trait\CustomKernelTestBehavior;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

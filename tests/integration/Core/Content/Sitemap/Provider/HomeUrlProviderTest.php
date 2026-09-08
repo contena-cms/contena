@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Provider;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\Provider\HomeUrlProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -15,6 +14,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

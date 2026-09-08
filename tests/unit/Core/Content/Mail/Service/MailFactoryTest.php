@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Service;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Service\Mail;
 use Contena\Core\Content\Mail\Service\MailFactory;
 use Contena\Core\Framework\Validation\HappyPathValidator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**

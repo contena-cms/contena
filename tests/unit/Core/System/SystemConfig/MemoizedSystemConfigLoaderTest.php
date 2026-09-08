@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\SystemConfig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\AbstractSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Core\System\SystemConfig\MemoizedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Store\MemoizedSystemConfigStore;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

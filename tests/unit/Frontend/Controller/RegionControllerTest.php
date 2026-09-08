@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\RegionController;
 use Contena\Frontend\Pagelet\Region\RegionDataPagelet;
 use Contena\Frontend\Pagelet\Region\RegionDataPageletLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

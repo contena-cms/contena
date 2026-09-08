@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\DataAbstractionLayer;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationDefinition;
 use Contena\Core\Content\Media\Event\MediaFolderConfigurationIndexerEvent;
@@ -15,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MediaFolderConfigurationIndexer extends EntityIndexer

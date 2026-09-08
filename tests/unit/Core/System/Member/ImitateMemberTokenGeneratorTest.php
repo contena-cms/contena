@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\System\Member;
 
-use Lcobucci\JWT\Configuration;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\JWTConfigurationFactory;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Member\ImitateMemberTokenGenerator;
 use Contena\Core\System\Member\Struct\ImitateMemberToken;
+use Lcobucci\JWT\Configuration;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;

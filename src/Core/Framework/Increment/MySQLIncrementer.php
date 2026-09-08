@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Increment;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 
 /**
  * @internal

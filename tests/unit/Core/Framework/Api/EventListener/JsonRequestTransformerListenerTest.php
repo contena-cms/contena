@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\EventListener;
 
+use Contena\Core\Framework\Api\EventListener\JsonRequestTransformerListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\EventListener\JsonRequestTransformerListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

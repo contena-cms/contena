@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Seo\Channel\SeoResolverData;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

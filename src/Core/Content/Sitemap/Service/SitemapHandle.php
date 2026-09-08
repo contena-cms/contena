@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Content\Sitemap\Service;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Sitemap\Event\SitemapFilterOpenTagEvent;
 use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\System\Channel\ChannelContext;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SitemapHandle implements SitemapHandleInterface

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Channel;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
@@ -14,6 +12,8 @@ use Contena\Core\System\Member\Channel\AccountService;
 use Contena\Core\System\Member\Exception\BadCredentialsException;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

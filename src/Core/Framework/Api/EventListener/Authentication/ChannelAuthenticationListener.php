@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Api\EventListener\Authentication;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Types;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
@@ -15,6 +13,8 @@ use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

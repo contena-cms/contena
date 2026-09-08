@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\MessageQueue\Subscriber\UpdatePostFinishSubscriber;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

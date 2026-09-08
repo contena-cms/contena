@@ -2,17 +2,17 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
-use League\Flysystem\FilesystemOperator;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\ChannelRequest;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Theme\ThemeRuntimeConfig;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Contena\Frontend\Theme\ThemeScripts;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Migration\Traits;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -11,6 +10,7 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
+use Doctrine\DBAL\Connection;
 
 class StateMachineMigrationImporter
 {

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Member\Aggregate\MemberAddress\MemberAddressDefinition;
 use Contena\Core\System\Member\Aggregate\MemberAddress\MemberAddressEntity;
 use Contena\Core\System\Member\Subscriber\AddressHashSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

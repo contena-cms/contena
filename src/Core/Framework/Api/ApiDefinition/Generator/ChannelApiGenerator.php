@@ -2,11 +2,6 @@
 
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator;
 
-use OpenApi\Annotations\Components;
-use OpenApi\Annotations\License;
-use OpenApi\Annotations\OpenApi;
-use OpenApi\Annotations\Operation;
-use OpenApi\Annotations\Parameter;
 use Contena\Core\Framework\Api\ApiDefinition\ApiDefinitionGeneratorInterface;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder;
@@ -21,6 +16,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
+use OpenApi\Annotations\Components;
+use OpenApi\Annotations\License;
+use OpenApi\Annotations\OpenApi;
+use OpenApi\Annotations\Operation;
+use OpenApi\Annotations\Parameter;
 
 /**
  * @internal

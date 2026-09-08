@@ -2,6 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
+use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
+use Contena\Core\Content\Media\File\DownloadResponseGenerator;
+use Contena\Core\Content\Media\MediaEntity;
+use Contena\Core\Content\Media\MediaException;
+use Contena\Core\Content\Media\MediaService;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Test\TestCaseHelper\AssertResponseHelper;
+use Contena\Core\Framework\Uuid\Uuid;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToGenerateTemporaryUrl;
@@ -11,14 +19,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
-use Contena\Core\Content\Media\File\DownloadResponseGenerator;
-use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Content\Media\MediaService;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Test\TestCaseHelper\AssertResponseHelper;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Frontend\Theme\CompilerConfiguration;
 use Contena\Frontend\Theme\ScssPhpCompiler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

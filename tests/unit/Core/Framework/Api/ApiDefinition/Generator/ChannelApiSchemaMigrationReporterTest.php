@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator;
 
-use OpenApi\Annotations\Schema;
-use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\AllChannelApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\BundleSchemaPathCollection;
@@ -22,6 +16,12 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_extensionFixtures\ExtensionDefinition;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\ChannelSimpleDefinition;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\CustomBundleWithApiSchema\ContenaBundleWithName;
+use OpenApi\Annotations\Schema;
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
+use Contena\Core\Content\Media\File\FileService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\File\FileService;
 
 /**
  * @internal

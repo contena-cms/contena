@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Test\Stub\EventDispatcher;
 
+use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 
 /**
  * @internal

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\User\Rule;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Rule\Container\DaysSinceRule;
 use Contena\Core\Framework\Rule\Rule;
@@ -12,6 +10,8 @@ use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
 use Contena\Core\System\User\Rule\DaysSinceLastLoginRule;
 use Contena\Core\System\User\Rule\UserRuleScope;
 use Contena\Core\System\User\UserEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;

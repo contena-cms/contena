@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\MigrationException;
+use Contena\Core\Framework\Migration\MigrationStep;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\MigrationException;
-use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal

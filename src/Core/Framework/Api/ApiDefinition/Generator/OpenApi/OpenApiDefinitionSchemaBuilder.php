@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi;
 
-use OpenApi\Annotations\OpenApi;
-use OpenApi\Annotations\Property;
-use OpenApi\Annotations\Schema;
-use OpenApi\Context as OpenApiContext;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
@@ -42,6 +38,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldEnumProviderInterface;
 use Contena\Core\Framework\Uuid\Uuid;
+use OpenApi\Annotations\OpenApi;
+use OpenApi\Annotations\Property;
+use OpenApi\Annotations\Schema;
+use OpenApi\Context as OpenApiContext;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 class OpenApiDefinitionSchemaBuilder

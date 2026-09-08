@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Mcp\Authentication;
 
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\DependencyInjection;
 
-use Psr\Clock\ClockInterface;
 use Contena\Administration\Framework\Api\Subscriber\AdminInfoConfigBundlesSubscriber;
 use Contena\Administration\Framework\Asset\AssetUploadListener;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
@@ -10,6 +9,7 @@ use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
 use Contena\Administration\Framework\Routing\NotFound\AdministrationNotFoundSubscriber;
 use Contena\Administration\Framework\SystemCheck\AdministrationReadinessCheck;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;

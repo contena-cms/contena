@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Search;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Search\AbstractBlogSearchRoute;
@@ -18,6 +16,8 @@ use Contena\Core\Test\Generator;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\Search\SearchPageLoadedEvent;
 use Contena\Frontend\Page\Search\SearchPageLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 

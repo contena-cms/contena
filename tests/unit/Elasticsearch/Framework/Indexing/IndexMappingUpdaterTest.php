@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
-use OpenSearch\Client;
-use OpenSearch\Exception\BadRequestHttpException;
-use OpenSearch\Exception\NotFoundHttpException;
-use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
@@ -18,6 +12,12 @@ use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingProvider;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingUpdater;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
+use OpenSearch\Client;
+use OpenSearch\Exception\BadRequestHttpException;
+use OpenSearch\Exception\NotFoundHttpException;
+use OpenSearch\Namespaces\IndicesNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

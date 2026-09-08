@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Twig;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\BundleHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 use Twig\Cache\CacheInterface;
 use Twig\Environment;
 

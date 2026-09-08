@@ -2,9 +2,9 @@
 
 namespace Contena\Core\System\Channel;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\System\CustomField\CustomFieldTypes;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Contracts\Service\ResetInterface;
 

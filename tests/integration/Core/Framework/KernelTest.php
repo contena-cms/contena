@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework;
 
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\Aggregate;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfig\BlogSearchConfigExceptionHandler;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField\BlogSearchConfigFieldExceptionHandler;
 use Contena\Core\Content\Blog\Exception\DuplicateBlogSearchConfigFieldException;
 use Contena\Core\Content\Blog\Exception\DuplicateBlogSearchConfigLanguageException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\CustomField\Aggregate\CustomFieldSet;
 
+use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationCollection;
@@ -29,6 +30,10 @@ class CustomFieldSetEntity extends Entity
     protected ?CustomFieldSetRelationCollection $relations = null;
 
     protected ?string $extensionName = null;
+
+    protected ?string $appId = null;
+
+    protected ?AppEntity $app = null;
 
     public function getName(): string
     {
@@ -114,5 +119,25 @@ class CustomFieldSetEntity extends Entity
     public function setExtensionName(?string $extensionName): void
     {
         $this->extensionName = $extensionName;
+    }
+
+    public function getAppId(): ?string
+    {
+        return $this->appId;
+    }
+
+    public function setAppId(?string $appId): void
+    {
+        $this->appId = $appId;
+    }
+
+    public function getApp(): ?AppEntity
+    {
+        return $this->app;
+    }
+
+    public function setApp(?AppEntity $app): void
+    {
+        $this->app = $app;
     }
 }

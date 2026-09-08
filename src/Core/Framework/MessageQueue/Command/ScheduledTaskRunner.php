@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\MessageQueue\Command;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
 use Contena\Core\Framework\Util\MemorySizeCalculator;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

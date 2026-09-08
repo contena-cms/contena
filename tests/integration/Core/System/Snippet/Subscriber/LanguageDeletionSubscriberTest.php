@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Snippet\Subscriber;
 
-use GuzzleHttp\Psr7\Response;
-use League\Flysystem\Filesystem;
-use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -16,6 +12,10 @@ use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Tests\Integration\Core\System\Snippet\TranslationClientBehaviour;
+use GuzzleHttp\Psr7\Response;
+use League\Flysystem\Filesystem;
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

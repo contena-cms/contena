@@ -2,8 +2,8 @@
 
 namespace Contena\Core\System\Consent\Subscriber;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

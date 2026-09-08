@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\TwigContextHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

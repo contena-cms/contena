@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\ChannelCacheKeySubscriber;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

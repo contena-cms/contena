@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Translation;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Exception\DriverException;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
@@ -15,6 +12,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Locale\LocaleException;
 use Contena\Core\System\Snippet\SnippetService;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\DBAL\Exception\DriverException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Intl\Locale;

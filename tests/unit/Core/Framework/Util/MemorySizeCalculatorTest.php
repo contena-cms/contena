@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Util;
 
+use Contena\Core\Framework\Util\MemorySizeCalculator;
+use Contena\Tests\Unit\Common\Stubs\IniMock;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Util\MemorySizeCalculator;
-use Contena\Tests\Unit\Common\Stubs\IniMock;
 
 /**
  * @internal

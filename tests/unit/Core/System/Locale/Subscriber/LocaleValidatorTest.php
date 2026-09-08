@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Locale\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
@@ -15,6 +13,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\Subscriber\LocaleValidator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

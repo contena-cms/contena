@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchIndexingCommand;
@@ -12,6 +10,8 @@ use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexingMessage;
 use Contena\Elasticsearch\Framework\Indexing\IndexerOffset;
 use Contena\Elasticsearch\Framework\Indexing\IndexingDto;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

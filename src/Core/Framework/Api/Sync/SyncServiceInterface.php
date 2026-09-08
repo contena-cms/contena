@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Api\Sync;
 
-use Doctrine\DBAL\ConnectionException;
 use Contena\Core\Framework\Context;
+use Doctrine\DBAL\ConnectionException;
 
 interface SyncServiceInterface
 {

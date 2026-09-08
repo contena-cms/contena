@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
@@ -13,6 +9,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Elasticsearch\Blog\BlogCustomFieldsUsedUpdater;
 use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

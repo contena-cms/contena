@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Command;
 
+use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
+use Contena\Elasticsearch\Framework\Command\ElasticsearchAdminResetCommand;
 use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
-use Contena\Elasticsearch\Framework\Command\ElasticsearchAdminResetCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

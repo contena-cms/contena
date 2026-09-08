@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\RateLimiter;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\RateLimiter\Policy\SystemConfigLimiter;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoff;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoffLimiter;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\NoLock;
 use Symfony\Component\RateLimiter\LimiterInterface;

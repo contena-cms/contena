@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\RenderingSpecificationFactory;
 use Contena\Core\Framework\ContentSystem\PlaceholderValues;
 use Contena\Core\Framework\ContentSystem\SpecificationData;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\ContentSystem\StaticSpecificationSource;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

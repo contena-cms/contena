@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Log;
 
-use Monolog\Level;
 use Contena\Core\Framework\Event\IsFlowEventAware;
+use Monolog\Level;
 
 #[IsFlowEventAware]
 interface LogAware

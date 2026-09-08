@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
 use Contena\Core\Framework\Context;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\Subscriber\PluginAclPrivilegesSubscriber;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

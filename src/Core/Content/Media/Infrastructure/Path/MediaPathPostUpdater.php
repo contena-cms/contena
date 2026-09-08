@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
 use Contena\Core\Content\Media\DataAbstractionLayer\MediaIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\SynchronousPostUpdateIndexer;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 class MediaPathPostUpdater extends SynchronousPostUpdateIndexer
 {

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Constraint\Callback;
-use PHPUnit\Framework\Constraint\IsEqual;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -36,6 +32,10 @@ use Contena\Frontend\Theme\ThemeService;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleTheme\SimpleTheme;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleThemeConfigInheritance\SimpleThemeConfigInheritance;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeFixtures;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Constraint\Callback;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;

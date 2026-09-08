@@ -3,10 +3,12 @@
 namespace Contena\Core\System;
 
 use Contena\Core\Framework\Bundle;
+use Contena\Core\System\CustomEntity\CustomEntityRegistrar;
 use Contena\Core\System\DependencyInjection\CompilerPass\ChannelEntityCompilerPass;
 use Contena\Core\System\DependencyInjection\CompilerPass\NumberRangeIncrementerCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 /**
@@ -30,6 +32,7 @@ class System extends Bundle
 
         $phpLoader = new PhpFileLoader($container, $configLocator);
         $phpLoader->load('country.php');
+        $phpLoader->load('custom_entity.php');
         $phpLoader->load('region.php');
         $phpLoader->load('organization.php');
         $phpLoader->load('position.php');
@@ -54,5 +57,14 @@ class System extends Bundle
 
         $container->addCompilerPass(new ChannelEntityCompilerPass());
         $container->addCompilerPass(new NumberRangeIncrementerCompilerPass());
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        \assert($this->container instanceof ContainerInterface, 'Container is not set yet, please call setContainer() before calling boot(), see `src/Core/Kernel.php:186`.');
+
+        $this->container->get(CustomEntityRegistrar::class)->register();
     }
 }

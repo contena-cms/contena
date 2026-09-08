@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Service;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\MailTemplate\Service\MailDataSimulator;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
 use Contena\Core\System\User\UserEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

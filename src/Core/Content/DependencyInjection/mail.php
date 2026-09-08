@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Mail\Message\SendMailHandler;
 use Contena\Core\Content\Mail\Payload\MailPayloadFactory;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
@@ -25,6 +23,8 @@ use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\abstract_arg;

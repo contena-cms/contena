@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -17,6 +16,7 @@ use Contena\Core\System\Member\MemberEntity;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

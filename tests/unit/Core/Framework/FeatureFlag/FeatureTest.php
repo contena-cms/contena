@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\FeatureFlag;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\FeatureFlagExtension;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 

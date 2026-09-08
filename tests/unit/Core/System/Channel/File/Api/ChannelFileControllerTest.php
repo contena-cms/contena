@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -17,6 +15,8 @@ use Contena\Core\System\Channel\File\Api\ChannelFileController;
 use Contena\Core\System\Channel\File\ChannelFileRequestPathResolver;
 use Contena\Core\System\Channel\File\Loader\ChannelFileLoader;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderResult;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

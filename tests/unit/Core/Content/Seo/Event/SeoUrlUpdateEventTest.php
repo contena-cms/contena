@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\Event\SeoUrlUpdateEvent;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

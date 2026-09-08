@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;

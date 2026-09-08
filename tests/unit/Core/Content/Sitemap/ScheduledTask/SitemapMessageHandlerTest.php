@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Sitemap\ScheduledTask;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Sitemap\ScheduledTask\SitemapMessage;
 use Contena\Core\Content\Sitemap\ScheduledTask\SitemapMessageHandler;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
@@ -15,6 +12,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

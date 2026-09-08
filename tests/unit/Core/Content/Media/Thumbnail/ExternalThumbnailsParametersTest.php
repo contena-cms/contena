@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Thumbnail;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailCollection;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailData;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailsParameters;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Migration;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\TableNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

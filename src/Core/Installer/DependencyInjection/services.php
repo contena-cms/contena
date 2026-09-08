@@ -4,8 +4,6 @@ namespace Contena\Core\Installer\DependencyInjection;
 
 use Composer\Composer;
 use Composer\Repository\PlatformRepository;
-use GuzzleHttp\Client;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
 use Contena\Core\Framework\Plugin\Composer\Factory;
 use Contena\Core\Installer\Configuration\AdminConfigurationService;
@@ -35,6 +33,8 @@ use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGener
 use Contena\Core\System\Snippet\Service\AbstractTranslationConfigLoader;
 use Contena\Core\System\Snippet\Service\TranslationConfigLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use GuzzleHttp\Client;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

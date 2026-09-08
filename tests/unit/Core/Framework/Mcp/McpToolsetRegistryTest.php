@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
+use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Tool;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
-use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 
 /**
  * @internal

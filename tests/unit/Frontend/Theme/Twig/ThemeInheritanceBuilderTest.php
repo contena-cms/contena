@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Twig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Theme\ThemeRuntimeConfig;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

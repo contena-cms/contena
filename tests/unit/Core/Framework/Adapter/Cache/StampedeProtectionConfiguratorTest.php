@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 
+use Contena\Core\Framework\Adapter\Cache\StampedeProtectionConfigurator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Cache\StampedeProtectionConfigurator;
 use Symfony\Component\Cache\LockRegistry;
 
 /**

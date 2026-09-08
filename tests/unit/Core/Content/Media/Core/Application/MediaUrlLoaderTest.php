@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Core\Application;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\MediaUrlLoader;
 use Contena\Core\Content\Media\Core\Application\RemoteThumbnailLoader;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
@@ -16,6 +11,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

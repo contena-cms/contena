@@ -2,13 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Upload;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use League\Flysystem\UnableToDeleteFile;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\Message\GenerateThumbnailsMessage;
@@ -16,6 +9,13 @@ use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Upload\MediaFileCleanupService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\UnableToDeleteFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Administration\Framework\Asset;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Asset\AssetUploadListener;
 use Contena\Core\Framework\Plugin\Event\AssetUploadEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

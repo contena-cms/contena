@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Page;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Page\Navigation\NavigationPageLoadedEvent;
 use Contena\Frontend\Page\Navigation\NavigationPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

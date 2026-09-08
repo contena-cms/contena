@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Config;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Exception\MissingMetricConfigurationException;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

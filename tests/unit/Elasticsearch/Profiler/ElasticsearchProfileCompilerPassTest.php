@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Profiler;
 
+use Contena\Elasticsearch\Profiler\DataCollector;
+use Contena\Elasticsearch\Profiler\ElasticsearchProfileCompilerPass;
 use OpenSearch\Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Profiler\DataCollector;
-use Contena\Elasticsearch\Profiler\ElasticsearchProfileCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

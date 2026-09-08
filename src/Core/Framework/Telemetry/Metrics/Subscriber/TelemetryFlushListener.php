@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Subscriber;
 
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Filter;
 
+use Contena\Core\System\Snippet\Filter\AuthorFilter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\Filter\AuthorFilter;
 
 /**
  * @internal

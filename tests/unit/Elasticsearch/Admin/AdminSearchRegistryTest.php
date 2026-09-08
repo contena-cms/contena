@@ -2,16 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin;
 
-use Doctrine\DBAL\Connection;
-use OpenSearch\Client;
-use OpenSearch\Exception\RuntimeException;
-use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
@@ -30,6 +20,16 @@ use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
+use Doctrine\DBAL\Connection;
+use OpenSearch\Client;
+use OpenSearch\Exception\RuntimeException;
+use OpenSearch\Namespaces\IndicesNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

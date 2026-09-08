@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\AbstractFileContentValidator;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\File\SvgContentValidator;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

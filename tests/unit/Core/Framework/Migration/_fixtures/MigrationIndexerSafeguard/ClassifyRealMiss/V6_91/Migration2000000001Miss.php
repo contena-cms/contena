@@ -2,8 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationIndexerSafeguard\ClassifyRealMiss\V6_91;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * Fixture for MigrationIndexerSafeguardTest — regex-parsed, never executed.

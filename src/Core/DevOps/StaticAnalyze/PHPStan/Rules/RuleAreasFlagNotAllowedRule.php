@@ -2,6 +2,9 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Content\Rule\RuleDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -12,9 +15,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Content\Rule\RuleDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 
 /**
  * @implements Rule<MethodCall>

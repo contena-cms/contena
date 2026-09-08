@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing\NotFound;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -16,6 +13,9 @@ use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Core\Test\Assert\Serialization;
 use Contena\Frontend\Framework\Routing\Exception\ErrorRedirectRequestEvent;
 use Contena\Frontend\Framework\Routing\NotFound\NotFoundSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\EventDispatcher\EventDispatcher;

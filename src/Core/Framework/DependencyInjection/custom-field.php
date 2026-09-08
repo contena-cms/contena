@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationDefinition;
@@ -10,6 +9,7 @@ use Contena\Core\System\CustomField\Api\CustomFieldSetActionController;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

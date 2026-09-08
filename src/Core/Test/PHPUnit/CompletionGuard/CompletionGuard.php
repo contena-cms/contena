@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Test\PHPUnit\CompletionGuard;
 
-use PHPUnit\Event\EventFacadeIsSealedException;
-use PHPUnit\Event\Facade;
 use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionFinishedSubscriber;
 use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionStartedSubscriber;
+use PHPUnit\Event\EventFacadeIsSealedException;
+use PHPUnit\Event\Facade;
 
 /**
  * Forces a non-zero exit code when the PHPUnit process terminates before the

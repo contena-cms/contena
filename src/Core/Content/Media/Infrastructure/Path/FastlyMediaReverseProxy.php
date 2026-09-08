@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
+use Contena\Core\Content\Media\Core\Application\MediaReverseProxy;
+use Contena\Core\Content\Media\MediaException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Media\Core\Application\MediaReverseProxy;
-use Contena\Core\Content\Media\MediaException;
 
 class FastlyMediaReverseProxy implements MediaReverseProxy
 {

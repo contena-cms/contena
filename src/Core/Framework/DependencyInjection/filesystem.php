@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Asset\AssetInstallCommand;
 use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
 use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Adapter\Filesystem\Adapter\LocalFactory;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
 use Contena\Core\Framework\Plugin\Util\AssetService;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

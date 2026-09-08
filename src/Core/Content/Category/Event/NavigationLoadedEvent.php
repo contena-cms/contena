@@ -4,8 +4,8 @@ namespace Contena\Core\Content\Category\Event;
 
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 
 class NavigationLoadedEvent extends NestedEvent implements ContenaChannelEvent

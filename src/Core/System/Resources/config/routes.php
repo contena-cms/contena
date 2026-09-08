@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 return static function (RoutingConfigurator $routes): void {
     $routes->import('../../Consent/Api/**/*Controller.php', 'attribute');
     $routes->import('../../User/Api/**/*Controller.php', 'attribute');
+    $routes->import('../../CustomEntity/Api/*Controller.php', 'attribute');
     $routes->import('../../Snippet/**/*Controller.php', 'attribute');
     $routes->import('../../Snippet/Channel/**/*Route.php', 'attribute');
     $routes->import('../../CustomField/**/*Controller.php', 'attribute');

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Exception\MetricNotSupportedException;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Telemetry\Metrics\Exception\MissingMetricConfiguratio
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
+use Psr\Log\LoggerInterface;
 
 class Meter
 {

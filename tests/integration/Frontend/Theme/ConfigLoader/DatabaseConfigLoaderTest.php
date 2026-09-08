@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme\ConfigLoader;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
@@ -16,6 +14,8 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

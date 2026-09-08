@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Migration\V6_8;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\Traits\ImportTranslationsTrait;
+use Doctrine\DBAL\Connection;
 
 /**
  * Development-baseline schema for the Content System aggregate.

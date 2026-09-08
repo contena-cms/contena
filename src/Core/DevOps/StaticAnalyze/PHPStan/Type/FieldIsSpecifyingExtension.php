@@ -2,6 +2,7 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Type;
 
+use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -17,7 +18,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 
 /**
  * @internal

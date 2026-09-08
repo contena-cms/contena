@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent\DTO;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\DTO\ConsentState;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

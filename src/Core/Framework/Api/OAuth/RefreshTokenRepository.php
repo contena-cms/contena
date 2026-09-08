@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\Uuid\Uuid;
 
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {

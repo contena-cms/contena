@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Resource;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

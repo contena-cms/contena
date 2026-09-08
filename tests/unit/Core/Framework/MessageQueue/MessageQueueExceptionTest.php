@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue;
 
+use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\MessageQueue\MessageQueueException;
 
 /**
  * @internal

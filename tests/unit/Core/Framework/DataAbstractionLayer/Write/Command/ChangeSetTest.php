@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\Command;
 
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 
 /**
  * @internal

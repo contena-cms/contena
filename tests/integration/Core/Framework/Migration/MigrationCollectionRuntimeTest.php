@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Migration;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Result;
-use Monolog\Logger;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
@@ -14,6 +10,10 @@ use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Test\Migration\_test_migrations_valid_run_time\Migration1;
 use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
+use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

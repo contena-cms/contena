@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
@@ -18,6 +16,8 @@ use Contena\Core\System\Channel\Context\ChannelContextRestorer;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\Subscriber\MemberFlowEventsSubscriber;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

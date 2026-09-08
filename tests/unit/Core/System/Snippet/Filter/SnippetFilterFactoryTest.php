@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Filter;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Filter\AddedFilter;
 use Contena\Core\System\Snippet\Filter\AuthorFilter;
 use Contena\Core\System\Snippet\Filter\EditedFilter;
@@ -15,6 +12,9 @@ use Contena\Core\System\Snippet\Filter\SnippetFilterInterface;
 use Contena\Core\System\Snippet\Filter\TermFilter;
 use Contena\Core\System\Snippet\Filter\TranslationKeyFilter;
 use Contena\Core\System\Snippet\SnippetException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

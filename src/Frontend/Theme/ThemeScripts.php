@@ -2,9 +2,9 @@
 
 namespace Contena\Frontend\Theme;
 
+use Contena\Core\ChannelRequest;
 use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
-use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

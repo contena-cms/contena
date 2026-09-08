@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber;
 
-use PHPUnit\Event\Test\PreparationStarted;
-use PHPUnit\Event\Test\PreparationStartedSubscriber;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\FeatureFlagExtension;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\SavedConfig;
+use PHPUnit\Event\Test\PreparationStarted;
+use PHPUnit\Event\Test\PreparationStartedSubscriber;
 
 /**
  * @internal

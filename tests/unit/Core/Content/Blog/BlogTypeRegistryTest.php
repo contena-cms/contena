@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog;
 
+use Contena\Core\Content\Blog\BlogTypeRegistry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\BlogTypeRegistry;
 
 /**
  * @internal

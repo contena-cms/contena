@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Command\Lifecycle;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Command\Lifecycle\PluginUpdateAllCommand;
 use Contena\Core\Framework\Plugin\Context\UpdateContext;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Tester\CommandTester;

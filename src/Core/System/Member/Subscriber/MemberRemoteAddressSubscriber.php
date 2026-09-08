@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\Event\MemberLoginEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\RequestStack;

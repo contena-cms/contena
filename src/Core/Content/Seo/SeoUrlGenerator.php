@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlEntity;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlMapping;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
@@ -24,6 +23,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\ChannelEntity;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;

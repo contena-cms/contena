@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Api;
 
+use Contena\Core\Content\Seo\Api\SeoActionController;
+use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\Api\SeoActionController;
-use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 
 /**

@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Flow\Aggregate\FlowSequence;
 
 use Contena\Core\Content\Flow\FlowEntity;
 use Contena\Core\Content\Rule\RuleEntity;
+use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
@@ -42,6 +43,10 @@ class FlowSequenceEntity extends Entity implements IdAware
     protected int $displayGroup = 1;
 
     protected bool $trueCase = false;
+
+    protected ?string $appFlowActionId = null;
+
+    protected ?AppFlowActionEntity $appFlowAction = null;
 
     public function getTenantId(): ?string
     {
@@ -177,5 +182,25 @@ class FlowSequenceEntity extends Entity implements IdAware
     public function setTrueCase(bool $trueCase): void
     {
         $this->trueCase = $trueCase;
+    }
+
+    public function getAppFlowActionId(): ?string
+    {
+        return $this->appFlowActionId;
+    }
+
+    public function setAppFlowActionId(?string $appFlowActionId): void
+    {
+        $this->appFlowActionId = $appFlowActionId;
+    }
+
+    public function getAppFlowAction(): ?AppFlowActionEntity
+    {
+        return $this->appFlowAction;
+    }
+
+    public function setAppFlowAction(?AppFlowActionEntity $appFlowAction): void
+    {
+        $this->appFlowAction = $appFlowAction;
     }
 }

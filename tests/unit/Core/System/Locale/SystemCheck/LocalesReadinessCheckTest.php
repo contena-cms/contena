@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Locale\SystemCheck;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
@@ -12,6 +10,8 @@ use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\Locale\SystemCheck\LocalesReadinessCheck;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

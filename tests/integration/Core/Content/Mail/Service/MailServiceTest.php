@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Mail\Service;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\Service\AbstractMailSender;
 use Contena\Core\Content\Mail\Service\MailFactory;
 use Contena\Core\Content\Mail\Service\MailService;
@@ -19,6 +15,10 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;

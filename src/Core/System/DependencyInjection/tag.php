@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\CriteriaQueryBuilder;
 use Contena\Core\System\Tag\Service\FilterTagIdsService;
 use Contena\Core\System\Tag\TagDefinition;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

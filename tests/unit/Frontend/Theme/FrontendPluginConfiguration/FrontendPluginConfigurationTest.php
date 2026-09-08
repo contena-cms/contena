@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\FrontendPluginConfiguration;
 
+use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 
 /**
  * @internal

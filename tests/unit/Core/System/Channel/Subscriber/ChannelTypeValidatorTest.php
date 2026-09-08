@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
@@ -17,6 +15,8 @@ use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeDefinition;
 use Contena\Core\System\Channel\Exception\DefaultChannelTypeCannotBeDeleted;
 use Contena\Core\System\Channel\Subscriber\ChannelTypeValidator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

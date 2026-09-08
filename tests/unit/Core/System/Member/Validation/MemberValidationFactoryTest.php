@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\System\Member\Validation\MemberProfileValidationFactory;
 use Contena\Core\System\Member\Validation\MemberValidationFactory;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Transport;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Transport\SmtpOauthAuthenticator;
 use Contena\Core\Content\Mail\Transport\SmtpOauthTransportFactoryDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;

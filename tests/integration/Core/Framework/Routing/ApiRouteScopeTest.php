@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

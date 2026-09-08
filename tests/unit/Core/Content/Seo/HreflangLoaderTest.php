@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\HreflangLoader;
 use Contena\Core\Content\Seo\HreflangLoaderParameter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

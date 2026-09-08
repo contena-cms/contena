@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
+use Contena\Core\PlatformRequest;
+use Contena\Frontend\Framework\Routing\ClearSiteDataListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\PlatformRequest;
-use Contena\Frontend\Framework\Routing\ClearSiteDataListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

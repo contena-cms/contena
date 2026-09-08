@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -34,6 +31,9 @@ use Contena\Tests\Integration\Frontend\Theme\fixtures\PluginWithAdditionalBundle
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePluginWithoutCompilation\SimplePluginWithoutCompilation;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleTheme\SimpleTheme;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\Infrastructure\Path;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Event\MediaLocationEvent;
 use Contena\Core\Content\Media\Core\Event\ThumbnailLocationEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
@@ -16,6 +13,9 @@ use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

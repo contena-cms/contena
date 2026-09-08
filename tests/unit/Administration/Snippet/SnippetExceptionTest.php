@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Administration\Snippet;
 
+use Contena\Administration\Snippet\SnippetException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Snippet\SnippetException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

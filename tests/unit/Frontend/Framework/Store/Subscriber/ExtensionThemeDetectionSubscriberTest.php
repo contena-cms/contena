@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Store\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Event\ExtensionLoadedEvent;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Frontend\Framework\Store\Subscriber\ExtensionThemeDetectionSubscriber;
 use Contena\Tests\Unit\Frontend\Theme\fixtures\MockFrontend\MockFrontend;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

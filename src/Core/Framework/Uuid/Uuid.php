@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Uuid;
 
-use Ramsey\Uuid\BinaryUtils;
-use Ramsey\Uuid\Generator\RandomGeneratorFactory;
-use Ramsey\Uuid\Generator\UnixTimeGenerator;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidLengthException;
+use Ramsey\Uuid\BinaryUtils;
+use Ramsey\Uuid\Generator\RandomGeneratorFactory;
+use Ramsey\Uuid\Generator\UnixTimeGenerator;
 
 class Uuid
 {

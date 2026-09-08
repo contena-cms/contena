@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\System\Member;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlEntity;
 use Contena\Core\Defaults;
@@ -17,6 +16,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupCollection;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

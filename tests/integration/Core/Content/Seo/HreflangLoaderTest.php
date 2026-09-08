@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Seo;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Seo\HreflangLoaderInterface;
 use Contena\Core\Content\Seo\HreflangLoaderParameter;
@@ -22,6 +20,8 @@ use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

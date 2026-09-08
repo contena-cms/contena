@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Command\Util;
 
+use Contena\Core\System\Snippet\Command\Util\TranslationCommandHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\Command\Util\TranslationCommandHelper;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**

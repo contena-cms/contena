@@ -7,6 +7,7 @@ use Composer\Package\AliasPackage;
 use Composer\Package\CompletePackageInterface;
 use Composer\Package\Version\VersionParser;
 use Contena\Core\Defaults;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -16,7 +17,6 @@ use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
 use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
 use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\System\Language\LanguageCollection;
 use Symfony\Component\Filesystem\Filesystem;
 

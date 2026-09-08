@@ -2,11 +2,11 @@
 
 namespace Contena\Frontend\Theme;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\Exception\ThemeCompileException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
+use Psr\Clock\ClockInterface;
 
 /**
  * @internal

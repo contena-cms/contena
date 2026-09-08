@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\MemberGroupStorer;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\MemberGroupProvider;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Event\MemberGroupAware;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\System\Member\Event\MemberGroupRegistrationDeclined;
 use Contena\Core\System\Member\Event\MemberRegisterEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

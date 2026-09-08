@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheRelevantRulesResolver;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\ResolveCacheRelevantRuleIdsExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

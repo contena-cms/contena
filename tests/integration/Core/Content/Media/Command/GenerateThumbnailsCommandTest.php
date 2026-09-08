@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\Command;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
 use Contena\Core\Content\Media\Commands\GenerateThumbnailsCommand;
@@ -19,6 +18,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\User\Service;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -12,6 +11,7 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\User\Service\UserValidationService;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

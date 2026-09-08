@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Captcha;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

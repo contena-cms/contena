@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\DependencyInjection\TwigComponentBundlePass;
 use Contena\Frontend\Frontend;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 

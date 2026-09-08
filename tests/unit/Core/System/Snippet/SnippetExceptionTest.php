@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet;
 
+use Contena\Core\System\Snippet\SnippetException;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\SnippetException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

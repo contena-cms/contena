@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\BulkEntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -17,6 +15,8 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\EntityCompilerPass;
 use Contena\Core\System\DataDictionary\Aggregate\DataDictionaryItem\DataDictionaryItemDefinition;
 use Contena\Core\System\DataDictionary\DataDictionaryDefinition;
 use Contena\Core\System\Tag\TagDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;

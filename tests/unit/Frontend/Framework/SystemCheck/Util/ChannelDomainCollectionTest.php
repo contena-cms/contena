@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\SystemCheck\Util;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomain;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

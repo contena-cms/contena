@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Consent;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
@@ -14,6 +12,8 @@ use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Definition\BackendData;
 use Contena\Core\System\Consent\DTO\ConsentStateRecord;
 use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

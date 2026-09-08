@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\User\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -12,6 +11,7 @@ use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
 use Contena\Core\System\User\Recovery\UserRecoveryService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use OpenSearchDSL\Query\Compound\BoolQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
@@ -39,6 +35,10 @@ use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchTokenizer;
 use Contena\Elasticsearch\NestedFieldQueryBuilder;
 use Contena\Elasticsearch\TokenQueryBuilder;
 use Contena\Elasticsearch\TranslatedFieldQueryBuilder;
+use OpenSearchDSL\Query\Compound\BoolQuery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

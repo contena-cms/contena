@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\Channel\ChannelCategoryEntity;
 use Contena\Core\Content\Category\Tree\Tree;
@@ -15,6 +14,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSys
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
 /**

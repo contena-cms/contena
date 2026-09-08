@@ -12,9 +12,13 @@ return static function (RoutingConfigurator $routes): void {
     $routes->import('../../MessageQueue/**/*Controller.php', 'attribute');
     $routes->import('../../Increment/Controller/*Controller.php', 'attribute');
     $routes->import('../../Migration/**/*Controller.php', 'attribute');
+    $routes->import('../../App/**/*Controller.php', 'attribute');
+    $routes->import('../../App/**/*Route.php', 'attribute');
+    $routes->import('../../Script/Api/*Route.php', 'attribute');
     $routes->import('../../Rule/Api/*Controller.php', 'attribute');
     $routes->import('../../Notification/Api/*Controller.php', 'attribute');
     $routes->import('../../Mcp/Controller/*Controller.php', 'attribute');
     $routes->import('../../Validation/Api/*Controller.php', 'attribute');
     $routes->import('../../ContentSystem/Api/*Controller.php', 'attribute');
+    $routes->import('../../Webhook/Api/*Controller.php', 'attribute');
 };

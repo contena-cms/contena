@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Integration\Elasticsearch\Blog;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\AfterClass;
-use PHPUnit\Framework\Attributes\BeforeClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
@@ -26,6 +21,11 @@ use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\AfterClass;
+use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

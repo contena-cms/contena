@@ -3,8 +3,6 @@
 namespace Contena\Tests\Unit\Frontend\System\Member;
 
 use Cocur\Slugify\SlugifyInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -22,6 +20,8 @@ use Contena\Core\System\Member\Aggregate\MemberGroupTranslation\MemberGroupTrans
 use Contena\Core\System\Member\Aggregate\MemberGroupTranslation\MemberGroupTranslationEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\System\Member\MemberGroupSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

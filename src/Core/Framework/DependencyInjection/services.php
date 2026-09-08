@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\DependencyInjection;
 
 use Cocur\Slugify\Bridge\Twig\SlugifyExtension;
 use Cocur\Slugify\Slugify;
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheStore;
@@ -21,6 +19,7 @@ use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Adapter\Storage\MySQLKeyValueStorage;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
 use Contena\Core\Framework\Adapter\Translation\Translator;
+use Contena\Core\Framework\Adapter\Twig\AppTemplateIterator;
 use Contena\Core\Framework\Adapter\Twig\Extension\ConfigExtension;
 use Contena\Core\Framework\Adapter\Twig\Extension\FeatureFlagExtension;
 use Contena\Core\Framework\Adapter\Twig\Extension\InstanceOfExtension;
@@ -41,6 +40,8 @@ use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateIterator;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Adapter\Twig\TwigVariableParserFactory;
+use Contena\Core\Framework\App\ActiveAppsLoader;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
@@ -94,9 +95,16 @@ use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\Framework\Util\HtmlPurifierConfigProvider;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Kernel;
+use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
+use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
+use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchemaValidator;
+use Contena\Core\System\CustomEntity\Xml\Config\CustomEntityEnrichmentService;
+use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchemaValidator;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Snippet\Api\SnippetController;
 use Contena\Core\System\Snippet\Api\TranslationController;
+use Contena\Core\System\Snippet\Files\AppSnippetFileLoader;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileCollectionFactory;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
@@ -116,6 +124,8 @@ use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -341,6 +351,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('validator.constraint_validator');
 
+    // Custom Entity
+    $services->set(CustomEntityEnrichmentService::class)
+        ->args([
+            service(AdminUiXmlSchemaValidator::class),
+        ]);
+
+    $services->set(CustomEntityLifecycleService::class)
+        ->args([
+            service(CustomEntityPersister::class),
+            service(CustomEntitySchemaUpdater::class),
+            service(CustomEntityEnrichmentService::class),
+            service(CustomEntityXmlSchemaValidator::class),
+            service(SourceResolver::class),
+            service(Connection::class),
+            service('custom_entity.repository'),
+            service(ClockInterface::class),
+        ]);
+
     $services->set(Translator::class)
         ->decorate('translator')
         ->args([
@@ -401,10 +429,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(KernelInterface::class),
             service(Connection::class),
+            service(AppSnippetFileLoader::class),
+            service(ActiveAppsLoader::class),
             service(TranslationConfig::class),
             service(TranslationLoader::class),
             service('contena.filesystem.translation'),
+            service(SourceResolver::class),
+            service('logger'),
         ]);
+
+    $services->set(AppSnippetFileLoader::class)->args([param('kernel.project_dir')]);
 
     $services->set(SnippetFileCollection::class)
         ->public()
@@ -657,6 +691,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(HtmlPurifierConfigProvider::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
+
+    $services->set(AppTemplateIterator::class)
+        ->decorate('twig.template_iterator')
+        ->public()
+        ->args([
+            service(AppTemplateIterator::class . '.inner'),
+            service('app_template.repository'),
+        ]);
 
     $services->set(ExcludeExceptionHandler::class)
         ->decorate('monolog.handler.main', null, 0, ContainerInterface::IGNORE_ON_INVALID_REFERENCE)

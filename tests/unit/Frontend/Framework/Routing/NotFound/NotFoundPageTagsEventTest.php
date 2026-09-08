@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing\NotFound;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\NotFound\NotFoundPageTagsEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

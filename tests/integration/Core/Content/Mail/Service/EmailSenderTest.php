@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Mail\Service;
 
-use League\Flysystem\FilesystemOperator;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Service\MailFactory;
 use Contena\Core\Content\Mail\Service\MailSender;
 use Contena\Core\Framework\Context;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
 

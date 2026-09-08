@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Integration\Core\Content\Seo\Channel;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Test\TestNavigationSeoUrlRoute;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Administration\Controller;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Controller\UserConfigController;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
@@ -16,6 +13,9 @@ use Contena\Core\System\User\Aggregate\UserConfig\UserConfigCollection;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigDefinition;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

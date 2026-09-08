@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\MediaType;
 
+use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 
 /**
  * @internal

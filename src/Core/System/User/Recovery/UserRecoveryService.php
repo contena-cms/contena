@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Recovery;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,6 +12,7 @@ use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryCollection;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

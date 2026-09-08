@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Routing;
 
+use Contena\Core\Framework\Routing\RoutingException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Routing\RoutingException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 

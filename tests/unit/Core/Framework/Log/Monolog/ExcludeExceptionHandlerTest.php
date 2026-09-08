@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Log\Monolog;
 
+use Contena\Core\Framework\Log\Monolog\ExcludeExceptionHandler;
 use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Monolog\ExcludeExceptionHandler;
 
 /**
  * @internal

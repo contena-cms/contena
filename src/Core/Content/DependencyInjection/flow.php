@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceDefinition;
 use Contena\Core\Content\Flow\Aggregate\FlowTemplate\FlowTemplateDefinition;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
@@ -47,11 +46,13 @@ use Contena\Core\Content\Shared\MailFlow\DataProvider\MemberProvider;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\MemberRecoveryProvider;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserRecoveryProvider;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
+use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -112,9 +113,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FlowActionCollector::class)->args([
         tagged_iterator('flow.action'),
         service('event_dispatcher'),
+        service('app_flow_action.repository'),
     ]);
 
     $services->set(FlowExecutor::class)->args([
+        service('event_dispatcher'), service(AppFlowActionProvider::class),
         service(AbstractRuleLoader::class), service(Connection::class), service(ExtensionDispatcher::class), service('logger'), tagged_iterator('flow.action', 'key'),
         service(FlowMetricsInstrumentor::class),
     ]);

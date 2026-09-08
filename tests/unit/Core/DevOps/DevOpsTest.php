@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\DevOps;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\DevOps;
 use Contena\Core\DevOps\System\Command\SyncComposerVersionCommand;
 use Contena\Core\DevOps\System\Command\SystemDumpDatabaseCommand;
 use Contena\Core\DevOps\System\Command\SystemRestoreDatabaseCommand;
 use Contena\Core\DevOps\Test\Command\MakeCoverageTestCommand;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

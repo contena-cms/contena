@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Frontend\Framework\Captcha;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
@@ -14,6 +12,8 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Frontend\Framework\Captcha\CaptchaCookieCollectListener;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV2;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

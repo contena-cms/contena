@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Api\MediaUploadController;
 use Contena\Core\Content\Media\Api\MediaUploadV2Controller;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 
 /**

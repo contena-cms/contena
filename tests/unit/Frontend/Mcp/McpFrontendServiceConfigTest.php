@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Mcp;
 
+use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

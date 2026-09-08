@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Twig\Components;
 
+use Contena\Frontend\Framework\Twig\Components\TwigComponentRenderEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Framework\Twig\Components\TwigComponentRenderEventListener;
 use Symfony\UX\TwigComponent\ComponentAttributes;
 use Symfony\UX\TwigComponent\ComponentMetadata;
 use Symfony\UX\TwigComponent\Event\PreRenderEvent;

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Maintenance\User\Service;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 
 /**
  * @internal

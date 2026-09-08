@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\NonStandardFkGuard;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\DriverException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\NonStandardFkGuard;
 
 /**
  * @internal

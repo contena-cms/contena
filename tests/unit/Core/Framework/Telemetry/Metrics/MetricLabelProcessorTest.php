@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
 use Contena\Core\Framework\Telemetry\Metrics\MetricLabelProcessor;
 use Contena\Core\Framework\Telemetry\TelemetryException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

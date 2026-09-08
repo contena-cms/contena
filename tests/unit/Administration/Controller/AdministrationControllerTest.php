@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Administration\Controller;
 
-use Doctrine\DBAL\Connection;
-use League\Flysystem\FilesystemOperator;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Controller\AdministrationController;
 use Contena\Administration\Events\PreResetExcludedSearchTermEvent;
 use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollectorInterface;
@@ -22,6 +16,12 @@ use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

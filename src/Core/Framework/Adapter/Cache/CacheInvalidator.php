@@ -2,16 +2,16 @@
 
 namespace Contena\Core\Framework\Adapter\Cache;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
-use Psr\SimpleCache\CacheInterface;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\AbstractInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCache;
 use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\PlatformRequest;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\HttpFoundation\RequestStack;

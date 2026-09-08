@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Mcp\Resource;
 
-use Mcp\Capability\Attribute\McpResource;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\System\Channel\ChannelCollection;
+use Mcp\Capability\Attribute\McpResource;
 
 #[McpResource(
     uri: 'contena://channels',

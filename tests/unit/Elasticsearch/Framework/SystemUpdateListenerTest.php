@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
@@ -14,6 +12,8 @@ use Contena\Elasticsearch\Framework\Indexing\IndexerOffset;
 use Contena\Elasticsearch\Framework\Indexing\IndexingDto;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingUpdater;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 
 /**

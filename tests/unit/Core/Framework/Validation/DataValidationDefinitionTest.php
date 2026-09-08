@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Validation;
 
+use Contena\Core\Framework\Validation\DataValidationDefinition;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 

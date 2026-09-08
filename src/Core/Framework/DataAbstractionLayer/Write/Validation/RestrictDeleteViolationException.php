@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\Validation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Symfony\Component\HttpFoundation\Response;
 
 class RestrictDeleteViolationException extends ContenaHttpException

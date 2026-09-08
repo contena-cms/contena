@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\Filter;
 
+use Contena\Core\Framework\Adapter\Twig\Filter\LeadingSpacesFilter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Twig\Filter\LeadingSpacesFilter;
 
 /**
  * @internal

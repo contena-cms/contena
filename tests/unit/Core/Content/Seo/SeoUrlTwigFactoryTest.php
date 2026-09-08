@@ -4,12 +4,12 @@ namespace Contena\Tests\Unit\Core\Content\Seo;
 
 use Cocur\Slugify\Bridge\Twig\SlugifyExtension;
 use Cocur\Slugify\Slugify;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Seo\SeoUrlTwigFactory;
 use Contena\Core\Framework\Adapter\Twig\Extension\PhpSyntaxExtension;
 use Contena\Core\Framework\Adapter\Twig\SecurityExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Twig\Cache\FilesystemCache;

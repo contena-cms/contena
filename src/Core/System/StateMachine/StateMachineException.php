@@ -3,8 +3,8 @@
 namespace Contena\Core\System\StateMachine;
 
 use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
-use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\HttpException;
 use Contena\Core\System\StateMachine\Exception\IllegalTransitionException;
 use Contena\Core\System\StateMachine\Exception\UnnecessaryTransitionException;
 use Symfony\Component\HttpFoundation\Response;

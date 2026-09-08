@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV2;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

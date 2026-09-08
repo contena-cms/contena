@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Account\Overview;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\Channel\AbstractMemberRoute;
@@ -17,6 +14,9 @@ use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\GenericPageLoader;
 use Contena\Frontend\Page\MetaInformation;
 use Contena\Frontend\Page\Page;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

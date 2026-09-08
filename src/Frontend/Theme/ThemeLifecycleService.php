@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
-use GuzzleHttp\Psr7\MimeType;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\File\FileSaver;
@@ -23,6 +21,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
+use Doctrine\DBAL\Connection;
+use GuzzleHttp\Psr7\MimeType;
 
 final class ThemeLifecycleService
 {

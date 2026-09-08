@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Event\SnippetsThemeResolveEvent;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\Subscriber\ThemeSnippetsSubscriber;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

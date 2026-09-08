@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Kernel;
 
 use Composer\Autoload\ClassLoader;
 use Composer\InstalledVersions;
-use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\DbalKernelPluginLoader;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;
 use Contena\Core\Kernel;
 use Contena\Core\Profiling\Doctrine\ProfilingMiddleware;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**

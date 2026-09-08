@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Devops\Core\Framework;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestKernel;
 use Contena\Core\Kernel;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\TestContainer;
 use Symfony\Component\Console\Tester\CommandTester;

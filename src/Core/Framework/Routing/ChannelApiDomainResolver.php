@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

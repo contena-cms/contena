@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Command;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\Commands\SitemapGenerateCommand;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporter;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\EventDispatcher\EventDispatcher;

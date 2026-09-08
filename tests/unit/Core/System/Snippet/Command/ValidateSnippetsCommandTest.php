@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Command\ValidateSnippetsCommand;
 use Contena\Core\System\Snippet\Files\GenericSnippetFile;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
@@ -13,6 +10,9 @@ use Contena\Core\System\Snippet\SnippetFixer;
 use Contena\Core\System\Snippet\SnippetValidator;
 use Contena\Core\System\Snippet\Struct\InvalidPluralizationCollection;
 use Contena\Core\System\Snippet\Struct\MissingSnippetCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;

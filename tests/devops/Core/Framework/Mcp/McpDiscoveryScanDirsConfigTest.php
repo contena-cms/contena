@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\DevOps\Core\Framework\Mcp;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Framework;
 use Contena\Frontend\Frontend;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

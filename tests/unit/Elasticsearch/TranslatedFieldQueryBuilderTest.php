@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
-use OpenSearchDSL\Query\Compound\DisMaxQuery;
-use OpenSearchDSL\Query\TermLevel\TermQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
@@ -16,6 +12,10 @@ use Contena\Elasticsearch\Blog\SearchFieldConfig;
 use Contena\Elasticsearch\ResolvedField;
 use Contena\Elasticsearch\TranslatedFieldQueryBuilder;
 use Contena\Elasticsearch\TranslatedResolvedField;
+use OpenSearchDSL\Query\Compound\DisMaxQuery;
+use OpenSearchDSL\Query\TermLevel\TermQuery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

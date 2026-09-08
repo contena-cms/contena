@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Event;
 
+use Contena\Frontend\Event\FrontendRedirectEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Event\FrontendRedirectEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

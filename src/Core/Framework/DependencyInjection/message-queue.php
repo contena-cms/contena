@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Doctrine\Messenger\DoctrineTransportFactory;
 use Contena\Core\Framework\Adapter\Messenger\Middleware\QueuedTimeMiddleware;
 use Contena\Core\Framework\MessageQueue\Api\ConsumeMessagesController;
@@ -20,6 +18,8 @@ use Contena\Core\Framework\MessageQueue\Telemetry\MessageQueueTelemetrySubscribe
 use Contena\Core\Framework\MessageQueue\Telemetry\MessengerQueueDepthCollector;
 use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Messenger\Event\SendMessageToTransportsEvent;
 

@@ -2,17 +2,17 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Service;
 
+use Contena\Core\System\Snippet\Event\TranslationRemovedEvent;
+use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
+use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
+use Contena\Core\System\Snippet\Service\TranslationRemover;
+use Contena\Core\System\Snippet\SnippetException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\Event\TranslationRemovedEvent;
-use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
-use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
-use Contena\Core\System\Snippet\Service\TranslationRemover;
-use Contena\Core\System\Snippet\SnippetException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

@@ -2,6 +2,9 @@
 
 namespace Contena\Core\Framework\JWT\Constraints;
 
+use Contena\Core\Framework\JWT\JWTException;
+use Contena\Core\Framework\JWT\Struct\JWKCollection;
+use Contena\Core\Framework\JWT\Struct\JWKStruct;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -12,9 +15,6 @@ use Lcobucci\JWT\Validation\Constraint;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Math\BigInteger;
-use Contena\Core\Framework\JWT\JWTException;
-use Contena\Core\Framework\JWT\Struct\JWKCollection;
-use Contena\Core\Framework\JWT\Struct\JWKStruct;
 
 final readonly class HasValidRSAJWKSignature implements Constraint
 {

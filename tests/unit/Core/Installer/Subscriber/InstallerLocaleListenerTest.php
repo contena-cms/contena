@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Subscriber;
 
+use Contena\Core\Installer\Subscriber\InstallerLocaleListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Subscriber\InstallerLocaleListener;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

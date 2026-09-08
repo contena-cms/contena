@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel;
 
+use Contena\Core\Framework\HttpException;
+use Contena\Core\System\Channel\ChannelException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\HttpException;
-use Contena\Core\System\Channel\ChannelException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

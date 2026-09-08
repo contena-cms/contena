@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\SearchKeyword;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilder;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchTermInterpreterInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\Channel\ChannelContext;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

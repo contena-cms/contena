@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * @internal

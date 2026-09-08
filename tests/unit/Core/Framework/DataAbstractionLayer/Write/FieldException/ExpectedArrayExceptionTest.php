@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\FieldException;
 
+use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\ExpectedArrayException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\ExpectedArrayException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

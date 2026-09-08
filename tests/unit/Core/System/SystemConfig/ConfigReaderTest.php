@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\SystemConfig;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

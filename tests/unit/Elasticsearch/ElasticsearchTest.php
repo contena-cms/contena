@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Elasticsearch\Elasticsearch;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

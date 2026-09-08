@@ -2,12 +2,12 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 
 /**
  * @internal

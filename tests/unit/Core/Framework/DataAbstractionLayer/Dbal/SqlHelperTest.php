@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal;
 
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\SqlHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\SqlHelper;
 
 /**
  * @internal

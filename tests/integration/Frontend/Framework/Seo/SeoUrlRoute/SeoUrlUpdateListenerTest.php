@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Seo\SeoUrlRoute;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlEntity;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Command;
 
+use Contena\Frontend\Theme\Command\ThemePrepareIconsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\Command\ThemePrepareIconsCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;

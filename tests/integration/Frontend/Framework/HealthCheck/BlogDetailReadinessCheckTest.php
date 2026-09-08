@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\HealthCheck;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Defaults;
@@ -17,6 +15,8 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\SystemCheck\BlogDetailReadinessCheck;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

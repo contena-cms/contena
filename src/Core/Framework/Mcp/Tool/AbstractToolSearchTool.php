@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\RegistryInterface;
-use Mcp\Schema\Tool;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
 use Contena\Core\Framework\Mcp\McpToolSchemaNormalizer;
 use Contena\Core\Framework\Mcp\Tool\Search\ToolSearch;
 use Contena\Core\Framework\Util\Json;
+use Mcp\Capability\RegistryInterface;
+use Mcp\Schema\Tool;
 
 /**
  * @internal

@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Maintenance\System\Command;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\Framework\Util\Random;
+use Contena\Core\Maintenance\MaintenanceException;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Pdo\Mysql;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Util\Random;
-use Contena\Core\Maintenance\MaintenanceException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

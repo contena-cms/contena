@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -21,6 +19,8 @@ use Contena\Core\System\Member\Aggregate\MemberRecovery\MemberRecoveryEntity;
 use Contena\Core\System\Member\Channel\ResetPasswordRoute;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\Request;

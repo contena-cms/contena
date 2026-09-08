@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\DataAbstractionLayer;
 
-use OpenSearch\Client;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
@@ -16,6 +13,9 @@ use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntityAggr
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntityAggregatorSearchedEvent;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntityAggregatorSearchEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use OpenSearch\Client;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

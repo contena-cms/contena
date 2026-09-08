@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\SeoUrlRoute;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
@@ -15,6 +12,9 @@ use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageChannelApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

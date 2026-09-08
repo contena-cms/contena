@@ -2,6 +2,8 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
+use Contena\Core\Framework\MessageQueue\LowPriorityMessageInterface;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -16,8 +18,6 @@ use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
-use Contena\Core\Framework\MessageQueue\LowPriorityMessageInterface;
 
 /**
  * @internal

@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\NamespaceHierarchy;
 
+use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\BundleHierarchyBuilder;
+use Contena\Core\Framework\Bundle;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\BundleHierarchyBuilder;
-use Contena\Core\Framework\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**

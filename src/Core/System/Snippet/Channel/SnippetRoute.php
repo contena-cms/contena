@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Channel;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Adapter\Translation\Translator;
@@ -14,6 +13,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Snippet\SnippetException;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Translation\MessageCatalogueInterface;

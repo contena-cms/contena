@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Member;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Member\MemberEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

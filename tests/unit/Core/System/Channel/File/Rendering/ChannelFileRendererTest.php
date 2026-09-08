@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\File\Rendering;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandler;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
@@ -31,6 +28,9 @@ use Contena\Core\System\Channel\File\Rendering\ChannelFileTemplateOverrideLoader
 use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;

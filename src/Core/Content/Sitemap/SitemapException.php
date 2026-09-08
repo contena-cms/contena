@@ -3,8 +3,8 @@
 namespace Contena\Core\Content\Sitemap;
 
 use Contena\Core\Content\Sitemap\Exception\InvalidSitemapKey;
-use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\HttpException;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Response;
 

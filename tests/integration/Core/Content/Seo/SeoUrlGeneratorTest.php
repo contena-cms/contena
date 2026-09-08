@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Seo;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\AbstractLogger;
-use Psr\Log\NullLogger;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
@@ -25,6 +21,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\AbstractLogger;
+use Psr\Log\NullLogger;
 
 /**
  * @internal

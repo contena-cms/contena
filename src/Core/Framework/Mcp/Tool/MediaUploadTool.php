@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Content\Media\Upload\MediaUploadParameters;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Mcp\Capability\Attribute\McpTool;
 
 #[McpTool(
     name: 'contena-media-upload',

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Adapter\FactoryHelper;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\DomainAwareLayoutResolver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -16,6 +13,9 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderContentLayoutCollection;
 use Contena\Frontend\ContentSystem\HeaderContentLayout\HeaderContentLayoutEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

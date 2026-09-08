@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeChildDefinition;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeManyToOneDefinition;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeParentDefinition;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

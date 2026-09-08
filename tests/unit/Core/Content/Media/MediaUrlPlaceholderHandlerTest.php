@@ -2,6 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media;
 
+use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
+use Contena\Core\Content\Media\MediaUrlPlaceholderHandler;
+use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Result;
@@ -10,10 +14,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
-use Contena\Core\Content\Media\MediaUrlPlaceholderHandler;
-use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
-use Contena\Core\Framework\Uuid\Uuid;
 
 /**
  * @internal

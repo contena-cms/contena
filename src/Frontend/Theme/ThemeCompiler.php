@@ -2,12 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use League\Flysystem\FilesystemException;
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToDeleteDirectory;
-use League\Flysystem\Visibility;
-use Psr\Log\LoggerInterface;
-use ScssPhp\ScssPhp\OutputStyle;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatch;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
@@ -23,6 +17,12 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\Validator\SCSSValidator;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\Visibility;
+use Psr\Log\LoggerInterface;
+use ScssPhp\ScssPhp\OutputStyle;
 use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;

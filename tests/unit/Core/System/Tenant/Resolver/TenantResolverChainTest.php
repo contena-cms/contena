@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Tenant\Resolver;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Tenant\Resolver\TenantResolution;
 use Contena\Core\System\Tenant\Resolver\TenantResolverChain;
 use Contena\Core\System\Tenant\Resolver\TenantResolverInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

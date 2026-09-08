@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Increment;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
 use Contena\Core\Framework\Increment\IncrementException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\MessageQueue\ScheduledTask\Scheduler;
 
-use Doctrine\DBAL\Connection;
-use Monolog\Logger;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,6 +14,11 @@ use Contena\Core\Framework\Test\MessageQueue\fixtures\FooMessage;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
+use Doctrine\DBAL\Connection;
+use Monolog\Logger;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Messenger\Envelope;

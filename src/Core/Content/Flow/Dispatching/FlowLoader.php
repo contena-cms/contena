@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Flow\Dispatching;
 
-use Doctrine\DBAL\Connection;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal not intended for decoration or replacement

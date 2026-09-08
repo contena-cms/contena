@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Maintenance\System\Service;
 
+use Contena\Core\Maintenance\MaintenanceException;
+use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Contena\Core\Maintenance\MaintenanceException;
-use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 
 /**
  * @internal

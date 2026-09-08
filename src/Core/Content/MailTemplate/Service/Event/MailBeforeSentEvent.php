@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\MailTemplate\Service\Event;
 
-use Monolog\Level;
 use Contena\Core\Content\Flow\Dispatching\Aware\MessageAware;
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Framework\Context;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ObjectType;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
+use Monolog\Level;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\EventDispatcher\Event;
 

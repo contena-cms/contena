@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\UserStorer;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserRecoveryProvider;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

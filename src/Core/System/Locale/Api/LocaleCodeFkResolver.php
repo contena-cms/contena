@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\Locale\Api;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Sync\AbstractFkResolver;
 use Contena\Core\Framework\Api\Sync\FkReference;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

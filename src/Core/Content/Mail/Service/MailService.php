@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Service;
 
-use Monolog\Level;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\Telemetry\MailMetricsInstrumentor;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
@@ -21,6 +19,8 @@ use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Monolog\Level;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;

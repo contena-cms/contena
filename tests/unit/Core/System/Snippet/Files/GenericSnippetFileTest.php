@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Files;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\System\Snippet\Files\GenericSnippetFile;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

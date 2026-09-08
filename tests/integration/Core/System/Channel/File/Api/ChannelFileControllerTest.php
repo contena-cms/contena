@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Channel\File\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

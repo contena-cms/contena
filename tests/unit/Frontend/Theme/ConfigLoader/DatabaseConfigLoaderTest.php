@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\ConfigLoader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Framework\Context;
@@ -17,6 +14,9 @@ use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeDefinition;
 use Contena\Frontend\Theme\ThemeEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

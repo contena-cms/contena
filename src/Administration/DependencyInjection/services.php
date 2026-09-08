@@ -2,8 +2,6 @@
 
 namespace Contena\Administration\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Administration\Command\CheckExtensionsCommand;
 use Contena\Administration\Command\DeleteAdminFilesAfterBuildCommand;
 use Contena\Administration\Command\DeleteExtensionLocalPublicFilesCommand;
@@ -28,6 +26,8 @@ use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\Tag\Service\FilterTagIdsService;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 

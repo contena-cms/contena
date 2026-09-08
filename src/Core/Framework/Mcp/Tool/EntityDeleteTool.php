@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
-use Doctrine\DBAL\Connection;
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Doctrine\DBAL\Connection;
+use Mcp\Capability\Attribute\McpTool;
 
 #[McpTool(
     name: 'contena-entity-delete',

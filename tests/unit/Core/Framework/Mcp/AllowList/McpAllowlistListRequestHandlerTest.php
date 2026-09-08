@@ -2,6 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\AllowList;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistListRequestHandler;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Mcp\McpToolsetRegistry;
+use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Mcp\Capability\Registry;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Exception\InvalidCursorException;
@@ -21,11 +26,6 @@ use Mcp\Schema\Tool;
 use Mcp\Server\Session\SessionInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistListRequestHandler;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
-use Contena\Core\Framework\Mcp\McpToolsetRegistry;
-use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 

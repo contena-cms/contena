@@ -2,6 +2,10 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
+use Contena\Core\Framework\Api\OAuth\Scope\AdminScope;
+use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
+use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -9,10 +13,6 @@ use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
-use Contena\Core\Framework\Api\OAuth\Scope\AdminScope;
-use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
-use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
 
 class ScopeRepository implements ScopeRepositoryInterface
 {

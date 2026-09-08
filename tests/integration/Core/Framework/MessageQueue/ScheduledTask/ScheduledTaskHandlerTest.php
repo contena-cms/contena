@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\MessageQueue\ScheduledTask;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -20,6 +15,11 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\DummyScheduledTaskHandler;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestRescheduleOnFailureTask;
 use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\NativeClock;
 
 /**

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\Serializer;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncoder;
@@ -15,6 +13,8 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Custom
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\SerializationFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,13 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\Controller;
 
-use Mcp\Schema\Request\CallToolRequest;
-use Mcp\Schema\Request\GetPromptRequest;
-use Mcp\Schema\Request\InitializeRequest;
-use Mcp\Schema\Request\ReadResourceRequest;
-use Mcp\Server;
-use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
@@ -25,6 +18,13 @@ use Contena\Core\Framework\Mcp\Session\McpSessionIdValidator;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;
+use Mcp\Schema\Request\CallToolRequest;
+use Mcp\Schema\Request\GetPromptRequest;
+use Mcp\Schema\Request\InitializeRequest;
+use Mcp\Schema\Request\ReadResourceRequest;
+use Mcp\Server;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Media\Event;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ThumbnailGeneratedEvent extends Event

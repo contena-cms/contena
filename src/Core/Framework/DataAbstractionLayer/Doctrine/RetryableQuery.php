@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Doctrine;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\RetryableException;
-use Doctrine\DBAL\Statement;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\RetryableException;
+use Doctrine\DBAL\Statement;
 
 class RetryableQuery
 {

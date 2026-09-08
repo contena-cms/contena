@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem;
 
-use League\Flysystem\Visibility;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\LocalFactory;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
+use League\Flysystem\Visibility;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**

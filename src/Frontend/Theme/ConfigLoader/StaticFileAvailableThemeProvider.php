@@ -2,10 +2,10 @@
 
 namespace Contena\Frontend\Theme\ConfigLoader;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Frontend\Theme\Exception\ThemeException;
+use League\Flysystem\FilesystemOperator;
 
 class StaticFileAvailableThemeProvider extends AbstractAvailableThemeProvider
 {

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\Span;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\Telemetry\Telemetry;
 use Contena\Core\Framework\Telemetry\TelemetryException;
 use Contena\Core\Profiling\Integration\ProfilerInterface;
 use Contena\Core\Profiling\Profiler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

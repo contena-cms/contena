@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\DependencyInjection\ThumbnailProcessorCompilerPass;
 use Contena\Core\Content\Media\Thumbnail\Processor\GdImageThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ImagickThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

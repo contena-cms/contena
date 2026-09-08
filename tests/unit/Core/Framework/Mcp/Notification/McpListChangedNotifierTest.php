@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Notification;
 
+use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
+use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
+use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
+use Contena\Core\Framework\Util\Json;
 use Mcp\Server\Session\SessionStoreInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
-use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
-use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
-use Contena\Core\Framework\Util\Json;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Uid\Uuid;

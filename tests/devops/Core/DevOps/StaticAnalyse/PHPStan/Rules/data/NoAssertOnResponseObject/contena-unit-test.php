@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Foo;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseHelper\AssertResponseHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

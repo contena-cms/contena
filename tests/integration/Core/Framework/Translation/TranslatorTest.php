@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Translation;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Translation\Translator;
@@ -19,6 +17,8 @@ use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\SnippetCollection;
 use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\MessageCatalogueInterface;

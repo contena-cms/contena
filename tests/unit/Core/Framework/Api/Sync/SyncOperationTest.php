@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Sync;
 
+use Contena\Core\Framework\Api\ApiException;
+use Contena\Core\Framework\Api\Sync\SyncOperation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 
 /**
  * @internal

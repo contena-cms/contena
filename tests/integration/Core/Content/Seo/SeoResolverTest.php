@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Seo;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\AbstractSeoResolver;
 use Contena\Core\Content\Seo\SeoResolver;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

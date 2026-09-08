@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Core\Application\MediaLocationBuilder;
 use Contena\Core\Content\Media\Core\Event\MediaLocationEvent;
 use Contena\Core\Content\Media\Core\Event\ThumbnailLocationEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DependencyInjection;
 
 use Composer\Autoload\ClassLoader;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -60,8 +59,11 @@ use Contena\Core\Framework\Plugin\Util\PluginFinder;
 use Contena\Core\Framework\Plugin\Util\PluginIdProvider;
 use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
+use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -136,6 +138,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('cache.messenger.restart_workers_signal'),
             param('kernel.contena_version'),
             service(SystemConfigService::class),
+            service(CustomEntityPersister::class),
+            service(CustomEntitySchemaUpdater::class),
             service(PluginService::class),
             service(VersionSanitizer::class),
             service(DefinitionInstanceRegistry::class),

@@ -2,11 +2,11 @@
 
 namespace Contena\Frontend\Theme\Validator;
 
-use ScssPhp\ScssPhp\Colors;
-use ScssPhp\ScssPhp\OutputStyle;
 use Contena\Frontend\Theme\AbstractScssCompiler;
 use Contena\Frontend\Theme\CompilerConfiguration;
 use Contena\Frontend\Theme\Exception\ThemeException;
+use ScssPhp\ScssPhp\Colors;
+use ScssPhp\ScssPhp\OutputStyle;
 
 class SCSSValidator
 {

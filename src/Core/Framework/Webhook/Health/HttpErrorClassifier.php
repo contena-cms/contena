@@ -1,0 +1,27 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook\Health;
+
+/**
+ * @internal
+ */
+final class HttpErrorClassifier
+{
+    public function classify(int $statusCode): ErrorClassification
+    {
+        // Status 0 means that no HTTP response was received.
+        if ($statusCode === 0) {
+            return ErrorClassification::TransientNetwork;
+        }
+
+        return match (true) {
+            $statusCode >= 200 && $statusCode < 300 => ErrorClassification::Success,
+            $statusCode >= 300 && $statusCode < 400 => ErrorClassification::TransientRedirect,
+            $statusCode === 429 => ErrorClassification::TransientRateLimit,
+            $statusCode === 404, $statusCode === 408, $statusCode >= 500 && $statusCode < 600 => ErrorClassification::TransientServer,
+            $statusCode === 401, $statusCode === 403 => ErrorClassification::NonTransientAuth,
+            $statusCode === 410 => ErrorClassification::NonTransientEndpoint,
+            default => ErrorClassification::NonTransientPayload,
+        };
+    }
+}

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller\Exception;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Controller\Exception\FrontendException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Twig\Error\Error as TwigError;
 use Twig\Source;
 

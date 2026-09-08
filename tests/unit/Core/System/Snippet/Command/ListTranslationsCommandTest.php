@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Command;
 
-use GuzzleHttp\Psr7\Uri;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Command\ListTranslationsCommand;
 use Contena\Core\System\Snippet\DataTransfer\Language\Language;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
@@ -14,6 +10,10 @@ use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

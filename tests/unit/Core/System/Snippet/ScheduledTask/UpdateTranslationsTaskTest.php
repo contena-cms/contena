@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\ScheduledTask;
 
+use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTask;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTask;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**

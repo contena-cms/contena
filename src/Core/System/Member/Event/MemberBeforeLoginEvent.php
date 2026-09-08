@@ -6,12 +6,12 @@ use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ChannelAware;
+use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
 

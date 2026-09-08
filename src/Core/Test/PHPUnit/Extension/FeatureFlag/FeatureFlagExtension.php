@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Test\PHPUnit\Extension\FeatureFlag;
 
+use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestFinishedSubscriber;
+use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestPreparationStartedSubscriber;
+use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestSkippedSubscriber;
 use PHPUnit\Runner\Extension\Extension;
 use PHPUnit\Runner\Extension\Facade;
 use PHPUnit\Runner\Extension\ParameterCollection;
 use PHPUnit\TextUI\Configuration\Configuration;
-use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestFinishedSubscriber;
-use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestPreparationStartedSubscriber;
-use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestSkippedSubscriber;
 
 /**
  * This extension guarantees a clean feature environment for pure unit tests

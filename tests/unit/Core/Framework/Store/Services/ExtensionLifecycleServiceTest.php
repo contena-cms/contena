@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Store\Services;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Store\Services\ExtensionLifecycleService;
 use Contena\Core\Framework\Store\StoreException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

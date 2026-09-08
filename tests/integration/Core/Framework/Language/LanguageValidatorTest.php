@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Language;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageValidator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\File\FileSaver;
@@ -33,6 +30,9 @@ use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithFileAssociations\ThemeWithFileAssociations;
 use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithLabels\ThemeWithLabels;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

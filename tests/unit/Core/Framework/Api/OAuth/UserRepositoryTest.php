@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\OAuth;
 
+use Contena\Core\Framework\Api\OAuth\UserRepository;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Api\OAuth\UserRepository;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\HttpFoundation\RequestStack;
 

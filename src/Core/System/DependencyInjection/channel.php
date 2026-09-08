@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Rule\AbstractRuleLoader;
@@ -74,6 +72,8 @@ use Contena\Core\System\Channel\File\Rendering\ChannelFileTemplateOverrideLoader
 use Contena\Core\System\Channel\Subscriber\ChannelTypeValidator;
 use Contena\Core\System\Channel\Telemetry\ChannelTypeResolver;
 use Contena\Core\System\Channel\Validation\ChannelValidator;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
@@ -14,6 +12,8 @@ use Contena\Core\System\Member\MemberDefinition;
 use Contena\Core\System\Member\Validation\Constraint\MemberEmailUnique;
 use Contena\Core\System\Member\Validation\MemberEmailUniqueCheck;
 use Contena\Core\System\Member\Validation\MemberEmailUniqueChecker;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;

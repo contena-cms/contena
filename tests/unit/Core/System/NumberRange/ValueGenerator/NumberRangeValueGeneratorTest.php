@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\NumberRange\ValueGenerator;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Result;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -16,6 +12,10 @@ use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\Incr
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternDate;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternIncrement;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternRegistry;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

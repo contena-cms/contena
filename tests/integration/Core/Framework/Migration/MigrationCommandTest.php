@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Migration;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Contena\Core\Framework\Migration\Command\MigrationCommand;
 use Contena\Core\Framework\Migration\Command\MigrationDestructiveCommand;
 use Contena\Core\Framework\Migration\MigrationCollection;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Migration\MigrationRuntime;
 use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;

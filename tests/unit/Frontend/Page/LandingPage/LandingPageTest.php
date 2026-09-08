@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\LandingPage;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Frontend\Page\LandingPage\LandingPage;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

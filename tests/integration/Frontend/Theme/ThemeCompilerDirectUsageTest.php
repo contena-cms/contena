@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Theme;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
@@ -20,6 +16,10 @@ use Contena\Frontend\Theme\ScssPhpCompiler;
 use Contena\Frontend\Theme\ThemeCompiler;
 use Contena\Frontend\Theme\ThemeFileResolver;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Doctrine;
 
+use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Doctrine\DBAL\Exception\DeadlockException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 
 /**
  * @internal

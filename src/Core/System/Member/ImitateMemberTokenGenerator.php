@@ -2,12 +2,12 @@
 
 namespace Contena\Core\System\Member;
 
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Token\RegisteredClaims;
 use Contena\Core\Framework\JWT\Channel\JWTGenerator;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Member\Struct\ImitateMemberToken;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Token\RegisteredClaims;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 

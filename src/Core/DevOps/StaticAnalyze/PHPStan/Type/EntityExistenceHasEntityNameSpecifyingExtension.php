@@ -2,6 +2,7 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Type;
 
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
@@ -12,7 +13,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 
 /**
  * @internal

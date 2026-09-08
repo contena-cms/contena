@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -12,6 +11,7 @@ use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\Struct\ThemeDependencies;
+use Doctrine\DBAL\Connection;
 
 class ThemeLifecycleHandler
 {

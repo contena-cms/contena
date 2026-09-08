@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Media\ScheduledTask;
 
-use Doctrine\DBAL\ArrayParameterType;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\ScheduledTask\CleanupCorruptedMediaHandler;
 use Contena\Core\Defaults;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\ArrayParameterType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

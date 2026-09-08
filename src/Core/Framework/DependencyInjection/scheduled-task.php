@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\MessageQueue\Api\ScheduledTaskController;
 use Contena\Core\Framework\MessageQueue\Command\DeactivateScheduledTaskCommand;
 use Contena\Core\Framework\MessageQueue\Command\ListScheduledTaskCommand;
@@ -25,6 +23,8 @@ use Contena\Core\Framework\MessageQueue\Subscriber\PluginLifecycleSubscriber;
 use Contena\Core\Framework\MessageQueue\Subscriber\UpdatePostFinishSubscriber;
 use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

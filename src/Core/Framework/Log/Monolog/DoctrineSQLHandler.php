@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\Log\Monolog;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\Uuid\Uuid;
 
 class DoctrineSQLHandler extends AbstractProcessingHandler
 {

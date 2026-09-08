@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\ScheduledTask;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\ScheduledTask\CleanupCorruptedMediaHandler;
 use Contena\Core\Framework\Context;
@@ -19,6 +15,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Clock\NativeClock;
 
 /**

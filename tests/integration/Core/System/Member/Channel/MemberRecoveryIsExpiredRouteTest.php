@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Channel;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
@@ -17,6 +14,9 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Member\Channel\MemberRecoveryIsExpiredRoute;
 use Contena\Core\System\Member\Exception\MemberNotFoundByHashException;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

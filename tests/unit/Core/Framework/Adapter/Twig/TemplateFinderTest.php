@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
 
+use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
+use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
+use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
+use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
-use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
-use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
 use Twig\Error\LoaderError;

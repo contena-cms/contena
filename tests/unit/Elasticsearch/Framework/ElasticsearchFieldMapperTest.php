@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
@@ -12,6 +9,9 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldMapper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

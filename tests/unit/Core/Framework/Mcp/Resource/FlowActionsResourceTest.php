@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Resource;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Flow\Api\FlowActionCollectorResponse;
 use Contena\Core\Content\Flow\Api\FlowActionDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Resource\FlowActionsResource;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

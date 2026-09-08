@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Asset;
 
+use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
+use Contena\Core\Framework\Adapter\Asset\PrefixVersionStrategy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
-use Contena\Core\Framework\Adapter\Asset\PrefixVersionStrategy;
 
 /**
  * @internal

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Command\MakerCommand;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingWriter;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

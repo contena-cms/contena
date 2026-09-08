@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Contena\Tests\DevOps\Core;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

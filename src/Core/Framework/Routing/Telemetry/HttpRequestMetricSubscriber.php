@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Routing\Telemetry;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Middleware as DriverMiddleware;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCounter;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Telemetry;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Middleware as DriverMiddleware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

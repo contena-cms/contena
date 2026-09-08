@@ -1,0 +1,126 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook\Hookable;
+
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
+
+/**
+ * @internal
+ */
+class WriteResultMerger
+{
+    /**
+     * @internal
+     */
+    public function __construct(private readonly DefinitionInstanceRegistry $definitionRegistry)
+    {
+    }
+
+    public function mergeWriteResults(
+        EntityWrittenEvent $writtenEvent,
+        ?EntityWrittenEvent $translationEvent
+    ): ?EntityWrittenEvent {
+        if ($writtenEvent instanceof EntityDeletedEvent) {
+            return $writtenEvent;
+        }
+
+        $mergedWriteResults = [];
+        foreach ($writtenEvent->getWriteResults() as $writeResult) {
+            if ($translationEvent) {
+                $mergedWriteResults[] = $this->getMergedWriteResult($translationEvent, $writeResult);
+
+                continue;
+            }
+
+            if ($writeResult->getPayload() === []) {
+                continue;
+            }
+
+            $mergedWriteResults[] = $writeResult;
+        }
+
+        $mergedWriteResults = array_values(array_filter($mergedWriteResults));
+
+        if ($mergedWriteResults === []) {
+            return null;
+        }
+
+        return new EntityWrittenEvent(
+            $writtenEvent->getEntityName(),
+            $mergedWriteResults,
+            $writtenEvent->getContext(),
+            $writtenEvent->getErrors()
+        );
+    }
+
+    private function getMergedWriteResult(
+        EntityWrittenEvent $translationEvent,
+        EntityWriteResult $writeResult
+    ): ?EntityWriteResult {
+        $translationResults = $this->findWriteResultByPrimaryKey(
+            $translationEvent->getWriteResults(),
+            $writeResult->getPrimaryKey()
+        );
+
+        $payload = $writeResult->getPayload();
+        foreach ($translationResults as $translationResult) {
+            $payload = array_merge($payload, $this->getMergeableTranslationPayload($translationResult));
+        }
+
+        if ($payload === []) {
+            return null;
+        }
+
+        return new EntityWriteResult(
+            $writeResult->getPrimaryKey(),
+            $payload,
+            $writeResult->getEntityName(),
+            $writeResult->getOperation(),
+            $writeResult->getExistence(),
+            $writeResult->getChangeSet()
+        );
+    }
+
+    /**
+     * @param EntityWriteResult[] $writeResults
+     * @param string|array<string, string> $entityKey
+     *
+     * @return EntityWriteResult[]
+     */
+    private function findWriteResultByPrimaryKey(array $writeResults, array|string $entityKey): array
+    {
+        return array_filter($writeResults, static function (EntityWriteResult $result) use ($entityKey): bool {
+            $primaryKey = $result->getPrimaryKey();
+
+            if (\is_array($primaryKey)) {
+                unset($primaryKey['languageId']);
+
+                if (\count($primaryKey) === 1) {
+                    $primaryKey = array_shift($primaryKey);
+                }
+            }
+
+            return $primaryKey === $entityKey;
+        });
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getMergeableTranslationPayload(EntityWriteResult $translationResult): array
+    {
+        // use PKs from definition because versionIds are removed from the writeResult
+        $pks = $this->definitionRegistry
+            ->getByEntityName($translationResult->getEntityName())
+            ->getPrimaryKeys()
+            ->getKeys();
+
+        return array_diff_key(
+            $translationResult->getPayload(),
+            array_flip($pks)
+        );
+    }
+}

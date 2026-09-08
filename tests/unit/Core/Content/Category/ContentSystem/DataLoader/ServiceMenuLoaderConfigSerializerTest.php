@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Content\Category\ContentSystem\DataLoader;
 
+use Contena\Core\Content\Category\CategoryException;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfig;
+use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfigSerializer;
+use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWithJson;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryException;
-use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfig;
-use Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfigSerializer;
-use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 
 /**
  * @internal

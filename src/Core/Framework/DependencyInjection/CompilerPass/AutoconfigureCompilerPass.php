@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
@@ -18,6 +17,7 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInterface;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

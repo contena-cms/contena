@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\DataTransfer\Language;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\DataTransfer\Language\Language;
 use Contena\Core\System\Snippet\SnippetException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

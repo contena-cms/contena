@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\Command\CreateMigrationCommand;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

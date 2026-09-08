@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Redis;
 
+use Contena\Core\Framework\Adapter\AdapterException;
+use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Symfony\Contracts\Service\ServiceLocatorTrait;
 
 /**

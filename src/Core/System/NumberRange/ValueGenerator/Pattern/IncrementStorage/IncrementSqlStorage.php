@@ -2,11 +2,11 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 
 /**
  * @codeCoverageIgnore

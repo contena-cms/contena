@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\Tool;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 
 /**
  * @internal

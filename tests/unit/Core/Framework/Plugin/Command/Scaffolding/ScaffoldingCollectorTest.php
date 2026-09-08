@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Command\Scaffolding;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ChannelApiRouteGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\CommandGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\EventSubscriberGenerator;
@@ -13,6 +11,8 @@ use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguratio
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingCollector;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

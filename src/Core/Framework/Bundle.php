@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\BusinessEventRegisterCompilerPass;
 use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Kernel;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Seo\SeoUrlRoute;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Channel\Context\Cleanup;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
@@ -11,6 +9,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\Cleanup\CleanupChannelContextTaskHandler;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

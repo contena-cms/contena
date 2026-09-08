@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Robots\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Page\Robots\Event\RobotsDirectiveParsingEvent;
 use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Snippet\Service;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -13,6 +12,7 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Tests\Integration\Core\System\Snippet\TranslationClientBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

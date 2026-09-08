@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Test\Stub\Doctrine;
 
+use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;
 
 /**
  * @internal

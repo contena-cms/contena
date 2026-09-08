@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\DataDictionary;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
@@ -23,6 +20,9 @@ use Contena\Core\System\DataDictionary\DataDictionaryWriteValidator;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\Validator\UserGenderValidator;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

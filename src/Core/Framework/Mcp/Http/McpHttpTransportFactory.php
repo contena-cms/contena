@@ -2,6 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Http;
 
+use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
+use Contena\Core\Framework\Mcp\McpToolSchemaNormalizer;
+use Contena\Core\Framework\Util\Json;
+use Contena\Core\PlatformRequest;
 use Mcp\Server\Transport\Http\Middleware\DnsRebindingProtectionMiddleware;
 use Mcp\Server\Transport\StreamableHttpTransport;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -10,10 +14,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
-use Contena\Core\Framework\Mcp\McpToolSchemaNormalizer;
-use Contena\Core\Framework\Util\Json;
-use Contena\Core\PlatformRequest;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Content;
 use Contena\Core\Content\Media\Subscriber\MediaVisibilityRestrictionSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

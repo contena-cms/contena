@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Integration\Frontend\Theme\ConfigLoader;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseAvailableThemeProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

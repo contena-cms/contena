@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tenant\TenantEntity;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Provides isolated tenant fixtures and contexts for integration tests.

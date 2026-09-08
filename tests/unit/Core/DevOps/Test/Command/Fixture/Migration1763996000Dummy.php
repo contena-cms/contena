@@ -2,8 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\Test\Command\Fixture;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

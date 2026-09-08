@@ -2,15 +2,20 @@
 
 namespace Contena\Core\System\SystemConfig\Service;
 
-use Psr\Log\LoggerInterface;
+use Contena\Core\Framework\App\AppCollection;
+use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\SystemConfig\Exception\BundleConfigNotFoundException;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class ConfigurationService
@@ -19,10 +24,13 @@ class ConfigurationService
      * @internal
      *
      * @param BundleInterface[] $bundles
+     * @param EntityRepository<AppCollection> $appRepository
      */
     public function __construct(
         private readonly iterable $bundles,
         private readonly ConfigReader $configReader,
+        private readonly AppConfigReader $appConfigReader,
+        private readonly EntityRepository $appRepository,
         private readonly SystemConfigService $systemConfigService,
         private readonly LoggerInterface $logger
     ) {
@@ -98,7 +106,7 @@ class ConfigurationService
         if ($this->checkConfiguration($domain, $context)) {
             $config = array_merge(
                 $config,
-                $this->enrichValues($this->getConfiguration($domain, $context), $channelId, $context)
+                $this->enrichValues($this->getConfiguration($domain, $context), $channelId)
             );
         }
 
@@ -160,7 +168,20 @@ class ConfigurationService
             }
         }
 
-        return null;
+        $app = $this->getAppByName($technicalName, $context);
+
+        return $app ? $this->appConfigReader->read($app) : null;
+    }
+
+    private function getAppByName(string $name, Context $context): ?AppEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('name', $name));
+
+        /** @var AppEntity|null $result */
+        $result = $this->appRepository->search($criteria, $context)->getEntities()->first();
+
+        return $result;
     }
 
     /**
@@ -168,7 +189,7 @@ class ConfigurationService
      *
      * @return array<mixed>
      */
-    private function enrichValues(array $config, ?string $channelId, Context $context): array
+    private function enrichValues(array $config, ?string $channelId): array
     {
         foreach ($config as &$card) {
             if (!\is_array($card['elements'] ?? false)) {
@@ -176,7 +197,7 @@ class ConfigurationService
             }
 
             foreach ($card['elements'] as &$element) {
-                $element['value'] = $this->systemConfigService->get($element['name'], $channelId, $context) ?? $element['config']['defaultValue'] ?? '';
+                $element['value'] = $this->systemConfigService->get($element['name'], $channelId) ?? $element['config']['defaultValue'] ?? '';
             }
         }
 

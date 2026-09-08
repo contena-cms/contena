@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Requirement\Exception;
 
+use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
+use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

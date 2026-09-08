@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Migration;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Doctrine\DBAL\Connection;
 
 trait ColumnExistsTrait
 {

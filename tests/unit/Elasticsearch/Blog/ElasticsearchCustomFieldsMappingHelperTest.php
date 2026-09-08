@@ -2,18 +2,18 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use OpenSearch\Client;
-use OpenSearch\Exception\BadRequestHttpException;
-use OpenSearch\Namespaces\IndicesNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Elasticsearch\Blog\CustomFieldSetGateway;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
+use OpenSearch\Client;
+use OpenSearch\Exception\BadRequestHttpException;
+use OpenSearch\Namespaces\IndicesNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
+use Contena\Core\Framework\Mcp\McpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\McpException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

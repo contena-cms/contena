@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Theme\DataAbstractionLayer;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\Event\ThemeIndexerEvent;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeDefinition;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ThemeIndexer extends EntityIndexer

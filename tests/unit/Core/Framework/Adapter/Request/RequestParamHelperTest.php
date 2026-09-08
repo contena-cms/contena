@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Request;
 
+use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

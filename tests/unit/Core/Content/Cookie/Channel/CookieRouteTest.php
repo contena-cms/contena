@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Cookie\Channel;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Channel\CookieRoute;
 use Contena\Core\Content\Cookie\Channel\CookieRouteResponse;
 use Contena\Core\Content\Cookie\CookieException;
@@ -14,6 +12,8 @@ use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Test\Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

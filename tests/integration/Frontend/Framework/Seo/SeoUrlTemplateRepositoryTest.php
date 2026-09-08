@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Seo;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Resource;
 
-use Mcp\Capability\Attribute\McpResource;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Util\Json;
+use Mcp\Capability\Attribute\McpResource;
 
 #[McpResource(
     uri: 'contena://business-events',

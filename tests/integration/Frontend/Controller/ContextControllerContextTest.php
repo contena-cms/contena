@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
@@ -14,6 +13,7 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Event\ChannelContextSwitchEvent;
 use Contena\Frontend\Framework\Routing\Router;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\Plugin\KernelPluginLoader;
 
 use Composer\Autoload\ClassLoader;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Framework\Plugin\PluginException;
@@ -14,6 +12,8 @@ use Contena\Tests\Integration\Core\Framework\Plugin\_fixtures\bundles\GizmoBundl
 use CtTestPlugin\CtTestFake;
 use CtTestPlugin\CtTestPlugin;
 use CtTestWithBundle\CtTestWithBundle;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

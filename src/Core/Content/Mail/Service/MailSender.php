@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Mail\Service;
 
-use League\Flysystem\FilesystemOperator;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use League\Flysystem\FilesystemOperator;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;

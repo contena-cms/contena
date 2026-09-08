@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\SystemConfig;
 
+use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
 
 /**
  * @internal

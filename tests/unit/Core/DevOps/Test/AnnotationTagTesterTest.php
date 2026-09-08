@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\Test;
 
+use Contena\Core\DevOps\Test\AnnotationTagTester;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\Test\AnnotationTagTester;
 
 /**
  * @internal

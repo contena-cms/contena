@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\SystemConfig;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ConfigJsonField;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
+use Doctrine\DBAL\Connection;
 
 class SystemConfigLoader extends AbstractSystemConfigLoader
 {

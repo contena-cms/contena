@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core;
 
+use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
+use Contena\Core\Kernel;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
-use Contena\Core\Kernel;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;

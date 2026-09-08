@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Service\Event;
 
+use Contena\Core\Content\MailTemplate\Service\Event\MailErrorEvent;
+use Contena\Core\Framework\Context;
 use Monolog\Level;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\MailTemplate\Service\Event\MailErrorEvent;
-use Contena\Core\Framework\Context;
 
 /**
  * @internal

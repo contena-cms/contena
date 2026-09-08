@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\Maintenance\System\Service;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

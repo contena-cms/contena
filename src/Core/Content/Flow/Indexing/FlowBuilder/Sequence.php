@@ -7,7 +7,6 @@ namespace Contena\Core\Content\Flow\Indexing\FlowBuilder;
 /**
  * @internal
  *
- * @codeCoverageIgnore
  */
 class Sequence
 {
@@ -25,6 +24,7 @@ class Sequence
         public int $position = 1,
         public int $displayGroup = 1,
         public bool $trueCase = false,
+        public ?string $appFlowActionId = null,
         public array $children = [],
     ) {
     }
@@ -44,6 +44,7 @@ class Sequence
             (int) $data['position'],
             (int) $data['display_group'],
             (bool) $data['true_case'],
+            (string) ($data['app_flow_action_id'] ?? null) ?: null,
         );
     }
 }

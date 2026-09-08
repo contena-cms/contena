@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Event;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Event\ChannelContextCreatedEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

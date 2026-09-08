@@ -2,16 +2,16 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\RemovedTwigBlocks;
+use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
+use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
+use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 use Danger\Context;
 use Danger\Struct\File;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\RemovedTwigBlocks;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal

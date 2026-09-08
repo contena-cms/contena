@@ -2,10 +2,10 @@
 
 namespace Contena\Core\System\Member\Event;
 
-use Monolog\Level;
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ChannelAware;
+use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
@@ -13,11 +13,11 @@ use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\MemberAware;
-use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Log\LogAware;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Member\MemberDefinition;
 use Contena\Core\System\Member\MemberEntity;
+use Monolog\Level;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class MemberLoginEvent extends Event implements ChannelAware, ContenaChannelEvent, MemberAware, MailAware, ScalarValuesAware, FlowEventAware, LogAware

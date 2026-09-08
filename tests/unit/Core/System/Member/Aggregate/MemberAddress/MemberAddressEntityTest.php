@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Member\Aggregate\MemberAddress;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Member\Aggregate\MemberAddress\MemberAddressEntity;
 use Contena\Core\System\Region\RegionEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

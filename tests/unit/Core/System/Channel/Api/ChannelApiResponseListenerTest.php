@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Struct\ArrayStruct;
@@ -14,6 +11,9 @@ use Contena\Core\System\Channel\Api\ChannelApiResponseListener;
 use Contena\Core\System\Channel\Api\StructEncoder;
 use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\Channel\GenericChannelApiResponse;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

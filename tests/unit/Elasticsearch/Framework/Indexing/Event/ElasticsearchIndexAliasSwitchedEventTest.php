@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing\Event;
 
+use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexAliasSwitchedEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexAliasSwitchedEvent;
 
 /**
  * @internal

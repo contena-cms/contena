@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\SystemCheck;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
 use Contena\Frontend\Framework\SystemCheck\ChannelsReadinessCheck;
 use Contena\Frontend\Framework\SystemCheck\Util\AbstractChannelDomainProvider;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

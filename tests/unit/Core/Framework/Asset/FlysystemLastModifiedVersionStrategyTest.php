@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Asset;
 
+use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;

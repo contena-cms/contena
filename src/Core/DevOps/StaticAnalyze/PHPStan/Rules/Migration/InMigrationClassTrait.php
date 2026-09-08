@@ -2,8 +2,8 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration;
 
-use PHPStan\Analyser\Scope;
 use Contena\Core\Framework\Migration\MigrationStep;
+use PHPStan\Analyser\Scope;
 
 /**
  * @internal

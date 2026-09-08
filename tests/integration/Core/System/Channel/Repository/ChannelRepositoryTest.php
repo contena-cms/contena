@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Channel\Repository;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -14,6 +13,7 @@ use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

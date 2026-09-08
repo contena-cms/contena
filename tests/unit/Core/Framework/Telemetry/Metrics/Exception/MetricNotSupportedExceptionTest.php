@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Exception;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Exception\MetricNotSupportedException;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

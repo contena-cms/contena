@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\SystemCheck;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\SystemCheck\BaseCheck;
 use Contena\Core\Framework\SystemCheck\Check\Category;
@@ -13,6 +12,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\SystemCheck\Util\AbstractChannelDomainProvider;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

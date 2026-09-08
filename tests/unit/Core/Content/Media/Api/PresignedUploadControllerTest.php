@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Api\PresignedUploadController;
 use Contena\Core\Content\Media\Upload\PresignedMediaUploadService;
 use Contena\Core\Content\Media\Upload\PresignedUploadFinalizePayload;
 use Contena\Core\Content\Media\Upload\PresignedUploadPreparePayload;
 use Contena\Core\Content\Media\Upload\PresignedUploadPrepareResult;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

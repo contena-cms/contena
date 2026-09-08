@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

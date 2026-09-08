@@ -2,9 +2,9 @@
 
 namespace Contena\Core\DevOps\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\System\Command\SystemDumpDatabaseCommand;
 use Contena\Core\DevOps\System\Command\SystemRestoreDatabaseCommand;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpClient\MockHttpClient;
 

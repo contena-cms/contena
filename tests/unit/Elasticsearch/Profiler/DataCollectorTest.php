@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Profiler;
 
-use OpenSearch\Namespaces\CatNamespace;
-use OpenSearch\Namespaces\ClusterNamespace;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\PlatformRequest;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
 use Contena\Elasticsearch\Profiler\DataCollector;
+use OpenSearch\Namespaces\CatNamespace;
+use OpenSearch\Namespaces\ClusterNamespace;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Payload\MailPayload;
 use Contena\Core\Content\MailTemplate\MailTemplateCollection;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
@@ -18,6 +16,8 @@ use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

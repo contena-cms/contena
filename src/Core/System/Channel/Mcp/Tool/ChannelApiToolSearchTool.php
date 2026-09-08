@@ -2,9 +2,9 @@
 
 namespace Contena\Core\System\Channel\Mcp\Tool;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Tool\AbstractToolSearchTool;
+use Mcp\Capability\Attribute\McpTool;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Hydration\DataContext;
 
+use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 
 /**
  * @internal

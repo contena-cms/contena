@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Provider;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
@@ -22,6 +20,8 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

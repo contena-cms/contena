@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
+use Contena\Elasticsearch\ElasticsearchException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\ElasticsearchException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

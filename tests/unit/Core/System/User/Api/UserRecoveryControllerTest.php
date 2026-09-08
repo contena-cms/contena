@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\User\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\System\User\Api\UserRecoveryController;
 use Contena\Core\System\User\Recovery\UserRecoveryService;
 use Contena\Core\System\User\UserEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

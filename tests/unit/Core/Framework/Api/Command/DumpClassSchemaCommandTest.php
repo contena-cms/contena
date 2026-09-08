@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Command\DumpClassSchemaCommand;
 use Contena\Core\Framework\Rule\RuleCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

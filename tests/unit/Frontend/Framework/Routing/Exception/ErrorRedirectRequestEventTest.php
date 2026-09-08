@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing\Exception;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Framework\Routing\Exception\ErrorRedirectRequestEvent;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

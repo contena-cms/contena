@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Sitemap\Commands;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\Commands\SitemapGenerateCommand;
 use Contena\Core\Content\Sitemap\Event\SitemapChannelCriteriaEvent;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

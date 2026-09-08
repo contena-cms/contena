@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin;
 
+use Contena\Core\Framework\Plugin\NullBundleConfigStyleFileResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Plugin\NullBundleConfigStyleFileResolver;
 
 /**
  * @internal

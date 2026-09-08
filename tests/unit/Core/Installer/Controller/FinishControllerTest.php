@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Controller;
 
+use Contena\Core\Installer\Controller\FinishController;
+use Contena\Core\Installer\Finish\SystemLocker;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
@@ -9,8 +11,6 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Controller\FinishController;
-use Contena\Core\Installer\Finish\SystemLocker;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

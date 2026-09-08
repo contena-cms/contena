@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\ConfigLoader;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\ConfigLoader\AbstractAvailableThemeProvider;
 use Contena\Frontend\Theme\ConfigLoader\AbstractConfigLoader;
@@ -14,6 +10,10 @@ use Contena\Frontend\Theme\ConfigLoader\StaticFileConfigDumper;
 use Contena\Frontend\Theme\Event\ThemeConfigChangedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigResetEvent;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Test\Stub\DataAbstractionLayer;
 
+use Contena\Core\Test\Stub\DataAbstractionLayer\EmptyEntityExistence;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\Stub\DataAbstractionLayer\EmptyEntityExistence;
 
 /**
  * @internal

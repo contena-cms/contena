@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexingMessage;
 use Contena\Elasticsearch\Framework\Indexing\IndexerOffset;
 use Contena\Elasticsearch\Framework\Indexing\IndexingDto;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-type MessageData array{

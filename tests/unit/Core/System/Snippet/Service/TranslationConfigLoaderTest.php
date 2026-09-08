@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Service;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Snippet\DataTransfer\Language\Language;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
 use Contena\Core\System\Snippet\Service\TranslationConfigLoader;
 use Contena\Core\System\Snippet\SnippetException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

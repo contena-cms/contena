@@ -4,8 +4,8 @@ namespace Contena\Core\Content\Blog\Events;
 
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

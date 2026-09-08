@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Migration\Command;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Migration\MigrationException;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

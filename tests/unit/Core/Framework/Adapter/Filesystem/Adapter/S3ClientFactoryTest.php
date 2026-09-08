@@ -4,9 +4,9 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem\Adapter;
 
 use AsyncAws\Core\AbstractApi;
 use AsyncAws\S3\S3Client;
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\S3ClientFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Filesystem\Adapter\S3ClientFactory;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

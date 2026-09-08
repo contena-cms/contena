@@ -3,9 +3,6 @@
 namespace Contena\Core\Framework\Test\Plugin;
 
 use Composer\Autoload\ClassLoader;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
@@ -14,6 +11,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use CtTestPlugin\CtTestPlugin;
 use CtTestSkipRebuild\CtTestSkipRebuild;
 use CtTestWithBundle\CtTestWithBundle;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 
 trait PluginIntegrationTestBehaviour
 {

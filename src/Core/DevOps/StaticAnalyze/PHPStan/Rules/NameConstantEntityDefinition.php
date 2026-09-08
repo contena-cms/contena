@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 
 /**
  * @implements Rule<InClassNode>

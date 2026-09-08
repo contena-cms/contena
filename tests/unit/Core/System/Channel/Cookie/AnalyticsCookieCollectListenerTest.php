@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\System\Channel\Cookie;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
@@ -17,6 +15,8 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Cookie\AnalyticsCookieCollectListener;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

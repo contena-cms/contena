@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Migration\Traits;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 
 trait ImportTranslationsTrait
 {

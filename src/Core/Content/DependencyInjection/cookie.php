@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Cookie\Channel\CookieConsentLogRoute;
 use Contena\Core\Content\Cookie\Channel\CookieRoute;
 use Contena\Core\Content\Cookie\CookieConsentConfigVersion\CookieConsentConfigVersionDefinition;
@@ -13,6 +11,8 @@ use Contena\Core\Content\Cookie\ScheduledTask\CleanupCookieConsentLogTaskHandler
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

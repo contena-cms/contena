@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Constraint\Callback;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Exception\MissingMetricConfigurationException;
@@ -19,6 +13,12 @@ use Contena\Core\Framework\Telemetry\Metrics\MetricLabelProcessor;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
 use Contena\Core\Framework\Telemetry\TelemetryException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Constraint\Callback;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @internal

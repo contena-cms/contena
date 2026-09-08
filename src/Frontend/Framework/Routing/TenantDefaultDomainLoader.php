@@ -2,9 +2,9 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
+use Doctrine\DBAL\Connection;
 
 /**
  * Resolves the default web channel of a tenant for requests that are

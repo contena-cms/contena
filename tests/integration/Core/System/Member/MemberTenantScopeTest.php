@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,6 +18,7 @@ use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\Test\TestDefaults;
 use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\TenantIsolationTestTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

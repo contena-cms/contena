@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomField;
 
+use Contena\Core\System\CustomField\CustomFieldException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\CustomField\CustomFieldException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

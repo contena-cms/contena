@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Channel\Api\ResponseFields;
 use Contena\Core\System\Channel\ChannelException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

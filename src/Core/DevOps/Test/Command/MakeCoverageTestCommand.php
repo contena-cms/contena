@@ -2,9 +2,9 @@
 
 namespace Contena\Core\DevOps\Test\Command;
 
-use PHPUnit\TextUI\XmlConfiguration\Loader;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Struct\Struct;
+use PHPUnit\TextUI\XmlConfiguration\Loader;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

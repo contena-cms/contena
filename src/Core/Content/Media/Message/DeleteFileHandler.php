@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Media\Message;
 
+use Contena\Core\Content\Media\MediaException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\Visibility;
-use Contena\Core\Content\Media\MediaException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

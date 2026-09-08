@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Routing;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Content\Seo\SeoResolver;
 use Contena\Core\Defaults;
@@ -26,6 +23,9 @@ use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\TenantDefaultDomainLoader;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Test\Framework\Routing\Helper\ExpectedRequest;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

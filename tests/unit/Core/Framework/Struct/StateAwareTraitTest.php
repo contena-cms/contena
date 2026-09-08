@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Struct;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Tests\Unit\Core\Framework\Struct\Fixture\StateStruct;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

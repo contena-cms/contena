@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Routing\Event;
 
+use Contena\Core\Framework\Routing\Event\MaintenanceModeRequestEvent;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Routing\Event\MaintenanceModeRequestEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

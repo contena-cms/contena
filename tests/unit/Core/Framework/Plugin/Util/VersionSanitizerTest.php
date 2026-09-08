@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Util;
 
+use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
 
 /**
  * @internal

@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Context;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
@@ -16,6 +14,8 @@ use Contena\Core\System\Channel\Context\ChannelRuleLoader;
 use Contena\Core\System\Channel\Event\ChannelContextCreatedEvent;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Telemetry;
 
+use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 
 /**
  * @internal

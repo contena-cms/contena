@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Store\Session;
 
+use Contena\Core\Framework\Store\Session\FrontendSessionStorageFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Store\Session\FrontendSessionStorageFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface;

@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Increment;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 
 class IncrementException extends HttpException

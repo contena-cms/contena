@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Listing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Aggrega
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Struct\ArrayStruct;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

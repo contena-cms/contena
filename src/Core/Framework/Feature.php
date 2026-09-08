@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Feature\FeatureException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-type FeatureFlagConfig array{name?: string, default?: boolean, major?: boolean, description?: string, active?: bool, static?: bool}

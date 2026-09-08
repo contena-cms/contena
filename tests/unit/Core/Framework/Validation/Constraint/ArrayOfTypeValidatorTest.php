@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\Validation\Constraint;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfType;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfTypeValidator;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;

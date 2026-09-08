@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
+use Contena\Frontend\Theme\CompilerConfiguration;
+use Contena\Frontend\Theme\ScssPhpCompiler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ScssPhp\ScssPhp\OutputStyle;
-use Contena\Frontend\Theme\CompilerConfiguration;
-use Contena\Frontend\Theme\ScssPhpCompiler;
 
 /**
  * @internal

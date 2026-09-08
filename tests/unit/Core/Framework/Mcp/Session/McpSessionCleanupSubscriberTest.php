@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Session;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
 use Contena\Core\Framework\Mcp\Session\McpSessionCleanupSubscriber;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\HttpFoundation\Request;

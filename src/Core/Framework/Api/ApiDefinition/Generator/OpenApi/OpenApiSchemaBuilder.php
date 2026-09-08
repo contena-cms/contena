@@ -2,6 +2,9 @@
 
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
+use Contena\Core\PlatformRequest;
 use OpenApi\Annotations\Components;
 use OpenApi\Annotations\Info;
 use OpenApi\Annotations\MediaType;
@@ -11,9 +14,6 @@ use OpenApi\Annotations\Response as OpenApiResponse;
 use OpenApi\Annotations\Schema;
 use OpenApi\Annotations\SecurityScheme;
 use OpenApi\Annotations\Server;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
-use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class OpenApiSchemaBuilder

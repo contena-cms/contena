@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\IndexerQueuer;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\IndexerQueuer;
 
 /**
  * @internal

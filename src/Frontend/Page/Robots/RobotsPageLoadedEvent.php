@@ -3,8 +3,8 @@
 namespace Contena\Frontend\Page\Robots;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 class RobotsPageLoadedEvent extends NestedEvent implements ContenaEvent

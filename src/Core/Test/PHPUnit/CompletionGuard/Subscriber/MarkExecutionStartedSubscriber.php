@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber;
 
+use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
 use PHPUnit\Event\TestRunner\ExecutionStarted;
 use PHPUnit\Event\TestRunner\ExecutionStartedSubscriber;
-use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
 
 /**
  * @internal

@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
-use Doctrine\DBAL\Connection;
-use OpenSearchDSL\Query\Compound\BoolQuery;
-use OpenSearchDSL\Query\FullText\MatchQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
@@ -30,6 +24,12 @@ use Contena\Elasticsearch\Framework\ElasticsearchFieldMapper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Contena\Tests\Unit\Core\System\Language\Stubs\StaticChannelLanguageLoader;
 use Contena\Tests\Unit\Core\System\Language\Stubs\StaticLanguageLoader;
+use Doctrine\DBAL\Connection;
+use OpenSearchDSL\Query\Compound\BoolQuery;
+use OpenSearchDSL\Query\FullText\MatchQuery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

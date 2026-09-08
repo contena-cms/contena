@@ -2,11 +2,11 @@
 
 namespace Contena\Frontend\Theme\ConfigLoader;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\Event\ThemeConfigChangedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigResetEvent;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

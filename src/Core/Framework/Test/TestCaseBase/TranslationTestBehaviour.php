@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
+use Contena\Core\Framework\Adapter\Translation\Translator;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
-use Contena\Core\Framework\Adapter\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait TranslationTestBehaviour

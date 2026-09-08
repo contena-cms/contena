@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Blog;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRouteResponse;
@@ -16,6 +14,8 @@ use Contena\Frontend\Page\Blog\BlogPageLoader;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\MetaInformation;
 use Contena\Frontend\Page\Page;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 

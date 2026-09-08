@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Content\Media\Upload;
 
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToDeleteFile;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\Message\GenerateThumbnailsMessage;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Framework\Context;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteFile;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**

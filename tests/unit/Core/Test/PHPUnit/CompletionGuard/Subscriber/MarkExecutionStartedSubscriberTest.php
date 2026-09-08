@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Test\PHPUnit\CompletionGuard\Subscriber;
 
+use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
+use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionStartedSubscriber;
 use PHPUnit\Event\Code\TestCollection;
 use PHPUnit\Event\Telemetry\Duration;
 use PHPUnit\Event\Telemetry\GarbageCollectorStatus;
@@ -13,8 +15,6 @@ use PHPUnit\Event\TestRunner\ExecutionStarted;
 use PHPUnit\Event\TestSuite\TestSuiteWithName;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
-use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionStartedSubscriber;
 
 /**
  * @internal

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\MigrationException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\MigrationException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

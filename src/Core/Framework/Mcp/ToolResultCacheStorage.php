@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 
 /**
  * Persists large tool results in the DB for the duration of an MCP session.

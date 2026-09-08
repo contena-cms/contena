@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Service;
 
+use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
+use Contena\Core\System\Snippet\Service\TranslationFilesystemFactory;
 use League\Flysystem\FilesystemOperator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
-use Contena\Core\System\Snippet\Service\TranslationFilesystemFactory;
 
 /**
  * @internal

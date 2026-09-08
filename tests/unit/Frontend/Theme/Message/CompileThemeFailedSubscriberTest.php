@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Message;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Notification\NotificationService;
@@ -13,6 +11,8 @@ use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Theme\Message\CompileThemeFailedSubscriber;
 use Contena\Frontend\Theme\Message\CompileThemeMessage;
 use Contena\Frontend\Theme\ThemeService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 

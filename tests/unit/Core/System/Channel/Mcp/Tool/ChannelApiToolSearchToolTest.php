@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Mcp\Tool;
 
+use Contena\Core\Framework\Mcp\Tool\AbstractToolSearchTool;
+use Contena\Core\Framework\Mcp\Tool\Search\ToolSearch;
+use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Tool;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Tool\AbstractToolSearchTool;
-use Contena\Core\Framework\Mcp\Tool\Search\ToolSearch;
-use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
 
 /**
  * @internal

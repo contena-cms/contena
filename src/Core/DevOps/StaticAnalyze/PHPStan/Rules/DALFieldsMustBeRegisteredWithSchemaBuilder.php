@@ -2,6 +2,11 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\EnumField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
+use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -10,11 +15,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\EnumField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 
 /**
  * @internal

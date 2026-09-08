@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\HealthCheck;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -18,6 +15,9 @@ use Contena\Frontend\Framework\SystemCheck\ChannelsReadinessCheck;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainProvider;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
 use Contena\Frontend\Framework\SystemCheck\Util\FrontendHealthCheckResult;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

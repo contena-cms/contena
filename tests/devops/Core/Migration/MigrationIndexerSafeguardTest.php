@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\DevOps\Core\Migration;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Migration\MigrationIndexerSafeguard;
 use Contena\Core\Test\Assert\StrictEmpty;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Flags core migrations that write to tables feeding a DAL indexer without

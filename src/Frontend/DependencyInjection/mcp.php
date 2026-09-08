@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Contena\Frontend\Theme\ThemeService;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

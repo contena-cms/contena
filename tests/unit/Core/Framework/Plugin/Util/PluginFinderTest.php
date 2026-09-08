@@ -3,13 +3,13 @@
 namespace Contena\Tests\Unit\Core\Framework\Plugin\Util;
 
 use Composer\IO\NullIO;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Plugin\Composer\PackageProvider;
 use Contena\Core\Framework\Plugin\Exception\ExceptionCollection;
 use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
 use Contena\Core\Framework\Plugin\Struct\PluginFromFileSystemStruct;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

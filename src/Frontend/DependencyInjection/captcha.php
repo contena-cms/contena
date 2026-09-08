@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
-use GuzzleHttp\Client;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha\BasicCaptchaGenerator;
@@ -11,6 +10,7 @@ use Contena\Frontend\Framework\Captcha\CaptchaRouteListener;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV2;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
 use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
+use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

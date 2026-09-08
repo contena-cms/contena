@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Maintenance\System\Service;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Kernel;
 use Contena\Core\Maintenance\MaintenanceException;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

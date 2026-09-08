@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Seo;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Defaults;
@@ -15,6 +11,10 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Regression test for the category indexing deadlock of contena/contena#6540 (NEXT-22174).

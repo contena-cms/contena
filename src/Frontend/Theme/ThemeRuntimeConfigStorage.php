@@ -2,12 +2,12 @@
 
 namespace Contena\Frontend\Theme;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Frontend\Theme\ThemeRuntimeConfigStorageTest;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\DataAbstractionLayer;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
 use Contena\Core\Content\Media\MediaCollection;
@@ -17,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MediaIndexer extends EntityIndexer

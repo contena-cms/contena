@@ -2,17 +2,17 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 
+use Contena\Core\Framework\Adapter\AdapterException;
+use Contena\Core\Framework\Adapter\Cache\CacheClearer;
+use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
+use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
+use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Adapter\Cache\CacheClearer;
-use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
-use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
 use Symfony\Component\Cache\PruneableInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;

@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer;
 
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\MigrationQueryGenerator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider;
 use Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider;
@@ -14,9 +17,6 @@ use Doctrine\DBAL\Schema\Table;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\MigrationQueryGenerator;
 
 /**
  * @internal

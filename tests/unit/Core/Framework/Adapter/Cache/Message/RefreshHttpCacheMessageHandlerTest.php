@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Message;
 
+use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessage;
+use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessageHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessage;
-use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessageHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;

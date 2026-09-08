@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Migration;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
 
 class MigrationCollectionLoader
 {

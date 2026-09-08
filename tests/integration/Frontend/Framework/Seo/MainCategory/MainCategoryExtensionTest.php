@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Seo\MainCategory;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogMainCategory\BlogMainCategoryCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMainCategory\BlogMainCategoryEntity;
 use Contena\Core\Content\Blog\BlogCollection;
@@ -16,6 +15,7 @@ use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\MessageQueue\Api\ConsumeMessagesController;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Stats\AbstractStatsRepository;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\MessageQueue\Subscriber\EarlyReturnMessagesListener;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueStatsSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ServiceLocator;

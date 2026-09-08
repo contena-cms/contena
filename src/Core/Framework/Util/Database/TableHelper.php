@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\Util\Database;
 
+use Contena\Core\Framework\Util\UtilException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -11,7 +12,6 @@ use Doctrine\DBAL\Schema\Column as DbalColumn;
 use Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
 use Doctrine\DBAL\Schema\Index as DbalIndex;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Contena\Core\Framework\Util\UtilException;
 
 /**
  * Covered by {@see \Contena\Tests\Integration\Core\Framework\Util\Database\TableHelperTest}

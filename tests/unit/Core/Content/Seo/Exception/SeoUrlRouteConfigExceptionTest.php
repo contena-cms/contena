@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo\Exception;
 
+use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

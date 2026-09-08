@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Validation;
 
+use Contena\Core\Content\MailTemplate\Validation\MailTemplateRenderResult;
+use Contena\Core\Framework\Adapter\AdapterException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\MailTemplate\Validation\MailTemplateRenderResult;
-use Contena\Core\Framework\Adapter\AdapterException;
 
 /**
  * @internal

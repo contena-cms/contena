@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Payload\MailPayload;
 use Contena\Core\Content\Mail\Payload\MailPayloadFactory;
 use Contena\Core\Content\MailTemplate\Api\MailActionController;
@@ -17,6 +14,9 @@ use Contena\Core\Content\MailTemplate\Service\MailTemplateService;
 use Contena\Core\Content\MailTemplate\Validation\MailTemplateRenderResult;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mime\Email;
 
 /**

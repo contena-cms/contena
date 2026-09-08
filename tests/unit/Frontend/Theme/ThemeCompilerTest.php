@@ -2,14 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
@@ -38,6 +30,14 @@ use Contena\Tests\Integration\Frontend\Theme\fixtures\MockThemeVariablesSubscrib
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeAndPlugin\AsyncPlugin\AsyncPlugin;
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeAndPlugin\NotFoundPlugin\NotFoundPlugin;
 use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeAndPlugin\TestTheme\TestTheme;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcher;

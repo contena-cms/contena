@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Cache;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\CacheHashRequiredExtension;
 use Contena\Core\Framework\Adapter\Session\SessionFactory;
 use Contena\Core\Framework\Adapter\Session\StatefulFlashBag;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Framework\Cache\CacheCookieEventSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

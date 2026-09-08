@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Database;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Installer\Database\DatabaseMigrator;
@@ -15,6 +9,12 @@ use Contena\Core\Installer\Database\MigrationCollectionFactory;
 use Contena\Core\Installer\Requirements\IniConfigReader;
 use Contena\Core\Kernel;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
 
 /**

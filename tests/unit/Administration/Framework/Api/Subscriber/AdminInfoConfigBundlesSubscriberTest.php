@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Administration\Framework\Api\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Api\Subscriber\AdminInfoConfigBundlesSubscriber;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
 use Contena\Core\Test\Stub\Symfony\StubKernel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Routing\RouterInterface;

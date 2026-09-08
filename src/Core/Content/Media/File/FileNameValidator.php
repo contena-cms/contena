@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Content\Media\File;
 
+use Contena\Core\Content\Media\MediaException;
 use League\Flysystem\CorruptedPathDetected;
 use League\Flysystem\WhitespacePathNormalizer;
-use Contena\Core\Content\Media\MediaException;
 
 class FileNameValidator
 {

@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Adapter\Filesystem;
 
+use Contena\Core\Framework\Adapter\AdapterException;
 use League\Flysystem\DirectoryListing;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
-use Contena\Core\Framework\Adapter\AdapterException;
 
 class PrefixFilesystem implements FilesystemOperator
 {

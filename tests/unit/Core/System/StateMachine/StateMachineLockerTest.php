@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\StateMachine;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
@@ -13,6 +11,8 @@ use Contena\Core\System\StateMachine\StateMachineException;
 use Contena\Core\System\StateMachine\StateMachineLocker;
 use Contena\Core\System\StateMachine\StateMachineTransitionResult;
 use Contena\Core\System\StateMachine\Transition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\SharedLockInterface;
 use Symfony\Component\Lock\Store\InMemoryStore;

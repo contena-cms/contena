@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\User;
 
+use Contena\Core\System\User\UserException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

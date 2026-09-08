@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Framework\Util\UrlEncoder;
+use League\Flysystem\FilesystemOperator;
 
 /**
  * @internal Concrete implementations of this class should not be extended or used as a base class/type hint.

@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\Command;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\AllChannelApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiSchemaMigrationReport;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiSchemaMigrationReporter;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreChannelApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\Command\ChannelApiSchemaMigrationReportCommand;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;

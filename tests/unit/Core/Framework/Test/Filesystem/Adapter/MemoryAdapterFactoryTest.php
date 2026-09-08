@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Test\Filesystem\Adapter;
 
+use Contena\Core\Framework\Test\Filesystem\Adapter\MemoryAdapterFactory;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\Filesystem\Adapter\MemoryAdapterFactory;
 
 /**
  * @internal

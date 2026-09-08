@@ -5,14 +5,14 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework;
 use AsyncAws\Core\Configuration;
 use AsyncAws\Core\Credentials\CredentialProvider;
 use AsyncAws\Core\Credentials\Credentials;
+use Contena\Elasticsearch\ElasticsearchException;
+use Contena\Elasticsearch\Framework\AsyncAwsSigner;
 use GuzzleHttp\Psr7\HttpFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Elasticsearch\ElasticsearchException;
-use Contena\Elasticsearch\Framework\AsyncAwsSigner;
 
 /**
  * @internal

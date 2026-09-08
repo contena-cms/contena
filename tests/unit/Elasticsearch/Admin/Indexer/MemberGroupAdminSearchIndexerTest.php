@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -20,6 +17,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupDefinition;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Elasticsearch\Admin\Indexer\MemberGroupAdminSearchIndexer;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

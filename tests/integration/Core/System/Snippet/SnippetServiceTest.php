@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Integration\Core\System\Snippet;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
@@ -20,6 +17,9 @@ use Contena\Core\System\Snippet\Filter\SnippetFilterFactory;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Tests\Integration\Core\System\Snippet\Mock\MockSnippetFile;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 

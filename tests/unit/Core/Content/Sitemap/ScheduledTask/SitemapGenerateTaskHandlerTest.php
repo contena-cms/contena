@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Sitemap\ScheduledTask;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Sitemap\Event\SitemapChannelCriteriaEvent;
 use Contena\Core\Content\Sitemap\ScheduledTask\SitemapGenerateTaskHandler;
 use Contena\Core\Content\Sitemap\ScheduledTask\SitemapMessage;
@@ -18,6 +15,9 @@ use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

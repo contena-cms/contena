@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail\Payload;
 
+use Contena\Core\Content\Mail\Payload\MailPayload;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Mail\Payload\MailPayload;
 
 /**
  * @internal

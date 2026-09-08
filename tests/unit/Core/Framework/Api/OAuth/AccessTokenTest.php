@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\OAuth;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\AccessToken;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\FakeCryptKey;
 use Contena\Core\Framework\Api\OAuth\JWTConfigurationFactory;
 use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

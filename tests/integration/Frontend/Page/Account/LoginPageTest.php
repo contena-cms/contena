@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Integration\Frontend\Page\Account;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoadedEvent;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Test\Page\FrontendPageTestBehaviour;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

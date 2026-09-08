@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheAttribute;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheControlDirectives;
 use Contena\Core\Framework\Adapter\Cache\Http\CachePolicy;
 use Contena\Core\Framework\Adapter\Cache\Http\CachePolicyProvider;
 use Contena\Core\Framework\Adapter\Cache\Http\DefaultPolicies;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Content\Media\Message;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

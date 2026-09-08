@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\CachedCompressedCriteriaDecoder;
+use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DataAbstractionLayer\Search\CachedCompressedCriteriaDecoder;
-use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
 
 /**
  * @internal

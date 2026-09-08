@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Framework\SystemCheck;
 
-use Psr\Clock\ClockInterface;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Bundle as ContenaBundle;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

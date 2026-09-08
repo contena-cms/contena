@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Installer\Controller\RequirementsController;
 use Contena\Core\Installer\Requirements\RequirementsValidatorInterface;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

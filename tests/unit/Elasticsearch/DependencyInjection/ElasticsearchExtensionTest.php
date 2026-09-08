@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\DependencyInjection;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Elasticsearch\DependencyInjection\Configuration;
 use Contena\Elasticsearch\DependencyInjection\ElasticsearchExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

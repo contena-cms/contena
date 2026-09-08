@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Framework\Routing\AbstractDomainLoader;
 use Contena\Frontend\Framework\Routing\CachedDomainLoader;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**

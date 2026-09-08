@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\Migration;
 
+use Contena\Core\Defaults;
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\Framework\Util\Database\TableHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Contena\Core\Defaults;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Util\Database\TableHelper;
 
 abstract class MigrationStep
 {

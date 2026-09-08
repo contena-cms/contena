@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Extensions;
 
-use Psr\EventDispatcher\StoppableEventInterface;
 use Contena\Core\Framework\Struct\ExtendableTrait;
+use Psr\EventDispatcher\StoppableEventInterface;
 
 /**
  * @template TResultType

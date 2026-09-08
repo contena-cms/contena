@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Administration\Snippet;
 
+use Contena\Administration\Snippet\CachedSnippetFinder;
+use Contena\Administration\Snippet\SnippetFinder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Administration\Snippet\CachedSnippetFinder;
-use Contena\Administration\Snippet\SnippetFinder;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 

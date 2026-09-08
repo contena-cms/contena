@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\TypeDetector;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\AudioType;
 use Contena\Core\Content\Media\MediaType\BinaryType;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\TypeDetector\DefaultTypeDetector;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

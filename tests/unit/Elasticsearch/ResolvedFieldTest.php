@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Elasticsearch\ResolvedField;
 use Contena\Elasticsearch\TranslatedResolvedField;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\MailTemplate\Request;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeEntity;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\MailTemplateException;
@@ -13,6 +10,9 @@ use Contena\Core\Content\MailTemplate\Request\Resolver\PreviewRequestResolver;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateService;
 use Contena\Core\Framework\Context;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 

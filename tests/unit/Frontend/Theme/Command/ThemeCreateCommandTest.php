@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Command;
 
+use Contena\Frontend\Theme\Command\ThemeCreateCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Frontend\Theme\Command\ThemeCreateCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

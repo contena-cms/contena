@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\Controller;
 
-use Mcp\Server;
-use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
@@ -13,6 +10,9 @@ use Contena\Core\Framework\Mcp\RateLimit\McpRateLimiter;
 use Contena\Core\Framework\Mcp\Session\McpSessionIdValidator;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
+use Mcp\Server;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

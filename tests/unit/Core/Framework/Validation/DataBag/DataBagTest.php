@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Validation\DataBag;
 
+use Contena\Core\Framework\Validation\DataBag\DataBag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**

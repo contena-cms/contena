@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\HealthCheck;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
@@ -18,6 +16,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\SystemCheck\BlogListingReadinessCheck;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

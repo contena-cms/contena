@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Framework\Migration\MigrationIndexerSafeguard;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\MigrationIndexerSafeguard;
 
 /**
  * Fixtures use synthetic majors (`V6_90`, `V6_91`) and a single shared

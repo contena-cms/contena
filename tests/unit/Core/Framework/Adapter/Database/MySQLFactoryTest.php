@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Database;
 
+use Contena\Core\Framework\Adapter\Database\MySQLFactory;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
 use Doctrine\DBAL\Driver;
@@ -9,8 +11,6 @@ use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Database\MySQLFactory;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
+use Contena\Core\Content\Media\File\FileNameValidator;
+use Contena\Core\Content\Media\MediaException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\File\FileNameValidator;
-use Contena\Core\Content\Media\MediaException;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Administration;
 
-use Pentatrion\ViteBundle\PentatrionViteBundle;
 use Contena\Administration\DependencyInjection\AdministrationMigrationCompilerPass;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
+use Pentatrion\ViteBundle\PentatrionViteBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

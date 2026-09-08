@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Test\Integration\Traits;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

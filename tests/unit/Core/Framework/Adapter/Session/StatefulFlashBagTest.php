@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Session;
 
+use Contena\Core\Framework\Adapter\Session\StatefulFlashBag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Adapter\Session\StatefulFlashBag;
 
 /**
  * @internal

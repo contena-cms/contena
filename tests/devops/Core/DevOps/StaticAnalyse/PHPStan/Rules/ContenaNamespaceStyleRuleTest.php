@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ContenaNamespaceStyleRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\ContenaNamespaceStyleRule;
 
 /**
  * @internal

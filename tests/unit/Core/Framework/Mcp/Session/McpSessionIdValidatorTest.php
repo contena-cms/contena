@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Session;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\Mcp\Session\McpSessionIdValidator;
 use Contena\Core\PlatformRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 

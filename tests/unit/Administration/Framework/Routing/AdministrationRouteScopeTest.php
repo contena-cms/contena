@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Administration\Framework\Routing;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Framework\Routing\ApiRouteScope;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

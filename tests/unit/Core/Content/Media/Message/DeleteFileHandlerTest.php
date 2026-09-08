@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Message;
 
+use Contena\Core\Content\Media\Message\DeleteFileHandler;
+use Contena\Core\Content\Media\Message\DeleteFileMessage;
 use League\Flysystem\DirectoryListing;
 use League\Flysystem\FilesystemOperator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Message\DeleteFileHandler;
-use Contena\Core\Content\Media\Message\DeleteFileMessage;
 
 /**
  * @internal

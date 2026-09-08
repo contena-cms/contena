@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Administration\System\Channel\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Administration\System\Channel\Subscriber\ChannelUserConfigSubscriber;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -17,6 +13,10 @@ use Contena\Core\System\Channel\ChannelEvents;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigCollection;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigDefinition;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

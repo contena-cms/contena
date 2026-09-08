@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256 as Hmac256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Symfony\Component\Clock\NativeClock;
 
 /**

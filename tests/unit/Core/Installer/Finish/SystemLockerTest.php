@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Installer\Finish;
 
+use Contena\Core\Installer\Finish\SystemLocker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Installer\Finish\SystemLocker;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

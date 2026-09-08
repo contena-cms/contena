@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheHitEvent;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheStoreEvent;
 use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessage;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\PlatformRequest;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

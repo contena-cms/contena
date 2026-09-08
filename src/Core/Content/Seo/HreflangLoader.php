@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Seo\Hreflang\HreflangCollection;
 use Contena\Core\Content\Seo\Hreflang\HreflangStruct;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Routing\RouterInterface;
 
 class HreflangLoader implements HreflangLoaderInterface

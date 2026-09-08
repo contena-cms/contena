@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Log\Monolog;
 
+use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use Monolog\Level;
 use Monolog\LogRecord;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\MockClock;
 
 /**

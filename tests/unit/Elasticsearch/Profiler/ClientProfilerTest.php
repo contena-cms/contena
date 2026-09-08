@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Profiler;
 
+use Contena\Elasticsearch\Profiler\ClientProfiler;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -15,7 +16,6 @@ use OpenSearch\TransportFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Profiler\ClientProfiler;
 
 /**
  * @internal

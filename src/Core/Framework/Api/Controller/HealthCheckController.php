@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\HealthCheck\Event\HealthCheckEvent;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
 use Contena\Core\Framework\SystemCheck\SystemChecker;
 use Contena\Core\PlatformRequest;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\SearchKeyword;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -13,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\System\Channel\ChannelContext;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class BlogSearchBuilder implements BlogSearchBuilderInterface

@@ -15,4 +15,6 @@ class ActionSequence extends Sequence
     public array $config = [];
 
     public ?Sequence $nextAction = null;
+
+    public ?string $appFlowActionId = null;
 }

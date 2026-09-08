@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfig\BlogSearchConfigEntity;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Defaults;
@@ -21,6 +20,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Framework\Twig\NavigationInfo;
 use Contena\Frontend\Framework\Twig\TemplateDataExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

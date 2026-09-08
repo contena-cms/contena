@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Store\Api;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Store\Api\ExtensionStoreActionsController;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Store\StoreException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\AllowList;
 
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
 
 /**
  * @internal

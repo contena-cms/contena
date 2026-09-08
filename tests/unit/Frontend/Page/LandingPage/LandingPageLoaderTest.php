@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\LandingPage;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\Channel\AbstractLandingPageRoute;
 use Contena\Core\Content\LandingPage\Channel\LandingPageRouteResponse;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
@@ -14,6 +12,8 @@ use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\LandingPage\LandingPageLoader;
 use Contena\Frontend\Page\MetaInformation;
 use Contena\Frontend\Page\Page;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 

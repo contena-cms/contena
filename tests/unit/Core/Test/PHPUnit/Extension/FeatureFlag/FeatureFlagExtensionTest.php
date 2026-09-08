@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Test\PHPUnit\Extension\FeatureFlag;
 
+use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\FeatureFlagExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\FeatureFlagExtension;
 
 /**
  * @internal

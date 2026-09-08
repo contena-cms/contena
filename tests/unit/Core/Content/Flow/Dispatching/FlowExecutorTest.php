@@ -2,12 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Flow\Dispatching\FlowExecutor;
+use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Content\Flow\Dispatching\FlowState;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Struct\IfSequence;
@@ -28,6 +24,11 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\MemberEntity;
 use Contena\Core\System\Member\Rule\MemberRequestedGroupRule;
 use Contena\Core\Test\Generator;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -74,6 +75,8 @@ class FlowExecutorTest extends TestCase
             ->willReturn(new RuleCollection([$ruleEntity]));
 
         $flowExecutor = new FlowExecutor(
+            new EventDispatcher(),
+            static::createStub(AppFlowActionProvider::class),
             $ruleLoader,
             static::createStub(Connection::class),
             new ExtensionDispatcher(new EventDispatcher()),

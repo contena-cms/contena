@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\System\Language\CachedLanguageLoader;
@@ -16,6 +15,7 @@ use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Language\LanguageLoader;
 use Contena\Core\System\Language\LanguageValidator;
 use Contena\Core\System\Language\TranslationValidator;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

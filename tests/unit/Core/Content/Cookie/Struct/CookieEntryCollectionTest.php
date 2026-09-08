@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Content\Cookie\Struct;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Struct\CookieEntry;
 use Contena\Core\Content\Cookie\Struct\CookieEntryCollection;
 use Contena\Core\Framework\FrameworkException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

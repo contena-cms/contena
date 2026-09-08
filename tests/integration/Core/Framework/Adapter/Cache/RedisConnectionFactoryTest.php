@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Adapter\Cache;
 
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 
 /**
  * @internal

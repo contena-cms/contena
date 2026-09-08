@@ -2,12 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\RateLimiter\Policy;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\RateLimiter\Policy\SystemConfigLimiter;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoffLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\RateLimiter\Policy\NoLimiter;

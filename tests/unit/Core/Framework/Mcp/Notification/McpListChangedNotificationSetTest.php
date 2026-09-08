@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Notification;
 
+use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 
 /**
  * @internal

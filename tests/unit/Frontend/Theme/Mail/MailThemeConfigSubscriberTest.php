@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme\Mail;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\MailTemplate\Service\Event\MailTemplateRenderContextEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -15,6 +13,8 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Theme\Mail\MailThemeConfigSubscriber;
 use Contena\Frontend\Theme\Mail\MailThemeIdLoader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

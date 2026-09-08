@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\TransactionIsolationLevel;
+use Psr\Log\LoggerInterface;
 
 /**
  * Whilst this adapter attempts to work around various locking issues, it is not foolproof, so if you encounter deadlock due to load, use the `\Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage` adapter instead.

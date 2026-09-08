@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Framework\Context;
@@ -21,6 +18,9 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Admin\Indexer\LandingPageAdminSearchIndexer;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

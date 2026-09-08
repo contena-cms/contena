@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -11,6 +10,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\Event\MemberDeletedEvent;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\Test\TestDefaults;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

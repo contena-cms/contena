@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\SearchKeyword;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\SearchKeyword\AnalyzedKeyword;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchKeywordAnalyzer;
@@ -16,6 +13,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tag\TagEntity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

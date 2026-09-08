@@ -46,6 +46,10 @@ use Contena\Core\Framework\Increment\IncrementerGatewayCompilerPass;
 use Contena\Core\Framework\MessageQueue\MessageHandlerCompilerPass;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Test\RateLimiter\DisableRateLimiterCompilerPass;
+use Contena\Core\Framework\Webhook\Event\WebhookActivatedEvent;
+use Contena\Core\Framework\Webhook\Event\WebhookDegradedEvent;
+use Contena\Core\Framework\Webhook\Event\WebhookDisabledEvent;
+use Contena\Core\Framework\Webhook\Event\WebhookSuspendedEvent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -80,6 +84,7 @@ class Framework extends Bundle
         $phpLoader->load('services.php');
         $phpLoader->load('acl.php');
         $phpLoader->load('cache.php');
+        $phpLoader->load('app.php');
         $phpLoader->load('content-system.php');
         $phpLoader->load('seo.php');
         $phpLoader->load('api.php');
@@ -91,10 +96,12 @@ class Framework extends Bundle
         $phpLoader->load('message-queue.php');
         $phpLoader->load('plugin.php');
         $phpLoader->load('scheduled-task.php');
+        $phpLoader->load('script.php');
         $phpLoader->load('store.php');
         $phpLoader->load('language.php');
         $phpLoader->load('validation.php');
         $phpLoader->load('rate-limiter.php');
+        $phpLoader->load('webhook.php');
         $phpLoader->load('increment.php');
         $phpLoader->load('flag.php');
         $phpLoader->load('health.php');
@@ -105,6 +112,7 @@ class Framework extends Bundle
         if ($container->getParameter('kernel.environment') === 'test') {
             $phpLoader->load('services_test.php');
             $phpLoader->load('seo_test.php');
+            $phpLoader->load('app_test.php');
         }
 
         /** Needs to run after @see RegisterAutoconfigureAttributesPass (priority 100) to include all services that are autoconfigured */
@@ -174,5 +182,15 @@ class Framework extends Bundle
 
         $stampedeProtectionConfigurator = $this->container->get(StampedeProtectionConfigurator::class);
         $stampedeProtectionConfigurator->apply();
+    }
+
+    protected function getActionEventClasses(): array
+    {
+        return [
+            WebhookActivatedEvent::class,
+            WebhookDegradedEvent::class,
+            WebhookSuspendedEvent::class,
+            WebhookDisabledEvent::class,
+        ];
     }
 }

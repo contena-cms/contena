@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Adapter\Asset;
 
-use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Util\Hasher;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 

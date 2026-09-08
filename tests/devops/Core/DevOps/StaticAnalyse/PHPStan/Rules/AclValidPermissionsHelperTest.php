@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsHelper;
 
 /**
  * @internal

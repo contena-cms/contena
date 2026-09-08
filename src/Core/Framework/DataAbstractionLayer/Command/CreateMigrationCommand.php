@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Command;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\MigrationFileRenderer;
 use Contena\Core\Framework\DataAbstractionLayer\MigrationQueryGenerator;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

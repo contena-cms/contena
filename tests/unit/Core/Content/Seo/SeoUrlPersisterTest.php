@@ -2,6 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Seo;
 
+use Contena\Core\Content\Seo\SeoUrlPersister;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelEntity;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -9,11 +14,6 @@ use Doctrine\DBAL\Result;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\SeoUrlPersister;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

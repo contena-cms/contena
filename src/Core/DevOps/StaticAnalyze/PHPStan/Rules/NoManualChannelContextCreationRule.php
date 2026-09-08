@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextFactory;
+use Contena\Core\Test\Generator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -11,9 +14,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\Context\ChannelContextFactory;
-use Contena\Core\Test\Generator;
 
 /**
  * This PHPStan rule prevents the manual creation of a `ChannelContext`.

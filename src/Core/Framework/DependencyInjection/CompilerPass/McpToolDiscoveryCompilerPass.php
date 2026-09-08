@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
+use Mcp\Capability\Attribute\McpTool;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

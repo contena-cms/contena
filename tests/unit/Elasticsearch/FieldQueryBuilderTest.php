@@ -2,12 +2,6 @@
 
 namespace Contena\Tests\Unit\Elasticsearch;
 
-use OpenSearchDSL\Query\Compound\DisMaxQuery;
-use OpenSearchDSL\Query\FullText\MatchPhrasePrefixQuery;
-use OpenSearchDSL\Query\TermLevel\TermQuery;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
@@ -19,6 +13,12 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 use Contena\Elasticsearch\FieldQueryBuilder;
 use Contena\Elasticsearch\ResolvedField;
+use OpenSearchDSL\Query\Compound\DisMaxQuery;
+use OpenSearchDSL\Query\FullText\MatchPhrasePrefixQuery;
+use OpenSearchDSL\Query\TermLevel\TermQuery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

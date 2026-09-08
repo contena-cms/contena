@@ -3,8 +3,8 @@
 namespace Contena\Core\Framework\Validation;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Event\ContenaEvent;
+use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Symfony\Contracts\EventDispatcher\Event;
 

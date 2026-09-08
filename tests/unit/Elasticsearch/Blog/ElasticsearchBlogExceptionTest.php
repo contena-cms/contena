@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
+use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use OpenSearch\Exception\BadRequestHttpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

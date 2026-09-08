@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\Generator;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\Channel\Channel\ChannelApiInfoController;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

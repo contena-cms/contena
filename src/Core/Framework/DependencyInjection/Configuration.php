@@ -7,6 +7,7 @@ use Contena\Core\Content\Media\File\DownloadResponseGenerator;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;
 use Contena\Core\Framework\Util\MemorySizeCalculator;
+use Contena\Core\Framework\Webhook\Service\WebhookClient;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -56,6 +57,8 @@ class Configuration implements ConfigurationInterface
                 ->append($this->createBlogTypesSection())
                 ->append($this->createProductStreamSection())
                 ->append($this->createTranslationSection())
+                ->append($this->createAppSystemSection())
+                ->append($this->createWebhookSection())
             ->end();
 
         return $treeBuilder;
@@ -1416,6 +1419,73 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('dsn')->isRequired()->end()
                             // Additional options if necessary
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $rootNode;
+    }
+
+    private function createWebhookSection(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('webhook');
+
+        $rootNode = $treeBuilder->getRootNode();
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('health')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('cooldown_schedule_seconds')
+                            ->info('Cooldown tiers between DEGRADED trial deliveries, in seconds. The first tier must exceed the delivery timeout.')
+                            ->performNoDeepMerging()
+                            ->requiresAtLeastOneElement()
+                            ->integerPrototype()->min(1)->end()
+                            ->defaultValue([300, 600, 1200, 2400, 3600, 14400])
+                            ->validate()
+                                ->ifTrue(static fn (array $schedule): bool => $schedule !== [] && $schedule[0] <= WebhookClient::REQUEST_TIMEOUT)
+                                ->thenInvalid(\sprintf('The first cooldown tier must exceed the %d-second webhook delivery timeout.', WebhookClient::REQUEST_TIMEOUT))
+                            ->end()
+                        ->end()
+                        ->integerNode('degraded_threshold_count')
+                            ->info('Consecutive first-attempt transient failures that trip HEALTHY into DEGRADED.')
+                            ->min(1)->defaultValue(5)
+                        ->end()
+                        ->integerNode('non_transient_threshold_count')
+                            ->info('Consecutive auth rejections (401/403) that suspend the webhook.')
+                            ->min(1)->defaultValue(3)
+                        ->end()
+                        ->integerNode('max_suspended_days')
+                            ->info('Days a webhook may stay SUSPENDED before it retires to DISABLED.')
+                            ->min(1)->max(14)->defaultValue(7)
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $rootNode;
+    }
+
+    private function createAppSystemSection(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('app_system');
+
+        $rootNode = $treeBuilder->getRootNode();
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->booleanNode('enable_url_validation')->defaultTrue()->end()
+                ->booleanNode('allow_unencrypted_traffic')->defaultFalse()->end()
+                ->arrayNode('allowed_private_ip_addresses')
+                    ->performNoDeepMerging()
+                    ->defaultValue([])
+                    ->scalarPrototype()
+                        ->cannotBeEmpty()
+                        ->validate()
+                            ->ifTrue(static fn (string $value): bool => filter_var($value, \FILTER_VALIDATE_IP) === false)
+                            ->thenInvalid('"%s" is not a valid IP address.')
                         ->end()
                     ->end()
                 ->end()

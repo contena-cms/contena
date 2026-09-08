@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Health;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
@@ -17,6 +13,10 @@ use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomain;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainCollection;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
 use Contena\Frontend\Framework\SystemCheck\Util\FrontendHealthCheckResult;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

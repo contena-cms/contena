@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Category\Service;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Blog\Aggregate\BlogMainCategory\BlogMainCategoryCollection;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
@@ -30,6 +28,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 
 class CategoryBreadcrumbBuilder
 {

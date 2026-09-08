@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media;
 
-use Psr\Http\Message\StreamInterface;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\File\FileFetcher;
 use Contena\Core\Content\Media\File\FileLoader;
@@ -13,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
+use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class MediaService

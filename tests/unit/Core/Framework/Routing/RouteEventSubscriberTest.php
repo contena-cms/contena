@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Routing;
 
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\Framework\Routing\RouteEventSubscriber;
+use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
+use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\RouteEventSubscriber;
-use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
-use Contena\Core\PlatformRequest;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

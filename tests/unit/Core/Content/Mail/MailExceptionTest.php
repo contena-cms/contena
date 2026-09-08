@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Content\Mail;
 
+use Contena\Core\Content\Mail\MailException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Mail\MailException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

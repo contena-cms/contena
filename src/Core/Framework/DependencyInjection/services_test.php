@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Monolog\Handler\NullHandler;
 use Contena\Core\Framework\Test\Api\Acl\fixtures\AclTestController;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestTranslationDefinition;
@@ -29,6 +28,7 @@ use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoaderConfigSer
 use Contena\Core\Test\Stub\ContentSystem\TestNavigationShapedLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestNavigationShapedLoaderConfigSerializer;
 use Contena\Core\Test\Stub\ContentSystem\TestStyleOptionLoader;
+use Monolog\Handler\NullHandler;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\TraceableMessageBus;

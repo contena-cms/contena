@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Flow\Aggregate\FlowSequence;
 
 use Contena\Core\Content\Flow\FlowDefinition;
 use Contena\Core\Content\Rule\RuleDefinition;
+use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
@@ -68,6 +69,8 @@ class FlowSequenceDefinition extends EntityDefinition
             new ChildrenAssociationField(self::class),
             new ParentFkField(self::class),
             new CustomFields(),
+            new FkField('app_flow_action_id', 'appFlowActionId', AppFlowActionDefinition::class),
+            new ManyToOneAssociationField('appFlowAction', 'app_flow_action_id', AppFlowActionDefinition::class, 'id', false),
         ]);
     }
 }

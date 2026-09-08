@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Subscriber;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueStatsSubscriber;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 

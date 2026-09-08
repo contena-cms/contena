@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Member\Subscriber;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
@@ -13,6 +12,7 @@ use Contena\Core\System\Channel\Context\ChannelContextRestorer;
 use Contena\Core\System\Member\DataAbstractionLayer\MemberIndexingMessage;
 use Contena\Core\System\Member\Event\MemberRegisterEvent;
 use Contena\Core\System\Member\MemberEvents;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

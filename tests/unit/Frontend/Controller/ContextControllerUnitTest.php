@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -12,6 +10,8 @@ use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Frontend\Controller\ContextController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;

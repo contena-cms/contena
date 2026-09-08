@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Tests;
 
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\DataProviderRowArityRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\DataProviderRowArityRule;
 
 /**
  * @internal

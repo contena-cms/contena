@@ -2,15 +2,18 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\StorageAttributes;
+use Contena\Core\Framework\App\ActiveAppsLoader;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Kernel;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\StorageAttributes;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
@@ -31,9 +34,13 @@ class SnippetFileLoader implements SnippetFileLoaderInterface
     public function __construct(
         private readonly Kernel $kernel,
         private readonly Connection $connection,
+        private readonly AppSnippetFileLoader $appSnippetFileLoader,
+        private readonly ActiveAppsLoader $activeAppsLoader,
         private readonly TranslationConfig $config,
         private readonly AbstractTranslationLoader $translationLoader,
         private readonly FilesystemOperator $translationReader,
+        private readonly SourceResolver $sourceResolver,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -43,6 +50,41 @@ class SnippetFileLoader implements SnippetFileLoaderInterface
         $this->loadTranslationSnippets($snippetFileCollection);
         // Load snippets from Contena bundles and plugins
         $this->loadShippedSnippets($snippetFileCollection);
+        // Load snippets from active apps
+        $this->loadAppSnippets($snippetFileCollection);
+    }
+
+    private function loadAppSnippets(SnippetFileCollection $snippetFileCollection): void
+    {
+        foreach ($this->activeAppsLoader->getActiveApps() as $app) {
+            foreach ($this->loadSnippetFilesForApp($app) as $snippetFile) {
+                /** @var GenericSnippetFile $snippetFile */
+                $snippetFile->setTechnicalName($app['name']);
+                $snippetFileCollection->add($snippetFile);
+            }
+        }
+    }
+
+    /**
+     * @param array{name: string, author: string|null, path: string, selfManaged: bool} $app
+     *
+     * @return list<GenericSnippetFile>
+     */
+    private function loadSnippetFilesForApp(array $app): array
+    {
+        if (!$app['selfManaged']) {
+            return $this->appSnippetFileLoader->loadSnippetFilesFromApp($app['author'] ?? '', $app['path']);
+        }
+
+        try {
+            $filesystem = $this->sourceResolver->filesystemForAppName($app['name']);
+        } catch (\Throwable $e) {
+            $this->logger->error(\sprintf('Could not load snippet files of app "%s": %s', $app['name'], $e->getMessage()), ['exception' => $e]);
+
+            return [];
+        }
+
+        return $this->appSnippetFileLoader->loadSnippetFilesFromApp($app['author'] ?? '', $filesystem->location, true);
     }
 
     private function loadTranslationSnippets(SnippetFileCollection $snippetFileCollection): void

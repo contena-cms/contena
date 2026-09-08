@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomField\Xml\CustomFieldTypes;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\MultiSelectField;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

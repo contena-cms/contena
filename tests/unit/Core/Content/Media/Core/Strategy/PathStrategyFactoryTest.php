@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Content\Media\Core\Strategy;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Strategy\FilenamePathStrategy;
 use Contena\Core\Content\Media\Core\Strategy\IdPathStrategy;
 use Contena\Core\Content\Media\Core\Strategy\PathStrategyFactory;
 use Contena\Core\Content\Media\Core\Strategy\PhysicalFilenamePathStrategy;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Content\Media\MediaException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
