@@ -12,10 +12,10 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSys
 use Contena\Core\Framework\ContentSystem\Mutation\LayoutMutation;
 use Contena\Core\Framework\ContentSystem\Mutation\MutationPipeline;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\AttachElement;
+use Contena\Core\Framework\ContentSystem\Mutation\Op\AttachElements;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\BindElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\DuplicateElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\InsertElement;
-use Contena\Core\Framework\ContentSystem\Mutation\Op\InsertPreset;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\MoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\RemoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\ReplaceElement;
@@ -133,7 +133,8 @@ class LayoutMutationController
         AttachElementRequest $payload,
         Context $context,
     ): Response {
-        $mutation = new AttachElement($this->registry, $this->decoder->decodeOne($payload->element), $payload->parentElementId, $payload->slot, $payload->index);
+        $element = $this->decoder->decodeOne($payload->element);
+        $mutation = new AttachElement($this->registry, $element, $this->bindingRegistry, $this->bindingApplicator, $payload->parentElementId, $payload->slot, $payload->index);
 
         return $this->respond($mutation, $payload->layout, $payload->rootSource, $context);
     }
@@ -146,7 +147,7 @@ class LayoutMutationController
     ): Response {
         $preset = $this->presetRegistry->get($payload->presetId);
         $elements = $this->decoder->decode($preset->payload);
-        $mutation = new InsertPreset($this->registry, $elements, $this->bindingRegistry, $this->bindingApplicator, $payload->parentElementId, $payload->slot);
+        $mutation = new AttachElements($this->registry, $elements, $this->bindingRegistry, $this->bindingApplicator, $payload->parentElementId, $payload->slot);
 
         return $this->respond($mutation, $payload->layout, $payload->rootSource, $context);
     }

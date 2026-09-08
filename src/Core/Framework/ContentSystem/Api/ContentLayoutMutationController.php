@@ -135,7 +135,8 @@ class ContentLayoutMutationController
         ContentLayoutAttachRequest $payload,
         Context $context,
     ): Response {
-        $mutation = new AttachElement($this->registry, $this->decoder->decodeOne($payload->element), $payload->parentElementId, $payload->slot, $payload->index);
+        $element = $this->decoder->decodeOne($payload->element);
+        $mutation = new AttachElement($this->registry, $element, $this->bindingRegistry, $this->bindingApplicator, $payload->parentElementId, $payload->slot, $payload->index);
 
         return $this->respond($layoutId, $payload->expectedVersion, $mutation, $context);
     }
