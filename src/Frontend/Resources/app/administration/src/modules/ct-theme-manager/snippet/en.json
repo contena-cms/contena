@@ -99,7 +99,8 @@
       "mainMenuHeader": "Your themes",
       "captionMediaUpload": "Upload an image",
       "lockedToolTip": "Themes installed via plugin are locked and can not be deleted",
-      "defaultTab": "General"
+      "defaultTab": "General",
+      "switchThemeListMode": "Switch between grid and list view"
     },
     "sorting": {
       "labelSort": "Sort by:",

@@ -13,19 +13,19 @@
 
     .ct-theme-list__actions {
         display: grid;
-        grid-template-columns: auto 380px 36px;
-        grid-column-gap: var(--scale-size-20);
+        grid-template-columns: auto 380px max-content;
+        grid-column-gap: var(--scale-size-8);
         align-items: center;
         align-content: center;
-        margin-bottom: var(--scale-size-28);
+        margin-bottom: var(--scale-size-32);
 
         @media screen and (max-width: 700px) {
-            grid-template-columns: auto 36px;
+            grid-template-columns: auto max-content;
         }
 
         h3 {
             font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-regular);
+            font-weight: var(--font-weight-semibold);
             margin: 0;
         }
     }

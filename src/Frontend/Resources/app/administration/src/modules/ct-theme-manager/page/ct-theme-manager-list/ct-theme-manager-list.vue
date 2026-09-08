@@ -47,7 +47,9 @@
                                             <mt-button
                                                 class="ct-theme-list__actions-mode"
                                                 variant="secondary"
+                                                size="small"
                                                 square
+                                                :aria-label="t('ct-theme-manager.general.switchThemeListMode')"
                                                 @click="onListModeChange"
                                             >
                                                 <mt-icon v-if="listMode === 'grid'" name="regular-view-normal" size="16" />
