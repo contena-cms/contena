@@ -311,20 +311,6 @@ ctDefinePublic({
 });
 
 usePageTitle();
-
-defineExpose({
-    isLoading,
-    isSaveSuccessful,
-    selectedChannelId,
-    frontendSettings,
-    channelFrontendSettings,
-    isGlobalConfig,
-    currentChannelFrontendSettings,
-    loadPageContent,
-    loadChannelFrontendSettings,
-    saveFrontendSettings,
-    onChannelChanged,
-});
 </script>
 
 <style lang="scss" src="./ct-settings-frontend-index.scss"></style>

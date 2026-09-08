@@ -348,28 +348,4 @@ ctDefinePublic({
     openInThemeManager,
     onChangeTheme,
 });
-
-defineExpose({
-    theme,
-    themeDescription,
-    pendingTheme,
-    pendingTooltip,
-    pendingCheckTimeoutId,
-    activeCheckId,
-    showThemeSelectionModal,
-    isLoading,
-    themeRepository,
-    channelRepository,
-    acl,
-    getTheme,
-    checkPendingAssignment,
-    loadPendingThemeId,
-    loadLiveThemeId,
-    schedulePendingCheck,
-    clearPendingCheck,
-    openThemeModal,
-    closeThemeModal,
-    openInThemeManager,
-    onChangeTheme,
-});
 </script>

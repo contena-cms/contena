@@ -330,25 +330,4 @@ ctDefinePublic({
     onCreateLayout,
     onOpenLayout,
 });
-
-defineExpose({
-    assignments,
-    loadingSections,
-    savingAssignments,
-    assignmentTargets,
-    allowEdit,
-    allowCreateLayout,
-    getCollectionEntries,
-    getAssignmentRepository,
-    getContentLayoutCriteria,
-    getAssignment,
-    getContentLayoutId,
-    getAssignmentKey,
-    isAssignmentSaving,
-    loadAssignments,
-    loadSectionAssignments,
-    onContentLayoutChange,
-    onCreateLayout,
-    onOpenLayout,
-});
 </script>

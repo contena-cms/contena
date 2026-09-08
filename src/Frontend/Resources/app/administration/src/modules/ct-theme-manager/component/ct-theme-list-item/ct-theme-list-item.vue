@@ -157,17 +157,4 @@ ctDefinePublic({
     onDelete,
     emitItemClick,
 });
-
-defineExpose({
-    previewMedia,
-    defaultThemeAsset,
-    lockToolTip,
-    componentClasses,
-    isActive,
-    onChangePreviewImage,
-    onThemeClick,
-    onRemovePreviewImage,
-    onDelete,
-    emitItemClick,
-});
 </script>

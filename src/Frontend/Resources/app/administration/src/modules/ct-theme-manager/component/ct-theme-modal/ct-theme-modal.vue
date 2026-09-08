@@ -195,26 +195,4 @@ ctDefinePublic({
     closeModal,
     onModalChange,
 });
-
-defineExpose({
-    selected,
-    isLoading,
-    sortBy,
-    sortDirection,
-    term,
-    searchTerm,
-    total,
-    themes,
-    page,
-    limit,
-    themeRepository,
-    createdComponent,
-    getList,
-    selectLayout,
-    selectItem,
-    onSearch,
-    onSelection,
-    closeModal,
-    onModalChange,
-});
 </script>
