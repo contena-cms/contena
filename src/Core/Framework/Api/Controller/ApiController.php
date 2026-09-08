@@ -36,6 +36,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -198,6 +199,9 @@ class ApiController extends AbstractController
         }
 
         $versionContext = $context->createWithVersionId($versionId);
+
+        // A version discard must not enter the change set: merge() replays recorded deletions against its target version.
+        $versionContext->addState(VersionManager::DISABLE_AUDIT_LOG);
 
         $entityRepository = $this->definitionRegistry->getRepository($entityDefinition->getEntityName());
 
@@ -644,7 +648,7 @@ class ApiController extends AbstractController
 
         $last = $pathSegments[\count($pathSegments) - 1];
 
-        if ($type === self::WRITE_CREATE && !empty($last['value'])) {
+        if ($type === self::WRITE_CREATE && $last['value'] !== null && $last['value'] !== '') {
             $methods = ['GET', 'PATCH', 'DELETE'];
 
             throw ApiException::methodNotAllowed($methods, \sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(), $request->getPathInfo(), implode(', ', $methods)));
