@@ -44,7 +44,10 @@ final readonly class ElementDataResolver
 
     /**
      * The ordinary case: an element runs its OWN data requirements, and is also the element whose stored
-     * properties the loader inputs are dereferenced against.
+     * properties the loader inputs are dereferenced against. `$rootContext` contains that element's
+     * root-scoped page context and overrides stored properties with the same key.
+     *
+     * @param array<string, mixed> $rootContext
      *
      * @return array<string, ResolvedLoaderValue> every requirement's resolved value, keyed by requirement key
      */
@@ -53,8 +56,9 @@ final readonly class ElementDataResolver
         ChannelContext $context,
         Request $request,
         RenderingCacheContext $cacheContext,
+        array $rootContext = [],
     ): array {
-        return $this->resolveRequirements($stored, $stored->dataRequirements, $context, $request, $cacheContext);
+        return $this->resolveRequirements($stored, $stored->dataRequirements, $context, $request, $cacheContext, $rootContext);
     }
 
     /**
@@ -69,6 +73,7 @@ final readonly class ElementDataResolver
      * finally carries.
      *
      * @param array<string, DataRequirement> $requirements keyed by requirement key
+     * @param array<string, mixed> $rootContext
      *
      * @return array<string, ResolvedLoaderValue> every requirement's resolved value, keyed by requirement key
      */
@@ -78,12 +83,13 @@ final readonly class ElementDataResolver
         ChannelContext $context,
         Request $request,
         RenderingCacheContext $cacheContext,
+        array $rootContext = [],
     ): array {
         if ($requirements === []) {
             return [];
         }
 
-        $properties = $this->unwrapProperties($inputSource->properties());
+        $properties = array_merge($this->unwrapProperties($inputSource->properties()), $rootContext);
         $resolved = [];
 
         foreach ($requirements as $key => $requirement) {

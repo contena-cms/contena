@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Binding\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDto;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\Dto\BindingSpecificationDtoCollection;
@@ -26,6 +22,10 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
 use Contena\Core\Framework\ContentSystem\Schema\AbstractContentSystemDataLoaderMapResolver;
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
@@ -77,6 +77,21 @@ class TypeConsistentBindingSpecificationValidatorTest extends TestCase
         static::assertCount(1, $violations);
         static::assertSame('bindings[' . self::ID . '].resolves[media].config.property', $violations->get(0)->getPropertyPath());
         static::assertStringContainsString('primitive property', (string) $violations->get(0)->getMessage());
+    }
+
+    #[TestDox('allows an object propertyReference config key to name a non-primitive property')]
+    public function testObjectPropertyReferenceMayNameNonPrimitiveProperty(): void
+    {
+        $validator = $this->validator($this->imageType(), $this->map(['entity' => $this->loaderSpec('object')]));
+
+        $dto = new BindingSpecificationDto(
+            type: 'image',
+            label: 'label',
+            resolves: ['media' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'media']]],
+            inputs: [],
+        );
+
+        static::assertCount(0, $this->validateWith($dto, $validator));
     }
 
     #[TestDox('resolves the declared type from the overlay when the registry does not carry it')]
@@ -490,11 +505,11 @@ class TypeConsistentBindingSpecificationValidatorTest extends TestCase
         return new ContentSystemDataLoaderMap([], $specifications);
     }
 
-    private function loaderSpec(): LoaderConfigSpecification
+    private function loaderSpec(string $referencedType = 'string'): LoaderConfigSpecification
     {
         return new LoaderConfigSpecification([
             new ConfigKeySpecification('entity', ConfigKeyKind::EntityName, 'string', required: true),
-            new ConfigKeySpecification('property', ConfigKeyKind::PropertyReference, 'string', required: true),
+            new ConfigKeySpecification('property', ConfigKeyKind::PropertyReference, 'string', required: true, referencedType: $referencedType),
         ]);
     }
 

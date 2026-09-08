@@ -225,6 +225,81 @@ class ElementLoweringTest extends TestCase
     }
 
     /**
+     * The element loader references `blog` through its config. The blog is a page-level object, so the
+     * root-scoped consumer must receive it before this element's loader inputs are resolved even though
+     * ordinary parent delivery still happens after the forest-wide loader walk.
+     */
+    #[TestDox('resolves an element loader object input from root-scoped page context')]
+    public function testFullModeResolvesElementLoaderObjectInputFromRootContext(): void
+    {
+        $blog = new StubStruct();
+        $captured = null;
+        $pageLoader = $this->loaderReturning(ContentDataLoaderResult::cached($blog));
+        $elementLoader = $this->createMock(AbstractContentDataLoader::class);
+        $elementLoader->method('configSpecification')->willReturn(new LoaderConfigSpecification([
+            new ConfigKeySpecification('entity', ConfigKeyKind::EntityName, 'string', required: true),
+            new ConfigKeySpecification('activeProperty', ConfigKeyKind::PropertyReference, 'string', required: false, referencedType: 'object'),
+        ]));
+        $elementLoader->expects($this->once())
+            ->method('load')
+            ->willReturnCallback(static function (LoaderInputs $inputs) use (&$captured): ContentDataLoaderResult {
+                $captured = $inputs;
+
+                return ContentDataLoaderResult::cached(new StubStruct());
+            });
+
+        $provider = static::createStub(DataLoaderProvider::class);
+        $provider->method('get')->willReturnMap([
+            ['entity', $pageLoader],
+            ['object', $elementLoader],
+        ]);
+
+        $element = StoredElementBuilder::create('CT:Box', 'element-1')
+            ->withConsumer('blog', ContextType::Single, scope: ConsumerScope::Root)
+            ->withDataRequirement(
+                'result',
+                'object',
+                new TestNavigationShapedLoaderConfig(entity: 'blog', activeProperty: 'blog'),
+            )
+            ->build();
+        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+            ->withSlot('main', [$element])
+            ->build();
+        $wrapper = $this->virtualRoot($root);
+
+        new ElementLowering(
+            new ElementDataResolver(
+                $provider,
+                new LoaderInputResolver(),
+                new LoaderValueIdentityFactory(
+                    new DataLoaderConfigSerializerProvider(new ServiceLocator([
+                        'entity' => static fn (): StubLoaderConfigSerializer => new StubLoaderConfigSerializer(),
+                        'object' => static fn (): TestNavigationShapedLoaderConfigSerializer => new TestNavigationShapedLoaderConfigSerializer(),
+                    ])),
+                    new ConfigCanonicalizer(),
+                    new ValueFingerprinter(),
+                ),
+            ),
+            new ContextDeliveryResolver(
+                new ContextDistributor(new ContextPathResolver()),
+                new ContextPathResolver(),
+            ),
+            new RenderedTreeFactory(new RenderedElementFactory($this->typeRegistry())),
+        )->lower(
+            [$wrapper],
+            RenderingMode::FULL,
+            static::createStub(ChannelContext::class),
+            new Request(),
+            new RenderingCacheContext(),
+            [new DataRequirement('blog', 'entity', new StubLoaderConfig())],
+            $wrapper,
+        );
+
+        static::assertInstanceOf(LoaderInputs::class, $captured);
+        static::assertSame($blog, $captured->get('activeProperty'));
+    }
+
+    /**
      * The no-wrapper arm. A preparation subscriber can leave a forest the preparation refuses to wrap while
      * the specification still carries page-level requirements, and that combination must resolve nothing
      * rather than reaching for an element to dereference inputs against.
