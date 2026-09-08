@@ -82,10 +82,6 @@
             "textContenaAdmin": "Contena 控制台",
             "textProjectName": "Contena 控制台",
             "administrator": "管理员",
-            "themeToggle": {
-                "switchToLight": "浅色模式",
-                "switchToDark": "深色模式"
-            },
             "navigation": {
                 "label": "主导航",
                 "mainMenuItemHome": "首页",

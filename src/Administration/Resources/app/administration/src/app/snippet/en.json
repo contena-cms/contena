@@ -92,10 +92,6 @@
       "textContenaAdmin": "Contena Console",
       "textProjectName": "Contena Console",
       "administrator": "Administrator",
-      "themeToggle": {
-        "switchToLight": "Light mode",
-        "switchToDark": "Dark mode"
-      },
       "navigation": {
         "label": "Main navigation",
         "mainMenuItemHome": "Home",
