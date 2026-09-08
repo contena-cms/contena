@@ -427,6 +427,35 @@ ALTER TABLE `rule_condition`
     ADD KEY `fk.rule_condition.script_id` (`script_id`),
     ADD CONSTRAINT `fk.rule_condition.script_id` FOREIGN KEY (`script_id`) REFERENCES `app_script_condition` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 SQL,
+            <<<'SQL'
+CREATE TABLE IF NOT EXISTS `app_cms_block` (
+    `id` BINARY(16) NOT NULL,
+    `app_id` BINARY(16) NOT NULL,
+    `name` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `block` JSON NOT NULL,
+    `template` LONGTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+    `styles` LONGTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+    PRIMARY KEY (`id`),
+    KEY `fk.app_cms_block.app_id` (`app_id`),
+    CONSTRAINT `fk.app_cms_block.app_id` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `json.app_cms_block.block` CHECK (JSON_VALID(`block`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL,
+            <<<'SQL'
+CREATE TABLE IF NOT EXISTS `app_cms_block_translation` (
+    `label` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `app_cms_block_id` BINARY(16) NOT NULL,
+    `language_id` BINARY(16) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+    PRIMARY KEY (`app_cms_block_id`, `language_id`),
+    KEY `fk.app_cms_block_translation.language_id` (`language_id`),
+    CONSTRAINT `fk.app_cms_block_translation.app_cms_block_id` FOREIGN KEY (`app_cms_block_id`) REFERENCES `app_cms_block` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.app_cms_block_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL,
         ];
 
         foreach ($statements as $statement) {

@@ -6,6 +6,7 @@ use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\Tool;
+use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
 
 /**
  * Provides enriched capability data by combining registry tools with dependency
@@ -19,9 +20,11 @@ class McpCapabilityCatalog
      * @param array<string, list<string>> $toolDependencies tool-name => [dep-name, ...]
      * @param array<string, array{static: list<string>, entityParam: ?string, operations: list<string>}> $toolPrivileges tool-name => privilege info
      * @param array<string, string> $toolGroups tool-name => group
+     *
      */
     public function __construct(
         private readonly RegistryInterface $registry,
+        private readonly ?AppMcpPrivilegeProvider $privilegeProvider = null,
         private readonly array $toolDependencies = [],
         private readonly array $toolPrivileges = [],
         private readonly array $toolGroups = [],
@@ -37,7 +40,9 @@ class McpCapabilityCatalog
      */
     public function enrichedTools(?array $allowlist = null): array
     {
-        $toolGroups = $this->resolveToolGroups([]);
+        $appToolPrivileges = $this->privilegeProvider?->getAppToolPrivileges() ?? [];
+        $appToolGroups = $this->privilegeProvider?->getAppToolGroups() ?? [];
+        $toolGroups = $this->resolveToolGroups($appToolGroups);
 
         $tools = [];
 
@@ -48,7 +53,7 @@ class McpCapabilityCatalog
                 continue;
             }
 
-            $tools[] = $this->buildToolEntry($tool->name, $tool->title, $tool->description, [], $toolGroups);
+            $tools[] = $this->buildToolEntry($tool->name, $tool->title, $tool->description, $appToolPrivileges, $toolGroups);
         }
 
         usort($tools, static fn (array $a, array $b): int => $a['name'] <=> $b['name']);
@@ -63,14 +68,16 @@ class McpCapabilityCatalog
      */
     public function findTool(string $name): ?array
     {
-        $toolGroups = $this->resolveToolGroups([]);
+        $appToolPrivileges = $this->privilegeProvider?->getAppToolPrivileges() ?? [];
+        $appToolGroups = $this->privilegeProvider?->getAppToolGroups() ?? [];
+        $toolGroups = $this->resolveToolGroups($appToolGroups);
 
         foreach ($this->registry->getTools()->references as $tool) {
             if (!$tool instanceof Tool || $tool->name !== $name) {
                 continue;
             }
 
-            return $this->buildToolEntry($tool->name, $tool->title, $tool->description, [], $toolGroups);
+            return $this->buildToolEntry($tool->name, $tool->title, $tool->description, $appToolPrivileges, $toolGroups);
         }
 
         return null;
@@ -143,7 +150,7 @@ class McpCapabilityCatalog
     }
 
     /**
-     * @param array<string, list<string>> $runtimeToolPrivileges
+     * @param array<string, list<string>> $appToolPrivileges
      * @param array<string, string> $toolGroups
      *
      * @return array{name: string, title: ?string, description: ?string, group: string, dependencies: list<string>, requiredPrivileges: array{static: list<string>, entityParam: ?string, operations: list<string>}|null}
@@ -152,12 +159,12 @@ class McpCapabilityCatalog
         string $name,
         ?string $title,
         ?string $description,
-        array $runtimeToolPrivileges,
+        array $appToolPrivileges,
         array $toolGroups,
     ): array {
         $privileges = $this->toolPrivileges[$name]
-            ?? (isset($runtimeToolPrivileges[$name])
-                ? ['static' => $runtimeToolPrivileges[$name], 'entityParam' => null, 'operations' => []]
+            ?? (isset($appToolPrivileges[$name])
+                ? ['static' => $appToolPrivileges[$name], 'entityParam' => null, 'operations' => []]
                 : null);
 
         return [
@@ -171,16 +178,16 @@ class McpCapabilityCatalog
     }
 
     /**
-     * Explicit #[McpToolGroup] values take precedence over runtime groups. Each remaining
+     * Explicit #[McpToolGroup] values take precedence over runtime app groups. Each remaining
      * tool uses the longest hyphen-separated prefix it shares with another unconfigured tool.
      *
-     * @param array<string, string> $runtimeToolGroups
+     * @param array<string, string> $appToolGroups
      *
      * @return array<string, string> tool-name => group
      */
-    private function resolveToolGroups(array $runtimeToolGroups): array
+    private function resolveToolGroups(array $appToolGroups): array
     {
-        $resolvedGroups = array_merge($runtimeToolGroups, $this->toolGroups);
+        $resolvedGroups = array_merge($appToolGroups, $this->toolGroups);
         $unconfiguredToolNames = [];
 
         foreach ($this->registry->getTools()->references as $tool) {

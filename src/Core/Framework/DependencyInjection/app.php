@@ -15,6 +15,8 @@ use Contena\Core\Framework\App\ActionButton\Response\OpenNewTabResponseFactory;
 use Contena\Core\Framework\App\ActionButton\Response\ReloadDataResponseFactory;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonDefinition;
+use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockDefinition;
+use Contena\Core\Framework\App\Aggregate\CmsBlockTranslation\AppCmsBlockTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\ActionButtonTranslation\ActionButtonTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeDefinition;
@@ -26,7 +28,7 @@ use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowActionTranslation\AppFlowActionTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventDefinition;
 use Contena\Core\Framework\App\Api\AppActionController;
-use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
+use Contena\Core\Framework\App\Api\AppCmsController;
 use Contena\Core\Framework\App\Api\AppPrivilegeController;
 use Contena\Core\Framework\App\Api\AppSecretRotationController;
 use Contena\Core\Framework\App\Api\ShopIdController;
@@ -76,6 +78,7 @@ use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\Lifecycle\AppSecretRotationService;
 use Contena\Core\Framework\App\Lifecycle\Handler\ActionButtonLifecycleHandler;
+use Contena\Core\Framework\App\Lifecycle\Handler\CmsBlockLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemBindingSpecificationLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemElementTypeLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemStyleOptionLifecycleHandler;
@@ -93,6 +96,7 @@ use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemStyleOptionPersi
 use Contena\Core\Framework\App\Lifecycle\Registration\AppRegistrationService;
 use Contena\Core\Framework\App\Lifecycle\Registration\HandshakeFactory;
 use Contena\Core\Framework\App\Lifecycle\ScriptFileReader;
+use Contena\Core\Framework\App\Cms\BlockTemplateLoader;
 use Contena\Core\Framework\App\Manifest\ManifestFactory;
 use Contena\Core\Framework\App\MessageHandler\RotateAppSecretHandler;
 use Contena\Core\Framework\App\Module\ModuleFeatureDefinition;
@@ -305,6 +309,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -800]);
 
+    $services->set(CmsBlockLifecycleHandler::class)
+        ->args([
+            service('app_cms_block.repository'),
+            service(BlockTemplateLoader::class),
+        ])
+        ->tag('contena.app_lifecycle.handler', ['priority' => -1200]);
+
     $services->set(TemplateLifecycleHandler::class)
         ->args([
             service(TemplateLoader::class),
@@ -366,6 +377,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(SourceResolver::class),
         ]);
+
+    $services->set(BlockTemplateLoader::class);
 
     $services->set(ContentSystemElementTypePersister::class)
         ->args([
@@ -669,13 +682,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(AppJWTGenerateRoute::class)
+    $services->set(AppCmsController::class)
         ->public()
-        ->args([
-            service(Connection::class),
-            service(ShopIdProvider::class),
-            service(ClockInterface::class),
-        ]);
+        ->args([service('app_cms_block.repository')])
+        ->call('setContainer', [service('service_container')]);
 
     $services->set(AppSecretRotationController::class)
         ->public()
@@ -827,6 +837,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.entity.definition');
 
     $services->set(ActionButtonDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(AppCmsBlockDefinition::class)
+        ->tag('contena.entity.definition');
+    $services->set(AppCmsBlockTranslationDefinition::class)
         ->tag('contena.entity.definition');
 
     $services->set(ActionButtonTranslationDefinition::class)

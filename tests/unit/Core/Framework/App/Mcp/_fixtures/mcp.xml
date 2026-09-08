@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mcp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="">
+    <mcp-tools>
+        <mcp-tool name="sync-orders" url="https://app.example.com/mcp/sync-orders">
+            <label>Sync Orders</label>
+            <label lang="de-DE">Bestellungen synchronisieren</label>
+            <description>Syncs orders</description>
+            <input-schema>
+                <property name="since" type="string" description="ISO date" required="true"/>
+            </input-schema>
+            <required-privileges>
+                <privilege>blog:read</privilege>
+                <privilege>blog:update</privilege>
+            </required-privileges>
+        </mcp-tool>
+    </mcp-tools>
+    <mcp-prompts>
+        <mcp-prompt name="order-context" url="https://app.example.com/mcp/prompt/order-context">
+            <label>Order Context</label>
+            <description>Context for orders</description>
+        </mcp-prompt>
+    </mcp-prompts>
+    <mcp-resources>
+        <mcp-resource name="order-stats" uri="app-example://order-stats" url="https://app.example.com/mcp/resource/order-stats" mime-type="application/json">
+            <label>Order Stats</label>
+            <description>Live order statistics</description>
+        </mcp-resource>
+    </mcp-resources>
+</mcp>

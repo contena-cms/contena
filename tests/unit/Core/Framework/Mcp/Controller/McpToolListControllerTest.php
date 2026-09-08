@@ -176,7 +176,7 @@ class McpToolListControllerTest extends TestCase
         $registry->method('getResources')->willReturn($resourcesPage ?? new Page([], null));
         $registry->method('getPrompts')->willReturn($promptsPage ?? new Page([], null));
 
-        $catalog = new McpCapabilityCatalog($registry, $toolDependencies, $toolPrivileges);
+        $catalog = new McpCapabilityCatalog($registry, toolDependencies: $toolDependencies, toolPrivileges: $toolPrivileges);
 
         return new McpToolListController(Server::builder(), $catalog);
     }

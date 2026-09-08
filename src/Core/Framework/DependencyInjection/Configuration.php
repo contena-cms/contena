@@ -58,6 +58,7 @@ class Configuration implements ConfigurationInterface
                 ->append($this->createProductStreamSection())
                 ->append($this->createTranslationSection())
                 ->append($this->createAppSystemSection())
+                ->append($this->createMcpSection())
                 ->append($this->createWebhookSection())
             ->end();
 
@@ -1488,6 +1489,27 @@ class Configuration implements ConfigurationInterface
                             ->thenInvalid('"%s" is not a valid IP address.')
                         ->end()
                     ->end()
+                ->end()
+            ->end();
+
+        return $rootNode;
+    }
+
+    private function createMcpSection(): ArrayNodeDefinition
+    {
+        $rootNode = (new TreeBuilder('mcp'))->getRootNode();
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('allowed_tools')
+                    ->info('Restrict which MCP tools are exposed. Empty array means all tools are allowed.')
+                    ->scalarPrototype()->end()
+                    ->defaultValue([])
+                ->end()
+                ->integerNode('app_tool_timeout')
+                    ->info('Timeout in seconds for app webhook MCP tool calls.')
+                    ->defaultValue(10)
+                    ->min(1)
                 ->end()
             ->end();
 

@@ -5,6 +5,12 @@ use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\OAuth\ClientRepository;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
+use Contena\Core\Framework\App\AppSecretResolver;
+use Contena\Core\Framework\App\Feature\AppFeatureStorage;
+use Contena\Core\Framework\App\Mcp\Feature\McpPromptFeatureDefinition;
+use Contena\Core\Framework\App\Mcp\Feature\McpResourceFeatureDefinition;
+use Contena\Core\Framework\App\Mcp\Feature\McpToolFeatureDefinition;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistFilter;
@@ -21,12 +27,19 @@ use Contena\Core\Framework\Mcp\Controller\McpServerController;
 use Contena\Core\Framework\Mcp\Controller\McpToolListController;
 use Contena\Core\Framework\Mcp\Controller\UserMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
+use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
+use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
+use Contena\Core\Framework\Mcp\Loader\AppMcpPromptLoader;
+use Contena\Core\Framework\Mcp\Loader\AppMcpResourceLoader;
+use Contena\Core\Framework\Mcp\Loader\AppMcpToolLoader;
 use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
+use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityDetector;
+use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityLifecycleSubscriber;
 use Contena\Core\Framework\Mcp\Prompt\ContenaContextPrompt;
 use Contena\Core\Framework\Mcp\RateLimit\McpRateLimiter;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
@@ -91,6 +104,15 @@ return static function (ContainerConfigurator $container): void {
         service(McpSessionRegistry::class),
         service('logger'),
     ])->tag('monolog.logger', ['channel' => 'mcp']);
+
+    $services->set(AppMcpCapabilityDetector::class)
+        ->args([service(AppFeatureStorage::class)]);
+    $services->set(AppMcpCapabilityLifecycleSubscriber::class)
+        ->args([
+            service(AppMcpCapabilityDetector::class),
+            service(McpListChangedNotifier::class),
+        ])
+        ->tag('kernel.event_subscriber');
 
     $services->set(McpContextProvider::class)->args([service('request_stack')]);
     $services->set(ChannelApiMcpContextProvider::class)->args([service('request_stack')]);
@@ -187,6 +209,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set('mcp.channel_api.capability_catalog', McpCapabilityCatalog::class)
         ->args([
             service('mcp.channel_api.registry'),
+            service(AppMcpPrivilegeProvider::class),
             param('contena.channel_api_mcp.tool_dependencies'),
             param('contena.channel_api_mcp.tool_privileges'),
             param('contena.channel_api_mcp.tool_groups'),
@@ -223,6 +246,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set(McpCapabilityCatalog::class)->args([
         service('mcp.registry'),
+        service(AppMcpPrivilegeProvider::class),
         param('contena.mcp.tool_dependencies'),
         param('contena.mcp.tool_privileges'),
         param('contena.mcp.tool_groups'),
@@ -274,6 +298,10 @@ return static function (ContainerConfigurator $container): void {
     $services->set(SystemConfigWriteTool::class)->args([service(SystemConfigService::class), service(McpContextProvider::class)])->tag('mcp.tool');
     $services->set(MediaUploadTool::class)->args([service(MediaUploadService::class), service(McpContextProvider::class)])->tag('mcp.tool');
 
+    $services->set(AppMcpPrivilegeProvider::class)
+        ->args([service(AppFeatureStorage::class), service('logger')])
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+
     $services->set(ChannelApiContextTool::class)
         ->args([service(ChannelApiMcpContextProvider::class)])
         ->tag('contena.channel_api_mcp.tool');
@@ -313,4 +341,50 @@ return static function (ContainerConfigurator $container): void {
     $services->set(FlowActionsResource::class)->args([service(FlowActionCollector::class), service(McpContextProvider::class)])->tag('mcp.resource');
     $services->set(ChannelListResource::class)->args([service('channel.repository'), service(McpContextProvider::class)])->tag('mcp.resource');
     $services->set(ToolResultResource::class)->args([service(ToolResultCacheStorage::class)])->tag('mcp.resource_template');
+
+    $services->set(AppMcpCapabilityExecutor::class)
+        ->args([
+            service('contena.app_system.guzzle'),
+            env('APP_URL'),
+            service(ShopIdProvider::class),
+            param('contena.mcp.app_tool_timeout'),
+            service('logger'),
+            service('kernel'),
+            service('request_stack'),
+            service('router'),
+            service(AppSecretResolver::class),
+        ])
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+    $services->set(AppMcpToolLoader::class)
+        ->args([
+            service(AppFeatureStorage::class),
+            service(AppMcpCapabilityExecutor::class),
+            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service('logger'),
+            param('contena.mcp.allowed_tools'),
+        ])
+        ->tag('mcp.loader')
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+    $services->set(AppMcpPromptLoader::class)
+        ->args([
+            service(AppFeatureStorage::class),
+            service(AppMcpCapabilityExecutor::class),
+            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service('logger'),
+        ])
+        ->tag('mcp.loader')
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+    $services->set(AppMcpResourceLoader::class)
+        ->args([
+            service(AppFeatureStorage::class),
+            service(AppMcpCapabilityExecutor::class),
+            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service('logger'),
+        ])
+        ->tag('mcp.loader')
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+
+    $services->set(McpToolFeatureDefinition::class)->tag('contena.app_feature.definition');
+    $services->set(McpPromptFeatureDefinition::class)->tag('contena.app_feature.definition');
+    $services->set(McpResourceFeatureDefinition::class)->tag('contena.app_feature.definition');
 };

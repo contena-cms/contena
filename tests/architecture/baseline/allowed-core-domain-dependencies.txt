@@ -220,9 +220,6 @@ src/Core/Framework/App/Api/AppActionController.php	Contena\Core\Framework\App\Ac
 src/Core/Framework/App/Api/AppActionController.php	Contena\Core\Framework\App\ActionButton\Executor
 src/Core/Framework/App/Api/AppActionController.php	Contena\Core\Framework\App\Manifest\ModuleLoader
 src/Core/Framework/App/Api/AppCmsController.php	Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockCollection
-src/Core/Framework/App/Api/AppJWTGenerateRoute.php	Contena\Core\Framework\App\AppException
-src/Core/Framework/App/Api/AppJWTGenerateRoute.php	Contena\Core\Framework\App\ShopId\ShopIdProvider
-src/Core/Framework/App/Api/AppJWTGenerateRoute.php	Contena\Core\System\SalesChannel\SalesChannelContext
 src/Core/Framework/App/Api/AppPrivilegeController.php	Contena\Core\Framework\App\AppException
 src/Core/Framework/App/Api/AppPrivilegeController.php	Contena\Core\Framework\App\Privileges\Privileges
 src/Core/Framework/App/Api/AppSecretRotationController.php	Contena\Core\Framework\App\AppCollection

@@ -2,6 +2,11 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
+use Contena\Core\Test\Integration\App\TestAppServer;
 use Contena\Core\Framework\Test\Api\Acl\fixtures\AclTestController;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestTranslationDefinition;
@@ -34,12 +39,55 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\TraceableMessageBus;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->defaults()->public();
     $services->defaults()->public();
+
+    // Keep App and Webhook integration tests deterministic and offline. The
+    // upstream App test harness uses the same mock server and history
+    // middleware; only service ids are mapped to Contena's namespace.
+    $services->set('contena.app_system.guzzle', Client::class)
+        ->args([
+            [
+                'handler' => inline_service(HandlerStack::class)
+                    ->factory([HandlerStack::class, 'create'])
+                    ->args([service(TestAppServer::class)])
+                    ->call('push', [service('contena.app_system.guzzle.middleware')])
+                    ->call('push', [service('test.guzzle.history.middleware')]),
+            ],
+        ]);
+
+    $services->set('contena.webhook.guzzle', Client::class)
+        ->args([
+            [
+                'handler' => inline_service(HandlerStack::class)
+                    ->factory([HandlerStack::class, 'create'])
+                    ->args([service(TestAppServer::class)])
+                    ->call('after', [
+                        'allow_redirects',
+                        service('contena.webhook.guzzle.security_middleware'),
+                        'app_system_http_security',
+                    ])
+                    ->call('push', [service('contena.app_system.guzzle.middleware')])
+                    ->call('push', [service('test.guzzle.history.middleware')]),
+            ],
+        ]);
+
+    $services->set(TestAppServer::class)
+        ->args([service(MockHandler::class)]);
+
+    $services->set(MockHandler::class)
+        ->public()
+        ->args([[]]);
+
+    $services->set('test.guzzle.history.middleware', 'callable')
+        ->factory([service(GuzzleHistoryCollector::class), 'getHistoryMiddleWare']);
+
+    $services->set(GuzzleHistoryCollector::class)->public();
 
     $services->set(TestElementTypeLoader::class)
         ->tag('content_system.type_loader');

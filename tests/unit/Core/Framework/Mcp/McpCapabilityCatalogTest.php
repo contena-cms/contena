@@ -3,6 +3,7 @@
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
+use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
@@ -44,8 +45,8 @@ class McpCapabilityCatalogTest extends TestCase
 
         $catalog = new McpCapabilityCatalog(
             $registry,
-            ['contena-entity-delete' => ['contena-entity-search', 'contena-entity-schema']],
-            ['contena-entity-delete' => ['static' => [], 'entityParam' => 'entity', 'operations' => ['delete']]],
+            toolDependencies: ['contena-entity-delete' => ['contena-entity-search', 'contena-entity-schema']],
+            toolPrivileges: ['contena-entity-delete' => ['static' => [], 'entityParam' => 'entity', 'operations' => ['delete']]],
         );
 
         $tools = $catalog->enrichedTools();
@@ -68,12 +69,31 @@ class McpCapabilityCatalogTest extends TestCase
 
         $catalog = new McpCapabilityCatalog(
             $registry,
-            [],
-            [],
-            ['contena-entity-search' => 'catalogue'],
+            toolGroups: ['contena-entity-search' => 'catalogue'],
         );
 
         static::assertSame('catalogue', $catalog->enrichedTools()[0]['group']);
+    }
+
+    public function testEnrichedToolsIncludesAppPrivilegesAndGroups(): void
+    {
+        $registry = new Registry();
+        $this->registerTool($registry, 'my-app-sync', 'Sync');
+        $provider = static::createStub(AppMcpPrivilegeProvider::class);
+        $provider->method('getAppToolPrivileges')->willReturn([
+            'my-app-sync' => ['blog:read'],
+        ]);
+        $provider->method('getAppToolGroups')->willReturn([
+            'my-app-sync' => 'my-app',
+        ]);
+
+        $catalog = new McpCapabilityCatalog($registry, $provider);
+
+        static::assertSame('my-app', $catalog->enrichedTools()[0]['group']);
+        static::assertSame(
+            ['static' => ['blog:read'], 'entityParam' => null, 'operations' => []],
+            $catalog->enrichedTools()[0]['requiredPrivileges'],
+        );
     }
 
     public function testEnrichedToolsDerivesGroupFromLongestCommonNamePrefix(): void
@@ -168,7 +188,7 @@ class McpCapabilityCatalogTest extends TestCase
 
         $catalog = new McpCapabilityCatalog(
             $registry,
-            ['tool-a' => ['dep-1']],
+            toolDependencies: ['tool-a' => ['dep-1']],
         );
 
         $entry = $catalog->findTool('tool-a');

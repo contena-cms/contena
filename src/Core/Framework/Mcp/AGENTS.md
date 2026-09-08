@@ -55,7 +55,10 @@ Core capability names use the `contena-` prefix and kebab case, for example `con
 ## Conventions
 
 - Use the `Contena\\Core\\Framework\\Mcp` namespace and FQCN service IDs.
-- Do not reintroduce legacy package metadata, `#[Package]`, App loaders, Channel API transports, or commerce-specific capability code.
+- Do not reintroduce legacy package metadata or `#[Package]`. App MCP loaders are part of
+  the current 6.8 runtime and must remain aligned with the App feature storage, while
+  Channel API transports and commerce-specific capability code stay scoped to their own
+  registries.
 - Mark implementation services `@internal` unless they are an intentional extension point. Keep supported concrete services `@final` where appropriate.
 - Write tools default to `dryRun=true`; use the shared transaction helper and preserve ACL checks.
 - Entity tools validate entity existence before ACL checks and serialize DAL data with `JsonEntityEncoder`.
