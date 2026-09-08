@@ -35,6 +35,7 @@ import MtSlider from '@contena/meteor-component-library/dist/esm/MtSlider';
 import MtSwitch from '@contena/meteor-component-library/dist/esm/MtSwitch';
 import MtTextField from '@contena/meteor-component-library/dist/esm/MtTextField';
 import MtTextarea from '@contena/meteor-component-library/dist/esm/MtTextarea';
+import MtThemeSelect from '@contena/meteor-component-library/dist/esm/MtThemeSelect';
 import MtIcon from '@contena/meteor-component-library/dist/esm/MtIcon';
 import MtPagination from '@contena/meteor-component-library/dist/esm/MtPagination';
 import MtSkeletonBar from '@contena/meteor-component-library/dist/esm/MtSkeletonBar';
@@ -350,6 +351,7 @@ export default class VueAdapter extends ViewAdapter {
             MtSwitch,
             MtTextField,
             MtTextarea,
+            MtThemeSelect,
             MtIcon,
             MtPagination,
             MtSkeletonBar,
