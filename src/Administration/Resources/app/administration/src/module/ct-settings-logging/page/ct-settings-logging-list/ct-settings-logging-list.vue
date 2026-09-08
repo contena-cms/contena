@@ -112,7 +112,8 @@ defineProps({});
 
 import { ref, computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useSettingsListing } from 'src/app/composables/use-settings-listing';
 
 const { t } = useI18n();
@@ -120,7 +121,8 @@ const { page, limit, total, term, onPageChange, onSearch, onRefresh, initializeS
 
 const translate = t;
 
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 
 const repositoryFactory = inject('repositoryFactory');
 

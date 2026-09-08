@@ -59,7 +59,8 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 interface SystemConfigComponent {
     saveAll: () => Promise<void>;
@@ -108,5 +109,6 @@ ctDefinePublic({
     onLoadingChanged,
 });
 
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

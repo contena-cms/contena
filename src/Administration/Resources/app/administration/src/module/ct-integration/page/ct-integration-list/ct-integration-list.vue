@@ -409,7 +409,8 @@ defineProps({});
 import { ref, computed, inject, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 const { t } = useI18n();
 const { createNotificationSuccess, createNotificationError } = useNotification();
@@ -694,5 +695,6 @@ ctDefinePublic({
     onCloseDeleteModal,
     onConfirmDelete,
 });
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

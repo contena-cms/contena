@@ -94,7 +94,8 @@ import { computed, inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useListing } from 'src/app/composables/use-listing';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 type SortDirection = 'ASC' | 'DESC';
 type BadgeVariant = 'neutral' | 'attention' | 'positive' | 'critical';
@@ -202,7 +203,8 @@ const statusVariant = (status: number): BadgeVariant => {
 
 initializeListing({ getList, sortBy, sortDirection });
 void getList();
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 
 ctDefinePublic({
     refunds,

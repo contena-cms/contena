@@ -84,7 +84,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import './ct-settings-listing-option-base.scss';
 
 interface BlogSortingField {
@@ -279,5 +280,6 @@ ctDefinePublic({
     clearValidationErrors,
 });
 
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

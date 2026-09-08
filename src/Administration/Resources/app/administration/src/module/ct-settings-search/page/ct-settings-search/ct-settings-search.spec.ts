@@ -63,7 +63,6 @@ async function createWrapper(privileges: string[] = [], saveError = false) {
     await router.push('/search/general');
     await router.isReady();
     const routerPush = jest.spyOn(router, 'push');
-    Object.assign(Contena, { ExtensionAPI: { publishData: jest.fn() } });
     const root = mount(defineComponent({ template: '<router-view />' }), {
         global: {
             plugins: [router],

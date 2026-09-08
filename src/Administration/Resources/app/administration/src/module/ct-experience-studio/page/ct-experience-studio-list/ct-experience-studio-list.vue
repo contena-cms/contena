@@ -77,7 +77,8 @@ import { ref, computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useListing } from 'src/app/composables/use-listing';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 const router = useRouter();
 const { t } = useI18n();
@@ -201,5 +202,6 @@ ctDefinePublic({
     onTableSortChange,
     onOpenDetails,
 });
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

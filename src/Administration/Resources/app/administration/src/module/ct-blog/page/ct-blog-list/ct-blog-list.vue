@@ -119,7 +119,8 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useListing } from 'src/app/composables/use-listing';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 import './ct-blog-list.scss';
 
@@ -289,5 +290,6 @@ ctDefinePublic({
     onTableSortChange,
 });
 
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

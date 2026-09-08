@@ -48,6 +48,7 @@ import * as Vue from 'vue';
 import * as VueI18n from 'vue-i18n';
 import * as VueRouter from 'vue-router';
 import type { Component, Ref } from 'vue';
+import ExtensionApi from './extension-api';
 import Telemetry from './telemetry';
 import useContext from '../app/composables/use-context';
 
@@ -218,6 +219,8 @@ class ContenaClass implements CustomContenaProperties {
     };
 
     public Data = data;
+
+    public ExtensionAPI = ExtensionApi;
 
     public get Snippet() {
         // @ts-expect-error - type is currently not available

@@ -69,8 +69,10 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter, type Rout
 import { useI18n } from 'vue-i18n';
 import type AclService from 'src/app/service/acl.service';
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import usePublishedData from 'src/app/composables/use-published-data';
 
 defineOptions({
     shortcuts: {
@@ -259,18 +261,11 @@ const onLeaveModalChange = (open: boolean): void => {
 const createdComponent = (): void => {
     void getDefaultSearchConfig();
     void getBlogSearchConfigs();
-    Contena.ExtensionAPI.publishData({
-        id: 'ct-settings-search__defaultConfig',
-        path: 'defaultConfig',
-        scope: { defaultConfig },
-    });
-    Contena.ExtensionAPI.publishData({
-        id: 'ct-settings-search__blogSearchConfigs',
-        path: 'blogSearchConfigs',
-        scope: { blogSearchConfigs },
-    });
 };
 createdComponent();
+
+usePublishedData('ct-settings-search__defaultConfig', defaultConfig);
+usePublishedData('ct-settings-search__blogSearchConfigs', blogSearchConfigs);
 
 ctDefinePublic({
     blogSearchConfigs,
@@ -309,7 +304,8 @@ ctDefinePublic({
     onLeaveModalChange,
 });
 
-onBeforeRouteUpdate((to) => unsavedDataLeaveHandler.value(to));
-onBeforeRouteLeave((to) => unsavedDataLeaveHandler.value(to));
-usePageTitle();
+onBeforeRouteUpdate((to) => unsavedDataLeaveHandler(to));
+onBeforeRouteLeave((to) => unsavedDataLeaveHandler(to));
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

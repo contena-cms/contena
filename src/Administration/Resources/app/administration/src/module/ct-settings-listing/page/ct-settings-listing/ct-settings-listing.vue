@@ -162,7 +162,8 @@ import { useRouter } from 'vue-router';
 
 import { useInlineSnippet } from 'src/app/composables/use-inline-snippet';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import './ct-settings-listing.scss';
 
 interface BlogSortingField {
@@ -457,7 +458,8 @@ void Promise.all([
 ]);
 
 const isLoading = computed(() => isSortingLoading.value || isSystemConfigLoading.value);
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 
 ctDefinePublic({
     isSortingLoading,

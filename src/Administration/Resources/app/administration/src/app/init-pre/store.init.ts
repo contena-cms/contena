@@ -2,6 +2,7 @@ import Store from 'src/app/store';
 import '../store/admin-menu.store';
 import '../store/block-override.store';
 import 'src/app/store/extension-entry-routes.store';
+import 'src/app/store/extensions.store';
 import 'src/app/store/error.store';
 import 'src/app/store/admin-help-center.store';
 import 'src/app/store/context.store';

@@ -3,6 +3,7 @@ import { config, enableAutoUnmount } from '@vue/test-utils';
 import '@testing-library/jest-dom';
 
 import VirtualCallStackPlugin from 'src/app/plugin/virtual-call-stack.plugin';
+import MeteorSdkDataPlugin from 'src/app/plugin/meteor-sdk-data.plugin';
 import getBlockDataScope from 'src/app/component/structure/ct-block-override/ct-block/get-block-data-scope';
 import {
     MtActionMenu,
@@ -57,6 +58,7 @@ import findByPlaceholder from '../_helper_/find-by-placeholder';
 // initialize the Stores
 import '../../src/app/store/admin-menu.store';
 import '../../src/app/store/extension-entry-routes.store';
+import '../../src/app/store/extensions.store';
 import '../../src/app/store/error.store';
 import '../../src/app/store/admin-help-center.store';
 import '../../src/app/store/context.store';
@@ -266,6 +268,7 @@ const i18n = createI18n({
 // Add global plugins
 config.global.plugins = [
     VirtualCallStackPlugin,
+    MeteorSdkDataPlugin,
     i18n,
 ];
 

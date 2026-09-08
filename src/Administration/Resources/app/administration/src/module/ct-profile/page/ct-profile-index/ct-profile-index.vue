@@ -102,7 +102,8 @@ import { ref, computed, inject, watch, onBeforeMount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import useTheme from 'src/app/composables/use-theme';
 import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
@@ -614,5 +615,6 @@ ctDefinePublic({
     saveMinSearchTermLength,
     saveUserSearchPreferences,
 });
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

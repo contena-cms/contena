@@ -338,7 +338,8 @@ const props = defineProps({
 import { ref, computed, inject, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useNotification } from 'src/app/composables/use-notification';
 
 const router = useRouter();
@@ -711,5 +712,6 @@ ctDefinePublic({
     onSave,
     onCancel,
 });
-usePageTitle(() => identifier.value);
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle(identifier.value) }));
 </script>

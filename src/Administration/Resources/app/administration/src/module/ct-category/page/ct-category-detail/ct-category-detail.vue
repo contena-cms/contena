@@ -246,7 +246,8 @@ import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { usePlaceholder } from 'src/app/composables/use-placeholder';
 import './store';
 import './ct-category-detail.scss';
@@ -770,7 +771,8 @@ ctDefinePublic({
     checkViewport,
 });
 
-usePageTitle(() => identifier.value);
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle(identifier.value) }));
 
 onBeforeRouteLeave((to) => {
     if (forceDiscardChanges.value) {

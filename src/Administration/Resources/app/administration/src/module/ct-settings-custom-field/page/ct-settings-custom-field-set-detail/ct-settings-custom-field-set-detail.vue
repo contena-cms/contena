@@ -82,7 +82,8 @@ import { ref, computed, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useInlineSnippet } from 'src/app/composables/use-inline-snippet';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useNotification } from 'src/app/composables/use-notification';
 import { useDiscardDetailPageChanges } from 'src/app/composables/use-discard-detail-page-changes';
 
@@ -186,7 +187,8 @@ const saveOnLanguageChange = () => onSave();
 
 createdComponent();
 
-usePageTitle(() => identifier.value);
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle(identifier.value) }));
 const { discardChanges } = useDiscardDetailPageChanges(route, { set: () => set.value });
 
 ctDefinePublic({

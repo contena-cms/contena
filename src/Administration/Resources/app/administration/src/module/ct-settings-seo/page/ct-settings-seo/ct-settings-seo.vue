@@ -58,7 +58,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 interface SystemConfigComponent {
     saveAll: () => Promise<void>;
@@ -87,5 +88,6 @@ ctDefinePublic({
     onClickSave,
     onLoadingChanged,
 });
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

@@ -349,7 +349,8 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useListing } from 'src/app/composables/use-listing';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 
 const router = useRouter();
 const { t } = useI18n();
@@ -844,5 +845,6 @@ ctDefinePublic({
     confirmDelete,
     removeTranslationFiles,
 });
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>

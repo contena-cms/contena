@@ -70,7 +70,8 @@ import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { usePlaceholder } from 'src/app/composables/use-placeholder';
 
 import './ct-blog-detail.scss';
@@ -251,5 +252,6 @@ ctDefinePublic({
     onChangeLanguage,
 });
 
-usePageTitle(() => blogTitle.value);
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle(blogTitle.value) }));
 </script>

@@ -114,7 +114,8 @@ import { ref, computed, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { usePlaceholder } from 'src/app/composables/use-placeholder';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useDiscardDetailPageChanges } from 'src/app/composables/use-discard-detail-page-changes';
 
 const router = useRouter();
@@ -244,7 +245,8 @@ const onUpdateCountry = (path, value) => {
 
 createdComponent();
 
-usePageTitle(() => identifier.value);
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle(identifier.value) }));
 const { discardChanges } = useDiscardDetailPageChanges(route, { country: () => country.value });
 
 ctDefinePublic({

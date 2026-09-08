@@ -91,13 +91,9 @@ const forbiddenRemoteSourcePaths = [
     'store/extension-component-sections.store.ts',
     '../core/in-app-purchase.ts',
     '../core/service/api/app-modules.service.ts',
-    '../core/extension-api.ts',
-    '../core/service/extension-api-data.service.ts',
     '../module/ct-cms/blocks/app/app-renderer/index.ts',
     '../module/ct-cms/elements/location-renderer/index.ts',
     '../module/ct-flow/component/modals/ct-flow-app-action-modal/index.js',
-    'plugin/meteor-sdk-data.plugin.ts',
-    'store/extensions.store.ts',
     'store/extension-sdk-module.store.ts',
     'store/in-app-purchase-checkout.store.ts',
     'store/main-module.store.ts',
@@ -130,21 +126,12 @@ describe('Contena core Administration services', () => {
         expect(roleDetailSource).not.toContain('appAclService');
     });
 
-    it('keeps remote App data channels out of native Plugin and user management', () => {
+    it('keeps remote App data channels out of native Plugin and user management until they are restored', () => {
         expect(applicationSource).not.toContain('injectIframe');
-        expect(contenaSource).not.toContain('ExtensionAPI');
-        expect(storeInitializerSource).not.toContain('app/store/extensions.store');
+        expect(contenaSource).toContain('public ExtensionAPI = ExtensionApi');
         expect(adminShellConfigSource).not.toContain('ExtensionAPI');
         expect(roleDetailSource).not.toContain('ExtensionAPI');
         expect(userDetailSource).not.toContain('ExtensionAPI');
-    });
-
-    it('does not publish Administration data through the removed App API', () => {
-        const extensionApiConsumers = globSync(resolve(__dirname, '../**/*.{js,ts}'))
-            .filter((file) => !file.includes('.spec.'))
-            .filter((file) => readFileSync(file, 'utf8').includes('Contena.ExtensionAPI'));
-
-        expect(extensionApiConsumers).toStrictEqual([]);
     });
 
     it('does not ship remote App CMS renderers', () => {

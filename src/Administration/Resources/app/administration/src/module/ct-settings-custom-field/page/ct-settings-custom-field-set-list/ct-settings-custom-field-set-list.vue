@@ -240,7 +240,8 @@ defineProps({});
 import { ref, computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useInlineSnippet } from 'src/app/composables/use-inline-snippet';
-import { usePageTitle } from 'src/app/composables/use-page-title';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useSettingsListing } from 'src/app/composables/use-settings-listing';
 
 const { t } = useI18n();
@@ -265,7 +266,8 @@ const {
 
 const translate = t;
 
-usePageTitle();
+const createTitle = useCreateTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 
 const term = term2;
 

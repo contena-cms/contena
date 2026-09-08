@@ -56,6 +56,7 @@ import type { DevtoolComponent } from './app/adapter/view/ct-vue-devtools';
 import type { AdminMenuStore } from './app/store/admin-menu.store';
 import type { BlockOverrideStore } from './app/store/block-override.store';
 import type { ExtensionEntryRoutes } from './app/store/extension-entry-routes.store';
+import type { Extensions } from './app/store/extensions.store';
 import type { ErrorStore } from './app/store/error.store';
 import type { AdminHelpCenterStore } from './app/store/admin-help-center.store';
 import type { ContextStore } from './app/store/context.store';
@@ -266,6 +267,7 @@ declare global {
         adminMenu: AdminMenuStore;
         blockOverride: BlockOverrideStore;
         extensionEntryRoutes: ExtensionEntryRoutes;
+        extensions: Extensions;
         error: ErrorStore;
         experienceStudioEditor: ExperienceStudioEditorStore;
         context: ContextStore;
