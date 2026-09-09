@@ -39,7 +39,6 @@ class CustomFieldLifecycleHandler extends AbstractLifecycleHandler
 
         $this->customFieldSetPersister->sync(
             $customFields,
-            $context->app->getId(),
             $context->app->getName(),
             $context->context
         );
