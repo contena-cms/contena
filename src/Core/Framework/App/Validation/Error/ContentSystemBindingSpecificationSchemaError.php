@@ -2,6 +2,8 @@
 
 namespace Contena\Core\Framework\App\Validation\Error;
 
+use Contena\Core\Framework\App\AppException;
+
 /**
  * Aggregates every binding-specification violation of one manifest into a single error, because
  * {@see ErrorCollection} keys errors by their message key; a second error of the same class would
@@ -9,9 +11,11 @@ namespace Contena\Core\Framework\App\Validation\Error;
  *
  * @internal only for use by the app-system
  */
-class ContentSystemBindingSpecificationSchemaError extends Error
+class ContentSystemBindingSpecificationSchemaError implements Error
 {
     private const KEY = 'manifest-invalid-binding-specification-schema';
+
+    private readonly string $message;
 
     /**
      * @param list<string> $violations
@@ -22,12 +26,30 @@ class ContentSystemBindingSpecificationSchemaError extends Error
             "The following content-system binding specifications are invalid:\n- %s",
             implode("\n- ", $violations)
         );
-
-        parent::__construct($this->message);
     }
 
     public function getMessageKey(): string
     {
         return self::KEY;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function getErrorCode(): string
+    {
+        return AppException::CONTENT_SYSTEM_BINDING_SPECIFICATION_LOAD_FAILED;
+    }
+
+    public function getParameters(): array
+    {
+        return [];
+    }
+
+    public function isBlocking(): bool
+    {
+        return true;
     }
 }
