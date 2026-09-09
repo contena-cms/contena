@@ -31,4 +31,3 @@ class ErrorCollection extends Collection
         return Error::class;
     }
 }
-
