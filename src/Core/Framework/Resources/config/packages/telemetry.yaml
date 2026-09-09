@@ -8,6 +8,10 @@ contena:
                     description: 'Number of plugin installations'
                     type: 'counter'
 
+                app.install.count:
+                    description: 'Number of app installations'
+                    type: 'counter'
+
                 cache.invalidate.count:
                     description: 'Number of cache invalidations'
                     type: 'counter'
