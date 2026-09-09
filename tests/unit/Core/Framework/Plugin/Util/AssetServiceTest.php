@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Util;
 use Composer\Autoload\ClassLoader;
 use Contena\Administration\Administration as ContenaAdministration;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\WriteBatchInterface;
 use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
@@ -422,6 +423,7 @@ class AssetServiceTest extends TestCase
             $kernel,
             $pluginLoader ?? new StaticKernelPluginLoader(static::createStub(ClassLoader::class)),
             $cacheInvalidator ?? static::createStub(CacheInvalidator::class),
+            static::createStub(SourceResolver::class),
             $parameterBag ?? new ParameterBag([
                 'contena.filesystem.asset.type' => 's3',
                 'contena.filesystem.asset.visibility' => Visibility::PUBLIC,

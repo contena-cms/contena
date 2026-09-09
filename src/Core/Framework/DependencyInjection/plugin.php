@@ -277,6 +277,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('kernel'),
             service(KernelPluginLoader::class),
             service(CacheInvalidator::class),
+            service(\Contena\Core\Framework\App\Source\SourceResolver::class),
             service('parameter_bag'),
             service('event_dispatcher'),
         ]);

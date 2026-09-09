@@ -6,6 +6,7 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatch;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Event\AssetUploadEvent;
@@ -46,6 +47,7 @@ class AssetService
         private readonly KernelInterface $kernel,
         private readonly KernelPluginLoader $pluginLoader,
         private readonly CacheInvalidator $cacheInvalidator,
+        private readonly SourceResolver $sourceResolver,
         private readonly ParameterBagInterface $parameterBag,
         private readonly EventDispatcherInterface $eventDispatcher,
     ) {
@@ -82,6 +84,21 @@ class AssetService
         $this->copyAssetsFromBundleOrApp(
             Path::join($bundle->getPath(), self::EXTENSION_RESOURCES_DIRECTORY),
             $bundle->getName(),
+            $force,
+        );
+    }
+
+    public function copyAssetsFromApp(string $appName, string $appPath, bool $force = false): void
+    {
+        $fs = $this->sourceResolver->filesystemForAppName($appName);
+
+        if (!$fs->has(self::EXTENSION_RESOURCES_DIRECTORY)) {
+            return;
+        }
+
+        $this->copyAssetsFromBundleOrApp(
+            $fs->path(self::EXTENSION_RESOURCES_DIRECTORY),
+            $appName,
             $force,
         );
     }
