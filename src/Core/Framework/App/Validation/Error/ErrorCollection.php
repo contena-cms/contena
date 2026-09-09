@@ -16,13 +16,13 @@ class ErrorCollection extends Collection
      */
     public function add($error): void
     {
-        $this->set($error->getMessageKey(), $error);
+        $this->set($error->getErrorCode(), $error);
     }
 
     public function addErrors(ErrorCollection $errors): void
     {
         foreach ($errors as $error) {
-            $this->set($error->getMessageKey(), $error);
+            $this->set($error->getErrorCode(), $error);
         }
     }
 
