@@ -456,6 +456,21 @@ CREATE TABLE IF NOT EXISTS `app_cms_block_translation` (
     CONSTRAINT `fk.app_cms_block_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL,
+            <<<'SQL'
+CREATE TABLE IF NOT EXISTS `app_administration_snippet` (
+    `id` BINARY(16) NOT NULL,
+    `app_id` BINARY(16) NOT NULL,
+    `locale_id` BINARY(16) NOT NULL,
+    `value` JSON NOT NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+    PRIMARY KEY (`id`),
+    KEY `fk.app_administration_snippet.app_id` (`app_id`),
+    KEY `fk.app_administration_snippet.locale_id` (`locale_id`),
+    CONSTRAINT `fk.app_administration_snippet.app_id` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.app_administration_snippet.locale_id` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL,
         ];
 
         foreach ($statements as $statement) {

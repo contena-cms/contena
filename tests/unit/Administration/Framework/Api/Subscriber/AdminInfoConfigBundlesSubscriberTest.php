@@ -3,6 +3,7 @@
 namespace Contena\Tests\Unit\Administration\Framework\Api\Subscriber;
 
 use Contena\Administration\Framework\Api\Subscriber\AdminInfoConfigBundlesSubscriber;
+use Contena\Administration\Framework\App\ActiveAdminAppLoader;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
@@ -165,6 +166,7 @@ class AdminInfoConfigBundlesSubscriberTest extends TestCase
         $subscriber = new AdminInfoConfigBundlesSubscriber(
             $kernel,
             $router ?? static::createStub(RouterInterface::class),
+            static::createStub(ActiveAdminAppLoader::class),
             $filesystem ?? new Filesystem(),
             $viteAccessor,
         );

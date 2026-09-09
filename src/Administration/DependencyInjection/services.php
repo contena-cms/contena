@@ -7,16 +7,20 @@ use Contena\Administration\Command\DeleteAdminFilesAfterBuildCommand;
 use Contena\Administration\Command\DeleteExtensionLocalPublicFilesCommand;
 use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
 use Contena\Administration\Command\SetupExtensionToolingCommand;
-use Contena\Administration\Controller\AdministrationController;
 use Contena\Administration\Controller\AdminExtensionApiController;
+use Contena\Administration\Controller\AdministrationController;
 use Contena\Administration\Controller\AdminSearchController;
 use Contena\Administration\Controller\AdminTagController;
 use Contena\Administration\Controller\UserConfigController;
 use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
 use Contena\Administration\Service\AdminSearcher;
+use Contena\Administration\Snippet\AppAdministrationSnippetDefinition;
+use Contena\Administration\Snippet\AppAdministrationSnippetPersister;
+use Contena\Administration\Snippet\AppLifecycleSubscriber;
 use Contena\Administration\Snippet\CachedSnippetFinder;
 use Contena\Administration\Snippet\SnippetFinder;
 use Contena\Administration\System\Channel\Subscriber\ChannelUserConfigSubscriber;
+use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
@@ -24,6 +28,7 @@ use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\App\ActionButton\Executor;
 use Contena\Core\Framework\App\Hmac\QuerySigner;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Util\HtmlSanitizer;
@@ -139,12 +144,32 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SnippetFinder::class)
         ->args([
             service('kernel'),
+            service(Connection::class),
             service('contena.filesystem.translation'),
             service(TranslationConfig::class),
             service(TranslationLoader::class),
+            service(HtmlSanitizer::class),
             service('logger'),
             param('kernel.debug'),
         ]);
+
+    $services->set(AppAdministrationSnippetDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(AppAdministrationSnippetPersister::class)
+        ->args([
+            service('app_administration_snippet.repository'),
+            service('locale.repository'),
+            service(CacheInvalidator::class),
+            service('filesystem'),
+        ]);
+
+    $services->set(AppLifecycleSubscriber::class)
+        ->args([
+            service(SourceResolver::class),
+            service(AppAdministrationSnippetPersister::class),
+        ])
+        ->tag('kernel.event_subscriber');
 
     $services->set(CachedSnippetFinder::class)
         ->decorate(SnippetFinder::class)

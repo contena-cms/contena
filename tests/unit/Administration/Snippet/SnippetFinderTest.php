@@ -8,6 +8,7 @@ use Contena\Administration\Snippet\SnippetFinder;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
+use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Kernel;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageDefinition;
@@ -22,6 +23,7 @@ use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
+use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Uri;
 use League\Flysystem\Filesystem;
@@ -371,9 +373,11 @@ class SnippetFinderTest extends TestCase
 
         return new SnippetFinder(
             $kernelMock,
+            static::createStub(Connection::class),
             $this->filesystem,
             $config,
             $translationLoader,
+            new HtmlSanitizer(enabled: false),
             $logger ?? new NullLogger(),
             $debug,
         );

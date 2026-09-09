@@ -3,11 +3,14 @@
 namespace Contena\Administration\Snippet;
 
 use Contena\Core\Framework\Plugin;
+use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Kernel;
 use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPath;
 use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPathCollection;
+use Contena\Core\System\Snippet\Files\SnippetFileLoader;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use Doctrine\DBAL\Connection;
 use League\Flysystem\Filesystem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -17,19 +20,17 @@ use Symfony\Component\Finder\Finder;
 /**
  * @internal
  *
- * @description Loads administration snippets from the core and plugins.
+ * @description Loads administration snippets from the core, plugins, and apps.
  */
 class SnippetFinder implements SnippetFinderInterface
 {
-    private const string SCOPE_PLATFORM = 'Platform';
-
-    private const string SCOPE_PLUGINS = 'Plugins';
-
     public function __construct(
         private readonly Kernel $kernel,
+        private readonly Connection $connection,
         private readonly Filesystem $translationReader,
         private readonly TranslationConfig $translationConfig,
         private readonly AbstractTranslationLoader $translationLoader,
+        private readonly HtmlSanitizer $htmlSanitizer,
         private readonly LoggerInterface $logger,
         private readonly bool $debug,
     ) {
@@ -49,7 +50,53 @@ class SnippetFinder implements SnippetFinderInterface
         return array_replace_recursive(
             $countryAgnosticSnippets,
             $countrySpecificSnippets,
+            $this->getAppAdministrationSnippets($locale),
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getAppAdministrationSnippets(string $locale): array
+    {
+        $result = $this->connection->fetchAllAssociative(
+            'SELECT app_administration_snippet.value
+             FROM locale
+             INNER JOIN app_administration_snippet ON locale.id = app_administration_snippet.locale_id
+             INNER JOIN app ON app_administration_snippet.app_id = app.id
+             WHERE locale.code = :code AND app.active = 1',
+            ['code' => $locale],
+        );
+
+        $decoded = array_map(
+            static fn (array $data): array => json_decode((string) $data['value'], true, 512, \JSON_THROW_ON_ERROR),
+            $result,
+        );
+
+        return $this->sanitizeAppSnippets(array_replace_recursive([], ...$decoded));
+    }
+
+    /**
+     * @param array<string, mixed> $snippets
+     *
+     * @return array<string, mixed>
+     */
+    private function sanitizeAppSnippets(array $snippets): array
+    {
+        $sanitized = [];
+        foreach ($snippets as $key => $value) {
+            if (\is_string($value)) {
+                $sanitized[$key] = $this->htmlSanitizer->sanitize($value);
+
+                continue;
+            }
+
+            if (\is_array($value)) {
+                $sanitized[$key] = $this->sanitizeAppSnippets($value);
+            }
+        }
+
+        return $sanitized;
     }
 
     private function findSnippetFiles(string $locale, bool $isBaseLanguage = false): SnippetPathCollection
@@ -151,12 +198,12 @@ class SnippetFinder implements SnippetFinderInterface
     private function buildLocalePath(string $locale, ?Plugin $plugin = null): string
     {
         if ($plugin === null) {
-            return Path::join($this->translationLoader->getLocalePath($locale), self::SCOPE_PLATFORM);
+            return Path::join($this->translationLoader->getLocalePath($locale), SnippetFileLoader::SCOPE_PLATFORM);
         }
 
         $name = $this->translationConfig->getMappedPluginName($plugin);
 
-        return Path::join($this->translationLoader->getLocalePath($locale), self::SCOPE_PLUGINS, $name);
+        return Path::join($this->translationLoader->getLocalePath($locale), SnippetFileLoader::SCOPE_PLUGINS, $name);
     }
 
     private function addMeteorBundlePaths(SnippetPathCollection $paths): void

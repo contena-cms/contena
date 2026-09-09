@@ -2,6 +2,7 @@
 
 namespace Contena\Administration\Framework\Api\Subscriber;
 
+use Contena\Administration\Framework\App\ActiveAdminAppLoader;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
 use Contena\Core\Framework\Bundle;
@@ -19,6 +20,7 @@ readonly class AdminInfoConfigBundlesSubscriber implements EventSubscriberInterf
     public function __construct(
         private Kernel $kernel,
         private RouterInterface $router,
+        private ActiveAdminAppLoader $activeAdminAppLoader,
         private Filesystem $filesystem,
         private ViteFileAccessorDecorator $viteFileAccessorDecorator,
     ) {
@@ -42,6 +44,15 @@ readonly class AdminInfoConfigBundlesSubscriber implements EventSubscriberInterf
      *     css: list<string>,
      *     js: list<string>,
      *     baseUrl: ?string
+     * }|array{
+     *     type: 'app',
+     *     name: string,
+     *     active: bool,
+     *     integrationId: string,
+     *     baseUrl: string,
+     *     sourceType: string,
+     *     version: string,
+     *     permissions: array<string, list<string>>
      * }>
      */
     private function buildBundles(): array
@@ -69,6 +80,19 @@ readonly class AdminInfoConfigBundlesSubscriber implements EventSubscriberInterf
                 'js' => $scripts,
                 'baseUrl' => $baseUrl,
                 'type' => 'plugin',
+            ];
+        }
+
+        foreach ($this->activeAdminAppLoader->getActiveAdminApps() as $app) {
+            $assets[$app['name']] = [
+                'active' => (bool) $app['active'],
+                'integrationId' => $app['integrationId'],
+                'type' => 'app',
+                'sourceType' => $app['sourceType'],
+                'baseUrl' => $app['baseUrl'],
+                'permissions' => $app['privileges'],
+                'version' => $app['version'],
+                'name' => $app['name'],
             ];
         }
 

@@ -5,10 +5,12 @@ namespace Contena\Tests\Integration\Administration\Snippet;
 use Contena\Administration\Snippet\SnippetFinder;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPath;
 use Contena\Core\System\Snippet\DataTransfer\SnippetPath\SnippetPathCollection;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Tests\Unit\Core\System\Snippet\Service\TestableTranslationConfigLoader;
+use Doctrine\DBAL\Connection;
 use League\Flysystem\Filesystem as Flysystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
@@ -34,9 +36,11 @@ class SnippetFinderTest extends TestCase
 
         $this->snippetFinder = new SnippetFinder(
             self::getKernel(),
+            static::getContainer()->get(Connection::class),
             $flySystem,
             $configLoader->load(),
             static::getContainer()->get(TranslationLoader::class),
+            static::getContainer()->get(HtmlSanitizer::class),
             new NullLogger(),
             false,
         );

@@ -3,12 +3,15 @@
 namespace Contena\Administration\DependencyInjection;
 
 use Contena\Administration\Framework\Api\Subscriber\AdminInfoConfigBundlesSubscriber;
+use Contena\Administration\Framework\App\ActiveAdminAppLoader;
+use Contena\Administration\Framework\App\Subscriber\SystemLanguageChangedSubscriber;
 use Contena\Administration\Framework\Asset\AssetUploadListener;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
 use Contena\Administration\Framework\Routing\NotFound\AdministrationNotFoundSubscriber;
 use Contena\Administration\Framework\SystemCheck\AdministrationReadinessCheck;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
+use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -58,8 +61,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('kernel'),
             service('router'),
+            service(ActiveAdminAppLoader::class),
             service('filesystem'),
             service(ViteFileAccessorDecorator::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(ActiveAdminAppLoader::class)
+        ->args([service(Connection::class)]);
+
+    $services->set(SystemLanguageChangedSubscriber::class)
+        ->args([
+            service('locale.repository'),
+            service('app_administration_snippet.repository'),
         ])
         ->tag('kernel.event_subscriber');
 
