@@ -8,6 +8,7 @@ use Contena\Administration\Command\DeleteExtensionLocalPublicFilesCommand;
 use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
 use Contena\Administration\Command\SetupExtensionToolingCommand;
 use Contena\Administration\Controller\AdministrationController;
+use Contena\Administration\Controller\AdminExtensionApiController;
 use Contena\Administration\Controller\AdminSearchController;
 use Contena\Administration\Controller\AdminTagController;
 use Contena\Administration\Controller\UserConfigController;
@@ -20,6 +21,9 @@ use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
+use Contena\Core\Framework\App\ActionButton\Executor;
+use Contena\Core\Framework\App\Hmac\QuerySigner;
+use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Util\HtmlSanitizer;
@@ -68,6 +72,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GenerateEntitySchemaTypesCommand::class)
         ->tag('console.command');
+
+    $services->set(AdminExtensionApiController::class)
+        ->public()
+        ->args([
+            service(Executor::class),
+            service(AppPayloadServiceHelper::class),
+            service('app.repository'),
+            service(QuerySigner::class),
+        ])
+        ->call('setContainer', [service('service_container')]);
 
     $services->set(AdministrationController::class)
         ->public()
