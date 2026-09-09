@@ -20,6 +20,7 @@ import initializeShortcutService from 'src/app/init/shortcut.init';
 import initializeAppModules from 'src/app/init/app-modules.init';
 import initializeActionButtons from 'src/app/init/action-button.init';
 import initializeCms from 'src/app/init/cms.init';
+import initializeExtensionDataLoader from 'src/app/init/extension-data-handling.init';
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
 export default {
@@ -40,4 +41,5 @@ export default {
     appModules: initializeAppModules,
     actionButtons: initializeActionButtons,
     cms: initializeCms,
+    extensionDataHandling: initializeExtensionDataLoader,
 };
