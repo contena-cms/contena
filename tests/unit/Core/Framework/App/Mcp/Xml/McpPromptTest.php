@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpPrompt;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -21,15 +21,15 @@ class McpPromptTest extends TestCase
         static::assertNotNull($prompts);
 
         $prompt = $prompts->getPrompts()[0];
-        static::assertSame('order-context', $prompt->getName());
-        static::assertSame('https://app.example.com/mcp/prompt/order-context', $prompt->getUrl());
+        static::assertSame('blog-context', $prompt->getName());
+        static::assertSame('https://app.example.com/mcp/prompt/blog-context', $prompt->getUrl());
         static::assertSame([
-            'en-GB' => 'Order Context',
-            'de-DE' => 'Bestellungskontext',
+            'en-GB' => 'Blog context',
+            'zh-CN' => '文章上下文',
         ], $prompt->getLabel());
         static::assertSame([
-            'en-GB' => 'Context for order management',
-            'de-DE' => 'Kontext für die Bestellungsverwaltung',
+            'en-GB' => 'Context for blog management',
+            'zh-CN' => '文章管理上下文',
         ], $prompt->getDescription());
     }
 
@@ -41,7 +41,7 @@ class McpPromptTest extends TestCase
         static::assertNotNull($prompts);
 
         $prompt = $prompts->getPrompts()[1];
-        static::assertSame('product-context', $prompt->getName());
+        static::assertSame('category-context', $prompt->getName());
         static::assertSame([], $prompt->getDescription());
     }
 

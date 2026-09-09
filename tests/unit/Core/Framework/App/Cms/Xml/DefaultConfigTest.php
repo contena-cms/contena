@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Cms\Xml;
 
+use Contena\Core\Framework\App\Cms\Xml\DefaultConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\App\Cms\Xml\DefaultConfig;
 
 /**
  * @internal

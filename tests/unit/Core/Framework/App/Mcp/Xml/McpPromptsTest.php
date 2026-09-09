@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpPrompt;
 use Contena\Core\Framework\App\Mcp\Xml\McpPrompts;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -36,7 +36,7 @@ class McpPromptsTest extends TestCase
             $prompts->getPrompts(),
         );
 
-        static::assertSame(['order-context', 'product-context'], $names);
+        static::assertSame(['blog-context', 'category-context'], $names);
     }
 
     public function testFromArrayCreatesPrompts(): void

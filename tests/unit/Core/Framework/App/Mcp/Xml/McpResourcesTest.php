@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpResource;
 use Contena\Core\Framework\App\Mcp\Xml\McpResources;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -36,7 +36,7 @@ class McpResourcesTest extends TestCase
             $resources->getResources(),
         );
 
-        static::assertSame(['order-stats', 'product-list'], $names);
+        static::assertSame(['blog-stats', 'blog-list'], $names);
     }
 
     public function testFromArrayCreatesResources(): void

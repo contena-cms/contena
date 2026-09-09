@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="">
+    <meta>
+        <name>test</name>
+        <label>Contena App Test</label>
+        <label lang="zh-CN">Contena 应用测试</label>
+        <description>Test for App System</description>
+        <description lang="zh-CN">应用系统测试</description>
+        <author>Contena AG</author>
+        <copyright>(c) by Contena AG</copyright>
+        <version>1.0.0</version>
+        <icon>icon.png</icon>
+        <license>MIT</license>
+        <privacy>https://test.com/privacy</privacy>
+        <privacyPolicyExtensions>Following personal information is processed by Contena.</privacyPolicyExtensions>
+        <privacyPolicyExtensions lang="zh-CN">Contena 处理以下个人信息。</privacyPolicyExtensions>
+    </meta>
+    <setup>
+        <registrationUrl>https://my.app.com/test/registration</registrationUrl>
+        <secret>s3cr3t</secret>
+    </setup>
+    <admin>
+        <action-button action="viewBlog" entity="blog" view="detail" url="https://contena.example.com/blog">
+            <label>View blog</label>
+            <label lang="zh-CN">查看文章</label>
+        </action-button>
+        <action-button action="doStuffWithMembers" entity="member" view="list" url="https://contena.example.com/member">
+            <label>Manage members</label>
+            <label lang="zh-CN">管理会员</label>
+        </action-button>
+        <module name="first-module" source="https://test.com" parent="ct-content" position="10">
+            <label>My first own module</label>
+            <label lang="zh-CN">我的第一个模块</label>
+        </module>
+        <module name="structure-module" parent="ct-content" position="50">
+            <label>My menu entry for modules</label>
+            <label lang="zh-CN">我的模块菜单项</label>
+        </module>
+        <main-module source="https://main-module"/>
+        <base-app-url>https://base-url.com</base-app-url>
+    </admin>
+    <frontend><template-load-priority>100</template-load-priority></frontend>
+    <permissions>
+        <create>blog</create>
+        <update>blog</update>
+        <delete>blog</delete>
+        <delete>category</delete>
+        <read>language</read>
+        <update>custom_field_set</update>
+        <read>member</read>
+        <permission>user_change_me</permission>
+    </permissions>
+    <webhooks>
+        <webhook name="hook1" url="https://test.com/hook" event="blog.written"/>
+        <webhook name="hook2" url="https://test.com/hook2" event="member.written" onlyLiveVersion="true"/>
+    </webhooks>
+    <cookies>
+        <cookie><snippet-name>Analytics</snippet-name><cookie>contena.analytics</cookie></cookie>
+    </cookies>
+    <consents>
+        <consent><name>usage_tracking</name><scope>admin_user</scope><since>2026-02-15</since></consent>
+    </consents>
+    <rule-conditions>
+        <rule-condition>
+            <identifier>myCustomCondition</identifier><name>My custom rule condition</name><group>member</group>
+            <script>customer-group-rule-script.twig</script>
+            <constraints><single-select name="operator"><label>Operator</label><options><option value="="><name>Is equal to</name></option></options></single-select></constraints>
+        </rule-condition>
+    </rule-conditions>
+</manifest>

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpTool;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -21,15 +21,15 @@ class McpToolTest extends TestCase
         static::assertNotNull($tools);
 
         $tool = $tools->getTools()[0];
-        static::assertSame('sync-orders', $tool->getName());
+        static::assertSame('sync-blogs', $tool->getName());
         static::assertSame('https://app.example.com/mcp/sync', $tool->getUrl());
         static::assertSame([
-            'en-GB' => 'Sync Orders',
-            'de-DE' => 'Bestellungen synchronisieren',
+            'en-GB' => 'Sync blogs',
+            'zh-CN' => '同步文章',
         ], $tool->getLabel());
         static::assertSame([
-            'en-GB' => 'Synchronize orders from external ERP',
-            'de-DE' => 'Bestellungen vom externen ERP synchronisieren',
+            'en-GB' => 'Synchronize blogs from an external content source',
+            'zh-CN' => '从外部内容源同步文章',
         ], $tool->getDescription());
     }
 
@@ -52,7 +52,7 @@ class McpToolTest extends TestCase
 
         static::assertSame('integer', $schema['limit']['type']);
         static::assertArrayHasKey('description', $schema['limit']);
-        static::assertSame('Max number of orders', $schema['limit']['description']);
+        static::assertSame('Maximum number of blogs', $schema['limit']['description']);
         static::assertArrayNotHasKey('required', $schema['limit']);
     }
 
@@ -64,7 +64,7 @@ class McpToolTest extends TestCase
         static::assertNotNull($tools);
 
         $tool = $tools->getTools()[1];
-        static::assertSame('stock-check', $tool->getName());
+        static::assertSame('media-check', $tool->getName());
         static::assertNull($tool->getInputSchema());
     }
 
@@ -105,7 +105,7 @@ class McpToolTest extends TestCase
         static::assertNotNull($tools);
 
         $tool = $tools->getTools()[0];
-        static::assertSame(['product:read', 'order:read'], $tool->getRequiredPrivileges());
+        static::assertSame(['blog:read', 'blog:update'], $tool->getRequiredPrivileges());
     }
 
     public function testToolWithoutRequiredPrivilegesReturnsEmptyArray(): void

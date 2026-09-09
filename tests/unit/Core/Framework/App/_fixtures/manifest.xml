@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="">
+    <meta>
+        <name>test</name><label>Contena App Test</label><author>Contena AG</author>
+        <copyright>(c) Contena AG</copyright><license>MIT</license><version>1.0.0</version>
+    </meta>
+    <admin>
+        <module name="first-module" source="https://test.com" parent="ct-content" position="10"><label>My first own module</label><label lang="de-DE">Mein erstes eigenes Modul</label></module>
+        <module name="structure-module" parent="ct-content" position="50"><label>My menu entry for modules</label><label lang="de-DE">Mein Menüeintrag für Module</label></module>
+        <main-module source="https://main-module"/>
+    </admin>
+</manifest>

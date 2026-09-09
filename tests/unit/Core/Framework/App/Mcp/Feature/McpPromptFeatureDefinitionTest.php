@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Feature;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptFeatureDefinition;
 use Contena\Core\Framework\Util\Filesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -46,12 +46,12 @@ class McpPromptFeatureDefinitionTest extends TestCase
             'en-GB',
         );
 
-        static::assertCount(1, $configs);
+        static::assertCount(2, $configs);
         $config = $configs[0];
-        static::assertSame('order-context', $config->name);
-        static::assertSame('https://app.example.com/mcp/prompt/order-context', $config->url);
-        static::assertSame('Order Context', $config->label->forLocale('en-GB'));
-        static::assertSame('Context for orders', $config->description->forLocale('en-GB'));
+        static::assertSame('blog-context', $config->name);
+        static::assertSame('https://app.example.com/mcp/prompt/blog-context', $config->url);
+        static::assertSame('Blog context', $config->label->forLocale('en-GB'));
+        static::assertSame('Context for blog management', $config->description->forLocale('en-GB'));
     }
 
     public function testFromAppFillsMissingDefaultLocaleTranslationFromFallback(): void
@@ -62,18 +62,18 @@ class McpPromptFeatureDefinitionTest extends TestCase
             'fr-FR',
         );
 
-        static::assertCount(1, $configs);
-        static::assertSame('Order Context', $configs[0]->label->forLocale('fr-FR'));
-        static::assertSame('Context for orders', $configs[0]->description->forLocale('fr-FR'));
+        static::assertCount(2, $configs);
+        static::assertSame('Blog context', $configs[0]->label->forLocale('fr-FR'));
+        static::assertSame('Context for blog management', $configs[0]->description->forLocale('fr-FR'));
     }
 
     public function testPayloadRoundTrip(): void
     {
         $declared = new McpPromptConfig(
-            'order-context',
-            'https://app.example.com/mcp/prompt/order-context',
-            new TranslatedString(['en-GB' => 'Order Context']),
-            new TranslatedString(['en-GB' => 'Context for orders']),
+            'blog-context',
+            'https://app.example.com/mcp/prompt/blog-context',
+            new TranslatedString(['en-GB' => 'Blog context']),
+            new TranslatedString(['en-GB' => 'Context for blog management']),
         );
 
         $hydrated = $this->definition->fromPayload($this->definition->toPayload($declared, null));

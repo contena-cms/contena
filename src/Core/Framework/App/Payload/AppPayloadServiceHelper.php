@@ -77,8 +77,8 @@ class AppPayloadServiceHelper
         );
 
         if ($languageId !== null && $userLocale !== null) {
-            $headers[AuthMiddleware::SHOPWARE_CONTEXT_LANGUAGE] = $languageId;
-            $headers[AuthMiddleware::SHOPWARE_USER_LANGUAGE] = $userLocale;
+            $headers[AuthMiddleware::CONTENA_CONTEXT_LANGUAGE] = $languageId;
+            $headers[AuthMiddleware::CONTENA_USER_LANGUAGE] = $userLocale;
         }
 
         $request = new Request(

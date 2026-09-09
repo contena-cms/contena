@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Cms;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Cms\CmsExtensions;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

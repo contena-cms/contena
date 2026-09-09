@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpResource;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -21,15 +21,15 @@ class McpResourceTest extends TestCase
         static::assertNotNull($resources);
 
         $resource = $resources->getResources()[0];
-        static::assertSame('order-stats', $resource->getName());
-        static::assertSame('app-example://order-stats', $resource->getUri());
-        static::assertSame('https://app.example.com/mcp/resource/order-stats', $resource->getUrl());
+        static::assertSame('blog-stats', $resource->getName());
+        static::assertSame('app-example://blog-stats', $resource->getUri());
+        static::assertSame('https://app.example.com/mcp/resource/blog-stats', $resource->getUrl());
         static::assertSame('application/json', $resource->getMimeType());
         static::assertSame([
-            'en-GB' => 'Order Stats',
-            'de-DE' => 'Bestellungsstatistiken',
+            'en-GB' => 'Blog stats',
+            'zh-CN' => '文章统计',
         ], $resource->getLabel());
-        static::assertSame(['en-GB' => 'Live order statistics'], $resource->getDescription());
+        static::assertSame(['en-GB' => 'Live blog statistics'], $resource->getDescription());
     }
 
     public function testResourceWithoutDescriptionReturnsEmptyArray(): void
@@ -40,7 +40,7 @@ class McpResourceTest extends TestCase
         static::assertNotNull($resources);
 
         $resource = $resources->getResources()[1];
-        static::assertSame('product-list', $resource->getName());
+        static::assertSame('blog-list', $resource->getName());
         static::assertSame([], $resource->getDescription());
     }
 

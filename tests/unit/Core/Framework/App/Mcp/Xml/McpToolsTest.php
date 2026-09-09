@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpTool;
 use Contena\Core\Framework\App\Mcp\Xml\McpTools;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -37,7 +37,7 @@ class McpToolsTest extends TestCase
             $tools->getTools(),
         );
 
-        static::assertSame(['sync-orders', 'stock-check'], $names);
+        static::assertSame(['sync-blogs', 'media-check'], $names);
     }
 
     public function testFromArrayCreatesTools(): void

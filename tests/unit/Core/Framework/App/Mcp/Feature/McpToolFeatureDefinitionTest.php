@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp\Feature;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Manifest\Manifest;
@@ -12,6 +10,8 @@ use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolFeatureDefinition;
 use Contena\Core\Framework\Util\Filesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -49,18 +49,18 @@ class McpToolFeatureDefinitionTest extends TestCase
             'en-GB',
         );
 
-        static::assertCount(1, $configs);
+        static::assertCount(2, $configs);
         $config = $configs[0];
-        static::assertSame('sync-orders', $config->name);
-        static::assertSame('https://app.example.com/mcp/sync-orders', $config->url);
+        static::assertSame('sync-blogs', $config->name);
+        static::assertSame('https://app.example.com/mcp/sync', $config->url);
         static::assertSame(['blog:read', 'blog:update'], $config->requiredPrivileges);
         static::assertSame(
-            ['since' => ['type' => 'string', 'description' => 'ISO date', 'required' => true]],
+            ['since' => ['type' => 'string', 'description' => 'ISO 8601 date', 'required' => true], 'limit' => ['type' => 'integer', 'description' => 'Maximum number of blogs']],
             $config->inputSchema,
         );
-        static::assertSame('Sync Orders', $config->label->forLocale('en-GB'));
-        static::assertSame('Bestellungen synchronisieren', $config->label->forLocale('de-DE'));
-        static::assertSame('Syncs orders', $config->description->forLocale('en-GB'));
+        static::assertSame('Sync blogs', $config->label->forLocale('en-GB'));
+        static::assertSame('同步文章', $config->label->forLocale('zh-CN'));
+        static::assertSame('Synchronize blogs from an external content source', $config->description->forLocale('en-GB'));
     }
 
     public function testFromAppFillsMissingDefaultLocaleTranslationFromFallback(): void
@@ -71,9 +71,9 @@ class McpToolFeatureDefinitionTest extends TestCase
             'fr-FR',
         );
 
-        static::assertCount(1, $configs);
-        static::assertSame('Sync Orders', $configs[0]->label->forLocale('fr-FR'));
-        static::assertSame('Syncs orders', $configs[0]->description->forLocale('fr-FR'));
+        static::assertCount(2, $configs);
+        static::assertSame('Sync blogs', $configs[0]->label->forLocale('fr-FR'));
+        static::assertSame('Synchronize blogs from an external content source', $configs[0]->description->forLocale('fr-FR'));
     }
 
     public function testFromAppPassesWhenManifestGrantsRequiredPrivileges(): void
@@ -87,7 +87,7 @@ class McpToolFeatureDefinitionTest extends TestCase
             'en-GB',
         );
 
-        static::assertCount(1, $configs);
+        static::assertCount(2, $configs);
     }
 
     public function testFromAppRejectsRequiredPrivilegeMissingFromManifestPermissions(): void
@@ -113,21 +113,21 @@ class McpToolFeatureDefinitionTest extends TestCase
             'en-GB',
         );
 
-        static::assertCount(1, $configs);
+        static::assertCount(2, $configs);
     }
 
     public function testPayloadRoundTripIgnoresStored(): void
     {
         $declared = new McpToolConfig(
-            'sync-orders',
-            'https://app.example.com/mcp/sync-orders',
-            ['order:read'],
+            'sync-blogs',
+            'https://app.example.com/mcp/sync',
+            ['blog:read'],
             ['since' => ['type' => 'string', 'required' => true]],
-            new TranslatedString(['en-GB' => 'Sync Orders']),
-            new TranslatedString(['en-GB' => 'Syncs orders']),
+            new TranslatedString(['en-GB' => 'Sync blogs']),
+            new TranslatedString(['en-GB' => 'Synchronize blogs from an external content source']),
         );
 
-        $stored = new McpToolConfig('sync-orders', 'https://stale.example.com', [], null, new TranslatedString(['en-GB' => 'Old']), new TranslatedString([]));
+        $stored = new McpToolConfig('sync-blogs', 'https://stale.example.com', [], null, new TranslatedString(['en-GB' => 'Old']), new TranslatedString([]));
 
         $payload = $this->definition->toPayload($declared, $stored);
         $hydrated = $this->definition->fromPayload($payload);

@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Mcp;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\App\Mcp\Xml\McpPrompts;
 use Contena\Core\Framework\App\Mcp\Xml\McpResources;
 use Contena\Core\Framework\App\Mcp\Xml\McpTools;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -81,7 +81,7 @@ class McpTest extends TestCase
         static::assertInstanceOf(McpTools::class, $tools);
 
         $toolList = $tools->getTools();
-        static::assertSame('sync-orders', $toolList[0]->getName());
-        static::assertSame('stock-check', $toolList[1]->getName());
+        static::assertSame('sync-blogs', $toolList[0]->getName());
+        static::assertSame('media-check', $toolList[1]->getName());
     }
 }
