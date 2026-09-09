@@ -265,6 +265,11 @@ contena:
                       interval: '60 seconds'
                     - limit: 600
                       interval: '10 minutes'
+            app_shop_verify:
+                enabled: true
+                policy: 'sliding_window'
+                limit: 60
+                interval: '60 minutes'
             reset_password:
                 enabled: true
                 policy: 'time_backoff'

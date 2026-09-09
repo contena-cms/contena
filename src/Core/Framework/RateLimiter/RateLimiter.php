@@ -26,6 +26,8 @@ class RateLimiter
 
     final public const string MCP_CHANNEL_API = 'mcp_channel_api';
 
+    final public const string APP_SHOP_VERIFY = 'app_shop_verify';
+
     /**
      * @var array<string, RateLimiterFactory>
      */
