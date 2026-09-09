@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\App\Validation\Requirements;
 /**
  * @internal
  *
- * Validates whether a given shop URL is a secure and valid target.
+ * Validates whether a given installation URL is a secure and valid target.
  *
  * The validator ensures that the URL: (this remains a simple validation and does not guarantee absolute correctness)
  *   - Uses the HTTPS scheme

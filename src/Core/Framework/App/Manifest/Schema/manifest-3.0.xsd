@@ -86,7 +86,7 @@
                 <xs:element name="consents" type="consents" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation xml:lang="en">
-                            Define consents the shop owner can accept or revoke for your app.
+                            Define consents an administrator can accept or revoke for your app.
                         </xs:documentation>
                     </xs:annotation>
                     <xs:unique name="uniqueConsentName">
@@ -141,7 +141,7 @@
             <xs:element type="translatableString" name="privacyPolicyExtensions" maxOccurs="unbounded" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
-                        Description of the changes the shop owner has to make to his privacy policy.
+                        Description of the changes an administrator has to make to the privacy policy.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -152,7 +152,7 @@
             <xs:element type="xs:anyURI" name="registrationUrl">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
-                        This url is used by a shop to register to your app.
+                        This URL is used by an installation to register with your app.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -160,7 +160,7 @@
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
                         Optional: This secret can be used to develop your app locally.
-                        If this secret is set, the shop will not use the plugin store
+                        If this secret is set, the installation will not use an extension store
                         to authenticate itself with your app.
                     </xs:documentation>
                 </xs:annotation>
@@ -443,14 +443,14 @@
             <xs:element type="consent-name" name="name">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
-                        Identifies the consent within your app. The shop stores answers under your app name and this name.
+                        Identifies the consent within your app. The installation stores answers under your app name and this name.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element type="consent-scope" name="scope">
                 <xs:annotation>
                     <xs:documentation xml:lang="en">
-                        Who answers the consent: "system" for one answer per shop, "admin_user" for one answer per admin user.
+                        Who answers the consent: "system" for one answer per installation, "admin_user" for one answer per admin user.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

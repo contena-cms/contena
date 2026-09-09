@@ -8,7 +8,7 @@ use Contena\Core\Framework\Struct\JsonSerializableTrait;
 /**
  * @internal only for use by the app-system
  *
- * @method array{url: string, shopId: string, appVersion: string} jsonSerialize()
+ * @method array{url: string, installationId: string, appVersion: string} jsonSerialize()
  */
 class Source implements \JsonSerializable
 {
@@ -17,7 +17,7 @@ class Source implements \JsonSerializable
 
     public function __construct(
         protected string $url,
-        protected string $shopId,
+        protected string $installationId,
         protected string $appVersion,
     ) {
     }
@@ -27,9 +27,9 @@ class Source implements \JsonSerializable
         return $this->url;
     }
 
-    public function getShopId(): string
+    public function getInstallationId(): string
     {
-        return $this->shopId;
+        return $this->installationId;
     }
 
     public function getAppVersion(): string

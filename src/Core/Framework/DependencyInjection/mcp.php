@@ -7,10 +7,10 @@ use Contena\Core\Framework\Api\OAuth\ClientRepository;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\App\AppSecretResolver;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptFeatureDefinition;
 use Contena\Core\Framework\App\Mcp\Feature\McpResourceFeatureDefinition;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolFeatureDefinition;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistFilter;
@@ -36,10 +36,10 @@ use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
-use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
-use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityDetector;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityLifecycleSubscriber;
+use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
+use Contena\Core\Framework\Mcp\Notification\McpSessionRegistry;
 use Contena\Core\Framework\Mcp\Prompt\ContenaContextPrompt;
 use Contena\Core\Framework\Mcp\RateLimit\McpRateLimiter;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
@@ -74,6 +74,7 @@ use Contena\Core\System\Channel\Mcp\Tool\ChannelApiContextTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetEnableTool;
 use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetsListTool;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Doctrine\DBAL\Connection;
 use Mcp\Capability\Registry;
@@ -346,7 +347,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service('contena.app_system.guzzle'),
             env('APP_URL'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             param('contena.mcp.app_tool_timeout'),
             service('logger'),
             service('kernel'),
@@ -359,7 +360,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(AppFeatureStorage::class),
             service(AppMcpCapabilityExecutor::class),
-            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service(LanguageLocaleCodeProvider::class),
             service('logger'),
             param('contena.mcp.allowed_tools'),
         ])
@@ -369,7 +370,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(AppFeatureStorage::class),
             service(AppMcpCapabilityExecutor::class),
-            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service(LanguageLocaleCodeProvider::class),
             service('logger'),
         ])
         ->tag('mcp.loader')
@@ -378,7 +379,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(AppFeatureStorage::class),
             service(AppMcpCapabilityExecutor::class),
-            service(Contena\Core\System\Locale\LanguageLocaleCodeProvider::class),
+            service(LanguageLocaleCodeProvider::class),
             service('logger'),
         ])
         ->tag('mcp.loader')

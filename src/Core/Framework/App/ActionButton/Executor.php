@@ -4,9 +4,9 @@ namespace Contena\Core\Framework\App\ActionButton;
 
 use Contena\Core\Framework\App\ActionButton\Response\ActionButtonResponseFactory;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use GuzzleHttp\Client;
@@ -31,7 +31,7 @@ class Executor
         private readonly Client $guzzleClient,
         private readonly LoggerInterface $logger,
         private readonly ActionButtonResponseFactory $actionButtonResponseFactory,
-        private readonly ShopIdProvider $shopIdProvider,
+        private readonly InstallationIdProvider $installationIdProvider,
         private readonly RouterInterface $router,
         private readonly RequestStack $requestStack,
         private readonly KernelInterface $kernel,
@@ -42,8 +42,8 @@ class Executor
     public function execute(AppAction $action, Context $context): Response
     {
         try {
-            $this->shopIdProvider->getShopId();
-        } catch (ShopIdChangeSuggestedException $e) {
+            $this->installationIdProvider->getInstallationId();
+        } catch (InstallationIdChangeSuggestedException $e) {
             throw AppException::actionButtonProcessException($action->getActionId(), $e->getMessage(), $e);
         }
 

@@ -8,8 +8,8 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Hmac\QuerySigner;
-use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -36,11 +36,11 @@ class QuerySignerTest extends TestCase
             ->with($context)
             ->willReturn('en-GB');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider
             ->expects($this->once())
-            ->method('getShopId')
-            ->willReturn(ShopId::v2('shopId'));
+            ->method('getInstallationId')
+            ->willReturn(InstallationId::create('installationId'));
 
         $app = new AppEntity();
         $app->setName('extension-1');
@@ -48,23 +48,23 @@ class QuerySignerTest extends TestCase
         $app->setId(Uuid::randomHex());
         $app->setVersion('1.0.0');
 
-        $querySigner = new QuerySigner('http://shop.url', '1.0.0', $localeProvider, $shopIdProvider, new NativeClock());
+        $querySigner = new QuerySigner('http://installation.url', '1.0.0', $localeProvider, $installationIdProvider, new NativeClock());
         $signedQuery = $querySigner->signUri('http://app.url/?foo=bar', $app, $context);
 
         \parse_str($signedQuery->getQuery(), $url);
 
-        static::assertArrayHasKey('shop-id', $url);
-        static::assertArrayHasKey('shop-url', $url);
+        static::assertArrayHasKey('installation-id', $url);
+        static::assertArrayHasKey('installation-url', $url);
         static::assertArrayHasKey('timestamp', $url);
         static::assertArrayHasKey('ct-version', $url);
         static::assertArrayHasKey('ct-context-language', $url);
         static::assertArrayHasKey('ct-user-language', $url);
-        static::assertArrayHasKey('contena-shop-signature', $url);
+        static::assertArrayHasKey('contena-installation-signature', $url);
         static::assertArrayHasKey('app-version', $url);
         static::assertArrayHasKey('ct-user-id', $url);
 
-        static::assertSame('shopId', $url['shop-id']);
-        static::assertSame('http://shop.url', $url['shop-url']);
+        static::assertSame('installationId', $url['installation-id']);
+        static::assertSame('http://installation.url', $url['installation-url']);
         static::assertIsNumeric($url['timestamp']);
         static::assertSame('1.0.0', $url['ct-version']);
         static::assertSame(Defaults::LANGUAGE_SYSTEM, $url['ct-context-language']);
@@ -83,11 +83,11 @@ class QuerySignerTest extends TestCase
             ->with($context)
             ->willReturn('en-GB');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider
             ->expects($this->once())
-            ->method('getShopId')
-            ->willReturn(ShopId::v2('shopId'));
+            ->method('getInstallationId')
+            ->willReturn(InstallationId::create('installationId'));
 
         $app = new AppEntity();
         $app->setName('extension-1');
@@ -96,10 +96,10 @@ class QuerySignerTest extends TestCase
         $app->setVersion('1.0.0');
 
         $querySigner = new QuerySigner(
-            'http://shop.url',
+            'http://installation.url',
             '1.0.0',
             $localeProvider,
-            $shopIdProvider,
+            $installationIdProvider,
             new NativeClock()
         );
 
@@ -122,10 +122,10 @@ class QuerySignerTest extends TestCase
         $app->setAppSecret(null);
 
         $querySigner = new QuerySigner(
-            'http://shop.url',
+            'http://installation.url',
             '1.0.0',
             static::createStub(AppLocaleProvider::class),
-            static::createStub(ShopIdProvider::class),
+            static::createStub(InstallationIdProvider::class),
             new NativeClock()
         );
 

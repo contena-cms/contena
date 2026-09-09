@@ -5,9 +5,9 @@ namespace Contena\Core\Framework\App\Payload;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -29,20 +29,20 @@ class AppPayloadServiceHelper
     public function __construct(
         private readonly DefinitionInstanceRegistry $definitionRegistry,
         private readonly JsonEntityEncoder $entityEncoder,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly string $shopUrl,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly string $installationUrl,
         private readonly ClockInterface $clock,
     ) {
     }
 
     /**
-     * @throws ShopIdChangeSuggestedException
+     * @throws InstallationIdChangeSuggestedException
      */
     public function buildSource(string $appVersion, string $appName): Source
     {
         return new Source(
-            $this->shopUrl,
-            $this->shopIdProvider->getShopId()->id,
+            $this->installationUrl,
+            $this->installationIdProvider->getInstallationId()->id,
             $appVersion,
         );
     }

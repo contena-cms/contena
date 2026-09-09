@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestSigner
 {
-    final public const SHOPWARE_APP_SIGNATURE = 'contena-app-signature';
+    final public const CONTENA_APP_SIGNATURE = 'contena-app-signature';
 
-    final public const SHOPWARE_SHOP_SIGNATURE = 'contena-shop-signature';
+    final public const CONTENA_INSTALLATION_SIGNATURE = 'contena-installation-signature';
 
     public function signRequest(RequestInterface $request, string $secret): RequestInterface
     {
@@ -26,16 +26,16 @@ class RequestSigner
             return clone $request;
         }
 
-        return $request->withAddedHeader(self::SHOPWARE_SHOP_SIGNATURE, $this->signPayload($body, $secret));
+        return $request->withAddedHeader(self::CONTENA_INSTALLATION_SIGNATURE, $this->signPayload($body, $secret));
     }
 
     public function isResponseAuthentic(ResponseInterface $response, string $secret): bool
     {
-        if (!$response->hasHeader(self::SHOPWARE_APP_SIGNATURE)) {
+        if (!$response->hasHeader(self::CONTENA_APP_SIGNATURE)) {
             return false;
         }
 
-        $responseSignature = $response->getHeaderLine(self::SHOPWARE_APP_SIGNATURE);
+        $responseSignature = $response->getHeaderLine(self::CONTENA_APP_SIGNATURE);
         $compareSignature = $this->signPayload($response->getBody()->getContents(), $secret);
 
         $response->getBody()->rewind();

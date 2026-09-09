@@ -47,7 +47,7 @@ class InfoControllerTest extends TestCase
         static::assertSame(2, $response['settings']['minSearchTermLength']);
         static::assertContains('pdf', $response['settings']['private_allowed_extensions']);
         static::assertContains('application/pdf', $response['settings']['private_allowed_mime_types_by_extension']['pdf']);
-        static::assertArrayNotHasKey('shopId', $response);
+        static::assertArrayNotHasKey('installationId', $response);
         static::assertArrayNotHasKey('inAppPurchases', $response);
         static::assertArrayNotHasKey('appUrlReachable', $response['settings']);
         static::assertArrayNotHasKey('appsRequireAppUrl', $response['settings']);

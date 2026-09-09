@@ -8,7 +8,7 @@ use Contena\Core\Framework\App\Event\AppChangedEvent;
 use Contena\Core\Framework\App\Event\AppDeletedEvent;
 use Contena\Core\Framework\App\Event\AppFlowActionEvent;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -43,7 +43,7 @@ class WebhookManager implements ResetInterface
         private readonly HookableEventFactory $eventFactory,
         private readonly AppLocaleProvider $appLocaleProvider,
         private readonly AppPayloadServiceHelper $appPayloadServiceHelper,
-        private readonly string $shopUrl,
+        private readonly string $installationUrl,
         private readonly string $contenaVersion,
         private readonly WebhookDeliveryService $webhookDeliveryService,
         private readonly WebhookHealthService $webhookHealthService,
@@ -105,7 +105,7 @@ class WebhookManager implements ResetInterface
     ): void {
         $deliver = [];
         $hold = [];
-        $pendingShopIdChangeByApp = [];
+        $pendingInstallationIdChangeByApp = [];
 
         foreach ($webhooks as $webhook) {
             if (!$this->isEventDispatchingAllowed($webhook, $event)) {
@@ -114,9 +114,9 @@ class WebhookManager implements ResetInterface
 
             // An undeliverable app source must not consume a recovery trial.
             if ($webhook->appId !== null && $webhook->appVersion !== null) {
-                $pendingShopIdChangeByApp[$webhook->appId] ??= !$this->canBuildAppSource($webhook->appVersion, $webhook->appName ?? '');
+                $pendingInstallationIdChangeByApp[$webhook->appId] ??= !$this->canBuildAppSource($webhook->appVersion, $webhook->appName ?? '');
 
-                if ($pendingShopIdChangeByApp[$webhook->appId]) {
+                if ($pendingInstallationIdChangeByApp[$webhook->appId]) {
                     continue;
                 }
             }
@@ -157,7 +157,7 @@ class WebhookManager implements ResetInterface
             $this->appPayloadServiceHelper->buildSource($appVersion, $appName);
 
             return true;
-        } catch (ShopIdChangeSuggestedException) {
+        } catch (InstallationIdChangeSuggestedException) {
             return false;
         }
     }
@@ -174,7 +174,7 @@ class WebhookManager implements ResetInterface
 
         try {
             $webhookData = $this->getPayloadForWebhook($webhook, $event);
-        } catch (ShopIdChangeSuggestedException) {
+        } catch (InstallationIdChangeSuggestedException) {
             // don't dispatch webhooks for apps if url changed
             return null;
         }
@@ -211,7 +211,7 @@ class WebhookManager implements ResetInterface
     private function getPayloadForWebhook(Webhook $webhook, Hookable $event): array
     {
         $source = [
-            'url' => $this->shopUrl,
+            'url' => $this->installationUrl,
             'eventId' => Uuid::randomHex(),
         ];
 

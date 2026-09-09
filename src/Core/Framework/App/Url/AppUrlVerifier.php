@@ -3,8 +3,8 @@
 namespace Contena\Core\Framework\App\Url;
 
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
-use Contena\Core\Framework\App\ShopId\ShopId;
+use Contena\Core\Framework\App\InstallationId\Fingerprint\AppUrl;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -31,7 +31,7 @@ class AppUrlVerifier
     private const NON_HARD_FAIL_TTL = 60 * 60 * 24; // 24h
     private const INITIAL_SOFT_FAIL_BACKOFF = 60; // 1 minute
     private const MAX_SOFT_FAIL_BACKOFF = 60 * 60; // 1 hour
-    private const VERIFY_PATH = '/api/app-system/shop/verify';
+    private const VERIFY_PATH = '/api/app-system/installation/verify';
 
     public function __construct(
         private readonly string $appEnv,
@@ -62,7 +62,7 @@ class AppUrlVerifier
      *
      * @param bool $skipEnvCheck Normally verification should only run in blogion, use this to run in any environment
      */
-    public function forceVerify(ShopId $shopId, bool $skipEnvCheck = false): bool
+    public function forceVerify(InstallationId $installationId, bool $skipEnvCheck = false): bool
     {
         if ($skipEnvCheck === false && $this->appEnv !== 'prod') {
             return true;
@@ -70,7 +70,7 @@ class AppUrlVerifier
 
         $this->cache->deleteItem(self::VERIFICATION_RESULT_CACHE_KEY);
 
-        return $this->doVerify($shopId, true);
+        return $this->doVerify($installationId, true);
     }
 
     /**
@@ -79,13 +79,13 @@ class AppUrlVerifier
      *
      * Note: for non-prod environments we skip the verification entirely
      */
-    public function verify(ShopId $shopId): bool
+    public function verify(InstallationId $installationId): bool
     {
         if ($this->appEnv !== 'prod') {
             return true;
         }
 
-        return $this->doVerify($shopId, false);
+        return $this->doVerify($installationId, false);
     }
 
     /**
@@ -110,11 +110,11 @@ class AppUrlVerifier
         return hash_equals($storedToken, $token);
     }
 
-    private function doVerify(ShopId $shopId, bool $force): bool
+    private function doVerify(InstallationId $installationId, bool $force): bool
     {
         $lockKey = $force ? 'app-url-verification-force' : 'app-url-verification';
 
-        $appUrl = $shopId->getFingerprint(AppUrl::IDENTIFIER);
+        $appUrl = $installationId->getFingerprint(AppUrl::IDENTIFIER);
 
         if ($appUrl === null) {
             return false;

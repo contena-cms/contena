@@ -5,8 +5,8 @@ namespace Contena\Core\Framework\App\DeletedApps;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\Event\AppDeletedEvent;
 use Contena\Core\Framework\App\Event\AppInstalledEvent;
-use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
-use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
+use Contena\Core\Framework\App\InstallationId\InstallationIdChangedEvent;
+use Contena\Core\Framework\App\InstallationId\InstallationIdDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,8 +30,8 @@ readonly class RememberDeletedAppsSecretSubscriber implements EventSubscriberInt
         return [
             AppDeletedEvent::class => 'saveSecretFromDeletedApp',
             AppInstalledEvent::class => 'removeDeletedAppSecret',
-            ShopIdChangedEvent::class => 'purgeOldSecrets',
-            ShopIdDeletedEvent::class => 'purgeOldSecrets',
+            InstallationIdChangedEvent::class => 'purgeOldSecrets',
+            InstallationIdDeletedEvent::class => 'purgeOldSecrets',
         ];
     }
 
@@ -63,8 +63,8 @@ readonly class RememberDeletedAppsSecretSubscriber implements EventSubscriberInt
     }
 
     /**
-     * When the shopId changes, all current apps are re-registered
-     * stored old secrets should be dismissed, as they are only valid when you re-install the app on the same shopId
+     * When the installationId changes, all current apps are re-registered
+     * stored old secrets should be dismissed, as they are only valid when you re-install the app on the same installationId
      */
     public function purgeOldSecrets(): void
     {

@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\App\Subscriber;
 
 use Contena\Core\Framework\App\AppCollection;
-use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
+use Contena\Core\Framework\App\InstallationId\InstallationIdDeletedEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -12,9 +12,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 /**
  * @internal
  *
- * Deleting the shop id abandons every registration keyed to it, so unconfirmed secret candidates can
+ * Deleting the installation id abandons every registration keyed to it, so unconfirmed secret candidates can
  * never repair one again — discard them before the apps are re-registered or removed under the new
- * identity. Same-identity moves never delete the shop id, so they keep their candidates for recovery.
+ * identity. Same-identity moves never delete the installation id, so they keep their candidates for recovery.
  */
 class DiscardUnconfirmedAppSecretsListener
 {
@@ -26,7 +26,7 @@ class DiscardUnconfirmedAppSecretsListener
     ) {
     }
 
-    public function __invoke(ShopIdDeletedEvent $event): void
+    public function __invoke(InstallationIdDeletedEvent $event): void
     {
         $context = Context::createDefaultContext();
 

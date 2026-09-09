@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Contena\Core\Framework\App\Api;
+
+use Contena\Core\Framework\App\Api\DTO\VerifyInstallation;
+use Contena\Core\Framework\App\Url\AppUrlVerifier;
+use Contena\Core\Framework\RateLimiter\RateLimiter;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\Routing\Attribute\Route;
+
+/**
+ * @internal only for use by the app-system
+ */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
+class VerifyInstallationController
+{
+    public function __construct(
+        private readonly RateLimiter $rateLimiter,
+        private readonly AppUrlVerifier $appUrlVerifier
+    ) {
+    }
+
+    #[Route(
+        path: 'api/app-system/installation/verify',
+        name: 'api.app_system.installation_verify',
+        defaults: ['auth_required' => false],
+        methods: ['GET']
+    )]
+    public function verify(#[MapQueryString] VerifyInstallation $verifyInstallationRequest, Request $request): Response
+    {
+        $ip = $request->getClientIp();
+        if ($ip === null) {
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->rateLimiter->ensureAccepted(RateLimiter::APP_INSTALLATION_VERIFY, $ip);
+
+        if ($this->appUrlVerifier->completeVerification($verifyInstallationRequest->runId, $verifyInstallationRequest->token)) {
+            return new JsonResponse([], Response::HTTP_NO_CONTENT);
+        }
+
+        return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+    }
+}

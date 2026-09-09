@@ -6,10 +6,10 @@ use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Exception\AppRegistrationException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -40,8 +40,8 @@ class AppRegistrationService
         private readonly HandshakeFactory $handshakeFactory,
         private readonly Client $httpClient,
         private readonly EntityRepository $appRepository,
-        private readonly string $shopUrl,
-        private readonly ShopIdProvider $shopIdProvider,
+        private readonly string $installationUrl,
+        private readonly InstallationIdProvider $installationIdProvider,
         private readonly string $contenaVersion,
         private readonly ClockInterface $clock,
         private readonly LoggerInterface $logger,
@@ -105,7 +105,7 @@ class AppRegistrationService
             );
         }
 
-        // Build the payload first — a failure here (e.g. the shop id lookup) must not leave a false
+        // Build the payload first — a failure here (e.g. the installation id lookup) must not leave a false
         // unconfirmed record, since no confirm was ever sent.
         $confirmationPayload = $this->getConfirmationPayload($app, $secretAccessKey);
 
@@ -115,9 +115,9 @@ class AppRegistrationService
         $this->saveUnconfirmedAppSecrets($app->getId(), $context, $secret);
 
         try {
-            // A re-registration confirm carries two signatures: contena-shop-signature signed with the new
-            // secret (proves we received it) and contena-shop-signature-previous signed with the current
-            // secret (proves we are the same shop the app already knows).
+            // A re-registration confirm carries two signatures: contena-installation-signature signed with the new
+            // secret (proves we received it) and contena-installation-signature-previous signed with the current
+            // secret (proves we are the same installation the app already knows).
             $this->confirmRegistration($context, $secret, $currentSecret, $confirmationPayload, $confirmationUrl);
         } catch (ClientException $e) {
             // A 4xx means the app answered and clearly rejected the confirm. Drop the rejected secret so
@@ -239,16 +239,16 @@ class AppRegistrationService
         $signature = $this->signPayload($payload, $secret);
 
         $headers = [
-            'contena-shop-signature' => $signature,
+            'contena-installation-signature' => $signature,
             'ct-version' => $this->contenaVersion,
         ];
 
         // For re-registration, also send signature with current/old secret
-        // contena-shop-signature (new) + contena-shop-signature-previous (current).
+        // contena-installation-signature (new) + contena-installation-signature-previous (current).
         // This is to ensure that only the party who initiated the re-registration can confirm it.
         if ($currentSecret !== null) {
             $previousSignature = $this->signPayload($payload, $currentSecret);
-            $headers['contena-shop-signature-previous'] = $previousSignature;
+            $headers['contena-installation-signature-previous'] = $previousSignature;
         }
 
         $this->httpClient->post($confirmationUrl, [
@@ -295,8 +295,8 @@ class AppRegistrationService
     private function getConfirmationPayload(AppEntity $app, #[\SensitiveParameter] string $secretAccessKey): array
     {
         try {
-            $shopId = $this->shopIdProvider->getShopId();
-        } catch (ShopIdChangeSuggestedException $e) {
+            $installationId = $this->installationIdProvider->getInstallationId();
+        } catch (InstallationIdChangeSuggestedException $e) {
             throw AppRegistrationException::registrationFailed(
                 $app->getName(),
                 $e->getMessage(),
@@ -312,8 +312,8 @@ class AppRegistrationService
             'apiKey' => $integration->getAccessKey(),
             'secretKey' => $secretAccessKey,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
-            'shopUrl' => $this->shopUrl,
-            'shopId' => $shopId->id,
+            'installationUrl' => $this->installationUrl,
+            'installationId' => $installationId->id,
         ];
     }
 

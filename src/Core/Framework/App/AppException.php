@@ -10,12 +10,12 @@ use Contena\Core\Framework\App\Exception\AppRegistrationRejectedException;
 use Contena\Core\Framework\App\Exception\AppValidationException;
 use Contena\Core\Framework\App\Exception\AppValidationRefusedException;
 use Contena\Core\Framework\App\Exception\AppXmlParsingException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeStrategyNotFoundException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Exception\InvalidAppFlowActionVariableException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeStrategyNotFoundException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Exception\UserAbortedCommandException;
-use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
-use Contena\Core\Framework\App\ShopId\ShopId;
+use Contena\Core\Framework\App\InstallationId\FingerprintComparisonResult;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
 use Contena\Core\Framework\App\Validation\Error\Error;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
 use Contena\Core\Framework\HttpException;
@@ -59,10 +59,10 @@ class AppException extends HttpException
     final public const REQUIRES_ADMIN_API_SOURCE = 'FRAMEWORK__APP_ACTION_REQUIRES_ADMIN_API_SOURCE';
     final public const MISSING_USER_IN_CONTEXT_SOURCE = 'FRAMEWORK__APP_MISSING_USER_IN_CONTEXT_SOURCE';
     final public const INTEGRATION_MISSING = 'FRAMEWORK__APP_MISSING_INTEGRATION';
-    final public const SHOP_ID_CHANGE_SUGGESTED = 'FRAMEWORK__APP_SHOP_ID_CHANGE_SUGGESTED';
+    final public const INSTALLATION_ID_CHANGE_SUGGESTED = 'FRAMEWORK__APP_INSTALLATION_ID_CHANGE_SUGGESTED';
     final public const APP_URL_NOT_CONFIGURED = 'FRAMEWORK__APP_URL_NOT_CONFIGURED';
-    final public const INVALID_SHOP_ID_CONFIGURATION = 'FRAMEWORK__APP_INVALID_SHOP_ID_CONFIGURATION';
-    final public const SHOP_ID_CHANGE_STRATEGY_NOT_FOUND = 'FRAMEWORK__APP_SHOP_ID_CHANGE_STRATEGY_NOT_FOUND';
+    final public const INVALID_INSTALLATION_ID_CONFIGURATION = 'FRAMEWORK__APP_INVALID_INSTALLATION_ID_CONFIGURATION';
+    final public const INSTALLATION_ID_CHANGE_STRATEGY_NOT_FOUND = 'FRAMEWORK__APP_INSTALLATION_ID_CHANGE_STRATEGY_NOT_FOUND';
     final public const APP_URL_INVALID = 'FRAMEWORK__APP_URL_INVALID';
     final public const MANIFEST_NOT_FOUND = 'FRAMEWORK__APP_MANIFEST_NOT_FOUND';
     final public const CONTENT_SYSTEM_ELEMENT_TYPE_LOAD_FAILED = 'FRAMEWORK__APP_ELEMENT_TYPE_LOAD_FAILED';
@@ -182,7 +182,7 @@ class AppException extends HttpException
         return new self(
             Response::HTTP_CONFLICT,
             self::APP_SECRET_RECOVERY_FAILED,
-            'App "{{ appName }}" did not accept any saved credential candidate. The pending recovery state was kept; retry "bin/console app:secret:rotate {{ appName }}" or "bin/console app:install {{ appName }}". If the registration is permanently lost, run the "reinstall-apps" shop ID change strategy.',
+            'App "{{ appName }}" did not accept any saved credential candidate. The pending recovery state was kept; retry "bin/console app:secret:rotate {{ appName }}" or "bin/console app:install {{ appName }}". If the registration is permanently lost, run the "reinstall-apps" installation ID change strategy.',
             ['appName' => $appName]
         );
     }
@@ -494,9 +494,9 @@ class AppException extends HttpException
         );
     }
 
-    public static function shopIdChangeSuggested(ShopId $shopId, FingerprintComparisonResult $comparisonResult): self
+    public static function installationIdChangeSuggested(InstallationId $installationId, FingerprintComparisonResult $comparisonResult): self
     {
-        return new ShopIdChangeSuggestedException($shopId, $comparisonResult);
+        return new InstallationIdChangeSuggestedException($installationId, $comparisonResult);
     }
 
     public static function appUrlNotConfigured(): self
@@ -508,18 +508,18 @@ class AppException extends HttpException
         );
     }
 
-    public static function invalidShopIdConfiguration(): self
+    public static function invalidInstallationIdConfiguration(): self
     {
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::INVALID_SHOP_ID_CONFIGURATION,
-            'The configuration values for "core.app.shopIdV2" and "core.app.shopId" in the system config are invalid.'
+            self::INVALID_INSTALLATION_ID_CONFIGURATION,
+            'The configuration value for "core.app.installationId" in the system config is invalid.'
         );
     }
 
-    public static function shopIdChangeResolveStrategyNotFound(string $strategy): self
+    public static function installationIdChangeResolveStrategyNotFound(string $strategy): self
     {
-        return new ShopIdChangeStrategyNotFoundException($strategy);
+        return new InstallationIdChangeStrategyNotFoundException($strategy);
     }
 
     public static function invalidAppUrl(string $reason): self
@@ -569,7 +569,7 @@ class AppException extends HttpException
     /**
      * @param list<string> $failedAppNames
      */
-    public static function shopMoveFailed(array $failedAppNames): self
+    public static function installationMoveFailed(array $failedAppNames): self
     {
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -639,7 +639,7 @@ class AppException extends HttpException
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::RE_REGISTRATION_FAILED,
             'Failed to re-register {{ count }} app(s): {{ apps }}. After resolving the issue, '
-            . 'run the shop ID change strategy "reinstall-apps" again.',
+            . 'run the installation ID change strategy "reinstall-apps" again.',
             ['count' => (string) \count($failedAppNames), 'apps' => implode(', ', $failedAppNames)]
         );
     }

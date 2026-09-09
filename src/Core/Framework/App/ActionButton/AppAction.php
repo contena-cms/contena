@@ -68,7 +68,7 @@ class AppAction
     }
 
     /**
-     * @return array{source: array{url: string, appVersion: string, shopId: string}, data: array{ids: array<string>, entity: string, action: string}}
+     * @return array{source: array{url: string, appVersion: string, installationId: string}, data: array{ids: array<string>, entity: string, action: string}}
      */
     public function asPayload(): array
     {

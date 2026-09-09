@@ -129,9 +129,9 @@ class AppManager
     }
 
     /**
-     * Refreshes the setup handshake with the app server: the app receives the current shop URL and
-     * new credentials. No lifecycle events are emitted because the shop identity is unchanged — the
-     * app server still knows this shop and only needs the updated connection details.
+     * Refreshes the setup handshake with the app server: the app receives the current installation URL and
+     * new credentials. No lifecycle events are emitted because the installation identity is unchanged — the
+     * app server still knows this installation and only needs the updated connection details.
      */
     public function refreshRegistration(AppEntity $app, Context $context): void
     {
@@ -143,14 +143,14 @@ class AppManager
         $this->appSecretRotationService->rotateNow(
             $app->getId(),
             $context,
-            AppSecretRotationService::TRIGGER_SHOP_MOVE
+            AppSecretRotationService::TRIGGER_INSTALLATION_MOVE
         );
     }
 
     /**
      * Runs the registration handshake again and re-emits the install lifecycle events. Intended
-     * for shop identity changes: the caller must have discarded the shop id beforehand, so the app
-     * server sees the registration as a brand-new shop and needs the lifecycle events to bring its
+     * for installation identity changes: the caller must have discarded the installation id beforehand, so the app
+     * server sees the registration as a brand-new installation and needs the lifecycle events to bring its
      * state to parity. No local app state is modified.
      *
      * Events are only emitted after a successful handshake and follow the order of a regular
@@ -168,7 +168,7 @@ class AppManager
         $this->appSecretRotationService->rotateNow(
             $app->getId(),
             $context,
-            AppSecretRotationService::TRIGGER_SHOP_MOVE
+            AppSecretRotationService::TRIGGER_INSTALLATION_MOVE
         );
 
         $this->dispatchInstalled($app, $manifest, $context);
@@ -602,6 +602,7 @@ class AppManager
 
         $metadata['aclRole'] = [
             'id' => $roleId,
+            'code' => $appName,
             'name' => $appName,
         ];
         $metadata['accessToken'] = $secret;

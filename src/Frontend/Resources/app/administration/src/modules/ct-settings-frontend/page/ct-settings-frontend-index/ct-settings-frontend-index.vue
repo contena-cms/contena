@@ -148,8 +148,9 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import useCreateTitle from 'src/app/composables/use-create-title';
+import useMetaInfo from 'src/app/composables/use-meta-info';
 import { useNotification } from 'src/app/composables/use-notification';
-import { usePageTitle } from 'src/app/composables/use-page-title';
 
 type ToggleValue = boolean | null | '';
 
@@ -181,6 +182,7 @@ const defaultChannelFrontendSettings: ChannelFrontendSettings = {
 
 const { t } = useI18n();
 const { createNotificationError, createNotificationSuccess } = useNotification();
+const createTitle = useCreateTitle();
 const injectedSystemConfigApiService = inject<SystemConfigApiService>('systemConfigApiService');
 
 if (!injectedSystemConfigApiService) {
@@ -310,7 +312,7 @@ ctDefinePublic({
     onChannelChanged,
 });
 
-usePageTitle();
+useMetaInfo(() => ({ title: createTitle() }));
 </script>
 
 <style lang="scss" src="./ct-settings-frontend-index.scss"></style>

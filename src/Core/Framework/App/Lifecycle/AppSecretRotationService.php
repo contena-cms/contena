@@ -27,7 +27,7 @@ class AppSecretRotationService
 {
     public const TRIGGER_API = 'api';
     public const TRIGGER_CLI = 'cli';
-    public const TRIGGER_SHOP_MOVE = 'shop_move';
+    public const TRIGGER_INSTALLATION_MOVE = 'installation_move';
     public const TRIGGER_RECOVERY = 'recovery';
 
     /**

@@ -6,11 +6,11 @@ use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\App\Payload\SourcedPayloadInterface;
-use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
@@ -33,16 +33,16 @@ class AppPayloadServiceHelperTest extends TestCase
 
     public function testBuildSource(): void
     {
-        $shopId = ShopId::v2($this->ids->get('shop-id'));
-        $shopIdProvider = static::createStub(ShopIdProvider::class);
-        $shopIdProvider
-            ->method('getShopId')
-            ->willReturn($shopId);
+        $installationId = InstallationId::create($this->ids->get('installation-id'));
+        $installationIdProvider = static::createStub(InstallationIdProvider::class);
+        $installationIdProvider
+            ->method('getInstallationId')
+            ->willReturn($installationId);
 
         $appPayloadServiceHelper = new AppPayloadServiceHelper(
             static::createStub(DefinitionInstanceRegistry::class),
             static::createStub(JsonEntityEncoder::class),
-            $shopIdProvider,
+            $installationIdProvider,
             'https://contena.com',
             new MockClock(),
         );
@@ -50,25 +50,25 @@ class AppPayloadServiceHelperTest extends TestCase
         $source = $appPayloadServiceHelper->buildSource('1.0.0', 'TestApp');
 
         static::assertSame('https://contena.com', $source->getUrl());
-        static::assertSame($this->ids->get('shop-id'), $source->getShopId());
+        static::assertSame($this->ids->get('installation-id'), $source->getInstallationId());
         static::assertSame('1.0.0', $source->getAppVersion());
     }
 
     public function testCreateRequestOptionsWithNoParams(): void
     {
-        $shopId = ShopId::v2($this->ids->get('shop-id'));
+        $installationId = InstallationId::create($this->ids->get('installation-id'));
         $context = Context::createDefaultContext();
         $definitionInstanceRegistry = static::createStub(DefinitionInstanceRegistry::class);
         $entityEncoder = static::createStub(JsonEntityEncoder::class);
-        $shopIdProvider = static::createStub(ShopIdProvider::class);
-        $shopIdProvider
-            ->method('getShopId')
-            ->willReturn($shopId);
+        $installationIdProvider = static::createStub(InstallationIdProvider::class);
+        $installationIdProvider
+            ->method('getInstallationId')
+            ->willReturn($installationId);
 
         $appPayloadServiceHelper = new AppPayloadServiceHelper(
             $definitionInstanceRegistry,
             $entityEncoder,
-            $shopIdProvider,
+            $installationIdProvider,
             'https://contena.com',
             new MockClock(),
         );
@@ -98,19 +98,19 @@ class AppPayloadServiceHelperTest extends TestCase
 
     public function testCreateRequestOptionsWithAdditionalParams(): void
     {
-        $shopId = ShopId::v2($this->ids->get('shop-id'));
+        $installationId = InstallationId::create($this->ids->get('installation-id'));
         $context = Context::createDefaultContext();
         $definitionInstanceRegistry = static::createStub(DefinitionInstanceRegistry::class);
         $entityEncoder = static::createStub(JsonEntityEncoder::class);
-        $shopIdProvider = static::createStub(ShopIdProvider::class);
-        $shopIdProvider
-            ->method('getShopId')
-            ->willReturn($shopId);
+        $installationIdProvider = static::createStub(InstallationIdProvider::class);
+        $installationIdProvider
+            ->method('getInstallationId')
+            ->willReturn($installationId);
 
         $appPayloadServiceHelper = new AppPayloadServiceHelper(
             $definitionInstanceRegistry,
             $entityEncoder,
-            $shopIdProvider,
+            $installationIdProvider,
             'https://contena.com',
             new MockClock(),
         );
@@ -147,12 +147,12 @@ class AppPayloadServiceHelperTest extends TestCase
         $context = Context::createDefaultContext();
         $definitionInstanceRegistry = static::createStub(DefinitionInstanceRegistry::class);
         $entityEncoder = static::createStub(JsonEntityEncoder::class);
-        $shopIdProvider = static::createStub(ShopIdProvider::class);
+        $installationIdProvider = static::createStub(InstallationIdProvider::class);
 
         $appPayloadServiceHelper = new AppPayloadServiceHelper(
             $definitionInstanceRegistry,
             $entityEncoder,
-            $shopIdProvider,
+            $installationIdProvider,
             'https://contena.com',
             new MockClock(),
         );
@@ -245,7 +245,7 @@ class AppPayloadServiceHelperTest extends TestCase
         return new AppPayloadServiceHelper(
             static::createStub(DefinitionInstanceRegistry::class),
             static::createStub(JsonEntityEncoder::class),
-            static::createStub(ShopIdProvider::class),
+            static::createStub(InstallationIdProvider::class),
             'https://contena.com',
             $clock,
         );

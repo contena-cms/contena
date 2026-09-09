@@ -49,7 +49,7 @@ readonly class DeletedAppsGateway
     }
 
     /**
-     * Secrets the app may hold but this shop never committed, most-recent first.
+     * Secrets the app may hold but this installation never committed, most-recent first.
      *
      * @return list<string>|null
      */

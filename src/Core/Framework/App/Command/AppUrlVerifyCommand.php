@@ -2,7 +2,7 @@
 
 namespace Contena\Core\Framework\App\Command;
 
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class AppUrlVerifyCommand extends Command
 {
     public function __construct(
-        private readonly ShopIdProvider $shopIdProvider,
+        private readonly InstallationIdProvider $installationIdProvider,
         private readonly AppUrlVerifier $appUrlVerifier,
         private readonly AppUrlVerificationPrinter $printer,
     ) {
@@ -35,8 +35,8 @@ class AppUrlVerifyCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $shopId = $this->shopIdProvider->getShopId();
-        $this->appUrlVerifier->forceVerify($shopId, true);
+        $installationId = $this->installationIdProvider->getInstallationId();
+        $this->appUrlVerifier->forceVerify($installationId, true);
 
         $state = $this->appUrlVerifier->getCurrentState();
 

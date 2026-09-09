@@ -2,6 +2,12 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Loader;
 
+use Contena\Core\Framework\App\AppSecretResolver;
+use Contena\Core\Framework\App\Hmac\RequestSigner;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
+use Contena\Core\PlatformRequest;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -9,12 +15,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\AppSecretResolver;
-use Contena\Core\Framework\App\Hmac\RequestSigner;
-use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
-use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -44,8 +44,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
         );
         $this->executor = new AppMcpCapabilityExecutor(
             $client,
-            'https://shop.example.com',
-            $this->createShopIdProvider(),
+            'https://installation.example.com',
+            $this->createInstallationIdProvider(),
             30,
             static::createStub(LoggerInterface::class),
             static::createStub(KernelInterface::class),
@@ -76,13 +76,13 @@ class AppMcpCapabilityExecutorTest extends TestCase
         static::assertSame('https://app.example.com/mcp/sync', (string) $lastRequest->getUri());
         static::assertSame('application/json', $lastRequest->getHeaderLine('Content-Type'));
         static::assertSame('application/json', $lastRequest->getHeaderLine('Accept'));
-        static::assertNotEmpty($lastRequest->getHeaderLine(RequestSigner::SHOPWARE_SHOP_SIGNATURE));
+        static::assertNotEmpty($lastRequest->getHeaderLine(RequestSigner::CONTENA_INSTALLATION_SIGNATURE));
 
         $body = json_decode($lastRequest->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR);
         static::assertSame('sync-orders', $body['tool']);
         static::assertSame(['foo' => 'bar'], $body['arguments']);
-        static::assertSame('https://shop.example.com', $body['source']['url']);
-        static::assertSame('test-shop-id', $body['source']['shopId']);
+        static::assertSame('https://installation.example.com', $body['source']['url']);
+        static::assertSame('test-installation-id', $body['source']['installationId']);
         static::assertSame('1.0.0', $body['source']['appVersion']);
     }
 
@@ -116,8 +116,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
 
         $executor = new AppMcpCapabilityExecutor(
             new Client(['handler' => HandlerStack::create($mock)]),
-            'https://shop.example.com',
-            $this->createShopIdProvider(),
+            'https://installation.example.com',
+            $this->createInstallationIdProvider(),
             30,
             $logger,
             static::createStub(KernelInterface::class),
@@ -140,8 +140,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
 
         $executor = new AppMcpCapabilityExecutor(
             new Client(['handler' => HandlerStack::create($mock)]),
-            'https://shop.example.com',
-            $this->createShopIdProvider(),
+            'https://installation.example.com',
+            $this->createInstallationIdProvider(),
             30,
             $logger,
             static::createStub(KernelInterface::class),
@@ -166,8 +166,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
 
         $executor = new AppMcpCapabilityExecutor(
             new Client(['handler' => HandlerStack::create($mock)]),
-            'https://shop.example.com',
-            $this->createShopIdProvider(),
+            'https://installation.example.com',
+            $this->createInstallationIdProvider(),
             30,
             $logger,
             static::createStub(KernelInterface::class),
@@ -191,7 +191,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $body = $lastRequest->getBody()->getContents();
         $expectedSignature = hash_hmac('sha256', $body, 'secret');
 
-        $signature = $lastRequest->getHeaderLine(RequestSigner::SHOPWARE_SHOP_SIGNATURE);
+        $signature = $lastRequest->getHeaderLine(RequestSigner::CONTENA_INSTALLATION_SIGNATURE);
         static::assertSame($expectedSignature, $signature);
     }
 
@@ -203,7 +203,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
 
         $lastRequest = $this->mockHandler->getLastRequest();
         static::assertNotNull($lastRequest);
-        static::assertEmpty($lastRequest->getHeaderLine(RequestSigner::SHOPWARE_SHOP_SIGNATURE));
+        static::assertEmpty($lastRequest->getHeaderLine(RequestSigner::CONTENA_INSTALLATION_SIGNATURE));
     }
 
     public function testInternalUrlWithNoActiveRequestReturnsError(): void
@@ -386,8 +386,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
     ): AppMcpCapabilityExecutor {
         return new AppMcpCapabilityExecutor(
             new Client(['handler' => HandlerStack::create($this->mockHandler)]),
-            'https://shop.example.com',
-            $this->createShopIdProvider(),
+            'https://installation.example.com',
+            $this->createInstallationIdProvider(),
             30,
             static::createStub(LoggerInterface::class),
             $kernel,
@@ -397,10 +397,10 @@ class AppMcpCapabilityExecutorTest extends TestCase
         );
     }
 
-    private function createShopIdProvider(): ShopIdProvider
+    private function createInstallationIdProvider(): InstallationIdProvider
     {
-        $provider = static::createStub(ShopIdProvider::class);
-        $provider->method('getShopId')->willReturn(ShopId::v2('test-shop-id'));
+        $provider = static::createStub(InstallationIdProvider::class);
+        $provider->method('getInstallationId')->willReturn(InstallationId::create('test-installation-id'));
 
         return $provider;
     }

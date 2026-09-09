@@ -8,19 +8,19 @@
                 "url": {
                     "type": "string",
                     "format": "uri",
-                    "description": "Shop url"
+                    "description": "Installation URL"
                 },
                 "appVersion": {
                     "type": "string",
                     "pattern": "^[0-9]+\\.[0-9]\\.[0-9]+$",
-                    "description": "App version of the shop"
+                    "description": "App version of the installation"
                 },
-                "shopId": {
+                "installationId": {
                     "type": "string",
-                    "description": "The unique identifier of the shop triggering the action"
+                    "description": "The unique identifier of the installation triggering the action"
                 }
             },
-            "required": ["url","appVersion", "shopId"]
+            "required": ["url","appVersion", "installationId"]
         },
         "data": {
             "type": "object",

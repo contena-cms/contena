@@ -44,7 +44,7 @@ class McpPromptFeatureDefinition extends AppFeatureDefinition
         return array_map(
             static function (McpPrompt $prompt) use ($defaultLocale): McpPromptConfig {
                 // toArray() fills the default locale translation when it is missing,
-                // matching what the app expects to be shown for the shop's default language
+                // matching what the app expects to be shown for the installation's default language
                 $data = $prompt->toArray($defaultLocale);
                 /** @var array<string, string> $label */
                 $label = $data['label'];

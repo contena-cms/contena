@@ -13,12 +13,12 @@ use Psr\Http\Message\RequestInterface;
 class PrivateHandshake implements AppHandshakeInterface
 {
     public function __construct(
-        private readonly string $shopUrl,
+        private readonly string $installationUrl,
         #[\SensitiveParameter]
         private readonly string $secret,
         private readonly string $appEndpoint,
         private readonly string $appName,
-        private readonly string $shopId,
+        private readonly string $installationId,
         private readonly string $contenaVersion,
         private readonly ClockInterface $clock,
         #[\SensitiveParameter]
@@ -31,8 +31,8 @@ class PrivateHandshake implements AppHandshakeInterface
         $uri = new Uri($this->appEndpoint);
 
         $uri = Uri::withQueryValues($uri, [
-            'shop-id' => $this->shopId,
-            'shop-url' => $this->shopUrl,
+            'installation-id' => $this->installationId,
+            'installation-url' => $this->installationUrl,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
         ]);
 
@@ -43,10 +43,10 @@ class PrivateHandshake implements AppHandshakeInterface
             'ct-version' => $this->contenaVersion,
         ];
 
-        // Add shop signature for re-registration
+        // Add the installation signature for re-registration.
         if ($this->currentAppSecret !== null) {
-            $shopSignature = hash_hmac('sha256', $uri->getQuery(), $this->currentAppSecret);
-            $headers['contena-shop-signature'] = $shopSignature;
+            $instanceSignature = hash_hmac('sha256', $uri->getQuery(), $this->currentAppSecret);
+            $headers['contena-installation-signature'] = $instanceSignature;
         }
 
         return new Request(
@@ -58,6 +58,6 @@ class PrivateHandshake implements AppHandshakeInterface
 
     public function fetchAppProof(): string
     {
-        return hash_hmac('sha256', $this->shopId . $this->shopUrl . $this->appName, $this->secret);
+        return hash_hmac('sha256', $this->installationId . $this->installationUrl . $this->appName, $this->secret);
     }
 }

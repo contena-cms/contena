@@ -7,6 +7,7 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
             privileges: [
                 'system.plugin_maintain',
                 'system.plugin_upload',
+                'system:app:change',
                 'plugin:read',
                 'plugin:create',
                 'plugin:update',

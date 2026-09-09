@@ -265,7 +265,7 @@ contena:
                       interval: '60 seconds'
                     - limit: 600
                       interval: '10 minutes'
-            app_shop_verify:
+            app_installation_verify:
                 enabled: true
                 policy: 'sliding_window'
                 limit: 60

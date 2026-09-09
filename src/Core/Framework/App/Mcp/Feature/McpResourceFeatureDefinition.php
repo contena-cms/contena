@@ -44,7 +44,7 @@ class McpResourceFeatureDefinition extends AppFeatureDefinition
         return array_map(
             static function (McpResource $resource) use ($defaultLocale): McpResourceConfig {
                 // toArray() fills the default locale translation when it is missing,
-                // matching what the app expects to be shown for the shop's default language
+                // matching what the app expects to be shown for the installation's default language
                 $data = $resource->toArray($defaultLocale);
                 /** @var array<string, string> $label */
                 $label = $data['label'];

@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
-use GuzzleHttp\Client;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppSecretResolver;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;
+use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -28,8 +28,8 @@ class AppMcpCapabilityExecutor
      */
     public function __construct(
         private readonly Client $client,
-        private readonly string $shopUrl,
-        private readonly ShopIdProvider $shopIdProvider,
+        private readonly string $installationUrl,
+        private readonly InstallationIdProvider $installationIdProvider,
         private readonly int $timeout,
         private readonly LoggerInterface $logger,
         private readonly KernelInterface $kernel,
@@ -54,8 +54,8 @@ class AppMcpCapabilityExecutor
             'tool' => $capabilityName,
             'arguments' => $arguments,
             'source' => [
-                'url' => $this->shopUrl,
-                'shopId' => $this->shopIdProvider->getShopId()->id,
+                'url' => $this->installationUrl,
+                'installationId' => $this->installationIdProvider->getInstallationId()->id,
                 'appVersion' => $appVersion,
             ],
         ]);
@@ -66,7 +66,7 @@ class AppMcpCapabilityExecutor
         ];
 
         if ($appSecret !== null) {
-            $headers[RequestSigner::SHOPWARE_SHOP_SIGNATURE] = (new RequestSigner())->signPayload($payload, $appSecret);
+            $headers[RequestSigner::CONTENA_INSTALLATION_SIGNATURE] = new RequestSigner()->signPayload($payload, $appSecret);
         }
 
         try {

@@ -182,7 +182,7 @@ class AppFeatureStorage
 
     /**
      * Saves the given config for one declared feature, replacing its payload as is —
-     * The feature must already be created by the app: apps declare features, the shop modifies them.
+     * The feature must already be created by the app: apps declare features, the installation modifies them.
      */
     public function save(string $appId, AppFeatureConfig $config): void
     {

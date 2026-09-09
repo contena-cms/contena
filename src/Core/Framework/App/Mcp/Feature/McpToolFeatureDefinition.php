@@ -48,7 +48,7 @@ class McpToolFeatureDefinition extends AppFeatureDefinition
         return array_map(
             static function (McpTool $tool) use ($defaultLocale): McpToolConfig {
                 // toArray() fills the default locale translation when it is missing,
-                // matching what the app expects to be shown for the shop's default language
+                // matching what the app expects to be shown for the installation's default language
                 $data = $tool->toArray($defaultLocale);
                 /** @var array<string, string> $label */
                 $label = $data['label'];

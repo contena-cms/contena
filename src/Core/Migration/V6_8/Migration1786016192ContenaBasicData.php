@@ -218,6 +218,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'system.logging',
         'system.system_config',
         'system:cache:info',
+        'system:app:change',
         'system:clear:cache',
         'user.update_profile',
         'user_change_me',

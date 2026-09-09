@@ -67,11 +67,11 @@ class TestAppServer
 
     private function buildAppResponse(RequestInterface $request): string
     {
-        $shopUrl = $this->getQueryParameter($request, 'shop-url');
+        $installationUrl = $this->getQueryParameter($request, 'installation-url');
         $appName = $this->getAppname($request);
-        $shopId = $this->getQueryParameter($request, 'shop-id');
+        $installationId = $this->getQueryParameter($request, 'installation-id');
 
-        $proof = \hash_hmac('sha256', $shopId . $shopUrl . $appName, self::TEST_SETUP_SECRET);
+        $proof = \hash_hmac('sha256', $installationId . $installationUrl . $appName, self::TEST_SETUP_SECRET);
 
         return \json_encode(['proof' => $proof, 'secret' => self::APP_SECRET, 'confirmation_url' => self::CONFIRMATION_URL], \JSON_THROW_ON_ERROR);
     }

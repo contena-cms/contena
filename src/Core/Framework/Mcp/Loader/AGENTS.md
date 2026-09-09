@@ -13,5 +13,5 @@ Generic plugin, Symfony Bundle, and App capabilities are registered through DI:
 4. Add focused unit coverage and an HTTP discovery assertion.
 
 App loaders must use `AppFeatureStorage`, `AppMcpCapabilityExecutor`, and the existing
-App secret/Shop ID services. Do not add commerce-specific capability loaders here.
+App secret/Installation ID services. Do not add commerce-specific capability loaders here.
 Extension code must use the authenticated Contena context and normal ACL/DAL boundaries.

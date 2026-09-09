@@ -8,18 +8,18 @@ use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppSecretResolver;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Hmac\QuerySigner;
+use Contena\Core\Framework\App\InstallationId\FingerprintComparisonResult;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Module\MainModule;
 use Contena\Core\Framework\App\Module\Module;
 use Contena\Core\Framework\App\Module\ModuleConfig;
 use Contena\Core\Framework\App\Module\ModuleLoader;
-use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
-use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
@@ -35,18 +35,18 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ModuleLoader::class)]
 class ModuleLoaderTest extends TestCase
 {
-    public function testLoadModulesReturnsNothingWhenShopIdChangeWasSuggested(): void
+    public function testLoadModulesReturnsNothingWhenInstallationIdChangeWasSuggested(): void
     {
         $app = AppFixture::createAppEntity('AllowedApp');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willThrowException(
-            new ShopIdChangeSuggestedException(ShopId::v2('shop-id'), new FingerprintComparisonResult([], [], 75))
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willThrowException(
+            new InstallationIdChangeSuggestedException(InstallationId::create('installation-id'), new FingerprintComparisonResult([], [], 75))
         );
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             static::createStub(QuerySigner::class),
             $this->storageWithFeature($this->feature($app, modules: [
                 new Module('some-module', new TranslatedString(['en-GB' => 'some module']), 'sw-catalogue', 'https://module.app.com', 10),
@@ -69,8 +69,8 @@ class ModuleLoaderTest extends TestCase
             mainModule: new MainModule('https://main.app.com'),
         );
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willReturn(ShopId::v2('shop-id'));
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willReturn(InstallationId::create('installation-id'));
 
         $querySigner = $this->createMock(QuerySigner::class);
         $querySigner->expects($this->exactly(2))->method('signUriFor')->willReturnCallback(
@@ -81,8 +81,8 @@ class ModuleLoaderTest extends TestCase
         $source->setPermissions(['app.AllowedApp']);
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             $querySigner,
             $this->storageWithFeature($feature),
             $this->secretResolver(),
@@ -127,7 +127,7 @@ class ModuleLoaderTest extends TestCase
         /** @var EntityRepository<AppCollection>&MockObject $appRepository */
         $loader = new ModuleLoader(
             $appRepository,
-            static::createStub(ShopIdProvider::class),
+            static::createStub(InstallationIdProvider::class),
             static::createStub(QuerySigner::class),
             $storage,
             static::createStub(AppSecretResolver::class),
@@ -140,12 +140,12 @@ class ModuleLoaderTest extends TestCase
     {
         $app = AppFixture::createAppEntity('EmptyApp');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willReturn(ShopId::v2('shop-id'));
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willReturn(InstallationId::create('installation-id'));
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             static::createStub(QuerySigner::class),
             $this->storageWithFeature($this->feature($app, modules: [])),
             $this->secretResolver(),
@@ -161,15 +161,15 @@ class ModuleLoaderTest extends TestCase
         $querySigner = $this->createMock(QuerySigner::class);
         $querySigner->expects($this->never())->method('signUriFor');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willReturn(ShopId::v2('shop-id'));
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willReturn(InstallationId::create('installation-id'));
 
         $source = new AdminApiSource(null);
         $source->setPermissions(['app.AllowedApp']);
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             $querySigner,
             $this->storageWithFeature($this->feature($app, modules: [
                 new Module('forbidden-module', new TranslatedString(['en-GB' => 'forbidden module']), 'sw-catalogue', 'https://forbidden.app.com', 50),
@@ -184,15 +184,15 @@ class ModuleLoaderTest extends TestCase
     {
         $app = AppFixture::createAppEntity('SecretlessApp');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willReturn(ShopId::v2('shop-id'));
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willReturn(InstallationId::create('installation-id'));
 
         $secretResolver = static::createStub(AppSecretResolver::class);
         $secretResolver->method('resolveMany')->willReturn([]);
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             static::createStub(QuerySigner::class),
             $this->storageWithFeature($this->feature(
                 $app,
@@ -213,8 +213,8 @@ class ModuleLoaderTest extends TestCase
     {
         $app = AppFixture::createAppEntity('SecretlessApp');
 
-        $shopIdProvider = $this->createMock(ShopIdProvider::class);
-        $shopIdProvider->expects($this->once())->method('getShopId')->willReturn(ShopId::v2('shop-id'));
+        $installationIdProvider = $this->createMock(InstallationIdProvider::class);
+        $installationIdProvider->expects($this->once())->method('getInstallationId')->willReturn(InstallationId::create('installation-id'));
 
         $querySigner = $this->createMock(QuerySigner::class);
         $querySigner->expects($this->never())->method('signUriFor');
@@ -223,8 +223,8 @@ class ModuleLoaderTest extends TestCase
         $secretResolver->method('resolveMany')->willReturn([]);
 
         $moduleLoader = new ModuleLoader(
-            new StaticEntityRepository([new AppCollection([$app])], new AppDefinition()),
-            $shopIdProvider,
+            StaticEntityRepository::of(AppCollection::class, [new AppCollection([$app])], new AppDefinition()),
+            $installationIdProvider,
             $querySigner,
             $this->storageWithFeature($this->feature($app, modules: [
                 new Module('structure-module', new TranslatedString(['en-GB' => 'structure module']), 'sw-catalogue', null, 10),

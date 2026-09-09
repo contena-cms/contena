@@ -2038,7 +2038,7 @@ filesystems:
 ```
 
 ## Removal of `app:url-change:resolve` command alias
-Use `app:shop-id:change` instead of `app:url-change:resolve`
+Use `app:installation-id:change` instead of `app:url-change:resolve`
 
 ## Removed Store-API Route caching configuration
 

@@ -49,7 +49,7 @@ final class AppFixture
      */
     public static function createAppRepository(AppEntity ...$apps): StaticEntityRepository
     {
-        $repository = new StaticEntityRepository([new AppCollection($apps)]);
+        $repository = StaticEntityRepository::of(AppCollection::class, [new AppCollection($apps)]);
 
         return $repository;
     }
@@ -68,7 +68,7 @@ final class AppFixture
             'translationCode' => $localeEntity,
         ]);
 
-        $repository = new StaticEntityRepository([new LanguageCollection([$languageEntity])]);
+        $repository = StaticEntityRepository::of(LanguageCollection::class, [new LanguageCollection([$languageEntity])]);
 
         return $repository;
     }

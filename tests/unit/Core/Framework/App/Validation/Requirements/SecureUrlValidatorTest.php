@@ -27,7 +27,7 @@ class SecureUrlValidatorTest extends TestCase
         yield 'HTTPS domain' => ['https://contena.com', true];
         yield 'HTTPS domain with port' => ['https://contena.com:8443', true];
         yield 'HTTPS domain with path' => ['https://contena.com/path', true];
-        yield 'HTTPS subdomain' => ['https://shop.contena.com', true];
+        yield 'HTTPS subdomain' => ['https://installation.contena.com', true];
         yield 'HTTPS domain with query params' => ['https://contena.com?param=value', true];
         yield 'HTTPS domain with fragment' => ['https://contena.com#fragment', true];
         yield 'HTTPS domain with complex path' => ['https://contena.com/path/to/resource', true];
@@ -59,7 +59,7 @@ class SecureUrlValidatorTest extends TestCase
         // Invalid URLs - Reserved IANA special-use domains
         yield '.test TLD' => ['https://myshop.test', false];
         yield '.local TLD' => ['https://myshop.local', false];
-        yield '.localhost subdomain' => ['https://shop.localhost', false];
+        yield '.localhost subdomain' => ['https://installation.localhost', false];
         yield '.example TLD' => ['https://myshop.example', false];
         yield '.invalid TLD' => ['https://myshop.invalid', false];
         yield '.onion TLD' => ['https://hidden.onion', false];

@@ -7,7 +7,7 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Context;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Clock\ClockInterface;
@@ -19,10 +19,10 @@ use Psr\Http\Message\UriInterface;
 class QuerySigner
 {
     public function __construct(
-        private readonly string $shopUrl,
+        private readonly string $installationUrl,
         private readonly string $contenaVersion,
         private readonly AppLocaleProvider $localeProvider,
-        private readonly ShopIdProvider $shopIdProvider,
+        private readonly InstallationIdProvider $installationIdProvider,
         private readonly ClockInterface $clock,
     ) {
     }
@@ -40,8 +40,8 @@ class QuerySigner
     public function signUriFor(string $uri, string $appName, string $appVersion, string $secret, Context $context): UriInterface
     {
         $unsignedUri = Uri::withQueryValues(new Uri($uri), [
-            'shop-id' => $this->shopIdProvider->getShopId()->id,
-            'shop-url' => $this->shopUrl,
+            'installation-id' => $this->installationIdProvider->getInstallationId()->id,
+            'installation-url' => $this->installationUrl,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
             'ct-version' => $this->contenaVersion,
             'app-version' => $appVersion,
@@ -52,7 +52,7 @@ class QuerySigner
 
         return Uri::withQueryValue(
             $unsignedUri,
-            'contena-shop-signature',
+            'contena-installation-signature',
             new RequestSigner()->signPayload($unsignedUri->getQuery(), $secret)
         );
     }

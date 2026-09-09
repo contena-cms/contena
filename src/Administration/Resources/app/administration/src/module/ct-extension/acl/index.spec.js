@@ -30,6 +30,7 @@ describe('src/module/ct-extension/acl', () => {
             expect.arrayContaining([
                 'system.plugin_maintain',
                 'system.plugin_upload',
+                'system:app:change',
                 'plugin:read',
                 'plugin:update',
             ]),

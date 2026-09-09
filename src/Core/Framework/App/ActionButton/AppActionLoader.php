@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\App\ActionButton;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonCollection;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -45,7 +45,7 @@ class AppActionLoader
 
         try {
             $source = $this->appPayloadServiceHelper->buildSource($app->getVersion(), $app->getName());
-        } catch (ShopIdChangeSuggestedException) {
+        } catch (InstallationIdChangeSuggestedException) {
             throw AppException::actionNotFound();
         }
 

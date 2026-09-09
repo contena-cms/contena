@@ -2,22 +2,22 @@
 
 namespace Contena\Core\Test;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\After;
-use Psr\Log\NullLogger;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\AppService;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\App\Lifecycle\AppLifecycle;
 use Contena\Core\Framework\App\Lifecycle\AppLifecycleIterator;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\After;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait AppSystemTestBehaviour
@@ -88,9 +88,9 @@ trait AppSystemTestBehaviour
     }
 
     #[After]
-    protected function deleteShopIdAndResetShopIdProvider(): void
+    protected function deleteInstallationIdAndResetInstallationIdProvider(): void
     {
-        static::getContainer()->get(ShopIdProvider::class)->deleteShopId();
+        static::getContainer()->get(InstallationIdProvider::class)->deleteInstallationId();
     }
 
     /**

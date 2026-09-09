@@ -44,7 +44,7 @@ abstract class AppFeatureDefinition
     /**
      * Serializes a config into the row's JSON payload; fromPayload() must be able to rebuild it.
      * $stored is the config currently in the row on update (null on first install and on
-     * AppFeatureStorage::save()), so a definition can keep shop-side changes across app updates.
+     * AppFeatureStorage::save()), so a definition can keep installation-side changes across app updates.
      *
      * @param T $declared
      * @param T|null $stored
