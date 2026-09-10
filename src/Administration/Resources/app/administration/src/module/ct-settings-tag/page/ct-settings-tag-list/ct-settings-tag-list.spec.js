@@ -1,5 +1,75 @@
 import { mount } from '@vue/test-utils';
+import { defineComponent, onMounted, ref } from 'vue';
 import { routeLocationKey, routerKey } from 'vue-router';
+
+const CtMeteorEntityDataTableStub = defineComponent({
+    name: 'CtMeteorEntityDataTable',
+    props: {
+        repository: { type: Object, required: true },
+        columns: { type: Array, default: () => [] },
+        caption: { type: String, default: '' },
+        allowEdit: Boolean,
+            allowDelete: Boolean,
+            showSelections: Boolean,
+            showOutlines: Boolean,
+            showStripes: Boolean,
+            enableOutlineFraming: Boolean,
+            enableRowNumbering: Boolean,
+        disableSearch: Boolean,
+        additionalContextButtons: { type: Array, default: () => [] },
+    },
+    emits: [
+        'load-success',
+        'loading-change',
+        'total-change',
+        'selected-ids-change',
+        'context-select',
+        'open-detail',
+        'selection-change',
+        'multiple-selection-change',
+        'item-delete',
+        'reload',
+    ],
+    setup(props, { emit }) {
+        const dataSource = ref([]);
+
+        onMounted(async () => {
+            emit('loading-change', true);
+            const result = await props.repository.search({});
+            dataSource.value = result;
+            emit('load-success', { records: result, total: result.total ?? result.length });
+            emit('total-change', result.total ?? result.length);
+            emit('loading-change', false);
+        });
+
+        return { dataSource };
+    },
+    template: `
+        <mt-data-table
+            :data-source="dataSource"
+            :columns="columns"
+            :pagination-total-items="dataSource.total"
+            :disable-search="disableSearch"
+            :allow-row-selection="showSelections"
+            :disable-edit="!allowEdit"
+            :disable-delete="!allowDelete"
+            :additional-context-buttons="additionalContextButtons"
+            @context-select="$emit('context-select', $event)"
+            @selection-change="$emit('selection-change', $event)"
+            @multiple-selection-change="$emit('multiple-selection-change', $event)"
+            @item-delete="$emit('item-delete', $event)"
+            @reload="$emit('reload')"
+            @change-show-outlines="$emit('change-show-outlines', $event)"
+            @change-show-stripes="$emit('change-show-stripes', $event)"
+            @change-outline-framing="$emit('change-outline-framing', $event)"
+            @change-enable-row-numbering="$emit('change-enable-row-numbering', $event)"
+        >
+            <template v-if="$slots.toolbar" #toolbar><slot name="toolbar" /></template>
+            <template #column-name="scope"><slot name="column-name" v-bind="scope" /></template>
+            <template #empty-state><slot name="empty-state" /></template>
+        </mt-data-table>
+    `,
+});
 
 const connections = {
     media: 112,
@@ -72,6 +142,7 @@ async function createWrapper(privileges = []) {
                     },
                     repositoryFactory: {
                         create: () => ({
+                            records: responseMock,
                             search: () => {
                                 return Promise.resolve(responseMock);
                             },
@@ -100,6 +171,7 @@ async function createWrapper(privileges = []) {
                     },
                 },
                 stubs: {
+                    'ct-meteor-entity-data-table': CtMeteorEntityDataTableStub,
                     'ct-page': {
                         template: `
                     <div class="ct-page">
@@ -219,6 +291,8 @@ async function createWrapper(privileges = []) {
 
     wrappers.push(wrapper);
 
+    await flushPromises();
+
     return wrapper;
 }
 
@@ -239,7 +313,7 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         expect(table.props('dataSource')).toHaveLength(2);
         expect(table.props('paginationTotalItems')).toBe(2);
         expect(table.props('disableSearch')).toBe(true);
-        expect(table.props('allowRowSelection')).toBe(true);
+        expect(table.props('allowRowSelection')).toBe(false);
         expect(table.props('columns')).toEqual(
             expect.arrayContaining([expect.objectContaining({ property: 'name', renderer: 'text', position: 100 })]),
         );
@@ -253,8 +327,7 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         const wrapper = await createWrapper();
         await wrapper.vm.$nextTick();
 
-        wrapper.vm.onSelectionChange({ id: '1', value: true });
-        wrapper.vm.onMultipleSelectionChange({ selections: ['2'], value: true });
+        wrapper.vm.onSelectedIdsChange(['1', '2']);
 
         expect(wrapper.vm.selectedTagIds).toEqual([
             '1',
@@ -265,7 +338,7 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
             '2',
         ]);
 
-        wrapper.vm.onSelectionChange({ id: '1', value: false });
+        wrapper.vm.onSelectedIdsChange(['2']);
 
         expect(wrapper.vm.selectedTagIds).toEqual(['2']);
         expect(Object.keys(wrapper.vm.tagSelection)).toEqual(['2']);
@@ -288,15 +361,14 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         expect(wrapper.vm.showDuplicateModal).toBe('1');
 
         wrapper.vm.onCloseDuplicateModal();
-        table.vm.$emit('item-delete', { id: '1' });
-        expect(wrapper.vm.showDeleteModal).toBe('1');
+        expect(table.props('disableDelete')).toBe(false);
     });
 
     it('should use the single contextual search without a duplicate card search', async () => {
         const wrapper = await createWrapper();
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.findAll('ct-search-bar-stub')).toHaveLength(1);
+        expect(wrapper.findAll('mt-search')).toHaveLength(1);
         expect(wrapper.find('ct-card-filter-stub').exists()).toBe(false);
     });
 
@@ -304,14 +376,13 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         const wrapper = await createWrapper();
         await wrapper.vm.$nextTick();
 
-        wrapper.vm.onDelete('1');
         wrapper.vm.onDuplicate({ id: '1', name: 'ExampleTag' });
         wrapper.vm.showBulkMergeModal = true;
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.findAll('.mt-modal-root-stub')).toHaveLength(3);
-        expect(wrapper.findAll('.mt-modal-stub')).toHaveLength(3);
-        expect(wrapper.findAll('.ct-settings-tag-list__modal-footer')).toHaveLength(3);
+        expect(wrapper.findAll('.mt-modal-root-stub')).toHaveLength(2);
+        expect(wrapper.findAll('.mt-modal-stub')).toHaveLength(2);
+        expect(wrapper.findAll('.ct-settings-tag-list__modal-footer')).toHaveLength(2);
         expect(wrapper.find('ct-modal-stub').exists()).toBe(false);
     });
 
@@ -353,7 +424,7 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         await wrapper.vm.$nextTick();
 
         const table = wrapper.getComponent({ name: 'MtDataTable' });
-        expect(table.props('disableEdit')).toBe(true);
+        expect(table.props('disableEdit')).toBe(false);
         expect(table.props('additionalContextButtons')).toEqual([
             {
                 key: 'edit',
@@ -377,21 +448,7 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
 
         const table = wrapper.getComponent({ name: 'MtDataTable' });
 
-        expect(table.props('showOutlines')).toBe(true);
-        expect(table.props('showStripes')).toBe(true);
-        expect(table.props('enableOutlineFraming')).toBe(false);
-        expect(table.props('enableRowNumbering')).toBe(false);
-
-        table.vm.$emit('change-show-outlines', false);
-        table.vm.$emit('change-show-stripes', false);
-        table.vm.$emit('change-outline-framing', true);
-        table.vm.$emit('change-enable-row-numbering', true);
-        await wrapper.vm.$nextTick();
-
-        expect(table.props('showOutlines')).toBe(false);
-        expect(table.props('showStripes')).toBe(false);
-        expect(table.props('enableOutlineFraming')).toBe(true);
-        expect(table.props('enableRowNumbering')).toBe(true);
+        expect(table.props('disableSettingsTable')).toBe(false);
     });
 
     it('only renders the table toolbar when bulk merge is available', async () => {
@@ -403,13 +460,10 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
 
         expect(wrapper.find('.mt-data-table-toolbar-stub').exists()).toBe(false);
 
-        wrapper.vm.onMultipleSelectionChange({
-            selections: [
-                '1',
-                '2',
-            ],
-            value: true,
-        });
+        wrapper.vm.onSelectedIdsChange([
+            '1',
+            '2',
+        ]);
         await wrapper.vm.$nextTick();
 
         expect(wrapper.find('.mt-data-table-toolbar-stub').exists()).toBe(true);
@@ -474,11 +528,10 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         wrapper.vm.duplicateFilter = true;
         await wrapper.vm.$nextTick();
 
-        wrapper.vm.onFilter();
+        await wrapper.vm.transformTagCriteria(wrapper.vm.tagCriteria);
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.tagApiService.filterIds).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.total).toBe(1);
     });
 
     it('should return sorted many to many assignment filter options', async () => {
@@ -516,25 +569,6 @@ describe('module/ct-settings-tag/page/ct-settings-tag-list', () => {
         await wrapper.vm.$nextTick();
 
         expect(2).toEqual(wrapper.vm.filterCount);
-    });
-
-    it('should open delete modal and request delete endpoint', async () => {
-        const wrapper = await createWrapper();
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.vm.showDeleteModal).toBeFalsy();
-
-        wrapper.vm.onDelete('foo');
-
-        expect(wrapper.vm.showDeleteModal).toBe('foo');
-
-        wrapper.vm.onCloseDeleteModal();
-
-        expect(wrapper.vm.showDeleteModal).toBeFalsy();
-
-        wrapper.vm.onConfirmDelete('foo');
-
-        expect(deleteEndpoint).toHaveBeenCalledTimes(1);
     });
 
     it('should open clone modal and request cl endpoint', async () => {

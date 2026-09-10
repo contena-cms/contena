@@ -119,39 +119,28 @@
                         <ct-card-view>
                             <ct-block name="ct_settings_tag_list_content_card">
                                 <ct-block name="ct_settings_tag_list_grid">
-                                    <mt-data-table
+                                    <ct-meteor-entity-data-table
+                                        ref="tagTable"
                                         class="ct-settings-tag-list__content ct-settings-tag-list__grid"
                                         layout="full"
+                                        entity="tag"
+                                        :repository="tagTableRepository"
                                         :caption="$t('ct-settings-tag.list.textHeadline')"
-                                        :data-source="tags ?? []"
                                         :columns="tagColumns"
-                                        :is-loading="isLoading"
-                                        :pagination-total-items="total"
-                                        :current-page="page"
-                                        :pagination-limit="limit"
-                                        :sort-by="sortBy"
-                                        :sort-direction="sortDirection"
-                                        :selected-rows="selectedTagIds"
-                                        :show-outlines="showOutlines"
-                                        :show-stripes="showStripes"
-                                        :enable-outline-framing="enableOutlineFraming"
-                                        :enable-row-numbering="enableRowNumbering"
-                                        :allow-row-selection="true"
+                                        :criteria="tagCriteria"
+                                        :criteria-transform="transformTagCriteria"
+                                        :search-term="term"
+                                        default-sort-by="name"
+                                        :allow-edit="acl.can('tag.editor')"
+                                        :allow-delete="acl.can('tag.deleter')"
+                                        :show-selections="acl.can('tag.deleter')"
                                         :disable-search="true"
-                                        :disable-edit="true"
-                                        :disable-delete="!acl.can('tag.deleter')"
                                         :additional-context-buttons="additionalContextButtons"
-                                        @reload="getList"
-                                        @pagination-current-page-change="onCurrentPageChange"
-                                        @pagination-limit-change="onLimitChange"
-                                        @sort-change="onSortChange"
-                                        @selection-change="onSelectionChange"
-                                        @multiple-selection-change="onMultipleSelectionChange"
-                                        @change-show-outlines="showOutlines = $event"
-                                        @change-show-stripes="showStripes = $event"
-                                        @change-outline-framing="enableOutlineFraming = $event"
-                                        @change-enable-row-numbering="enableRowNumbering = $event"
-                                        @item-delete="onItemDelete"
+                                        @load-success="onTableLoadSuccess"
+                                        @loading-change="onTableLoadingChange"
+                                        @total-change="onTableTotalChange"
+                                        @selected-ids-change="onSelectedIdsChange"
+                                        @open-detail="onOpenDetails"
                                         @context-select="onContextSelect"
                                     >
                                         <template
@@ -196,6 +185,18 @@
                                         </template>
                                         <!-- eslint-enable vue/no-unused-vars -->
 
+                                        <template #delete-confirm-text="{ item }">
+                                            <p class="ct-settings-tag-list__confirm-delete-text">
+                                                {{
+                                                    $t(
+                                                        'ct-settings-tag.list.textDeleteConfirm',
+                                                        { name: item.name },
+                                                        0,
+                                                    )
+                                                }}
+                                            </p>
+                                        </template>
+
                                         <template #empty-state>
                                             <ct-block name="ct_settings_tag_list_empty_state">
                                                 <mt-empty-state
@@ -204,56 +205,9 @@
                                                 />
                                             </ct-block>
                                         </template>
-                                    </mt-data-table>
+                                    </ct-meteor-entity-data-table>
 
                                     <ct-block name="ct_settings_tag_list_grid_action_modals">
-                                        <ct-block name="ct_settings_tag_list_delete_modal">
-                                            <mt-modal-root v-if="tagToDelete" :is-open="true" @change="onCloseDeleteModal">
-                                                <mt-modal :title="$t('global.default.warning')" width="s">
-                                                    <ct-block name="ct_settings_tag_list_delete_modal_confirm_delete_text">
-                                                        <p class="ct-settings-tag-list__confirm-delete-text">
-                                                            {{
-                                                                $t(
-                                                                    'ct-settings-tag.list.textDeleteConfirm',
-                                                                    { name: tagToDelete.name },
-                                                                    0,
-                                                                )
-                                                            }}
-                                                        </p>
-                                                    </ct-block>
-
-                                                    <template #footer>
-                                                        <div class="ct-settings-tag-list__modal-footer">
-                                                            <ct-block name="ct_settings_tag_list_delete_modal_footer">
-                                                                <ct-block name="ct_settings_tag_list_delete_modal_cancel">
-                                                                    <mt-modal-close
-                                                                        as="mt-button"
-                                                                        size="small"
-                                                                        variant="secondary"
-                                                                    >
-                                                                        {{ $t('global.default.cancel') }}
-                                                                    </mt-modal-close>
-                                                                </ct-block>
-
-                                                                <ct-block name="ct_settings_tag_list_delete_modal_confirm">
-                                                                    <mt-modal-action
-                                                                        as="mt-button"
-                                                                        variant="critical"
-                                                                        size="small"
-                                                                        @click="
-                                                                            (done) => onConfirmDelete(tagToDelete.id, done)
-                                                                        "
-                                                                    >
-                                                                        {{ $t('global.default.delete') }}
-                                                                    </mt-modal-action>
-                                                                </ct-block>
-                                                            </ct-block>
-                                                        </div>
-                                                    </template>
-                                                </mt-modal>
-                                            </mt-modal-root>
-                                        </ct-block>
-
                                         <ct-block name="ct_settings_tag_list_duplicate_modal">
                                             <mt-modal-root
                                                 v-if="tagToDuplicate"
@@ -472,7 +426,7 @@ import { useListing } from 'src/app/composables/use-listing';
 import { useNotification } from 'src/app/composables/use-notification';
 
 const { t } = useI18n();
-const { page, limit, total: total2, term, onPageChange, onSearch, updateRoute, initializeListing } = useListing();
+const { page, limit, total: total2, term, onSearch, initializeListing } = useListing();
 const total = total2;
 const { createNotificationError } = useNotification();
 
@@ -481,10 +435,10 @@ const acl = inject('acl');
 const tagApiService = inject('tagApiService');
 
 const tags = ref(null);
+const tagTable = ref(null);
 const sortBy = ref('name');
 const isLoading = ref(false);
 const sortDirection = ref('ASC');
-const showDeleteModal = ref(false);
 const showDuplicateModal = ref(false);
 const showBulkMergeModal = ref(false);
 const duplicateName = ref(null);
@@ -494,10 +448,6 @@ const detailEntity = ref(null);
 const assignmentFilter = ref(null);
 const emptyFilter = ref(false);
 const duplicateFilter = ref(false);
-const showOutlines = ref(true);
-const showStripes = ref(true);
-const enableOutlineFraming = ref(false);
-const enableRowNumbering = ref(false);
 const selectedTagIds = ref([]);
 const tagSelection = ref({});
 const bulkMergeProgress = ref({
@@ -510,13 +460,26 @@ const bulkMergeProgress = ref({
 const tagRepository = computed(() => {
     return repositoryFactory.create('tag');
 });
+const tagTableRepository = computed(() => {
+    const repository = tagRepository.value;
+
+    return {
+        search: async (criteria, context) => {
+            const result = await repository.search(criteria, context);
+            tags.value = result;
+
+            return result;
+        },
+        delete: repository.delete?.bind(repository),
+        syncDeleted: repository.syncDeleted?.bind(repository),
+    };
+});
 const tagDefinition = computed(() => {
     return Contena.EntityDefinition.get('tag');
 });
 const getTagById = (id) => {
     return tags.value?.find((tag) => tag.id === id) ?? null;
 };
-const tagToDelete = computed(() => getTagById(showDeleteModal.value));
 const tagToDuplicate = computed(() => getTagById(showDuplicateModal.value));
 const tagToEdit = computed(() => getTagById(showDetailModal.value));
 const assignmentProperties = computed(() => {
@@ -557,6 +520,21 @@ const tagCriteria = computed(() => {
 
     return criteria;
 });
+const transformTagCriteria = async (criteria) => {
+    if (!duplicateFilter.value && !emptyFilter.value && !hasAssignmentFilter.value) {
+        return criteria;
+    }
+
+    const { ids } = await tagApiService.filterIds(criteria.parse(), {
+        duplicateFilter: duplicateFilter.value,
+        emptyFilter: emptyFilter.value,
+        assignmentFilter: assignmentFilter.value,
+    });
+
+    criteria.setIds(ids);
+
+    return criteria;
+};
 const tagColumns = computed(() => {
     const columns = [
         {
@@ -667,75 +645,37 @@ const setAggregations = (criteria) => {
     );
 };
 const getList = () => {
-    isLoading.value = true;
-    if (duplicateFilter.value || emptyFilter.value || hasAssignmentFilter.value) {
-        tagApiService
-            .filterIds(tagCriteria.value.parse(), {
-                duplicateFilter: duplicateFilter.value,
-                emptyFilter: emptyFilter.value,
-                assignmentFilter: assignmentFilter.value,
-            })
-            .then(({ total: totalValue, ids }) => {
-                total2.value = totalValue;
-
-                if (totalValue === 0) {
-                    tags.value = null;
-                    isLoading.value = false;
-
-                    return;
-                }
-
-                const criteria = new Criteria(1, limit.value);
-                criteria.setIds(ids);
-                criteria.setTotalCountMode(0);
-                criteria.aggregations = tagCriteria.value.aggregations;
-                criteria.associations = tagCriteria.value.associations;
-
-                tagRepository.value
-                    .search(criteria)
-                    .then((items) => {
-                        items.total = totalValue;
-                        tags.value = sortByIdsOrder(items, ids);
-                        isLoading.value = false;
-
-                        return items;
-                    })
-                    .catch(() => {
-                        isLoading.value = false;
-                    });
-            })
-            .catch(() => {
-                isLoading.value = false;
-            });
-
-        return;
-    }
-    tagRepository.value
-        .search(tagCriteria.value)
-        .then((items) => {
-            total2.value = items.total;
-            tags.value = items;
-            isLoading.value = false;
-
-            return items;
-        })
-        .catch(() => {
-            isLoading.value = false;
-        });
+    return tagTable.value?.reload?.() ?? Promise.resolve([]);
 };
-const sortByIdsOrder = (items, ids) => {
-    items.sort((a, b) => {
-        if (ids.indexOf(a.id) > ids.indexOf(b.id)) {
-            return 1;
-        }
+const onTableLoadSuccess = ({ records, total: totalValue }) => {
+    if (!tags.value) {
+        tags.value = records;
+    }
+    total2.value = totalValue;
+};
+const onTableLoadingChange = (loading) => {
+    isLoading.value = loading;
+};
+const onTableTotalChange = (totalValue) => {
+    total2.value = totalValue;
+};
+const onSelectedIdsChange = (ids) => {
+    const selection = {};
 
-        return -1;
+    ids.forEach((id) => {
+        const tag = getTagById(id);
+
+        if (tag) {
+            selection[id] = tag;
+        }
     });
 
-    return items;
+    selectedTagIds.value = ids;
+    tagSelection.value = selection;
 };
 const getCounts = (id) => {
     const counts = {};
+    const aggregations = tags.value?.aggregations ?? {};
 
     Object.entries(tagDefinition.value.properties).forEach(
         ([
@@ -743,7 +683,7 @@ const getCounts = (id) => {
             property,
         ]) => {
             if (property.relation === 'many_to_many') {
-                const countBucket = tags.value.aggregations[propertyName]?.buckets.filter((bucket) => {
+                const countBucket = aggregations[propertyName]?.buckets.filter((bucket) => {
                     return bucket.key === id;
                 })[0];
 
@@ -759,11 +699,13 @@ const getCounts = (id) => {
     return counts;
 };
 const getPropertyCounting = (propertyName, id) => {
-    if (!tags.value.aggregations[propertyName]) {
+    const aggregation = tags.value?.aggregations?.[propertyName];
+
+    if (!aggregation) {
         return 0;
     }
 
-    const countBucket = tags.value.aggregations[propertyName].buckets.filter((bucket) => {
+    const countBucket = aggregation.buckets.filter((bucket) => {
         return bucket.key === id;
     })[0];
 
@@ -773,43 +715,12 @@ const getPropertyCounting = (propertyName, id) => {
 
     return countBucket[propertyName].count;
 };
-const updateTagSelection = (ids, value) => {
-    const updatedIds = new Set(selectedTagIds.value);
-    const updatedSelection = { ...tagSelection.value };
-
-    ids.forEach((id) => {
-        if (!value) {
-            updatedIds.delete(id);
-            delete updatedSelection[id];
-
-            return;
-        }
-
-        const tag = getTagById(id);
-        if (tag) {
-            updatedIds.add(id);
-            updatedSelection[id] = tag;
-        }
-    });
-
-    selectedTagIds.value = [...updatedIds];
-    tagSelection.value = updatedSelection;
-};
-const onSelectionChange = ({ id, value }) => {
-    updateTagSelection([id], value);
-};
-const onMultipleSelectionChange = ({ selections, value }) => {
-    updateTagSelection(selections, value);
-};
 const resetTagSelection = () => {
     selectedTagIds.value = [];
     tagSelection.value = {};
 };
 const onOpenDetails = (item) => {
     onDetail(item.id);
-};
-const onItemDelete = (item) => {
-    onDelete(item.id);
 };
 const onContextSelect = ({ key, data }) => {
     if (key === 'edit') {
@@ -819,27 +730,6 @@ const onContextSelect = ({ key, data }) => {
     if (key === 'duplicate') {
         onDuplicate(data);
     }
-};
-const onDelete = (id) => {
-    showDeleteModal.value = id;
-};
-const onCloseDeleteModal = () => {
-    showDeleteModal.value = false;
-};
-const onConfirmDelete = (id, done) => {
-    void nextTick().then(() => {
-        isLoading.value = true;
-    });
-
-    return tagRepository.value.delete(id).then(() => {
-        getList();
-
-        if (done) {
-            done();
-        } else {
-            onCloseDeleteModal();
-        }
-    });
 };
 const onDuplicate = (item) => {
     showDuplicateModal.value = item.id;
@@ -974,18 +864,6 @@ const resetFilters = () => {
 
     onFilter();
 };
-const onCurrentPageChange = (currentPage) => {
-    onPageChange({ page: currentPage, limit: limit.value });
-};
-const onLimitChange = (currentLimit) => {
-    onPageChange({ page: 1, limit: currentLimit });
-};
-const onSortChange = (property, direction) => {
-    sortBy.value = property;
-    sortDirection.value = direction;
-    updateRoute({ sortBy: property, sortDirection: direction });
-};
-
 initializeListing({
     getList,
     sortBy,
@@ -1000,7 +878,6 @@ ctDefinePublic({
     sortBy,
     isLoading,
     sortDirection,
-    showDeleteModal,
     showDuplicateModal,
     showBulkMergeModal,
     duplicateName,
@@ -1010,16 +887,11 @@ ctDefinePublic({
     assignmentFilter,
     emptyFilter,
     duplicateFilter,
-    showOutlines,
-    showStripes,
-    enableOutlineFraming,
-    enableRowNumbering,
     bulkMergeProgress,
     selectedTagIds,
     tagSelection,
     tagRepository,
     tagDefinition,
-    tagToDelete,
     tagToDuplicate,
     tagToEdit,
     assignmentProperties,
@@ -1031,12 +903,8 @@ ctDefinePublic({
     filterCount,
     setAggregations,
     getList,
-    sortByIdsOrder,
     getCounts,
     getPropertyCounting,
-    onDelete,
-    onCloseDeleteModal,
-    onConfirmDelete,
     onDuplicate,
     onCloseDuplicateModal,
     onConfirmDuplicate,
@@ -1051,14 +919,8 @@ ctDefinePublic({
     setEmptyFilter,
     setAssignmentFilter,
     resetFilters,
-    onCurrentPageChange,
-    onLimitChange,
-    onSortChange,
-    onSelectionChange,
-    onMultipleSelectionChange,
     resetTagSelection,
     onOpenDetails,
-    onItemDelete,
     onContextSelect,
 });
 </script>

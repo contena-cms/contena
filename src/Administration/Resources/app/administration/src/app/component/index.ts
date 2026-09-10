@@ -168,6 +168,10 @@ export default () => {
         () => import('src/app/component/entity/ct-category-tree-field/index'),
     );
     Contena.Component.register(
+        'ct-meteor-entity-data-table',
+        () => import('src/app/component/entity/ct-meteor-entity-data-table/ct-meteor-entity-data-table.vue'),
+    );
+    Contena.Component.register(
         'ct-data-grid-skeleton',
         () => import('src/app/component/data-grid/ct-data-grid-skeleton/index'),
     );
