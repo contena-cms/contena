@@ -40,6 +40,9 @@ jobs:
               working-directory: src/Administration/Resources/app/administration
               run: npm ci
 
+            - name: Generate Administration entity schema types
+              run: composer admin:generate-entity-schema-types
+
             - name: Check Administration types
               working-directory: src/Administration/Resources/app/administration
               run: npm run lint:types
