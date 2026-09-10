@@ -39,7 +39,7 @@ final readonly class StoredElement implements \JsonSerializable
     ) {
         $this->rejectNumericKeys($properties, 'Element property map');
         $this->rejectNumericKeys($dataRequirements, 'Element data requirement map');
-        $this->rejectNumericKeys($slots, 'Element slot map');
+        $this->rejectMalformedSlots($slots);
     }
 
     /**
@@ -229,6 +229,40 @@ final readonly class StoredElement implements \JsonSerializable
         foreach (array_keys($map) as $key) {
             if (\is_int($key)) {
                 throw ContentSystemException::invalidMapKey($mapType, 'int');
+            }
+        }
+    }
+
+    /**
+     * @param array<array-key, mixed> $slots
+     */
+    private function rejectMalformedSlots(array $slots): void
+    {
+        foreach ($slots as $name => $children) {
+            if (\is_int($name)) {
+                throw ContentSystemException::invalidMapKey('Element slot map', 'int');
+            }
+
+            if (!\is_array($children) || !array_is_list($children)) {
+                throw ContentSystemException::invalidMapValue(
+                    'Element slot map',
+                    $name,
+                    'list',
+                    get_debug_type($children)
+                );
+            }
+
+            foreach ($children as $child) {
+                if ($child instanceof self) {
+                    continue;
+                }
+
+                throw ContentSystemException::invalidMapValue(
+                    'Element slot child list',
+                    $name,
+                    self::class,
+                    get_debug_type($child)
+                );
             }
         }
     }

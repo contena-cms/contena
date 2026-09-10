@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\ContentSystem\Api;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\Util\Random;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -22,17 +21,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ContentPreviewPayloadStore
 {
-    private const CACHE_PREFIX = 'content-system.preview.';
+    private const string CACHE_PREFIX = 'content-system.preview.';
 
-    private readonly ValidatorInterface $validator;
-
-    /**
-     * @internal
-     */
     public function __construct(
         private readonly CacheItemPoolInterface $cache,
+        private readonly ValidatorInterface $validator,
     ) {
-        $this->validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     }
 
     public function store(ContentPreviewRequest $payload): string
@@ -147,7 +141,10 @@ class ContentPreviewPayloadStore
 
     /**
      * Runs {@see ContentPreviewRequest}'s own constraint attributes against the rebuilt DTO, so the stored
-     * envelope is admitted on exactly the terms `#[MapRequestPayload]` admitted it at the HTTP boundary.
+     * envelope is admitted on exactly the terms `#[MapRequestPayload]` admitted it at the HTTP boundary. That
+     * equivalence is why the validator is injected rather than built here: a self-built one carries no
+     * configured constraint-validator factory, so a constraint whose validator has constructor dependencies
+     * would resolve at the boundary and fail on the read.
      */
     private function assertDeclaredConstraints(ContentPreviewRequest $request): void
     {

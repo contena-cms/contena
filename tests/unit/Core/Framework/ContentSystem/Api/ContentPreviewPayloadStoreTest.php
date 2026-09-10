@@ -10,6 +10,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal
@@ -20,7 +22,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
     #[TestDox('returns the stored request unchanged for the token store minted')]
     public function testRoundTripsTheStoredRequest(): void
     {
-        $store = new ContentPreviewPayloadStore(new ArrayAdapter());
+        $store = new ContentPreviewPayloadStore(new ArrayAdapter(), self::validator());
         $payload = new ContentPreviewRequest(
             layout: [['id' => 'el-1', 'component' => 'Ct:Block']],
             entityType: 'blog',
@@ -54,7 +56,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
     #[TestDox('returns null for a token that addresses no entry')]
     public function testLoadReturnsNullForUnknownToken(): void
     {
-        $store = new ContentPreviewPayloadStore(new ArrayAdapter());
+        $store = new ContentPreviewPayloadStore(new ArrayAdapter(), self::validator());
 
         static::assertNull($store->load('no-such-token'));
     }
@@ -67,7 +69,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
         $item->set('not-an-array');
         $cache->save($item);
 
-        $store = new ContentPreviewPayloadStore($cache);
+        $store = new ContentPreviewPayloadStore($cache, self::validator());
 
         $this->expectExceptionObject(ContentSystemException::previewPayloadInvalid('payload', 'array', 'string'));
 
@@ -182,7 +184,12 @@ class ContentPreviewPayloadStoreTest extends TestCase
         $item->set($stored);
         $cache->save($item);
 
-        return new ContentPreviewPayloadStore($cache);
+        return new ContentPreviewPayloadStore($cache, self::validator());
+    }
+
+    private static function validator(): ValidatorInterface
+    {
+        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     }
 
     /**

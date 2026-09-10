@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Event;
 
 use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\LayoutReference;
 use Contena\Core\Framework\ContentSystem\Rendering\RenderedElement;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
@@ -43,6 +44,7 @@ class RenderedTreeFinalizationEvent implements ContenaChannelEvent
         public readonly ChannelContext $channelContext,
         public readonly RenderingCacheContext $cacheContext,
     ) {
+        $this->rejectForeignTree($tree);
     }
 
     /**
@@ -58,6 +60,8 @@ class RenderedTreeFinalizationEvent implements ContenaChannelEvent
      */
     public function replaceTree(array $tree): void
     {
+        $this->rejectForeignTree($tree);
+
         $this->tree = $tree;
     }
 
@@ -69,5 +73,33 @@ class RenderedTreeFinalizationEvent implements ContenaChannelEvent
     public function getChannelContext(): ChannelContext
     {
         return $this->channelContext;
+    }
+
+    /**
+     * @param array<array-key, mixed> $tree
+     */
+    private function rejectForeignTree(array $tree): void
+    {
+        if (!array_is_list($tree)) {
+            throw ContentSystemException::invalidMapValue(
+                'Rendered content tree',
+                'tree',
+                'list<RenderedElement>',
+                'array with non-list keys'
+            );
+        }
+
+        foreach ($tree as $index => $element) {
+            if ($element instanceof RenderedElement) {
+                continue;
+            }
+
+            throw ContentSystemException::invalidMapValue(
+                'Rendered content tree',
+                (string) $index,
+                RenderedElement::class,
+                get_debug_type($element)
+            );
+        }
     }
 }

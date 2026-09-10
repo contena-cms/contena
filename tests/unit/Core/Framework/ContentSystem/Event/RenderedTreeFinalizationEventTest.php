@@ -4,7 +4,7 @@ namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Event;
 
 use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Event\ContentTreePreparationEvent;
+use Contena\Core\Framework\ContentSystem\Event\RenderedTreeFinalizationEvent;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\LayoutReference;
 use Contena\Core\Framework\ContentSystem\PlaceholderValues;
@@ -20,18 +20,18 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @internal
  */
-#[CoversClass(ContentTreePreparationEvent::class)]
-class ContentTreePreparationEventTest extends TestCase
+#[CoversClass(RenderedTreeFinalizationEvent::class)]
+class RenderedTreeFinalizationEventTest extends TestCase
 {
     #[TestDox('Exposes the constructed forest through tree(), then replaces it via replaceTree()')]
     public function testReplaceTreeReplacesWhatTreeReturns(): void
     {
-        $tree = [new StoredElement('root-id', 'section')];
+        $tree = [new RenderedElement('root-id', 'section')];
         $event = $this->createEvent($tree);
 
         static::assertSame($tree, $event->tree());
 
-        $replacement = [new StoredElement('injected-id', 'text')];
+        $replacement = [new RenderedElement('injected-id', 'text')];
         $event->replaceTree($replacement);
 
         static::assertSame($replacement, $event->tree());
@@ -41,13 +41,10 @@ class ContentTreePreparationEventTest extends TestCase
      * @param array<array-key, mixed> $replacement
      */
     #[DataProvider('foreignForestProvider')]
-    #[TestDox('refuses a replacement that is not a stored forest: $_dataName')]
     public function testReplaceTreeRefusesAForeignForest(array $replacement, ContentSystemException $expected): void
     {
-        $event = $this->createEvent([new StoredElement('root-id', 'section')]);
-
+        $event = $this->createEvent([new RenderedElement('root-id', 'section')]);
         $this->expectExceptionObject($expected);
-
         $event->replaceTree($replacement); // @phpstan-ignore argument.type
     }
 
@@ -55,22 +52,19 @@ class ContentTreePreparationEventTest extends TestCase
      * @param array<array-key, mixed> $replacement
      */
     #[DataProvider('foreignForestProvider')]
-    #[TestDox('refuses a construction that is not a stored forest: $_dataName')]
     public function testConstructorRefusesAForeignForest(array $replacement, ContentSystemException $expected): void
     {
         $this->expectExceptionObject($expected);
-
         $this->createEvent($replacement); // @phpstan-ignore argument.type
     }
 
-    #[TestDox('keeps the forest it holds when a replacement is refused')]
     public function testRefusedReplacementLeavesTheForestInPlace(): void
     {
-        $tree = [new StoredElement('root-id', 'section')];
+        $tree = [new RenderedElement('root-id', 'section')];
         $event = $this->createEvent($tree);
 
         try {
-            $event->replaceTree([new RenderedElement('rendered-id', 'text')]); // @phpstan-ignore argument.type
+            $event->replaceTree([new StoredElement('stored-id', 'text')]); // @phpstan-ignore argument.type
         } catch (ContentSystemException) {
         }
 
@@ -82,38 +76,19 @@ class ContentTreePreparationEventTest extends TestCase
      */
     public static function foreignForestProvider(): iterable
     {
-        yield 'a rendered element' => [
-            [new RenderedElement('rendered-id', 'text')],
-            ContentSystemException::invalidMapValue('Stored content tree', '0', StoredElement::class, RenderedElement::class),
-        ];
-
-        yield 'a rendered element behind a valid one' => [
-            [new StoredElement('root-id', 'section'), new RenderedElement('rendered-id', 'text')],
-            ContentSystemException::invalidMapValue('Stored content tree', '1', StoredElement::class, RenderedElement::class),
-        ];
-
-        yield 'a decoded element still in array form' => [
-            [['id' => 'root-id', 'component' => 'section']],
-            ContentSystemException::invalidMapValue('Stored content tree', '0', StoredElement::class, 'array'),
-        ];
-
-        yield 'a forest keyed by element id' => [
-            ['root-id' => new StoredElement('root-id', 'section')],
-            ContentSystemException::invalidMapValue('Stored content tree', 'tree', 'list<StoredElement>', 'array with non-list keys'),
-        ];
-
-        yield 'a forest with a gap left by an unset root' => [
-            [0 => new StoredElement('first-id', 'section'), 2 => new StoredElement('third-id', 'section')],
-            ContentSystemException::invalidMapValue('Stored content tree', 'tree', 'list<StoredElement>', 'array with non-list keys'),
-        ];
+        yield 'a stored element' => [[new StoredElement('stored-id', 'text')], ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, StoredElement::class)];
+        yield 'a stored element behind a valid one' => [[new RenderedElement('root-id', 'section'), new StoredElement('stored-id', 'text')], ContentSystemException::invalidMapValue('Rendered content tree', '1', RenderedElement::class, StoredElement::class)];
+        yield 'an element still in array form' => [[['id' => 'root-id', 'component' => 'section']], ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, 'array')];
+        yield 'a forest keyed by element id' => [['root-id' => new RenderedElement('root-id', 'section')], ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys')];
+        yield 'a forest with a gap left by an unset root' => [[0 => new RenderedElement('first-id', 'section'), 2 => new RenderedElement('third-id', 'section')], ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys')];
     }
 
     /**
-     * @param list<StoredElement> $tree
+     * @param list<RenderedElement> $tree
      */
-    private function createEvent(array $tree): ContentTreePreparationEvent
+    private function createEvent(array $tree): RenderedTreeFinalizationEvent
     {
-        return new ContentTreePreparationEvent(
+        return new RenderedTreeFinalizationEvent(
             $tree,
             LayoutReference::create('layout-1', 'Test', null),
             new RenderingSpecification([], PlaceholderValues::from([]), new Request()),

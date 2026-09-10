@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Event;
 
 use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\LayoutReference;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
@@ -34,6 +35,7 @@ class ContentTreePreparationEvent implements ContenaChannelEvent
         public readonly ChannelContext $channelContext,
         public readonly RenderingCacheContext $cacheContext,
     ) {
+        $this->rejectForeignTree($tree);
     }
 
     /**
@@ -49,6 +51,8 @@ class ContentTreePreparationEvent implements ContenaChannelEvent
      */
     public function replaceTree(array $tree): void
     {
+        $this->rejectForeignTree($tree);
+
         $this->tree = $tree;
     }
 
@@ -60,5 +64,33 @@ class ContentTreePreparationEvent implements ContenaChannelEvent
     public function getChannelContext(): ChannelContext
     {
         return $this->channelContext;
+    }
+
+    /**
+     * @param array<array-key, mixed> $tree
+     */
+    private function rejectForeignTree(array $tree): void
+    {
+        if (!array_is_list($tree)) {
+            throw ContentSystemException::invalidMapValue(
+                'Stored content tree',
+                'tree',
+                'list<StoredElement>',
+                'array with non-list keys'
+            );
+        }
+
+        foreach ($tree as $index => $element) {
+            if ($element instanceof StoredElement) {
+                continue;
+            }
+
+            throw ContentSystemException::invalidMapValue(
+                'Stored content tree',
+                (string) $index,
+                StoredElement::class,
+                get_debug_type($element)
+            );
+        }
     }
 }
