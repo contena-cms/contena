@@ -87,7 +87,7 @@
         "composer/semver": "^3.4.0",
         "contena/conflicts": "0.6.1",
         "doctrine/dbal": "~4.4.0",
-        "dompdf/dompdf": "3.1.4",
+        "dompdf/dompdf": "3.1.6",
         "dragonmantank/cron-expression": "^3.3",
         "ezyang/htmlpurifier": "^4.16",
         "guzzlehttp/guzzle": "^7.5.0",
