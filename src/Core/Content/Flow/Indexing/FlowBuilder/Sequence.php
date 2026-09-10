@@ -6,7 +6,6 @@ namespace Contena\Core\Content\Flow\Indexing\FlowBuilder;
 
 /**
  * @internal
- *
  */
 class Sequence
 {

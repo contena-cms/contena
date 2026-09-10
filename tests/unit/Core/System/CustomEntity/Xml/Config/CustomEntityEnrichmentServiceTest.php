@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchemaValidator;
@@ -11,6 +9,8 @@ use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Entity as Ad
 use Contena\Core\System\CustomEntity\Xml\Config\CustomEntityEnrichmentService;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\Entity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\Xml\Entity;
 use Contena\Core\System\CustomEntity\Xml\Field\StringField;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

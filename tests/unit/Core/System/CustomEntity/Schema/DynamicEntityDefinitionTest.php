@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Schema;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\System\CustomEntity\Schema\DynamicEntityDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

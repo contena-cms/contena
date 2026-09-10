@@ -1497,7 +1497,7 @@ class Configuration implements ConfigurationInterface
 
     private function createMcpSection(): ArrayNodeDefinition
     {
-        $rootNode = (new TreeBuilder('mcp'))->getRootNode();
+        $rootNode = new TreeBuilder('mcp')->getRootNode();
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()

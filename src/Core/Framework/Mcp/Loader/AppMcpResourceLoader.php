@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
+use Contena\Core\Framework\App\Mcp\Feature\McpResourceConfig;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Server\RequestContext;
-use Contena\Core\Framework\App\Mcp\Feature\McpResourceConfig;
 
 /**
  * Registers app-provided MCP resources with the MCP server registry at build time.

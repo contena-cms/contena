@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Notification;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppActivatedEvent;
 use Contena\Core\Framework\App\Event\AppDeactivatedEvent;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityLifecycleSubscriber;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -66,7 +66,7 @@ class AppMcpCapabilityLifecycleSubscriberTest extends TestCase
             ->with($notifications);
 
         $subscriber = new AppMcpCapabilityLifecycleSubscriber($detector, $notifier);
-        $subscriber->onAppChanged(new AppActivatedEvent((new AppEntity())->assign(['id' => $appId]), Context::createDefaultContext()));
+        $subscriber->onAppChanged(new AppActivatedEvent(new AppEntity()->assign(['id' => $appId]), Context::createDefaultContext()));
     }
 
     public function testNotifiesPersistedCapabilitiesForDeletedApp(): void

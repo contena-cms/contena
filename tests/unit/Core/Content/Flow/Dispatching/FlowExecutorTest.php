@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Content\Flow\Dispatching\FlowExecutor;
-use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Content\Flow\Dispatching\FlowState;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Struct\IfSequence;
@@ -13,6 +12,7 @@ use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 use Contena\Core\Content\Rule\AbstractRuleLoader;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Content\Rule\RuleEntity;
+use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\Event\ChannelContextAware;

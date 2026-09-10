@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Notification;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Feature\TranslatedString;
@@ -14,6 +12,8 @@ use Contena\Core\Framework\App\Mcp\Mcp;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityDetector;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Uuid\Uuid;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

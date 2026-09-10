@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Schema;
 
+use Contena\Core\System\CustomEntity\CustomEntityException;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\CustomEntity\CustomEntityException;
-use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
 
 /**
  * @internal
@@ -22,7 +22,7 @@ class CustomEntityNameValidatorTest extends TestCase
     {
         $this->expectExceptionObject($expectedException);
 
-        (new CustomEntityNameValidator())->validate($entityName, $fieldNames);
+        new CustomEntityNameValidator()->validate($entityName, $fieldNames);
     }
 
     /**
@@ -75,7 +75,7 @@ class CustomEntityNameValidatorTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        (new CustomEntityNameValidator())->validate(
+        new CustomEntityNameValidator()->validate(
             'ce_blog',
             ['top_seller_restrict', 'topSeller', '_internal', 'field2', '2fa_counter', 'price$usd']
         );

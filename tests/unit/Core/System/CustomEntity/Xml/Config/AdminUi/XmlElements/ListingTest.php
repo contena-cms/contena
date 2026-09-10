@@ -2,9 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements;
 
+use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Listing;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Listing;
 
 /**
  * @internal

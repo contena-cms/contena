@@ -9,7 +9,9 @@ namespace Contena\Core\Framework\Util;
  */
 final readonly class Result
 {
-    /** @var T|null */
+    /**
+     * @var T|null
+     */
     public mixed $errors;
 
     private function __construct(
@@ -19,13 +21,17 @@ final readonly class Result
         $this->errors = $errors;
     }
 
-    /** @phpstan-assert-if-false !null $this->errors */
+    /**
+     * @phpstan-assert-if-false !null $this->errors
+     */
     public function isOk(): bool
     {
         return $this->ok;
     }
 
-    /** @return self<never> */
+    /**
+     * @return self<never>
+     */
     public static function ok(): self
     {
         return new self(true);

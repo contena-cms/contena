@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Exception;
 
-
 /**
  * @codeCoverageIgnore
  */

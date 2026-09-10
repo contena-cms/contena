@@ -13,7 +13,7 @@ class BlockTemplateLoader extends AbstractBlockTemplateLoader
     public function getTemplateForBlock(CmsExtensions $cmsExtensions, string $blockName): string
     {
         try {
-            $templateFiles = (new Finder())
+            $templateFiles = new Finder()
                 ->files()
                 ->name('preview.html')
                 ->in(\sprintf('%s/cms/blocks/%s', $cmsExtensions->getPath(), $blockName));
@@ -31,7 +31,7 @@ class BlockTemplateLoader extends AbstractBlockTemplateLoader
     public function getStylesForBlock(CmsExtensions $cmsExtensions, string $blockName): string
     {
         try {
-            $styleFiles = (new Finder())
+            $styleFiles = new Finder()
                 ->files()
                 ->name('styles.css')
                 ->in(\sprintf('%s/cms/blocks/%s', $cmsExtensions->getPath(), $blockName));

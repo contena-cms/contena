@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config\CmsAware;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\Xml\Config\CmsAware\CmsAwareFields;
 use Contena\Core\System\CustomEntity\Xml\Field\Field;
 use Contena\Core\System\CustomEntity\Xml\Field\JsonField;
@@ -11,6 +9,8 @@ use Contena\Core\System\CustomEntity\Xml\Field\ManyToManyField;
 use Contena\Core\System\CustomEntity\Xml\Field\ManyToOneField;
 use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 use Contena\Core\System\CustomEntity\Xml\Field\TextField;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

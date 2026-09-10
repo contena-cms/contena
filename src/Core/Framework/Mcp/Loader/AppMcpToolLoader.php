@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
+use Contena\Core\Framework\App\Feature\AppFeatureStorage;
+use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Request\CallToolRequest;
 use Mcp\Schema\Tool;
 use Mcp\Server\RequestContext;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\Feature\AppFeatureStorage;
-use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 
 /**
  * Registers app-provided MCP tools with the MCP server registry at build time.

@@ -2,6 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Schema;
 
+use Contena\Core\System\CustomEntity\CustomEntityException;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
+use Contena\Core\System\CustomEntity\Schema\SchemaUpdater;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
@@ -10,9 +13,6 @@ use Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\CustomEntity\CustomEntityException;
-use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
-use Contena\Core\System\CustomEntity\Schema\SchemaUpdater;
 
 /**
  * @internal

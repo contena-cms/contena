@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -27,6 +23,10 @@ use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 use Contena\Tests\Unit\Core\Framework\App\AppFixture;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;
 
@@ -288,7 +288,7 @@ class CustomEntityLifecycleServiceTest extends TestCase
     public function testRemoveAppSoftDeletesCustomEntitiesWhenKeepingUserData(): void
     {
         $context = Context::createDefaultContext();
-        $customEntity = (new CustomEntityEntity())->assign(['id' => Uuid::randomHex()]);
+        $customEntity = new CustomEntityEntity()->assign(['id' => Uuid::randomHex()]);
         $customEntityRepository = $this->createCustomEntityRepository($customEntity);
         $clock = new MockClock('2026-06-16 12:34:56.123456');
         $deletedAt = $clock->now();
@@ -319,7 +319,7 @@ class CustomEntityLifecycleServiceTest extends TestCase
     public function testRemoveAppHardDeletesCustomEntities(): void
     {
         $context = Context::createDefaultContext();
-        $customEntity = (new CustomEntityEntity())->assign(['id' => Uuid::randomHex()]);
+        $customEntity = new CustomEntityEntity()->assign(['id' => Uuid::randomHex()]);
         $customEntityRepository = $this->createCustomEntityRepository($customEntity);
 
         $customEntitySchemaUpdater = $this->createMock(CustomEntitySchemaUpdater::class);

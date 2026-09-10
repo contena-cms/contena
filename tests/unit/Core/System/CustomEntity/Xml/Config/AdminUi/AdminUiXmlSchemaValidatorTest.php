@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config\AdminUi;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchemaValidator;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Entity as AdminUiEntity;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\Entity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -72,7 +72,7 @@ class AdminUiXmlSchemaValidatorTest extends TestCase
         static::assertNotNull($customEntities = $customEntityXmlSchema->getEntities()?->getEntities());
         static::assertInstanceOf(AdminUiEntity::class, $adminUiEntity = \array_pop($adminUiEntities));
         static::assertInstanceOf(Entity::class, $customEntity = \array_pop($customEntities));
-        (new AdminUiXmlSchemaValidator())->validateConfigurations(
+        new AdminUiXmlSchemaValidator()->validateConfigurations(
             $adminUiEntity,
             $customEntity,
         );

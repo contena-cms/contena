@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
+use Psr\Log\LoggerInterface;
 
 /**
  * Reads runtime metadata for app MCP tools from app feature storage: declared

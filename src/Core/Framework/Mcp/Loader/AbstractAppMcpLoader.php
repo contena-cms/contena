@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
-use Doctrine\DBAL\Exception as DBALException;
-use Mcp\Capability\Registry\Loader\LoaderInterface;
-use Mcp\Capability\RegistryInterface;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Feature\AppFeatureException;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
+use Doctrine\DBAL\Exception as DBALException;
+use Mcp\Capability\Registry\Loader\LoaderInterface;
+use Mcp\Capability\RegistryInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractAppMcpLoader implements LoaderInterface
 {

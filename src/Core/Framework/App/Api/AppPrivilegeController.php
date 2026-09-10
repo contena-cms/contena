@@ -2,13 +2,13 @@
 
 namespace Contena\Core\Framework\App\Api;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

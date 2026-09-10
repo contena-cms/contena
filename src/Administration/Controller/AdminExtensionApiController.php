@@ -52,7 +52,7 @@ class AdminExtensionApiController extends AbstractController
         }
 
         $app = $this->appRepository->search(
-            (new Criteria())->addFilter(new EqualsFilter('name', $appName)),
+            new Criteria()->addFilter(new EqualsFilter('name', $appName)),
             $context,
         )->getEntities()->first();
         if (!$app) {
@@ -70,12 +70,12 @@ class AdminExtensionApiController extends AbstractController
 
         $urlParts = parse_url($targetUrl);
         if ($urlParts === false || !isset($urlParts['scheme'], $urlParts['host'])) {
-            throw AppException::invalidArgument(sprintf('%s is not a valid url', $targetUrl));
+            throw AppException::invalidArgument(\sprintf('%s is not a valid url', $targetUrl));
         }
 
         $targetHost = $urlParts['host'];
         $allowedHosts = $app->getAllowedHosts() ?? [];
-        if (!$targetHost || !in_array($targetHost, $allowedHosts, true)) {
+        if (!$targetHost || !\in_array($targetHost, $allowedHosts, true)) {
             throw AppException::hostNotAllowed($targetUrl, $app->getName());
         }
 
@@ -110,7 +110,7 @@ class AdminExtensionApiController extends AbstractController
         }
 
         $app = $this->appRepository->search(
-            (new Criteria())->addFilter(new EqualsFilter('name', $appName)),
+            new Criteria()->addFilter(new EqualsFilter('name', $appName)),
             $context,
         )->getEntities()->first();
         if (!$app) {
@@ -124,12 +124,12 @@ class AdminExtensionApiController extends AbstractController
 
         $uriParts = parse_url($uri);
         if ($uriParts === false || !isset($uriParts['scheme'], $uriParts['host'])) {
-            throw AppException::invalidArgument(sprintf('%s is not a valid url', $uri));
+            throw AppException::invalidArgument(\sprintf('%s is not a valid url', $uri));
         }
 
         $targetHost = $uriParts['host'];
         $allowedHosts = $app->getAllowedHosts() ?? [];
-        if (!$targetHost || !in_array($targetHost, $allowedHosts, true)) {
+        if (!$targetHost || !\in_array($targetHost, $allowedHosts, true)) {
             throw AppException::hostNotAllowed($uri, $app->getName());
         }
 

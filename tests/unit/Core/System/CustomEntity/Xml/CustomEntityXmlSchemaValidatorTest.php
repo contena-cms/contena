@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchemaValidator;
 use Contena\Core\System\CustomEntity\Xml\Entities;
 use Contena\Core\System\CustomEntity\Xml\Entity;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -69,7 +69,7 @@ class CustomEntityXmlSchemaValidatorTest extends TestCase
 
         static::expectNotToPerformAssertions();
 
-        (new CustomEntityXmlSchemaValidator(new CustomEntityNameValidator()))->validate(new CustomEntityXmlSchema(__DIR__, $entities));
+        new CustomEntityXmlSchemaValidator(new CustomEntityNameValidator())->validate(new CustomEntityXmlSchema(__DIR__, $entities));
     }
 
     /**

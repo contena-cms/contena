@@ -4,7 +4,9 @@ namespace Contena\Core\Framework\Store\Struct;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 
-/** @template-extends StoreCollection<PermissionStruct> */
+/**
+ * @template-extends StoreCollection<PermissionStruct>
+ */
 class PermissionCollection extends StoreCollection
 {
     public function __construct(iterable $elements = [])
@@ -25,7 +27,9 @@ class PermissionCollection extends StoreCollection
         parent::__construct(array_values(array_unique($elements, \SORT_REGULAR)));
     }
 
-    /** @return array<string, PermissionCollection> */
+    /**
+     * @return array<string, PermissionCollection>
+     */
     public function getCategorizedPermissions(): array
     {
         $categories = [];

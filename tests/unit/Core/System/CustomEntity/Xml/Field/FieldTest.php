@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Field;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\CustomEntity\Xml\Field\Field;
 use Contena\Core\System\CustomEntity\Xml\Field\StringField;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

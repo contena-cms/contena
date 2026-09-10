@@ -2,10 +2,13 @@
 
 namespace Contena\Core\Framework\Store\Struct;
 
-/** @codeCoverageIgnore */
+/**
+ * @codeCoverageIgnore
+ */
 class PermissionStruct extends StoreStruct
 {
     protected string $entity;
+
     protected string $operation;
 
     public static function fromArray(array $data): self

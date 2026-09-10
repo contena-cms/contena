@@ -2,10 +2,10 @@
 
 namespace Contena\Tests\Integration\Core\Framework\App\Api;
 
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

@@ -2,6 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Loader;
 
+use Contena\Core\Framework\App\Feature\AppFeature;
+use Contena\Core\Framework\App\Feature\AppFeatureException;
+use Contena\Core\Framework\App\Feature\AppFeatureStorage;
+use Contena\Core\Framework\App\Feature\TranslatedString;
+use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
+use Contena\Core\Framework\Mcp\Loader\AbstractAppMcpLoader;
+use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
+use Contena\Core\Framework\Mcp\Loader\AppMcpToolLoader;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Doctrine\DBAL\Exception as DBALException;
 use Mcp\Capability\Registry\ToolReference;
 use Mcp\Capability\RegistryInterface;
@@ -14,15 +23,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\App\Feature\AppFeature;
-use Contena\Core\Framework\App\Feature\AppFeatureException;
-use Contena\Core\Framework\App\Feature\AppFeatureStorage;
-use Contena\Core\Framework\App\Feature\TranslatedString;
-use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
-use Contena\Core\Framework\Mcp\Loader\AbstractAppMcpLoader;
-use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
-use Contena\Core\Framework\Mcp\Loader\AppMcpToolLoader;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 
 /**
  * @internal

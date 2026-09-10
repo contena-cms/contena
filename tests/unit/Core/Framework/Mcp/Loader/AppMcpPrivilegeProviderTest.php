@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Loader;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
 use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * @internal

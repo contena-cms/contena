@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Framework\Mcp\Loader;
 
+use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Server\RequestContext;
-use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
 
 /**
  * Registers app-provided MCP prompts with the MCP server registry at build time.

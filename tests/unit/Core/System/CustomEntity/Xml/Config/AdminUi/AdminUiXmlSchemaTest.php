@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config\AdminUi;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Exception\CustomEntityXmlParsingException;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchema;
@@ -17,6 +15,8 @@ use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Entity;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Listing;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Tab;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\Tabs;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

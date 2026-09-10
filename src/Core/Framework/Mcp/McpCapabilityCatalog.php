@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Framework\Mcp;
 
+use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\Tool;
-use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
 
 /**
  * Provides enriched capability data by combining registry tools with dependency
@@ -20,7 +20,6 @@ class McpCapabilityCatalog
      * @param array<string, list<string>> $toolDependencies tool-name => [dep-name, ...]
      * @param array<string, array{static: list<string>, entityParam: ?string, operations: list<string>}> $toolPrivileges tool-name => privilege info
      * @param array<string, string> $toolGroups tool-name => group
-     *
      */
     public function __construct(
         private readonly RegistryInterface $registry,

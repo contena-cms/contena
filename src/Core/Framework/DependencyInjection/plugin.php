@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\DependencyInjection;
 use Composer\Autoload\ClassLoader;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationDefinition;
@@ -277,7 +278,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('kernel'),
             service(KernelPluginLoader::class),
             service(CacheInvalidator::class),
-            service(\Contena\Core\Framework\App\Source\SourceResolver::class),
+            service(SourceResolver::class),
             service('parameter_bag'),
             service('event_dispatcher'),
         ]);

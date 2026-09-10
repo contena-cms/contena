@@ -2,8 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
-use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Mcp\Capability\Registry;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;

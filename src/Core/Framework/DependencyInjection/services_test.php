@@ -2,11 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
-use Contena\Core\Test\Integration\App\TestAppServer;
 use Contena\Core\Framework\Test\Api\Acl\fixtures\AclTestController;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CustomFieldTestTranslationDefinition;
@@ -27,19 +22,24 @@ use Contena\Core\Framework\Test\MessageQueue\fixtures\TestMessageHandler;
 use Contena\Core\Framework\Test\TestCacheClearer;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Test\TestSessionStorageFactory;
+use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
+use Contena\Core\Test\Integration\App\TestAppServer;
 use Contena\Core\Test\Stub\ContentSystem\TestElementTypeLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestMultiReferenceGatingLoaderConfigSerializer;
 use Contena\Core\Test\Stub\ContentSystem\TestNavigationShapedLoader;
 use Contena\Core\Test\Stub\ContentSystem\TestNavigationShapedLoaderConfigSerializer;
 use Contena\Core\Test\Stub\ContentSystem\TestStyleOptionLoader;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use Monolog\Handler\NullHandler;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\TraceableMessageBus;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

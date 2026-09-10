@@ -2,15 +2,15 @@
 
 namespace Contena\Tests\Integration\Core\Framework\App;
 
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
+use Contena\Core\Test\Integration\App\TestAppServer;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Promise\PromiseInterface;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
-use Contena\Core\Test\Integration\App\TestAppServer;
 
 /**
  * @internal

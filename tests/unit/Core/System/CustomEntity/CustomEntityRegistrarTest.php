@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\CustomEntity;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
@@ -15,6 +12,9 @@ use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\System\CustomEntity\CustomEntityRegistrar;
 use Contena\Core\System\CustomEntity\Schema\DynamicEntityDefinition;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
