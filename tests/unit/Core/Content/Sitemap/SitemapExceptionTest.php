@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Content\Sitemap;
 
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\Test\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -25,6 +26,7 @@ class SitemapExceptionTest extends TestCase
     public function testSitemapAlreadyLocked(): void
     {
         $exception = SitemapException::sitemapAlreadyLocked(Generator::generateChannelContext());
+        static::assertSame(AlreadyLockedException::class, $exception::class);
         static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
         static::assertSame('CONTENT__SITEMAP_ALREADY_LOCKED', $exception->getErrorCode());
         static::assertSame('Cannot acquire lock for channel 98432def39fc4624b33213a56b8c944d and language 2fbb5fe2e29a4d70aa5854ce7ce3e20b', $exception->getMessage());

@@ -68,6 +68,7 @@ async function createWrapper(
 
                             return privileges.includes(identifier);
                         },
+                        isAdmin: () => !!Contena.Store.get('session').currentUser?.admin,
                     },
                     loginService: mockedLoginService,
                     userService: {
@@ -292,6 +293,29 @@ describe('modules/ct-users/page/ct-users-user-detail', () => {
     afterEach(async () => {
         await wrapper.unmount();
         Contena.Store.get('session').languageId = '';
+        Contena.Store.get('session').removeCurrentUser();
+    });
+
+    it.each([
+        [
+            true,
+            false,
+        ],
+        [
+            false,
+            true,
+        ],
+    ])('should render the admin switch with admin %s as disabled %s', async (isAdmin, expectedDisabled) => {
+        Contena.Store.get('session').setCurrentUser({ admin: isAdmin });
+
+        wrapper = await createWrapper(['users_and_permissions.editor']);
+        Object.assign(wrapper.vm, { isLoading: false });
+        await flushPromises();
+
+        const adminSwitch = wrapper.findComponent('.ct-users-user-detail__grid-is-admin');
+
+        expect(adminSwitch.exists()).toBe(true);
+        expect(Boolean(adminSwitch.props('disabled'))).toBe(expectedDisabled);
     });
 
     it('should contain all fields', async () => {

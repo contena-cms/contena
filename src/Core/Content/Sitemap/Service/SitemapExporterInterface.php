@@ -2,7 +2,7 @@
 
 namespace Contena\Core\Content\Sitemap\Service;
 
-use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
+use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
 use Contena\Core\System\Channel\ChannelContext;
 
@@ -15,7 +15,7 @@ interface SitemapExporterInterface
     public const int STRATEGY_LIVE = 3;
 
     /**
-     * @throws AlreadyLockedException
+     * @throws SitemapException
      */
     public function generate(ChannelContext $context, bool $force = false, ?string $lastProvider = null, ?int $offset = null): SitemapGenerationResult;
 }

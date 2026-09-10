@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Content\Sitemap;
 
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Exception\InvalidSitemapKey;
 use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\HttpException;
@@ -28,15 +29,7 @@ class SitemapException extends HttpException
 
     public static function sitemapAlreadyLocked(ChannelContext $context): self
     {
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::SITEMAP_ALREADY_LOCKED,
-            'Cannot acquire lock for channel {{ channelId }} and language {{ languageId }}',
-            [
-                'channelId' => $context->getChannelId(),
-                'languageId' => $context->getLanguageId(),
-            ],
-        );
+        return new AlreadyLockedException($context);
     }
 
     public static function invalidDomain(): self

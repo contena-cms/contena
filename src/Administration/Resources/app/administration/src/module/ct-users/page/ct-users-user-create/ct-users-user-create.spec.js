@@ -38,6 +38,7 @@ async function createWrapper(privileges = []) {
 
                         return privileges.includes(identifier);
                     },
+                    isAdmin: () => !!Contena.Store.get('session').currentUser?.admin,
                 },
                 loginService: {},
                 numberRangeService,

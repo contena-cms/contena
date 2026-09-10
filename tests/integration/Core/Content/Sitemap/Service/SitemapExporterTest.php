@@ -2,11 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Service;
 
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporter;
 use Contena\Core\Content\Sitemap\Service\SitemapHandleFactoryInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapHandleInterface;
-use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\Content\Sitemap\Struct\Url;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Defaults;
@@ -73,7 +73,7 @@ class SitemapExporterTest extends TestCase
 
         $exporter = $this->createSitemapExporter($cache);
 
-        $this->expectException(SitemapException::class);
+        $this->expectException(AlreadyLockedException::class);
         $exporter->generate($this->context);
     }
 

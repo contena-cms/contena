@@ -49,12 +49,13 @@
                         </ct-block>
 
                         <ct-block name="ct_users_user_detail_grid_content_acl_is_admin">
+                            <!-- Only a super admin can grant or revoke the admin flag. The API rejects the write otherwise. -->
                             <mt-switch
                                 v-model="user.admin"
                                 name="ct-field--user-admin"
                                 class="ct-users-user-detail__grid-is-admin"
                                 :label="translate('ct-users.user-detail.labelAdministrator')"
-                                :disabled="isCurrentUser || !acl.can('users_and_permissions.editor') || undefined"
+                                :disabled="isCurrentUser || !acl.isAdmin() || undefined"
                             />
                         </ct-block>
                     </div>

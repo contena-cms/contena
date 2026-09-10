@@ -3,6 +3,7 @@
 namespace Contena\Tests\Integration\Core\Content\Sitemap\Command;
 
 use Contena\Core\Content\Sitemap\Commands\SitemapGenerateCommand;
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporter;
 use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
@@ -14,7 +15,9 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -80,5 +83,35 @@ class SitemapGenerateCommandTest extends TestCase
 
         $input = new ArrayInput([]);
         $this->command->run($input, new NullOutput());
+    }
+
+    public function testContinuesWhenSitemapGenerationIsLocked(): void
+    {
+        $connection = static::getContainer()->get(Connection::class);
+        $connection->executeStatement('DELETE FROM channel');
+        $tenantContext = $this->createTenantContext($this->createTenant());
+
+        $this->createChannel([
+            'id' => Uuid::randomHex(),
+            'name' => 'frontend',
+            'typeId' => Defaults::CHANNEL_TYPE_WEB,
+            'domains' => [[
+                'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                'url' => 'http://valid.test',
+            ]],
+        ], $tenantContext);
+
+        $this->exporter->expects($this->once())
+            ->method('generate')
+            ->willReturnCallback(static function (ChannelContext $context): never {
+                throw new AlreadyLockedException($context);
+            });
+
+        $output = new BufferedOutput();
+        $status = $this->command->run(new ArrayInput([]), $output);
+
+        static::assertSame(Command::SUCCESS, $status);
+        static::assertStringContainsString('ERROR: Cannot acquire lock', $output->fetch());
     }
 }

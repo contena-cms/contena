@@ -2,6 +2,10 @@
 
 ## Core
 
+### Concurrent sitemap generation is skipped gracefully
+
+`sitemap:generate` without `--force` no longer aborts when another process is already generating the sitemap for the same channel and language. The affected channel is reported and skipped, and generation continues for the remaining channels. The lock now throws `Contena\Core\Content\Sitemap\Exception\AlreadyLockedException` again as a subtype of `SitemapException`, so plugin `catch (AlreadyLockedException)` blocks work as intended; the error code and HTTP status remain unchanged.
+
 ### Modular payment services and plugin boundaries
 
 Incoming payments (`Payment`), refunds, transfers and subscription agreements now expose separate abstract service contracts. Each business owns its orders/agreements, queries and callbacks; there is no shared order workflow or standalone query domain. Gateways implement capability-specific interfaces; routing plugins can provide candidates, veto candidates and select a route. Events distinguish vetoable pre-gateway hooks, transactional state changes and best-effort gateway completion observers, without a duplicate operation event cycle. See `src/Core/System/Payment/README.md` for contracts, tags, ordering and limitations.
