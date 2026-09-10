@@ -3,6 +3,7 @@
 namespace Contena\Core\Installer\Configuration;
 
 use Contena\Core\Installer\Controller\SystemConfigurationController;
+use Contena\Core\Maintenance\Member\Service\MemberProvisioner;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Doctrine\DBAL\Connection;
@@ -27,6 +28,7 @@ class AdminConfigurationService
     public function createAdmin(array $user, Connection $connection): void
     {
         $userProvisioner = new UserProvisioner($connection, $this->clock, $this->numberRangeValueGenerator);
+        $memberProvisioner = new MemberProvisioner($connection, $this->clock, $this->numberRangeValueGenerator);
         $isDefaultAdmin = strcasecmp($user['username'], UserProvisioner::DEFAULT_ADMIN_USERNAME) === 0;
         $additionalData = [
             'name' => $user['name'],
@@ -43,6 +45,8 @@ class AdminConfigurationService
             $user['password'],
             $additionalData
         );
+
+        $memberProvisioner->provision($user['email'], $user['password'], $user['name']);
 
         if ($isDefaultAdmin) {
             return;

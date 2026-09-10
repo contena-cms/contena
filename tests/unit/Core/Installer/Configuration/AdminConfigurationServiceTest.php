@@ -22,14 +22,24 @@ class AdminConfigurationServiceTest extends TestCase
     {
         $localeId = Uuid::randomBytes();
         $roleId = Uuid::randomBytes();
+        $channelId = Uuid::randomBytes();
+        $memberGroupId = Uuid::randomBytes();
+        $languageId = Uuid::randomBytes();
         $users = [];
+        $member = null;
         $roleAssignment = null;
         $connection = $this->createMock(Connection::class);
-        $connection->expects($this->exactly(3))
+        $connection->expects($this->exactly(4))
             ->method('insert')
-            ->willReturnCallback(static function (string $table, array $data) use (&$users, &$roleAssignment): int {
+            ->willReturnCallback(static function (string $table, array $data) use (&$users, &$member, &$roleAssignment): int {
                 if ($table === 'user') {
                     $users[] = $data;
+
+                    return 1;
+                }
+
+                if ($table === 'member') {
+                    $member = $data;
 
                     return 1;
                 }
@@ -50,6 +60,11 @@ class AdminConfigurationServiceTest extends TestCase
             new FakeQueryBuilder($connection, []),
             new FakeQueryBuilder($connection, [[$localeId]])
         );
+        $connection->method('fetchAssociative')->willReturn([
+            'id' => $channelId,
+            'member_group_id' => $memberGroupId,
+            'language_id' => $languageId,
+        ]);
 
         $user = [
             'username' => 'supperadmin',
@@ -81,6 +96,16 @@ class AdminConfigurationServiceTest extends TestCase
         static::assertTrue($users[1]['active']);
         static::assertTrue(password_verify('contenaAdmin', (string) $users[1]['password']));
 
+        static::assertIsArray($member);
+        static::assertSame($channelId, $member['channel_id']);
+        static::assertSame($memberGroupId, $member['member_group_id']);
+        static::assertSame($languageId, $member['language_id']);
+        static::assertSame('10000', $member['member_number']);
+        static::assertSame('first last', $member['name']);
+        static::assertSame('test@test.com', $member['email']);
+        static::assertTrue($member['active']);
+        static::assertTrue(password_verify('contenaAdmin', (string) $member['password']));
+
         static::assertIsArray($roleAssignment);
         static::assertSame($users[1]['id'], $roleAssignment['user_id']);
         static::assertSame($roleId, $roleAssignment['acl_role_id']);
@@ -90,14 +115,24 @@ class AdminConfigurationServiceTest extends TestCase
     {
         $localeId = Uuid::randomBytes();
         $roleId = Uuid::randomBytes();
+        $channelId = Uuid::randomBytes();
+        $memberGroupId = Uuid::randomBytes();
+        $languageId = Uuid::randomBytes();
         $user = null;
+        $member = null;
         $roleAssignment = null;
         $connection = $this->createMock(Connection::class);
-        $connection->expects($this->exactly(2))
+        $connection->expects($this->exactly(3))
             ->method('insert')
-            ->willReturnCallback(static function (string $table, array $data) use (&$user, &$roleAssignment): int {
+            ->willReturnCallback(static function (string $table, array $data) use (&$user, &$member, &$roleAssignment): int {
                 if ($table === 'user') {
                     $user = $data;
+
+                    return 1;
+                }
+
+                if ($table === 'member') {
+                    $member = $data;
 
                     return 1;
                 }
@@ -114,6 +149,11 @@ class AdminConfigurationServiceTest extends TestCase
             new FakeQueryBuilder($connection, []),
             new FakeQueryBuilder($connection, [[$localeId]])
         );
+        $connection->method('fetchAssociative')->willReturn([
+            'id' => $channelId,
+            'member_group_id' => $memberGroupId,
+            'language_id' => $languageId,
+        ]);
 
         $generator = static::createStub(AbstractNumberRangeValueGenerator::class);
         $generator->method('getValue')->willReturn('10000');
@@ -129,6 +169,10 @@ class AdminConfigurationServiceTest extends TestCase
         static::assertIsArray($user);
         static::assertSame('admin', $user['username']);
         static::assertSame(1, $user['admin']);
+        static::assertIsArray($member);
+        static::assertSame('Custom administrator', $member['name']);
+        static::assertSame('custom@example.com', $member['email']);
+        static::assertTrue(password_verify('contenaAdmin', (string) $member['password']));
         static::assertIsArray($roleAssignment);
         static::assertSame($user['id'], $roleAssignment['user_id']);
         static::assertSame($roleId, $roleAssignment['acl_role_id']);

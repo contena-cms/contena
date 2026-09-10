@@ -2,6 +2,10 @@
 
 ## Core
 
+### Initial installations create a default member
+
+Web installer setups and `system:install --basic-setup` now create a member for the default Web channel with the initial administrator's name, email address, and password. Running `user:create` independently continues to create only an administration user.
+
 ### Concurrent sitemap generation is skipped gracefully
 
 `sitemap:generate` without `--force` no longer aborts when another process is already generating the sitemap for the same channel and language. The affected channel is reported and skipped, and generation continues for the remaining channels. The lock now throws `Contena\Core\Content\Sitemap\Exception\AlreadyLockedException` again as a subtype of `SitemapException`, so plugin `catch (AlreadyLockedException)` blocks work as intended; the error code and HTTP status remain unchanged.

@@ -126,6 +126,12 @@ class SystemInstallCommand extends Command
                 '--email' => UserProvisioner::DEFAULT_ADMIN_EMAIL,
                 '--role' => UserProvisioner::ADMINISTRATOR_ROLE_CODE,
             ];
+            $commands[] = [
+                'command' => 'member:create',
+                'email' => UserProvisioner::USER_EMAIL_FALLBACK,
+                '--password' => 'contenaAdmin',
+                '--name' => 'supperadmin',
+            ];
 
             if ($application->has('theme:change') && !$input->getOption('no-assign-theme')) {
                 $commands[] = [

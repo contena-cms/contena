@@ -8,6 +8,7 @@ use Contena\Core\Installer\Finish\SystemLocker;
 use Contena\Core\Maintenance\System\Command\SystemInstallCommand;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
+use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -89,6 +90,7 @@ class SystemInstallCommandTest extends TestCase
         $command = $this->prepareCommandInstanceWithDefaultInstallCommands([
             'user:create',
             'user:create',
+            'member:create',
             'theme:change',
             'assets:install',
         ]);
@@ -106,13 +108,13 @@ class SystemInstallCommandTest extends TestCase
         $connectionFactory->method('getConnection')->willReturn($connection);
 
         $setupDatabaseAdapter = static::createStub(SetupDatabaseAdapter::class);
-        $userCommands = [];
+        $provisioningCommands = [];
 
         $application = static::createStub(Application::class);
         $application->method('has')->willReturn(true);
-        $application->method('doRun')->willReturnCallback(function (InputInterface $input) use (&$userCommands): int {
-            if ($input->getFirstArgument() === 'user:create') {
-                $userCommands[] = (string) $input;
+        $application->method('doRun')->willReturnCallback(function (InputInterface $input) use (&$provisioningCommands): int {
+            if (\in_array($input->getFirstArgument(), ['user:create', 'member:create'], true)) {
+                $provisioningCommands[] = (string) $input;
             }
 
             return Command::SUCCESS;
@@ -129,14 +131,18 @@ class SystemInstallCommandTest extends TestCase
         $command->setApplication($application);
 
         static::assertSame(Command::SUCCESS, $command->run(new ArrayInput(['--basic-setup' => true]), new BufferedOutput()));
-        static::assertCount(2, $userCommands);
-        static::assertStringContainsString('supperadmin', $userCommands[0]);
-        static::assertStringContainsString('--admin', $userCommands[0]);
-        static::assertStringContainsString('--password=contenaAdmin', $userCommands[0]);
-        static::assertStringContainsString(' admin', $userCommands[1]);
-        static::assertStringContainsString('--name=admin', $userCommands[1]);
-        static::assertStringContainsString('--role=administrator', $userCommands[1]);
-        static::assertStringContainsString('--password=contenaAdmin', $userCommands[1]);
+        static::assertCount(3, $provisioningCommands);
+        static::assertStringContainsString('supperadmin', $provisioningCommands[0]);
+        static::assertStringContainsString('--admin', $provisioningCommands[0]);
+        static::assertStringContainsString('--password=contenaAdmin', $provisioningCommands[0]);
+        static::assertStringContainsString(' admin', $provisioningCommands[1]);
+        static::assertStringContainsString('--name=admin', $provisioningCommands[1]);
+        static::assertStringContainsString('--role=administrator', $provisioningCommands[1]);
+        static::assertStringContainsString('--password=contenaAdmin', $provisioningCommands[1]);
+        static::assertStringContainsString('member:create', $provisioningCommands[2]);
+        static::assertStringContainsString(UserProvisioner::USER_EMAIL_FALLBACK, $provisioningCommands[2]);
+        static::assertStringContainsString('--name=supperadmin', $provisioningCommands[2]);
+        static::assertStringContainsString('--password=contenaAdmin', $provisioningCommands[2]);
     }
 
     public function testAssetsInstallCanBeSkipped(): void

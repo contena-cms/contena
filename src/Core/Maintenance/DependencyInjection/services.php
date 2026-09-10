@@ -12,6 +12,8 @@ use Contena\Core\Maintenance\Channel\Command\ChannelMaintenanceEnableCommand;
 use Contena\Core\Maintenance\Channel\Command\ChannelReplaceUrlCommand;
 use Contena\Core\Maintenance\Channel\Command\ChannelUpdateDomainCommand;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
+use Contena\Core\Maintenance\Member\Command\MemberCreateCommand;
+use Contena\Core\Maintenance\Member\Service\MemberProvisioner;
 use Contena\Core\Maintenance\System\Command\SystemGenerateAppSecretCommand;
 use Contena\Core\Maintenance\System\Command\SystemInstallCommand;
 use Contena\Core\Maintenance\System\Command\SystemIsInstalledCommand;
@@ -113,6 +115,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([service(UserProvisioner::class)])
         ->tag('console.command');
 
+    $services->set(MemberCreateCommand::class)
+        ->args([service(MemberProvisioner::class)])
+        ->tag('console.command');
+
     $services->set(UserChangePasswordCommand::class)
         ->args([service('user.repository')])
         ->tag('console.command');
@@ -123,6 +129,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(UserProvisioner::class)
         ->public()
+        ->args([
+            service(Connection::class),
+            service(ClockInterface::class),
+            service(AbstractNumberRangeValueGenerator::class),
+        ]);
+
+    $services->set(MemberProvisioner::class)
         ->args([
             service(Connection::class),
             service(ClockInterface::class),
