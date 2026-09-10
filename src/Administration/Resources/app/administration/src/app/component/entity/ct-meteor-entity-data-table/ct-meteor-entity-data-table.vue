@@ -881,6 +881,7 @@ const confirmDelete = tableDelete.confirmDelete;
 const openBulkDeleteModal = tableDelete.openBulkDeleteModal;
 const closeBulkDeleteModal = tableDelete.closeBulkDeleteModal;
 const confirmBulkDelete = tableDelete.confirmBulkDelete;
+const syncRouteQueryState = routeSync.syncRouteQueryState;
 
 ctDefinePublic({
     records,
@@ -899,6 +900,7 @@ ctDefinePublic({
     setSort,
     setSelectedIds,
     openDetail,
+    syncRouteQueryState,
 });
 </script>
 
