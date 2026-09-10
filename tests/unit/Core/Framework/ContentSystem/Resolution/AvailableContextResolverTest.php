@@ -42,7 +42,7 @@ class AvailableContextResolverTest extends TestCase
     #[TestDox('returns the bound source root-ambient context for a top-level element')]
     public function testTopLevelReceivesRootAmbient(): void
     {
-        $root = new StoredElement('root-1', 'CT:Block');
+        $root = new StoredElement('root-1', 'Ct:Block');
 
         $rootContext = $this->rootAmbientBlogContext();
 
@@ -52,7 +52,7 @@ class AvailableContextResolverTest extends TestCase
     #[TestDox('returns nothing for a top-level element whose source exposes no root-ambient context (header/footer)')]
     public function testTopLevelWithoutRootAmbientReceivesNothing(): void
     {
-        $root = new StoredElement('root-1', 'CT:Block');
+        $root = new StoredElement('root-1', 'Ct:Block');
 
         static::assertSame([], $this->resolver()->resolve('root-1', [$root], []));
     }
@@ -60,10 +60,10 @@ class AvailableContextResolverTest extends TestCase
     #[TestDox('resolves ancestor provider context with the FQCN from the provider type spec for a nested element')]
     public function testNestedReceivesAncestorProvider(): void
     {
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -91,10 +91,10 @@ class AvailableContextResolverTest extends TestCase
     {
         // Mirrors ContextDistributor's child matching ($config->getConsumerAlias() ?? $contextKey): a provider
         // keyed by the alias at serving must be judged available under the alias at the write gate too.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -118,9 +118,9 @@ class AvailableContextResolverTest extends TestCase
     {
         // The uniform formula: one rule for every depth, so the deep element and the top-level element see the
         // same ambient entry even though not one element between them declares any wiring.
-        $child = new StoredElement('child-1', 'CT:Block');
-        $intermediate = new StoredElement('level-2', 'CT:Block', [], [], ['content' => [$child]]);
-        $root = new StoredElement('root-1', 'CT:Block', [], [], ['content' => [$intermediate]]);
+        $child = new StoredElement('child-1', 'Ct:Block');
+        $intermediate = new StoredElement('level-2', 'Ct:Block', [], [], ['content' => [$child]]);
+        $root = new StoredElement('root-1', 'Ct:Block', [], [], ['content' => [$intermediate]]);
 
         $rootContext = $this->rootAmbientBlogContext();
 
@@ -131,11 +131,11 @@ class AvailableContextResolverTest extends TestCase
     #[TestDox('does not expose a backed ancestor provider past a non-redistributing intermediate')]
     public function testProviderContextStopsAtNonRedistributingIntermediate(): void
     {
-        $grandchild = new StoredElement('grandchild-1', 'CT:Block');
-        $child = new StoredElement('child-1', 'CT:Block', [], [], ['content' => [$grandchild]]);
+        $grandchild = new StoredElement('grandchild-1', 'Ct:Block');
+        $child = new StoredElement('child-1', 'Ct:Block', [], [], ['content' => [$grandchild]]);
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -204,10 +204,10 @@ class AvailableContextResolverTest extends TestCase
         // only in the root-ambient set, so neither relays anything. What the deep element sees is the ambient
         // entry itself, appended by the uniform formula. Asserting an empty result would be wrong: the formula
         // appends the ambient set at every depth, and a test demanding [] would invite weakening it.
-        $deep = new StoredElement('deep-1', 'CT:Block');
+        $deep = new StoredElement('deep-1', 'Ct:Block');
         $level2 = new StoredElement(
             'level-2',
-            'CT:Block',
+            'Ct:Block',
             [],
             [],
             ['content' => [$deep]],
@@ -215,7 +215,7 @@ class AvailableContextResolverTest extends TestCase
         );
         $root = new StoredElement(
             'root-1',
-            'CT:Block',
+            'Ct:Block',
             [],
             [],
             ['content' => [$level2]],
@@ -243,10 +243,10 @@ class AvailableContextResolverTest extends TestCase
         // provider, and what it hands downstream carries its own address and root:false. No loader can back the
         // provider here, so the ambient set is the only thing that can, and dropping it from the backing
         // judgment collapses this to the ambient entry alone.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -272,10 +272,10 @@ class AvailableContextResolverTest extends TestCase
         // ambient value into this ancestor at render time, so its declared provider stays unbacked and the
         // child sees the ambient entry alone. Judging the whole ambient set instead mints a phantom exposure
         // here, which then satisfies a required parent-scope consumer downstream that render never feeds.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -297,10 +297,10 @@ class AvailableContextResolverTest extends TestCase
         // ambient key, so both other clauses accept it, and only its scope disqualifies it. The ambient map
         // fills root-scoped consumers alone, so a parent-scoped one is fed by an ancestor or by nothing, and
         // this element is top-level.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -321,10 +321,10 @@ class AvailableContextResolverTest extends TestCase
         // The ancestor does receive the ambient value, but its propertyAlias files it under `item`, while the
         // provider distributes whatever sits under `blog`. A root-scoped consumer is therefore not backing
         // by its presence: what it lands on has to be the provider's own key.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -346,10 +346,10 @@ class AvailableContextResolverTest extends TestCase
         // difference visible. The consumer resolves through the ambient `blog` and writes its value under
         // the FULL key `blog.manufacturer`, so the provider reading `blog` finds nothing at render.
         // Comparing only the base key would call this backed and feed a downstream consumer from nowhere.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -370,10 +370,10 @@ class AvailableContextResolverTest extends TestCase
         // The same consumer, now aliased onto the provider's key, is the shape that DOES back it: the overlay
         // writes the resolved value under `blog`, which is the key the provider distributes from. Dropping
         // the alias from the comparison and matching on the consumer key alone loses this backing.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -397,10 +397,10 @@ class AvailableContextResolverTest extends TestCase
         // for `category` while the bound source supplies `blog`. Nothing is delivered to this ancestor at
         // render time and its provider stays unbacked. The FQCNs match either way, which is precisely what the
         // type-only judgment this replaces went on.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -422,10 +422,10 @@ class AvailableContextResolverTest extends TestCase
         // the whole ambient set makes the provider's own property ambiguous (two Root candidates, which
         // ElementResolver::pickDefault refuses to choose between) and loses a backing the runtime has: delivery
         // hands this element the `blog` entry alone.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$child]],
@@ -457,7 +457,7 @@ class AvailableContextResolverTest extends TestCase
     {
         // Non-empty root-ambient context so the located-element return (which appends it at every depth)
         // cannot produce the same [] as the not-found return under test.
-        $root = new StoredElement('root-1', 'CT:Block');
+        $root = new StoredElement('root-1', 'Ct:Block');
 
         static::assertSame([], $this->resolver()->resolve('missing', [$root], $this->rootAmbientBlogContext()));
     }
@@ -470,7 +470,7 @@ class AvailableContextResolverTest extends TestCase
         // the per-ancestor pass never reaches it.
         $root = new StoredElement(
             'root-1',
-            'CT:Block',
+            'Ct:Block',
             [],
             [],
             [],
@@ -491,10 +491,10 @@ class AvailableContextResolverTest extends TestCase
         // Collision axis: the ANCESTOR's two provider map keys both rename the matched child key to 'item'.
         // The target's own provider set is clean, so only the per-ancestor validateProviderDeliveryKeys
         // call can throw — dropping it while keeping the target call silently accepts the colliding layout.
-        $child = new StoredElement('child-1', 'CT:Block');
+        $child = new StoredElement('child-1', 'Ct:Block');
         $root = new StoredElement(
             'root-1',
-            'CT:Block',
+            'Ct:Block',
             [],
             [],
             ['content' => [$child]],
@@ -537,10 +537,10 @@ class AvailableContextResolverTest extends TestCase
      */
     private function providerChain(array $intermediateConsumers): array
     {
-        $deep = new StoredElement('deep-1', 'CT:Block');
+        $deep = new StoredElement('deep-1', 'Ct:Block');
         $level2 = new StoredElement(
             'level-2',
-            'CT:Block',
+            'Ct:Block',
             [],
             [],
             ['content' => [$deep]],
@@ -548,7 +548,7 @@ class AvailableContextResolverTest extends TestCase
         );
         $root = new StoredElement(
             'root-1',
-            'CT:Provider',
+            'Ct:Provider',
             [],
             [],
             ['content' => [$level2]],
@@ -594,7 +594,7 @@ class AvailableContextResolverTest extends TestCase
     private function resolverWithLoaderMap(ContentSystemDataLoaderMap $map): AvailableContextResolver
     {
         $providerSpec = new ContentSystemElementTypeSpecification(
-            'CT:Provider',
+            'Ct:Provider',
             'Provider',
             '',
             null,
@@ -612,7 +612,7 @@ class AvailableContextResolverTest extends TestCase
         );
 
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
-        $registry->method('has')->willReturnCallback(static fn (string $name): bool => $name === 'CT:Provider');
+        $registry->method('has')->willReturnCallback(static fn (string $name): bool => $name === 'Ct:Provider');
         $registry->method('get')->willReturn($providerSpec);
 
         $typeResolver = static::createStub(AbstractContentSystemDataLoaderMapResolver::class);

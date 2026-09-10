@@ -30,8 +30,8 @@ class ContentDataPageEncoderTest extends TestCase
     #[TestDox('serves the body keys in wire order, the page triple, the index maps, and the api alias, with no structure key')]
     public function testEncodeServesTheDataPageBody(): void
     {
-        $child = new RenderedElement('child', 'CT:Content:Text');
-        $tree = [new RenderedElement('root', 'CT:Grid:Container', [], ['content' => [$child]])];
+        $child = new RenderedElement('child', 'Ct:Content:Text');
+        $tree = [new RenderedElement('root', 'Ct:Grid:Container', [], ['content' => [$child]])];
         $data = ['r2' => 'Beta', 'r1' => 'Alpha'];
         $assignments = ['zulu-element' => ['title' => 'r2'], 'alpha-element' => ['title' => 'r1']];
 

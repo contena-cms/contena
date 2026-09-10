@@ -40,7 +40,7 @@ Elements can declare multiple data requirements:
 ```json
 {
   "id": "complex-page",
-  "component": "CT:Page:Complex",
+  "component": "Ct:Page:Complex",
   "properties": {
     "blog": "{{blogId}}",
     "relatedBlogIds": ["{{relatedId1}}", "{{relatedId2}}", "{{relatedId3}}"]

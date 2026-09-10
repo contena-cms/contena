@@ -72,7 +72,7 @@ function isRestrictedSource(event: KeyboardEvent): boolean {
     const target = event.target as HTMLElement | null;
     const isEditableDiv = target?.tagName === 'DIV' && target.isContentEditable;
 
-    return isEditableDiv || /INPUT|TEXTAREA|SELECT/.test(target?.tagName ?? '');
+    return isEditableDiv || /INPUT|TEXTAREA|SELECt/.test(target?.tagName ?? '');
 }
 
 function findShortcut(key: string): ShortcutRegistration | undefined {

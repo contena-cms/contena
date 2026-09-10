@@ -82,7 +82,7 @@ class ElementTypeSpecificationSerializerTest extends TestCase
         $data = [
             'meta' => $this->buildMinimalMeta(),
             'slots' => [
-                ['name' => 'media', 'maxElements' => 1, 'allowList' => ['CT:Media:Image'], 'description' => 'Media slot.'],
+                ['name' => 'media', 'maxElements' => 1, 'allowList' => ['Ct:Media:Image'], 'description' => 'Media slot.'],
             ],
         ];
 
@@ -91,7 +91,7 @@ class ElementTypeSpecificationSerializerTest extends TestCase
         static::assertCount(1, $dto->slots);
         static::assertSame('media', $dto->slots[0]->name);
         static::assertSame(1, $dto->slots[0]->maxElements);
-        static::assertSame(['CT:Media:Image'], $dto->slots[0]->allowList);
+        static::assertSame(['Ct:Media:Image'], $dto->slots[0]->allowList);
     }
 
     /**
@@ -326,11 +326,11 @@ class ElementTypeSpecificationSerializerTest extends TestCase
     #[TestDox('includes allowList in normalized slot output')]
     public function testNormalizesOptionalSlotFields(): void
     {
-        $dto = $this->buildMinimalDto(slots: [new SlotSpecificationDto('media', null, ['CT:Media:Image'], '')]);
+        $dto = $this->buildMinimalDto(slots: [new SlotSpecificationDto('media', null, ['Ct:Media:Image'], '')]);
 
         $normalized = $this->serializer->normalize($dto);
 
-        static::assertSame(['CT:Media:Image'], $normalized['slots'][0]['allowList']);
+        static::assertSame(['Ct:Media:Image'], $normalized['slots'][0]['allowList']);
     }
 
     #[TestDox('omits optional fields from normalized output when values are defaults')]
@@ -392,7 +392,7 @@ class ElementTypeSpecificationSerializerTest extends TestCase
     #[TestDox('produces identical specification schema after JSON round-trip')]
     public function testJsonRoundTripProducesIdenticalSchema(string $fixtureFile): void
     {
-        $name = 'CT:Test:Element';
+        $name = 'Ct:Test:Element';
         $source = 'core';
 
         $yamlInput = Yaml::parseFile(__DIR__ . '/fixtures/' . $fixtureFile);

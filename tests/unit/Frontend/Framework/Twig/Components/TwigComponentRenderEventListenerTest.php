@@ -53,21 +53,21 @@ class TwigComponentRenderEventListenerTest extends TestCase
         $event = $this->event(
             $metadata,
             ['attributes' => $this->attributes()],
-            ['hostTemplate' => 'components/CT/Filter/Panel.html.twig'],
+            ['hostTemplate' => 'components/Ct/Filter/Panel.html.twig'],
         );
 
         $listener($event);
 
         $rendered = (string) $event->getVariables()['attributes'];
-        static::assertStringContainsString('data-component-parent="CT:Filter:Panel"', $rendered);
-        static::assertStringContainsString('data-component-parent-template="components/CT/Filter/Panel.html.twig"', $rendered);
+        static::assertStringContainsString('data-component-parent="Ct:Filter:Panel"', $rendered);
+        static::assertStringContainsString('data-component-parent-template="components/Ct/Filter/Panel.html.twig"', $rendered);
     }
 
     public function testInvokeDoesNotAddParentTemplateInProductionEnvironment(): void
     {
         $listener = new TwigComponentRenderEventListener('prod');
         $metadata = $this->metadata();
-        $event = $this->event($metadata, ['attributes' => $this->attributes()], ['hostTemplate' => 'components/CT/Filter/Panel.html.twig']);
+        $event = $this->event($metadata, ['attributes' => $this->attributes()], ['hostTemplate' => 'components/Ct/Filter/Panel.html.twig']);
 
         $listener($event);
 
@@ -114,9 +114,9 @@ class TwigComponentRenderEventListenerTest extends TestCase
     public static function pathToComponentNameDataProvider(): \Generator
     {
         yield 'simple path' => ['components/Button.html.twig', 'Button'];
-        yield 'nested path' => ['components/CT/Filter/Panel.html.twig', 'CT:Filter:Panel'];
-        yield 'path without components prefix' => ['CT/Filter/Panel.html.twig', 'CT:Filter:Panel'];
-        yield 'deeply nested path' => ['components/CT/Forms/Input/Text/Primary.html.twig', 'CT:Forms:Input:Text:Primary'];
+        yield 'nested path' => ['components/Ct/Filter/Panel.html.twig', 'Ct:Filter:Panel'];
+        yield 'path without components prefix' => ['Ct/Filter/Panel.html.twig', 'Ct:Filter:Panel'];
+        yield 'deeply nested path' => ['components/Ct/Forms/Input/Text/Primary.html.twig', 'Ct:Forms:Input:Text:Primary'];
     }
 
     #[DataProvider('pathToComponentNameDataProvider')]

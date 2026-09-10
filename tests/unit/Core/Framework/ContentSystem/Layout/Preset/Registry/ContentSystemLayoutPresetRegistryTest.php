@@ -39,15 +39,15 @@ class ContentSystemLayoutPresetRegistryTest extends TestCase
             'name' => 'Text block',
             'description' => 'A single text element.',
             'icon' => 'regular-align-left',
-            'layout' => [['component' => 'CT:Content:Text']],
+            'layout' => [['component' => 'Ct:Content:Text']],
         ]);
         $this->writePreset('other.yaml', [
             'id' => 'core.media-and-text',
             'name' => 'Media & text',
-            'layout' => [['component' => 'CT:Grid:Container']],
+            'layout' => [['component' => 'Ct:Grid:Container']],
         ]);
 
-        $payload = [['id' => 'el-1', 'component' => 'CT:Content:Text', 'properties' => []]];
+        $payload = [['id' => 'el-1', 'component' => 'Ct:Content:Text', 'properties' => []]];
         $compiler = static::createStub(LayoutPresetPayloadCompiler::class);
         $compiler->method('compile')->willReturn($payload);
 
@@ -81,7 +81,7 @@ class ContentSystemLayoutPresetRegistryTest extends TestCase
     #[TestDox('compiles the authoring shorthand through the payload compiler')]
     public function testAllCompilesLayoutThroughCompiler(): void
     {
-        $layout = [['component' => 'CT:Content:Text', 'properties' => ['text' => 'x']]];
+        $layout = [['component' => 'Ct:Content:Text', 'properties' => ['text' => 'x']]];
         $this->writePreset('text-block.yaml', [
             'id' => 'core.text-block',
             'name' => 'Text block',
@@ -175,7 +175,7 @@ class ContentSystemLayoutPresetRegistryTest extends TestCase
         $this->writePreset('text-block.yaml', [
             'id' => 'core.text-block',
             'name' => 'Text block',
-            'layout' => [['component' => 'CT:Content:Text']],
+            'layout' => [['component' => 'Ct:Content:Text']],
         ]);
 
         $compiler = static::createStub(LayoutPresetPayloadCompiler::class);

@@ -131,7 +131,7 @@ class ContentSystemExceptionTest extends TestCase
     public static function producesCorrectStatusAndErrorCodeProvider(): iterable
     {
         yield 'data loader not registered' => [
-            ContentSystemException::dataLoaderNotRegistered('blog', 'CT:Blog:Card', 'elem-1'),
+            ContentSystemException::dataLoaderNotRegistered('blog', 'Ct:Blog:Card', 'elem-1'),
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'CONTENT_SYSTEM__DATA_LOADER_NOT_REGISTERED',
             'blog',
@@ -339,22 +339,22 @@ class ContentSystemExceptionTest extends TestCase
         ];
 
         yield 'element type duplicate' => [
-            ContentSystemException::elementTypeDuplicate('CT:Blog:Card', 'core', 'MyPlugin'),
+            ContentSystemException::elementTypeDuplicate('Ct:Blog:Card', 'core', 'MyPlugin'),
             Response::HTTP_CONFLICT,
             'CONTENT_SYSTEM__ELEMENT_TYPE_DUPLICATE',
-            'CT:Blog:Card',
+            'Ct:Blog:Card',
         ];
 
         yield 'element types invalid with batch violations' => [
             ContentSystemException::elementTypesInvalid(
                 new ConstraintViolationList([
-                    new ConstraintViolation('must not be blank', null, [], null, '[CT:Bad:A].label', null),
-                    new ConstraintViolation('too short', null, [], null, '[CT:Bad:B].description', null),
+                    new ConstraintViolation('must not be blank', null, [], null, '[Ct:Bad:A].label', null),
+                    new ConstraintViolation('too short', null, [], null, '[Ct:Bad:B].description', null),
                 ])
             ),
             Response::HTTP_BAD_REQUEST,
             'CONTENT_SYSTEM__ELEMENT_TYPES_INVALID',
-            '[CT:Bad:A].label: must not be blank; [CT:Bad:B].description: too short',
+            '[Ct:Bad:A].label: must not be blank; [Ct:Bad:B].description: too short',
         ];
 
         yield 'element type invalid filename' => [
@@ -365,10 +365,10 @@ class ContentSystemExceptionTest extends TestCase
         ];
 
         yield 'element type not found' => [
-            ContentSystemException::elementTypeNotFound('CT:Unknown:Type'),
+            ContentSystemException::elementTypeNotFound('Ct:Unknown:Type'),
             Response::HTTP_NOT_FOUND,
             'CONTENT_SYSTEM__ELEMENT_TYPE_NOT_FOUND',
-            'CT:Unknown:Type',
+            'Ct:Unknown:Type',
         ];
 
         yield 'unknown entity type' => [
@@ -430,10 +430,10 @@ class ContentSystemExceptionTest extends TestCase
         ];
 
         yield 'binding type mismatch' => [
-            ContentSystemException::bindingTypeMismatch('spec-1', 'CT:Media:Image', 'CT:Blog'),
+            ContentSystemException::bindingTypeMismatch('spec-1', 'Ct:Media:Image', 'Ct:Blog'),
             Response::HTTP_BAD_REQUEST,
             'CONTENT_SYSTEM__BINDING_TYPE_MISMATCH',
-            'CT:Media:Image',
+            'Ct:Media:Image',
         ];
     }
 

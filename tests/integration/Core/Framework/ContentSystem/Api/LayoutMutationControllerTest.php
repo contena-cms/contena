@@ -18,7 +18,7 @@ class LayoutMutationControllerTest extends TestCase
 
     private const BASE_URL = '/api/_action/content-system/layout/';
 
-    private const CORE_MEDIA_BINDING_ID = 'core:CT:Media:Image';
+    private const CORE_MEDIA_BINDING_ID = 'core:Ct:Media:Image';
 
     #[TestDox('inserts a registered element at the root and returns the re-resolved layout and diagnostics')]
     public function testInsertElement(): void
@@ -159,10 +159,10 @@ class LayoutMutationControllerTest extends TestCase
         static::assertSame('block-a', $body['layout'][0]['id']);
 
         $container = $body['layout'][1];
-        static::assertSame('CT:Grid:Container', $container['component']);
+        static::assertSame('Ct:Grid:Container', $container['component']);
         static::assertCount(2, $container['slots']['content']);
-        static::assertSame('CT:Media:Image', $container['slots']['content'][0]['component']);
-        static::assertSame('CT:Content:Text', $container['slots']['content'][1]['component']);
+        static::assertSame('Ct:Media:Image', $container['slots']['content'][0]['component']);
+        static::assertSame('Ct:Content:Text', $container['slots']['content'][1]['component']);
 
         // the inserted elements are fill-applied their type default binding, exactly like a manual insert, so the
         // image carries the core media wiring even though the preset spec authors no data requirements
@@ -238,11 +238,11 @@ class LayoutMutationControllerTest extends TestCase
         static::assertFalse($body['diagnostics']['resolvable']);
     }
 
-    #[TestDox('inlines the core CT:Media:Image default specification\'s wiring and attribution on a draft bind')]
+    #[TestDox('inlines the core Ct:Media:Image default specification\'s wiring and attribution on a draft bind')]
     public function testBindElementInlinesCoreSpecificationWiringAndAttribution(): void
     {
         $body = $this->mutate('bind-element', [
-            'layout' => [$this->element('img-1', 'CT:Media:Image')],
+            'layout' => [$this->element('img-1', 'Ct:Media:Image')],
             'elementId' => 'img-1',
             'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
         ]);
@@ -256,12 +256,12 @@ class LayoutMutationControllerTest extends TestCase
         static::assertSame(['media' => self::CORE_MEDIA_BINDING_ID], $bound['attributedSpecifications']);
     }
 
-    #[TestDox('applies the core CT:Media:Image default specification atomically when inserting a fresh image on the draft route')]
+    #[TestDox('applies the core Ct:Media:Image default specification atomically when inserting a fresh image on the draft route')]
     public function testInsertElementAppliesCoreBindingWiringAndAttribution(): void
     {
         $body = $this->mutate('insert-element', [
             'layout' => [],
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
         ]);
 
@@ -277,7 +277,7 @@ class LayoutMutationControllerTest extends TestCase
     public function testBoundImageWithMediaIdFilledResolvesMediaViaStoredWiring(): void
     {
         $bound = $this->mutate('bind-element', [
-            'layout' => [$this->element('img-1', 'CT:Media:Image')],
+            'layout' => [$this->element('img-1', 'Ct:Media:Image')],
             'elementId' => 'img-1',
             'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
         ])['layout'][0];
@@ -295,7 +295,7 @@ class LayoutMutationControllerTest extends TestCase
         static::assertSame('stored', $mediaResolution['resolved']['origin']);
     }
 
-    #[TestDox('auto-applies the core CT:Media:Image default specification on a fresh image insert carrying no bindingSpecificationId')]
+    #[TestDox('auto-applies the core Ct:Media:Image default specification on a fresh image insert carrying no bindingSpecificationId')]
     public function testInsertElementAutoAppliesCoreDefaultWithoutBindingSpecificationId(): void
     {
         // No bindingSpecificationId is sent, so the media wiring and attribution can only come from the type's
@@ -303,7 +303,7 @@ class LayoutMutationControllerTest extends TestCase
         // bindingSpecificationId tests drive: a wrong-result regression in that fill path leaves media unwired here.
         $body = $this->mutate('insert-element', [
             'layout' => [],
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
         ]);
 
         $inserted = $body['layout'][0];
@@ -429,7 +429,7 @@ class LayoutMutationControllerTest extends TestCase
     {
         $this->getBrowser()->jsonRequest('POST', self::BASE_URL . 'insert-element', [
             'layout' => [],
-            'type' => 'CT:Content:Text',
+            'type' => 'Ct:Content:Text',
             'bindingSpecificationId' => self::CORE_MEDIA_BINDING_ID,
         ]);
         $response = $this->getBrowser()->getResponse();

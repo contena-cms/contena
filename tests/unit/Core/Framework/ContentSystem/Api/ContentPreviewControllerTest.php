@@ -64,7 +64,7 @@ class ContentPreviewControllerTest extends TestCase
     public function testPreviewUrlRejectsMalformedDraftWithoutStoring(): void
     {
         $rejection = ContentSystemException::elementTypesInvalid(new ConstraintViolationList([
-            new ConstraintViolation('Component "CT:Missing" is not a registered element type.', null, [], null, 'el-1', null),
+            new ConstraintViolation('Component "Ct:Missing" is not a registered element type.', null, [], null, 'el-1', null),
         ]));
 
         $pageBuilder = static::createStub(ContentPreviewPageBuilder::class);
@@ -123,7 +123,7 @@ class ContentPreviewControllerTest extends TestCase
     private function request(): ContentPreviewRequest
     {
         return new ContentPreviewRequest(
-            layout: [['id' => 'e1', 'component' => 'CT:Content:Heading']],
+            layout: [['id' => 'e1', 'component' => 'Ct:Content:Heading']],
             entityType: 'blog',
             entityId: 'prod-1',
             channelId: 'sc-1',

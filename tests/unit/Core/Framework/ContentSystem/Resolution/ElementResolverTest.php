@@ -262,7 +262,7 @@ class ElementResolverTest extends TestCase
             distribution: DistributionStrategy::Broadcast,
         )];
 
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -294,7 +294,7 @@ class ElementResolverTest extends TestCase
             distribution: DistributionStrategy::Broadcast,
         )];
 
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -322,13 +322,13 @@ class ElementResolverTest extends TestCase
             static::createStub(DataLoaderProvider::class),
         );
 
-        static::assertSame([], $resolver->resolve('CT:Unknown', new ResolutionContext('el-1', [])));
+        static::assertSame([], $resolver->resolve('Ct:Unknown', new ResolutionContext('el-1', [])));
     }
 
     #[TestDox('yields no Stored resolution when applied wiring resolution throws a client-defect exception')]
     public function testClientDefectDuringAppliedWiringYieldsNoStoredResolution(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -345,7 +345,7 @@ class ElementResolverTest extends TestCase
     #[TestDox('propagates a non-client-defect exception raised while resolving applied wiring\'s produced type')]
     public function testNonClientDefectDuringAppliedWiringPropagates(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -389,7 +389,7 @@ class ElementResolverTest extends TestCase
             static::createStub(DataLoaderProvider::class),
         );
 
-        return $resolver->resolve('CT:Block', $context);
+        return $resolver->resolve('Ct:Block', $context);
     }
 
     private function registryReturning(ContentSystemElementTypeSpecification $spec): AbstractContentSystemElementTypeRegistry

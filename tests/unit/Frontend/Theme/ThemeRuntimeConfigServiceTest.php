@@ -383,7 +383,7 @@ class ThemeRuntimeConfigServiceTest extends TestCase
         $configCollection = new FrontendPluginConfigurationCollection([$themeConfig]);
 
         $existingImportMap = [
-            'imports' => ['CT:Button' => 'js/components/CT/Button.js'],
+            'imports' => ['Ct:Button' => 'js/components/Ct/Button.js'],
         ];
 
         $existingConfig = $this->createThemeRuntimeConfig(

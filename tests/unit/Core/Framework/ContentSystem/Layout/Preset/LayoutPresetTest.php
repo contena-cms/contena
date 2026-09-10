@@ -17,7 +17,7 @@ class LayoutPresetTest extends TestCase
     public function testToArrayExposesAllFields(): void
     {
         $payload = [
-            ['id' => 'el-1', 'component' => 'CT:Content:Text', 'properties' => ['text' => '<p>Hi</p>']],
+            ['id' => 'el-1', 'component' => 'Ct:Content:Text', 'properties' => ['text' => '<p>Hi</p>']],
         ];
 
         $preset = new LayoutPreset('core.text-block', 'Text block', 'A single text element.', 'regular-align-left', $payload);

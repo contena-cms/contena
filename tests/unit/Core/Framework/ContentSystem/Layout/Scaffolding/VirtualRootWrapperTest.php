@@ -54,13 +54,13 @@ class VirtualRootWrapperTest extends TestCase
         yield 'data requirements and elements both present' => [
             true,
             self::specificationWithLanguageRequirement(),
-            [StoredElementBuilder::create('CT:Text')->build()],
+            [StoredElementBuilder::create('Ct:Text')->build()],
         ];
 
         yield 'no data requirements' => [
             false,
             new RenderingSpecification([], PlaceholderValues::from([]), new Request()),
-            [StoredElementBuilder::create('CT:Text')->build()],
+            [StoredElementBuilder::create('Ct:Text')->build()],
         ];
 
         yield 'no elements' => [
@@ -74,12 +74,12 @@ class VirtualRootWrapperTest extends TestCase
     public function testWrapCreatesVirtualRootWithItsReservedIdentity(): void
     {
         $virtualRoot = $this->wrapper->wrap(
-            [StoredElementBuilder::create('CT:Text')->build()],
+            [StoredElementBuilder::create('Ct:Text')->build()],
             $this->specificationWithLanguageRequirement(),
         );
 
         static::assertSame('__page_context_root__', $virtualRoot->id);
-        static::assertSame('CT:Internal:PageContext', $virtualRoot->component);
+        static::assertSame('Ct:Internal:PageContext', $virtualRoot->component);
     }
 
     /**
@@ -98,7 +98,7 @@ class VirtualRootWrapperTest extends TestCase
         // Fixture guard: there IS a page-level requirement to copy across, so both assertions can fail.
         static::assertCount(1, $specification->dataRequirements);
 
-        $virtualRoot = $this->wrapper->wrap([StoredElementBuilder::create('CT:Text')->build()], $specification);
+        $virtualRoot = $this->wrapper->wrap([StoredElementBuilder::create('Ct:Text')->build()], $specification);
 
         static::assertSame([], $virtualRoot->dataRequirements);
         static::assertSame([], $virtualRoot->contextDefinitions->getAllProviders());
@@ -108,8 +108,8 @@ class VirtualRootWrapperTest extends TestCase
     #[TestDox('holds the actual roots as a plain list under the page roots slot')]
     public function testWrapHoldsTheActualRootsAsAPlainList(): void
     {
-        $root1 = StoredElementBuilder::create('CT:Text', 'root-a')->build();
-        $root2 = StoredElementBuilder::create('CT:Image', 'root-b')->build();
+        $root1 = StoredElementBuilder::create('Ct:Text', 'root-a')->build();
+        $root2 = StoredElementBuilder::create('Ct:Image', 'root-b')->build();
 
         $virtualRoot = $this->wrapper->wrap([$root1, $root2], $this->specificationWithLanguageRequirement());
 
@@ -126,7 +126,7 @@ class VirtualRootWrapperTest extends TestCase
             new Request(),
         );
 
-        $virtualRoot = $this->wrapper->wrap([StoredElementBuilder::create('CT:Text')->build()], $specification);
+        $virtualRoot = $this->wrapper->wrap([StoredElementBuilder::create('Ct:Text')->build()], $specification);
 
         $properties = $virtualRoot->properties();
         static::assertSame(['blogId', 'page'], array_keys($properties));
@@ -139,7 +139,7 @@ class VirtualRootWrapperTest extends TestCase
     public function testIsVirtualRootReturnsTrueForVirtualRoot(): void
     {
         $virtualRoot = $this->wrapper->wrap(
-            [StoredElementBuilder::create('CT:Text')->build()],
+            [StoredElementBuilder::create('Ct:Text')->build()],
             $this->specificationWithLanguageRequirement(),
         );
 
@@ -149,7 +149,7 @@ class VirtualRootWrapperTest extends TestCase
     #[TestDox('returns false when element is a regular non-virtual element')]
     public function testIsVirtualRootReturnsFalseForRegularElement(): void
     {
-        $element = StoredElementBuilder::create('CT:Text', 'some-id')->build();
+        $element = StoredElementBuilder::create('Ct:Text', 'some-id')->build();
 
         static::assertFalse($this->wrapper->isVirtualRoot($element));
     }
@@ -157,8 +157,8 @@ class VirtualRootWrapperTest extends TestCase
     #[TestDox('extracts original roots from a valid virtual root wrapper')]
     public function testUnwrapExtractsOriginalRoots(): void
     {
-        $root1 = StoredElementBuilder::create('CT:Section', 'root-a')->build();
-        $root2 = StoredElementBuilder::create('CT:Container', 'root-b')->build();
+        $root1 = StoredElementBuilder::create('Ct:Section', 'root-a')->build();
+        $root2 = StoredElementBuilder::create('Ct:Container', 'root-b')->build();
 
         $virtualRoot = $this->mintRendered($this->wrapper->wrap([$root1, $root2], $this->specificationWithLanguageRequirement()));
         $extractedRoots = $this->wrapper->unwrap($virtualRoot);
@@ -191,7 +191,7 @@ class VirtualRootWrapperTest extends TestCase
     public static function rootlessWrapperProvider(): \Generator
     {
         yield 'missing slot' => [
-            new RenderedElement(VirtualRootWrapper::VIRTUAL_ROOT_ID, 'CT:Internal:PageContext'),
+            new RenderedElement(VirtualRootWrapper::VIRTUAL_ROOT_ID, 'Ct:Internal:PageContext'),
             ContentSystemException::invalidMapValue(
                 'Virtual page context root slot map',
                 '__page_roots__',
@@ -203,7 +203,7 @@ class VirtualRootWrapperTest extends TestCase
         yield 'empty slot' => [
             new RenderedElement(
                 VirtualRootWrapper::VIRTUAL_ROOT_ID,
-                'CT:Internal:PageContext',
+                'Ct:Internal:PageContext',
                 [],
                 ['__page_roots__' => []],
             ),

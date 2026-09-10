@@ -28,7 +28,7 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('publishes every declared primitive as a property entry, carrying a default only where the property declares one')]
     public function testResolveDeclaredPrimitivesToPropertyEntriesCarryingDefaultOnlyWhenDeclared(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->primitive('alt', 'string', required: true)
             ->primitive('maxImageWidth', 'integer', default: 1360)
             ->build();
@@ -42,7 +42,7 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('omits a declared FQCN property from the storage schema, because nothing is stored under the reference key')]
     public function testResolveOmitsDeclaredReferencePropertyFromEntries(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->reference('media', MediaEntity::class, required: true)
             ->primitive('height', 'string', default: 'auto')
             ->build();
@@ -55,14 +55,14 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('publishes the storage key of a synthesized default specification as a resolvedByStorage entry')]
     public function testResolveSynthesizedDefaultStorageKeyToResolvedByStorageEntry(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->reference('media', MediaEntity::class, required: true)
             ->build();
 
         // A synthesized default carries the type name as its id, which is what isDefault() derives from.
         $specification = new BindingSpecification(
-            'CT:Media:Image',
-            'CT:Media:Image',
+            'Ct:Media:Image',
+            'Ct:Media:Image',
             'Image',
             ['media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId'])],
             [],
@@ -71,21 +71,21 @@ class StoredSchemaResolverTest extends TestCase
 
         static::assertSame([
             'mediaId' => ['kind' => 'resolvedByStorage', 'type' => 'string', 'required' => true],
-        ], $this->resolver(['core:CT:Media:Image' => $specification], $this->entityLoaderKeys())->resolve($type));
+        ], $this->resolver(['core:Ct:Media:Image' => $specification], $this->entityLoaderKeys())->resolve($type));
     }
 
     #[TestDox('publishes the reference token of an authored specification as a config entry')]
     public function testResolveAuthoredSpecificationReferenceTokenToConfigEntry(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->reference('media', MediaEntity::class, required: true)
             ->build();
 
-        // 'media-picker' !== 'CT:Media:Image', so this specification is not the type's default, and its
+        // 'media-picker' !== 'Ct:Media:Image', so this specification is not the type's default, and its
         // storage-key config key is a plain config entry despite being named 'property'.
         $specification = new BindingSpecification(
             'media-picker',
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Media Picker',
             ['media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId'])],
             [],
@@ -100,13 +100,13 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('publishes a config key referencedType rather than its own type, falls the token back to the key default, and emits no default at all: both keys declare type string, both declare a default, only associationOverride references a list')]
     public function testResolvePublishesReferencedTypeOfConfigKeyRatherThanItsOwnType(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Blog:Listing')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog:Listing')
             ->reference('blogs', BlogListingResult::class)
             ->build();
 
         $specification = new BindingSpecification(
             'listing-with-associations',
-            'CT:Blog:Listing',
+            'Ct:Blog:Listing',
             'Blog Listing',
             ['blogs' => new LoaderBinding('blog_listing', [])],
             [],
@@ -124,14 +124,14 @@ class StoredSchemaResolverTest extends TestCase
     {
         // The listing loader's 'property' key defaults to the token 'navigationId', which this type also
         // declares as a primitive property — the collision the property tier resolves.
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Blog:Listing')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog:Listing')
             ->reference('blogs', BlogListingResult::class)
             ->primitive('navigationId', 'string', required: true)
             ->build();
 
         $specification = new BindingSpecification(
             'listing-with-associations',
-            'CT:Blog:Listing',
+            'Ct:Blog:Listing',
             'Blog Listing',
             ['blogs' => new LoaderBinding('blog_listing', [])],
             [],
@@ -148,15 +148,15 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('prefers the resolvedByStorage entry over a config entry naming the same stored key')]
     public function testResolvePrefersResolvedByStorageEntryOverConfigEntryOnSameStoredKey(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Blog:Listing')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog:Listing')
             ->reference('blogs', BlogListingResult::class)
             ->build();
 
         // The default specification is listed first, so a plain last-write-wins traversal would leave the
         // authored specification's config entry as the winner on 'navigationId'.
         $default = new BindingSpecification(
-            'CT:Blog:Listing',
-            'CT:Blog:Listing',
+            'Ct:Blog:Listing',
+            'Ct:Blog:Listing',
             'Blog Listing',
             ['blogs' => new LoaderBinding('blog_listing', ['property' => 'navigationId'])],
             [],
@@ -165,7 +165,7 @@ class StoredSchemaResolverTest extends TestCase
 
         $authored = new BindingSpecification(
             'listing-with-navigation-associations',
-            'CT:Blog:Listing',
+            'Ct:Blog:Listing',
             'Blog Listing With Navigation Associations',
             ['blogs' => new LoaderBinding('blog_listing', ['associationOverride' => 'navigationId'])],
             [],
@@ -177,7 +177,7 @@ class StoredSchemaResolverTest extends TestCase
             'associations' => ['kind' => 'config', 'type' => 'list<string>', 'required' => false],
             'navigationId' => ['kind' => 'resolvedByStorage', 'type' => 'string', 'required' => false],
         ], $this->resolver(
-            ['core:CT:Blog:Listing' => $default, 'core:listing-with-navigation-associations' => $authored],
+            ['core:Ct:Blog:Listing' => $default, 'core:listing-with-navigation-associations' => $authored],
             $this->listingLoaderKeys(),
         )->resolve($type));
     }
@@ -185,14 +185,14 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('skips a binding token naming a declared FQCN property, which claims storage where none exists')]
     public function testResolveSkipsBindingTokenNamingDeclaredReferenceProperty(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->reference('media', MediaEntity::class, required: true)
             ->primitive('height', 'string', default: 'auto')
             ->build();
 
         $specification = new BindingSpecification(
             'media-picker',
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Media Picker',
             ['media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'media'])],
             [],
@@ -207,14 +207,14 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('skips an integer-like binding token, which no stored key can be')]
     public function testResolveSkipsIntegerLikeToken(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Media:Image')
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Media:Image')
             ->reference('media', MediaEntity::class, required: true)
             ->primitive('height', 'string', default: 'auto')
             ->build();
 
         $specification = new BindingSpecification(
             'media-picker',
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Media Picker',
             ['media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => '42'])],
             [],
@@ -229,7 +229,7 @@ class StoredSchemaResolverTest extends TestCase
     #[TestDox('resolves a type with neither primitives nor binding specifications to an empty map')]
     public function testResolveTypeWithoutPrimitivesAndSpecificationsToEmptyMap(): void
     {
-        $type = ContentSystemElementTypeSpecificationBuilder::create('CT:Layout:Spacer')->build();
+        $type = ContentSystemElementTypeSpecificationBuilder::create('Ct:Layout:Spacer')->build();
 
         static::assertSame([], $this->resolver([])->resolve($type));
     }

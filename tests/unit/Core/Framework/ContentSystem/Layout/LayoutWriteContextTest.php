@@ -131,6 +131,6 @@ class LayoutWriteContextTest extends TestCase
 
     private function tree(string $elementId): StoredTree
     {
-        return new StoredTree([new StoredElement($elementId, 'CT:Block')]);
+        return new StoredTree([new StoredElement($elementId, 'Ct:Block')]);
     }
 }

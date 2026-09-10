@@ -25,12 +25,12 @@ class MoveElementTest extends TestCase
     #[TestDox('relocates the element and its subtree into the new parent slot, carries the parent attributed specifications over to the rebuilt parent, reports the whole moved subtree as affected, and creates nothing')]
     public function testMoveRelocatesSubtreeToNewParent(): void
     {
-        $target = StoredElementBuilder::create('CT:Block', 'target')
+        $target = StoredElementBuilder::create('Ct:Block', 'target')
             ->withAttributedSpecification('blog', 'spec-1')
             ->build();
         $tree = new StoredTree([
-            new StoredElement('movable', 'CT:Block', [], [], [
-                'content' => [new StoredElement('child', 'CT:Block')],
+            new StoredElement('movable', 'Ct:Block', [], [], [
+                'content' => [new StoredElement('child', 'Ct:Block')],
             ]),
             $target,
         ]);
@@ -51,10 +51,10 @@ class MoveElementTest extends TestCase
     #[TestDox('reuses the element current slot for a same-parent move that omits the new slot')]
     public function testMoveSameParentWithoutSlotReusesCurrentSlot(): void
     {
-        $parent = new StoredElement('parent', 'CT:Block', [], [], [
+        $parent = new StoredElement('parent', 'Ct:Block', [], [], [
             'content' => [
-                new StoredElement('a', 'CT:Block'),
-                new StoredElement('child', 'CT:Block'),
+                new StoredElement('a', 'Ct:Block'),
+                new StoredElement('child', 'Ct:Block'),
             ],
         ]);
 
@@ -80,7 +80,7 @@ class MoveElementTest extends TestCase
         string $expectedSlot,
         array $expectedOrder,
     ): void {
-        $parent = new StoredElement('parent', 'CT:Block', [], [], $slots, $contextDefinitions);
+        $parent = new StoredElement('parent', 'Ct:Block', [], [], $slots, $contextDefinitions);
 
         $move = new MoveElement($movedId, 'parent', $newSlot, $newIndex);
         $result = $move->apply(new StoredTree([$parent]));
@@ -100,8 +100,8 @@ class MoveElementTest extends TestCase
         yield 'reorder within the same slot, even under an indexed distribution' => [
             [
                 'content' => [
-                    new StoredElement('a', 'CT:Block'),
-                    new StoredElement('b', 'CT:Block'),
+                    new StoredElement('a', 'Ct:Block'),
+                    new StoredElement('b', 'Ct:Block'),
                 ],
             ],
             new ContextDefinitions(['list' => new ContextProvider(ContextType::Single, IndexedDistributionConfig::simple())], []),
@@ -114,7 +114,7 @@ class MoveElementTest extends TestCase
 
         yield 'move to a different slot under the same parent' => [
             [
-                'left' => [new StoredElement('child', 'CT:Block')],
+                'left' => [new StoredElement('child', 'Ct:Block')],
                 'right' => [],
             ],
             new ContextDefinitions(),
@@ -130,8 +130,8 @@ class MoveElementTest extends TestCase
     public function testMoveToRootDetachesFromParent(): void
     {
         $tree = new StoredTree([
-            new StoredElement('parent', 'CT:Block', [], [], [
-                'content' => [new StoredElement('movable', 'CT:Block')],
+            new StoredElement('parent', 'Ct:Block', [], [], [
+                'content' => [new StoredElement('movable', 'Ct:Block')],
             ]),
         ]);
 
@@ -150,8 +150,8 @@ class MoveElementTest extends TestCase
     public function testMoveOntoSelfOrDescendantRejected(string $newParentId): void
     {
         $tree = new StoredTree([
-            new StoredElement('movable', 'CT:Block', [], [], [
-                'content' => [new StoredElement('child', 'CT:Block')],
+            new StoredElement('movable', 'Ct:Block', [], [], [
+                'content' => [new StoredElement('child', 'Ct:Block')],
             ]),
         ]);
 
@@ -176,7 +176,7 @@ class MoveElementTest extends TestCase
         $move = new MoveElement('ghost', 'target', 'content');
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $move->apply(new StoredTree([new StoredElement('target', 'CT:Block')]));
+        $move->apply(new StoredTree([new StoredElement('target', 'Ct:Block')]));
     }
 
     #[TestDox('rejects moving into a parent absent from the tree with a 400')]
@@ -185,15 +185,15 @@ class MoveElementTest extends TestCase
         $move = new MoveElement('movable', 'ghost', 'content');
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $move->apply(new StoredTree([new StoredElement('movable', 'CT:Block')]));
+        $move->apply(new StoredTree([new StoredElement('movable', 'Ct:Block')]));
     }
 
     #[TestDox('rejects a cross-parent move without a slot with a 400')]
     public function testMoveToNewParentWithoutSlotRejected(): void
     {
         $tree = new StoredTree([
-            new StoredElement('movable', 'CT:Block'),
-            new StoredElement('target', 'CT:Block'),
+            new StoredElement('movable', 'Ct:Block'),
+            new StoredElement('target', 'Ct:Block'),
         ]);
 
         $move = new MoveElement('movable', 'target');

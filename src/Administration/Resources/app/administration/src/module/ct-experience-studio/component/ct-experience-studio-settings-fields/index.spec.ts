@@ -98,7 +98,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-settings-fi
     });
 
     it('builds element-specific and default panel snippet keys', () => {
-        const wrapper = createWrapper({ selectedElementType: { name: 'CT:Grid:Container' } });
+        const wrapper = createWrapper({ selectedElementType: { name: 'Ct:Grid:Container' } });
 
         expect(wrapper.vm.getPanelSnippetKey({ technicalName: 'spacing' })).toBe(
             'ct-experience-studio.elements.ct-grid-container.panels.spacing',
@@ -111,7 +111,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-settings-fi
     });
 
     it('translates the generated panel snippet key', () => {
-        const wrapper = createWrapper({ selectedElementType: { name: 'CT:Grid:Container' } });
+        const wrapper = createWrapper({ selectedElementType: { name: 'Ct:Grid:Container' } });
 
         expect(wrapper.vm.getPanelTitle({ technicalName: 'spacing' })).toBe(
             'ct-experience-studio.elements.ct-grid-container.panels.spacing',

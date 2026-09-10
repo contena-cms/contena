@@ -33,18 +33,18 @@ class DraftLayoutDecoderTest extends TestCase
     #[TestDox('decode returns the decoded element tree with properties wrapped into the storage value envelope')]
     public function testDecodeReturnsTreeWithPropertiesWrapped(): void
     {
-        $tree = $this->decoder()->decode([['id' => 'el-1', 'component' => 'CT:Block', 'properties' => ['headline' => 'Hi']]]);
+        $tree = $this->decoder()->decode([['id' => 'el-1', 'component' => 'Ct:Block', 'properties' => ['headline' => 'Hi']]]);
 
         static::assertCount(1, $tree);
         static::assertSame('el-1', $tree[0]->id);
-        static::assertSame('CT:Block', $tree[0]->component);
+        static::assertSame('Ct:Block', $tree[0]->component);
         static::assertSame('Hi', $tree[0]->property('headline')?->jsonSerialize());
     }
 
     #[TestDox('decodeOne returns the single decoded element for a structurally valid element')]
     public function testDecodeOneReturnsElement(): void
     {
-        $element = $this->decoder()->decodeOne(['id' => 'el-1', 'component' => 'CT:Block']);
+        $element = $this->decoder()->decodeOne(['id' => 'el-1', 'component' => 'Ct:Block']);
 
         static::assertSame('el-1', $element->id);
     }
@@ -52,7 +52,7 @@ class DraftLayoutDecoderTest extends TestCase
     #[TestDox('decodeLintable returns the decoded tree and no violations for a valid layout')]
     public function testDecodeLintableReturnsTreeWithoutViolations(): void
     {
-        [$tree, $violations] = $this->decoder()->decodeLintable([['id' => 'el-1', 'component' => 'CT:Block']]);
+        [$tree, $violations] = $this->decoder()->decodeLintable([['id' => 'el-1', 'component' => 'Ct:Block']]);
 
         static::assertSame(['el-1'], array_map(static fn (StoredElement $e): string => $e->id, $tree));
         static::assertSame([], $violations);
@@ -63,7 +63,7 @@ class DraftLayoutDecoderTest extends TestCase
     {
         $tree = $this->decoder()->decode([[
             'id' => 'el-1',
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'style' => ['align-self' => ['xs' => 'center']],
         ]]);
 
@@ -78,10 +78,10 @@ class DraftLayoutDecoderTest extends TestCase
     {
         $tree = $this->decoder()->decode([[
             'id' => 'root',
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'slots' => ['content' => [[
                 'id' => 'child',
-                'component' => 'CT:Text',
+                'component' => 'Ct:Text',
                 'style' => ['align-self' => ['xs' => 'end']],
             ]]],
         ]]);
@@ -97,7 +97,7 @@ class DraftLayoutDecoderTest extends TestCase
     {
         [$tree, $violations] = $this->decoder()->decodeLintable([[
             'id' => 'el-1',
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'style' => ['align-self' => ['xs' => 'center']],
         ]]);
 
@@ -112,8 +112,8 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeLintableKeepsDuplicateIdTreeForDiagnostics(): void
     {
         [$tree, $violations] = $this->decoder()->decodeLintable([
-            ['id' => 'dup', 'component' => 'CT:Block'],
-            ['id' => 'dup', 'component' => 'CT:Other'],
+            ['id' => 'dup', 'component' => 'Ct:Block'],
+            ['id' => 'dup', 'component' => 'Ct:Other'],
         ]);
 
         static::assertSame(['dup', 'dup'], array_map(static fn (StoredElement $e): string => $e->id, $tree));
@@ -127,7 +127,7 @@ class DraftLayoutDecoderTest extends TestCase
 
         [$tree, $violations] = $decoder->decodeLintable([
             $this->elementWithDataRequirement('bad'),
-            ['id' => 'good', 'component' => 'CT:Block'],
+            ['id' => 'good', 'component' => 'Ct:Block'],
         ]);
 
         static::assertCount(1, $tree);
@@ -145,8 +145,8 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeLintableCollectsAnElementLocalWiringDefect(array $wiring, string $expectedMessageFragment): void
     {
         [$tree, $violations] = $this->decoder()->decodeLintable([
-            ['id' => 'defective', 'component' => 'CT:Block', ...$wiring],
-            ['id' => 'good', 'component' => 'CT:Block'],
+            ['id' => 'defective', 'component' => 'Ct:Block', ...$wiring],
+            ['id' => 'good', 'component' => 'Ct:Block'],
         ]);
 
         static::assertSame(['good'], array_map(static fn (StoredElement $e): string => $e->id, $tree));
@@ -159,9 +159,9 @@ class DraftLayoutDecoderTest extends TestCase
     #[TestDox('decode rejects a tree nested past the codec maximum depth')]
     public function testDecodeRejectsExcessiveNestingDepth(): void
     {
-        $element = ['id' => 'leaf', 'component' => 'CT:Block'];
+        $element = ['id' => 'leaf', 'component' => 'Ct:Block'];
         for ($level = 0; $level < 60; ++$level) {
-            $element = ['id' => 'n' . $level, 'component' => 'CT:Block', 'slots' => ['content' => [$element]]];
+            $element = ['id' => 'n' . $level, 'component' => 'Ct:Block', 'slots' => ['content' => [$element]]];
         }
 
         try {
@@ -177,7 +177,7 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeOneRejectsMalformedElement(): void
     {
         try {
-            $this->decoder()->decodeOne(['component' => 'CT:Block']);
+            $this->decoder()->decodeOne(['component' => 'Ct:Block']);
             static::fail('Expected a ContentSystemException for the malformed element.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());
@@ -202,8 +202,8 @@ class DraftLayoutDecoderTest extends TestCase
     {
         try {
             $this->decoder()->decode([
-                ['id' => 'dup', 'component' => 'CT:Block'],
-                ['id' => 'dup', 'component' => 'CT:Other'],
+                ['id' => 'dup', 'component' => 'Ct:Block'],
+                ['id' => 'dup', 'component' => 'Ct:Other'],
             ]);
             static::fail('Expected a ContentSystemException for the duplicate element id.');
         } catch (ContentSystemException $exception) {
@@ -244,7 +244,7 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeRefusesNumericWiringKeyAsClientDefect(): void
     {
         try {
-            $this->decoder()->decode([['id' => 'el-1', 'component' => 'CT:Block', 'properties' => ['5' => 'x']]]);
+            $this->decoder()->decode([['id' => 'el-1', 'component' => 'Ct:Block', 'properties' => ['5' => 'x']]]);
             static::fail('Expected a ContentSystemException for the numeric property key.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());
@@ -264,7 +264,7 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeRejectsAnElementLocalWiringDefect(array $wiring, string $expectedMessageFragment): void
     {
         try {
-            $this->decoder()->decode([['id' => 'el-1', 'component' => 'CT:Block', ...$wiring]]);
+            $this->decoder()->decode([['id' => 'el-1', 'component' => 'Ct:Block', ...$wiring]]);
             static::fail('Expected a ContentSystemException for the element-local wiring defect.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());
@@ -285,7 +285,7 @@ class DraftLayoutDecoderTest extends TestCase
     public function testDecodeLintableRejectsStructurallyInvalidElement(): void
     {
         try {
-            $this->decoder()->decodeLintable([['component' => 'CT:Block']]);
+            $this->decoder()->decodeLintable([['component' => 'Ct:Block']]);
             static::fail('Expected a ContentSystemException for the structurally invalid element.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());
@@ -323,7 +323,7 @@ class DraftLayoutDecoderTest extends TestCase
         ];
 
         yield 'element missing only the id' => [
-            [['component' => 'CT:Block']],
+            [['component' => 'Ct:Block']],
             new ConstraintViolationList([
                 new ConstraintViolation('Layout element id must be a non-empty string.', null, [], null, '[0].id', null),
             ]),
@@ -346,13 +346,13 @@ class DraftLayoutDecoderTest extends TestCase
      */
     public static function malformedContainerProvider(): iterable
     {
-        yield 'scalar style' => [['id' => 'root', 'component' => 'CT:Block', 'style' => 'garbage']];
-        yield 'scalar slots' => [['id' => 'root', 'component' => 'CT:Block', 'slots' => 'garbage']];
-        yield 'non-list slot children container' => [['id' => 'root', 'component' => 'CT:Block', 'slots' => ['main' => 'garbage']]];
-        yield 'non-array nested child' => [['id' => 'root', 'component' => 'CT:Block', 'slots' => ['content' => ['not-an-array']]]];
-        yield 'scalar dataRequirements' => [['id' => 'root', 'component' => 'CT:Block', 'dataRequirements' => 'garbage']];
-        yield 'scalar acceptsContext' => [['id' => 'root', 'component' => 'CT:Block', 'acceptsContext' => 'garbage']];
-        yield 'scalar attributedSpecifications' => [['id' => 'root', 'component' => 'CT:Block', 'attributedSpecifications' => 'garbage']];
+        yield 'scalar style' => [['id' => 'root', 'component' => 'Ct:Block', 'style' => 'garbage']];
+        yield 'scalar slots' => [['id' => 'root', 'component' => 'Ct:Block', 'slots' => 'garbage']];
+        yield 'non-list slot children container' => [['id' => 'root', 'component' => 'Ct:Block', 'slots' => ['main' => 'garbage']]];
+        yield 'non-array nested child' => [['id' => 'root', 'component' => 'Ct:Block', 'slots' => ['content' => ['not-an-array']]]];
+        yield 'scalar dataRequirements' => [['id' => 'root', 'component' => 'Ct:Block', 'dataRequirements' => 'garbage']];
+        yield 'scalar acceptsContext' => [['id' => 'root', 'component' => 'Ct:Block', 'acceptsContext' => 'garbage']];
+        yield 'scalar attributedSpecifications' => [['id' => 'root', 'component' => 'Ct:Block', 'attributedSpecifications' => 'garbage']];
     }
 
     /**
@@ -395,7 +395,7 @@ class DraftLayoutDecoderTest extends TestCase
     {
         return [
             'id' => $id,
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'dataRequirements' => ['blog' => ['source' => 'entity', 'config' => ['entity' => 'prodct']]],
         ];
     }

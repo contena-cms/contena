@@ -95,12 +95,12 @@ describe('devImportMapPlugin', () => {
         const componentsRoot = path.join(fixtureRoot, 'src/Frontend/Resources/views/components');
         const varRoot = path.join(fixtureRoot, 'var');
         fs.mkdirSync(path.join(viteRoot, 'src'), { recursive: true });
-        fs.mkdirSync(path.join(componentsRoot, 'CT/Header'), { recursive: true });
+        fs.mkdirSync(path.join(componentsRoot, 'Ct/Header'), { recursive: true });
         fs.mkdirSync(varRoot, { recursive: true });
 
         fs.writeFileSync(path.join(viteRoot, 'src/contena.ts'), 'export const test = true;');
-        fs.writeFileSync(path.join(componentsRoot, 'CT/Header/Navbar.ts'), 'export default class Navbar {}');
-        fs.writeFileSync(path.join(componentsRoot, 'CT/Header/Navbar.css'), '.navbar { color: red; }');
+        fs.writeFileSync(path.join(componentsRoot, 'Ct/Header/Navbar.ts'), 'export default class Navbar {}');
+        fs.writeFileSync(path.join(componentsRoot, 'Ct/Header/Navbar.css'), '.navbar { color: red; }');
         fs.writeFileSync(path.join(varRoot, 'plugins.json'), JSON.stringify({
             Frontend: {
                 basePath: 'src/Frontend',
@@ -127,9 +127,9 @@ describe('devImportMapPlugin', () => {
         };
 
         expect(devMap.imports['contena']).toBe('http://localhost:5180/src/contena.ts');
-        expect(devMap.imports['CT:Header:Navbar']).toContain('/@fs');
+        expect(devMap.imports['Ct:Header:Navbar']).toContain('/@fs');
         expect(devMap.styles).toContain('http://localhost:5180/theme-scss/all.css');
-        expect(devMap.styles).toContain('http://localhost:5180/__ct-comp-css/CT/Header/Navbar.css');
+        expect(devMap.styles).toContain('http://localhost:5180/__ct-comp-css/Ct/Header/Navbar.css');
         expect(devMap.themeId).toBeUndefined();
 
         server.httpServer.emit('close');
@@ -259,11 +259,11 @@ describe('devImportMapPlugin', () => {
         const componentsRoot = path.join(pluginRoot, 'src/Frontend/Resources/views/components');
         const varRoot = path.join(pluginRoot, 'var');
         fs.mkdirSync(path.join(viteRoot, 'src'), { recursive: true });
-        fs.mkdirSync(path.join(componentsRoot, 'CT/Header'), { recursive: true });
+        fs.mkdirSync(path.join(componentsRoot, 'Ct/Header'), { recursive: true });
         fs.mkdirSync(varRoot, { recursive: true });
 
         fs.writeFileSync(path.join(viteRoot, 'src/contena.ts'), 'export const test = true;');
-        fs.writeFileSync(path.join(componentsRoot, 'CT/Header/Navbar.css'), '.navbar { color: red; }');
+        fs.writeFileSync(path.join(componentsRoot, 'Ct/Header/Navbar.css'), '.navbar { color: red; }');
         fs.writeFileSync(path.join(varRoot, 'plugins.json'), JSON.stringify({
             Frontend: {
                 basePath: 'src/Frontend',
@@ -290,6 +290,6 @@ describe('devImportMapPlugin', () => {
 
         expect(devMap.imports['contena']).toBe('http://host.docker.internal:5183/src/contena.ts');
         expect(devMap.styles).toContain('http://host.docker.internal:5183/theme-scss/all.css');
-        expect(devMap.styles).toContain('http://host.docker.internal:5183/__ct-comp-css/CT/Header/Navbar.css');
+        expect(devMap.styles).toContain('http://host.docker.internal:5183/__ct-comp-css/Ct/Header/Navbar.css');
     });
 });

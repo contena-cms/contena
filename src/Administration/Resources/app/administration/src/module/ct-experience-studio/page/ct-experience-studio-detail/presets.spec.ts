@@ -8,7 +8,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
 
     it('allows any preset at the root but gates slot presets by their root component', async () => {
         const { wrapper } = await createWrapper();
-        const allowed = new Set(['CT:Content:Text']);
+        const allowed = new Set(['Ct:Content:Text']);
         const rootPayload = { parentElementId: null, slotName: null, anchorTop: 0, anchorLeft: 0 };
         const slotPayload = { parentElementId: 'parent-1', slotName: 'content', anchorTop: 0, anchorLeft: 0 };
         const containerPreset = {
@@ -16,9 +16,9 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
             name: 'P',
             description: null,
             icon: null,
-            payload: [{ id: 'x', component: 'CT:Grid:Container' }],
+            payload: [{ id: 'x', component: 'Ct:Grid:Container' }],
         };
-        const textPreset = { ...containerPreset, payload: [{ id: 'x', component: 'CT:Content:Text' }] };
+        const textPreset = { ...containerPreset, payload: [{ id: 'x', component: 'Ct:Content:Text' }] };
 
         expect(wrapper.vm.isPresetAllowedForPayload(containerPreset, rootPayload, allowed)).toBe(true);
         expect(wrapper.vm.isPresetAllowedForPayload(containerPreset, slotPayload, allowed)).toBe(false);
@@ -35,14 +35,14 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
                             name: 'Allowed',
                             description: 'd',
                             icon: 'p',
-                            payload: [{ id: 'a', component: 'CT:Content:Text' }],
+                            payload: [{ id: 'a', component: 'Ct:Content:Text' }],
                         },
                         {
                             id: 'blocked',
                             name: 'Blocked',
                             description: null,
                             icon: null,
-                            payload: [{ id: 'b', component: 'CT:Grid:Container' }],
+                            payload: [{ id: 'b', component: 'Ct:Grid:Container' }],
                         },
                     ]),
                 },
@@ -55,19 +55,19 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
             anchorLeft: 0,
         };
         wrapper.vm.elementTypeStore.typesByName = {
-            'CT:Content:Text': {
-                name: 'CT:Content:Text',
+            'Ct:Content:Text': {
+                name: 'Ct:Content:Text',
                 label: 'Text',
                 icon: 'i',
                 category: 'content',
                 slots: [],
             },
-            'CT:Layout:Container': {
-                name: 'CT:Layout:Container',
+            'Ct:Layout:Container': {
+                name: 'Ct:Layout:Container',
                 label: 'Container',
                 icon: null,
                 category: 'layout',
-                slots: [{ name: 'content', maxElements: null, allowList: ['CT:Content:Text'] }],
+                slots: [{ name: 'content', maxElements: null, allowList: ['Ct:Content:Text'] }],
             },
         };
         wrapper.vm.layout = {
@@ -75,7 +75,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
             layout: [
                 {
                     id: 'parent-1',
-                    component: 'CT:Layout:Container',
+                    component: 'Ct:Layout:Container',
                     slots: { content: [] },
                 },
             ],
@@ -83,7 +83,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail presets',
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.availablePickerElements).toEqual([
-            { name: 'CT:Content:Text', label: 'Text', icon: 'i', category: 'content', kind: 'element' },
+            { name: 'Ct:Content:Text', label: 'Text', icon: 'i', category: 'content', kind: 'element' },
             {
                 name: 'allowed',
                 label: 'Allowed',

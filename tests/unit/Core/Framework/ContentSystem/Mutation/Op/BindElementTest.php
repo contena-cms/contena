@@ -29,7 +29,7 @@ class BindElementTest extends TestCase
     public function testBindWiresResolvesSeedsDefaultsAndAttributesSpecification(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $tree = new StoredTree([new StoredElement('el', 'CT:Blog')]);
+        $tree = new StoredTree([new StoredElement('el', 'Ct:Blog')]);
 
         $result = new BindElement($this->registry(), 'spec-1', 'el', $this->applicator($config))->apply($tree);
 
@@ -42,7 +42,7 @@ class BindElementTest extends TestCase
     public function testBindDoesNotSeedInputWithoutDefaultForAbsentKey(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $tree = new StoredTree([new StoredElement('el', 'CT:Blog')]);
+        $tree = new StoredTree([new StoredElement('el', 'Ct:Blog')]);
 
         $result = new BindElement($this->registryWithoutInputDefault(), 'spec-1', 'el', $this->applicator($config))->apply($tree);
 
@@ -53,7 +53,7 @@ class BindElementTest extends TestCase
     public function testBindKeepsAuthoredValueOverDefault(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $old = StoredElementBuilder::create('CT:Blog', 'el')->withProperty('mediaId', 'authored')->build();
+        $old = StoredElementBuilder::create('Ct:Blog', 'el')->withProperty('mediaId', 'authored')->build();
 
         $result = new BindElement($this->registry(), 'spec-1', 'el', $this->applicator($config))->apply(new StoredTree([$old]));
 
@@ -65,7 +65,7 @@ class BindElementTest extends TestCase
     {
         $oldConfig = static::createStub(AbstractContentDataLoaderConfig::class);
         $newConfig = static::createStub(AbstractContentDataLoaderConfig::class);
-        $old = StoredElementBuilder::create('CT:Blog', 'el')
+        $old = StoredElementBuilder::create('Ct:Blog', 'el')
             ->withDataRequirement('blog', 'entity', $oldConfig)
             ->withAttributedSpecification('blog', 'spec-old')
             ->withProperty('mediaId', 'user-filled')
@@ -84,7 +84,7 @@ class BindElementTest extends TestCase
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
         $bind = new BindElement($this->registry(), 'spec-1', 'el', $this->applicator($config));
 
-        $bind->apply(new StoredTree([new StoredElement('el', 'CT:Blog')]));
+        $bind->apply(new StoredTree([new StoredElement('el', 'Ct:Blog')]));
 
         // Bind only rewires the existing node: it creates nothing, and never detaches anything, so
         // orphaned()/droppedWiring()/droppedProperties() are always empty for this operation.
@@ -96,7 +96,7 @@ class BindElementTest extends TestCase
     public function testBindKeepsAuthoredExplicitNullOverDefault(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $old = StoredElementBuilder::create('CT:Blog', 'el')->withProperty('mediaId', null)->build();
+        $old = StoredElementBuilder::create('Ct:Blog', 'el')->withProperty('mediaId', null)->build();
 
         $result = new BindElement($this->registry(), 'spec-1', 'el', $this->applicator($config))->apply(new StoredTree([$old]));
 
@@ -109,8 +109,8 @@ class BindElementTest extends TestCase
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
         $bind = new BindElement($this->registry(), 'spec-1', 'el', $this->applicator($config));
 
-        $this->expectExceptionObject(ContentSystemException::bindingTypeMismatch('spec-1', 'CT:Blog', 'CT:Other'));
-        $bind->apply(new StoredTree([new StoredElement('el', 'CT:Other')]));
+        $this->expectExceptionObject(ContentSystemException::bindingTypeMismatch('spec-1', 'Ct:Blog', 'Ct:Other'));
+        $bind->apply(new StoredTree([new StoredElement('el', 'Ct:Other')]));
     }
 
     #[TestDox('rejects an unknown binding specification id with a 400')]
@@ -121,7 +121,7 @@ class BindElementTest extends TestCase
         $bind = new BindElement($registry, 'ghost', 'el', $this->applicator(static::createStub(AbstractContentDataLoaderConfig::class)));
 
         $this->expectExceptionObject(ContentSystemException::bindingSpecificationNotFound('ghost'));
-        $bind->apply(new StoredTree([new StoredElement('el', 'CT:Blog')]));
+        $bind->apply(new StoredTree([new StoredElement('el', 'Ct:Blog')]));
     }
 
     #[TestDox('rejects binding an element absent from the tree with a 400')]
@@ -131,14 +131,14 @@ class BindElementTest extends TestCase
         $bind = new BindElement($this->registry(), 'spec-1', 'ghost', $this->applicator($config));
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $bind->apply(new StoredTree([new StoredElement('el', 'CT:Blog')]));
+        $bind->apply(new StoredTree([new StoredElement('el', 'Ct:Blog')]));
     }
 
     private function registry(): AbstractContentSystemBindingSpecificationRegistry
     {
         $specification = new BindingSpecification(
             'spec-1',
-            'CT:Blog',
+            'Ct:Blog',
             'Blog binding',
             ['blog' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId'])],
             ['mediaId' => new BindingInput(true, '123', false)],
@@ -155,7 +155,7 @@ class BindElementTest extends TestCase
     {
         $specification = new BindingSpecification(
             'spec-1',
-            'CT:Blog',
+            'Ct:Blog',
             'Blog binding',
             ['blog' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId'])],
             ['mediaId' => new BindingInput(false, null, false)],

@@ -195,7 +195,7 @@ class ContentResponseEncodingListenerTest extends TestCase
     private function indexedRenderResult(): RenderResult
     {
         return new RenderResult(
-            [new RenderedElement('root', 'CT:Content:Text')],
+            [new RenderedElement('root', 'Ct:Content:Text')],
             LayoutReference::create('layout-1', 'Landing', '1.0.0'),
             new ResolvedValueIndex(['blog-ref-1' => 'Release notes'], ['root' => ['title' => 'blog-ref-1']]),
         );

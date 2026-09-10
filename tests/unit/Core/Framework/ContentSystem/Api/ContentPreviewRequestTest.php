@@ -72,7 +72,7 @@ class ContentPreviewRequestTest extends TestCase
     private function request(array $queryParameters): ContentPreviewRequest
     {
         return new ContentPreviewRequest(
-            layout: [['id' => 'el-1', 'component' => 'CT:Block']],
+            layout: [['id' => 'el-1', 'component' => 'Ct:Block']],
             entityType: 'blog',
             entityId: 'prod-1',
             channelId: 'sales-channel-1',

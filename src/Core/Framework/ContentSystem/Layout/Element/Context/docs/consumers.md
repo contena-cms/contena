@@ -7,7 +7,7 @@ Consumer receives context from ancestor provider using `acceptsContext`.
 ```json
 {
   "id": "blog-title-consumer",
-  "component": "CT:Blog:Title",
+  "component": "Ct:Blog:Title",
   "acceptsContext": {
     "blog": {
       "type": "single",
@@ -39,7 +39,7 @@ Consumer receives context data directly as a property.
 ```json
 {
   "id": "blog-cover",
-  "component": "CT:Content:Image",
+  "component": "Ct:Content:Image",
   "acceptsContext": {
     "blog.cover": {
       "type": "single",

@@ -3,14 +3,14 @@ name: "Category page"
 description: "Collection of components that make up the category page."
 icon: "regular-boxes"
 layout:
-  - component: CT:Grid:Container
+  - component: Ct:Grid:Container
     properties:
       mode: explicit
       columns: 4
       justify: stretch
     slots:
       content:
-        - component: CT:Navigation:Tree
+        - component: Ct:Navigation:Tree
           style:
             display:
               xs: false
@@ -19,7 +19,7 @@ layout:
               lg: true
               xl: true
               xxl: true
-        - component: CT:Blog:Listing
+        - component: Ct:Blog:Listing
           style:
             col-span:
               xs: 4
@@ -30,4 +30,4 @@ layout:
               xxl: 3
           slots:
             filters-panel:
-              - component: CT:Filter:Panel
+              - component: Ct:Filter:Panel

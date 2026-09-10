@@ -23,7 +23,7 @@ class ContentSystemElementTypeSpecificationTest extends TestCase
         $spec = $this->createSpecification('card', 'commerce');
         $schema = $spec->toSchema();
 
-        static::assertSame('CT:Blog:Card', $schema['name']);
+        static::assertSame('Ct:Blog:Card', $schema['name']);
         static::assertSame('Blog Card', $schema['label']);
         static::assertSame('A blog card.', $schema['description']);
         static::assertSame('test', $schema['source']);
@@ -61,7 +61,7 @@ class ContentSystemElementTypeSpecificationTest extends TestCase
     public function testToSchemaIncludesSource(): void
     {
         $specification = new ContentSystemElementTypeSpecification(
-            'CT:Content:Text',
+            'Ct:Content:Text',
             'Text',
             '',
             null,
@@ -78,7 +78,7 @@ class ContentSystemElementTypeSpecificationTest extends TestCase
     private function createSpecification(?string $icon, ?string $category): ContentSystemElementTypeSpecification
     {
         return new ContentSystemElementTypeSpecification(
-            'CT:Blog:Card',
+            'Ct:Blog:Card',
             'Blog Card',
             'A blog card.',
             $icon,
@@ -93,7 +93,7 @@ class ContentSystemElementTypeSpecificationTest extends TestCase
     private function createFullSpecification(): ContentSystemElementTypeSpecification
     {
         return new ContentSystemElementTypeSpecification(
-            'CT:Blog:Card',
+            'Ct:Blog:Card',
             'Blog Card',
             'A blog card.',
             'card',
@@ -118,7 +118,7 @@ class ContentSystemElementTypeSpecificationTest extends TestCase
                 ),
             ],
             [
-                new SlotSpecification('media', 1, ['CT:Media:Image'], 'Media slot.'),
+                new SlotSpecification('media', 1, ['Ct:Media:Image'], 'Media slot.'),
             ],
             'test',
         );

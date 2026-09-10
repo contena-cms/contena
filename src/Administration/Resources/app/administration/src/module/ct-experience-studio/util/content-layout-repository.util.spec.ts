@@ -31,12 +31,12 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
     it('reads the entity layout as content element nodes', async () => {
         const section: ContentElementNode = {
             id: 'section-1',
-            component: 'CT:Layout:Section',
+            component: 'Ct:Layout:Section',
             slots: {
                 main: [
                     {
                         id: 'text-1',
-                        component: 'CT:Content:Text',
+                        component: 'Ct:Content:Text',
                         properties: {
                             text: 'Hello',
                         },
@@ -49,13 +49,13 @@ describe('module/ct-experience-studio/util/content-layout-repository.util', () =
         const entity = await repository.get(LAYOUT_ID, Contena.Context.api, new Criteria(1, 1));
 
         expect(entity?.layout).toEqual([section]);
-        expect(entity?.layout[0].slots?.main[0].component).toBe('CT:Content:Text');
+        expect(entity?.layout[0].slots?.main[0].component).toBe('Ct:Content:Text');
     });
 
     it('keeps element attribution on the entity read', async () => {
         const attributedElement: ContentElementNode = {
             id: 'text-1',
-            component: 'CT:Content:Text',
+            component: 'Ct:Content:Text',
             dataRequirements: {
                 blog: {
                     entity: 'blog',

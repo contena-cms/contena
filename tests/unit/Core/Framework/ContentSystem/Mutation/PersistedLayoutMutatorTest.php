@@ -282,8 +282,8 @@ class PersistedLayoutMutatorTest extends TestCase
         $entity->setUniqueIdentifier($id);
         $entity->setRootSource($rootSource);
         $entity->setLayout([
-            StoredElementBuilder::create('CT:Card', 'block-a')->build(),
-            StoredElementBuilder::create('CT:Card', 'block-b')->build(),
+            StoredElementBuilder::create('Ct:Card', 'block-a')->build(),
+            StoredElementBuilder::create('Ct:Card', 'block-b')->build(),
         ]);
 
         if ($updatedAt !== null) {

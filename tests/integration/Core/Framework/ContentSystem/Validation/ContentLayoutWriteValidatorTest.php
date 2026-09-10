@@ -76,7 +76,7 @@ class ContentLayoutWriteValidatorTest extends TestCase
         $context->addState(LayoutGate::SKIP_VALIDATION_STATE);
         $id = $this->ids->get('layout');
 
-        $this->repository()->create([$this->layout('category', 'CT:Test:DefinitelyUnregistered', $id)], $context);
+        $this->repository()->create([$this->layout('category', 'Ct:Test:DefinitelyUnregistered', $id)], $context);
 
         static::assertSame($id, $this->repository()->searchIds(new Criteria([$id]), $context)->firstId());
     }
@@ -129,10 +129,10 @@ class ContentLayoutWriteValidatorTest extends TestCase
         $context = Context::createDefaultContext();
 
         try {
-            $this->repository()->create([$this->layout('category', 'CT:Test:DefinitelyUnregistered')], $context);
+            $this->repository()->create([$this->layout('category', 'Ct:Test:DefinitelyUnregistered')], $context);
             static::fail('Expected the well-formedness gate to reject the unregistered component.');
         } catch (WriteException $exception) {
-            static::assertStringContainsString('CT:Test:DefinitelyUnregistered', $exception->getMessage());
+            static::assertStringContainsString('Ct:Test:DefinitelyUnregistered', $exception->getMessage());
             static::assertStringContainsString('is not a registered element type', $exception->getMessage());
         }
     }

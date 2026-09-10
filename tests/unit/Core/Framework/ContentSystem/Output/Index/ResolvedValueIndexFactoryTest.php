@@ -32,7 +32,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
- * `CT:Text` declares its three primitives in the order `zulu`, `mike`, `alpha` — the exact reverse of their
+ * `Ct:Text` declares its three primitives in the order `zulu`, `mike`, `alpha` — the exact reverse of their
  * byte order — so an assertion about type-spec order cannot pass by accident under byte order, and neither
  * can pass by accident under the order a fixture happened to write the keys or the provenance in.
  *
@@ -47,14 +47,14 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('walks pre-order: an element, then its slots in map order, then each slot child in list order')]
     public function testTraversalIsPreOrderDepthFirst(): void
     {
-        $grandchild = RenderedElementBuilder::create('CT:Tile', 'grandchild')->withProperty('label', 'g')->build();
-        $firstChild = RenderedElementBuilder::create('CT:Tile', 'child-a')
+        $grandchild = RenderedElementBuilder::create('Ct:Tile', 'grandchild')->withProperty('label', 'g')->build();
+        $firstChild = RenderedElementBuilder::create('Ct:Tile', 'child-a')
             ->withProperty('label', 'a')
             ->withSlot('inner', [$grandchild])
             ->build();
-        $secondChild = RenderedElementBuilder::create('CT:Tile', 'child-b')->withProperty('label', 'b')->build();
-        $asideChild = RenderedElementBuilder::create('CT:Tile', 'child-c')->withProperty('label', 'c')->build();
-        $root = RenderedElementBuilder::create('CT:Tile', 'root')
+        $secondChild = RenderedElementBuilder::create('Ct:Tile', 'child-b')->withProperty('label', 'b')->build();
+        $asideChild = RenderedElementBuilder::create('Ct:Tile', 'child-c')->withProperty('label', 'c')->build();
+        $root = RenderedElementBuilder::create('Ct:Tile', 'root')
             ->withProperty('label', 'root')
             ->withSlot('main', [$firstChild, $secondChild])
             ->withSlot('aside', [$asideChild])
@@ -84,7 +84,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('emits declared primitives in type-spec order, then the other four categories in byte order')]
     public function testPerElementEmissionOrderFollowsTheFiveCategories(): void
     {
-        $element = RenderedElementBuilder::create('CT:Text', 'element-1')
+        $element = RenderedElementBuilder::create('Ct:Text', 'element-1')
             ->withProperties([
                 'victor' => 'v',
                 'alpha' => 'a',
@@ -132,8 +132,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blog', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('blog', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blog', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('blog', $second)->build(),
             ],
             [
                 'element-1' => ['blog' => $this->loaderProvenance($first)],
@@ -161,8 +161,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blogs', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('blogs', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blogs', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('blogs', $second)->build(),
             ],
             [
                 'element-1' => ['blogs' => $this->loaderProvenance($first)],
@@ -181,8 +181,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     {
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('note', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('note', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('note', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('note', $second)->build(),
             ],
             []
         );
@@ -201,8 +201,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('category', $shared)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('extra', $shared)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('category', $shared)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('extra', $shared)->build(),
             ],
             ['element-1' => ['category' => new ValueProvenance(ValueOrigin::DeliveredContext)]]
         );
@@ -225,8 +225,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blog', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('blog', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blog', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('blog', $second)->build(),
             ],
             [
                 'element-1' => ['blog' => $this->loaderProvenance($first, source: 'first_loader')],
@@ -252,8 +252,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blog', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('blog', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blog', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('blog', $second)->build(),
             ],
             [
                 'element-1' => ['blog' => $this->loaderProvenance($first, configHash: 'config-a')],
@@ -301,8 +301,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blogs', $first)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('blogs', $second)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blogs', $first)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('blogs', $second)->build(),
             ],
             [
                 'element-1' => ['blogs' => $this->loaderProvenance($first, inputsHash: 'inputs-a')],
@@ -318,8 +318,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('an element with no rendered property gets no assignment entry at all')]
     public function testElementWithoutPropertiesIsAbsentFromTheAssignments(): void
     {
-        $child = RenderedElementBuilder::create('CT:Tile', 'child')->withProperty('label', 'c')->build();
-        $root = RenderedElementBuilder::create('CT:Tile', 'root')->withSlot('main', [$child])->build();
+        $child = RenderedElementBuilder::create('Ct:Tile', 'child')->withProperty('label', 'c')->build();
+        $root = RenderedElementBuilder::create('Ct:Tile', 'root')->withSlot('main', [$child])->build();
 
         $index = $this->factory()->create([$root], $this->declaredPrimitiveFor(['child'], 'label'));
 
@@ -333,7 +333,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('orders keys of one category by byte value rather than by collation')]
     public function testByteOrderPutsUppercaseKeysFirst(): void
     {
-        $element = RenderedElementBuilder::create('CT:Tile', 'element-1')
+        $element = RenderedElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperties(['apple' => 'a', 'Zebra' => 'z'])
             ->build();
 
@@ -353,7 +353,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('declared-primitive keys the type does not declare follow the declared ones in byte order')]
     public function testUndeclaredPrimitiveKeysFollowTheDeclaredOnes(): void
     {
-        $element = RenderedElementBuilder::create('CT:Text', 'element-1')
+        $element = RenderedElementBuilder::create('Ct:Text', 'element-1')
             ->withProperties(['omega' => 'o', 'alpha' => 'a', 'nova' => 'n', 'zulu' => 'z'])
             ->build();
 
@@ -391,8 +391,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('subject', $blog)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('subject', $category)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('subject', $blog)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('subject', $category)->build(),
             ],
             [
                 'element-1' => ['subject' => $this->loaderProvenance($blog)],
@@ -417,8 +417,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     public function testBroadcastDeliverySharesTheProviderRef(): void
     {
         $provided = new StubStruct();
-        $child = RenderedElementBuilder::create('CT:Tile', 'child')->withProperty('blog', $provided)->build();
-        $parent = RenderedElementBuilder::create('CT:Tile', 'parent')
+        $child = RenderedElementBuilder::create('Ct:Tile', 'child')->withProperty('blog', $provided)->build();
+        $parent = RenderedElementBuilder::create('Ct:Tile', 'parent')
             ->withProperty('blog', $provided)
             ->withSlot('main', [$child])
             ->build();
@@ -553,8 +553,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     {
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('blog', null)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('category', null)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('blog', null)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('category', null)->build(),
             ],
             [
                 'element-1' => ['blog' => $this->loaderProvenance(null, source: 'blog')],
@@ -576,7 +576,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('shares one ref across loader-resolved and delivered-context nulls')]
     public function testEveryNullSharesOneRefWhateverProducedIt(): void
     {
-        $element = RenderedElementBuilder::create('CT:Tile', 'element-1')
+        $element = RenderedElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperties(['blog' => null, 'category' => null])
             ->build();
 
@@ -600,7 +600,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('injects a key with no provenance entry, emits it last, and resolves to its value')]
     public function testKeyWithoutProvenanceIsInjected(): void
     {
-        $element = RenderedElementBuilder::create('CT:Text', 'element-1')
+        $element = RenderedElementBuilder::create('Ct:Text', 'element-1')
             ->withProperties(['note' => 'listener wrote this', 'zulu' => 'z'])
             ->build();
 
@@ -614,7 +614,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('ignores a provenance entry for a key the element no longer carries')]
     public function testProvenanceForAnAbsentKeyIsIgnored(): void
     {
-        $element = RenderedElementBuilder::create('CT:Text', 'element-1')->withProperty('zulu', 'z')->build();
+        $element = RenderedElementBuilder::create('Ct:Text', 'element-1')->withProperty('zulu', 'z')->build();
 
         $index = $this->factory()->create([$element], ['element-1' => [
             'zulu' => new ValueProvenance(ValueOrigin::DeclaredAuthored),
@@ -638,10 +638,10 @@ class ResolvedValueIndexFactoryTest extends TestCase
     {
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Text', 'element-1')
+                RenderedElementBuilder::create('Ct:Text', 'element-1')
                     ->withProperty('blog', 'original')
                     ->build(),
-                RenderedElementBuilder::create('CT:Text', 'element-2')
+                RenderedElementBuilder::create('Ct:Text', 'element-2')
                     ->withProperties(['note' => 'n', 'blog' => 'rewritten', 'zulu' => 'z'])
                     ->build(),
             ],
@@ -678,10 +678,10 @@ class ResolvedValueIndexFactoryTest extends TestCase
 
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')
                     ->withProperty('blog', $produced)
                     ->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')
                     ->withProperty('blog', $replacement)
                     ->build(),
             ],
@@ -713,8 +713,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     {
         $index = $this->factory()->create(
             [
-                RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('teaser', $value)->build(),
-                RenderedElementBuilder::create('CT:Tile', 'element-2')->withProperty('teaser', $value)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('teaser', $value)->build(),
+                RenderedElementBuilder::create('Ct:Tile', 'element-2')->withProperty('teaser', $value)->build(),
             ],
             [
                 'element-1' => ['teaser' => $this->loaderProvenance($value, inputsHash: 'inputs-a')],
@@ -737,8 +737,8 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('rejects element ids repeated on the descent path')]
     public function testRepeatedElementIdOnThePathThrows(): void
     {
-        $child = RenderedElementBuilder::create('CT:Tile', 'element-1')->withProperty('label', 'child')->build();
-        $root = RenderedElementBuilder::create('CT:Tile', 'element-1')
+        $child = RenderedElementBuilder::create('Ct:Tile', 'element-1')->withProperty('label', 'child')->build();
+        $root = RenderedElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperty('label', 'root')
             ->withSlot('main', [$child])
             ->build();
@@ -754,9 +754,9 @@ class ResolvedValueIndexFactoryTest extends TestCase
     #[TestDox('rejects element ids shared across different branch slots')]
     public function testRepeatedElementIdAcrossBranchesThrows(): void
     {
-        $inMain = RenderedElementBuilder::create('CT:Tile', 'twin')->withProperty('label', 'main')->build();
-        $inAside = RenderedElementBuilder::create('CT:Tile', 'twin')->withProperty('label', 'aside')->build();
-        $root = RenderedElementBuilder::create('CT:Tile', 'root')
+        $inMain = RenderedElementBuilder::create('Ct:Tile', 'twin')->withProperty('label', 'main')->build();
+        $inAside = RenderedElementBuilder::create('Ct:Tile', 'twin')->withProperty('label', 'aside')->build();
+        $root = RenderedElementBuilder::create('Ct:Tile', 'root')
             ->withProperty('label', 'root')
             ->withSlot('main', [$inMain])
             ->withSlot('aside', [$inAside])
@@ -828,7 +828,7 @@ class ResolvedValueIndexFactoryTest extends TestCase
      */
     private function consumer(array $properties = []): array
     {
-        return ['component' => 'CT:Tile', 'properties' => $properties];
+        return ['component' => 'Ct:Tile', 'properties' => $properties];
     }
 
     /**
@@ -840,10 +840,10 @@ class ResolvedValueIndexFactoryTest extends TestCase
      */
     private function assertDeliveredValueTakesItsOwnRef(mixed $providerValue, mixed $deliveredValue): void
     {
-        $child = RenderedElementBuilder::create('CT:Tile', 'child')
+        $child = RenderedElementBuilder::create('Ct:Tile', 'child')
             ->withProperty('provider', $deliveredValue)
             ->build();
-        $parent = RenderedElementBuilder::create('CT:Tile', 'parent')
+        $parent = RenderedElementBuilder::create('Ct:Tile', 'parent')
             ->withProperty('provider', $providerValue)
             ->withSlot('main', [$child])
             ->build();
@@ -904,12 +904,12 @@ class ResolvedValueIndexFactoryTest extends TestCase
     private function factory(): ResolvedValueIndexFactory
     {
         $specs = [
-            'CT:Text' => ContentSystemElementTypeSpecificationBuilder::create('CT:Text')
+            'Ct:Text' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Text')
                 ->primitive('zulu', 'string')
                 ->primitive('mike', 'string')
                 ->primitive('alpha', 'string')
                 ->build(),
-            'CT:Tile' => ContentSystemElementTypeSpecificationBuilder::create('CT:Tile')
+            'Ct:Tile' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Tile')
                 ->primitive('label', 'string')
                 ->build(),
         ];

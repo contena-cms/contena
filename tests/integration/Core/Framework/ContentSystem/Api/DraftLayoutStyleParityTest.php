@@ -25,7 +25,7 @@ class DraftLayoutStyleParityTest extends TestCase
         // missing breakpoints, so a path that skipped it would produce a visibly different map.
         $raw = [[
             'id' => Uuid::randomHex(),
-            'component' => 'CT:Content:Text',
+            'component' => 'Ct:Content:Text',
             'properties' => ['text' => '<p>Parity</p>'],
             'style' => ['align-self' => ['xs' => 'center']],
         ]];

@@ -31,7 +31,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
     public function testValidBindingProducesNoViolations(): void
     {
         $dto = new BindingSpecificationDto(
-            type: 'CT:Media:Image',
+            type: 'Ct:Media:Image',
             label: 'Image binding',
             resolves: [
                 'media' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -77,13 +77,13 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
     public static function invalidBindingsProvider(): iterable
     {
         yield 'unknown type' => [
-            'type' => 'CT:Does:NotExist',
+            'type' => 'Ct:Does:NotExist',
             'resolves' => [],
             'inputs' => [],
             'expectedPath' => 'type',
         ];
         yield 'resolves key is not a reference property' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'mediaId' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
             ],
@@ -91,7 +91,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'resolves[mediaId]',
         ];
         yield 'loader produces a type not assignable to the declared property type' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['loader' => 'entity', 'config' => ['entity' => 'blog', 'property' => 'mediaId']],
             ],
@@ -99,7 +99,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'resolves[media]',
         ];
         yield 'undecodable loader config' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['loader' => 'entity', 'config' => []],
             ],
@@ -107,7 +107,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'resolves[media].config',
         ];
         yield 'loader is not a registered data loader' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['loader' => 'not-a-registered-loader', 'config' => []],
             ],
@@ -117,7 +117,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
         yield 'entity loader property names a non-primitive property' => [
             // config decodes and the produced MediaEntity is assignable, but the "property" that should
             // hold the id names "media" (itself a reference), not a primitive id property.
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'media']],
             ],
@@ -125,7 +125,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'resolves[media].config.property',
         ];
         yield 'inputs key is not a primitive property' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [],
             'inputs' => [
                 'media' => ['default' => 'not-a-primitive-property'],
@@ -133,7 +133,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'inputs[media]',
         ];
         yield 'input default type mismatch' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [],
             'inputs' => [
                 'maxImageWidth' => ['default' => 'not-an-integer'],
@@ -141,7 +141,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             'expectedPath' => 'inputs[maxImageWidth].default',
         ];
         yield 'context form is rejected' => [
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['context' => 'blog.cover'],
             ],
@@ -153,7 +153,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             // resolveProducedType() throws ContentSystemException::unknownLoaderEntity() for the
             // unregistered entity name -- this exercises the resolveProducedType() catch, distinct
             // from the "undecodable loader config" case above, which exercises the decodeConfig() catch.
-            'type' => 'CT:Media:Image',
+            'type' => 'Ct:Media:Image',
             'resolves' => [
                 'media' => ['loader' => 'entity', 'config' => ['entity' => 'this_entity_does_not_exist', 'property' => 'name']],
             ],
@@ -170,7 +170,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
         $filesystem->mkdir($directory . '/media');
 
         try {
-            // The type is implicit: media/image.yaml under prefix Sw resolves to the registered CT:Media:Image,
+            // The type is implicit: media/image.yaml under prefix Sw resolves to the registered Ct:Media:Image,
             // whose "media" reference is a MediaEntity, so the entity loader producing a BlogEntity is a
             // produced-type mismatch caught at load time.
             file_put_contents($directory . '/media/image.yaml', Yaml::dump([

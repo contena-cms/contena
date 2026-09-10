@@ -63,22 +63,22 @@ class StoredElementListFieldSerializerTest extends TestCase
     public function testNormalizeSeedsPrimitiveDefaultsIntoRawPayload(): void
     {
         $field = $this->createField();
-        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'CT:Block', 'properties' => []]]];
+        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'Ct:Block', 'properties' => []]]];
 
         $result = $this->serializerWithRealSeeder()->normalize($field, $data, $this->parameters());
 
-        static::assertSame([['id' => 'el', 'component' => 'CT:Block', 'properties' => ['headline' => 'Hi']]], $result['elements']);
+        static::assertSame([['id' => 'el', 'component' => 'Ct:Block', 'properties' => ['headline' => 'Hi']]], $result['elements']);
     }
 
     #[TestDox('wraps a single StoredElement value into a list and seeds the type primitive defaults onto it')]
     public function testNormalizeWrapsSingleStoredElementIntoListAndSeedsPrimitiveDefaults(): void
     {
         $field = $this->createField();
-        $element = StoredElementBuilder::create('CT:Block', 'el')->build();
+        $element = StoredElementBuilder::create('Ct:Block', 'el')->build();
 
         $result = $this->serializerWithRealSeeder()->normalize($field, ['id' => 'layout-1', 'elements' => $element], $this->parameters());
 
-        static::assertSame([['id' => 'el', 'component' => 'CT:Block', 'properties' => ['headline' => 'Hi']]], $result['elements']);
+        static::assertSame([['id' => 'el', 'component' => 'Ct:Block', 'properties' => ['headline' => 'Hi']]], $result['elements']);
     }
 
     #[TestDox('leaves a non-list layout value untouched')]
@@ -106,7 +106,7 @@ class StoredElementListFieldSerializerTest extends TestCase
         $calls = [];
         $field = $this->createField();
         $data = ['id' => 'layout-1', 'elements' => [
-            ['id' => 'el', 'component' => 'CT:Block', 'properties' => [], 'style' => ['display' => ['xs' => false]]],
+            ['id' => 'el', 'component' => 'Ct:Block', 'properties' => [], 'style' => ['display' => ['xs' => false]]],
         ]];
 
         $result = $this->recordingSerializer($calls)->normalize($field, $data, $this->parameters());
@@ -127,7 +127,7 @@ class StoredElementListFieldSerializerTest extends TestCase
     {
         $calls = [];
         $field = $this->createField();
-        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'CT:Block', 'properties' => [12 => 'x']]]];
+        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'Ct:Block', 'properties' => [12 => 'x']]]];
 
         try {
             $this->recordingSerializer($calls)->normalize($field, $data, $this->parameters());
@@ -144,8 +144,8 @@ class StoredElementListFieldSerializerTest extends TestCase
         $calls = [];
         $field = $this->createField();
         $data = ['id' => 'layout-1', 'elements' => [
-            ['id' => 'el', 'component' => 'CT:Block', 'properties' => []],
-            ['id' => 'el', 'component' => 'CT:Block', 'properties' => []],
+            ['id' => 'el', 'component' => 'Ct:Block', 'properties' => []],
+            ['id' => 'el', 'component' => 'Ct:Block', 'properties' => []],
         ]];
 
         try {
@@ -162,13 +162,13 @@ class StoredElementListFieldSerializerTest extends TestCase
     {
         $field = $this->createField();
         $data = ['id' => 'layout-1', 'elements' => [
-            ['id' => 'el', 'component' => 'CT:Block', 'properties' => [], 'style' => ['display' => ['xs' => false]]],
+            ['id' => 'el', 'component' => 'Ct:Block', 'properties' => [], 'style' => ['display' => ['xs' => false]]],
         ]];
 
         $result = $this->serializer()->normalize($field, $data, $this->parameters());
 
         static::assertSame(
-            [['id' => 'el', 'component' => 'CT:Block', 'properties' => [], 'style' => [
+            [['id' => 'el', 'component' => 'Ct:Block', 'properties' => [], 'style' => [
                 'display' => ['xs' => false, 'sm' => true, 'md' => true, 'lg' => true, 'xl' => true, 'xxl' => true],
             ]]],
             $result['elements']
@@ -180,7 +180,7 @@ class StoredElementListFieldSerializerTest extends TestCase
     {
         $context = Context::createDefaultContext();
         $field = $this->createField();
-        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'CT:Block', 'properties' => []]]];
+        $data = ['id' => 'layout-1', 'elements' => [['id' => 'el', 'component' => 'Ct:Block', 'properties' => []]]];
 
         $this->serializerWithRealSeeder()->normalize($field, $data, $this->parametersFor($context));
 
@@ -637,7 +637,7 @@ class StoredElementListFieldSerializerTest extends TestCase
 
     private function serializerWithRealSeeder(): StoredElementListFieldSerializer
     {
-        $specs = ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create('CT:Block')->primitive('headline', 'string', default: 'Hi')->build()];
+        $specs = ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Block')->primitive('headline', 'string', default: 'Hi')->build()];
 
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('has')->willReturnCallback(static fn (string $name): bool => isset($specs[$name]));
@@ -669,10 +669,10 @@ class StoredElementListFieldSerializerTest extends TestCase
         $typeRegistry->method('has')->willReturnCallback(function (string $name) use (&$calls): bool {
             $calls[] = 'seed';
 
-            return $name === 'CT:Block';
+            return $name === 'Ct:Block';
         });
         $typeRegistry->method('get')->willReturn(
-            ContentSystemElementTypeSpecificationBuilder::create('CT:Block')->primitive('headline', 'string', default: 'seeded')->build()
+            ContentSystemElementTypeSpecificationBuilder::create('Ct:Block')->primitive('headline', 'string', default: 'seeded')->build()
         );
 
         $styleRegistry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);

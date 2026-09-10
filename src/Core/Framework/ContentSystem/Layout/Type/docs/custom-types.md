@@ -54,7 +54,7 @@ slots:
     description: "Action buttons below blog info"
     maxElements: 3
     allowList:
-      - "CT:Content:Button"
+      - "Ct:Content:Button"
       - "AcmeStore:OpenMedia"
 ```
 

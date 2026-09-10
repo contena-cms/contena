@@ -190,7 +190,7 @@ class ElementDataResolverTest extends TestCase
         $resolver = new ElementDataResolver($provider, new LoaderInputResolver(), $this->identityFactory());
 
         $resolved = $resolver->resolve(
-            StoredElementBuilder::create('CT:Text', 'element-1')->withProperty('headline', 'Hello')->build(),
+            StoredElementBuilder::create('Ct:Text', 'element-1')->withProperty('headline', 'Hello')->build(),
             static::createStub(ChannelContext::class),
             new Request(),
             new RenderingCacheContext()
@@ -218,7 +218,7 @@ class ElementDataResolverTest extends TestCase
             }
         );
 
-        $inputSource = StoredElementBuilder::create('CT:Internal:PageContext', 'wrapper-1')
+        $inputSource = StoredElementBuilder::create('Ct:Internal:PageContext', 'wrapper-1')
             ->withProperty('activeId', 'the-placeholder-id')
             ->build();
 
@@ -295,7 +295,7 @@ class ElementDataResolverTest extends TestCase
 
     private function elementWithRequirement(string $key, string $activeId = 'the-active-id'): StoredElement
     {
-        return StoredElementBuilder::create('CT:BlogBox', 'element-1')
+        return StoredElementBuilder::create('Ct:BlogBox', 'element-1')
             ->withProperty('activeId', $activeId)
             ->withDataRequirement($key, 'entity', $this->config())
             ->build();
@@ -303,7 +303,7 @@ class ElementDataResolverTest extends TestCase
 
     private function elementWithTwoRequirements(): StoredElement
     {
-        return StoredElementBuilder::create('CT:BlogBox', 'element-1')
+        return StoredElementBuilder::create('Ct:BlogBox', 'element-1')
             ->withProperty('activeId', 'the-active-id')
             ->withDataRequirement('blog', 'entity', $this->config())
             ->withDataRequirement('category', 'entity', $this->config())

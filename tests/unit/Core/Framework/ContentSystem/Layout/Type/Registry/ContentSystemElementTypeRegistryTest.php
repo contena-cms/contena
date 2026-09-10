@@ -21,7 +21,7 @@ class ContentSystemElementTypeRegistryTest extends TestCase
     #[TestDox('aggregates specifications from multiple loaders')]
     public function testAllAggregatesFromMultipleLoaders(): void
     {
-        $specA = $this->createSpec('CT:Content:Text', 'Text', 'core');
+        $specA = $this->createSpec('Ct:Content:Text', 'Text', 'core');
         $specB = $this->createSpec('App:Demo:Hero', 'Hero', 'plugin:Demo');
 
         $loaderA = static::createStub(AbstractContentSystemElementTypeLoader::class);
@@ -34,7 +34,7 @@ class ContentSystemElementTypeRegistryTest extends TestCase
 
         $all = $registry->all();
         static::assertCount(2, $all);
-        static::assertArrayHasKey('CT:Content:Text', $all);
+        static::assertArrayHasKey('Ct:Content:Text', $all);
         static::assertArrayHasKey('App:Demo:Hero', $all);
     }
 
@@ -50,11 +50,11 @@ class ContentSystemElementTypeRegistryTest extends TestCase
     public function testHasReturnsTrueForRegisteredType(): void
     {
         $loader = static::createStub(AbstractContentSystemElementTypeLoader::class);
-        $loader->method('load')->willReturn([$this->createSpec('CT:Content:Text', 'Text')]);
+        $loader->method('load')->willReturn([$this->createSpec('Ct:Content:Text', 'Text')]);
 
         $registry = new ContentSystemElementTypeRegistry([$loader]);
 
-        static::assertTrue($registry->has('CT:Content:Text'));
+        static::assertTrue($registry->has('Ct:Content:Text'));
     }
 
     #[TestDox('returns false for an unknown type')]
@@ -62,20 +62,20 @@ class ContentSystemElementTypeRegistryTest extends TestCase
     {
         $registry = new ContentSystemElementTypeRegistry([]);
 
-        static::assertFalse($registry->has('CT:Unknown:Type'));
+        static::assertFalse($registry->has('Ct:Unknown:Type'));
     }
 
     #[TestDox('returns the specification for a registered type')]
     public function testGetReturnsSpecificationForRegisteredType(): void
     {
-        $spec = $this->createSpec('CT:Content:Text', 'Text');
+        $spec = $this->createSpec('Ct:Content:Text', 'Text');
 
         $loader = static::createStub(AbstractContentSystemElementTypeLoader::class);
         $loader->method('load')->willReturn([$spec]);
 
         $registry = new ContentSystemElementTypeRegistry([$loader]);
 
-        static::assertSame($spec, $registry->get('CT:Content:Text'));
+        static::assertSame($spec, $registry->get('Ct:Content:Text'));
     }
 
     #[TestDox('throws DecorationPatternException when calling getDecorated')]
@@ -92,15 +92,15 @@ class ContentSystemElementTypeRegistryTest extends TestCase
     {
         $registry = new ContentSystemElementTypeRegistry([]);
 
-        $this->expectExceptionObject(ContentSystemException::elementTypeNotFound('CT:Unknown:Type'));
-        $registry->get('CT:Unknown:Type');
+        $this->expectExceptionObject(ContentSystemException::elementTypeNotFound('Ct:Unknown:Type'));
+        $registry->get('Ct:Unknown:Type');
     }
 
     #[TestDox('throws when two loaders register the same type name')]
     public function testCrossLoaderDuplicateThrowsWithSourceLabels(): void
     {
-        $specA = $this->createSpec('CT:Content:Text', 'Text', 'core');
-        $specB = $this->createSpec('CT:Content:Text', 'Text Dupe', 'plugin:MyPlugin');
+        $specA = $this->createSpec('Ct:Content:Text', 'Text', 'core');
+        $specB = $this->createSpec('Ct:Content:Text', 'Text Dupe', 'plugin:MyPlugin');
 
         $loaderA = static::createStub(AbstractContentSystemElementTypeLoader::class);
         $loaderA->method('load')->willReturn([$specA]);
@@ -111,7 +111,7 @@ class ContentSystemElementTypeRegistryTest extends TestCase
         $registry = new ContentSystemElementTypeRegistry([$loaderA, $loaderB]);
 
         $this->expectExceptionObject(
-            ContentSystemException::elementTypeDuplicate('CT:Content:Text', 'core', 'plugin:MyPlugin')
+            ContentSystemException::elementTypeDuplicate('Ct:Content:Text', 'core', 'plugin:MyPlugin')
         );
         $registry->all();
     }

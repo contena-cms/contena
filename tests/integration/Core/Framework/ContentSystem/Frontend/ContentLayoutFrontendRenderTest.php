@@ -141,12 +141,12 @@ class ContentLayoutFrontendRenderTest extends TestCase
             'rootSource' => 'category',
             'layout' => [[
                 'id' => $this->ids->get('root-grid'),
-                'component' => 'CT:Grid:Container',
+                'component' => 'Ct:Grid:Container',
                 'properties' => [],
                 'slots' => [
                     'content' => [[
                         'id' => $this->ids->get('image'),
-                        'component' => 'CT:Media:Image',
+                        'component' => 'Ct:Media:Image',
                         'properties' => [
                             'mediaId' => $this->ids->get('media'),
                             'height' => self::IMAGE_HEIGHT,

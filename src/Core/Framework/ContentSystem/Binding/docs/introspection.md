@@ -13,9 +13,9 @@ A type entry's `bindingSpecifications` fold:
 ```json
 {
   "bindingSpecifications": {
-    "core:CT:Media:Image": {
-      "id": "CT:Media:Image",
-      "type": "CT:Media:Image",
+    "core:Ct:Media:Image": {
+      "id": "Ct:Media:Image",
+      "type": "Ct:Media:Image",
       "label": "Image",
       "default": true,
       "resolves": {

@@ -358,7 +358,7 @@ class ContentLayoutWriteValidatorTest extends TestCase
 
     private function tree(): StoredTree
     {
-        return new StoredTree([new StoredElement('el-1', 'CT:Block')]);
+        return new StoredTree([new StoredElement('el-1', 'Ct:Block')]);
     }
 
     /**

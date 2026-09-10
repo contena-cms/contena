@@ -231,7 +231,7 @@ class ContextConsumerMirrorTest extends TestCase
     public static function baseKeyCollisionProvider(): iterable
     {
         yield 'existing consumer aliased to the written property' => [
-            StoredElementBuilder::create('CT:Content:Text', 'p1')
+            StoredElementBuilder::create('Ct:Content:Text', 'p1')
                 ->withConsumer('x', ContextType::Single, false, false, null, 'blog')
                 ->build(),
             self::reference('blog', true, self::candidate(CandidateOrigin::Parent, 'y')),
@@ -239,7 +239,7 @@ class ContextConsumerMirrorTest extends TestCase
         ];
 
         yield 'existing dotted consumer key sharing the first segment' => [
-            StoredElementBuilder::create('CT:Content:Text', 'p1')
+            StoredElementBuilder::create('Ct:Content:Text', 'p1')
                 ->withConsumer('blog.name', ContextType::Single)
                 ->build(),
             self::reference('blog', true, self::candidate(CandidateOrigin::Parent, 'y')),
@@ -247,7 +247,7 @@ class ContextConsumerMirrorTest extends TestCase
         ];
 
         yield 'dotted written key against an undotted existing consumer key' => [
-            StoredElementBuilder::create('CT:Content:Text', 'p1')
+            StoredElementBuilder::create('Ct:Content:Text', 'p1')
                 ->withConsumer('blog', ContextType::Single)
                 ->build(),
             self::reference('blog.sku', true, self::candidate(CandidateOrigin::Parent, 'blog.sku')),
@@ -255,7 +255,7 @@ class ContextConsumerMirrorTest extends TestCase
         ];
 
         yield 'collision against the second of two existing consumers' => [
-            StoredElementBuilder::create('CT:Content:Text', 'p1')
+            StoredElementBuilder::create('Ct:Content:Text', 'p1')
                 ->withConsumer('unrelated', ContextType::Single)
                 ->withConsumer('blog.name', ContextType::Single)
                 ->build(),
@@ -631,7 +631,7 @@ class ContextConsumerMirrorTest extends TestCase
 
     private static function plainTree(): StoredTree
     {
-        return new StoredTree([StoredElementBuilder::create('CT:Content:Text', 'p1')->build()]);
+        return new StoredTree([StoredElementBuilder::create('Ct:Content:Text', 'p1')->build()]);
     }
 
     /**
@@ -733,7 +733,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withProvider('blog', BroadcastDistributionConfig::simple())
                     ->build(),
             ]),
@@ -763,7 +763,7 @@ class ContextConsumerMirrorTest extends TestCase
             new StoredTree([
                 StoredElementBuilder::create('Sw:Grid:Container', 'outer')->withSlot('content', [
                     StoredElementBuilder::create('Sw:Grid:Container', 'inner')->withSlot('content', [
-                        StoredElementBuilder::create('CT:Content:Text', 'price')->build(),
+                        StoredElementBuilder::create('Ct:Content:Text', 'price')->build(),
                     ])->build(),
                 ])->build(),
             ]),
@@ -780,7 +780,7 @@ class ContextConsumerMirrorTest extends TestCase
         return [
             new StoredTree([
                 StoredElementBuilder::create('Sw:Grid:Container', 'outer')->withSlot('content', [
-                    StoredElementBuilder::create('CT:Content:Text', 'price')->build(),
+                    StoredElementBuilder::create('Ct:Content:Text', 'price')->build(),
                 ])->build(),
             ]),
             [
@@ -813,7 +813,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withDataRequirement('blog', 'entity', new StubLoaderConfig())
                     ->build(),
             ]),
@@ -830,7 +830,7 @@ class ContextConsumerMirrorTest extends TestCase
         return [
             new StoredTree([
                 StoredElementBuilder::create('Sw:Grid:Container', 'root0')->build(),
-                StoredElementBuilder::create('CT:Content:Text', 'root1')->build(),
+                StoredElementBuilder::create('Ct:Content:Text', 'root1')->build(),
             ]),
             ['root1' => [self::reference('blog', true, self::candidate(CandidateOrigin::Parent, 'blog'))]],
             ['root1'],
@@ -859,7 +859,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withConsumer('other', ContextType::Single)
                     ->build(),
             ]),
@@ -875,7 +875,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withConsumer('blog', ContextType::Collection, true, false, null, 'item')
                     ->build(),
             ]),
@@ -891,7 +891,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withDataRequirement('blog', 'entity', new StubLoaderConfig())
                     ->build(),
             ]),
@@ -907,7 +907,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withProvider('blog', BroadcastDistributionConfig::simple())
                     ->build(),
             ]),
@@ -923,7 +923,7 @@ class ContextConsumerMirrorTest extends TestCase
     {
         return [
             new StoredTree([
-                StoredElementBuilder::create('CT:Content:Text', 'p1')
+                StoredElementBuilder::create('Ct:Content:Text', 'p1')
                     ->withConsumer('authored', ContextType::Single)
                     ->build(),
             ]),

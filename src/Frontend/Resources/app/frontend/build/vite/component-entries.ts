@@ -43,7 +43,7 @@ export const componentRoot = path.resolve(resolveFrontendBasePath(), COMPONENTS_
  * Globs all non-test JS/TS component files under componentRoot and returns
  * them as a Rolldown input map keyed by the path-without-extension.
  *
- *   'CT/Header/Navbar.ts' → { 'CT/Header/Navbar': '/abs/path/…/Navbar.ts' }
+ *   'Ct/Header/Navbar.ts' → { 'Ct/Header/Navbar': '/abs/path/…/Navbar.ts' }
  */
 export async function buildComponentEntries(): Promise<Record<string, string>> {
     const files = await glob('**/*.{js,ts}', {
@@ -81,7 +81,7 @@ export interface ComponentStyleEntries {
      * Rolldown input map for SCSS entries.
      *
      * The `.scss` extension is intentionally kept in the entry key:
-     *   'CT/Header/Navbar.scss' → { 'CT/Header/Navbar.scss': '/abs/…/Navbar.scss' }
+     *   'Ct/Header/Navbar.scss' → { 'Ct/Header/Navbar.scss': '/abs/…/Navbar.scss' }
      *
      * This prevents a silent key collision when a JS/TS file and an SCSS file
      * share the same base name (e.g. `Dusel.js` + `Dusel.scss`). Without the
@@ -90,7 +90,7 @@ export interface ComponentStyleEntries {
      * `assetFileNames` function in each Vite config strips the `.scss` suffix
      * so the CSS output filename remains clean:
      *
-     *   Rolldown asset name: 'CT/Header/Navbar.scss.css' → output: 'CT/Header/Navbar-[hash].css'
+     *   Rolldown asset name: 'Ct/Header/Navbar.scss.css' → output: 'Ct/Header/Navbar-[hash].css'
      */
     scssEntries: Record<string, string>;
 

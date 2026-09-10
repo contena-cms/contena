@@ -22,7 +22,7 @@ class DraftLayoutCheckerTest extends TestCase
     public function testMapsIntrinsicErrorToConstraintViolation(): void
     {
         $report = new DiagnosticsReport([
-            new Violation(ViolationCode::UnregisteredComponent, 'bad-child', null, 'Component "CT:Unknown" is not a registered element type.'),
+            new Violation(ViolationCode::UnregisteredComponent, 'bad-child', null, 'Component "Ct:Unknown" is not a registered element type.'),
         ]);
 
         $violations = $this->checkerReturning($report)->check([]);

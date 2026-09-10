@@ -4,7 +4,7 @@ A data-driven layout system for serving structured content through the Channel A
 
 ## Core Concepts
 
-**Content Elements** - Building blocks of layouts. Each element has a component (e.g., `CT:Blog:Card`), properties for configuration, slots for child elements, and optional data requirements.
+**Content Elements** - Building blocks of layouts. Each element has a component (e.g., `Ct:Blog:Card`), properties for configuration, slots for child elements, and optional data requirements.
 
 **Placeholders** - Dynamic values in properties using `{{key}}` syntax. For example, `{{blogId}}` gets replaced with the actual blog UUID from the URL.
 

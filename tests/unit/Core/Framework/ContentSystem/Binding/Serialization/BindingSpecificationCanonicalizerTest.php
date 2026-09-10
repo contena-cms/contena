@@ -612,7 +612,7 @@ class BindingSpecificationCanonicalizerTest extends TestCase
             $this->map(['entity' => [$this->capability(MediaEntity::class, ['entity' => 'media'])]], ['entity' => $this->entitySpec()]),
         );
 
-        $dto = new BindingSpecificationDto('CT:Not:Registered', 'label', ['media' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']]], []);
+        $dto = new BindingSpecificationDto('Ct:Not:Registered', 'label', ['media' => ['loader' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']]], []);
 
         $exception = $this->expectCanonicalizationError($canonicalizer, $dto, 'binding');
 
@@ -734,7 +734,7 @@ class BindingSpecificationCanonicalizerTest extends TestCase
      */
     public static function rejectsUnknownTypeProvider(): iterable
     {
-        yield 'unregistered type name' => ['CT:Does:NotExist', 'CT:Does:NotExist'];
+        yield 'unregistered type name' => ['Ct:Does:NotExist', 'Ct:Does:NotExist'];
         yield 'blank type' => ['', ''];
         yield 'null type reported as its debug type' => [null, 'null'];
         yield 'non-string type reported as its debug type' => [123, 'int'];

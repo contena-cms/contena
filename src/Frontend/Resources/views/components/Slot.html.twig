@@ -33,7 +33,7 @@
 {% if elements is not empty %}
     {% block elements %}
         {% for element in elements %}
-            {% sw_include '@Frontend/components/CT/Content/_element.html.twig' with { element: element } only %}
+            {% sw_include '@Frontend/components/Ct/Content/_element.html.twig' with { element: element } only %}
         {% endfor %}
     {% endblock %}
 {% else %}

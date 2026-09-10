@@ -9,7 +9,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tre
 
         return shallowMount(sidebarTreeNodeComponent, {
             props: {
-                element: { id: 'element-id', component: 'CT:Content:Text' },
+                element: { id: 'element-id', component: 'Ct:Content:Text' },
                 ...props,
             },
             global: {
@@ -35,7 +35,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tre
     it('falls back to generic icon when no type icon exists', () => {
         getByName.mockReturnValue({ icon: null });
         const wrapper = createWrapper({
-            element: { id: 'element-id', component: 'CT:Content:Unknown' },
+            element: { id: 'element-id', component: 'Ct:Content:Unknown' },
         });
 
         expect(wrapper.vm.typeIcon).toBe('bars-square-s');
@@ -44,7 +44,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tre
     it('includes defined but currently empty slots in tree entries', () => {
         getByName.mockReturnValue({ slots: [{ name: 'content' }] });
         const wrapper = createWrapper({
-            element: { id: 'element-id', component: 'CT:Grid:Container', slots: {} },
+            element: { id: 'element-id', component: 'Ct:Grid:Container', slots: {} },
         });
 
         expect(wrapper.vm.slotEntries).toEqual([{ name: 'content', elements: [] }]);

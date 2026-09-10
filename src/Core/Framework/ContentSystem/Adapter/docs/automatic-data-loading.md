@@ -17,12 +17,12 @@ Entity-based rendering automatically loads the main entity before rendering your
 ```json
 {
   "id": "blog-page",
-  "component": "CT:Grid",
+  "component": "Ct:Grid",
   "slots": {
     "default": [
       {
         "id": "blog-title",
-        "component": "CT:Blog:Title",
+        "component": "Ct:Blog:Title",
         "acceptsContext": {
           "blog": {"type": "single", "required": true, "scope": "root"}
         }

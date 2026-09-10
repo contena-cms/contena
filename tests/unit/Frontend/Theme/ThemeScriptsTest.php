@@ -148,7 +148,7 @@ class ThemeScriptsTest extends TestCase
         $importMap = [
             'imports' => [
                 'contena' => '/bundles/frontend/frontend/contena/contena.js',
-                'CT:Button' => 'js/components/CT/Button.js',
+                'Ct:Button' => 'js/components/Ct/Button.js',
             ],
             'scopes' => [
                 'js/components/MyPlugin/' => [

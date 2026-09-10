@@ -11,13 +11,13 @@ Guidelines to write uniform Twig UX components that follow our best practices an
 ## Naming and directory structure
 
 * Each component name must be unique.
-* Default frontend components are in the `Sw` namespace. `<twig:CT:Button>`
+* Default frontend components are in the `Sw` namespace. `<twig:Ct:Button>`
 * Component names are written uppercase.
 * 3rd party components bring their own namespace e.g. `<twig:Agency:Button>`.
 * (S)CSS and JavaScript are in the same directory as the component template.
 
 ```
-views/components/CT/
+views/components/Ct/
     Button.html.twig
     Button.js
     Button.scss
@@ -26,18 +26,18 @@ views/components/CT/
 You can also use the index naming for anonymous components, which enables you to use the directory name as the component name. This can be helpful to have all component files in a separated directory, but without adding a duplicated namespace level. Make sure to name your JS and SCSS files accordingly.
 
 ```
-views/components/CT/Button
+views/components/Ct/Button
     index.html.twig
     index.js
     index.scss
 ```
 
-Both of the above structures produces the component `CT:Button`.
+Both of the above structures produces the component `Ct:Button`.
 
 
 ✅ Do:
 ```html
-<twig:CT:Button>My button</twig:CT:Button>
+<twig:Ct:Button>My button</twig:Ct:Button>
 ```
 
 ❌ Don't
@@ -272,7 +272,7 @@ The APIs of a component are "Props", "Blocks", "Attributes" and "Slots". Slots a
     defaultRoute = '#', {# With fallback #}
 %}
 
-<twig:CT:ProductCard :product="product" />
+<twig:Ct:ProductCard :product="product" />
 ```
 
 ### Blocks
@@ -289,7 +289,7 @@ The APIs of a component are "Props", "Blocks", "Attributes" and "Slots". Slots a
   </button>
 
   {# Usage #}
-  <twig:CT:Button>Button text in content block</twig:CT:Button>
+  <twig:Ct:Button>Button text in content block</twig:Ct:Button>
   ```
 * A component block must not be prefixed with the components name since it is automatically namespaced to the component.
 * Not all components must have blocks. For example when there is no inner HTML element that would make sense to customize.
@@ -495,7 +495,7 @@ The APIs of a component are "Props", "Blocks", "Attributes" and "Slots". Slots a
     allowsBuyAction = config('core.listing.allowBuyInListing')
 %}
 {# Usage: #}
-<twig:CT:ProductCard
+<twig:Ct:ProductCard
     name="{{ product.name }}"
     allowsBuyAction="false"
 />
@@ -516,9 +516,9 @@ components/Product
 ```
 
 ```twig
-<twig:CT:CT:Product:Card>
-    <twig:CT:Product:Card:Actions />
-</twig:CT:Product:Card>
+<twig:Ct:Ct:Product:Card>
+    <twig:Ct:Product:Card:Actions />
+</twig:Ct:Product:Card>
 ```
 
 ### CSS

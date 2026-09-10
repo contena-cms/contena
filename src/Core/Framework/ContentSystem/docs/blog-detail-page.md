@@ -5,7 +5,7 @@ One layout combining entity-based rendering with context distribution. The Blog 
 ```json
 {
   "id": "blog-detail-page",
-  "component": "CT:Grid:Container",
+  "component": "Ct:Grid:Container",
   "properties": {
     "columns": 1,
     "gap": 24
@@ -21,7 +21,7 @@ One layout combining entity-based rendering with context distribution. The Blog 
     "content": [
       {
         "id": "blog-title",
-        "component": "CT:Content:Text",
+        "component": "Ct:Content:Text",
         "acceptsContext": {
           "blog.name": {
             "type": "single",
@@ -32,7 +32,7 @@ One layout combining entity-based rendering with context distribution. The Blog 
       },
       {
         "id": "blog-description",
-        "component": "CT:Content:Text",
+        "component": "Ct:Content:Text",
         "acceptsContext": {
           "blog.description": {
             "type": "single",
@@ -46,4 +46,4 @@ One layout combining entity-based rendering with context distribution. The Blog 
 }
 ```
 
-The root element receives the auto-loaded Blog entity and redistributes it to both text elements. `propertyAlias` maps the requested Blog field to the `text` property expected by `CT:Content:Text`.
+The root element receives the auto-loaded Blog entity and redistributes it to both text elements. `propertyAlias` maps the requested Blog field to the `text` property expected by `Ct:Content:Text`.

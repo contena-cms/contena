@@ -67,17 +67,17 @@ class RegistryBindingSpecificationCanonicityTest extends TestCase
         static::assertSame([], $problems);
     }
 
-    #[TestDox('the synthesized core:CT:Media:Image default is served with its canonical entity wiring, no inputs, and is the type default')]
+    #[TestDox('the synthesized core:Ct:Media:Image default is served with its canonical entity wiring, no inputs, and is the type default')]
     public function testSwMediaImageDefaultIsServedInCanonicalForm(): void
     {
-        $specification = $this->registry()->get('core:CT:Media:Image');
+        $specification = $this->registry()->get('core:Ct:Media:Image');
 
-        static::assertInstanceOf(BindingSpecification::class, $specification, 'The synthesized core:CT:Media:Image default must be registered.');
-        static::assertSame('CT:Media:Image', $specification->type());
-        static::assertTrue($specification->isDefault(), '"CT:Media:Image" === "CT:Media:Image", so this specification is the type\'s default.');
+        static::assertInstanceOf(BindingSpecification::class, $specification, 'The synthesized core:Ct:Media:Image default must be registered.');
+        static::assertSame('Ct:Media:Image', $specification->type());
+        static::assertTrue($specification->isDefault(), '"Ct:Media:Image" === "Ct:Media:Image", so this specification is the type\'s default.');
 
         $mediaBinding = $specification->resolves()['media'] ?? null;
-        static::assertInstanceOf(LoaderBinding::class, $mediaBinding, 'core:CT:Media:Image must wire the media reference.');
+        static::assertInstanceOf(LoaderBinding::class, $mediaBinding, 'core:Ct:Media:Image must wire the media reference.');
         static::assertSame('entity', $mediaBinding->loader);
         static::assertSame('media', $mediaBinding->config['entity'] ?? null, 'The tier-A shorthand must canonicalize to an explicit media entity name.');
         static::assertSame('mediaId', $mediaBinding->config['property'] ?? null, 'The configured property must remain the authored mediaId storage key.');

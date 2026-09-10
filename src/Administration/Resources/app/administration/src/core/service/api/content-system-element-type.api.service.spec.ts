@@ -29,7 +29,7 @@ describe('core/service/api/content-system-element-type.api.service.ts', () => {
         const { contentSystemElementTypeApiService, clientMock } = createContentSystemElementTypeApiService();
         const types = [
             {
-                name: 'CT:Text',
+                name: 'Ct:Text',
                 label: 'Text',
                 description: 'A text element',
                 source: 'core',

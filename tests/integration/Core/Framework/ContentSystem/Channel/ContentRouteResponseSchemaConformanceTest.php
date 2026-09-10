@@ -376,25 +376,25 @@ class ContentRouteResponseSchemaConformanceTest extends TestCase
 
         $this->persistLayout($section, [[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'style' => ['col-span' => ['xs' => 6]],
             'slots' => [
                 'content' => [
                     [
                         'id' => $this->ids->get('text'),
-                        'component' => 'CT:Content:Text',
+                        'component' => 'Ct:Content:Text',
                         'properties' => ['text' => self::TEXT_VALUE],
                     ],
                     [
                         'id' => $this->ids->get('inner-grid'),
-                        'component' => 'CT:Grid:Container',
+                        'component' => 'Ct:Grid:Container',
                         'properties' => [],
                         'style' => ['col-span' => ['md' => 4]],
                         'slots' => [
                             'content' => [[
                                 'id' => $this->ids->get('image'),
-                                'component' => 'CT:Media:Image',
+                                'component' => 'Ct:Media:Image',
                                 'properties' => ['mediaId' => $this->ids->get('media')],
                                 'dataRequirements' => [
                                     'media' => ['source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -418,7 +418,7 @@ class ContentRouteResponseSchemaConformanceTest extends TestCase
     {
         $this->persistLayout($section, [[
             'id' => $this->ids->get('bare-text'),
-            'component' => 'CT:Content:Text',
+            'component' => 'Ct:Content:Text',
             'properties' => ['text' => null],
         ]]);
     }

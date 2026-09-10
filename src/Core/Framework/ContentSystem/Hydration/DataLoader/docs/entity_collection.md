@@ -5,7 +5,7 @@ Loads multiple entities by their IDs.
 ```json
 {
   "id": "blog-slider",
-  "component": "CT:Blog:Slider",
+  "component": "Ct:Blog:Slider",
   "properties": {
     "blogIds": ["019456789abc", "019456789def", "019456789ghi"]
   },

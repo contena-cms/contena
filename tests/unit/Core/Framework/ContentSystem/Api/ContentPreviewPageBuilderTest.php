@@ -40,7 +40,7 @@ class ContentPreviewPageBuilderTest extends TestCase
         $specification = $this->specification();
         $channelContext = Generator::generateChannelContext();
         $renderResult = new RenderResult([], LayoutReference::create('preview-layout', 'preview', null), null);
-        $stored = [new StoredElement('e1', 'CT:Content:Heading')];
+        $stored = [new StoredElement('e1', 'Ct:Content:Heading')];
 
         // Both halves read the decoded stored tree: the check takes it directly, and the pipeline takes it
         // wrapped in a preview-labelled RenderableLayout, lowering it itself once its stored steps have run.
@@ -87,13 +87,13 @@ class ContentPreviewPageBuilderTest extends TestCase
     public function testBuildThrowsForUnregisteredComponent(): void
     {
         $violations = new ConstraintViolationList([
-            new ConstraintViolation('Component "CT:Unknown:Widget" is not a registered element type.', null, [], null, 'e1', null),
+            new ConstraintViolation('Component "Ct:Unknown:Widget" is not a registered element type.', null, [], null, 'e1', null),
         ]);
 
         $builder = new ContentPreviewPageBuilder(
             $this->contextService(Generator::generateChannelContext()),
             $this->resolverReturning($this->specification()),
-            $this->decoderReturning([new StoredElement('e1', 'CT:Unknown:Widget')]),
+            $this->decoderReturning([new StoredElement('e1', 'Ct:Unknown:Widget')]),
             $this->checker($violations),
             static::createStub(ContentPipeline::class),
         );
@@ -147,7 +147,7 @@ class ContentPreviewPageBuilderTest extends TestCase
     private function request(): ContentPreviewRequest
     {
         return new ContentPreviewRequest(
-            layout: [['id' => 'e1', 'component' => 'CT:Content:Heading']],
+            layout: [['id' => 'e1', 'component' => 'Ct:Content:Heading']],
             entityType: 'blog',
             entityId: 'blog-1',
             channelId: 'channel-1',

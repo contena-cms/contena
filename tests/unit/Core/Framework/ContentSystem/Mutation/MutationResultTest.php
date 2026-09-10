@@ -24,7 +24,7 @@ class MutationResultTest extends TestCase
     #[TestDox('narrows resolutions to the mutation\'s affected elements')]
     public function testFromAnalyzedMutationNarrowsResolutionsToAffectedElements(): void
     {
-        $layout = new StoredTree([new StoredElement('el-1', 'CT:Card')]);
+        $layout = new StoredTree([new StoredElement('el-1', 'Ct:Card')]);
 
         $affectedResolution = [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'hi')];
         $unaffectedResolution = [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'stale')];
@@ -34,7 +34,7 @@ class MutationResultTest extends TestCase
             'el-2' => $unaffectedResolution,
         ]);
 
-        $orphan = new StoredElement('orphan-1', 'CT:Block');
+        $orphan = new StoredElement('orphan-1', 'Ct:Block');
         $droppedValue = StoredValue::ofString('dropped-property-value');
 
         $mutation = static::createStub(LayoutMutation::class);

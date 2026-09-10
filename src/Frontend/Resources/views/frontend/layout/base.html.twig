@@ -24,9 +24,9 @@
     {% block base_body_inner %}
         {% block base_noscript %}
             <noscript class="noscript-main">
-                <twig:CT:Alert variant="info" :icon="false">
+                <twig:Ct:Alert variant="info" :icon="false">
                     {{ 'general.noscriptNotice'|trans|sw_sanitize }}
-                </twig:CT:Alert>
+                </twig:Ct:Alert>
             </noscript>
         {% endblock %}
 
@@ -42,9 +42,9 @@
                     <div class="flashbags container">
                         {% for type, messages in app.flashes %}
                             {% for message in messages %}
-                                <twig:CT:Alert :variant="type">
+                                <twig:Ct:Alert :variant="type">
                                     {{ message|sw_sanitize }}
-                                </twig:CT:Alert>
+                                </twig:Ct:Alert>
                             {% endfor %}
                         {% endfor %}
                     </div>

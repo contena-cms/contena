@@ -104,8 +104,8 @@ class ContentSystemBindingSpecificationRegistryTest extends TestCase
     public function testThrowsOnCrossLoaderQualifiedIdCollision(): void
     {
         $registry = $this->registry([
-            $this->loader($this->specification('dup', 'CT:Blog', 'app:Acme')),
-            $this->loader($this->specification('dup', 'CT:Blog', 'app:Acme')),
+            $this->loader($this->specification('dup', 'Ct:Blog', 'app:Acme')),
+            $this->loader($this->specification('dup', 'Ct:Blog', 'app:Acme')),
         ]);
 
         try {

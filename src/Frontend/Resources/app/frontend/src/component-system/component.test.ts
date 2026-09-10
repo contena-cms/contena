@@ -34,7 +34,7 @@ describe('ContenaComponent', () => {
         const element = document.createElement('div');
         element.setAttribute('data-component-options', JSON.stringify({ fromAttribute: true, override: 'attribute' }));
 
-        const component = new TestComponent(element, { fromConstructor: true, override: 'constructor' }, 'CT:Test');
+        const component = new TestComponent(element, { fromConstructor: true, override: 'constructor' }, 'Ct:Test');
 
         expect(TestComponent.initCalls).toBe(1);
         expect(component.options).toEqual({
@@ -49,7 +49,7 @@ describe('ContenaComponent', () => {
         element.setAttribute('data-component-options', '{invalid');
         const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-        const component = new TestComponent(element, { fallback: true }, 'CT:Test');
+        const component = new TestComponent(element, { fallback: true }, 'Ct:Test');
 
         expect(component.options).toEqual({ fallback: true });
         expect(errorSpy).toHaveBeenCalledOnce();
@@ -57,7 +57,7 @@ describe('ContenaComponent', () => {
 
     it('dispatches custom events with payload', () => {
         const element = document.createElement('div');
-        const component = new TestComponent(element, {}, 'CT:Dispatch');
+        const component = new TestComponent(element, {}, 'Ct:Dispatch');
         const listener = vi.fn();
 
         element.addEventListener('sw:test-event', listener);
@@ -74,7 +74,7 @@ describe('ContenaComponent', () => {
 
     it('debounce with immediate=false calls once after delay', () => {
         vi.useFakeTimers();
-        const component = new TestComponent(document.createElement('div'), {}, 'CT:Debounce');
+        const component = new TestComponent(document.createElement('div'), {}, 'Ct:Debounce');
         const callback = vi.fn();
         const debounced = component.debounce(callback, 100);
 
@@ -89,7 +89,7 @@ describe('ContenaComponent', () => {
 
     it('debounce with immediate=true does not schedule trailing call', () => {
         vi.useFakeTimers();
-        const component = new TestComponent(document.createElement('div'), {}, 'CT:Debounce');
+        const component = new TestComponent(document.createElement('div'), {}, 'Ct:Debounce');
         const callback = vi.fn();
         const debounced = component.debounce(callback, 100, true);
 
@@ -102,7 +102,7 @@ describe('ContenaComponent', () => {
 
     it('debounce with immediate=true can be called again after wait', () => {
         vi.useFakeTimers();
-        const component = new TestComponent(document.createElement('div'), {}, 'CT:Debounce');
+        const component = new TestComponent(document.createElement('div'), {}, 'Ct:Debounce');
         const callback = vi.fn();
         const debounced = component.debounce(callback, 100, true);
 

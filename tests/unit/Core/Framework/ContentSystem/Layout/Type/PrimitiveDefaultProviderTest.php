@@ -21,7 +21,7 @@ class PrimitiveDefaultProviderTest extends TestCase
     public function testForTypeSkipsNullDefaultsAndReferences(): void
     {
         $specs = [
-            'CT:Mixed' => ContentSystemElementTypeSpecificationBuilder::create('CT:Mixed')
+            'Ct:Mixed' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Mixed')
                 ->primitive('withDefault', 'string', default: 'seeded')
                 ->primitive('noDefault', 'string', required: true)
                 ->reference('blog', ChannelBlogEntity::class)
@@ -31,6 +31,6 @@ class PrimitiveDefaultProviderTest extends TestCase
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('get')->willReturnCallback(static fn (string $name): ContentSystemElementTypeSpecification => $specs[$name]);
 
-        static::assertSame(['withDefault' => 'seeded'], new PrimitiveDefaultProvider()->forType($registry, 'CT:Mixed'));
+        static::assertSame(['withDefault' => 'seeded'], new PrimitiveDefaultProvider()->forType($registry, 'Ct:Mixed'));
     }
 }

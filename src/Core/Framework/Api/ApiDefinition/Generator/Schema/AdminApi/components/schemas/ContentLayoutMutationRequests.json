@@ -51,7 +51,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to insert (becomes the new element's `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`.",
-                                "example": "CT:Content:Text"
+                                "example": "Ct:Content:Text"
                             },
                             "parentElementId": {
                                 "anyOf": [
@@ -76,7 +76,7 @@
                                 "type": ["string", "null"],
                                 "description": "Optional source-qualified id (`source:id`) of a binding specification to apply onto the inserted element atomically after scaffold (data requirements, seeded input defaults, and attribution), in the same edit. A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`. The specification's declared `type` must equal `type` (else `400 bindingTypeMismatch`); an unregistered id is rejected with `400 bindingSpecificationNotFound`, and nothing is inserted on either failure.",
                                 "default": null,
-                                "example": "core:CT:Media:Image"
+                                "example": "core:Ct:Media:Image"
                             }
                         }
                     }
@@ -158,7 +158,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to replace it with (becomes the element's new `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`. Children, wiring, and property values the new type cannot hold are reported back in `orphaned`, `droppedWiring`, and `droppedProperties`.",
-                                "example": "CT:Content:Text"
+                                "example": "Ct:Content:Text"
                             }
                         }
                     }
@@ -298,7 +298,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "Source-qualified id of the binding specification to apply (`source:id`). A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`.",
-                                "example": "core:CT:Media:Image"
+                                "example": "core:Ct:Media:Image"
                             }
                         }
                     }
@@ -317,7 +317,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to insert (becomes the new element's `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`.",
-                                "example": "CT:Content:Text"
+                                "example": "Ct:Content:Text"
                             },
                             "parentElementId": {
                                 "anyOf": [
@@ -342,7 +342,7 @@
                                 "type": ["string", "null"],
                                 "description": "Optional source-qualified id (`source:id`) of a binding specification to apply onto the inserted element atomically after scaffold, in the same committed edit. A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`. The specification's declared `type` must equal `type` (else `400 bindingTypeMismatch`); an unregistered id is rejected with `400 bindingSpecificationNotFound`. The op throws before the repository write, so nothing is persisted on either failure.",
                                 "default": null,
-                                "example": "core:CT:Media:Image"
+                                "example": "core:Ct:Media:Image"
                             }
                         }
                     }
@@ -424,7 +424,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "The element type to replace it with (becomes the element's new `component`). A registered type name; see `GET /api/_info/content-system-element-types.json`. Children, wiring, and property values the new type cannot hold are reported back in `orphaned`, `droppedWiring`, and `droppedProperties`.",
-                                "example": "CT:Content:Text"
+                                "example": "Ct:Content:Text"
                             }
                         }
                     }
@@ -564,7 +564,7 @@
                                 "type": "string",
                                 "minLength": 1,
                                 "description": "Source-qualified id of the binding specification to apply (`source:id`). A value from the `bindingSpecifications` map on the element's type entry in `GET /api/_info/content-system-element-types.json`.",
-                                "example": "core:CT:Media:Image"
+                                "example": "core:Ct:Media:Image"
                             }
                         }
                     }

@@ -326,13 +326,13 @@ class ContentLayoutMutationControllerTest extends TestCase
     // These three tests cover the negative paths that need no shipped specification, and double as the
     // persisted bind-element route-wiring check: an app-level error (not a Symfony 404 route-not-found body)
     // proves the request reached ContentLayoutMutationController::bind(). The positive round trip against the
-    // real shipped core:CT:Media:Image default follows below.
+    // real shipped core:Ct:Media:Image default follows below.
     #[TestDox('returns 404 for a bind-element mutation targeting an unknown layout id')]
     public function testBindElementUnknownLayoutReturnsNotFound(): void
     {
         $this->request('bind-element', $this->ids->get('unknown-layout'), [
             'elementId' => 'block-a',
-            'bindingSpecificationId' => 'core:CT:Media:Image',
+            'bindingSpecificationId' => 'core:Ct:Media:Image',
             'expectedVersion' => null,
         ]);
 
@@ -350,7 +350,7 @@ class ContentLayoutMutationControllerTest extends TestCase
 
         $this->request('bind-element', $layoutId, [
             'elementId' => 'block-a',
-            'bindingSpecificationId' => 'core:CT:Media:Image',
+            'bindingSpecificationId' => 'core:Ct:Media:Image',
             'expectedVersion' => '2020-01-01T00:00:00.000+00:00',
         ]);
 
@@ -381,7 +381,7 @@ class ContentLayoutMutationControllerTest extends TestCase
         static::assertSame(['block-a'], $this->layoutIds($layoutId));
     }
 
-    #[TestDox('inlines the core CT:Media:Image default specification\'s wiring and attribution on a persisted bind, committing it to storage')]
+    #[TestDox('inlines the core Ct:Media:Image default specification\'s wiring and attribution on a persisted bind, committing it to storage')]
     public function testBindElementPersistsCoreSpecificationWiringAndAttribution(): void
     {
         // media is required with no parent-provided context on this layout's "category" root source, so the
@@ -393,7 +393,7 @@ class ContentLayoutMutationControllerTest extends TestCase
         $layoutId = $this->createLayout([
             [
                 'id' => 'img-1',
-                'component' => 'CT:Media:Image',
+                'component' => 'Ct:Media:Image',
                 'properties' => ['mediaId' => 'a-media-id'],
                 'dataRequirements' => [
                     'media' => ['source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -403,7 +403,7 @@ class ContentLayoutMutationControllerTest extends TestCase
 
         $body = $this->mutate('bind-element', $layoutId, [
             'elementId' => 'img-1',
-            'bindingSpecificationId' => 'core:CT:Media:Image',
+            'bindingSpecificationId' => 'core:Ct:Media:Image',
             'expectedVersion' => null,
         ]);
 
@@ -411,11 +411,11 @@ class ContentLayoutMutationControllerTest extends TestCase
             ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
             $body['layout'][0]['dataRequirements']['media']
         );
-        static::assertSame(['media' => 'core:CT:Media:Image'], $body['layout'][0]['attributedSpecifications']);
+        static::assertSame(['media' => 'core:Ct:Media:Image'], $body['layout'][0]['attributedSpecifications']);
 
         // the reload asserts the exact persisted wiring, not just that some entry exists under 'media'
         $stored = $this->reload($layoutId)->getLayout()[0];
-        static::assertSame(['media' => 'core:CT:Media:Image'], $stored->attributedSpecifications);
+        static::assertSame(['media' => 'core:Ct:Media:Image'], $stored->attributedSpecifications);
 
         $requirement = $stored->dataRequirements['media'];
         static::assertSame('entity', $requirement->source);
@@ -424,7 +424,7 @@ class ContentLayoutMutationControllerTest extends TestCase
         static::assertSame('mediaId', $requirement->config->property);
     }
 
-    #[TestDox('auto-applies the core CT:Media:Image default specification on a persisted replace to the image type carrying no bindingSpecificationId, committing the fill-applied wiring and attribution to storage')]
+    #[TestDox('auto-applies the core Ct:Media:Image default specification on a persisted replace to the image type carrying no bindingSpecificationId, committing the fill-applied wiring and attribution to storage')]
     public function testReplaceElementAutoAppliesCoreDefaultAndPersists(): void
     {
         // replace-element carries no bindingSpecificationId at all, so the media wiring and attribution can only
@@ -438,7 +438,7 @@ class ContentLayoutMutationControllerTest extends TestCase
 
         $body = $this->mutate('replace-element', $layoutId, [
             'elementId' => 'el',
-            'newType' => 'CT:Media:Image',
+            'newType' => 'Ct:Media:Image',
             'expectedVersion' => null,
         ]);
 
@@ -447,13 +447,13 @@ class ContentLayoutMutationControllerTest extends TestCase
             ['key' => 'media', 'source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
             $replaced['dataRequirements']['media']
         );
-        static::assertSame(['media' => 'core:CT:Media:Image'], $replaced['attributedSpecifications']);
+        static::assertSame(['media' => 'core:Ct:Media:Image'], $replaced['attributedSpecifications']);
         static::assertSame('a-media-id', $replaced['properties']['mediaId']);
 
         // the reload asserts the fill-applied wiring and attribution survived persistence: the write-boundary
         // AttributionReconciler keeps the attribution because the element's media wiring still matches the default's binding for that key.
         $stored = $this->reload($layoutId)->getLayout()[0];
-        static::assertSame(['media' => 'core:CT:Media:Image'], $stored->attributedSpecifications);
+        static::assertSame(['media' => 'core:Ct:Media:Image'], $stored->attributedSpecifications);
 
         $mediaId = $stored->property('mediaId');
         static::assertNotNull($mediaId);
@@ -477,8 +477,8 @@ class ContentLayoutMutationControllerTest extends TestCase
         static::assertInstanceOf(\DateTimeInterface::class, $before);
 
         $this->request('insert-element', $layoutId, [
-            'type' => 'CT:Content:Text',
-            'bindingSpecificationId' => 'core:CT:Media:Image',
+            'type' => 'Ct:Content:Text',
+            'bindingSpecificationId' => 'core:Ct:Media:Image',
             'expectedVersion' => $this->apiUpdatedAt($layoutId),
         ]);
         $response = $this->getBrowser()->getResponse();

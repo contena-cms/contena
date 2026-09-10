@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Proves end-to-end: the `content_layout` write gate blocks a save when a shipped `CT:Media:Image`
+ * Proves end-to-end: the `content_layout` write gate blocks a save when a shipped `Ct:Media:Image`
  * element is wired to the `entity` loader (media reference resolves via its own stored wiring) but carries no
  * `mediaId` value; the reference resolves yet the element would serve empty, which is exactly the gap the
  * `UnfilledRequiredInput` diagnostics rule closes. The rejection fires under root source `none`, whose root
@@ -116,7 +116,7 @@ class MediaImageWriteGateTest extends TestCase
     {
         $element = [
             'id' => $elementId,
-            'component' => 'CT:Media:Image',
+            'component' => 'Ct:Media:Image',
             'properties' => $mediaId === null ? [] : ['mediaId' => $mediaId],
             'dataRequirements' => [
                 'media' => ['source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -136,7 +136,7 @@ class MediaImageWriteGateTest extends TestCase
     {
         // A null mediaId drops the key entirely, matching the layout() payload above, so this is the absent-key
         // case rather than an authored explicit null. Both read as "no value" for the gate.
-        return StoredElementBuilder::create('CT:Media:Image', $id)
+        return StoredElementBuilder::create('Ct:Media:Image', $id)
             ->withDataRequirement('media', 'entity', new EntityLoaderConfig('media', 'mediaId', []))
             ->withProperties($mediaId === null ? [] : ['mediaId' => $mediaId])
             ->build();

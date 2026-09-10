@@ -145,22 +145,22 @@ class ContentRouteRenderingTest extends TestCase
 
         $root = $roots[0];
         static::assertSame($this->ids->get('root-grid'), $root['id']);
-        static::assertSame('CT:Grid:Container', $root['component']);
+        static::assertSame('Ct:Grid:Container', $root['component']);
         static::assertSame(['content'], array_keys($this->slots($root)));
 
         $children = $this->slotChildren($root, 'content');
         static::assertCount(2, $children);
         static::assertSame($this->ids->get('text'), $children[0]['id']);
-        static::assertSame('CT:Content:Text', $children[0]['component']);
+        static::assertSame('Ct:Content:Text', $children[0]['component']);
         static::assertSame([], $this->slots($children[0]), 'The text leaf must carry no slots.');
         static::assertSame($this->ids->get('inner-grid'), $children[1]['id']);
-        static::assertSame('CT:Grid:Container', $children[1]['component']);
+        static::assertSame('Ct:Grid:Container', $children[1]['component']);
         static::assertSame(['content'], array_keys($this->slots($children[1])));
 
         $grandChildren = $this->slotChildren($children[1], 'content');
         static::assertCount(1, $grandChildren);
         static::assertSame($this->ids->get('image'), $grandChildren[0]['id']);
-        static::assertSame('CT:Media:Image', $grandChildren[0]['component']);
+        static::assertSame('Ct:Media:Image', $grandChildren[0]['component']);
         static::assertSame([], $this->slots($grandChildren[0]), 'The image leaf must carry no slots.');
     }
 
@@ -647,10 +647,10 @@ class ContentRouteRenderingTest extends TestCase
         }
 
         static::assertSame([
-            ['id' => $this->ids->get('root-grid'), 'component' => 'CT:Grid:Container', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
-            ['id' => $this->ids->get('text'), 'component' => 'CT:Content:Text', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
-            ['id' => $this->ids->get('inner-grid'), 'component' => 'CT:Grid:Container', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
-            ['id' => $this->ids->get('image'), 'component' => 'CT:Media:Image', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
+            ['id' => $this->ids->get('root-grid'), 'component' => 'Ct:Grid:Container', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
+            ['id' => $this->ids->get('text'), 'component' => 'Ct:Content:Text', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
+            ['id' => $this->ids->get('inner-grid'), 'component' => 'Ct:Grid:Container', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
+            ['id' => $this->ids->get('image'), 'component' => 'Ct:Media:Image', 'hasProperties' => false, 'apiAlias' => 'content_skeleton_element'],
         ], $shapes);
     }
 
@@ -817,7 +817,7 @@ class ContentRouteRenderingTest extends TestCase
         // The image element's assignment keys arrive in exactly the order the CACHED spec declares its
         // primitives in, followed by the loader-resolved key. This does not isolate which reader of the cache
         // enforces that order, for the same reason the probe below states.
-        $declaredPrimitives = $this->declaredPrimitiveKeys($cachedTypes->get(), 'CT:Media:Image');
+        $declaredPrimitives = $this->declaredPrimitiveKeys($cachedTypes->get(), 'Ct:Media:Image');
         static::assertNotSame([], $declaredPrimitives);
         static::assertSame(
             [...$declaredPrimitives, 'media'],
@@ -835,7 +835,7 @@ class ContentRouteRenderingTest extends TestCase
         $original = $cachedTypes->get();
         $poisoned = $original;
         static::assertIsArray($poisoned);
-        unset($poisoned['CT:Media:Image']);
+        unset($poisoned['Ct:Media:Image']);
         static::assertTrue(
             $this->overwriteElementTypeCache($pool, $poisoned),
             'The element-type cache entry must be writable from the test.',
@@ -1434,7 +1434,7 @@ class ContentRouteRenderingTest extends TestCase
         $this->createMedia();
         $this->persistLayout([[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'style' => ['col-span' => ['xs' => 6]],
             // Consuming the page-level context the category root source declares is what makes the
@@ -1453,18 +1453,18 @@ class ContentRouteRenderingTest extends TestCase
                 'content' => [
                     [
                         'id' => $this->ids->get('text'),
-                        'component' => 'CT:Content:Text',
+                        'component' => 'Ct:Content:Text',
                         'properties' => ['text' => self::TEXT_VALUE],
                     ],
                     [
                         'id' => $this->ids->get('inner-grid'),
-                        'component' => 'CT:Grid:Container',
+                        'component' => 'Ct:Grid:Container',
                         'properties' => [],
                         'style' => ['col-span' => ['md' => 4]],
                         'slots' => [
                             'content' => [[
                                 'id' => $this->ids->get('image'),
-                                'component' => 'CT:Media:Image',
+                                'component' => 'Ct:Media:Image',
                                 'properties' => ['mediaId' => $this->ids->get('media')],
                                 'dataRequirements' => [
                                     'media' => ['source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -1492,12 +1492,12 @@ class ContentRouteRenderingTest extends TestCase
         $this->createCategory();
         $this->persistLayout([[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'slots' => [
                 'content' => [[
                     'id' => $this->ids->get('inner-grid'),
-                    'component' => 'CT:Grid:Container',
+                    'component' => 'Ct:Grid:Container',
                     'properties' => [],
                     'acceptsContext' => [
                         self::PAGE_CONTEXT_KEY => [
@@ -1510,7 +1510,7 @@ class ContentRouteRenderingTest extends TestCase
                     'slots' => [
                         'content' => [[
                             'id' => $this->ids->get('text'),
-                            'component' => 'CT:Content:Text',
+                            'component' => 'Ct:Content:Text',
                             'properties' => ['text' => self::TEXT_VALUE],
                         ]],
                     ],
@@ -1546,7 +1546,7 @@ class ContentRouteRenderingTest extends TestCase
 
         $this->persistLayout([[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'acceptsContext' => [
                 self::SEO_CONTEXT_PROPERTY => [
@@ -1587,7 +1587,7 @@ class ContentRouteRenderingTest extends TestCase
         $this->createCategory();
         $this->persistLayout([[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'slots' => [
                 'content' => [$this->dottedRedistributeText()],
@@ -1606,19 +1606,19 @@ class ContentRouteRenderingTest extends TestCase
         $this->createMedia();
         $this->persistLayout([[
             'id' => $this->ids->get('root-grid'),
-            'component' => 'CT:Grid:Container',
+            'component' => 'Ct:Grid:Container',
             'properties' => [],
             'slots' => [
                 'content' => [
                     $this->dottedRedistributeText(),
                     [
                         'id' => $this->ids->get('inner-grid'),
-                        'component' => 'CT:Grid:Container',
+                        'component' => 'Ct:Grid:Container',
                         'properties' => [],
                         'slots' => [
                             'content' => [[
                                 'id' => $this->ids->get('image'),
-                                'component' => 'CT:Media:Image',
+                                'component' => 'Ct:Media:Image',
                                 'properties' => ['mediaId' => $this->ids->get('media')],
                                 'dataRequirements' => [
                                     'media' => ['source' => 'entity', 'config' => ['entity' => 'media', 'property' => 'mediaId']],
@@ -1646,7 +1646,7 @@ class ContentRouteRenderingTest extends TestCase
     {
         return [
             'id' => $this->ids->get('text'),
-            'component' => 'CT:Content:Text',
+            'component' => 'Ct:Content:Text',
             'properties' => ['text' => self::TEXT_VALUE],
             'acceptsContext' => [
                 'categoryPlaceholder' => [

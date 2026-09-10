@@ -28,7 +28,7 @@ class ContextDeliveryResolverTest extends TestCase
     public function testDeliversFromParentToItsChildren(): void
     {
         $child = $this->consumer('child-1', 'blog');
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'blog-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -42,8 +42,8 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('records an entry for every element, roots and non-receivers included')]
     public function testIndexIsTotalOverTheForest(): void
     {
-        $bystander = StoredElementBuilder::create('CT:Text', 'child-2')->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $bystander = StoredElementBuilder::create('Ct:Text', 'child-2')->build();
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'blog-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$this->consumer('child-1', 'blog'), $bystander])
@@ -79,12 +79,12 @@ class ContextDeliveryResolverTest extends TestCase
     public function testChainedRedistributionReachesTheSecondHop(): void
     {
         $grandchild = $this->consumer('grandchild-1', 'blog');
-        $middle = StoredElementBuilder::create('CT:Section', 'child-1')
+        $middle = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withConsumer('blog', ContextType::Single)
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$grandchild])
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'blog-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$middle])
@@ -104,7 +104,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('flattens children slot by slot, in index order within each slot')]
     public function testChildrenAreFlattenedInSlotThenIndexOrder(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('items', ['first-item', 'second-item', 'third-item'])
             ->withProvider('items', IndexedDistributionConfig::simple())
             ->withSlot('left', [$this->consumer('child-1', 'items'), $this->consumer('child-2', 'items')])
@@ -121,7 +121,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('distributes a loader resolved value when the provider key names one')]
     public function testLoaderValuesAreAvailableToDistribute(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$this->consumer('child-1', 'blog')])
             ->build();
@@ -134,7 +134,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('prefers a loader resolved value over the stored value of the same key')]
     public function testLoaderValueOutranksTheStoredValue(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'stored-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$this->consumer('child-1', 'blog')])
@@ -149,13 +149,13 @@ class ContextDeliveryResolverTest extends TestCase
     public function testReceivedContextOutranksTheStoredValue(): void
     {
         $grandchild = $this->consumer('grandchild-1', 'blog');
-        $middle = StoredElementBuilder::create('CT:Section', 'child-1')
+        $middle = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withProperty('blog', 'stored-data')
             ->withConsumer('blog', ContextType::Single)
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$grandchild])
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'inherited-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$middle])
@@ -176,7 +176,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('distributes nothing when a loader found nothing under a key the element also stores')]
     public function testALoaderNullSuppressesTheStoredProviderValue(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'stored-blog-id')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$this->consumer('child-1', 'blog')])
@@ -196,11 +196,11 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('does not select a keyed consumer on a key property that arrived as delivered context')]
     public function testKeyedSelectionIgnoresADeliveredKeyProperty(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('data_key', ContextType::Single)
             ->withConsumer('items', ContextType::Single)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('data_key', 'present')
             ->withProperty('items', ['present' => 'present-item'])
             ->withProvider('data_key', BroadcastDistributionConfig::simple())
@@ -216,11 +216,11 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('carries the distribution referenced keys of a keyed provider through to the index')]
     public function testDistributionReferencedKeysReachTheIndex(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withProperty('data_key', 'present')
             ->withConsumer('items', ContextType::Single)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('items', ['present' => 'present-item'])
             ->withProvider('items', KeyedDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -235,7 +235,7 @@ class ContextDeliveryResolverTest extends TestCase
     public function testWalkedElementsAreNotMutated(): void
     {
         $child = $this->consumer('child-1', 'blog');
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'blog-data')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -270,10 +270,10 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('throws when a required dotted consumer receives a provider value that is not a Struct')]
     public function testRequiredDottedConsumerRejectsANonStructProviderValue(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog.name', ContextType::Single, required: true)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('blog', 'not-a-struct')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -295,10 +295,10 @@ class ContextDeliveryResolverTest extends TestCase
     public function testRootScopedConsumerReceivesAmbientContextAtDepth(): void
     {
         $grandchild = $this->rootScopedConsumer('grandchild-1', 'language');
-        $middle = StoredElementBuilder::create('CT:Section', 'child-1')
+        $middle = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withSlot('main', [$grandchild])
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$middle])
             ->build();
 
@@ -320,7 +320,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('fills a root-scoped consumer from the ambient map and leaves a parent-scope consumer of the same key empty')]
     public function testParentScopeConsumerReceivesNothingFromTheAmbientMap(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [
                 $this->rootScopedConsumer('root-scoped-1', 'language'),
                 $this->consumer('parent-scoped-1', 'language'),
@@ -336,7 +336,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('resolves a dotted root-scoped consumer key through the ambient struct')]
     public function testDottedRootScopedConsumerResolvesThroughTheAmbientStruct(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$this->rootScopedConsumer('child-1', 'blog.cover')])
             ->build();
 
@@ -352,10 +352,10 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('throws naming the element when a required dotted root-scoped consumer cannot resolve its path')]
     public function testRequiredDottedRootScopedConsumerRejectsANonStructAmbientValue(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog.cover', ContextType::Single, required: true, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
 
@@ -376,10 +376,10 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('delivers a present null to an optional dotted root-scoped consumer over a non-Struct ambient value')]
     public function testOptionalDottedRootScopedConsumerTakesANullOverANonStructAmbientValue(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog.cover', ContextType::Single, required: false, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
 
@@ -396,7 +396,7 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('writes no key at all when the ambient value under a root-scoped consumer key is null')]
     public function testAmbientNullDeliversNothingAndWritesNoKey(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$this->rootScopedConsumer('child-1', 'language')])
             ->build();
 
@@ -408,10 +408,10 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('lands a root-ambient value under the property alias when the root-scoped consumer declares one')]
     public function testRootScopedConsumerLandsUnderItsPropertyAlias(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('language', ContextType::Single, propertyAlias: 'pageLanguage', scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
 
@@ -430,12 +430,12 @@ class ContextDeliveryResolverTest extends TestCase
     public function testARootDeliveredValueEntersTheWorkingMapItsProvidersDistributeFrom(): void
     {
         $grandchild = $this->consumer('grandchild-1', 'language');
-        $middle = StoredElementBuilder::create('CT:Section', 'child-1')
+        $middle = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withConsumer('language', ContextType::Single, scope: ConsumerScope::Root)
             ->withProvider('language', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$grandchild])
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$middle])
             ->build();
 
@@ -460,12 +460,12 @@ class ContextDeliveryResolverTest extends TestCase
     #[TestDox('keeps the distribution referenced keys of a child whose delivery the root overlay replaced')]
     public function testTheRootOverlayPreservesDistributionReferencedKeys(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withProperty('data_key', 'present')
             ->withConsumer('items', ContextType::Single)
             ->withConsumer('language', ContextType::Single, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withProperty('items', ['present' => 'present-item'])
             ->withProvider('items', KeyedDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -486,7 +486,7 @@ class ContextDeliveryResolverTest extends TestCase
     public function testExactKeyRootDeliveryHandsOnTheSameInstance(): void
     {
         $ambientValue = new StubContextStruct('page-cover');
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$this->rootScopedConsumer('child-1', 'blog')])
             ->build();
 
@@ -505,21 +505,21 @@ class ContextDeliveryResolverTest extends TestCase
 
     private function rootScopedConsumer(string $id, string $contextKey): StoredElement
     {
-        return StoredElementBuilder::create('CT:Box', $id)
+        return StoredElementBuilder::create('Ct:Box', $id)
             ->withConsumer($contextKey, ContextType::Single, scope: ConsumerScope::Root)
             ->build();
     }
 
     private function consumer(string $id, string $contextKey): StoredElement
     {
-        return StoredElementBuilder::create('CT:Box', $id)
+        return StoredElementBuilder::create('Ct:Box', $id)
             ->withConsumer($contextKey, ContextType::Single)
             ->build();
     }
 
     private function providerRoot(string $rootId, string $childId, string $value): StoredElement
     {
-        return StoredElementBuilder::create('CT:Section', $rootId)
+        return StoredElementBuilder::create('Ct:Section', $rootId)
             ->withProperty('blog', $value)
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$this->consumer($childId, 'blog')])

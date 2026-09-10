@@ -59,7 +59,7 @@ class ContentDiagnoseControllerTest extends TestCase
             diagnostics: $this->diagnosticsReturning($analysis),
         );
 
-        $response = $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'CT:Block']]), Context::createDefaultContext());
+        $response = $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'Ct:Block']]), Context::createDefaultContext());
 
         static::assertSame('headline', $this->decode($response)['resolutions']['el-1'][0]['key']);
     }
@@ -76,7 +76,7 @@ class ContentDiagnoseControllerTest extends TestCase
             diagnostics: $this->diagnosticsReturning($analysis),
         );
 
-        $response = $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'CT:Block']]), Context::createDefaultContext());
+        $response = $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'Ct:Block']]), Context::createDefaultContext());
 
         static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $body = $this->decode($response);
@@ -96,7 +96,7 @@ class ContentDiagnoseControllerTest extends TestCase
 
         $response = $controller->diagnose(new ContentDiagnoseRequest([[
             'id' => 'el-1',
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'providesContext' => [
                 'blog' => ['type' => 'single', 'distribution' => 'broadcast', 'consumerAlias' => 'item'],
                 'category' => ['type' => 'single', 'distribution' => 'broadcast', 'consumerAlias' => 'item'],
@@ -142,7 +142,7 @@ class ContentDiagnoseControllerTest extends TestCase
         );
 
         $controller->diagnose(
-            new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'CT:Block']], rootSource: 'blog'),
+            new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'Ct:Block']], rootSource: 'blog'),
             Context::createDefaultContext(),
         );
 
@@ -162,7 +162,7 @@ class ContentDiagnoseControllerTest extends TestCase
 
         $response = $controller->diagnose(new ContentDiagnoseRequest([[
             'id' => 'el-1',
-            'component' => 'CT:Block',
+            'component' => 'Ct:Block',
             'dataRequirements' => ['blog' => ['source' => 'entity', 'config' => ['entity' => 'prodct']]],
         ]]), Context::createDefaultContext());
 
@@ -192,7 +192,7 @@ class ContentDiagnoseControllerTest extends TestCase
             rootSourceRegistry: $registry,
         );
 
-        $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'CT:Block']]), Context::createDefaultContext());
+        $controller->diagnose(new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'Ct:Block']]), Context::createDefaultContext());
 
         static::assertNull($threadedRootContext);
     }
@@ -212,7 +212,7 @@ class ContentDiagnoseControllerTest extends TestCase
 
         try {
             $controller->diagnose(
-                new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'CT:Block']], rootSource: 'definitely-not-a-root-source'),
+                new ContentDiagnoseRequest([['id' => 'el-1', 'component' => 'Ct:Block']], rootSource: 'definitely-not-a-root-source'),
                 Context::createDefaultContext(),
             );
             static::fail('Expected a ContentSystemException for the unknown root source.');
@@ -229,7 +229,7 @@ class ContentDiagnoseControllerTest extends TestCase
         );
 
         try {
-            $controller->diagnose(new ContentDiagnoseRequest([['component' => 'CT:Block']]), Context::createDefaultContext());
+            $controller->diagnose(new ContentDiagnoseRequest([['component' => 'Ct:Block']]), Context::createDefaultContext());
             static::fail('Expected a ContentSystemException for the structurally invalid element.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());
@@ -271,8 +271,8 @@ class ContentDiagnoseControllerTest extends TestCase
     private function realDiagnostics(): LayoutDiagnostics
     {
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
-        $registry->method('has')->willReturnCallback(static fn (string $name): bool => $name === 'CT:Block');
-        $registry->method('get')->willReturn(ContentSystemElementTypeSpecificationBuilder::create('CT:Block')->build());
+        $registry->method('has')->willReturnCallback(static fn (string $name): bool => $name === 'Ct:Block');
+        $registry->method('get')->willReturn(ContentSystemElementTypeSpecificationBuilder::create('Ct:Block')->build());
 
         $mapResolver = static::createStub(AbstractContentSystemDataLoaderMapResolver::class);
         $mapResolver->method('resolve')->willReturn(new ContentSystemDataLoaderMap([], []));

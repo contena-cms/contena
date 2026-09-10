@@ -61,10 +61,10 @@ class LayoutMutationControllerTest extends TestCase
     #[TestDox('serializes the mutation result into the layout, resolutions, diagnostics and affected ids')]
     public function testInsertSerializesMutationResult(): void
     {
-        $result = MutationResult::fromParts(new StoredTree([new StoredElement('el-1', 'CT:Card')]), ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
+        $result = MutationResult::fromParts(new StoredTree([new StoredElement('el-1', 'Ct:Card')]), ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
         $controller = $this->controller($this->pipelineReturning($result));
 
-        $response = $controller->insert(new InsertElementRequest('CT:Card'), Context::createDefaultContext());
+        $response = $controller->insert(new InsertElementRequest('Ct:Card'), Context::createDefaultContext());
 
         static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $body = $this->decode($response);
@@ -104,7 +104,7 @@ class LayoutMutationControllerTest extends TestCase
     {
         $controller = $this->controller($this->pipelineReturning($result));
 
-        $response = $controller->replace(new ReplaceElementRequest('el', 'CT:New'), Context::createDefaultContext());
+        $response = $controller->replace(new ReplaceElementRequest('el', 'Ct:New'), Context::createDefaultContext());
 
         static::assertSame($expected, $accessor($this->decode($response)[$field]));
     }
@@ -130,7 +130,7 @@ class LayoutMutationControllerTest extends TestCase
         $threadedRootContext = false;
         $controller = $this->controller($this->capturingPipeline($threadedRootContext), $registry);
 
-        $controller->insert(new InsertElementRequest('CT:Card', rootSource: 'blog'), Context::createDefaultContext());
+        $controller->insert(new InsertElementRequest('Ct:Card', rootSource: 'blog'), Context::createDefaultContext());
 
         static::assertSame($rootContext, $threadedRootContext);
     }
@@ -144,7 +144,7 @@ class LayoutMutationControllerTest extends TestCase
         $threadedRootContext = 'unset';
         $controller = $this->controller($this->capturingPipeline($threadedRootContext), $registry);
 
-        $controller->insert(new InsertElementRequest('CT:Card'), Context::createDefaultContext());
+        $controller->insert(new InsertElementRequest('Ct:Card'), Context::createDefaultContext());
 
         static::assertNull($threadedRootContext);
     }
@@ -173,7 +173,7 @@ class LayoutMutationControllerTest extends TestCase
         $controller = $this->controller(rootSourceRegistry: $registry);
 
         try {
-            $controller->insert(new InsertElementRequest('CT:Card', rootSource: 'definitely-not-a-root-source'), Context::createDefaultContext());
+            $controller->insert(new InsertElementRequest('Ct:Card', rootSource: 'definitely-not-a-root-source'), Context::createDefaultContext());
             static::fail('Expected a ContentSystemException for the unknown root source.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::UNKNOWN_ROOT_SOURCE, $exception->getErrorCode());
@@ -187,14 +187,14 @@ class LayoutMutationControllerTest extends TestCase
     {
         $context = Context::createDefaultContext();
 
-        yield 'insert' => [static fn (LayoutMutationController $c): Response => $c->insert(new InsertElementRequest('CT:Card'), $context), InsertElement::class];
+        yield 'insert' => [static fn (LayoutMutationController $c): Response => $c->insert(new InsertElementRequest('Ct:Card'), $context), InsertElement::class];
         yield 'remove' => [static fn (LayoutMutationController $c): Response => $c->remove(new RemoveElementRequest('el'), $context), RemoveElement::class];
         yield 'move' => [static fn (LayoutMutationController $c): Response => $c->move(new MoveElementRequest('el'), $context), MoveElement::class];
-        yield 'replace' => [static fn (LayoutMutationController $c): Response => $c->replace(new ReplaceElementRequest('el', 'CT:New'), $context), ReplaceElement::class];
+        yield 'replace' => [static fn (LayoutMutationController $c): Response => $c->replace(new ReplaceElementRequest('el', 'Ct:New'), $context), ReplaceElement::class];
         yield 'duplicate' => [static fn (LayoutMutationController $c): Response => $c->duplicate(new DuplicateElementRequest('el'), $context), DuplicateElement::class];
-        yield 'wrap' => [static fn (LayoutMutationController $c): Response => $c->wrap(new WrapElementsRequest(['a'], 'CT:Container'), $context), WrapElements::class];
+        yield 'wrap' => [static fn (LayoutMutationController $c): Response => $c->wrap(new WrapElementsRequest(['a'], 'Ct:Container'), $context), WrapElements::class];
         yield 'unwrap' => [static fn (LayoutMutationController $c): Response => $c->unwrap(new UnwrapElementRequest('el'), $context), UnwrapElement::class];
-        yield 'attach' => [static fn (LayoutMutationController $c): Response => $c->attach(new AttachElementRequest(['id' => 'incoming', 'component' => 'CT:Card']), $context), AttachElement::class];
+        yield 'attach' => [static fn (LayoutMutationController $c): Response => $c->attach(new AttachElementRequest(['id' => 'incoming', 'component' => 'Ct:Card']), $context), AttachElement::class];
         yield 'bind' => [static fn (LayoutMutationController $c): Response => $c->bind(new BindElementRequest('el', 'source:spec'), $context), BindElement::class];
     }
 
@@ -204,21 +204,21 @@ class LayoutMutationControllerTest extends TestCase
     public static function replaceOptionalFieldsProvider(): iterable
     {
         yield 'orphaned subtrees surface for re-attachment' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [new StoredElement('orphan', 'CT:Block')]),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [new StoredElement('orphan', 'Ct:Block')]),
             'orphaned',
             static fn (mixed $value): mixed => $value[0]['id'],
             'orphan',
         ];
 
         yield 'dropped wiring keys are reported' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
             'droppedWiring',
             static fn (mixed $value): mixed => $value,
             ['legacy'],
         ];
 
         yield 'dropped property values are reported' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => StoredValue::ofString('Old headline')]),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => StoredValue::ofString('Old headline')]),
             'droppedProperties',
             static fn (mixed $value): mixed => $value['headline'],
             'Old headline',

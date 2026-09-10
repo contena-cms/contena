@@ -25,7 +25,7 @@ describe('module/ct-experience-studio/util/element-settings.util', () => {
             getElementPropertyStorageKey(
                 {
                     bindingSpecifications: {
-                        'core:CT:Media:Image': {
+                        'core:Ct:Media:Image': {
                             default: true,
                             resolves: {
                                 media: {
@@ -49,7 +49,7 @@ describe('module/ct-experience-studio/util/element-settings.util', () => {
             getElementPropertyStorageKey(
                 {
                     bindingSpecifications: {
-                        'core:CT:Content:Text': {
+                        'core:Ct:Content:Text': {
                             default: true,
                             resolves: {},
                         },

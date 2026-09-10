@@ -28,7 +28,7 @@ use Contena\Core\Framework\ContentSystem\RenderingSpecification;
 final class VirtualRootWrapper
 {
     public const VIRTUAL_ROOT_ID = '__page_context_root__';
-    private const VIRTUAL_ROOT_TYPE = 'CT:Internal:PageContext';
+    private const VIRTUAL_ROOT_TYPE = 'Ct:Internal:PageContext';
     private const VIRTUAL_ROOT_SLOT_NAME = '__page_roots__';
 
     /**

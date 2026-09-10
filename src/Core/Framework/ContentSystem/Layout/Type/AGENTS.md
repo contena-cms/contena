@@ -28,7 +28,7 @@ Type spec `properties` = schema for hydrated API output, NOT storage format
 
 - Type names must be unique across all sources (core, bundles, plugins, apps) — duplicates caught at compile time and persist time with source labels: `"core"`, `"bundle:BundleName"`, `"plugin:PluginName"`, `"app:AppName"`
 - YAML: one type per file, name is derived from the file path (directory structure + filename → PascalCase colon-separated name) via `ElementTypeNameResolver`. `meta.name` is ignored — the serializer does not read it; names come exclusively from file paths.
-- Name prefix is auto-injected: `Sw` for core/bundles, the plugin bundle name (the short `Plugin::getName()` value, not the FQCN) for plugins, app name for apps
+- Name prefix is auto-injected: `Ct` for core/bundles (the Contena mapping of upstream `Sw`), the plugin bundle name (the short `Plugin::getName()` value, not the FQCN) for plugins, app name for apps
 - Filenames and directories must be kebab-case: `[a-z0-9]+(-[a-z0-9]+)*`
 - Both `.yaml` and `.yml` extensions are accepted
 - Registry uses Contena decoration pattern: `AbstractContentSystemElementTypeRegistry` → `ContentSystemElementTypeRegistry` (leaf) → `CachedContentSystemElementTypeRegistry` (decorator, `cache.system` pool). `invalidate()` throws `DecorationPatternException` by default — only the cached decorator overrides it. Consumers type-hint `AbstractContentSystemElementTypeRegistry`.

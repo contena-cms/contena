@@ -25,11 +25,11 @@ class LayoutPresetPayloadCompilerTest extends TestCase
         $compiler = $this->createCompiler($this->capturingDecoder($captured));
 
         $compiler->compile([
-            ['component' => 'CT:Content:Text', 'properties' => ['text' => '<p>hi</p>']],
+            ['component' => 'Ct:Content:Text', 'properties' => ['text' => '<p>hi</p>']],
         ]);
 
         static::assertCount(1, $captured);
-        static::assertSame('CT:Content:Text', $captured[0]['component']);
+        static::assertSame('Ct:Content:Text', $captured[0]['component']);
         static::assertSame(['text' => '<p>hi</p>'], $captured[0]['properties']);
         static::assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $captured[0]['id']);
     }
@@ -42,24 +42,24 @@ class LayoutPresetPayloadCompilerTest extends TestCase
 
         $compiler->compile([
             [
-                'component' => 'CT:Grid:Container',
+                'component' => 'Ct:Grid:Container',
                 'slots' => [
                     'content' => [
-                        ['component' => 'CT:Media:Image'],
-                        ['component' => 'CT:Content:Text', 'properties' => ['text' => 'x']],
+                        ['component' => 'Ct:Media:Image'],
+                        ['component' => 'Ct:Content:Text', 'properties' => ['text' => 'x']],
                     ],
                 ],
             ],
         ]);
 
         $container = $captured[0];
-        static::assertSame('CT:Grid:Container', $container['component']);
+        static::assertSame('Ct:Grid:Container', $container['component']);
         static::assertArrayHasKey('content', $container['slots']);
 
         $children = $container['slots']['content'];
         static::assertCount(2, $children);
-        static::assertSame('CT:Media:Image', $children[0]['component']);
-        static::assertSame('CT:Content:Text', $children[1]['component']);
+        static::assertSame('Ct:Media:Image', $children[0]['component']);
+        static::assertSame('Ct:Content:Text', $children[1]['component']);
         static::assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $children[0]['id']);
         static::assertNotSame($container['id'], $children[0]['id']);
     }
@@ -76,7 +76,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
         ];
 
         $compiler->compile([
-            ['component' => 'CT:Blog:Listing', 'style' => $style],
+            ['component' => 'Ct:Blog:Listing', 'style' => $style],
         ]);
 
         static::assertSame($style, $captured[0]['style']);
@@ -85,7 +85,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
     #[TestDox('throws when style is not a mapping')]
     public function testNonArrayStyleThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Content:Text', 'style' => 'nope']]);
+        $this->assertInvalidLayout([['component' => 'Ct:Content:Text', 'style' => 'nope']]);
     }
 
     #[TestDox('accepts every canonical breakpoint key in a style option')]
@@ -96,7 +96,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
 
         $style = ['col-span' => ['xs' => 4, 'sm' => 4, 'md' => 4, 'lg' => 3, 'xl' => 3, 'xxl' => 3]];
 
-        $compiler->compile([['component' => 'CT:Blog:Listing', 'style' => $style]]);
+        $compiler->compile([['component' => 'Ct:Blog:Listing', 'style' => $style]]);
 
         static::assertSame($style, $captured[0]['style']);
     }
@@ -104,13 +104,13 @@ class LayoutPresetPayloadCompilerTest extends TestCase
     #[TestDox('throws on a style breakpoint key outside the canonical set')]
     public function testUnknownStyleBreakpointThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Blog:Listing', 'style' => ['col-span' => ['lg' => 3, 'nope' => 2]]]]);
+        $this->assertInvalidLayout([['component' => 'Ct:Blog:Listing', 'style' => ['col-span' => ['lg' => 3, 'nope' => 2]]]]);
     }
 
     #[TestDox('throws when a breakpoint mapping does not define every breakpoint')]
     public function testIncompleteBreakpointMapThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Blog:Listing', 'style' => ['col-span' => ['lg' => 3, 'md' => 4]]]]);
+        $this->assertInvalidLayout([['component' => 'Ct:Blog:Listing', 'style' => ['col-span' => ['lg' => 3, 'md' => 4]]]]);
     }
 
     #[TestDox('broadcasts a scalar style option value across every breakpoint')]
@@ -119,7 +119,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
         $captured = [];
         $compiler = $this->createCompiler($this->capturingDecoder($captured));
 
-        $compiler->compile([['component' => 'CT:Blog:Listing', 'style' => ['col-span' => 3]]]);
+        $compiler->compile([['component' => 'Ct:Blog:Listing', 'style' => ['col-span' => 3]]]);
 
         static::assertSame(
             ['xs' => 3, 'sm' => 3, 'md' => 3, 'lg' => 3, 'xl' => 3, 'xxl' => 3],
@@ -131,12 +131,12 @@ class LayoutPresetPayloadCompilerTest extends TestCase
     public function testCompileEncodesDecodedElements(): void
     {
         $decoder = static::createStub(DraftLayoutDecoder::class);
-        $decoder->method('decode')->willReturn([new StoredElement('el-1', 'CT:Content:Text')]);
+        $decoder->method('decode')->willReturn([new StoredElement('el-1', 'Ct:Content:Text')]);
 
-        $result = $this->createCompiler($decoder)->compile([['component' => 'CT:Content:Text']]);
+        $result = $this->createCompiler($decoder)->compile([['component' => 'Ct:Content:Text']]);
 
         static::assertSame([
-            ['id' => 'el-1', 'component' => 'CT:Content:Text', 'properties' => []],
+            ['id' => 'el-1', 'component' => 'Ct:Content:Text', 'properties' => []],
         ], $result);
     }
 
@@ -152,7 +152,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
     #[TestDox('throws when a node is not a mapping')]
     public function testNonArrayNodeThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Content:Text'], 'not-a-node']);
+        $this->assertInvalidLayout([['component' => 'Ct:Content:Text'], 'not-a-node']);
     }
 
     #[TestDox('throws when a node has no type')]
@@ -170,19 +170,19 @@ class LayoutPresetPayloadCompilerTest extends TestCase
     #[TestDox('throws when properties is not a mapping')]
     public function testNonArrayPropertiesThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Content:Text', 'properties' => 'nope']]);
+        $this->assertInvalidLayout([['component' => 'Ct:Content:Text', 'properties' => 'nope']]);
     }
 
     #[TestDox('throws when slots is not a mapping')]
     public function testNonArraySlotsThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Grid:Container', 'slots' => 'nope']]);
+        $this->assertInvalidLayout([['component' => 'Ct:Grid:Container', 'slots' => 'nope']]);
     }
 
     #[TestDox('throws when a slot does not map to a list of children')]
     public function testSlotChildrenNotListThrows(): void
     {
-        $this->assertInvalidLayout([['component' => 'CT:Grid:Container', 'slots' => ['content' => 'nope']]]);
+        $this->assertInvalidLayout([['component' => 'Ct:Grid:Container', 'slots' => ['content' => 'nope']]]);
     }
 
     /**

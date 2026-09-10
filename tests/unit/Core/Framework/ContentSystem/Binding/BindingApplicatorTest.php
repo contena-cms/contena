@@ -26,7 +26,7 @@ class BindingApplicatorTest extends TestCase
     public function testAppliesResolvesEntryAsDataRequirementAndAttributesIt(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = new StoredElement('img-1', 'CT:Media:Image');
+        $element = new StoredElement('img-1', 'Ct:Media:Image');
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(false, null, false)), 'core:media-picker');
 
@@ -38,7 +38,7 @@ class BindingApplicatorTest extends TestCase
     public function testSeedsInputDefaultOntoAbsentKey(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = new StoredElement('img-1', 'CT:Media:Image');
+        $element = new StoredElement('img-1', 'Ct:Media:Image');
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(true, 'seeded', false)), 'core:media-picker');
 
@@ -65,12 +65,12 @@ class BindingApplicatorTest extends TestCase
     public function testFillOnlyWiresAbsentKeyAndAttributes(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = new StoredElement('img-1', 'CT:Media:Image');
+        $element = new StoredElement('img-1', 'Ct:Media:Image');
 
-        $result = $this->applicator($config)->applyFillOnly($element, $this->specification(new BindingInput(false, null, false)), 'core:CT:Media:Image');
+        $result = $this->applicator($config)->applyFillOnly($element, $this->specification(new BindingInput(false, null, false)), 'core:Ct:Media:Image');
 
         static::assertEquals(['media' => new DataRequirement('media', 'entity', $config)], $result->dataRequirements);
-        static::assertSame(['media' => 'core:CT:Media:Image'], $result->attributedSpecifications);
+        static::assertSame(['media' => 'core:Ct:Media:Image'], $result->attributedSpecifications);
     }
 
     #[TestDox('fill-only: does not overwrite the wiring or attribution of a key already bound by a different specification')]
@@ -80,7 +80,7 @@ class BindingApplicatorTest extends TestCase
         $newConfig = static::createStub(AbstractContentDataLoaderConfig::class);
         $element = $this->boundImageElement($oldConfig);
 
-        $result = $this->applicator($newConfig)->applyFillOnly($element, $this->specification(new BindingInput(false, null, false)), 'core:CT:Media:Image');
+        $result = $this->applicator($newConfig)->applyFillOnly($element, $this->specification(new BindingInput(false, null, false)), 'core:Ct:Media:Image');
 
         static::assertSame(['media'], array_keys($result->dataRequirements));
         static::assertSame('media', $result->dataRequirements['media']->key);
@@ -96,9 +96,9 @@ class BindingApplicatorTest extends TestCase
         $newConfig = static::createStub(AbstractContentDataLoaderConfig::class);
         $element = $this->boundImageElement($oldConfig);
 
-        $result = $this->applicator($newConfig)->applyFillOnly($element, $this->twoKeySpecification(), 'core:CT:Media:Image');
+        $result = $this->applicator($newConfig)->applyFillOnly($element, $this->twoKeySpecification(), 'core:Ct:Media:Image');
 
-        static::assertSame(['media' => 'core:old-spec', 'gallery' => 'core:CT:Media:Image'], $result->attributedSpecifications);
+        static::assertSame(['media' => 'core:old-spec', 'gallery' => 'core:Ct:Media:Image'], $result->attributedSpecifications);
         static::assertSame('media', $result->dataRequirements['media']->key);
         static::assertSame('entity', $result->dataRequirements['media']->source);
         static::assertSame($oldConfig, $result->dataRequirements['media']->config);
@@ -111,7 +111,7 @@ class BindingApplicatorTest extends TestCase
     public function testDoesNotSeedInputWithoutDefault(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = new StoredElement('img-1', 'CT:Media:Image');
+        $element = new StoredElement('img-1', 'Ct:Media:Image');
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(false, null, false)), 'core:media-picker');
 
@@ -122,7 +122,7 @@ class BindingApplicatorTest extends TestCase
     public function testKeepsAuthoredValueOverDefault(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = StoredElementBuilder::create('CT:Media:Image', 'img-1')->withProperty('mediaId', 'authored')->build();
+        $element = StoredElementBuilder::create('Ct:Media:Image', 'img-1')->withProperty('mediaId', 'authored')->build();
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(true, 'seeded', false)), 'core:media-picker');
 
@@ -133,7 +133,7 @@ class BindingApplicatorTest extends TestCase
     public function testKeepsAuthoredExplicitNullOverDefault(): void
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
-        $element = StoredElementBuilder::create('CT:Media:Image', 'img-1')->withProperty('mediaId', null)->build();
+        $element = StoredElementBuilder::create('Ct:Media:Image', 'img-1')->withProperty('mediaId', null)->build();
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(true, 'seeded', false)), 'core:media-picker');
 
@@ -145,15 +145,15 @@ class BindingApplicatorTest extends TestCase
     {
         $config = static::createStub(AbstractContentDataLoaderConfig::class);
         $style = new ElementStyle(['padding' => ['md' => '1rem']]);
-        $element = StoredElementBuilder::create('CT:Media:Image', 'img-1')
-            ->withSlot('content', [new StoredElement('child', 'CT:Content:Text')])
+        $element = StoredElementBuilder::create('Ct:Media:Image', 'img-1')
+            ->withSlot('content', [new StoredElement('child', 'Ct:Content:Text')])
             ->withStyle($style)
             ->build();
 
         $result = $this->applicator($config)->apply($element, $this->specification(new BindingInput(false, null, false)), 'core:media-picker');
 
         static::assertSame('img-1', $result->id);
-        static::assertSame('CT:Media:Image', $result->component);
+        static::assertSame('Ct:Media:Image', $result->component);
         static::assertSame($style, $result->style);
         static::assertSame($element->slots, $result->slots);
         static::assertSame($element->contextDefinitions, $result->contextDefinitions);
@@ -161,7 +161,7 @@ class BindingApplicatorTest extends TestCase
 
     private function boundImageElement(AbstractContentDataLoaderConfig $oldConfig): StoredElement
     {
-        return StoredElementBuilder::create('CT:Media:Image', 'img-1')
+        return StoredElementBuilder::create('Ct:Media:Image', 'img-1')
             ->withDataRequirement('media', 'entity', $oldConfig)
             ->withAttributedSpecification('media', 'core:old-spec')
             ->build();
@@ -179,7 +179,7 @@ class BindingApplicatorTest extends TestCase
     {
         return new BindingSpecification(
             'media-picker',
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Media picker',
             ['media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId'])],
             ['mediaId' => $mediaIdInput],
@@ -190,8 +190,8 @@ class BindingApplicatorTest extends TestCase
     private function twoKeySpecification(): BindingSpecification
     {
         return new BindingSpecification(
-            'CT:Media:Image',
-            'CT:Media:Image',
+            'Ct:Media:Image',
+            'Ct:Media:Image',
             'Image',
             [
                 'media' => new LoaderBinding('entity', ['entity' => 'media', 'property' => 'mediaId']),

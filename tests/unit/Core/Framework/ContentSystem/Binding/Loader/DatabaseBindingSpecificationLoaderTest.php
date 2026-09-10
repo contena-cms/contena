@@ -162,6 +162,6 @@ class DatabaseBindingSpecificationLoaderTest extends TestCase
      */
     private function validSchema(): array
     {
-        return ['type' => 'CT:Media:Image', 'label' => 'Media picker', 'resolves' => [], 'inputs' => []];
+        return ['type' => 'Ct:Media:Image', 'label' => 'Media picker', 'resolves' => [], 'inputs' => []];
     }
 }

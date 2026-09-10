@@ -54,10 +54,10 @@ class ContentLayoutMutationControllerTest extends TestCase
     #[TestDox('serializes the persisted mutation result into the layout, resolutions, diagnostics and affected ids')]
     public function testInsertSerializesMutationResult(): void
     {
-        $result = MutationResult::fromParts(new StoredTree([new StoredElement('el-1', 'CT:Card')]), ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
+        $result = MutationResult::fromParts(new StoredTree([new StoredElement('el-1', 'Ct:Card')]), ['el-1' => []], new DiagnosticsReport([]), ['el-1']);
         $controller = $this->controller($this->mutatorReturning($result));
 
-        $response = $controller->insert('layout-1', new ContentLayoutInsertRequest('CT:Card', null), Context::createDefaultContext());
+        $response = $controller->insert('layout-1', new ContentLayoutInsertRequest('Ct:Card', null), Context::createDefaultContext());
 
         static::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $body = $this->decode($response);
@@ -118,14 +118,14 @@ class ContentLayoutMutationControllerTest extends TestCase
     {
         $context = Context::createDefaultContext();
 
-        yield 'insert' => [static fn (ContentLayoutMutationController $c): Response => $c->insert('l', new ContentLayoutInsertRequest('CT:Card', null), $context), InsertElement::class];
+        yield 'insert' => [static fn (ContentLayoutMutationController $c): Response => $c->insert('l', new ContentLayoutInsertRequest('Ct:Card', null), $context), InsertElement::class];
         yield 'remove' => [static fn (ContentLayoutMutationController $c): Response => $c->remove('l', new ContentLayoutRemoveRequest('el', null), $context), RemoveElement::class];
         yield 'move' => [static fn (ContentLayoutMutationController $c): Response => $c->move('l', new ContentLayoutMoveRequest('el', null), $context), MoveElement::class];
-        yield 'replace' => [static fn (ContentLayoutMutationController $c): Response => $c->replace('l', new ContentLayoutReplaceRequest('el', 'CT:New', null), $context), ReplaceElement::class];
+        yield 'replace' => [static fn (ContentLayoutMutationController $c): Response => $c->replace('l', new ContentLayoutReplaceRequest('el', 'Ct:New', null), $context), ReplaceElement::class];
         yield 'duplicate' => [static fn (ContentLayoutMutationController $c): Response => $c->duplicate('l', new ContentLayoutDuplicateRequest('el', null), $context), DuplicateElement::class];
-        yield 'wrap' => [static fn (ContentLayoutMutationController $c): Response => $c->wrap('l', new ContentLayoutWrapElementsRequest(['a'], 'CT:Container', null), $context), WrapElements::class];
+        yield 'wrap' => [static fn (ContentLayoutMutationController $c): Response => $c->wrap('l', new ContentLayoutWrapElementsRequest(['a'], 'Ct:Container', null), $context), WrapElements::class];
         yield 'unwrap' => [static fn (ContentLayoutMutationController $c): Response => $c->unwrap('l', new ContentLayoutUnwrapRequest('el', null), $context), UnwrapElement::class];
-        yield 'attach' => [static fn (ContentLayoutMutationController $c): Response => $c->attach('l', new ContentLayoutAttachRequest(['id' => 'incoming', 'component' => 'CT:Card'], null), $context), AttachElement::class];
+        yield 'attach' => [static fn (ContentLayoutMutationController $c): Response => $c->attach('l', new ContentLayoutAttachRequest(['id' => 'incoming', 'component' => 'Ct:Card'], null), $context), AttachElement::class];
     }
 
     /**
@@ -137,7 +137,7 @@ class ContentLayoutMutationControllerTest extends TestCase
     {
         $controller = $this->controller($this->mutatorReturning($result));
 
-        $response = $controller->replace('layout-1', new ContentLayoutReplaceRequest('el', 'CT:New', null), Context::createDefaultContext());
+        $response = $controller->replace('layout-1', new ContentLayoutReplaceRequest('el', 'Ct:New', null), Context::createDefaultContext());
 
         $assert($this->decode($response));
     }
@@ -148,21 +148,21 @@ class ContentLayoutMutationControllerTest extends TestCase
     public static function serializesOptionalReplaceFieldsProvider(): iterable
     {
         yield 'orphaned subtrees surface for re-attachment' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [new StoredElement('orphan', 'CT:Block')]),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [new StoredElement('orphan', 'Ct:Block')]),
             static function (array $body): void {
                 static::assertSame('orphan', $body['orphaned'][0]['id']);
             },
         ];
 
         yield 'dropped wiring keys are reported' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [], ['legacy']),
             static function (array $body): void {
                 static::assertSame(['legacy'], $body['droppedWiring']);
             },
         ];
 
         yield 'dropped property values are reported' => [
-            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'CT:New')]), [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => StoredValue::ofString('Old headline')]),
+            MutationResult::fromParts(new StoredTree([new StoredElement('el', 'Ct:New')]), [], new DiagnosticsReport([]), ['el'], [], [], ['headline' => StoredValue::ofString('Old headline')]),
             static function (array $body): void {
                 static::assertSame('Old headline', $body['droppedProperties']['headline']);
             },
@@ -217,7 +217,7 @@ class ContentLayoutMutationControllerTest extends TestCase
         $mutator = static::createStub(PersistedLayoutMutator::class);
 
         try {
-            $this->controller($mutator)->attach('layout-1', new ContentLayoutAttachRequest(['component' => 'CT:Card'], null), Context::createDefaultContext());
+            $this->controller($mutator)->attach('layout-1', new ContentLayoutAttachRequest(['component' => 'Ct:Card'], null), Context::createDefaultContext());
             static::fail('Expected a ' . ContentSystemException::INVALID_LAYOUT_STRUCTURE . ' exception, but none was thrown.');
         } catch (ContentSystemException $exception) {
             static::assertSame(ContentSystemException::INVALID_LAYOUT_STRUCTURE, $exception->getErrorCode());

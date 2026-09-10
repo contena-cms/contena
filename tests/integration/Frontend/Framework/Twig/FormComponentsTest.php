@@ -22,7 +22,7 @@ class FormComponentsTest extends TestCase
 
     public function testInputRendersLabelAndValidationHooks(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'validationRules' => 'required',
@@ -50,19 +50,19 @@ class FormComponentsTest extends TestCase
      */
     public function testInputRendersTheRequiredMarkerOnlyForRequiredFields(): void
     {
-        $required = $this->render('CT:Form:Input', [
+        $required = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'validationRules' => 'required',
         ]);
 
-        $optional = $this->render('CT:Form:Input', [
+        $optional = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'validationRules' => 'email',
         ]);
 
-        $plain = $this->render('CT:Form:Input', ['name' => 'firstName', 'label' => 'First name']);
+        $plain = $this->render('Ct:Form:Input', ['name' => 'firstName', 'label' => 'First name']);
 
         static::assertStringContainsString('class="ct-form-label__required form-required-label" aria-hidden="true"', $required);
         static::assertStringNotContainsString('form-required-label', $optional);
@@ -76,7 +76,7 @@ class FormComponentsTest extends TestCase
 
     public function testInputLinksDescriptionAndFeedbackToTheControl(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'password',
             'label' => 'Password',
             'description' => 'At least 8 characters.',
@@ -89,7 +89,7 @@ class FormComponentsTest extends TestCase
 
     public function testInputUsesTheAriaLabelWhenThereIsNoVisibleLabel(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'search',
             'aria-label' => 'Search term',
         ]);
@@ -104,7 +104,7 @@ class FormComponentsTest extends TestCase
      */
     public function testClassAndStyleDressTheWrapperAndEveryOtherAttributeReachesTheControl(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'class' => 'col-sm-6',
             'style' => 'order: 2',
@@ -129,7 +129,7 @@ class FormComponentsTest extends TestCase
 
     public function testAdditionalInputClassReachesTheControl(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'additionalInputClass' => 'is--custom',
         ]);
@@ -139,7 +139,7 @@ class FormComponentsTest extends TestCase
 
     public function testInputRendersBooleanAttributesWithoutAValue(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'disabled' => true,
             'readonly' => true,
@@ -155,7 +155,7 @@ class FormComponentsTest extends TestCase
      */
     public function testInputKeepsAZeroValue(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'quantity',
             'type' => 'number',
             'value' => 0,
@@ -166,7 +166,7 @@ class FormComponentsTest extends TestCase
 
     public function testAnExplicitIdRipplesIntoTheLabelAndFeedbackReferences(): void
     {
-        $explicit = $this->render('CT:Form:Input', [
+        $explicit = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'id' => 'profileName',
             'label' => 'First name',
@@ -179,7 +179,7 @@ class FormComponentsTest extends TestCase
 
     public function testTextareaRendersTheValueAsItsContent(): void
     {
-        $html = $this->render('CT:Form:Textarea', [
+        $html = $this->render('Ct:Form:Textarea', [
             'name' => 'content',
             'label' => 'Your review',
             'value' => 'Great article',
@@ -197,7 +197,7 @@ class FormComponentsTest extends TestCase
 
     public function testSelectRendersOptionsAndMarksTheSelectedOne(): void
     {
-        $html = $this->render('CT:Form:Select', [
+        $html = $this->render('Ct:Form:Select', [
             'name' => 'salutationId',
             'label' => 'Salutation',
             'placeholder' => 'Please choose',
@@ -219,7 +219,7 @@ class FormComponentsTest extends TestCase
 
     public function testCheckboxUsesTheBootstrapFormCheckStructure(): void
     {
-        $html = $this->render('CT:Form:Checkbox', [
+        $html = $this->render('Ct:Form:Checkbox', [
             'name' => 'acceptedDataProtection',
             'label' => 'I have read the data protection information.',
             'checked' => true,
@@ -236,7 +236,7 @@ class FormComponentsTest extends TestCase
 
     public function testRadioGroupWrapsTheOptionsInAFieldset(): void
     {
-        $html = $this->render('CT:Form:RadioGroup', [
+        $html = $this->render('Ct:Form:RadioGroup', [
             'name' => 'sizeChoice',
             'label' => 'Choose a size',
             'value' => 'md',
@@ -271,7 +271,7 @@ class FormComponentsTest extends TestCase
      */
     public function testRadioGroupLeavesOutTheRequiredMarkerWhenNothingIsRequired(): void
     {
-        $html = $this->render('CT:Form:RadioGroup', [
+        $html = $this->render('Ct:Form:RadioGroup', [
             'name' => 'sizeChoice',
             'label' => 'Choose a size',
             'options' => [['value' => 'sm', 'label' => 'Small']],
@@ -282,7 +282,7 @@ class FormComponentsTest extends TestCase
 
     public function testRadioRendersStandaloneWithItsOwnFormCheck(): void
     {
-        $html = $this->render('CT:Form:Radio', [
+        $html = $this->render('Ct:Form:Radio', [
             'name' => 'sizeChoice',
             'value' => 'sm',
             'label' => 'Small',
@@ -292,14 +292,14 @@ class FormComponentsTest extends TestCase
         static::assertStringContainsString('class="ct-form-radio__control ct-form-field__control form-check-input"', $html);
 
         // A standalone radio has no feedback element of its own, so it must not point at one.
-        // CT:Form:RadioGroup passes the id of its own feedback element down instead.
+        // Ct:Form:RadioGroup passes the id of its own feedback element down instead.
         static::assertStringNotContainsString('aria-describedby', $html);
         static::assertStringContainsString('class="ct-form-label form-check-label" for="sizeChoice-sm"', $html);
     }
 
     public function testBirthdaySelectRendersThreeAutocompletedSelects(): void
     {
-        $html = $this->render('CT:Form:BirthdaySelect', [
+        $html = $this->render('Ct:Form:BirthdaySelect', [
             'day' => 24,
             'month' => 7,
             'year' => 1990,
@@ -340,7 +340,7 @@ class FormComponentsTest extends TestCase
 
     public function testBirthdaySelectPrefixesNamesAndIds(): void
     {
-        $html = $this->render('CT:Form:BirthdaySelect', [
+        $html = $this->render('Ct:Form:BirthdaySelect', [
             'namePrefix' => 'address',
             'idPrefix' => 'address-',
         ]);
@@ -356,7 +356,7 @@ class FormComponentsTest extends TestCase
     {
         $currentYear = (int) date('Y');
 
-        $html = $this->render('CT:Form:BirthdaySelect', []);
+        $html = $this->render('Ct:Form:BirthdaySelect', []);
 
         static::assertStringContainsString('<option value="' . $currentYear . '">', $html);
         static::assertStringContainsString('<option value="' . ($currentYear - 120) . '">', $html);
@@ -365,7 +365,7 @@ class FormComponentsTest extends TestCase
 
     public function testRadioGroupLinksItsDescriptionToEveryRadio(): void
     {
-        $html = $this->render('CT:Form:RadioGroup', [
+        $html = $this->render('Ct:Form:RadioGroup', [
             'name' => 'sizeChoice',
             'label' => 'Choose a size',
             'description' => 'Sizes run small.',
@@ -386,7 +386,7 @@ class FormComponentsTest extends TestCase
     public function testSelectRendersOwnOptionMarkupPassedAsContent(): void
     {
         $html = $this->renderTemplate(
-            '<twig:CT:Form:Select name="salutationId" label="Salutation"><option value="mr">Mr.</option></twig:CT:Form:Select>'
+            '<twig:Ct:Form:Select name="salutationId" label="Salutation"><option value="mr">Mr.</option></twig:Ct:Form:Select>'
         );
 
         static::assertStringContainsString('<option value="mr">Mr.</option>', $html);
@@ -396,7 +396,7 @@ class FormComponentsTest extends TestCase
     public function testTextareaTakesItsValueFromTheContent(): void
     {
         $html = $this->renderTemplate(
-            '<twig:CT:Form:Textarea name="content" label="Your review">Great article</twig:CT:Form:Textarea>'
+            '<twig:Ct:Form:Textarea name="content" label="Your review">Great article</twig:Ct:Form:Textarea>'
         );
 
         static::assertStringContainsString('>Great article</textarea>', $html);
@@ -410,11 +410,11 @@ class FormComponentsTest extends TestCase
     public function testEveryFieldTypeCarriesTheSharedFieldAndControlHooks(): void
     {
         $fields = [
-            'CT:Form:Input' => ['name' => 'firstName'],
-            'CT:Form:Textarea' => ['name' => 'content'],
-            'CT:Form:Select' => ['name' => 'country', 'options' => [['value' => 'de', 'label' => 'Germany']]],
-            'CT:Form:Checkbox' => ['name' => 'accept'],
-            'CT:Form:RadioGroup' => ['name' => 'size', 'options' => [['value' => 'sm', 'label' => 'Small']]],
+            'Ct:Form:Input' => ['name' => 'firstName'],
+            'Ct:Form:Textarea' => ['name' => 'content'],
+            'Ct:Form:Select' => ['name' => 'country', 'options' => [['value' => 'de', 'label' => 'Germany']]],
+            'Ct:Form:Checkbox' => ['name' => 'accept'],
+            'Ct:Form:RadioGroup' => ['name' => 'size', 'options' => [['value' => 'sm', 'label' => 'Small']]],
         ];
 
         foreach ($fields as $component => $props) {
@@ -432,12 +432,12 @@ class FormComponentsTest extends TestCase
      */
     public function testFieldExposesItsViolationPath(): void
     {
-        $withPath = $this->render('CT:Form:Input', [
+        $withPath = $this->render('Ct:Form:Input', [
             'name' => 'email',
             'violationPath' => '/email',
         ]);
 
-        $withoutPath = $this->render('CT:Form:Input', ['name' => 'email']);
+        $withoutPath = $this->render('Ct:Form:Input', ['name' => 'email']);
 
         static::assertMatchesRegularExpression('/<div[^>]*data-violation-path="\/email"/', $withPath);
         static::assertStringNotContainsString('data-violation-path', $withoutPath);
@@ -449,7 +449,7 @@ class FormComponentsTest extends TestCase
      */
     public function testRadioGroupIsOneFieldWithSeveralControls(): void
     {
-        $html = $this->render('CT:Form:RadioGroup', [
+        $html = $this->render('Ct:Form:RadioGroup', [
             'name' => 'sizeChoice',
             'violationPath' => '/sizeChoice',
             'options' => [
@@ -471,7 +471,7 @@ class FormComponentsTest extends TestCase
      */
     public function testBirthdaySelectIsACompositeOfThreeFields(): void
     {
-        $html = $this->render('CT:Form:BirthdaySelect', []);
+        $html = $this->render('Ct:Form:BirthdaySelect', []);
 
         static::assertSame(3, substr_count($html, 'ct-form-field '));
         static::assertStringNotContainsString('ct-form-birthday-select ct-form-field ', $html);
@@ -487,7 +487,7 @@ class FormComponentsTest extends TestCase
      */
     public function testHiddenTypeRendersNothingButTheInput(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'forwardTo',
             'type' => 'hidden',
             'value' => 'frontend.blog.detail',
@@ -513,7 +513,7 @@ class FormComponentsTest extends TestCase
 
     public function testRendersServerSideViolationsIntoTheFeedbackElement(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'email',
             'label' => 'Email',
             'violationPath' => '/email',
@@ -538,7 +538,7 @@ class FormComponentsTest extends TestCase
      */
     public function testAFieldWithoutAViolationPathNeverPrintsAnotherFieldsViolations(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'isInvalid' => true,
@@ -552,7 +552,7 @@ class FormComponentsTest extends TestCase
 
     public function testAFieldOnlyPrintsTheViolationsOfItsOwnPath(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'violationPath' => '/firstName',
@@ -565,7 +565,7 @@ class FormComponentsTest extends TestCase
 
     public function testCheckboxLinksItsDescriptionToTheControl(): void
     {
-        $html = $this->render('CT:Form:Checkbox', [
+        $html = $this->render('Ct:Form:Checkbox', [
             'name' => 'updates',
             'label' => 'Receive updates',
             'description' => 'You can disable updates at any time.',
@@ -577,7 +577,7 @@ class FormComponentsTest extends TestCase
 
     public function testCheckboxTakesAnAriaLabelWhenItHasNoVisibleLabel(): void
     {
-        $html = $this->render('CT:Form:Checkbox', [
+        $html = $this->render('Ct:Form:Checkbox', [
             'name' => 'selectAll',
             'aria-label' => 'Select all items',
         ]);
@@ -592,7 +592,7 @@ class FormComponentsTest extends TestCase
      */
     public function testAriaLabelIsDroppedWhenThereIsAVisibleLabel(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'aria-label' => 'Something else',
@@ -608,7 +608,7 @@ class FormComponentsTest extends TestCase
      */
     public function testLabelAndDescriptionAreSanitizedBeforeBeingRenderedRaw(): void
     {
-        $html = $this->render('CT:Form:Checkbox', [
+        $html = $this->render('Ct:Form:Checkbox', [
             'name' => 'acceptedDataProtection',
             'label' => 'I accept the <a href="/privacy">privacy policy</a><script>alert(1)</script>',
             'description' => 'See our <a href="/terms">terms</a><script>alert(2)</script>',
@@ -623,13 +623,13 @@ class FormComponentsTest extends TestCase
 
     public function testSelectCanMakeThePlaceholderUnselectable(): void
     {
-        $selectable = $this->render('CT:Form:Select', [
+        $selectable = $this->render('Ct:Form:Select', [
             'name' => 'countryId',
             'placeholder' => 'Please choose',
             'options' => [['value' => 'de', 'label' => 'Germany']],
         ]);
 
-        $locked = $this->render('CT:Form:Select', [
+        $locked = $this->render('Ct:Form:Select', [
             'name' => 'countryId',
             'placeholder' => 'Please choose',
             'placeholderDisabled' => true,
@@ -646,7 +646,7 @@ class FormComponentsTest extends TestCase
      */
     public function testRequiredWithoutValidationRulesStillReachesClientValidation(): void
     {
-        $html = $this->render('CT:Form:Input', [
+        $html = $this->render('Ct:Form:Input', [
             'name' => 'firstName',
             'label' => 'First name',
             'required' => true,
@@ -658,13 +658,13 @@ class FormComponentsTest extends TestCase
 
     public function testRequiredIsPrependedToTheOtherRulesWithoutDuplicating(): void
     {
-        $combined = $this->render('CT:Form:Input', [
+        $combined = $this->render('Ct:Form:Input', [
             'name' => 'email',
             'required' => true,
             'validationRules' => 'email',
         ]);
 
-        $alreadyThere = $this->render('CT:Form:Input', [
+        $alreadyThere = $this->render('Ct:Form:Input', [
             'name' => 'email',
             'validationRules' => 'required,email',
         ]);
@@ -675,7 +675,7 @@ class FormComponentsTest extends TestCase
 
     public function testRadioGroupPassesTheComputedRulesToItsRadios(): void
     {
-        $html = $this->render('CT:Form:RadioGroup', [
+        $html = $this->render('Ct:Form:RadioGroup', [
             'name' => 'sizeChoice',
             'required' => true,
             'options' => [['value' => 'sm', 'label' => 'Small']],
@@ -691,14 +691,14 @@ class FormComponentsTest extends TestCase
      */
     public function testServerRenderedInvalidFieldsAreAnnouncedAsInvalid(): void
     {
-        $invalid = $this->render('CT:Form:Input', [
+        $invalid = $this->render('Ct:Form:Input', [
             'name' => 'email',
             'label' => 'Email',
             'violationPath' => '/email',
             'formViolations' => $this->violations('/email'),
         ]);
 
-        $valid = $this->render('CT:Form:Input', ['name' => 'email', 'label' => 'Email']);
+        $valid = $this->render('Ct:Form:Input', ['name' => 'email', 'label' => 'Email']);
 
         static::assertStringContainsString('aria-invalid="true"', $invalid);
         static::assertStringNotContainsString('aria-invalid', $valid);

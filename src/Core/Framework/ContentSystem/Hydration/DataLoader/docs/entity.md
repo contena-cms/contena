@@ -5,7 +5,7 @@ Loads a single entity by ID or property reference.
 ```json
 {
   "id": "blog-detail",
-  "component": "CT:Blog:Detail",
+  "component": "Ct:Blog:Detail",
   "dataRequirements": {
     "blog": {
       "source": "entity",
@@ -31,7 +31,7 @@ A blog card that loads its own data:
 ```json
 {
   "id": "blog-card",
-  "component": "CT:Blog:Card",
+  "component": "Ct:Blog:Card",
   "properties": {
     "blog": "{{blogId}}"
   },

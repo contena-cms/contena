@@ -24,13 +24,13 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
 
         $result = $synthesizer->synthesize(
             ['properties' => ['media' => ['type' => 'Contena\\Core\\Content\\Media\\MediaEntity', 'resolvedBy' => 'mediaId']]],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
 
         static::assertNotNull($result);
-        static::assertSame('CT:Media:Image', $result['type']);
-        static::assertSame('CT:Media:Image', $result['label']);
+        static::assertSame('Ct:Media:Image', $result['type']);
+        static::assertSame('Ct:Media:Image', $result['label']);
         static::assertArrayNotHasKey('inputs', $result);
     }
 
@@ -44,7 +44,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
                 'meta' => ['label' => 'Image'],
                 'properties' => ['media' => ['type' => 'Contena\\Core\\Content\\Media\\MediaEntity', 'resolvedBy' => 'mediaId']],
             ],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
 
@@ -64,7 +64,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
                     'thumbnail' => ['type' => 'Contena\\Core\\Content\\Media\\MediaEntity', 'resolvedBy' => 'thumbnailId'],
                 ],
             ],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
 
@@ -84,7 +84,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
 
         $result = $synthesizer->synthesize(
             ['properties' => ['media' => ['type' => 'Contena\\Core\\Content\\Media\\MediaEntity', 'resolvedBy' => $resolvedBy]]],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
 
@@ -101,7 +101,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
     {
         $synthesizer = new DefaultBindingSpecificationSynthesizer();
 
-        static::assertNull($synthesizer->synthesize($data, 'CT:Media:Image', self::PATH));
+        static::assertNull($synthesizer->synthesize($data, 'Ct:Media:Image', self::PATH));
     }
 
     #[TestDox('performs no collision check when no string storage key can be extracted from a map-form resolvedBy value')]
@@ -118,7 +118,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
                     'mediaId' => ['type' => 'string'],
                 ],
             ],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
 
@@ -152,7 +152,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
             'property "media" must be a map, got string',
         ));
 
-        $synthesizer->synthesize(['properties' => ['media' => 'not-a-map']], 'CT:Media:Image', self::PATH);
+        $synthesizer->synthesize(['properties' => ['media' => 'not-a-map']], 'Ct:Media:Image', self::PATH);
     }
 
     #[TestDox('throws a load-failed error naming the file when a resolvedBy property has no declared type')]
@@ -165,7 +165,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
             'property "media" declares "resolvedBy" but its "type" is missing or not a string; resolvedBy is only valid on a declared reference (FQCN) property',
         ));
 
-        $synthesizer->synthesize(['properties' => ['media' => ['resolvedBy' => 'mediaId']]], 'CT:Media:Image', self::PATH);
+        $synthesizer->synthesize(['properties' => ['media' => ['resolvedBy' => 'mediaId']]], 'Ct:Media:Image', self::PATH);
     }
 
     #[TestDox('throws a load-failed error naming the file when a resolvedBy property declares a non-string (union) type')]
@@ -180,7 +180,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
 
         $synthesizer->synthesize(
             ['properties' => ['media' => ['type' => ['string', 'integer'], 'resolvedBy' => 'mediaId']]],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
     }
@@ -196,7 +196,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
             \sprintf('property "media" declares "resolvedBy" but its type "%s" is not a reference (FQCN) property; resolvedBy is only valid on a reference property', $type),
         ));
 
-        $synthesizer->synthesize(['properties' => ['media' => ['type' => $type, 'resolvedBy' => 'mediaId']]], 'CT:Media:Image', self::PATH);
+        $synthesizer->synthesize(['properties' => ['media' => ['type' => $type, 'resolvedBy' => 'mediaId']]], 'Ct:Media:Image', self::PATH);
     }
 
     /**
@@ -220,7 +220,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
                     'mediaId' => ['type' => 'string'],
                 ],
             ],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
     }
@@ -242,7 +242,7 @@ class DefaultBindingSpecificationSynthesizerTest extends TestCase
                     'thumbnail' => ['type' => 'Contena\\Core\\Content\\Media\\MediaEntity', 'resolvedBy' => 'assetId'],
                 ],
             ],
-            'CT:Media:Image',
+            'Ct:Media:Image',
             self::PATH,
         );
     }

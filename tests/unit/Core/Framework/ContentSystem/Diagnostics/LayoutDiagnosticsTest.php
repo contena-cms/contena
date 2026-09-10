@@ -59,9 +59,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces no binding error when root-ambient context satisfies a required reference')]
     public function testRootAmbientSatisfiesRequired(): void
     {
-        $tree = [new StoredElement('root-1', 'CT:Block')];
+        $tree = [new StoredElement('root-1', 'Ct:Block')];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
             ->analyze($tree, $this->rootAmbientBlogContext())->report;
 
         static::assertSame([], $report->bindingErrors());
@@ -70,7 +70,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('resolves a required reference via valid applied wiring, producing no unresolved_required binding error and keeping the element well-formed')]
     public function testValidAppliedWiringResolvesRequiredReferenceAndStaysWellFormed(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -78,7 +78,7 @@ class LayoutDiagnosticsTest extends TestCase
         $loader->method('resolveProducedType')->willReturn(ChannelBlogEntity::class);
 
         $analysis = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
             // A Stored resolution implies a registered loader, so the map must carry the source's config
             // specification (here: no propertyReference keys, so unfilled_required_input never fires).
             map: $this->loaderConfigMap('entity', new LoaderConfigSpecification([])),
@@ -94,12 +94,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('emits an orphaned_provider warning without blocking when a provider has no consumer in scope')]
     public function testOrphanedProviderWarning(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
-            ->withSlot('content', [new StoredElement('child-1', 'CT:Block')])
+            ->withSlot('content', [new StoredElement('child-1', 'Ct:Block')])
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$root], null)->report;
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$root], null)->report;
 
         static::assertTrue($report->isWellFormed());
         $warning = $this->single(array_filter($report->violations, static fn (Violation $v): bool => $v->code === ViolationCode::OrphanedProvider));
@@ -109,9 +109,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports no property-type violation for a stored value matching its declared primitive type')]
     public function testConformingPropertyValueProducesNoViolation(): void
     {
-        $tree = [StoredElementBuilder::create('CT:Block', 'el-1')->withProperty('count', 5)->build()];
+        $tree = [StoredElementBuilder::create('Ct:Block', 'el-1')->withProperty('count', 5)->build()];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
             ->analyze($tree, null)->report;
 
         static::assertTrue($report->isWellFormed());
@@ -126,14 +126,14 @@ class LayoutDiagnosticsTest extends TestCase
         // and the sole matching context offer wins the pick instead. This isolates the "origin !== Stored"
         // guard: the stored requirement is genuinely present, so if that guard were removed, execution would
         // reach the unfilled-input check below and gate on the empty "blogId", turning bindingErrors() non-empty.
-        $element = StoredElementBuilder::create('CT:Block', 'root-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'root-1')
             ->withDataRequirement('blog', 'media_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $rootContext = $this->rootAmbientBlogContext();
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: true)
                 ->primitive('blogId', 'string')
                 ->build()],
@@ -150,14 +150,14 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('does not flag a deep required consumer when an intermediate redistributes matching element-provided context')]
     public function testRedistributingIntermediateSatisfiesDeepRequiredChain(): void
     {
-        $level3 = StoredElementBuilder::create('CT:Block', 'level-3')
+        $level3 = StoredElementBuilder::create('Ct:Block', 'level-3')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
-        $level2 = StoredElementBuilder::create('CT:Block', 'level-2')
+        $level2 = StoredElementBuilder::create('Ct:Block', 'level-2')
             ->withConsumer('blog', ContextType::Single, redistribute: true)
             ->withSlot('content', [$level3])
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->withSlot('content', [$level2])
@@ -168,8 +168,8 @@ class LayoutDiagnosticsTest extends TestCase
 
         $report = $this->diagnostics(
             [
-                'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-                'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+                'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+                'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
             ],
             map: $this->loaderConfigMap('entity', new LoaderConfigSpecification([])),
             loaderProvider: $this->loaderProvider($loader),
@@ -184,11 +184,11 @@ class LayoutDiagnosticsTest extends TestCase
         // The exclusivity pin. The uniform availability formula appends the root-ambient set at every depth, so
         // without the scope split this consumer would pass the gate and then render nothing: delivery hands a
         // root-ambient value to root-scoped consumers alone.
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$element], $this->rootAmbientBlogContext())->report;
 
         $error = $this->onlyBindingError($report->bindingErrors());
@@ -200,17 +200,17 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('does not flag a required root-scoped consumer whose key the root-ambient context supplies, at any depth')]
     public function testRootScopeConsumerIsSatisfiedByRootAmbientContextAtDepth(): void
     {
-        $deep = StoredElementBuilder::create('CT:Block', 'deep-1')
+        $deep = StoredElementBuilder::create('Ct:Block', 'deep-1')
             ->withConsumer('blog', ContextType::Single, required: true, scope: ConsumerScope::Root)
             ->build();
-        $level2 = StoredElementBuilder::create('CT:Block', 'level-2')
+        $level2 = StoredElementBuilder::create('Ct:Block', 'level-2')
             ->withSlot('content', [$deep])
             ->build();
-        $root = StoredElementBuilder::create('CT:Block', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'root-1')
             ->withSlot('content', [$level2])
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$root], $this->rootAmbientBlogContext())->report;
 
         static::assertSame([], $report->bindingErrors());
@@ -219,11 +219,11 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces a broken_required_chain binding error naming the root source for a required root-scoped consumer the bound source does not supply')]
     public function testRootScopeConsumerWithoutMatchingAmbientKeyIsBroken(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withConsumer('category', ContextType::Single, required: true, scope: ConsumerScope::Root)
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$element], $this->rootAmbientBlogContext())->report;
 
         $error = $this->onlyBindingError($report->bindingErrors());
@@ -236,10 +236,10 @@ class LayoutDiagnosticsTest extends TestCase
     {
         // The mirror of the exclusivity pin: a root-scoped consumer draws on the ambient half alone, so an
         // ancestor providing the same key answers for nothing.
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog', ContextType::Single, required: true, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->withSlot('content', [$child])
@@ -250,8 +250,8 @@ class LayoutDiagnosticsTest extends TestCase
 
         $report = $this->diagnostics(
             [
-                'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-                'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+                'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+                'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
             ],
             map: $this->loaderConfigMap('entity', new LoaderConfigSpecification([])),
             loaderProvider: $this->loaderProvider($loader),
@@ -268,10 +268,10 @@ class LayoutDiagnosticsTest extends TestCase
         // The exact-key comparison this replaces false-positived every required dotted consumer that delivery
         // would in fact resolve through the base struct. No root-ambient set is passed, so only the
         // element-provided half can satisfy this consumer.
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog.manufacturer', ContextType::Single, required: true)
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->withSlot('content', [$child])
@@ -282,8 +282,8 @@ class LayoutDiagnosticsTest extends TestCase
 
         $report = $this->diagnostics(
             [
-                'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-                'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+                'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+                'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
             ],
             map: $this->loaderConfigMap('entity', new LoaderConfigSpecification([])),
             loaderProvider: $this->loaderProvider($loader),
@@ -298,14 +298,14 @@ class LayoutDiagnosticsTest extends TestCase
         // The root half of the same rule, and no element in this tree provides anything, so the ambient entry is
         // the only thing that can satisfy the consumer. A fixture that also carried an ancestor-provided
         // `blog` would pass even with the scope filter removed, proving nothing about the root half.
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog.manufacturer', ContextType::Single, required: true, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Block', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'root-1')
             ->withSlot('content', [$child])
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$root], $this->rootAmbientBlogContext())->report;
 
         static::assertSame([], $report->bindingErrors());
@@ -316,15 +316,15 @@ class LayoutDiagnosticsTest extends TestCase
     {
         // A root-scoped consumer takes its value from the layout's bound source, so the provider under the same
         // key feeds nothing and is as orphaned as one with no consumer at all.
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog', ContextType::Single, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Block', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('content', [$child])
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$root], null)->report;
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$root], null)->report;
 
         $warning = $this->single(array_filter($report->violations, static fn (Violation $v): bool => $v->code === ViolationCode::OrphanedProvider));
         static::assertSame('root-1', $warning->elementId);
@@ -334,7 +334,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('counts a Root candidate as usable, so two competing root-ambient offers are ambiguous_required rather than unresolved_required')]
     public function testTwoRootCandidatesAreAmbiguousRequired(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
         $rootContext = [
             $this->rootAmbientBlogContext()[0],
@@ -348,7 +348,7 @@ class LayoutDiagnosticsTest extends TestCase
             ),
         ];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
             ->analyze($tree, $rootContext)->report;
 
         $error = $this->onlyBindingError($report->bindingErrors());
@@ -364,10 +364,10 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('backs a declared provider via valid applied wiring so a descendant consumer requiring that context is no longer broken_required_chain')]
     public function testAppliedWiringBacksDeclaredProviderAndSatisfiesDescendantChain(): void
     {
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->withSlot('content', [$child])
@@ -378,8 +378,8 @@ class LayoutDiagnosticsTest extends TestCase
 
         $analysis = $this->diagnostics(
             [
-                'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-                'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+                'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+                'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
             ],
             loaderProvider: $this->loaderProvider($loader),
         )->analyze([$root], []);
@@ -392,9 +392,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('accepts an unsatisfied required reference in the well-formedness subset, emits no binding errors and exposes the analysed element in the resolutions map')]
     public function testWellFormednessSubsetIgnoresBinding(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
-        $analysis = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
+        $analysis = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
             ->analyze($tree, null);
 
         static::assertTrue($analysis->report->isWellFormed());
@@ -405,7 +405,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports a required reference whose only candidates are incomplete loaders as unresolved_required, not ambiguous_required')]
     public function testIncompleteLoaderCandidatesAreUnresolvedNotAmbiguous(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
         // Each loader's specification requires a "property" config key its empty template does not fill, so the
         // derived residual is non-empty and both candidates are incomplete.
@@ -425,7 +425,7 @@ class LayoutDiagnosticsTest extends TestCase
         );
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('category', CategoryEntity::class, required: true)->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('category', CategoryEntity::class, required: true)->build()],
             $map,
         )->analyze($tree, [])->report;
 
@@ -437,11 +437,11 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces a broken_required_chain binding error for a required acceptsContext with no provider')]
     public function testBrokenRequiredChain(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$element], [])->report;
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze([$element], [])->report;
 
         static::assertSame(ViolationCode::BrokenRequiredChain, $this->onlyBindingError($report->bindingErrors())->code);
     }
@@ -449,22 +449,22 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('flags a deep required consumer reached only through a non-redistributing intermediate as broken_required_chain at that consumer, leaving the intermediate satisfied')]
     public function testNonRedistributingIntermediateBreaksDeepRequiredChain(): void
     {
-        $level3 = StoredElementBuilder::create('CT:Block', 'level-3')
+        $level3 = StoredElementBuilder::create('Ct:Block', 'level-3')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
-        $level2 = StoredElementBuilder::create('CT:Block', 'level-2')
+        $level2 = StoredElementBuilder::create('Ct:Block', 'level-2')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->withSlot('content', [$level3])
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('content', [$level2])
             ->build();
 
         $report = $this->diagnostics(
             [
-                'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-                'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+                'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+                'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
             ],
             new ContentSystemDataLoaderMap(
                 ['blog_loader' => [new LoaderTypeCapability(ChannelBlogEntity::class)]],
@@ -481,17 +481,17 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('flags a descendant requiring a declared provider whose own property does not resolve on the providing element as broken_required_chain')]
     public function testUnbackedDeclaredProviderBreaksDescendantChain(): void
     {
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withConsumer('blog', ContextType::Single, required: true)
             ->build();
-        $root = StoredElementBuilder::create('CT:Provider', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Provider', 'root-1')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('content', [$child])
             ->build();
 
         $report = $this->diagnostics([
-            'CT:Provider' => ContentSystemElementTypeSpecificationBuilder::create('CT:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
-            'CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
+            'Ct:Provider' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Provider')->reference('blog', ChannelBlogEntity::class)->build(),
+            'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build(),
         ])->analyze([$root], [])->report;
 
         $error = $this->onlyBindingError($report->bindingErrors());
@@ -502,9 +502,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports a duplicate element id across roots as an intrinsic error')]
     public function testDuplicateElementId(): void
     {
-        $tree = [new StoredElement('dup', 'CT:Block'), new StoredElement('dup', 'CT:Block')];
+        $tree = [new StoredElement('dup', 'Ct:Block'), new StoredElement('dup', 'Ct:Block')];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze($tree, null)->report;
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])->analyze($tree, null)->report;
 
         static::assertFalse($report->isWellFormed());
         static::assertSame(ViolationCode::DuplicateElementId, $this->onlyIntrinsicError($report->intrinsicErrors())->code);
@@ -513,7 +513,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports an unregistered component as an intrinsic error')]
     public function testUnregisteredComponent(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Missing')];
+        $tree = [new StoredElement('el-1', 'Ct:Missing')];
 
         $report = $this->diagnostics([])->analyze($tree, null)->report;
 
@@ -524,9 +524,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports a stored value disagreeing with its declared primitive type as an intrinsic error naming the key and both types')]
     public function testMismatchedPropertyTypeIsIntrinsicError(): void
     {
-        $tree = [StoredElementBuilder::create('CT:Block', 'el-1')->withProperty('count', 'not-an-int')->build()];
+        $tree = [StoredElementBuilder::create('Ct:Block', 'el-1')->withProperty('count', 'not-an-int')->build()];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
             ->analyze($tree, null)->report;
 
         $violation = $this->onlyIntrinsicError($report->intrinsicErrors());
@@ -545,18 +545,18 @@ class LayoutDiagnosticsTest extends TestCase
         // suppression has to fire — but it is keyed on the declaring element, not on the violation code
         // alone, so the two owners still report separately. A key too broad to tell them apart would
         // report once and pass every other collision test in this file.
-        $ownerA = StoredElementBuilder::create('CT:Block', 'el-owner-a')
+        $ownerA = StoredElementBuilder::create('Ct:Block', 'el-owner-a')
             ->withProvider('blog', BroadcastDistributionConfig::aliased('item'))
             ->withProvider('category', BroadcastDistributionConfig::aliased('item'))
-            ->withSlot('content', [StoredElementBuilder::create('CT:Block', 'el-child-a')->build()])
+            ->withSlot('content', [StoredElementBuilder::create('Ct:Block', 'el-child-a')->build()])
             ->build();
-        $ownerB = StoredElementBuilder::create('CT:Block', 'el-owner-b')
+        $ownerB = StoredElementBuilder::create('Ct:Block', 'el-owner-b')
             ->withProvider('manufacturer', BroadcastDistributionConfig::aliased('box'))
             ->withProvider('media', BroadcastDistributionConfig::aliased('box'))
-            ->withSlot('content', [StoredElementBuilder::create('CT:Block', 'el-child-b')->build()])
+            ->withSlot('content', [StoredElementBuilder::create('Ct:Block', 'el-child-b')->build()])
             ->build();
 
-        $violations = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $violations = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$ownerA, $ownerB], null)->report->intrinsicErrors();
 
         static::assertSame(
@@ -568,9 +568,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces an unresolved_required binding error for a required reference with no candidate')]
     public function testUnresolvedRequired(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()])
             ->analyze($tree, [])->report;
 
         static::assertSame(ViolationCode::UnresolvedRequired, $this->onlyBindingError($report->bindingErrors())->code);
@@ -579,7 +579,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces an ambiguous_required binding error carrying candidates when two complete loaders match')]
     public function testAmbiguousRequired(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
         $map = new ContentSystemDataLoaderMap(
             [
@@ -593,7 +593,7 @@ class LayoutDiagnosticsTest extends TestCase
         );
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('category', CategoryEntity::class, required: true)->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('category', CategoryEntity::class, required: true)->build()],
             $map,
             $this->decodingSerializers(),
         )->analyze($tree, [])->report;
@@ -606,7 +606,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('raises an independent mismatched_reference_type intrinsic violation and unresolved_required binding violation for a required reference whose applied wiring produces the wrong type')]
     public function testMismatchedAppliedWiringRaisesIntrinsicAndBindingViolationsIndependently(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -614,7 +614,7 @@ class LayoutDiagnosticsTest extends TestCase
         $loader->method('resolveProducedType')->willReturn(CategoryEntity::class);
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
             loaderProvider: $this->loaderProvider($loader),
         )->analyze([$element], [])->report;
 
@@ -626,12 +626,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('emits one unfilled_required_input per unfilled required propertyReference key for a multi-reference loader')]
     public function testMultiReferenceLoaderEmitsOneViolationPerUnfilledInput(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'pair_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: true)
                 ->primitive('blogId', 'string')
                 ->primitive('blogSku', 'string')
@@ -656,14 +656,14 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('propagates a non-client-defect exception during config resolution instead of converting it to invalid_config')]
     public function testInternalFaultPropagates(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $loader = static::createStub(AbstractContentDataLoader::class);
         $loader->method('resolveProducedType')->willThrowException(ContentSystemException::layoutNotFound('x'));
 
-        $diagnostics = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()], loaderProvider: $this->loaderProvider($loader));
+        $diagnostics = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()], loaderProvider: $this->loaderProvider($loader));
 
         $this->expectExceptionObject(ContentSystemException::layoutNotFound('x'));
 
@@ -673,9 +673,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('treats a required primitive carrying an authored value and no default as resolvable')]
     public function testRequiredPrimitiveWithAuthoredValueResolves(): void
     {
-        $tree = [StoredElementBuilder::create('CT:Block', 'el-1')->withProperty('headline', 'Authored headline')->build()];
+        $tree = [StoredElementBuilder::create('Ct:Block', 'el-1')->withProperty('headline', 'Authored headline')->build()];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
             ->analyze($tree, [])->report;
 
         static::assertSame([], $report->bindingErrors());
@@ -696,7 +696,7 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('diagnoses a replacement that stored its new type primitive default as resolvable')]
     public function testReplacementWithSeededDefaultIsDiagnosedResolvable(): void
     {
-        $specs = ['CT:New' => ContentSystemElementTypeSpecificationBuilder::create('CT:New')->primitive('headline', 'string', required: true, default: 'Default headline')->build()];
+        $specs = ['Ct:New' => ContentSystemElementTypeSpecificationBuilder::create('Ct:New')->primitive('headline', 'string', required: true, default: 'Default headline')->build()];
 
         // ReplaceElement seeds the new type's default (fully covered in ReplaceElementTest); here we pin the
         // replacement output — the new component plus the seeded default — so the diagnostics assertion cannot pass
@@ -706,12 +706,12 @@ class LayoutDiagnosticsTest extends TestCase
         $bindingRegistry->method('all')->willReturn([]);
         $bindingApplicator = new BindingApplicator(static::createStub(DataLoaderConfigSerializerProvider::class));
 
-        $replaced = new ReplaceElement($this->registry($specs), 'el', 'CT:New', $bindingRegistry, $bindingApplicator)
-            ->apply(new StoredTree([new StoredElement('el', 'CT:Old')]));
+        $replaced = new ReplaceElement($this->registry($specs), 'el', 'Ct:New', $bindingRegistry, $bindingApplicator)
+            ->apply(new StoredTree([new StoredElement('el', 'Ct:Old')]));
 
         $report = $this->diagnostics($specs)->analyze($replaced->roots, [])->report;
 
-        static::assertSame('CT:New', $replaced->roots[0]->component);
+        static::assertSame('Ct:New', $replaced->roots[0]->component);
         static::assertSame('Default headline', $replaced->roots[0]->property('headline')?->jsonSerialize());
         static::assertSame([], $report->bindingErrors());
     }
@@ -724,10 +724,10 @@ class LayoutDiagnosticsTest extends TestCase
         // the same collision surfaces four times — once for the owner, once per descendant. The count is
         // the discriminating assertion: a presence assertion holds with all four entries present, three of
         // them naming a descendant that declares nothing.
-        $grandchild = StoredElementBuilder::create('CT:Block', 'el-grandchild')->build();
-        $child = StoredElementBuilder::create('CT:Block', 'el-child')->withSlot('content', [$grandchild])->build();
-        $sibling = StoredElementBuilder::create('CT:Block', 'el-sibling')->build();
-        $owner = StoredElementBuilder::create('CT:Block', 'el-owner')
+        $grandchild = StoredElementBuilder::create('Ct:Block', 'el-grandchild')->build();
+        $child = StoredElementBuilder::create('Ct:Block', 'el-child')->withSlot('content', [$grandchild])->build();
+        $sibling = StoredElementBuilder::create('Ct:Block', 'el-sibling')->build();
+        $owner = StoredElementBuilder::create('Ct:Block', 'el-owner')
             ->withProvider('blog', BroadcastDistributionConfig::aliased('item'))
             ->withProvider('category', BroadcastDistributionConfig::aliased('item'))
             ->withSlot('content', [$child, $sibling])
@@ -735,7 +735,7 @@ class LayoutDiagnosticsTest extends TestCase
 
         // The intrinsic ERROR subset: the owner's two providers are consumed by nobody, so the full list
         // also carries two orphaned_provider warnings that say nothing about the collision.
-        $violations = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $violations = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$owner], null)->report->intrinsicErrors();
 
         static::assertCount(1, $violations);
@@ -749,12 +749,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces an unresolved_required binding error for a required primitive whose key is absent from the stored property map')]
     public function testRequiredPrimitiveWithAbsentKeyIsUnresolved(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')->build();
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')->build();
 
         // Pins the fixture's state: an absent key, which the storage model reports as a null property.
         static::assertNull($element->property('headline'));
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
             ->analyze([$element], [])->report;
 
         static::assertSame(ViolationCode::UnresolvedRequired, $this->onlyBindingError($report->bindingErrors())->code);
@@ -763,9 +763,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports a required primitive carrying a type default but no authored value as unresolved_required')]
     public function testRequiredPrimitiveWithDefaultButNoValueIsUnresolved(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block')];
+        $tree = [new StoredElement('el-1', 'Ct:Block')];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true, default: 'Default headline')->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true, default: 'Default headline')->build()])
             ->analyze($tree, [])->report;
 
         static::assertSame(ViolationCode::UnresolvedRequired, $this->onlyBindingError($report->bindingErrors())->code);
@@ -790,10 +790,10 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports no style violation for an option the registry knows')]
     public function testRegisteredStyleOptionProducesNoViolation(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block', style: new ElementStyle(['align-self' => ['xs' => 'center']]))];
+        $tree = [new StoredElement('el-1', 'Ct:Block', style: new ElementStyle(['align-self' => ['xs' => 'center']]))];
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()],
             styleOptionRegistry: $this->styleOptionRegistry(['align-self']),
         )->analyze($tree, null)->report;
 
@@ -804,12 +804,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('emits no unfilled_required_input for an optional reference that stored wiring resolves, even when its input property is empty')]
     public function testOptionalStoredReferenceDoesNotGateOnUnfilledInput(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'media_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $analysis = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: false)
                 ->primitive('blogId', 'string')
                 ->build()],
@@ -830,12 +830,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('does not gate a required reference whose loader declares an optional propertyReference key, mirroring the navigation shape')]
     public function testOptionalPropertyReferenceKeyNeverGates(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('tree', 'navigation_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('tree', ChannelBlogEntity::class, required: true)
                 ->primitive('activeProperty', 'string')
                 ->build()],
@@ -852,12 +852,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('emits no unfilled_required_input when a required propertyReference config value is not a string')]
     public function testNonStringConfiguredPropertyReferenceDoesNotGate(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'media_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: true)
                 ->primitive('blogId', 'string')
                 ->build()],
@@ -874,12 +874,12 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('keys the violation on the reference property and names the configured key when the wired property is not declared on the type')]
     public function testUnfilledInputKeysOnReferenceWhenConfiguredPropertyUndeclared(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'media_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: true)
                 ->build()],
             $this->loaderConfigMap('media_loader', new LoaderConfigSpecification([
@@ -898,10 +898,10 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports a style option the registry does not know as an intrinsic error keyed on the option name')]
     public function testUnknownStyleOptionIsIntrinsicError(): void
     {
-        $tree = [new StoredElement('el-1', 'CT:Block', style: new ElementStyle(['gone-option' => ['xs' => 'x']]))];
+        $tree = [new StoredElement('el-1', 'Ct:Block', style: new ElementStyle(['gone-option' => ['xs' => 'x']]))];
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()],
             styleOptionRegistry: $this->styleOptionRegistry(['align-self']),
         )->analyze($tree, null)->report;
 
@@ -916,9 +916,9 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('reports no property-type violation for a stored null under a declared primitive, leaving that to the required-input rule')]
     public function testStoredNullUnderAPrimitiveProducesNoPropertyTypeViolation(): void
     {
-        $tree = [StoredElementBuilder::create('CT:Block', 'el-1')->withProperty('count', null)->build()];
+        $tree = [StoredElementBuilder::create('Ct:Block', 'el-1')->withProperty('count', null)->build()];
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('count', 'integer')->build()])
             ->analyze($tree, null)->report;
 
         static::assertTrue($report->isWellFormed());
@@ -928,13 +928,13 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces an unresolved_required binding error for a required primitive authored as an explicit null, which is a present stored value')]
     public function testRequiredPrimitiveAuthoredAsNullIsUnresolved(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')->withProperty('headline', null)->build();
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')->withProperty('headline', null)->build();
 
         // Pins the state this case turns on: the key is PRESENT and its stored value's variant is null, which is
         // the state a single-term `property($key) === null` satisfaction test would silently credit as resolved.
         $stored = $element->property('headline');
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->primitive('headline', 'string', required: true)->build()])
             ->analyze([$element], [])->report;
 
         static::assertNotNull($stored);
@@ -964,14 +964,14 @@ class LayoutDiagnosticsTest extends TestCase
     #[TestDox('produces an invalid_config intrinsic error for a data requirement naming an unknown entity')]
     public function testInvalidConfigForUnknownEntity(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
         $loader = static::createStub(AbstractContentDataLoader::class);
         $loader->method('resolveProducedType')->willThrowException(ContentSystemException::unknownLoaderEntity('prodct'));
 
-        $report = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()], loaderProvider: $this->loaderProvider($loader))
+        $report = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()], loaderProvider: $this->loaderProvider($loader))
             ->analyze([$element], null)->report;
 
         static::assertFalse($report->isWellFormed());
@@ -984,7 +984,7 @@ class LayoutDiagnosticsTest extends TestCase
         // The reference property IS declared here (unlike the unknown-entity case), so the
         // mismatch check would run if the config resolved. It does not: resolveType throws a client-defect,
         // so the single intrinsic error must be InvalidConfig and never MismatchedReferenceType.
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class))
             ->build();
 
@@ -992,7 +992,7 @@ class LayoutDiagnosticsTest extends TestCase
         $loader->method('resolveProducedType')->willThrowException(ContentSystemException::unknownLoaderEntity('prodct'));
 
         $report = $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->reference('blog', ChannelBlogEntity::class, required: true)->build()],
             loaderProvider: $this->loaderProvider($loader),
         )->analyze([$element], [])->report;
 
@@ -1007,12 +1007,12 @@ class LayoutDiagnosticsTest extends TestCase
         // key to 'item'. The context walk throws providerDeliveryCollision; analyze() must embed it as an
         // invalid_config violation (the write gate's verdict) instead of propagating the raw exception, and
         // the colliding element resolves nothing.
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withProvider('blog', BroadcastDistributionConfig::aliased('item'))
             ->withProvider('category', BroadcastDistributionConfig::aliased('item'))
             ->build();
 
-        $analysis = $this->diagnostics(['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
+        $analysis = $this->diagnostics(['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()->build()])
             ->analyze([$element], null);
 
         static::assertFalse($analysis->report->isWellFormed());
@@ -1060,7 +1060,7 @@ class LayoutDiagnosticsTest extends TestCase
      */
     private function mediaLoaderWiredElement(array $properties): StoredElement
     {
-        return StoredElementBuilder::create('CT:Block', 'el-1')
+        return StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withDataRequirement('blog', 'media_loader', static::createStub(AbstractContentDataLoaderConfig::class))
             ->withProperties($properties)
             ->build();
@@ -1069,7 +1069,7 @@ class LayoutDiagnosticsTest extends TestCase
     private function analyzeMediaLoaderWiring(StoredElement $element): DiagnosticsReport
     {
         return $this->diagnostics(
-            ['CT:Block' => ContentSystemElementTypeSpecificationBuilder::create()
+            ['Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create()
                 ->reference('blog', ChannelBlogEntity::class, required: true)
                 ->primitive('blogId', 'string')
                 ->build()],

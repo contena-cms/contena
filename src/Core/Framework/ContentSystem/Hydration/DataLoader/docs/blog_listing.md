@@ -5,7 +5,7 @@ Loads blog listings for a navigation/category. Filters, sorting, and pagination 
 ```json
 {
   "id": "category-listing",
-  "component": "CT:Blog:Listing",
+  "component": "Ct:Blog:Listing",
   "properties": {
     "navigationId": "{{categoryId}}"
   },

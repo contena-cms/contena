@@ -22,19 +22,19 @@ class AttachElementsTest extends TestCase
     #[TestDox('attaches every supplied element in order, aggregating affected and created across them')]
     public function testAttachesEveryElementInOrder(): void
     {
-        $tree = new StoredTree([new StoredElement('existing', 'CT:Block')]);
+        $tree = new StoredTree([new StoredElement('existing', 'Ct:Block')]);
         $elements = [
-            new StoredElement('first', 'CT:Card', [], [], [
-                'content' => [new StoredElement('child', 'CT:Card')],
+            new StoredElement('first', 'Ct:Card', [], [], [
+                'content' => [new StoredElement('child', 'Ct:Card')],
             ]),
-            new StoredElement('second', 'CT:Block'),
+            new StoredElement('second', 'Ct:Block'),
         ];
 
         $op = $this->op($elements);
         $result = $op->apply($tree);
 
         static::assertSame(
-            ['CT:Block', 'CT:Card', 'CT:Block'],
+            ['Ct:Block', 'Ct:Card', 'Ct:Block'],
             array_map(static fn (StoredElement $root): string => $root->component, $result->roots),
         );
         static::assertSame('existing', $result->roots[0]->id);
@@ -49,16 +49,16 @@ class AttachElementsTest extends TestCase
     #[TestDox('inserts every element at an explicit index, preserving their order')]
     public function testInsertsEveryElementAtIndexPreservingOrder(): void
     {
-        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
-            'content' => [new StoredElement('first', 'CT:Card')],
+        $tree = new StoredTree([new StoredElement('parent', 'Ct:Block', [], [], [
+            'content' => [new StoredElement('first', 'Ct:Card')],
         ])]);
-        $elements = [new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Card')];
+        $elements = [new StoredElement('a', 'Ct:Block'), new StoredElement('b', 'Ct:Card')];
 
         $result = $this->op($elements, 'parent', 'content', 0)->apply($tree);
 
         $children = $result->roots[0]->slots['content'];
         static::assertSame(
-            ['CT:Block', 'CT:Card', 'CT:Card'],
+            ['Ct:Block', 'Ct:Card', 'Ct:Card'],
             array_map(static fn (StoredElement $child): string => $child->component, $children),
         );
         static::assertSame('first', $children[2]->id);
@@ -68,7 +68,7 @@ class AttachElementsTest extends TestCase
     public function testEmptyListInsertsNothing(): void
     {
         $op = $this->op([]);
-        $result = $op->apply(new StoredTree([new StoredElement('existing', 'CT:Block')]));
+        $result = $op->apply(new StoredTree([new StoredElement('existing', 'Ct:Block')]));
 
         static::assertCount(1, $result->roots);
         static::assertSame([], $op->affected());
@@ -92,7 +92,7 @@ class AttachElementsTest extends TestCase
 
     private function registry(): AbstractContentSystemElementTypeRegistry
     {
-        $registered = ['CT:Card', 'CT:Block'];
+        $registered = ['Ct:Card', 'Ct:Block'];
 
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('has')->willReturnCallback(static fn (string $name): bool => \in_array($name, $registered, true));

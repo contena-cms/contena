@@ -32,7 +32,7 @@ class BindingAttributionPersistenceTest extends TestCase
 {
     use AdminFunctionalTestBehaviour;
 
-    private const CORE_MEDIA_BINDING_ID = 'core:CT:Media:Image';
+    private const CORE_MEDIA_BINDING_ID = 'core:Ct:Media:Image';
 
     private IdsCollection $ids;
 
@@ -202,7 +202,7 @@ class BindingAttributionPersistenceTest extends TestCase
         // drop-not-throw path is covered separately by AttributionReconcilerTest.)
         $element = [
             'id' => $elementId,
-            'component' => 'CT:Media:Image',
+            'component' => 'Ct:Media:Image',
             'properties' => ['mediaId' => 'a-media-id'],
             'dataRequirements' => [
                 'navigation' => ['source' => 'navigation', 'config' => ['depth' => 'not-an-int']],
@@ -266,7 +266,7 @@ class BindingAttributionPersistenceTest extends TestCase
     }
 
     /**
-     * A CT:Media:Image element wired and attributed to core:CT:Media:Image. mediaId is always filled so
+     * A Ct:Media:Image element wired and attributed to core:Ct:Media:Image. mediaId is always filled so
      * the wired `media` reference resolves (Stored) and the derived-required `mediaId` input is never
      * unfilled, so the element stays resolvable and the write is never rejected by the resolvability gate;
      * $property lets a caller edit the wiring away from what the specification produces while keeping the
@@ -279,7 +279,7 @@ class BindingAttributionPersistenceTest extends TestCase
     {
         return [
             'id' => $id,
-            'component' => 'CT:Media:Image',
+            'component' => 'Ct:Media:Image',
             // The wired property always carries a value: `media` is a required reference, so a wired-but-unfilled
             // input would be rejected at the write gate (unfilled_required_input) before reconciliation is observable.
             'properties' => ['mediaId' => 'a-media-id', $property => 'a-media-id'],

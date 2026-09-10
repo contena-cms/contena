@@ -3,10 +3,10 @@ name: "Media & text"
 description: "An image next to a rich-text block inside a grid container."
 icon: "regular-image-text"
 layout:
-  - component: CT:Grid:Container
+  - component: Ct:Grid:Container
     slots:
       content:
-        - component: CT:Media:Image
-        - component: CT:Content:Text
+        - component: Ct:Media:Image
+        - component: Ct:Content:Text
           properties:
             text: "<h3>Describe your blog</h3><p>Add a short, benefit-led description next to the image.</p>"

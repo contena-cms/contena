@@ -1921,7 +1921,7 @@ HTML,
                 'root_source' => 'blog',
                 'layout' => [[
                     'id' => 'blog-content',
-                    'component' => 'CT:Content:Text',
+                    'component' => 'Ct:Content:Text',
                     'properties' => [
                         'text' => '<h1>Welcome to Contena</h1><p>Edit this layout in Experience Studio.</p>',
                     ],
@@ -1933,7 +1933,7 @@ HTML,
                 'root_source' => 'category',
                 'layout' => [[
                     'id' => 'blog-listing',
-                    'component' => 'CT:Blog:Listing',
+                    'component' => 'Ct:Blog:Listing',
                     'properties' => [
                         'navigationId' => '{{categoryId}}',
                         'limit' => 24,
@@ -1954,7 +1954,7 @@ HTML,
                 'root_source' => 'landing_page',
                 'layout' => [[
                     'id' => 'landing-page-content',
-                    'component' => 'CT:Content:Text',
+                    'component' => 'Ct:Content:Text',
                     'properties' => [
                         'text' => '<h1>About Contena</h1><p>Edit this layout in Experience Studio.</p>',
                     ],

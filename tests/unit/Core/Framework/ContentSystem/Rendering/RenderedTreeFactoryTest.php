@@ -37,8 +37,8 @@ class RenderedTreeFactoryTest extends TestCase
     public function testMintsOneRootPerStoredRoot(): void
     {
         $forest = [
-            StoredElementBuilder::create('CT:Text', 'root-1')->build(),
-            StoredElementBuilder::create('CT:Text', 'root-2')->build(),
+            StoredElementBuilder::create('Ct:Text', 'root-1')->build(),
+            StoredElementBuilder::create('Ct:Text', 'root-2')->build(),
         ];
 
         $tree = $this->mint($forest, $this->indexFor([]), [], RenderingMode::FULL);
@@ -51,12 +51,12 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('mints children into their slots, keeping slot order and child order within a slot')]
     public function testSlotAndChildOrderSurvive(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('left', [
-                StoredElementBuilder::create('CT:Text', 'child-1')->build(),
-                StoredElementBuilder::create('CT:Text', 'child-2')->build(),
+                StoredElementBuilder::create('Ct:Text', 'child-1')->build(),
+                StoredElementBuilder::create('Ct:Text', 'child-2')->build(),
             ])
-            ->withSlot('right', [StoredElementBuilder::create('CT:Text', 'child-3')->build()])
+            ->withSlot('right', [StoredElementBuilder::create('Ct:Text', 'child-3')->build()])
             ->build();
 
         $tree = $this->mint([$root], $this->indexFor([]), [], RenderingMode::FULL);
@@ -85,10 +85,10 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('carries the delivered context of each element onto that element')]
     public function testDeliveredContextReachesItsOwnElement(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [
-                StoredElementBuilder::create('CT:Text', 'child-1')->build(),
-                StoredElementBuilder::create('CT:Text', 'child-2')->build(),
+                StoredElementBuilder::create('Ct:Text', 'child-1')->build(),
+                StoredElementBuilder::create('Ct:Text', 'child-2')->build(),
             ])
             ->build();
         $index = $this->indexFor([
@@ -106,7 +106,7 @@ class RenderedTreeFactoryTest extends TestCase
     public function testLoaderValuesReachTheirOwnElement(): void
     {
         $loaded = new StubStruct();
-        $root = StoredElementBuilder::create('CT:Blog', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Blog', 'root-1')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->build();
 
@@ -123,10 +123,10 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('collects the provenance of every element it minted, keyed by element id')]
     public function testProvenanceIsCollectedAcrossTheWholeFold(): void
     {
-        $child = StoredElementBuilder::create('CT:Text', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Text', 'child-1')
             ->withProperty('headline', 'Nested')
             ->build();
-        $root = StoredElementBuilder::create('CT:Blog', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Blog', 'root-1')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->withSlot('main', [$child])
             ->build();
@@ -153,7 +153,7 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('carries a distribution referenced key onto the rendered element')]
     public function testDistributionReferencedKeysReachTheRenderedElement(): void
     {
-        $root = StoredElementBuilder::create('CT:Text', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Text', 'root-1')
             ->withProperty('data_key', 'present')
             ->build();
         $index = $this->indexFor(['root-1' => new ContextDelivery('root-1', [], ['data_key'])]);
@@ -188,7 +188,7 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('mints no properties at all in skeleton mode')]
     public function testSkeletonModeMintsNoProperties(): void
     {
-        $root = StoredElementBuilder::create('CT:Text', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Text', 'root-1')
             ->withProperty('headline', 'stored')
             ->build();
 
@@ -201,7 +201,7 @@ class RenderedTreeFactoryTest extends TestCase
     public function testStyleSurvivesInBothModes(): void
     {
         $style = new ElementStyle(['col-span' => 6]);
-        $root = StoredElementBuilder::create('CT:Text', 'root-1')->withStyle($style)->build();
+        $root = StoredElementBuilder::create('Ct:Text', 'root-1')->withStyle($style)->build();
         $index = $this->indexFor([]);
 
         $full = $this->mint([$root], $index, [], RenderingMode::FULL);
@@ -214,7 +214,7 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('renders a skeleton without consulting the delivery index at all')]
     public function testSkeletonModeNeedsNoDeliveries(): void
     {
-        $root = StoredElementBuilder::create('CT:Text', 'root-1')->build();
+        $root = StoredElementBuilder::create('Ct:Text', 'root-1')->build();
 
         $tree = $this->mint([$root], new ContextDeliveryIndex(), [], RenderingMode::SKELETON);
 
@@ -224,8 +224,8 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('records no provenance entry for an element that carries no properties')]
     public function testProvenanceOmitsAPropertylessElement(): void
     {
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
-            ->withSlot('main', [StoredElementBuilder::create('CT:Text', 'child-1')->withProperty('headline', 'Nested')->build()])
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
+            ->withSlot('main', [StoredElementBuilder::create('Ct:Text', 'child-1')->withProperty('headline', 'Nested')->build()])
             ->build();
 
         $result = $this->mintResult([$root], $this->indexFor([]), [], RenderingMode::FULL);
@@ -247,7 +247,7 @@ class RenderedTreeFactoryTest extends TestCase
     #[TestDox('fails naming the element when the index was built from a different forest')]
     public function testMissingDeliveryFailsNamingTheElement(): void
     {
-        $root = StoredElementBuilder::create('CT:Text', 'root-1')->build();
+        $root = StoredElementBuilder::create('Ct:Text', 'root-1')->build();
 
         $this->expectExceptionObject(ContentSystemException::contextDeliveryMissing('root-1'));
 
@@ -290,12 +290,12 @@ class RenderedTreeFactoryTest extends TestCase
 
     private function threeLevelTree(): StoredElement
     {
-        $grandchild = StoredElementBuilder::create('CT:Text', 'grandchild-1')->build();
-        $child = StoredElementBuilder::create('CT:Section', 'child-1')
+        $grandchild = StoredElementBuilder::create('Ct:Text', 'grandchild-1')->build();
+        $child = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withSlot('inner', [$grandchild])
             ->build();
 
-        return StoredElementBuilder::create('CT:Section', 'root-1')
+        return StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
     }
@@ -359,11 +359,11 @@ class RenderedTreeFactoryTest extends TestCase
     private function factory(): RenderedTreeFactory
     {
         $specs = [
-            'CT:Text' => ContentSystemElementTypeSpecificationBuilder::create('CT:Text')
+            'Ct:Text' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Text')
                 ->primitive('headline', 'string')
                 ->build(),
-            'CT:Section' => ContentSystemElementTypeSpecificationBuilder::create('CT:Section')->build(),
-            'CT:Blog' => ContentSystemElementTypeSpecificationBuilder::create('CT:Blog')
+            'Ct:Section' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Section')->build(),
+            'Ct:Blog' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog')
                 ->reference('blog', StubStruct::class)
                 ->build(),
         ];

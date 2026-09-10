@@ -5,7 +5,7 @@ Loads available languages for the current channel.
 ```json
 {
   "id": "language-switcher",
-  "component": "CT:LanguageSwitcher",
+  "component": "Ct:LanguageSwitcher",
   "dataRequirements": {
     "languages": {
       "source": "language",

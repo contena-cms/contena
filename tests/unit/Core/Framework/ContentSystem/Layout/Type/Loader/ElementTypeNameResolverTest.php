@@ -27,13 +27,13 @@ class ElementTypeNameResolverTest extends TestCase
      */
     public static function resolvesFilePathToElementTypeNameProvider(): iterable
     {
-        yield 'simple file' => ['button.yaml', 'CT', 'CT:Button'];
+        yield 'simple file' => ['button.yaml', 'Ct', 'Ct:Button'];
         yield 'yml extension' => ['quick-view.yml', 'AcmeBlogExtras', 'AcmeBlogExtras:QuickView'];
-        yield 'nested path' => ['blog/listing.yaml', 'CT', 'CT:Blog:Listing'];
-        yield 'deep nesting' => ['filter/type/boolean-filter.yaml', 'CT', 'CT:Filter:Type:BooleanFilter'];
+        yield 'nested path' => ['blog/listing.yaml', 'Ct', 'Ct:Blog:Listing'];
+        yield 'deep nesting' => ['filter/type/boolean-filter.yaml', 'Ct', 'Ct:Filter:Type:BooleanFilter'];
         yield 'single char segment' => ['a/b.yaml', 'Prefix', 'Prefix:A:B'];
         yield 'multi-hyphen' => ['my-long-name.yaml', 'X', 'X:MyLongName'];
-        yield 'numeric segments' => ['v2/widget.yaml', 'CT', 'CT:V2:Widget'];
+        yield 'numeric segments' => ['v2/widget.yaml', 'Ct', 'Ct:V2:Widget'];
     }
 
     #[DataProvider('resolvesFilePathToElementTypeNameProvider')]

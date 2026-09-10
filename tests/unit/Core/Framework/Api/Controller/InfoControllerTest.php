@@ -98,7 +98,7 @@ class InfoControllerTest extends TestCase
     public function testContentSystemElementTypes(): void
     {
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
-        $registry->method('all')->willReturn(['CT:Alert' => $this->alertTypeSpecification()]);
+        $registry->method('all')->willReturn(['Ct:Alert' => $this->alertTypeSpecification()]);
 
         $response = $this->createController(elementTypeRegistry: $registry)->getContentSystemElementTypes();
 
@@ -108,7 +108,7 @@ class InfoControllerTest extends TestCase
 
         $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertCount(1, $data['types']);
-        static::assertSame('CT:Alert', $data['types'][0]['name']);
+        static::assertSame('Ct:Alert', $data['types'][0]['name']);
         static::assertSame('core', $data['types'][0]['source']);
     }
 
@@ -174,7 +174,7 @@ class InfoControllerTest extends TestCase
     public function testContentSystemElementTypesFoldsInBindingSpecifications(): void
     {
         $imageSpecification = new ContentSystemElementTypeSpecification(
-            name: 'CT:Media:Image',
+            name: 'Ct:Media:Image',
             label: 'Image',
             description: 'Image component',
             icon: null,
@@ -187,13 +187,13 @@ class InfoControllerTest extends TestCase
 
         $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $elementTypeRegistry->method('all')->willReturn([
-            'CT:Media:Image' => $imageSpecification,
-            'CT:Alert' => $this->alertTypeSpecification(),
+            'Ct:Media:Image' => $imageSpecification,
+            'Ct:Alert' => $this->alertTypeSpecification(),
         ]);
 
         $bindingSpecificationRegistry = static::createStub(AbstractContentSystemBindingSpecificationRegistry::class);
         $bindingSpecificationRegistry->method('all')->willReturn([
-            'core:media-picker' => new BindingSpecification('media-picker', 'CT:Media:Image', 'Media Picker', [], [], 'core'),
+            'core:media-picker' => new BindingSpecification('media-picker', 'Ct:Media:Image', 'Media Picker', [], [], 'core'),
         ]);
 
         $response = $this->createController(
@@ -212,21 +212,21 @@ class InfoControllerTest extends TestCase
         static::assertSame([
             'core:media-picker' => [
                 'id' => 'media-picker',
-                'type' => 'CT:Media:Image',
+                'type' => 'Ct:Media:Image',
                 'label' => 'Media Picker',
                 'default' => false,
                 'resolves' => [],
                 'inputs' => [],
             ],
-        ], $typesByName['CT:Media:Image']['bindingSpecifications']);
-        static::assertSame([], $typesByName['CT:Alert']['bindingSpecifications']);
+        ], $typesByName['Ct:Media:Image']['bindingSpecifications']);
+        static::assertSame([], $typesByName['Ct:Alert']['bindingSpecifications']);
     }
 
     #[TestDox('encodes the folded per-type binding specification set as a JSON object when the type has none')]
     public function testContentSystemElementTypesEncodesEmptyBindingSpecificationsAsObject(): void
     {
         $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
-        $elementTypeRegistry->method('all')->willReturn(['CT:Alert' => $this->alertTypeSpecification()]);
+        $elementTypeRegistry->method('all')->willReturn(['Ct:Alert' => $this->alertTypeSpecification()]);
 
         $content = $this->createController(elementTypeRegistry: $elementTypeRegistry)
             ->getContentSystemElementTypes()
@@ -354,7 +354,7 @@ class InfoControllerTest extends TestCase
     private function alertTypeSpecification(): ContentSystemElementTypeSpecification
     {
         return new ContentSystemElementTypeSpecification(
-            name: 'CT:Alert',
+            name: 'Ct:Alert',
             label: 'Alert',
             description: 'Alert component',
             icon: null,

@@ -43,7 +43,7 @@ Example (`insert-element`):
 ```json
 {
   "layout": [ { "id": "container-uuid", "component": "contena/container", "slots": { "content": [] } } ],
-  "type": "CT:Content:Text",
+  "type": "Ct:Content:Text",
   "parentElementId": "container-uuid",
   "slot": "content",
   "index": 0,

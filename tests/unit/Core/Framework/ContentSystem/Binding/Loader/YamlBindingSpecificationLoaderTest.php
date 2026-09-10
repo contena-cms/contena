@@ -51,7 +51,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     #[TestDox('loads an inline binding whose implicit type is resolved from the file path and directory prefix')]
     public function testLoadsInlineBindingWithImplicitTypeFromPathAndPrefix(): void
     {
-        // A file media/image.yaml under prefix "CT" yields type "CT:Media:Image" (ElementTypeNameResolver's
+        // A file media/image.yaml under prefix "CT" yields type "Ct:Media:Image" (ElementTypeNameResolver's
         // kebab-to-PascalCase, colon-joined, prefixed rule).
         mkdir($this->tempDir . '/media', 0777, true);
         file_put_contents($this->tempDir . '/media/image.yaml', "meta:\n  label: Image\nbindings:\n  image-binding:\n    label: \"Image binding\"\n");
@@ -62,7 +62,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
 
         static::assertCount(1, $specifications);
         static::assertSame('image-binding', $specifications[0]->id());
-        static::assertSame('CT:Media:Image', $specifications[0]->type());
+        static::assertSame('Ct:Media:Image', $specifications[0]->type());
         static::assertSame('core', $specifications[0]->source());
     }
 
@@ -154,10 +154,10 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         static::assertCount(1, $specifications);
         $specification = $specifications[0];
 
-        static::assertSame('CT:Media:Image', $specification->id());
-        static::assertSame('CT:Media:Image', $specification->type());
+        static::assertSame('Ct:Media:Image', $specification->id());
+        static::assertSame('Ct:Media:Image', $specification->type());
         static::assertSame('Image', $specification->label());
-        static::assertSame('core:CT:Media:Image', $specification->qualifiedId());
+        static::assertSame('core:Ct:Media:Image', $specification->qualifiedId());
         static::assertTrue($specification->isDefault());
         static::assertSame([], $specification->inputs());
         static::assertArrayHasKey('media', $specification->resolves());
@@ -281,12 +281,12 @@ class YamlBindingSpecificationLoaderTest extends TestCase
         // this fixture declares no properties at all, so it synthesizes nothing, yet the reserved-id guard
         // still fires.
         mkdir($this->tempDir . '/media', 0777, true);
-        file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  \"CT:Media:Image\":\n    label: x\n");
+        file_put_contents($this->tempDir . '/media/image.yaml', "bindings:\n  \"Ct:Media:Image\":\n    label: x\n");
 
         $loader = $this->createLoader([new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')]);
 
         $path = $this->tempDir . '/media/image.yaml';
-        $this->expectExceptionObject(ContentSystemException::bindingSpecificationReservedId('CT:Media:Image', 'CT:Media:Image', $path));
+        $this->expectExceptionObject(ContentSystemException::bindingSpecificationReservedId('Ct:Media:Image', 'Ct:Media:Image', $path));
 
         $loader->load();
     }
@@ -295,8 +295,8 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     public function testSynthesizedDefaultThenAuthoredCollisionReportsDuplicate(): void
     {
         // *.yaml files precede *.yml files in the loader's two-pass listing, so the resolvedBy file registers the
-        // synthesized "CT:Media:Image" default first; the authored entry in the .yml file then collides in the
-        // bindings loop (the $seenIds[$id] duplicate check). The authored file's own implicit type is "CT:Hero:Banner",
+        // synthesized "Ct:Media:Image" default first; the authored entry in the .yml file then collides in the
+        // bindings loop (the $seenIds[$id] duplicate check). The authored file's own implicit type is "Ct:Hero:Banner",
         // so the reserved-id check ($id === implicitType) passes and the duplicate check is what fires.
         mkdir($this->tempDir . '/media', 0777, true);
         mkdir($this->tempDir . '/hero', 0777, true);
@@ -304,7 +304,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
             $this->tempDir . '/media/image.yaml',
             "properties:\n  media:\n    type: Contena\\Core\\Content\\Media\\MediaEntity\n    resolvedBy: mediaId\n",
         );
-        file_put_contents($this->tempDir . '/hero/banner.yml', "bindings:\n  \"CT:Media:Image\":\n    label: x\n");
+        file_put_contents($this->tempDir . '/hero/banner.yml', "bindings:\n  \"Ct:Media:Image\":\n    label: x\n");
 
         $loader = new YamlBindingSpecificationLoader(
             [new ElementTypeSourceDirectory('core', $this->tempDir, 'CT')],
@@ -315,7 +315,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
             $this->passingValidator(),
         );
 
-        $this->expectExceptionObject(ContentSystemException::bindingSpecificationDuplicate('CT:Media:Image', 'image.yaml', 'banner.yml'));
+        $this->expectExceptionObject(ContentSystemException::bindingSpecificationDuplicate('Ct:Media:Image', 'image.yaml', 'banner.yml'));
 
         $loader->load();
     }
@@ -323,12 +323,12 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     #[TestDox('reports a duplicate when an authored entry (.yaml) registers the id first and a resolvedBy file (.yml) then synthesizes the same default id')]
     public function testAuthoredIdThenSynthesizedDefaultCollisionReportsDuplicate(): void
     {
-        // The authored file is *.yaml, so it registers "CT:Media:Image" first (its own implicit type "CT:Hero:Banner"
+        // The authored file is *.yaml, so it registers "Ct:Media:Image" first (its own implicit type "Ct:Hero:Banner"
         // clears the reserved-id check); the resolvedBy file is *.yml, processed second, and its synthesized default
         // collides in the synthesized branch (the $seenIds[$implicitType] check) before that entry is canonicalized.
         mkdir($this->tempDir . '/media', 0777, true);
         mkdir($this->tempDir . '/hero', 0777, true);
-        file_put_contents($this->tempDir . '/hero/banner.yaml', "bindings:\n  \"CT:Media:Image\":\n    label: x\n");
+        file_put_contents($this->tempDir . '/hero/banner.yaml', "bindings:\n  \"Ct:Media:Image\":\n    label: x\n");
         file_put_contents(
             $this->tempDir . '/media/image.yml',
             "properties:\n  media:\n    type: Contena\\Core\\Content\\Media\\MediaEntity\n    resolvedBy: mediaId\n",
@@ -343,7 +343,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
             $this->passingValidator(),
         );
 
-        $this->expectExceptionObject(ContentSystemException::bindingSpecificationDuplicate('CT:Media:Image', 'banner.yaml', 'image.yml'));
+        $this->expectExceptionObject(ContentSystemException::bindingSpecificationDuplicate('Ct:Media:Image', 'banner.yaml', 'image.yml'));
 
         $loader->load();
     }
@@ -367,7 +367,7 @@ class YamlBindingSpecificationLoaderTest extends TestCase
      */
     public static function rejectsInlineEntryWithForbiddenKeyProvider(): iterable
     {
-        yield 'explicit type' => ['type', 'CT:Media:Image', 'an inline binding entry must not declare "type"; the type is implicit from the containing element-type file.'];
+        yield 'explicit type' => ['type', 'Ct:Media:Image', 'an inline binding entry must not declare "type"; the type is implicit from the containing element-type file.'];
         yield 'explicit id' => ['id', 'something-else', 'an inline binding entry must not declare "id"; the map key is the id.'];
     }
 
@@ -420,18 +420,18 @@ class YamlBindingSpecificationLoaderTest extends TestCase
     }
 
     /**
-     * A real tier-A expansion for "CT:Media:Image" (a declared MediaEntity reference, resolved to the "media"
-     * entity name) plus an empty "CT:Hero:Banner" for the reserved-id/cross-file-collision fixtures, which
+     * A real tier-A expansion for "Ct:Media:Image" (a declared MediaEntity reference, resolved to the "media"
+     * entity name) plus an empty "Ct:Hero:Banner" for the reserved-id/cross-file-collision fixtures, which
      * author no resolves at all. Both names are needed because the two collision tests swap the .yaml/.yml roles:
      * the .yaml (always listed before the .yml) is the file that reaches full canonicalization, and it declares a
-     * different type in each — the synthesized "CT:Media:Image" in one, the authored file's own "CT:Hero:Banner"
+     * different type in each — the synthesized "Ct:Media:Image" in one, the authored file's own "Ct:Hero:Banner"
      * in the other. The colliding .yml throws at the duplicate check before it canonicalizes.
      */
     private function canonicalizerForSynthesisScenarios(): BindingSpecificationCanonicalizer
     {
         $types = [
-            'CT:Media:Image' => new ContentSystemElementTypeSpecification(
-                'CT:Media:Image',
+            'Ct:Media:Image' => new ContentSystemElementTypeSpecification(
+                'Ct:Media:Image',
                 'Image',
                 '',
                 null,
@@ -440,8 +440,8 @@ class YamlBindingSpecificationLoaderTest extends TestCase
                 ['media' => new PropertySpecification('media', new PropertyType(MediaEntity::class, false, null, null), false, '', '', null)],
                 [],
             ),
-            'CT:Hero:Banner' => new ContentSystemElementTypeSpecification(
-                'CT:Hero:Banner',
+            'Ct:Hero:Banner' => new ContentSystemElementTypeSpecification(
+                'Ct:Hero:Banner',
                 'Banner',
                 '',
                 null,

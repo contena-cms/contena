@@ -34,8 +34,8 @@ class ContentPageEncoderTest extends TestCase
     #[TestDox('carries the api alias on a nested element, not only on a root')]
     public function testEncodeWritesTheElementAliasAtEveryDepth(): void
     {
-        $child = new RenderedElement('child', 'CT:Content:Text');
-        $body = $this->encode([new RenderedElement('root', 'CT:Grid:Container', [], ['content' => [$child]])]);
+        $child = new RenderedElement('child', 'Ct:Content:Text');
+        $body = $this->encode([new RenderedElement('root', 'Ct:Grid:Container', [], ['content' => [$child]])]);
 
         $root = $body['elements'][0];
         static::assertSame('content_element', $root['apiAlias']);
@@ -45,9 +45,9 @@ class ContentPageEncoderTest extends TestCase
     #[TestDox('encodes a slot as a list of child elements keyed by the slot name')]
     public function testEncodeWritesSlotsAsListsOfChildren(): void
     {
-        $first = new RenderedElement('first', 'CT:Content:Text');
-        $second = new RenderedElement('second', 'CT:Content:Text');
-        $body = $this->encode([new RenderedElement('root', 'CT:Grid:Container', [], ['content' => [$first, $second]])]);
+        $first = new RenderedElement('first', 'Ct:Content:Text');
+        $second = new RenderedElement('second', 'Ct:Content:Text');
+        $body = $this->encode([new RenderedElement('root', 'Ct:Grid:Container', [], ['content' => [$first, $second]])]);
 
         $slots = $body['elements'][0]['slots'];
         static::assertSame(['content'], array_keys($slots));
@@ -58,7 +58,7 @@ class ContentPageEncoderTest extends TestCase
     #[TestDox('omits slots and style on an element that has neither, and keeps an empty property map')]
     public function testEncodeOmitsEmptySlotsAndStyleButKeepsProperties(): void
     {
-        $body = $this->encode([new RenderedElement('leaf', 'CT:Content:Text')]);
+        $body = $this->encode([new RenderedElement('leaf', 'Ct:Content:Text')]);
 
         static::assertSame(['id', 'component', 'properties', 'apiAlias'], array_keys($body['elements'][0]));
         static::assertSame([], $body['elements'][0]['properties']);
@@ -67,7 +67,7 @@ class ContentPageEncoderTest extends TestCase
     #[TestDox('emits the style value map of an element that carries style')]
     public function testEncodeWritesTheStyleValueMap(): void
     {
-        $element = new RenderedElement('root', 'CT:Grid:Container', [], [], new ElementStyle(['col-span' => ['xs' => 6]]));
+        $element = new RenderedElement('root', 'Ct:Grid:Container', [], [], new ElementStyle(['col-span' => ['xs' => 6]]));
 
         $body = $this->encode([$element]);
 
@@ -95,7 +95,7 @@ class ContentPageEncoderTest extends TestCase
             )
             ->willReturn(['protection' => 'applied']);
 
-        $element = new RenderedElement('leaf', 'CT:Media:Image', ['media' => $payload]);
+        $element = new RenderedElement('leaf', 'Ct:Media:Image', ['media' => $payload]);
         $body = $this->encode([$element], $structEncoder);
 
         static::assertSame(['protection' => 'applied'], $body['elements'][0]['properties']['media']);
@@ -111,7 +111,7 @@ class ContentPageEncoderTest extends TestCase
             ->method('encode')
             ->willReturn(['encoded' => true]);
 
-        $element = new RenderedElement('leaf', 'CT:Media:Image', ['gallery' => ['first' => $payload]]);
+        $element = new RenderedElement('leaf', 'Ct:Media:Image', ['gallery' => ['first' => $payload]]);
         $body = $this->encode([$element], $structEncoder);
 
         static::assertSame(['first' => ['encoded' => true]], $body['elements'][0]['properties']['gallery']);
@@ -120,7 +120,7 @@ class ContentPageEncoderTest extends TestCase
     #[TestDox('passes a scalar property through untouched')]
     public function testEncodeKeepsScalarPropertyValues(): void
     {
-        $body = $this->encode([new RenderedElement('leaf', 'CT:Content:Text', ['text' => 'Alpha copy', 'gap' => 24])]);
+        $body = $this->encode([new RenderedElement('leaf', 'Ct:Content:Text', ['text' => 'Alpha copy', 'gap' => 24])]);
 
         static::assertSame(['text' => 'Alpha copy', 'gap' => 24], $body['elements'][0]['properties']);
     }

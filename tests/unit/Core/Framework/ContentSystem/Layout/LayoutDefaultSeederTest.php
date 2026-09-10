@@ -26,7 +26,7 @@ class LayoutDefaultSeederTest extends TestCase
     #[TestDox('seeds a missing primitive default and ignores reference properties on a stored element')]
     public function testSeedsPrimitiveDefaultIgnoringReferences(): void
     {
-        $seeded = $this->seeder()->seed([StoredElementBuilder::create('CT:Block', 'el')->build()]);
+        $seeded = $this->seeder()->seed([StoredElementBuilder::create('Ct:Block', 'el')->build()]);
 
         static::assertSame(['headline' => 'Default headline'], $this->rawProperties($seeded[0]));
     }
@@ -34,7 +34,7 @@ class LayoutDefaultSeederTest extends TestCase
     #[TestDox('does not overwrite an authored primitive value on a stored element')]
     public function testKeepsAuthoredValue(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el')->withProperty('headline', 'Authored')->build();
+        $element = StoredElementBuilder::create('Ct:Block', 'el')->withProperty('headline', 'Authored')->build();
 
         $seeded = $this->seeder()->seed([$element]);
 
@@ -44,7 +44,7 @@ class LayoutDefaultSeederTest extends TestCase
     #[TestDox('keeps an authored null rather than replacing it with the type default')]
     public function testKeepsAuthoredNull(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el')->withProperty('headline', null)->build();
+        $element = StoredElementBuilder::create('Ct:Block', 'el')->withProperty('headline', null)->build();
 
         $seeded = $this->seeder()->seed([$element]);
 
@@ -54,8 +54,8 @@ class LayoutDefaultSeederTest extends TestCase
     #[TestDox('seeds primitive defaults on slot descendants')]
     public function testSeedsSlotDescendants(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'root')
-            ->withSlot('content', [StoredElementBuilder::create('CT:Block', 'child')->build()])
+        $root = StoredElementBuilder::create('Ct:Block', 'root')
+            ->withSlot('content', [StoredElementBuilder::create('Ct:Block', 'child')->build()])
             ->build();
 
         $seeded = $this->seeder()->seed([$root]);
@@ -66,7 +66,7 @@ class LayoutDefaultSeederTest extends TestCase
     #[TestDox('leaves a node whose component type is not registered untouched')]
     public function testNoOpsOnUnregisteredComponent(): void
     {
-        $seeded = $this->seeder()->seed([StoredElementBuilder::create('CT:Unregistered', 'el')->build()]);
+        $seeded = $this->seeder()->seed([StoredElementBuilder::create('Ct:Unregistered', 'el')->build()]);
 
         static::assertSame([], $this->rawProperties($seeded[0]));
     }
@@ -87,9 +87,9 @@ class LayoutDefaultSeederTest extends TestCase
         // isPrimitive() rather than being ambiguous with the "default is null" guard PrimitiveDefaultProvider
         // also checks.
         $specs = [
-            'CT:Block' => new ContentSystemElementTypeSpecification(
-                'CT:Block',
-                'CT:Block',
+            'Ct:Block' => new ContentSystemElementTypeSpecification(
+                'Ct:Block',
+                'Ct:Block',
                 '',
                 null,
                 null,

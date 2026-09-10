@@ -7,7 +7,7 @@ Provider distributing context to multiple consumer children:
 ```json
 {
   "id": "blog-detail-context",
-  "component": "CT:Blog:Detail",
+  "component": "Ct:Blog:Detail",
   "dataRequirements": {
     "blog": {
       "source": "entity",
@@ -27,7 +27,7 @@ Provider distributing context to multiple consumer children:
     "default": [
       {
         "id": "blog-title",
-        "component": "CT:Blog:Title",
+        "component": "Ct:Blog:Title",
         "acceptsContext": {
           "blog": {
             "type": "single",
@@ -37,7 +37,7 @@ Provider distributing context to multiple consumer children:
       },
       {
         "id": "blog-price",
-        "component": "CT:Blog:Price",
+        "component": "Ct:Blog:Price",
         "acceptsContext": {
           "blog": {
             "type": "single",
@@ -47,7 +47,7 @@ Provider distributing context to multiple consumer children:
       },
       {
         "id": "blog-images",
-        "component": "CT:Blog:Images",
+        "component": "Ct:Blog:Images",
         "acceptsContext": {
           "blog": {
             "type": "single",

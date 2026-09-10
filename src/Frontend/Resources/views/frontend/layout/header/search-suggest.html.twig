@@ -18,13 +18,13 @@
                                             {% block layout_search_suggest_result_image %}
                                                 <div class="col-auto search-suggest-blog-image-container">
                                                     {% if blog.cover and blog.cover.media %}
-                                                        <twig:CT:Media
+                                                        <twig:Ct:Media
                                                             :media="blog.cover.media"
                                                             class="search-suggest-blog-image"
                                                             sizes="100px"
                                                         />
                                                     {% else %}
-                                                        <twig:CT:Icon name="placeholder" size="lg" />
+                                                        <twig:Ct:Icon name="placeholder" size="lg" />
                                                     {% endif %}
                                                 </div>
                                             {% endblock %}
@@ -59,7 +59,7 @@
                                                title="{{ 'header.searchAllResults'|trans|striptags }}"
                                                aria-label="{{ 'header.searchAllResults'|trans|striptags }}"
                                                class="search-suggest-total-link">
-                                                <twig:CT:Icon name="arrow-head-right" size="sm" />
+                                                <twig:Ct:Icon name="arrow-head-right" size="sm" />
                                                 {{ 'header.searchAllResults'|trans|sw_sanitize }}
                                             </a>
                                         </div>

@@ -105,7 +105,7 @@ class ContextDistributorTest extends TestCase
     #[TestDox('delivers nothing to a child that consumes no matching key')]
     public function testNonConsumingChildReceivesNothing(): void
     {
-        $children = [StoredElementBuilder::create('CT:Text', 'child-1')->build()];
+        $children = [StoredElementBuilder::create('Ct:Text', 'child-1')->build()];
         $parent = $this->providerOf('blog', BroadcastDistributionConfig::simple());
 
         $deliveries = $this->distributor()->distribute($parent, ['blog' => 'blog-data'], $children);
@@ -117,7 +117,7 @@ class ContextDistributorTest extends TestCase
     public function testReturnsOneDeliveryPerChildAlignedWithTheInput(): void
     {
         $children = [
-            StoredElementBuilder::create('CT:Text', 'child-1')->build(),
+            StoredElementBuilder::create('Ct:Text', 'child-1')->build(),
             $this->consumerOf('child-2', 'blog'),
         ];
         $parent = $this->providerOf('blog', BroadcastDistributionConfig::simple());
@@ -132,7 +132,7 @@ class ContextDistributorTest extends TestCase
     #[TestDox('delivers under the property alias when the consumer declares one')]
     public function testPropertyAliasIsTheDeliveredKey(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog', ContextType::Single, propertyAlias: 'myBlog')
             ->build();
         $parent = $this->providerOf('blog', BroadcastDistributionConfig::simple());
@@ -171,7 +171,7 @@ class ContextDistributorTest extends TestCase
     #[TestDox('leaves a consumer key no provider matched out of the delivery entirely')]
     public function testUnmatchedConsumerKeyIsAbsentFromTheDelivery(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog', ContextType::Single)
             ->withConsumer('category', ContextType::Single)
             ->build();
@@ -186,7 +186,7 @@ class ContextDistributorTest extends TestCase
     public function testLastProviderWinsOnACollision(): void
     {
         $children = [$this->consumerOf('child-1', 'blog')];
-        $parent = StoredElementBuilder::create('CT:Section', 'parent-1')
+        $parent = StoredElementBuilder::create('Ct:Section', 'parent-1')
             ->withProvider('firstSource', BroadcastDistributionConfig::aliased('blog'))
             ->withProvider('secondSource', BroadcastDistributionConfig::aliased('blog'))
             ->build();
@@ -212,7 +212,7 @@ class ContextDistributorTest extends TestCase
     {
         $first = new StubContextStruct('first-cover');
         $second = new StubContextStruct('second-cover');
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog', ContextType::Single)
             ->withConsumer('blog.cover', ContextType::Single)
             ->build();
@@ -262,7 +262,7 @@ class ContextDistributorTest extends TestCase
     public function testANonConsumingChildTakesNoIndexedPosition(): void
     {
         $children = [
-            StoredElementBuilder::create('CT:Text', 'child-1')->build(),
+            StoredElementBuilder::create('Ct:Text', 'child-1')->build(),
             $this->consumerOf('child-2', 'items'),
         ];
         $parent = $this->providerOf('items', IndexedDistributionConfig::simple());
@@ -303,7 +303,7 @@ class ContextDistributorTest extends TestCase
     #[TestDox('writes no key for a root-scoped consumer of a child that matched through a parent-scope consumer')]
     public function testRootScopedConsumerKeyIsSkippedOnAChildThatMatchedThroughParentScope(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog', ContextType::Single)
             ->withConsumer('blog.cover', ContextType::Single, scope: ConsumerScope::Root)
             ->build();
@@ -349,7 +349,7 @@ class ContextDistributorTest extends TestCase
     {
         $children = [
             $this->keyedConsumerOf('child-1', 'items', 'present'),
-            StoredElementBuilder::create('CT:Text', 'child-2')->withProperty('data_key', 'present')->build(),
+            StoredElementBuilder::create('Ct:Text', 'child-2')->withProperty('data_key', 'present')->build(),
         ];
         $parent = $this->providerOf('items', KeyedDistributionConfig::simple());
 
@@ -372,7 +372,7 @@ class ContextDistributorTest extends TestCase
     public function testKeyedDistributionSelectsOnStoredValuesOnly(): void
     {
         $children = [
-            StoredElementBuilder::create('CT:Box', 'child-1')
+            StoredElementBuilder::create('Ct:Box', 'child-1')
                 ->withConsumer('items', ContextType::Single)
                 ->build(),
         ];
@@ -450,7 +450,7 @@ class ContextDistributorTest extends TestCase
     #[TestDox('throws naming the offending element when a required consumer path cannot be resolved')]
     public function testRequiredConsumerWithUnresolvablePathThrowsNamingTheElement(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog.cover', ContextType::Single, required: true)
             ->build();
         $parent = $this->providerOf('blog', BroadcastDistributionConfig::simple());
@@ -471,28 +471,28 @@ class ContextDistributorTest extends TestCase
 
     private function providerOf(string $contextKey, DistributionConfig $config): StoredElement
     {
-        return StoredElementBuilder::create('CT:Section', 'parent-1')
+        return StoredElementBuilder::create('Ct:Section', 'parent-1')
             ->withProvider($contextKey, $config)
             ->build();
     }
 
     private function consumerOf(string $id, string $contextKey): StoredElement
     {
-        return StoredElementBuilder::create('CT:Box', $id)
+        return StoredElementBuilder::create('Ct:Box', $id)
             ->withConsumer($contextKey, ContextType::Single)
             ->build();
     }
 
     private function rootScopedConsumerOf(string $id, string $contextKey): StoredElement
     {
-        return StoredElementBuilder::create('CT:Box', $id)
+        return StoredElementBuilder::create('Ct:Box', $id)
             ->withConsumer($contextKey, ContextType::Single, scope: ConsumerScope::Root)
             ->build();
     }
 
     private function keyedConsumerOf(string $id, string $contextKey, string $dataKey): StoredElement
     {
-        return StoredElementBuilder::create('CT:Box', $id)
+        return StoredElementBuilder::create('Ct:Box', $id)
             ->withProperty('data_key', $dataKey)
             ->withConsumer($contextKey, ContextType::Single)
             ->build();

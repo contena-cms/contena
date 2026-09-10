@@ -34,7 +34,7 @@ class LayoutWriteBoundaryTest extends TestCase
     #[TestDox('expands a partially specified breakpoint map from the option default')]
     public function testStyleNormalizationExpandsAPartialBreakpointMap(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
@@ -50,7 +50,7 @@ class LayoutWriteBoundaryTest extends TestCase
     #[TestDox('leaves an option declaring breakpointAware false as the flat scalar it was written as')]
     public function testStyleNormalizationLeavesAFlatOptionUnwrapped(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::FLAT => 7]))
             ->build();
 
@@ -62,11 +62,11 @@ class LayoutWriteBoundaryTest extends TestCase
     #[TestDox('normalizes the style of an element nested inside a slot, not only of the roots')]
     public function testStyleNormalizationReachesEveryDepth(): void
     {
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')->withSlot('content', [$child])->build();
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')->withSlot('content', [$child])->build();
 
         $result = $this->boundary()->apply(new StoredTree([$root]));
 
@@ -79,7 +79,7 @@ class LayoutWriteBoundaryTest extends TestCase
     #[TestDox('hands back a new forest and leaves the one it was given untouched')]
     public function testApplyDoesNotMutateTheForestItWasGiven(): void
     {
-        $element = StoredElementBuilder::create('CT:Block', 'el-1')
+        $element = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
@@ -102,7 +102,7 @@ class LayoutWriteBoundaryTest extends TestCase
             ContentSystemException::invalidFieldValueType('layout', StoredElement::class, 'string')
         );
 
-        $boundary->apply(new StoredTree([StoredElementBuilder::create('CT:Block', 'el-1')->build()]));
+        $boundary->apply(new StoredTree([StoredElementBuilder::create('Ct:Block', 'el-1')->build()]));
     }
 
     private function boundary(): LayoutWriteBoundary

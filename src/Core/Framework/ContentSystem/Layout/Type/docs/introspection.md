@@ -12,7 +12,7 @@ Response:
 {
   "types": [
     {
-      "name": "CT:Blog:Card",
+      "name": "Ct:Blog:Card",
       "label": "Blog Card",
       "description": "...",
       "source": "core",
@@ -32,7 +32,7 @@ Response:
         }
       },
       "slots": [
-        { "name": "actions", "maxElements": 3, "allowList": ["CT:Content:Button"], "description": "..." }
+        { "name": "actions", "maxElements": 3, "allowList": ["Ct:Content:Button"], "description": "..." }
       ],
       "storageSchema": {
         "<propertyName>": { "kind": "property", "type": "string", "required": true },

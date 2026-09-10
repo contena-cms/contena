@@ -70,16 +70,16 @@ describe('module/ct-experience-studio/component/ct-experience-studio-element-pic
             kind: 'preset',
             id: 'core.text-block',
         });
-        wrapper.vm.onSelect({ name: 'CT:Content:Text', label: 'Text', icon: null, kind: 'element' });
+        wrapper.vm.onSelect({ name: 'Ct:Content:Text', label: 'Text', icon: null, kind: 'element' });
 
         expect(wrapper.emitted('select-preset')).toEqual([['core.text-block']]);
-        expect(wrapper.emitted('select')).toEqual([['CT:Content:Text']]);
+        expect(wrapper.emitted('select')).toEqual([['Ct:Content:Text']]);
     });
 
     it('renders a plain label tooltip for elements and a bold name plus description for presets', () => {
         const wrapper = createWrapper();
 
-        expect(wrapper.vm.itemTooltip({ name: 'CT:Content:Text', label: 'Text', icon: null, kind: 'element' })).toEqual({
+        expect(wrapper.vm.itemTooltip({ name: 'Ct:Content:Text', label: 'Text', icon: null, kind: 'element' })).toEqual({
             message: 'Text',
         });
         expect(

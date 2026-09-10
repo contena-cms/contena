@@ -6,7 +6,7 @@ Why an option is universal rather than per-type, and the four value objects that
 
 Style options are strictly universal: every defined option is valid on every element, with no backend per-type gating. Where an element type declares its own `properties` and `slots`, a style option declares nothing about which elements it applies to. Visibility hints (for example, showing `col-span` only inside a grid) are an Admin concern carried in the option's opaque `adminUI` block, not a backend rule.
 
-This is why an option name lives in a **flat global namespace**: the name is the Store-API wire key (`col-span`), not a source-prefixed type name (`CT:Grid`). Uniqueness is still enforced — by the loader and registry dedup at load time, by `StyleOptionCollisionDetector` at app install time, and by a DB `UNIQUE KEY` — only the prefix is dropped.
+This is why an option name lives in a **flat global namespace**: the name is the Store-API wire key (`col-span`), not a source-prefixed type name (`Ct:Grid`). Uniqueness is still enforced — by the loader and registry dedup at load time, by `StyleOptionCollisionDetector` at app install time, and by a DB `UNIQUE KEY` — only the prefix is dropped.
 
 ## The Option Model
 

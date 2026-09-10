@@ -103,6 +103,6 @@ class LayoutGateTest extends TestCase
      */
     private function tree(): array
     {
-        return [new StoredElement('el-1', 'CT:Block')];
+        return [new StoredElement('el-1', 'Ct:Block')];
     }
 }

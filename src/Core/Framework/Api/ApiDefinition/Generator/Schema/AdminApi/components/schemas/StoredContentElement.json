@@ -84,7 +84,7 @@
                         "additionalProperties": {
                             "type": "string"
                         },
-                        "example": { "media": "core:CT:Media:Image" }
+                        "example": { "media": "core:Ct:Media:Image" }
                     }
                 },
                 "example": {

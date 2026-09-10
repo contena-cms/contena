@@ -26,11 +26,11 @@ class MutationResponseTest extends TestCase
     public function testMapsEveryResultFieldThrough(): void
     {
         $result = MutationResult::fromParts(
-            new StoredTree([new StoredElement('el-1', 'CT:Card')]),
+            new StoredTree([new StoredElement('el-1', 'Ct:Card')]),
             ['el-1' => [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'hi')]],
             new DiagnosticsReport([]),
             ['el-1'],
-            [new StoredElement('orphan', 'CT:Block')],
+            [new StoredElement('orphan', 'Ct:Block')],
             ['legacy'],
             ['headline' => StoredValue::ofString('Old headline')],
         );

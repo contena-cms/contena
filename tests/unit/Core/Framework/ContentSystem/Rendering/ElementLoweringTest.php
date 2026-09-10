@@ -94,11 +94,11 @@ class ElementLoweringTest extends TestCase
         // A skeleton mints no properties, so it records no provenance either: there is nothing to file.
         static::assertSame([], $lowered->provenance);
         static::assertSame('root-1', $tree[0]->id);
-        static::assertSame('CT:Section', $tree[0]->component);
+        static::assertSame('Ct:Section', $tree[0]->component);
         static::assertSame([], $tree[0]->properties);
         static::assertSame(['main'], array_keys($tree[0]->slots));
         static::assertSame('child-1', $tree[0]->slots['main'][0]->id);
-        static::assertSame('CT:Blog', $tree[0]->slots['main'][0]->component);
+        static::assertSame('Ct:Blog', $tree[0]->slots['main'][0]->component);
         static::assertSame([], $tree[0]->slots['main'][0]->properties);
         static::assertFalse($cacheContext->isDisabled());
         static::assertSame([], $cacheContext->getTags());
@@ -112,13 +112,13 @@ class ElementLoweringTest extends TestCase
     public function testFullModeResolvesDataForAnElementBelowTheRoots(): void
     {
         $loaded = new StubStruct();
-        $grandchild = StoredElementBuilder::create('CT:Blog', 'grandchild-1')
+        $grandchild = StoredElementBuilder::create('Ct:Blog', 'grandchild-1')
             ->withDataRequirement('blog', 'entity', new StubLoaderConfig())
             ->build();
-        $child = StoredElementBuilder::create('CT:Section', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Section', 'child-1')
             ->withSlot('inner', [$grandchild])
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
 
@@ -140,10 +140,10 @@ class ElementLoweringTest extends TestCase
     public function testFullModeDeliversAParentLoadedValueToItsConsumingChild(): void
     {
         $loaded = new StubStruct();
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog', ContextType::Single)
             ->build();
-        $parent = StoredElementBuilder::create('CT:Section', 'parent-1')
+        $parent = StoredElementBuilder::create('Ct:Section', 'parent-1')
             ->withDataRequirement('blog', 'entity', new StubLoaderConfig())
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -162,10 +162,10 @@ class ElementLoweringTest extends TestCase
     #[TestDox('throws when a required consumer resolves a dot path into a provided value that is not a struct')]
     public function testFullModeThrowsWhenRequiredConsumerPathIsUnresolvable(): void
     {
-        $child = StoredElementBuilder::create('CT:Box', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('blog.manufacturer', ContextType::Single, required: true)
             ->build();
-        $parent = StoredElementBuilder::create('CT:Section', 'parent-1')
+        $parent = StoredElementBuilder::create('Ct:Section', 'parent-1')
             ->withProperty('blog', 'Release notes')
             ->withProvider('blog', BroadcastDistributionConfig::simple())
             ->withSlot('main', [$child])
@@ -195,10 +195,10 @@ class ElementLoweringTest extends TestCase
             ->method('load')
             ->willReturn(ContentDataLoaderResult::cached($pageData));
 
-        $consumer = StoredElementBuilder::create('CT:Box', 'child-1')
+        $consumer = StoredElementBuilder::create('Ct:Box', 'child-1')
             ->withConsumer('language', ContextType::Single, scope: ConsumerScope::Root)
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$consumer])
             ->build();
         $wrapper = $this->virtualRoot($root);
@@ -254,7 +254,7 @@ class ElementLoweringTest extends TestCase
             ['object', $elementLoader],
         ]);
 
-        $element = StoredElementBuilder::create('CT:Box', 'element-1')
+        $element = StoredElementBuilder::create('Ct:Box', 'element-1')
             ->withConsumer('blog', ContextType::Single, scope: ConsumerScope::Root)
             ->withDataRequirement(
                 'result',
@@ -262,7 +262,7 @@ class ElementLoweringTest extends TestCase
                 new TestNavigationShapedLoaderConfig(entity: 'blog', activeProperty: 'blog'),
             )
             ->build();
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$element])
             ->build();
         $wrapper = $this->virtualRoot($root);
@@ -310,9 +310,9 @@ class ElementLoweringTest extends TestCase
         $loader = $this->loader();
         $loader->expects($this->never())->method('load');
 
-        $root = StoredElementBuilder::create('CT:Section', 'root-1')
+        $root = StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [
-                StoredElementBuilder::create('CT:Box', 'child-1')
+                StoredElementBuilder::create('Ct:Box', 'child-1')
                     ->withConsumer('language', ContextType::Single, scope: ConsumerScope::Root)
                     ->build(),
             ])
@@ -351,7 +351,7 @@ class ElementLoweringTest extends TestCase
             }
         );
 
-        $wrapper = $this->virtualRoot(StoredElementBuilder::create('CT:Section', 'root-1')->build());
+        $wrapper = $this->virtualRoot(StoredElementBuilder::create('Ct:Section', 'root-1')->build());
 
         // Fixture guard: the placeholder key the config references really is on the wrapper, and its value
         // is the one the assertion below expects to arrive at the loader.
@@ -412,7 +412,7 @@ class ElementLoweringTest extends TestCase
     {
         return new StoredElement(
             VirtualRootWrapper::VIRTUAL_ROOT_ID,
-            'CT:Internal:PageContext',
+            'Ct:Internal:PageContext',
             [],
             ['blogId' => StoredValue::ofString('placeholder-blog')],
             ['__page_roots__' => array_values($roots)],
@@ -425,12 +425,12 @@ class ElementLoweringTest extends TestCase
      */
     private function rootOverRequiringChild(): StoredElement
     {
-        $child = StoredElementBuilder::create('CT:Blog', 'child-1')
+        $child = StoredElementBuilder::create('Ct:Blog', 'child-1')
             ->withDataRequirement('blog', 'entity', new StubLoaderConfig())
             ->withDataRequirement('category', 'entity', new StubLoaderConfig())
             ->build();
 
-        return StoredElementBuilder::create('CT:Section', 'root-1')
+        return StoredElementBuilder::create('Ct:Section', 'root-1')
             ->withSlot('main', [$child])
             ->build();
     }
@@ -494,9 +494,9 @@ class ElementLoweringTest extends TestCase
     private function typeRegistry(): AbstractContentSystemElementTypeRegistry
     {
         $specs = [
-            'CT:Section' => ContentSystemElementTypeSpecificationBuilder::create('CT:Section')->build(),
-            'CT:Box' => ContentSystemElementTypeSpecificationBuilder::create('CT:Box')->build(),
-            'CT:Blog' => ContentSystemElementTypeSpecificationBuilder::create('CT:Blog')
+            'Ct:Section' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Section')->build(),
+            'Ct:Box' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Box')->build(),
+            'Ct:Blog' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog')
                 ->reference('blog', StubStruct::class)
                 ->build(),
         ];

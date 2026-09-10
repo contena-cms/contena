@@ -29,7 +29,7 @@ class StoredTreeStyleNormalizerTest extends TestCase
     #[TestDox('canonicalises the style of a root element against the option registry')]
     public function testNormalizesARootStyle(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
@@ -42,12 +42,12 @@ class StoredTreeStyleNormalizerTest extends TestCase
     #[TestDox('canonicalises the style of an element nested two slots deep, not only of the roots')]
     public function testNormalizesEveryDepth(): void
     {
-        $grandchild = StoredElementBuilder::create('CT:Block', 'grandchild-1')
+        $grandchild = StoredElementBuilder::create('Ct:Block', 'grandchild-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
-        $child = StoredElementBuilder::create('CT:Block', 'child-1')->withSlot('inner', [$grandchild])->build();
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')->withSlot('content', [$child])->build();
+        $child = StoredElementBuilder::create('Ct:Block', 'child-1')->withSlot('inner', [$grandchild])->build();
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')->withSlot('content', [$child])->build();
 
         $result = $this->normalizer()->normalize(new StoredTree([$root]));
 
@@ -60,7 +60,7 @@ class StoredTreeStyleNormalizerTest extends TestCase
     #[TestDox('returns an already normalised forest unchanged')]
     public function testIsIdempotent(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
@@ -76,7 +76,7 @@ class StoredTreeStyleNormalizerTest extends TestCase
     #[TestDox('hands back a new forest and leaves the one it was given untouched')]
     public function testDoesNotMutateTheForestItWasGiven(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))
             ->build();
 
@@ -90,7 +90,7 @@ class StoredTreeStyleNormalizerTest extends TestCase
     #[TestDox('leaves everything that is not style alone, seeding no default and reconciling no attribution')]
     public function testTouchesNothingButStyle(): void
     {
-        $root = StoredElementBuilder::create('CT:Block', 'el-1')
+        $root = StoredElementBuilder::create('Ct:Block', 'el-1')
             ->withProperty('headline', 'authored')
             ->withAttributedSpecification('media', 'core:media-picker')
             ->withStyle(new ElementStyle([self::BREAKPOINT_AWARE => ['xs' => false]]))

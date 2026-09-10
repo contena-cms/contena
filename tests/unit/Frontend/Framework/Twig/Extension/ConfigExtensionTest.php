@@ -107,12 +107,12 @@ class ConfigExtensionTest extends TestCase
         $accessor = $this->createMock(TemplateConfigAccessor::class);
         $accessor->expects($this->once())
             ->method('importMap')
-            ->willReturn(['CT:Button' => 'http://localhost/js/components/CT/Button.js']);
+            ->willReturn(['Ct:Button' => 'http://localhost/js/components/Ct/Button.js']);
 
         $extension = new ConfigExtension($accessor);
 
         static::assertSame(
-            ['CT:Button' => 'http://localhost/js/components/CT/Button.js'],
+            ['Ct:Button' => 'http://localhost/js/components/Ct/Button.js'],
             $extension->importMap()
         );
     }

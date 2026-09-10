@@ -44,7 +44,7 @@ class MutationPipelineTest extends TestCase
     public function testRunReturnsMutatedLayoutAndRestrictsResolutionsToAffected(): void
     {
         $tree = $this->inputTree();
-        $mutated = new StoredTree([new StoredElement('new-1', 'CT:Card')]);
+        $mutated = new StoredTree([new StoredElement('new-1', 'Ct:Card')]);
         $report = new DiagnosticsReport([]);
         $resolutions = [
             'new-1' => [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'hi')],
@@ -64,14 +64,14 @@ class MutationPipelineTest extends TestCase
     #[TestDox('passes orphaned subtrees, dropped wiring keys and dropped static property values from the op through to the result')]
     public function testRunCarriesOrphanedDroppedWiringAndDroppedProperties(): void
     {
-        $orphan = new StoredElement('orphan', 'CT:Block');
+        $orphan = new StoredElement('orphan', 'Ct:Block');
         $droppedHeadline = StoredValue::ofString('Old headline');
 
         $pipeline = $this->pipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), [])));
 
         $result = $pipeline->run(
             $this->mutation(
-                new StoredTree([new StoredElement('el-1', 'CT:New')]),
+                new StoredTree([new StoredElement('el-1', 'Ct:New')]),
                 ['el-1'],
                 [$orphan],
                 ['legacy'],
@@ -89,7 +89,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('forwards the mutated stored roots unconverted, with the root context, to the diagnostics pass')]
     public function testRunForwardsMutatedStoredRootsAndRootContextToDiagnostics(): void
     {
-        $mutated = new StoredTree([new StoredElement('new-1', 'CT:Card')]);
+        $mutated = new StoredTree([new StoredElement('new-1', 'Ct:Card')]);
         $rootContext = [new ProvidedContext('blog', 'Some\\Entity', ContextType::Single, null, DistributionStrategy::Broadcast)];
         $report = new DiagnosticsReport([]);
 
@@ -107,7 +107,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('forwards the root context to the second diagnostics pass as well as the first')]
     public function testRunForwardsRootContextToBothAnalyzePasses(): void
     {
-        $mutated = new StoredTree([StoredElementBuilder::create('CT:Content:Text', 'p1')->build()]);
+        $mutated = new StoredTree([StoredElementBuilder::create('Ct:Content:Text', 'p1')->build()]);
         $rootContext = [new ProvidedContext('blog', 'App\\Blog', ContextType::Single, null, DistributionStrategy::Broadcast)];
 
         $diagnostics = $this->createMock(LayoutDiagnostics::class);
@@ -124,7 +124,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('mirrors the proven consumers of the created elements into the returned layout')]
     public function testRunMirrorsConsumersOfCreatedElements(): void
     {
-        $mutated = new StoredTree([StoredElementBuilder::create('CT:Content:Text', 'p1')->build()]);
+        $mutated = new StoredTree([StoredElementBuilder::create('Ct:Content:Text', 'p1')->build()]);
 
         $pipeline = $this->pipeline($this->diagnosticsResolvingBlog());
 
@@ -138,7 +138,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('re-analyzes the wired tree and assembles the result from that second analysis, not the first')]
     public function testRunReanalyzesTheWiredTree(): void
     {
-        $mutated = new StoredTree([StoredElementBuilder::create('CT:Content:Text', 'p1')->build()]);
+        $mutated = new StoredTree([StoredElementBuilder::create('Ct:Content:Text', 'p1')->build()]);
         $secondReport = new DiagnosticsReport([]);
 
         $analyzed = [];
@@ -192,7 +192,7 @@ class MutationPipelineTest extends TestCase
         $replace = new ReplaceElement(
             $this->typeRegistry(),
             'el-1',
-            'CT:New',
+            'Ct:New',
             static::createStub(AbstractContentSystemBindingSpecificationRegistry::class),
             new BindingApplicator(static::createStub(DataLoaderConfigSerializerProvider::class)),
         );
@@ -226,7 +226,7 @@ class MutationPipelineTest extends TestCase
 
         $pipeline = $this->pipeline($this->diagnosticsReturning(new LayoutAnalysis(new DiagnosticsReport([]), $resolutions)));
 
-        $result = $pipeline->run($this->mutation(new StoredTree([new StoredElement('new-1', 'CT:Card')]), []), $this->inputTree(), null);
+        $result = $pipeline->run($this->mutation(new StoredTree([new StoredElement('new-1', 'Ct:Card')]), []), $this->inputTree(), null);
 
         static::assertSame([], $result->resolutions);
     }
@@ -234,7 +234,7 @@ class MutationPipelineTest extends TestCase
     #[TestDox('runs a single analysis pass when a created element proves no consumer to mirror')]
     public function testRunAnalyzesOnceWhenNothingIsWired(): void
     {
-        $mutated = new StoredTree([StoredElementBuilder::create('CT:Content:Text', 'p1')->build()]);
+        $mutated = new StoredTree([StoredElementBuilder::create('Ct:Content:Text', 'p1')->build()]);
         $resolutions = [
             'p1' => [new PropertyResolution('headline', PropertyKind::Primitive, false, 'string', 'hi')],
         ];
@@ -256,7 +256,7 @@ class MutationPipelineTest extends TestCase
 
     private function inputTree(): StoredTree
     {
-        return new StoredTree([new StoredElement('el-1', 'CT:Block')]);
+        return new StoredTree([new StoredElement('el-1', 'Ct:Block')]);
     }
 
     /**
@@ -265,16 +265,16 @@ class MutationPipelineTest extends TestCase
      */
     private function unwiredTree(): StoredTree
     {
-        $element = StoredElementBuilder::create('CT:Old', 'el-1')->build();
+        $element = StoredElementBuilder::create('Ct:Old', 'el-1')->build();
 
         return new StoredTree([
-            StoredElementBuilder::create('CT:Grid:Container', 'parent')->withSlot('content', [$element])->build(),
+            StoredElementBuilder::create('Ct:Grid:Container', 'parent')->withSlot('content', [$element])->build(),
         ]);
     }
 
     private function typeRegistry(): AbstractContentSystemElementTypeRegistry
     {
-        $specs = ['CT:New' => ContentSystemElementTypeSpecificationBuilder::create('CT:New')->build()];
+        $specs = ['Ct:New' => ContentSystemElementTypeSpecificationBuilder::create('Ct:New')->build()];
 
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('has')->willReturnCallback(static fn (string $name): bool => isset($specs[$name]));

@@ -25,7 +25,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
- * `CT:Tile` declares one property nothing here uses, so every key a test puts on a `CT:Tile` element
+ * `Ct:Tile` declares one property nothing here uses, so every key a test puts on a `Ct:Tile` element
  * reaches the rendered side through exactly one union member and no other.
  *
  * @internal
@@ -36,7 +36,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('carries its stored value for declared keys')]
     public function testDeclaredPropertyContributesItsStoredValue(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Hello')
             ->build();
 
@@ -49,7 +49,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testRequirementKeyContributesTheResolvedLoaderValue(): void
     {
         $loaded = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->build();
 
@@ -62,7 +62,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testDeliveredContextKeyContributesTheDeliveredValue(): void
     {
         $delivered = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')->build();
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')->build();
 
         $rendered = $this->mint($stored, [], ['category' => $delivered], [], []);
 
@@ -78,7 +78,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('carries its stored value for distribution-referenced keys')]
     public function testDistributionReferencedKeyContributesItsStoredValue(): void
     {
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperty('data_key', 'left')
             ->build();
 
@@ -98,7 +98,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('carries its stored value for a key declared as $_dataName')]
     public function testAuthoredDeclarationContributesItsStoredValue(string|array $declaredType, mixed $value): void
     {
-        $stored = StoredElementBuilder::create('CT:Declarations', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Declarations', 'element-1')
             ->withProperty('subject', $value)
             ->build();
 
@@ -122,7 +122,7 @@ class RenderedElementFactoryTest extends TestCase
         string|array $declaredType,
         mixed $value,
     ): void {
-        $stored = StoredElementBuilder::create('CT:Declarations', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Declarations', 'element-1')
             ->withProperty('subject', $value)
             ->build();
 
@@ -135,7 +135,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testLoaderResolvedValueBeatsTheDeclaredStoredValue(): void
     {
         $loaded = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Authored')
             ->withDataRequirement('headline', 'headline', new StubLoaderConfig())
             ->build();
@@ -149,7 +149,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testDeliveredContextBeatsTheDeclaredStoredValue(): void
     {
         $delivered = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Authored')
             ->build();
 
@@ -162,7 +162,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testDeliveredContextBeatsTheLoaderResolvedValue(): void
     {
         $delivered = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->build();
 
@@ -181,7 +181,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testLoaderResolvedValueBeatsTheDistributionReferencedStoredValue(): void
     {
         $loaded = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperty('data_key', 'left')
             ->withDataRequirement('data_key', 'blog', new StubLoaderConfig())
             ->build();
@@ -195,7 +195,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testDeliveredContextBeatsTheDistributionReferencedStoredValue(): void
     {
         $delivered = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperty('data_key', 'left')
             ->build();
 
@@ -211,7 +211,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('carries stored value once when both declared and distribution referenced')]
     public function testDeclaredAndDistributionReferencedAgreeOnTheStoredValue(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Hello')
             ->build();
 
@@ -223,7 +223,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('drops a stored key the element type does not declare')]
     public function testStoredKeyOutsideTheDeclaredSetIsDropped(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Hello')
             ->withProperty('internalNote', 'authoring scratch')
             ->build();
@@ -236,7 +236,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a consumer key the element declares but nothing delivered')]
     public function testUndeliveredConsumerKeyIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withConsumer('category', ContextType::Single, required: true)
             ->build();
 
@@ -248,7 +248,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a declared key the element stores no value for')]
     public function testDeclaredKeyWithoutAStoredValueIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')->build();
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')->build();
 
         $rendered = $this->mint($stored, [], [], [], []);
 
@@ -262,7 +262,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a declared reference property holding a stored id')]
     public function testDeclaredReferencePropertyStoredValueIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Blog', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Blog', 'element-1')
             ->withProperty('blog', 'blog-id')
             ->build();
 
@@ -278,7 +278,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a declared key whose stored value is an authored null')]
     public function testDeclaredKeyHoldingAnAuthoredNullIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', null)
             ->build();
 
@@ -290,7 +290,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a distribution referenced key whose stored value is an authored null')]
     public function testDistributionReferencedKeyHoldingAnAuthoredNullIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withProperty('data_key', null)
             ->build();
 
@@ -302,7 +302,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('yields an explicit null for a loader that found nothing and no key at all for an authored null')]
     public function testLoaderNullIsPresentWhereAnAuthoredNullIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', null)
             ->withProperty('blog', null)
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
@@ -316,7 +316,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('yields an explicit null for a loader that found nothing while an undelivered consumer key stays absent')]
     public function testLoaderNullIsPresentWhereAnUndeliveredConsumerKeyIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Tile', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Tile', 'element-1')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->withConsumer('category', ContextType::Single, required: true)
             ->build();
@@ -334,7 +334,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('leaves out a distribution referenced key that names a declared reference property')]
     public function testDistributionReferencedKeyNamingADeclaredReferenceIsAbsent(): void
     {
-        $stored = StoredElementBuilder::create('CT:Blog', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Blog', 'element-1')
             ->withProperty('blog', 'blog-id')
             ->build();
 
@@ -346,7 +346,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('declares nothing for unregistered component types')]
     public function testUnregisteredComponentDeclaresNothing(): void
     {
-        $stored = StoredElementBuilder::create('CT:Unregistered', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Unregistered', 'element-1')
             ->withProperty('headline', 'Hello')
             ->build();
 
@@ -358,7 +358,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('records the producing member of every key it writes')]
     public function testMintRecordsProvenancePerMember(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Authored')
             ->withProperty('data_key', 'grouping')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
@@ -389,7 +389,7 @@ class RenderedElementFactoryTest extends TestCase
         // Every member writes `headline`, so a factory whose tier write order shifted would keep serving a
         // plausible value while filing the key under the wrong category — the failure this asserts against.
         $delivered = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Authored')
             ->withDataRequirement('headline', 'headline', new StubLoaderConfig())
             ->build();
@@ -410,7 +410,7 @@ class RenderedElementFactoryTest extends TestCase
     public function testProvenanceCarriesTheLoaderIdentityOnlyForLoaderResolvedKeys(): void
     {
         $loaded = new StubStruct();
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Authored')
             ->withDataRequirement('blog', 'blog', new StubLoaderConfig())
             ->build();
@@ -430,7 +430,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('records nothing for a key no member wrote')]
     public function testProvenanceOmitsAnAbsentKey(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('undeclared', 'dropped')
             ->build();
 
@@ -444,8 +444,8 @@ class RenderedElementFactoryTest extends TestCase
     public function testCreateStructuralKeepsEverythingButTheProperties(): void
     {
         $style = new ElementStyle(['col-span' => 6]);
-        $child = new RenderedElement('child-1', 'CT:Text');
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $child = new RenderedElement('child-1', 'Ct:Text');
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('headline', 'Hello')
             ->withStyle($style)
             ->build();
@@ -454,7 +454,7 @@ class RenderedElementFactoryTest extends TestCase
 
         static::assertSame([], $rendered->properties);
         static::assertSame('element-1', $rendered->id);
-        static::assertSame('CT:Text', $rendered->component);
+        static::assertSame('Ct:Text', $rendered->component);
         static::assertSame($style, $rendered->style);
         static::assertSame(['main' => [$child]], $rendered->slots);
     }
@@ -462,10 +462,10 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('carries the id through and hands the slot map over with its names and child order intact')]
     public function testIdAndSlotOrderingSurvive(): void
     {
-        $first = new RenderedElement('child-1', 'CT:Text');
-        $second = new RenderedElement('child-2', 'CT:Text');
-        $aside = new RenderedElement('child-3', 'CT:Text');
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')->build();
+        $first = new RenderedElement('child-1', 'Ct:Text');
+        $second = new RenderedElement('child-2', 'Ct:Text');
+        $aside = new RenderedElement('child-3', 'Ct:Text');
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')->build();
 
         $rendered = $this->mint($stored, [], [], [], [
             'main' => [$first, $second],
@@ -479,7 +479,7 @@ class RenderedElementFactoryTest extends TestCase
     #[TestDox('unwraps a stored value at every depth, map variants nested in list variants included')]
     public function testStoredValuesAreUnwrappedAtEveryDepth(): void
     {
-        $stored = StoredElementBuilder::create('CT:Text', 'element-1')
+        $stored = StoredElementBuilder::create('Ct:Text', 'element-1')
             ->withProperty('items', ['first', ['label' => 'second', 'tags' => ['a', 'b']]])
             ->build();
 
@@ -516,7 +516,7 @@ class RenderedElementFactoryTest extends TestCase
      * @param array<string, mixed> $delivered
      * @param list<string> $distributionKeys
      * @param array<string, list<RenderedElement>> $slots
-     * @param string|list<string>|null $subjectType the declared type of `CT:Declarations`' `subject` property
+     * @param string|list<string>|null $subjectType the declared type of `Ct:Declarations`' `subject` property
      */
     private function mint(
         StoredElement $stored,
@@ -565,20 +565,20 @@ class RenderedElementFactoryTest extends TestCase
     private function factory(string|array|null $subjectType = null): RenderedElementFactory
     {
         $specs = [
-            'CT:Text' => ContentSystemElementTypeSpecificationBuilder::create('CT:Text')
+            'Ct:Text' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Text')
                 ->primitive('headline', 'string')
                 ->primitive('items', 'string')
                 ->reference('blog', StubStruct::class)
                 ->build(),
-            'CT:Blog' => ContentSystemElementTypeSpecificationBuilder::create('CT:Blog')
+            'Ct:Blog' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Blog')
                 ->reference('blog', StubStruct::class)
                 ->build(),
-            'CT:Tile' => ContentSystemElementTypeSpecificationBuilder::create('CT:Tile')
+            'Ct:Tile' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Tile')
                 ->primitive('label', 'string')
                 ->build(),
             // One property whose declared type each test supplies, so a test varies the declaration itself
             // rather than picking from a fixed menu of them.
-            'CT:Declarations' => ContentSystemElementTypeSpecificationBuilder::create('CT:Declarations')
+            'Ct:Declarations' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Declarations')
                 ->declared('subject', $subjectType ?? 'string')
                 ->build(),
         ];

@@ -89,7 +89,7 @@ class ContentPreviewControllerTest extends TestCase
     public function testPreviewUrlReturns400ForUnregisteredComponent(): void
     {
         $this->getBrowser()->jsonRequest('POST', self::PREVIEW_URL_URL, [
-            'layout' => [['id' => 'el-1', 'component' => 'CT:Test:PreviewProbe']],
+            'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
             'channelId' => TestDefaults::SALES_CHANNEL,
@@ -111,7 +111,7 @@ class ContentPreviewControllerTest extends TestCase
     {
         $this->getBrowser()->jsonRequest('POST', self::PREVIEW_URL_URL, [
             // entityType deliberately omitted
-            'layout' => [['id' => 'el-1', 'component' => 'CT:Test:PreviewProbe']],
+            'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityId' => 'does-not-matter',
             'channelId' => TestDefaults::SALES_CHANNEL,
         ]);
@@ -159,7 +159,7 @@ class ContentPreviewControllerTest extends TestCase
     public function testPreviewUrlReturns400ForFieldSelection(): void
     {
         $this->getBrowser()->jsonRequest('POST', self::PREVIEW_URL_URL . '?includes[content_page][]=id', [
-            'layout' => [['id' => 'el-1', 'component' => 'CT:Test:PreviewProbe']],
+            'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
             'channelId' => TestDefaults::SALES_CHANNEL,
@@ -183,7 +183,7 @@ class ContentPreviewControllerTest extends TestCase
     public function testPreviewUrlReturns400ForUnknownEntityType(): void
     {
         $this->getBrowser()->jsonRequest('POST', self::PREVIEW_URL_URL, [
-            'layout' => [['id' => 'el-1', 'component' => 'CT:Test:PreviewProbe']],
+            'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'not_a_real_entity_type',
             'entityId' => 'some-id',
             'channelId' => TestDefaults::SALES_CHANNEL,

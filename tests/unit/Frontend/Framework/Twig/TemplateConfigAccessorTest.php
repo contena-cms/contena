@@ -59,8 +59,8 @@ class TemplateConfigAccessorTest extends TestCase
         $storedMap = [
             'imports' => [
                 'contena' => '/bundles/frontend/frontend/contena/contena.js',
-                'CT:Button' => '/bundles/frontend/frontend/components/CT/Button.js',
-                'CT:Blog:Card' => '/bundles/frontend/frontend/components/CT/Blog/Card.js',
+                'Ct:Button' => '/bundles/frontend/frontend/components/Ct/Button.js',
+                'Ct:Blog:Card' => '/bundles/frontend/frontend/components/Ct/Blog/Card.js',
             ],
         ];
 
@@ -77,8 +77,8 @@ class TemplateConfigAccessorTest extends TestCase
             [
                 'imports' => [
                     'contena' => 'https://cdn.example.com/bundles/frontend/frontend/contena/contena.js',
-                    'CT:Button' => 'https://cdn.example.com/bundles/frontend/frontend/components/CT/Button.js',
-                    'CT:Blog:Card' => 'https://cdn.example.com/bundles/frontend/frontend/components/CT/Blog/Card.js',
+                    'Ct:Button' => 'https://cdn.example.com/bundles/frontend/frontend/components/Ct/Button.js',
+                    'Ct:Blog:Card' => 'https://cdn.example.com/bundles/frontend/frontend/components/Ct/Blog/Card.js',
                 ],
             ],
             $result
@@ -133,7 +133,7 @@ class TemplateConfigAccessorTest extends TestCase
                 'contena' => '/bundles/frontend/frontend/contena/contena.js',
             ],
             'styles' => [
-                '/bundles/frontend/frontend/components/CT/Button.css',
+                '/bundles/frontend/frontend/components/Ct/Button.css',
                 '/bundles/myplugin/frontend/components/MyPlugin/Wusel/Counter.css',
             ],
         ];
@@ -152,7 +152,7 @@ class TemplateConfigAccessorTest extends TestCase
                     'contena' => 'https://cdn.example.com/bundles/frontend/frontend/contena/contena.js',
                 ],
                 'styles' => [
-                    'https://cdn.example.com/bundles/frontend/frontend/components/CT/Button.css',
+                    'https://cdn.example.com/bundles/frontend/frontend/components/Ct/Button.css',
                     'https://cdn.example.com/bundles/myplugin/frontend/components/MyPlugin/Wusel/Counter.css',
                 ],
             ],
@@ -172,10 +172,10 @@ class TemplateConfigAccessorTest extends TestCase
                 ],
             ],
             'styles' => [
-                '/bundles/frontend/frontend/components/CT/Button.css',
+                '/bundles/frontend/frontend/components/Ct/Button.css',
             ],
             'scripts' => [
-                '/bundles/frontend/frontend/components/CT/Button.js',
+                '/bundles/frontend/frontend/components/Ct/Button.js',
             ],
             'themeId' => 'theme-123',
         ];

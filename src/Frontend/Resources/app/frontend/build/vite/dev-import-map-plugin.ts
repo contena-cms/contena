@@ -28,7 +28,7 @@ const COMP_CSS_PREFIX = '/__ct-comp-css/';
  * Converts a component file path (relative to its component root) to the
  * colon-separated tag used in `data-component` attributes and the import map.
  *
- *   'CT/Header/Navbar.ts'      → 'CT:Header:Navbar'
+ *   'Ct/Header/Navbar.ts'      → 'Ct:Header:Navbar'
  *   'Wusel/Counter.ts' (+ ns)  → 'ComponentTestApp:Wusel:Counter'
  */
 function fileToTag(relPath: string, namespace: string | undefined): string {
@@ -45,7 +45,7 @@ function fileToTag(relPath: string, namespace: string | undefined): string {
  *
  *   imports  — a complete ES module import map that PHP injects as
  *              `<script type="importmap">`. Every bare specifier
- *              (`contena`, `CT:Header:Navbar`, …) points directly to the
+ *              (`contena`, `Ct:Header:Navbar`, …) points directly to the
  *              running dev server, so no URL rewriting is needed in PHP.
  *
  *   styles   — an ordered array of Vite dev-server CSS URLs produced by the
@@ -282,7 +282,7 @@ export function devImportMapPlugin(projectRoot: string, scssLoadPaths: string[] 
 
                 // Determine namespace and file path from the URL.
                 // URLs look like "ComponentTestApp/Wusel/Dusel.scss" (namespaced)
-                // or "CT/Header/Navbar.scss" (core, no namespace). Plain CSS
+                // or "Ct/Header/Navbar.scss" (core, no namespace). Plain CSS
                 // sources follow the same pattern with a .css suffix.
                 let styleAbsPath: string | undefined;
                 for (const ns of Object.keys(nsToCompRoot)) {

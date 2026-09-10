@@ -17,7 +17,7 @@ class ThemeRuntimeConfigTest extends TestCase
         $importMap = [
             'imports' => [
                 'contena' => '/bundles/frontend/frontend/contena/contena.js',
-                'CT:Button' => 'js/components/CT/Button.js',
+                'Ct:Button' => 'js/components/Ct/Button.js',
             ],
         ];
 
@@ -92,7 +92,7 @@ class ThemeRuntimeConfigTest extends TestCase
 
         $newUpdatedAt = new \DateTimeImmutable('2024-01-01');
         $newImportMap = [
-            'imports' => ['CT:Alert' => 'js/components/CT/Alert.js'],
+            'imports' => ['Ct:Alert' => 'js/components/Ct/Alert.js'],
             'scopes' => ['js/components/MyPlugin/' => ['debounce' => 'js/components/MyPlugin/vendor/debounce-abc.js']],
         ];
         $newConfig = $originalConfig->with([

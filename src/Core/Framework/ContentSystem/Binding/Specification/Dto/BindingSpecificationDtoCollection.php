@@ -8,8 +8,8 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystem
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Keyed by id (e.g. `CT:Media:Image`) so Symfony includes the id in violation property paths:
- * `bindings[CT:Media:Image].type`.
+ * Keyed by id (e.g. `Ct:Media:Image`) so Symfony includes the id in violation property paths:
+ * `bindings[Ct:Media:Image].type`.
  *
  * Carries the semantic constraint {@see TypeConsistentBindingSpecification} at the collection level (not on the
  * DTO) so a per-load type overlay can ride the validated object into the validator: a per-call overlay cannot be

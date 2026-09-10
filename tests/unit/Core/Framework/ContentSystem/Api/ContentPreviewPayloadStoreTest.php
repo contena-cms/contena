@@ -22,7 +22,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
     {
         $store = new ContentPreviewPayloadStore(new ArrayAdapter());
         $payload = new ContentPreviewRequest(
-            layout: [['id' => 'el-1', 'component' => 'CT:Block']],
+            layout: [['id' => 'el-1', 'component' => 'Ct:Block']],
             entityType: 'blog',
             entityId: 'blog-1',
             channelId: 'channel-1',
@@ -42,7 +42,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
 
         static::assertEquals(
             new ContentPreviewRequest(
-                layout: [['id' => 'el-1', 'component' => 'CT:Block']],
+                layout: [['id' => 'el-1', 'component' => 'Ct:Block']],
                 entityType: 'blog',
                 entityId: 'blog-1',
                 channelId: 'channel-1',
@@ -193,7 +193,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
     private static function envelope(array $overrides): array
     {
         return [
-            'layout' => [['id' => 'el-1', 'component' => 'CT:Block']],
+            'layout' => [['id' => 'el-1', 'component' => 'Ct:Block']],
             'entityType' => 'blog',
             'entityId' => 'blog-1',
             'channelId' => 'channel-1',

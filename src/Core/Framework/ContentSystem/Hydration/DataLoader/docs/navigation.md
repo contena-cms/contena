@@ -5,7 +5,7 @@ Loads navigation tree data for menus.
 ```json
 {
   "id": "main-nav",
-  "component": "CT:Navigation:Menu",
+  "component": "Ct:Navigation:Menu",
   "properties": {
     "activeId": "{{categoryId}}"
   },

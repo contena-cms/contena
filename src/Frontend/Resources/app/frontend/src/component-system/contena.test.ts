@@ -44,7 +44,7 @@ describe('Contena runtime component lifecycle', () => {
     });
 
     it('prevents duplicate initialization on the same element', () => {
-        const componentName = 'CT:Lifecycle:Duplicate';
+        const componentName = 'Ct:Lifecycle:Duplicate';
         const element = document.createElement('div');
 
         const first = Contena.initializeComponentOnElement(componentName, LifecycleTestComponent, element);
@@ -56,7 +56,7 @@ describe('Contena runtime component lifecycle', () => {
     });
 
     it('initializes and destroys nested components recursively', async () => {
-        const componentName = 'CT:Lifecycle:Nested';
+        const componentName = 'Ct:Lifecycle:Nested';
         const root = document.createElement('div');
         root.setAttribute('data-component', componentName);
         const child = document.createElement('div');
@@ -84,8 +84,8 @@ describe('Contena runtime component lifecycle', () => {
 
     it('destroys all component instances attached to the same removed node', () => {
         const node = document.createElement('div');
-        Contena.initializeComponentOnElement('CT:Lifecycle:One', LifecycleTestComponent, node);
-        Contena.initializeComponentOnElement('CT:Lifecycle:Two', LifecycleTestComponent, node);
+        Contena.initializeComponentOnElement('Ct:Lifecycle:One', LifecycleTestComponent, node);
+        Contena.initializeComponentOnElement('Ct:Lifecycle:Two', LifecycleTestComponent, node);
 
         const host = document.createElement('div');
         host.appendChild(node);
@@ -96,12 +96,12 @@ describe('Contena runtime component lifecycle', () => {
         mutableContena.handleRemovedNodes(host.childNodes);
 
         expect(LifecycleTestComponent.destroyCount).toBe(2);
-        expect(Contena.getComponentInstances('CT:Lifecycle:One')).toHaveLength(0);
-        expect(Contena.getComponentInstances('CT:Lifecycle:Two')).toHaveLength(0);
+        expect(Contena.getComponentInstances('Ct:Lifecycle:One')).toHaveLength(0);
+        expect(Contena.getComponentInstances('Ct:Lifecycle:Two')).toHaveLength(0);
     });
 
     it('clears indexed lookups after node removal', () => {
-        const componentName = 'CT:Lifecycle:IndexedLookup';
+        const componentName = 'Ct:Lifecycle:IndexedLookup';
         const node = document.createElement('div');
         const host = document.createElement('div');
         host.appendChild(node);
@@ -143,17 +143,17 @@ describe('Contena runtime component lifecycle', () => {
         importMapScript.type = 'importmap';
         importMapScript.textContent = JSON.stringify({
             imports: {
-                'CT:FromCdn': 'https://cdn.example.com/component-from-cdn.js',
+                'Ct:FromCdn': 'https://cdn.example.com/component-from-cdn.js',
             },
         });
         document.body.appendChild(importMapScript);
 
         const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-        const component = await Contena.getComponent('CT:FromCdn');
+        const component = await Contena.getComponent('Ct:FromCdn');
 
         expect(component).toBeUndefined();
         expect(errorSpy).toHaveBeenCalledOnce();
-        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component CT:FromCdn:');
+        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component Ct:FromCdn:');
     });
 
     it('tries to import cross-origin component specifiers directly', async () => {
@@ -179,17 +179,17 @@ describe('Contena runtime component lifecycle', () => {
         importMapScript.type = 'importmap';
         importMapScript.textContent = JSON.stringify({
             imports: {
-                'CT:Local': `${window.location.origin}/does-not-exist-component.js`,
+                'Ct:Local': `${window.location.origin}/does-not-exist-component.js`,
             },
         });
         document.body.appendChild(importMapScript);
 
         const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-        const component = await Contena.getComponent('CT:Local');
+        const component = await Contena.getComponent('Ct:Local');
 
         expect(component).toBeUndefined();
         expect(errorSpy).toHaveBeenCalledOnce();
-        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component CT:Local:');
+        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component Ct:Local:');
     });
 
     it('allows loopback Vite /@fs/ component URLs in dev-server mode', async () => {
@@ -197,17 +197,17 @@ describe('Contena runtime component lifecycle', () => {
         importMapScript.type = 'importmap';
         importMapScript.textContent = JSON.stringify({
             imports: {
-                'CT:DevFs': 'http://localhost:5175/@fs/var/www/html/src/Frontend/Resources/views/components/CT/Custom/Test.js',
+                'Ct:DevFs': 'http://localhost:5175/@fs/var/www/html/src/Frontend/Resources/views/components/Ct/Custom/Test.js',
             },
         });
         document.body.appendChild(importMapScript);
 
         const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-        const component = await Contena.getComponent('CT:DevFs');
+        const component = await Contena.getComponent('Ct:DevFs');
 
         expect(component).toBeUndefined();
         expect(errorSpy).toHaveBeenCalledOnce();
-        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component CT:DevFs:');
+        expect(errorSpy.mock.calls[0]?.[0]).toBe('Failed to import component Ct:DevFs:');
     });
 
     it('runs interceptors in descending priority order', () => {
@@ -233,7 +233,7 @@ describe('Contena runtime component lifecycle', () => {
     });
 
     it('safely ignores callMethod invocations for missing methods', () => {
-        const componentName = 'CT:Lifecycle:Methods';
+        const componentName = 'Ct:Lifecycle:Methods';
         const element = document.createElement('div');
         Contena.initializeComponentOnElement(componentName, LifecycleTestComponent, element);
 
@@ -263,14 +263,14 @@ describe('Contena runtime component lifecycle', () => {
 
         Contena.on('runtime:event', emitterListener);
         Contena.intercept('runtime:interceptor', (payload) => ({ ...payload, order: 'intercepted' }), 10);
-        Contena.initializeComponentOnElement('CT:Lifecycle:Disconnect', LifecycleTestComponent, node);
+        Contena.initializeComponentOnElement('Ct:Lifecycle:Disconnect', LifecycleTestComponent, node);
 
         Contena.disconnect();
 
         expect(observerDisconnectSpy).toHaveBeenCalledOnce();
         expect(removeEventListenerSpy).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
         expect(LifecycleTestComponent.destroyCount).toBe(1);
-        expect(Contena.getComponentInstances('CT:Lifecycle:Disconnect')).toHaveLength(0);
+        expect(Contena.getComponentInstances('Ct:Lifecycle:Disconnect')).toHaveLength(0);
         expect(Contena.emitInterception('runtime:interceptor', { order: 'initial' })).toEqual({ order: 'initial' });
 
         Contena.emit('runtime:event');

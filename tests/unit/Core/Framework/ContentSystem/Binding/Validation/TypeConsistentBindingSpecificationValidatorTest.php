@@ -166,7 +166,7 @@ class TypeConsistentBindingSpecificationValidatorTest extends TestCase
     public function testRethrowsNonClientDefectExceptionFromDecode(): void
     {
         $type = new ContentSystemElementTypeSpecification(
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Image',
             '',
             null,
@@ -201,7 +201,7 @@ class TypeConsistentBindingSpecificationValidatorTest extends TestCase
         $validator->initialize(static::createStub(ExecutionContextInterface::class));
 
         $dto = new BindingSpecificationDto(
-            type: 'CT:Media:Image',
+            type: 'Ct:Media:Image',
             label: 'label',
             resolves: ['media' => ['loader' => 'entity', 'config' => []]],
             inputs: [],

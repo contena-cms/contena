@@ -85,9 +85,9 @@ export default defineConfig(async ({ command }): Promise<UserConfig> => {
                     entryFileNames: '[name]-[hash].js',
                     // All vendor chunks go into a flat vendor/ directory with a content hash.
                     chunkFileNames: 'vendor/[name]-[hash].js',
-                    // SCSS entry keys include the .scss extension (e.g. 'CT/Button/Primary.scss')
+                    // SCSS entry keys include the .scss extension (e.g. 'Ct/Button/Primary.scss')
                     // to avoid collisions with same-named JS entries. Rolldown appends .css to
-                    // produce the asset name ('CT/Button/Primary.scss.css'), so we strip the
+                    // produce the asset name ('Ct/Button/Primary.scss.css'), so we strip the
                     // embedded .scss before composing the final filename. Plain-CSS entries go
                     // through the virtual-module shim (see plainCssShimPlugin) and don't need
                     // any suffix massaging — Vite derives a clean asset name from the entry key.

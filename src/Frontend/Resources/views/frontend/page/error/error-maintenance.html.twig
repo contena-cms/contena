@@ -15,9 +15,9 @@
         {% block error_maintenance_body_inner %}
             {% block error_maintenance_noscript %}
                 <noscript class="noscript-main">
-                    <twig:CT:Alert variant="info" :icon="false">
+                    <twig:Ct:Alert variant="info" :icon="false">
                         {{ 'general.noscriptNotice'|trans|sw_sanitize }}
-                    </twig:CT:Alert>
+                    </twig:Ct:Alert>
                 </noscript>
             {% endblock %}
 
@@ -32,7 +32,7 @@
                     {% block error_maintenance_main_content %}
                         {% if contentPage is defined and contentPage %}
                             <div class="container-main content-page landing-page">
-                                <twig:CT:Content:Page :page="contentPage" />
+                                <twig:Ct:Content:Page :page="contentPage" />
                             </div>
                         {% else %}
                             {% block error_maintenance_main_fallback %}

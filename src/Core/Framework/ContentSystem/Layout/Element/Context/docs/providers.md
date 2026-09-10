@@ -7,7 +7,7 @@ Provider exposes data as context for direct children using `providesContext`.
 ```json
 {
   "id": "blog-detail-provider",
-  "component": "CT:Blog:Detail",
+  "component": "Ct:Blog:Detail",
   "dataRequirements": {
     "blog": {
       "source": "entity",

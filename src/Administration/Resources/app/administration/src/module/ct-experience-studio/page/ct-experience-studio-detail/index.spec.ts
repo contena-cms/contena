@@ -119,20 +119,20 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
             [
                 {
                     id: 'element-1',
-                    component: 'CT:Content:Text',
+                    component: 'Ct:Content:Text',
                     properties: {
                         text: 'Hello',
                     },
                 },
             ],
             {
-                type: 'CT:Content:Text',
+                type: 'Ct:Content:Text',
             },
         );
 
         expect(payload.rootSource).toBeNull();
         expect(payload.layout).toHaveLength(1);
-        expect(payload.type).toBe('CT:Content:Text');
+        expect(payload.type).toBe('Ct:Content:Text');
     });
 
     it('derives preview entity type from layout rootSource', async () => {
@@ -298,11 +298,11 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
             layout: [
                 {
                     id: 'parent-1',
-                    component: 'CT:Layout:Container',
+                    component: 'Ct:Layout:Container',
                     slots: {
                         main: [
-                            { id: 'element-1', component: 'CT:Content:Text' },
-                            { id: 'element-2', component: 'CT:Content:Text' },
+                            { id: 'element-1', component: 'Ct:Content:Text' },
+                            { id: 'element-2', component: 'Ct:Content:Text' },
                         ],
                     },
                 },
@@ -320,11 +320,11 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
             layout: [
                 {
                     id: 'parent-1',
-                    component: 'CT:Layout:Container',
+                    component: 'Ct:Layout:Container',
                     slots: {
                         main: [
-                            { id: 'element-1', component: 'CT:Content:Text' },
-                            { id: 'element-2', component: 'CT:Content:Text' },
+                            { id: 'element-1', component: 'Ct:Content:Text' },
+                            { id: 'element-2', component: 'Ct:Content:Text' },
                         ],
                     },
                 },
@@ -343,7 +343,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
             [
                 {
                     id: 'element-2',
-                    component: 'CT:Content:Text',
+                    component: 'Ct:Content:Text',
                 },
             ],
             ['element-2'],
@@ -357,7 +357,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
         const previousLayout = [
             {
                 id: 'element-1',
-                component: 'CT:Content:Text',
+                component: 'Ct:Content:Text',
             },
         ];
         wrapper.vm.layout = {
@@ -372,14 +372,14 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
         await wrapper.vm.executeStructuralDraftMutation(
             'insert',
             previousLayout,
-            { type: 'CT:Content:Text' },
+            { type: 'Ct:Content:Text' },
             (mutationResponse: { affectedElementIds: string[] }) => mutationResponse.affectedElementIds[0] ?? null,
         );
 
         expect(insertElement).toHaveBeenCalledWith({
             layout: previousLayout,
             rootSource: 'blog',
-            type: 'CT:Content:Text',
+            type: 'Ct:Content:Text',
         });
         expect(pushToHistory).toHaveBeenCalledWith(previousLayout, 'element-1');
         expect(wrapper.vm.selectedElementId).toBe('element-2');
@@ -397,7 +397,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
                         resolveFirstRequest = resolve;
                     }),
             )
-            .mockResolvedValueOnce(createMutationResponse([{ id: 'newer', component: 'CT:Content:Text' }], ['newer']));
+            .mockResolvedValueOnce(createMutationResponse([{ id: 'newer', component: 'Ct:Content:Text' }], ['newer']));
         const { wrapper } = await createWrapper({
             services: {
                 contentSystemLayoutDraftMutationService: { insertElement },
@@ -408,19 +408,19 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
 
         const firstCall = wrapper.vm.executeStructuralDraftMutation(
             'insert',
-            [{ id: 'first', component: 'CT:Content:Text' }],
-            { type: 'CT:Content:Text' },
+            [{ id: 'first', component: 'Ct:Content:Text' }],
+            { type: 'Ct:Content:Text' },
             () => 'first',
         );
         const secondCall = wrapper.vm.executeStructuralDraftMutation(
             'insert',
-            [{ id: 'second', component: 'CT:Content:Text' }],
-            { type: 'CT:Content:Text' },
+            [{ id: 'second', component: 'Ct:Content:Text' }],
+            { type: 'Ct:Content:Text' },
             (response: { affectedElementIds: string[] }) => response.affectedElementIds[0] ?? null,
         );
 
         await secondCall;
-        resolveFirstRequest(createMutationResponse([{ id: 'stale', component: 'CT:Content:Text' }], ['stale']));
+        resolveFirstRequest(createMutationResponse([{ id: 'stale', component: 'Ct:Content:Text' }], ['stale']));
         await firstCall;
 
         expect(wrapper.vm.layout.layout[0].id).toBe('newer');
@@ -477,12 +477,12 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
             layout: [
                 {
                     id: 'parent',
-                    component: 'CT:Layout:Container',
+                    component: 'Ct:Layout:Container',
                     slots: {
                         main: [
                             {
                                 id: 'child',
-                                component: 'CT:Content:Text',
+                                component: 'Ct:Content:Text',
                             },
                         ],
                     },
@@ -505,12 +505,12 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
         const layout = [
             {
                 id: 'parent',
-                component: 'CT:Layout:Container',
+                component: 'Ct:Layout:Container',
                 slots: {
                     main: [
-                        { id: 'a', component: 'CT:Content:Text' },
-                        { id: 'b', component: 'CT:Content:Text' },
-                        { id: 'c', component: 'CT:Content:Text' },
+                        { id: 'a', component: 'Ct:Content:Text' },
+                        { id: 'b', component: 'Ct:Content:Text' },
+                        { id: 'c', component: 'Ct:Content:Text' },
                     ],
                 },
             },

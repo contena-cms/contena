@@ -22,9 +22,9 @@ class RemoveElementTest extends TestCase
     public function testRemoveDeletesElementAndSubtree(): void
     {
         $tree = new StoredTree([
-            new StoredElement('keep', 'CT:Block'),
-            new StoredElement('drop', 'CT:Block', [], [], [
-                'content' => [new StoredElement('child', 'CT:Block')],
+            new StoredElement('keep', 'Ct:Block'),
+            new StoredElement('drop', 'Ct:Block', [], [], [
+                'content' => [new StoredElement('child', 'Ct:Block')],
             ]),
         ]);
 
@@ -40,10 +40,10 @@ class RemoveElementTest extends TestCase
     #[TestDox('removes a nested element while keeping its siblings')]
     public function testRemoveNestedElementKeepsSiblings(): void
     {
-        $parent = new StoredElement('parent', 'CT:Block', [], [], [
+        $parent = new StoredElement('parent', 'Ct:Block', [], [], [
             'content' => [
-                new StoredElement('a', 'CT:Block'),
-                new StoredElement('b', 'CT:Block'),
+                new StoredElement('a', 'Ct:Block'),
+                new StoredElement('b', 'Ct:Block'),
             ],
         ]);
 
@@ -56,8 +56,8 @@ class RemoveElementTest extends TestCase
     public function testRemoveLeavesSurvivorWiringUntouched(): void
     {
         $requirement = new DataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class));
-        $survivor = new StoredElement('survivor', 'CT:Block', ['blog' => $requirement]);
-        $tree = new StoredTree([$survivor, new StoredElement('drop', 'CT:Block')]);
+        $survivor = new StoredElement('survivor', 'Ct:Block', ['blog' => $requirement]);
+        $tree = new StoredTree([$survivor, new StoredElement('drop', 'Ct:Block')]);
 
         $result = new RemoveElement('drop')->apply($tree);
 
@@ -70,6 +70,6 @@ class RemoveElementTest extends TestCase
         $remove = new RemoveElement('ghost');
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $remove->apply(new StoredTree([new StoredElement('other', 'CT:Block')]));
+        $remove->apply(new StoredTree([new StoredElement('other', 'Ct:Block')]));
     }
 }

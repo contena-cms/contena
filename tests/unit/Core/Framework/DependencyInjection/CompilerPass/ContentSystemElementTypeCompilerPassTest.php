@@ -43,7 +43,7 @@ class ContentSystemElementTypeCompilerPassTest extends TestCase
         $bundleDir = $this->findBySource($this->extractDirectories($container), 'bundle:BundleA');
         static::assertNotNull($bundleDir);
         static::assertSame(self::FIXTURES_DIR . '/bundle-a/Resources/content-system/types', $bundleDir->getArgument(1));
-        static::assertSame('Sw', $bundleDir->getArgument(2));
+        static::assertSame('Ct', $bundleDir->getArgument(2));
     }
 
     #[TestDox('loads active plugins from their configured type directory')]
@@ -114,12 +114,12 @@ class ContentSystemElementTypeCompilerPassTest extends TestCase
         $corePath = $core->getArgument(1);
         static::assertIsString($corePath);
         static::assertStringEndsWith('ContentSystem/Layout/Type/Definitions', $corePath);
-        static::assertSame('Sw', $core->getArgument(2));
+        static::assertSame('Ct', $core->getArgument(2));
 
         $bundle = $this->findBySource($typeDirectories, 'bundle:BundleA');
         static::assertNotNull($bundle);
         static::assertSame(self::FIXTURES_DIR . '/bundle-a/Resources/content-system/types', $bundle->getArgument(1));
-        static::assertSame('Sw', $bundle->getArgument(2));
+        static::assertSame('Ct', $bundle->getArgument(2));
 
         $plugin = $this->findBySource($typeDirectories, 'plugin:FixturePluginWithCustomTypeDir');
         static::assertNotNull($plugin);

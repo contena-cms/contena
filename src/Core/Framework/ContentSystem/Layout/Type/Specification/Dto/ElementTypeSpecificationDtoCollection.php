@@ -10,8 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class ElementTypeSpecificationDtoCollection
 {
     /**
-     * Keyed by element type name (e.g. "CT:Blog:Card") so Symfony includes
-     * the name in violation property paths: types[CT:Blog:Card].label
+     * Keyed by element type name (e.g. "Ct:Blog:Card") so Symfony includes
+     * the name in violation property paths: types[Ct:Blog:Card].label
      *
      * @param array<string, ElementTypeSpecificationDto> $types
      */

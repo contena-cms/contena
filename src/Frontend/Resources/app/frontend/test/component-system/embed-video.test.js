@@ -1,5 +1,5 @@
 import 'src/component-system/component';
-import MediaEmbedVideo from '../../../../views/components/CT/Media/EmbedVideo';
+import MediaEmbedVideo from '../../../../views/components/Ct/Media/EmbedVideo';
 
 const ALLOW = 'autoplay; fullscreen';
 
@@ -34,7 +34,7 @@ function clearCookies() {
     });
 }
 
-describe('views/components/CT/Media/EmbedVideo', () => {
+describe('views/components/Ct/Media/EmbedVideo', () => {
     afterEach(() => {
         components.forEach((component) => component.destroy());
         components = [];

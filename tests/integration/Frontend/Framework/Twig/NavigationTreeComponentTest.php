@@ -33,9 +33,9 @@ class NavigationTreeComponentTest extends TestCase
         $registry = static::getContainer()->get(ContentSystemBindingSpecificationRegistry::class);
         static::assertInstanceOf(AbstractContentSystemBindingSpecificationRegistry::class, $registry);
 
-        $specification = $registry->all()['core:CT:Navigation:Tree'] ?? null;
+        $specification = $registry->all()['core:Ct:Navigation:Tree'] ?? null;
         static::assertInstanceOf(BindingSpecification::class, $specification);
-        static::assertSame('CT:Navigation:Tree', $specification->type());
+        static::assertSame('Ct:Navigation:Tree', $specification->type());
 
         $binding = $specification->resolves()['navigationTree'] ?? null;
         static::assertInstanceOf(LoaderBinding::class, $binding);
@@ -56,10 +56,10 @@ class NavigationTreeComponentTest extends TestCase
 
         $ownBindings = array_keys(array_filter(
             $registry->all(),
-            static fn (BindingSpecification $specification): bool => $specification->type() === 'CT:Navigation:Tree'
+            static fn (BindingSpecification $specification): bool => $specification->type() === 'Ct:Navigation:Tree'
         ));
 
-        static::assertSame(['core:CT:Navigation:Tree'], $ownBindings);
+        static::assertSame(['core:Ct:Navigation:Tree'], $ownBindings);
     }
 
     /**
@@ -71,7 +71,7 @@ class NavigationTreeComponentTest extends TestCase
         $types = static::getContainer()->get(ContentSystemElementTypeRegistry::class);
         static::assertInstanceOf(AbstractContentSystemElementTypeRegistry::class, $types);
 
-        $activeId = $types->get('CT:Navigation:Tree')->properties()['activeId']->toSchema();
+        $activeId = $types->get('Ct:Navigation:Tree')->properties()['activeId']->toSchema();
 
         static::assertSame('{{categoryId}}', $activeId['default']);
 
@@ -92,13 +92,13 @@ class NavigationTreeComponentTest extends TestCase
         $types = static::getContainer()->get(ContentSystemElementTypeRegistry::class);
         static::assertInstanceOf(AbstractContentSystemElementTypeRegistry::class, $types);
 
-        static::assertArrayNotHasKey('navigationMaxDepth', $types->get('CT:Navigation:Tree')->properties());
+        static::assertArrayNotHasKey('navigationMaxDepth', $types->get('Ct:Navigation:Tree')->properties());
 
         $bindings = static::getContainer()->get(ContentSystemBindingSpecificationRegistry::class);
         static::assertInstanceOf(AbstractContentSystemBindingSpecificationRegistry::class, $bindings);
 
         foreach ($bindings->all() as $qualifiedId => $specification) {
-            if ($specification->type() !== 'CT:Navigation:Tree') {
+            if ($specification->type() !== 'Ct:Navigation:Tree') {
                 continue;
             }
 
@@ -111,7 +111,7 @@ class NavigationTreeComponentTest extends TestCase
         $types = static::getContainer()->get(ContentSystemElementTypeRegistry::class);
         static::assertInstanceOf(AbstractContentSystemElementTypeRegistry::class, $types);
 
-        $displayType = $types->get('CT:Navigation:Tree')->properties()['displayType']->toSchema();
+        $displayType = $types->get('Ct:Navigation:Tree')->properties()['displayType']->toSchema();
 
         static::assertSame('static', $displayType['default']);
         static::assertSame(['static', 'collapse'], $displayType['enum']);
@@ -393,8 +393,8 @@ class NavigationTreeComponentTest extends TestCase
     }
 
     /**
-     * Degrading to empty output instead of failing the render matches CT:Media:Image and
-     * CT:Blog:Listing.
+     * Degrading to empty output instead of failing the render matches Ct:Media:Image and
+     * Ct:Blog:Listing.
      */
     public function testRendersNothingWhenNavigationTreeIsMissing(): void
     {
@@ -402,7 +402,7 @@ class NavigationTreeComponentTest extends TestCase
         static::assertInstanceOf(Environment::class, $twig);
 
         $html = $twig
-            ->createTemplate('{{ component(\'CT:Navigation:Tree\', { ariaLabel: \'Categories\', activeId: \'\', activePath: [], navigationMaxDepth: 3 }) }}')
+            ->createTemplate('{{ component(\'Ct:Navigation:Tree\', { ariaLabel: \'Categories\', activeId: \'\', activePath: [], navigationMaxDepth: 3 }) }}')
             ->render();
 
         static::assertStringNotContainsString('<nav', $html);
@@ -445,7 +445,7 @@ class NavigationTreeComponentTest extends TestCase
         ], $props);
 
         return $twig
-            ->createTemplate('{{ component(\'CT:Navigation:Tree\', props) }}')
+            ->createTemplate('{{ component(\'Ct:Navigation:Tree\', props) }}')
             ->render(['props' => $props]);
     }
 

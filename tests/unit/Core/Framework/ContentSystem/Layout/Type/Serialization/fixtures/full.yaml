@@ -54,7 +54,7 @@ slots:
   - name: media
     maxElements: 1
     allowList:
-      - "CT:Media:Image"
+      - "Ct:Media:Image"
     description: "Blog media."
   - name: footer
     description: "Footer area."

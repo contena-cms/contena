@@ -9,7 +9,7 @@ Consumers can request nested properties from context using dot notation. When a 
 ```json
 {
   "id": "blog-provider",
-  "component": "CT:Blog:Container",
+  "component": "Ct:Blog:Container",
   "dataRequirements": {
     "blog": {
       "source": "entity",
@@ -30,7 +30,7 @@ Consumers can request nested properties from context using dot notation. When a 
     "default": [
       {
         "id": "cover-image",
-        "component": "CT:Content:Image",
+        "component": "Ct:Content:Image",
         "acceptsContext": {
           "blog.cover": {
             "type": "single",
@@ -40,7 +40,7 @@ Consumers can request nested properties from context using dot notation. When a 
       },
       {
         "id": "manufacturer-name",
-        "component": "CT:Content:Text",
+        "component": "Ct:Content:Text",
         "acceptsContext": {
           "blog.manufacturer.name": {
             "type": "single",

@@ -24,7 +24,7 @@ class ContentDecomposedPageEncoderTest extends TestCase
     public function testEncodeWritesTheBodyKeysInTheirWireOrder(): void
     {
         $body = $this->encode(
-            [new RenderedElement('root', 'CT:Content:Text')],
+            [new RenderedElement('root', 'Ct:Content:Text')],
             new ResolvedValueIndex(['r2' => 'Beta', 'r1' => 'Alpha'], ['root' => ['title' => 'r2']])
         );
 
@@ -42,7 +42,7 @@ class ContentDecomposedPageEncoderTest extends TestCase
         $assignments = ['zulu-element' => ['title' => 'r2'], 'alpha-element' => ['title' => 'r1']];
 
         $body = $this->encode(
-            [new RenderedElement('root', 'CT:Content:Text')],
+            [new RenderedElement('root', 'Ct:Content:Text')],
             new ResolvedValueIndex($data, $assignments)
         );
 
@@ -75,17 +75,17 @@ class ContentDecomposedPageEncoderTest extends TestCase
     {
         $element = new RenderedElement(
             'root',
-            'CT:Grid:Container',
+            'Ct:Grid:Container',
             ['headline' => 'Alpha copy'],
             style: new ElementStyle(['col-span' => ['xs' => 6]]),
-            slots: ['content' => [new RenderedElement('child', 'CT:Content:Text', ['text' => 'Beta copy'])]],
+            slots: ['content' => [new RenderedElement('child', 'Ct:Content:Text', ['text' => 'Beta copy'])]],
         );
 
         $node = $this->encode([$element])['skeletons'][0];
 
         static::assertSame(['id', 'component', 'slots', 'style', 'apiAlias'], array_keys($node));
         static::assertSame('root', $node['id']);
-        static::assertSame('CT:Grid:Container', $node['component']);
+        static::assertSame('Ct:Grid:Container', $node['component']);
         static::assertSame(['col-span' => ['xs' => 6]], $node['style']);
         static::assertSame(['id', 'component', 'slots', 'apiAlias'], array_keys($node['slots']['content'][0]));
     }
@@ -93,7 +93,7 @@ class ContentDecomposedPageEncoderTest extends TestCase
     #[TestDox('omits style, but not slots, on a node that has neither')]
     public function testEncodeOmitsEmptyStyleButNotSlots(): void
     {
-        $node = $this->encode([new RenderedElement('leaf', 'CT:Content:Text')])['skeletons'][0];
+        $node = $this->encode([new RenderedElement('leaf', 'Ct:Content:Text')])['skeletons'][0];
 
         static::assertSame(['id', 'component', 'slots', 'apiAlias'], array_keys($node));
         static::assertSame([], $node['slots']);
@@ -110,7 +110,7 @@ class ContentDecomposedPageEncoderTest extends TestCase
     #[TestDox('serializes an empty slots map as a JSON array, never an object')]
     public function testEncodeSerializesEmptySlotsAsAJsonArrayOnTheWire(): void
     {
-        $body = $this->encode([new RenderedElement('leaf', 'CT:Content:Text')]);
+        $body = $this->encode([new RenderedElement('leaf', 'Ct:Content:Text')]);
 
         $json = json_encode($body['skeletons'][0], \JSON_THROW_ON_ERROR);
 
@@ -121,9 +121,9 @@ class ContentDecomposedPageEncoderTest extends TestCase
     #[TestDox('carries the element alias last on every node at every depth, not only on a root')]
     public function testEncodeWritesTheElementAliasLastAtEveryDepth(): void
     {
-        $grandchild = new RenderedElement('grandchild', 'CT:Content:Text');
-        $child = new RenderedElement('child', 'CT:Grid:Container', [], ['media' => [$grandchild]]);
-        $body = $this->encode([new RenderedElement('root', 'CT:Grid:Container', [], ['content' => [$child]])]);
+        $grandchild = new RenderedElement('grandchild', 'Ct:Content:Text');
+        $child = new RenderedElement('child', 'Ct:Grid:Container', [], ['media' => [$grandchild]]);
+        $body = $this->encode([new RenderedElement('root', 'Ct:Grid:Container', [], ['content' => [$child]])]);
 
         $rootNode = $body['skeletons'][0];
         $childNode = $rootNode['slots']['content'][0];

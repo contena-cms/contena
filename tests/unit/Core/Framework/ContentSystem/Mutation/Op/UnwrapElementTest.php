@@ -27,8 +27,8 @@ class UnwrapElementTest extends TestCase
     #[TestDox('replaces the container with its slot children at the root and creates nothing')]
     public function testUnwrapReplacesContainerWithChildren(): void
     {
-        $tree = new StoredTree([new StoredElement('container', 'CT:Container', [], [], [
-            'content' => [new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Block')],
+        $tree = new StoredTree([new StoredElement('container', 'Ct:Container', [], [], [
+            'content' => [new StoredElement('a', 'Ct:Block'), new StoredElement('b', 'Ct:Block')],
         ])]);
 
         $unwrap = new UnwrapElement('container');
@@ -41,13 +41,13 @@ class UnwrapElementTest extends TestCase
     #[TestDox('hoists the children into the parent slot at the container position')]
     public function testUnwrapHoistsIntoParentSlotAtPosition(): void
     {
-        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
+        $tree = new StoredTree([new StoredElement('parent', 'Ct:Block', [], [], [
             'content' => [
-                new StoredElement('x', 'CT:Block'),
-                new StoredElement('container', 'CT:Container', [], [], [
-                    'items' => [new StoredElement('a', 'CT:Block'), new StoredElement('b', 'CT:Block')],
+                new StoredElement('x', 'Ct:Block'),
+                new StoredElement('container', 'Ct:Container', [], [], [
+                    'items' => [new StoredElement('a', 'Ct:Block'), new StoredElement('b', 'Ct:Block')],
                 ]),
-                new StoredElement('y', 'CT:Block'),
+                new StoredElement('y', 'Ct:Block'),
             ],
         ])]);
 
@@ -59,12 +59,12 @@ class UnwrapElementTest extends TestCase
     #[TestDox('reports the whole hoisted forest as affected, including grandchildren that lose the container scope')]
     public function testUnwrapAffectedAreHoistedSubtrees(): void
     {
-        $tree = new StoredTree([new StoredElement('container', 'CT:Container', [], [], [
+        $tree = new StoredTree([new StoredElement('container', 'Ct:Container', [], [], [
             'content' => [
-                new StoredElement('a', 'CT:Block', [], [], [
-                    'inner' => [new StoredElement('grandchild', 'CT:Block')],
+                new StoredElement('a', 'Ct:Block', [], [], [
+                    'inner' => [new StoredElement('grandchild', 'Ct:Block')],
                 ]),
-                new StoredElement('b', 'CT:Block'),
+                new StoredElement('b', 'Ct:Block'),
             ],
         ])]);
 
@@ -77,9 +77,9 @@ class UnwrapElementTest extends TestCase
     #[TestDox('flattens children across all container slots in slot order')]
     public function testUnwrapFlattensAllSlots(): void
     {
-        $tree = new StoredTree([new StoredElement('container', 'CT:Container', [], [], [
-            'header' => [new StoredElement('a', 'CT:Block')],
-            'body' => [new StoredElement('b', 'CT:Block')],
+        $tree = new StoredTree([new StoredElement('container', 'Ct:Container', [], [], [
+            'header' => [new StoredElement('a', 'Ct:Block')],
+            'body' => [new StoredElement('b', 'Ct:Block')],
         ])]);
 
         $result = new UnwrapElement('container')->apply($tree);
@@ -92,10 +92,10 @@ class UnwrapElementTest extends TestCase
     {
         $container = new StoredElement(
             'container',
-            'CT:Container',
+            'Ct:Container',
             ['hero' => new DataRequirement('hero', 'entity', new StubLoaderConfig())],
             ['title' => StoredValue::ofString('Section'), 'spacing' => StoredValue::ofInt(3)],
-            ['content' => [new StoredElement('kid', 'CT:Block')]],
+            ['content' => [new StoredElement('kid', 'Ct:Block')]],
             new ContextDefinitions(
                 ['themeProvider' => new ContextProvider(ContextType::Single, BroadcastDistributionConfig::simple())],
                 ['theme' => new ContextConsumer(ContextType::Single, true)],
@@ -115,7 +115,7 @@ class UnwrapElementTest extends TestCase
     #[TestDox('removes an empty container and hoists nothing')]
     public function testUnwrapEmptyContainerJustRemovesIt(): void
     {
-        $tree = new StoredTree([new StoredElement('container', 'CT:Container'), new StoredElement('keep', 'CT:Block')]);
+        $tree = new StoredTree([new StoredElement('container', 'Ct:Container'), new StoredElement('keep', 'Ct:Block')]);
 
         $unwrap = new UnwrapElement('container');
         $result = $unwrap->apply($tree);
@@ -130,6 +130,6 @@ class UnwrapElementTest extends TestCase
         $unwrap = new UnwrapElement('ghost');
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $unwrap->apply(new StoredTree([new StoredElement('other', 'CT:Block')]));
+        $unwrap->apply(new StoredTree([new StoredElement('other', 'Ct:Block')]));
     }
 }

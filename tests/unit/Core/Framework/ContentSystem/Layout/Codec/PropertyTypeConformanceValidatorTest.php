@@ -75,9 +75,9 @@ class PropertyTypeConformanceValidatorTest extends TestCase
         // surfaces as the 404 escaping the constraint pass rather than as a missing violation.
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('has')->willReturn(false);
-        $registry->method('get')->willThrowException(ContentSystemException::elementTypeNotFound('CT:Ghost'));
+        $registry->method('get')->willThrowException(ContentSystemException::elementTypeNotFound('Ct:Ghost'));
 
-        $element = ['id' => 'el-1', 'component' => 'CT:Ghost', 'properties' => ['headline' => 42]];
+        $element = ['id' => 'el-1', 'component' => 'Ct:Ghost', 'properties' => ['headline' => 42]];
 
         static::assertCount(0, $this->validate($element, $registry));
     }
@@ -118,7 +118,7 @@ class PropertyTypeConformanceValidatorTest extends TestCase
      */
     private function element(array $properties): array
     {
-        return ['id' => 'el-1', 'component' => 'CT:Block', 'properties' => $properties];
+        return ['id' => 'el-1', 'component' => 'Ct:Block', 'properties' => $properties];
     }
 
     /**
@@ -138,8 +138,8 @@ class PropertyTypeConformanceValidatorTest extends TestCase
 
     private function registry(): AbstractContentSystemElementTypeRegistry
     {
-        $specs = ['CT:Block' => new ContentSystemElementTypeSpecification(
-            'CT:Block',
+        $specs = ['Ct:Block' => new ContentSystemElementTypeSpecification(
+            'Ct:Block',
             'Block',
             '',
             null,

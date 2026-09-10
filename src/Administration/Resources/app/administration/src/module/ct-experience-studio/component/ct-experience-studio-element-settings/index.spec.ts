@@ -8,7 +8,7 @@ describe('module/ct-experience-studio/component/ct-experience-studio-element-set
             media: {},
         },
         bindingSpecifications: {
-            'core:CT:Media:Image': {
+            'core:Ct:Media:Image': {
                 default: true,
                 resolves: {
                     media: {

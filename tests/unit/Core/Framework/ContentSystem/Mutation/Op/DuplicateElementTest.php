@@ -31,13 +31,13 @@ class DuplicateElementTest extends TestCase
     #[TestDox('inserts the clone as the next sibling with a fresh id')]
     public function testDuplicateInsertsCloneAsNextSibling(): void
     {
-        $tree = new StoredTree([new StoredElement('original', 'CT:Card'), new StoredElement('other', 'CT:Block')]);
+        $tree = new StoredTree([new StoredElement('original', 'Ct:Card'), new StoredElement('other', 'Ct:Block')]);
 
         $result = new DuplicateElement('original')->apply($tree);
 
         static::assertCount(3, $result->roots);
         static::assertSame('original', $result->roots[0]->id);
-        static::assertSame('CT:Card', $result->roots[1]->component);
+        static::assertSame('Ct:Card', $result->roots[1]->component);
         static::assertNotSame('original', $result->roots[1]->id);
         static::assertSame('other', $result->roots[2]->id);
     }
@@ -45,8 +45,8 @@ class DuplicateElementTest extends TestCase
     #[TestDox('remints every id in the cloned subtree and reports them as affected')]
     public function testDuplicateRemintsEverySubtreeIdAndReportsThemAsAffected(): void
     {
-        $tree = new StoredTree([new StoredElement('root', 'CT:Block', [], [], [
-            'content' => [new StoredElement('child', 'CT:Block')],
+        $tree = new StoredTree([new StoredElement('root', 'Ct:Block', [], [], [
+            'content' => [new StoredElement('child', 'Ct:Block')],
         ])]);
 
         $duplicate = new DuplicateElement('root');
@@ -56,15 +56,15 @@ class DuplicateElementTest extends TestCase
         $clonedChild = $clone->slots['content'][0];
         static::assertNotSame('root', $clone->id);
         static::assertNotSame('child', $clonedChild->id);
-        static::assertSame('CT:Block', $clonedChild->component);
+        static::assertSame('Ct:Block', $clonedChild->component);
         static::assertSame([$clone->id, $clonedChild->id], $duplicate->affected());
     }
 
     #[TestDox('reports the whole clone subtree as created and never the original it copied')]
     public function testDuplicateCreatedIsTheWholeCloneSubtree(): void
     {
-        $tree = new StoredTree([new StoredElement('root', 'CT:Block', [], [], [
-            'content' => [new StoredElement('child', 'CT:Block')],
+        $tree = new StoredTree([new StoredElement('root', 'Ct:Block', [], [], [
+            'content' => [new StoredElement('child', 'Ct:Block')],
         ])]);
 
         $duplicate = new DuplicateElement('root');
@@ -81,8 +81,8 @@ class DuplicateElementTest extends TestCase
     {
         $headline = StoredValue::ofString('Autumn sale');
         $tree = new StoredTree([
-            new StoredElement('original', 'CT:Card', [], ['headline' => $headline]),
-            new StoredElement('other', 'CT:Block'),
+            new StoredElement('original', 'Ct:Card', [], ['headline' => $headline]),
+            new StoredElement('other', 'Ct:Block'),
         ]);
 
         $duplicate = new DuplicateElement('original');
@@ -91,7 +91,7 @@ class DuplicateElementTest extends TestCase
         $clone = $result->roots[1];
         static::assertNotSame('original', $clone->id);
         static::assertSame('original', $result->roots[0]->id);
-        static::assertSame('CT:Card', $clone->component);
+        static::assertSame('Ct:Card', $clone->component);
         static::assertSame(['headline' => $headline], $clone->properties());
         static::assertSame([$clone->id], $duplicate->affected());
     }
@@ -102,7 +102,7 @@ class DuplicateElementTest extends TestCase
         $requirement = new DataRequirement('blog', 'entity', static::createStub(AbstractContentDataLoaderConfig::class));
         $contextDefinitions = new ContextDefinitions(['list' => new ContextProvider(ContextType::Single, BroadcastDistributionConfig::simple())], []);
         $style = new ElementStyle(['col-span' => ['md' => 6]]);
-        $tree = new StoredTree([new StoredElement('original', 'CT:Card', ['blog' => $requirement], [], [], $contextDefinitions, $style)]);
+        $tree = new StoredTree([new StoredElement('original', 'Ct:Card', ['blog' => $requirement], [], [], $contextDefinitions, $style)]);
 
         $result = new DuplicateElement('original')->apply($tree);
 
@@ -121,7 +121,7 @@ class DuplicateElementTest extends TestCase
     #[TestDox('carries the root consumer scope over to the reconstructed clone')]
     public function testDuplicatePreservesTheRootConsumerScopeOnClone(): void
     {
-        $original = StoredElementBuilder::create('CT:Card', 'original')
+        $original = StoredElementBuilder::create('Ct:Card', 'original')
             ->withConsumer('blog', ContextType::Single, scope: ConsumerScope::Root)
             ->build();
         $tree = new StoredTree([$original]);
@@ -138,10 +138,10 @@ class DuplicateElementTest extends TestCase
     #[TestDox('carries attributed specifications over to the reconstructed clone unchanged')]
     public function testDuplicatePreservesAttributedSpecificationsOnClone(): void
     {
-        $original = StoredElementBuilder::create('CT:Card', 'original')
+        $original = StoredElementBuilder::create('Ct:Card', 'original')
             ->withAttributedSpecification('blog', 'spec-1')
             ->build();
-        $tree = new StoredTree([$original, new StoredElement('other', 'CT:Block')]);
+        $tree = new StoredTree([$original, new StoredElement('other', 'Ct:Block')]);
 
         $result = new DuplicateElement('original')->apply($tree);
 
@@ -153,8 +153,8 @@ class DuplicateElementTest extends TestCase
     #[TestDox('duplicates a nested element into the same parent slot')]
     public function testDuplicateNestedElement(): void
     {
-        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
-            'content' => [new StoredElement('original', 'CT:Card')],
+        $tree = new StoredTree([new StoredElement('parent', 'Ct:Block', [], [], [
+            'content' => [new StoredElement('original', 'Ct:Card')],
         ])]);
 
         $result = new DuplicateElement('original')->apply($tree);
@@ -163,17 +163,17 @@ class DuplicateElementTest extends TestCase
         static::assertCount(2, $children);
         static::assertSame('original', $children[0]->id);
         static::assertTrue(Uuid::isValid($children[1]->id));
-        static::assertSame('CT:Card', $children[1]->component);
+        static::assertSame('Ct:Card', $children[1]->component);
     }
 
     #[TestDox('inserts the clone at an explicit index when given')]
     public function testDuplicateAtExplicitIndex(): void
     {
-        $tree = new StoredTree([new StoredElement('original', 'CT:Card'), new StoredElement('other', 'CT:Block')]);
+        $tree = new StoredTree([new StoredElement('original', 'Ct:Card'), new StoredElement('other', 'Ct:Block')]);
 
         $result = new DuplicateElement('original', 0)->apply($tree);
 
-        static::assertSame('CT:Card', $result->roots[0]->component);
+        static::assertSame('Ct:Card', $result->roots[0]->component);
         static::assertSame('original', $result->roots[1]->id);
         static::assertSame('other', $result->roots[2]->id);
     }
@@ -186,12 +186,12 @@ class DuplicateElementTest extends TestCase
     #[TestDox('repeats zero ids across a cloned subtree three levels deep')]
     public function testDuplicateDeepSubtreeRepeatsZeroIds(): void
     {
-        $tree = new StoredTree([new StoredElement('root', 'CT:Block', [], [], [
+        $tree = new StoredTree([new StoredElement('root', 'Ct:Block', [], [], [
             'content' => [
-                new StoredElement('inner', 'CT:Block', [], [], [
-                    'content' => [new StoredElement('leaf', 'CT:Card')],
+                new StoredElement('inner', 'Ct:Block', [], [], [
+                    'content' => [new StoredElement('leaf', 'Ct:Card')],
                 ]),
-                new StoredElement('sibling', 'CT:Card'),
+                new StoredElement('sibling', 'Ct:Card'),
             ],
         ])]);
 
@@ -214,8 +214,8 @@ class DuplicateElementTest extends TestCase
     #[TestDox('inserts the clone at a zero index inside the parent slot when given')]
     public function testDuplicateNestedAtZeroIndex(): void
     {
-        $tree = new StoredTree([new StoredElement('parent', 'CT:Block', [], [], [
-            'content' => [new StoredElement('original', 'CT:Card')],
+        $tree = new StoredTree([new StoredElement('parent', 'Ct:Block', [], [], [
+            'content' => [new StoredElement('original', 'Ct:Card')],
         ])]);
 
         $result = new DuplicateElement('original', 0)->apply($tree);
@@ -232,6 +232,6 @@ class DuplicateElementTest extends TestCase
         $duplicate = new DuplicateElement('ghost');
 
         $this->expectExceptionObject(ContentSystemException::mutationTargetNotFound('ghost'));
-        $duplicate->apply(new StoredTree([new StoredElement('other', 'CT:Block')]));
+        $duplicate->apply(new StoredTree([new StoredElement('other', 'Ct:Block')]));
     }
 }

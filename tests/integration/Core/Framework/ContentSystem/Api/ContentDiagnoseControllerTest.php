@@ -40,7 +40,7 @@ class ContentDiagnoseControllerTest extends TestCase
     #[TestDox('reports an unregistered component as an intrinsic violation without persisting')]
     public function testDiagnoseReportsUnregisteredComponent(): void
     {
-        $body = $this->diagnose(['layout' => [$this->element('CT:Test:DefinitelyUnregistered')]]);
+        $body = $this->diagnose(['layout' => [$this->element('Ct:Test:DefinitelyUnregistered')]]);
 
         static::assertFalse($body['diagnostics']['wellFormed']);
         $codes = array_column($body['diagnostics']['violations'], 'code');

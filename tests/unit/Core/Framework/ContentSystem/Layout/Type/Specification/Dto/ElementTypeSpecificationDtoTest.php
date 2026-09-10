@@ -31,7 +31,7 @@ class ElementTypeSpecificationDtoTest extends TestCase
             [],
         );
 
-        $schema = $dto->toContentSystemElementTypeSpecification('CT:Blog:Card', 'core')->toSchema();
+        $schema = $dto->toContentSystemElementTypeSpecification('Ct:Blog:Card', 'core')->toSchema();
 
         static::assertArrayHasKey('custom_key', $schema['properties']);
         static::assertArrayNotHasKey('different_name', $schema['properties']);
@@ -41,7 +41,7 @@ class ElementTypeSpecificationDtoTest extends TestCase
     #[TestDox('produces empty properties and slots when none provided')]
     public function testProducesEmptyCollectionsWhenNoneProvided(): void
     {
-        $schema = $this->buildMinimalDto()->toContentSystemElementTypeSpecification('CT:Empty', 'core')->toSchema();
+        $schema = $this->buildMinimalDto()->toContentSystemElementTypeSpecification('Ct:Empty', 'core')->toSchema();
 
         static::assertSame([], $schema['properties']);
         static::assertSame([], $schema['slots']);

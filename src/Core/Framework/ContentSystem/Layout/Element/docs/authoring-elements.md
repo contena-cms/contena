@@ -9,7 +9,7 @@ Each content element follows this structure:
 ```json
 {
   "id": "blog-card",
-  "component": "CT:Blog:Card",
+  "component": "Ct:Blog:Card",
   "properties": {
     "text": "Featured Blog",
     "blogId": "{{blogId}}"
@@ -18,7 +18,7 @@ Each content element follows this structure:
     "content": [
       {
         "id": "blog-title",
-        "component": "CT:Blog:Title"
+        "component": "Ct:Blog:Title"
       }
     ]
   }
@@ -61,22 +61,22 @@ Slots hold arrays of elements.
 ```json
 {
   "id": "main-container",
-  "component": "CT:Grid",
+  "component": "Ct:Grid",
   "properties": {
     "columns": "1"
   },
   "slots": {
     "header": [
-      {"id": "logo", "component": "CT:Content:Image"},
-      {"id": "navigation", "component": "CT:Navigation"},
-      {"id": "search", "component": "CT:Search"}
+      {"id": "logo", "component": "Ct:Content:Image"},
+      {"id": "navigation", "component": "Ct:Navigation"},
+      {"id": "search", "component": "Ct:Search"}
     ],
     "main": [
-      {"id": "blog-listing", "component": "CT:Blog:Listing"}
+      {"id": "blog-listing", "component": "Ct:Blog:Listing"}
     ],
     "sidebar": [
-      {"id": "filter-panel", "component": "CT:Filter:Panel"},
-      {"id": "promo-banner", "component": "CT:Content:Image"}
+      {"id": "filter-panel", "component": "Ct:Filter:Panel"},
+      {"id": "promo-banner", "component": "Ct:Content:Image"}
     ]
   }
 }
@@ -91,7 +91,7 @@ Containers can be nested for complex layouts:
 ```json
 {
   "id": "page-layout",
-  "component": "CT:Grid",
+  "component": "Ct:Grid",
   "properties": {
     "cssClass": "page-wrapper",
     "columns": "1"
@@ -100,7 +100,7 @@ Containers can be nested for complex layouts:
     "default": [
       {
         "id": "hero-section",
-        "component": "CT:Grid",
+        "component": "Ct:Grid",
         "properties": {
           "cssClass": "hero",
           "columns": "1"
@@ -109,7 +109,7 @@ Containers can be nested for complex layouts:
           "default": [
             {
               "id": "heading",
-              "component": "CT:Content:Text",
+              "component": "Ct:Content:Text",
               "properties": {
                 "text": "Summer Sale",
                 "style": "heading"
@@ -117,7 +117,7 @@ Containers can be nested for complex layouts:
             },
             {
               "id": "cta-button",
-              "component": "CT:Content:Button",
+              "component": "Ct:Content:Button",
               "properties": {
                 "label": "Shop Now"
               }

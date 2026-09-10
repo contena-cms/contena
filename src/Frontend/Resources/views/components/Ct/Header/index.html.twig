@@ -1,0 +1,85 @@
+{% props
+    header,
+%}
+
+{% set attributeDefaults = {
+    class: 'ct-header',
+} %}
+
+<header {{ attributes.defaults(attributeDefaults) }}>
+    <twig:Ct:Grid:Container
+        mode="max-content"
+        justifyContent="end"
+        align="end"
+        gap="15"
+        margin="0 0 15px 0"
+    >
+        <twig:Ct:Grid:Column :display="{ xs: false, sm: false, md: false, lg: true, xl: true, xxl: true }">
+            <twig:Ct:Header:LanguageSelect :languages="header.languages" />
+        </twig:Ct:Grid:Column>
+    </twig:Ct:Grid:Container>
+
+    <twig:Ct:Grid:Container
+        :columns="3"
+        :centered="true"
+        justifyContent="stretch"
+        alignContent="center"
+        align="center"
+        gap="16"
+        margin="0 0 16px 0"
+    >
+        <twig:Ct:Grid:Column
+            justify="stretch"
+            :span="{ xs: 3, sm: 3, md: 3, lg: 1, xl: 1, xxl: 1 }"
+        >
+            <twig:Ct:Header:Logo />
+        </twig:Ct:Grid:Column>
+
+        {# Mobile menu trigger #}
+        <twig:Ct:Grid:Column
+            :display="{ xs: true, sm: true, md: true, lg: false, xl: false, xxl: false }"
+            :span="{ xs: 2, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }"
+        >
+            <twig:Ct:Header:MenuWidget />
+        </twig:Ct:Grid:Column>
+
+        <twig:Ct:Grid:Column :display="{ xs: false, sm: true, md: true, lg: true, xl: true, xxl: true }">
+            <twig:Ct:Header:Search />
+        </twig:Ct:Grid:Column>
+
+        <twig:Ct:Grid:Column justify="end">
+            <twig:Ct:Grid:Container
+                mode="max-content"
+                gap="0"
+                margin="0"
+                padding="0"
+                justifyContent="end"
+                :centered="false"
+            >
+                {# Mobile search trigger #}
+                <twig:Ct:Grid:Column :display="{ xs: true, sm: false, md: false, lg: false, xl: false, xxl: false }">
+                    <twig:Ct:Header:Widget
+                        icon="search"
+                    />
+                </twig:Ct:Grid:Column>
+                <twig:Ct:Header:AccountWidget />
+            </twig:Ct:Grid:Container>
+        </twig:Ct:Grid:Column>
+    </twig:Ct:Grid:Container>
+
+    <twig:Ct:Grid:Container
+        :centered="false"
+        columns="100%"
+        gap="0"
+        margin="0"
+        justify="center"
+        border="bottom"
+        borderVariant="secondarySubtle"
+    >
+        {# :display="{ xs: false, sm: false, md: false, lg: true, xl: true, xxl: true }" #}
+        <twig:Ct:Header:Navbar
+            class="d-none d-lg-block"
+            :navigationTree="header.navigation.tree"
+        />
+    </twig:Ct:Grid:Container>
+</header>

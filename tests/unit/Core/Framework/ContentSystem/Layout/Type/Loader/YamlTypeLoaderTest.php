@@ -55,7 +55,7 @@ class YamlTypeLoaderTest extends TestCase
             $byName[$spec->name()] = $spec;
         }
 
-        static::assertArrayHasKey('CT:Test:Element', $byName);
+        static::assertArrayHasKey('Ct:Test:Element', $byName);
         static::assertArrayHasKey('TestPlugin:Plugin:Element', $byName);
     }
 
@@ -67,7 +67,7 @@ class YamlTypeLoaderTest extends TestCase
         $dtos = $loader->loadDtosFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'CT');
 
         static::assertCount(1, $dtos);
-        static::assertSame('CT:Test:Element', $dtos[0]->name);
+        static::assertSame('Ct:Test:Element', $dtos[0]->name);
         static::assertSame('test-source', $dtos[0]->source);
     }
 
@@ -79,7 +79,7 @@ class YamlTypeLoaderTest extends TestCase
         $definitions = $loader->loadFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'CT');
 
         static::assertCount(1, $definitions);
-        static::assertSame('CT:Test:Element', $definitions[0]->name());
+        static::assertSame('Ct:Test:Element', $definitions[0]->name());
         static::assertSame('test-source', $definitions[0]->source());
     }
 
@@ -96,7 +96,7 @@ class YamlTypeLoaderTest extends TestCase
             $byName[$definition->name()] = $definition;
         }
 
-        $containerProperties = $byName['CT:Grid:Container']->toSchema()['properties'];
+        $containerProperties = $byName['Ct:Grid:Container']->toSchema()['properties'];
 
         foreach (['padding', 'margin'] as $spacingProperty) {
             static::assertSame(['string', 'object'], $containerProperties[$spacingProperty]['type']);
@@ -180,10 +180,10 @@ class YamlTypeLoaderTest extends TestCase
         $overlay = $this->createLoader([])->loadOverlayFromDirectory($this->tempDir, 'test-source', 'CT');
 
         static::assertCount(2, $overlay);
-        static::assertArrayHasKey('CT:Button', $overlay);
-        static::assertArrayHasKey('CT:Card', $overlay);
-        static::assertSame('CT:Button', $overlay['CT:Button']->name());
-        static::assertSame('CT:Card', $overlay['CT:Card']->name());
+        static::assertArrayHasKey('Ct:Button', $overlay);
+        static::assertArrayHasKey('Ct:Card', $overlay);
+        static::assertSame('Ct:Button', $overlay['Ct:Button']->name());
+        static::assertSame('Ct:Card', $overlay['Ct:Card']->name());
     }
 
     #[TestDox('returns empty array when no directories are injected')]
@@ -231,7 +231,7 @@ class YamlTypeLoaderTest extends TestCase
         ]);
 
         $this->expectExceptionObject(
-            ContentSystemException::elementTypeDuplicate('CT:Dup', 'source-a', 'source-b')
+            ContentSystemException::elementTypeDuplicate('Ct:Dup', 'source-a', 'source-b')
         );
         $loader->load();
     }
@@ -247,7 +247,7 @@ class YamlTypeLoaderTest extends TestCase
         ]);
 
         $this->expectExceptionObject(
-            ContentSystemException::elementTypeDuplicate('CT:Button', 'button.yaml', 'button.yml')
+            ContentSystemException::elementTypeDuplicate('Ct:Button', 'button.yaml', 'button.yml')
         );
         $loader->load();
     }
@@ -296,7 +296,7 @@ class YamlTypeLoaderTest extends TestCase
         ]);
 
         $this->expectException(ContentSystemException::class);
-        $this->expectExceptionMessageMatches('/types\[CT:Invalid\]\.label/');
+        $this->expectExceptionMessageMatches('/types\[Ct:Invalid\]\.label/');
         $loader->load();
     }
 
@@ -314,7 +314,7 @@ class YamlTypeLoaderTest extends TestCase
         ]);
 
         $this->expectException(ContentSystemException::class);
-        $this->expectExceptionMessageMatches('/(?=.*types\[CT:A:InvalidA\])(?=.*types\[CT:B:InvalidB\])/s');
+        $this->expectExceptionMessageMatches('/(?=.*types\[Ct:A:InvalidA\])(?=.*types\[Ct:B:InvalidB\])/s');
         $loader->load();
     }
 

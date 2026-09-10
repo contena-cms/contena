@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * construction, so this tag-registered loader never participates in it regardless of its declared config.)
  *
  * The loader produces `MediaEntity` (so its `entityName` key is FQCN-derivable and it wires onto the shipped
- * `CT:Media:Image` type) and declares two required `propertyReference` keys, so this proof exercises
+ * `Ct:Media:Image` type) and declares two required `propertyReference` keys, so this proof exercises
  * multi-reference input synthesis with two independently gating keys, not just one; see
  * {@see TestMultiReferenceGatingLoader::configSpecification()}.
  *
@@ -43,7 +43,7 @@ class BindingConvenienceLayerExtensionParityTest extends TestCase
     public function testTierBExpansionNamesLoaderAndDerivesEntityName(): void
     {
         $dto = new BindingSpecificationDto(
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Extension parity binding',
             ['media' => [TestMultiReferenceGatingLoader::SOURCE => ['property' => 'maxImageWidth', 'secondProperty' => 'height']]],
             [],
@@ -68,7 +68,7 @@ class BindingConvenienceLayerExtensionParityTest extends TestCase
     public function testInputSynthesisStampsDerivedRequiredFlag(): void
     {
         $dto = new BindingSpecificationDto(
-            'CT:Media:Image',
+            'Ct:Media:Image',
             'Extension parity binding',
             ['media' => [TestMultiReferenceGatingLoader::SOURCE => ['property' => 'maxImageWidth', 'secondProperty' => 'height', 'activeProperty' => 'fetchpriority']]],
             [],
@@ -125,7 +125,7 @@ class BindingConvenienceLayerExtensionParityTest extends TestCase
      */
     private function wiredImage(array $properties): StoredElement
     {
-        return StoredElementBuilder::create('CT:Media:Image', 'el-1')
+        return StoredElementBuilder::create('Ct:Media:Image', 'el-1')
             ->withDataRequirement('media', TestMultiReferenceGatingLoader::SOURCE, new TestMultiReferenceGatingLoaderConfig('media', 'maxImageWidth', 'height', 'fetchpriority'))
             ->withProperties($properties)
             ->build();

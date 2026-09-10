@@ -23,7 +23,7 @@ Makes `{{page}}` and `{{limit}}` available as placeholders:
 ```json
 {
   "id": "blog-listing",
-  "component": "CT:Blog:Listing",
+  "component": "Ct:Blog:Listing",
   "properties": {
     "page": "{{page}}",
     "limit": "{{limit}}"

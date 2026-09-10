@@ -21,7 +21,7 @@ class ElementTypeCollisionDetectorTest extends TestCase
     public function testValidatePassesWhenNamesDoNotConflict(): void
     {
         $detector = new ElementTypeCollisionDetector(
-            $this->buildRegistry(['CT:Existing' => 'core']),
+            $this->buildRegistry(['Ct:Existing' => 'core']),
         );
 
         $this->expectNotToPerformAssertions();
@@ -53,7 +53,7 @@ class ElementTypeCollisionDetectorTest extends TestCase
     public function testValidatePassesWhenProposedMapIsEmpty(): void
     {
         $detector = new ElementTypeCollisionDetector(
-            $this->buildRegistry(['CT:Hero' => 'core']),
+            $this->buildRegistry(['Ct:Hero' => 'core']),
         );
 
         $this->expectNotToPerformAssertions();
@@ -69,15 +69,15 @@ class ElementTypeCollisionDetectorTest extends TestCase
     public function testValidateThrowsWhenNameCollidesWithActiveType(): void
     {
         $detector = new ElementTypeCollisionDetector(
-            $this->buildRegistry(['CT:Hero' => 'core']),
+            $this->buildRegistry(['Ct:Hero' => 'core']),
         );
 
         $this->expectExceptionObject(
-            ContentSystemException::elementTypeDuplicate('CT:Hero', 'core', 'app:MyApp')
+            ContentSystemException::elementTypeDuplicate('Ct:Hero', 'core', 'app:MyApp')
         );
 
         $detector->validate(
-            ['CT:Hero' => 'app:MyApp'],
+            ['Ct:Hero' => 'app:MyApp'],
             null,
             [],
         );
@@ -141,15 +141,15 @@ class ElementTypeCollisionDetectorTest extends TestCase
     public function testValidateThrowsWhenExcludeSourceDoesNotMatchExistingSource(): void
     {
         $detector = new ElementTypeCollisionDetector(
-            $this->buildRegistry(['CT:Hero' => 'core']),
+            $this->buildRegistry(['Ct:Hero' => 'core']),
         );
 
         $this->expectExceptionObject(
-            ContentSystemException::elementTypeDuplicate('CT:Hero', 'core', 'app:MyApp')
+            ContentSystemException::elementTypeDuplicate('Ct:Hero', 'core', 'app:MyApp')
         );
 
         $detector->validate(
-            ['CT:Hero' => 'app:MyApp'],
+            ['Ct:Hero' => 'app:MyApp'],
             'app:MyApp',
             [],
         );
