@@ -45,6 +45,7 @@ use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Test\Stub\ContentSystem\ContentSystemElementTypeSpecificationBuilder;
 use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -704,7 +705,10 @@ class LayoutDiagnosticsTest extends TestCase
         // replaced tree diagnoses as resolvable.
         $bindingRegistry = static::createStub(AbstractContentSystemBindingSpecificationRegistry::class);
         $bindingRegistry->method('all')->willReturn([]);
-        $bindingApplicator = new BindingApplicator(static::createStub(DataLoaderConfigSerializerProvider::class));
+        $bindingApplicator = new BindingApplicator(
+            static::createStub(DataLoaderConfigSerializerProvider::class),
+            static::createStub(AbstractContentSystemElementTypeRegistry::class),
+        );
 
         $replaced = new ReplaceElement($this->registry($specs), 'el', 'Ct:New', $bindingRegistry, $bindingApplicator)
             ->apply(new StoredTree([new StoredElement('el', 'Ct:Old')]));
@@ -1129,6 +1133,7 @@ class LayoutDiagnosticsTest extends TestCase
             $serializers,
             $styleOptionRegistry ?? $this->styleOptionRegistry([]),
             new ContextPathResolver(),
+            static::createStub(Connection::class),
         );
     }
 

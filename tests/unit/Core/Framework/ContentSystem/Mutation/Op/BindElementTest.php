@@ -13,6 +13,7 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSe
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\BindElement;
 use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -173,6 +174,6 @@ class BindElementTest extends TestCase
         $serializers = static::createStub(DataLoaderConfigSerializerProvider::class);
         $serializers->method('decode')->willReturn($config);
 
-        return new BindingApplicator($serializers);
+        return new BindingApplicator($serializers, static::createStub(AbstractContentSystemElementTypeRegistry::class));
     }
 }

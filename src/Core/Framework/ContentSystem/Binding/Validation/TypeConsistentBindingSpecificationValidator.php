@@ -291,6 +291,16 @@ final class TypeConsistentBindingSpecificationValidator extends ConstraintValida
 
         $default = $entry['default'];
 
+        if ($default === null && $property->type()->translatable()) {
+            $this->context->buildViolation($constraint->inputsEntryNullDefaultOnTranslatableMessage)
+                ->setParameter('{{ key }}', $key)
+                ->setParameter('{{ type }}', $type->name())
+                ->atPath($this->path($id, 'inputs[' . $key . '].default'))
+                ->addViolation();
+
+            return;
+        }
+
         if ($default === null) {
             return;
         }

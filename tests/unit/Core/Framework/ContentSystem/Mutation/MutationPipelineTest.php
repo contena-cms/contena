@@ -194,7 +194,10 @@ class MutationPipelineTest extends TestCase
             'el-1',
             'Ct:New',
             static::createStub(AbstractContentSystemBindingSpecificationRegistry::class),
-            new BindingApplicator(static::createStub(DataLoaderConfigSerializerProvider::class)),
+            new BindingApplicator(
+                static::createStub(DataLoaderConfigSerializerProvider::class),
+                static::createStub(AbstractContentSystemElementTypeRegistry::class),
+            ),
         );
 
         $result = $this->pipeline($this->diagnosticsResolvingBlog())->run($replace, $this->unwiredTree(), null);

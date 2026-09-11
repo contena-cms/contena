@@ -103,6 +103,7 @@ class ContentSystemException extends HttpException
     public const FIELD_SELECTION_NOT_SUPPORTED = 'CONTENT_SYSTEM__FIELD_SELECTION_NOT_SUPPORTED';
     public const UNSUPPORTED_PROPERTY_VALUE_TYPE = 'CONTENT_SYSTEM__UNSUPPORTED_PROPERTY_VALUE_TYPE';
     public const INVALID_ELEMENT_ID = 'CONTENT_SYSTEM__INVALID_ELEMENT_ID';
+    public const TRANSLATION_SHAPE_INVALID = 'CONTENT_SYSTEM__TRANSLATION_SHAPE_INVALID';
 
     /**
      * Error codes that mark a defect in client-supplied layout input rather than an internal fault; the
@@ -397,6 +398,16 @@ class ContentSystemException extends HttpException
             self::DUPLICATE_ELEMENT_ID,
             'Served forest is corrupt: element ID "{{ elementId }}" appears more than once, and element IDs must be unique across a forest. Re-save the layout through the DAL write, which rejects a repeated ID, and make sure no rendering listener that replaces the tree introduces one.',
             ['elementId' => $elementId]
+        );
+    }
+
+    public static function translationShapeInvalid(string $elementId, string $key, string $actualType): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::TRANSLATION_SHAPE_INVALID,
+            'Property "{{ key }}" of element "{{ elementId }}" is translatable and must hold a language map, but holds {{ actualType }}.',
+            ['elementId' => $elementId, 'key' => $key, 'actualType' => $actualType]
         );
     }
 

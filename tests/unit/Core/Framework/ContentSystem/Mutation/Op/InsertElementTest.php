@@ -302,12 +302,15 @@ class InsertElementTest extends TestCase
         $serializers = static::createStub(DataLoaderConfigSerializerProvider::class);
         $serializers->method('decode')->willReturn($config);
 
-        return new BindingApplicator($serializers);
+        return new BindingApplicator($serializers, static::createStub(AbstractContentSystemElementTypeRegistry::class));
     }
 
     private function unboundApplicator(): BindingApplicator
     {
-        return new BindingApplicator(static::createStub(DataLoaderConfigSerializerProvider::class));
+        return new BindingApplicator(
+            static::createStub(DataLoaderConfigSerializerProvider::class),
+            static::createStub(AbstractContentSystemElementTypeRegistry::class),
+        );
     }
 
     /**

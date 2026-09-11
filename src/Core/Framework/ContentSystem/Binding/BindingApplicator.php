@@ -2,19 +2,26 @@
 
 namespace Contena\Core\Framework\ContentSystem\Binding;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
+use Contena\Core\Framework\ContentSystem\Binding\Validation\TypeConsistentBindingSpecification;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
 
 /**
  * Applies one {@see BindingSpecification}'s wiring onto a {@see StoredElement}, through the element's own
  * `with*()` copiers. Two modes: {@see self::apply()} overwrites the same `resolves`/attribution keys,
  * {@see self::applyFillOnly()} wires and attributes only keys the element carries no data requirement for yet.
  * Both seed an `inputs` default only when the element does not already carry the property
- * ({@see StoredElement::property()} presence gate, so an authored value always wins, including an explicit null).
+ * ({@see StoredElement::property()} presence gate, so an authored value always wins, including an explicit null),
+ * and both seed it in the storage shape the target property declares — a translatable property's default lands
+ * under the anchor language key, resolved through the element-type registry.
  *
  * @internal
  */
@@ -22,6 +29,7 @@ final class BindingApplicator
 {
     public function __construct(
         private readonly DataLoaderConfigSerializerProvider $configSerializerProvider,
+        private readonly AbstractContentSystemElementTypeRegistry $registry,
     ) {
     }
 
@@ -84,6 +92,7 @@ final class BindingApplicator
      */
     private function seedInputDefaults(StoredElement $element, BindingSpecification $specification): array
     {
+        $properties = $this->registry->has($element->component) ? $this->registry->get($element->component)->properties() : [];
         $defaults = [];
 
         foreach ($specification->inputs() as $key => $input) {
@@ -95,10 +104,24 @@ final class BindingApplicator
                 continue;
             }
 
-            $defaults[$key] = StoredValue::fromDecoded($input->default);
+            $defaults[$key] = StoredValue::fromDecoded($this->inStoredShape($input->default, $properties[$key] ?? null));
         }
 
         return $defaults;
+    }
+
+    /**
+     * The shape rule {@see PropertyType::storedDefault()} states, applied to a specification's own default.
+     * A null default is left untouched and rejected by {@see TypeConsistentBindingSpecification} when its target
+     * is translatable.
+     */
+    private function inStoredShape(mixed $default, ?PropertySpecification $property): mixed
+    {
+        if ($default === null || $property === null || !$property->type()->translatable()) {
+            return $default;
+        }
+
+        return [Defaults::LANGUAGE_SYSTEM => $default];
     }
 
     /**

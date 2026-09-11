@@ -898,10 +898,11 @@ class ContentPipelineTest extends TestCase
         // above the target, so the wrapper is NOT in the tree the render step lowers. A mechanism that read
         // root context off the rendered forest would find no wrapper here and deliver nothing.
         $preparation = new StoredTreePreparer(
+            $this->typeRegistry(),
             new VirtualRootWrapper(),
             new PartialRenderer(new ElementTreePruner(), new ContextDependencyAnalyzer(), new SubTreeExtractor()),
             static::createStub(DataLoaderConfigSerializerProvider::class),
-        )->prepare($layout->elements, $specification, RenderingMode::FULL);
+        )->prepare($layout->elements, $specification, RenderingMode::FULL, Generator::generateChannelContext());
         static::assertFalse($preparation->scaffolding->virtualRootSurvivedPrune);
         static::assertSame(['middle-id', 'consumer-id'], $this->collectStoredIds($preparation->tree));
         static::assertSame(VirtualRootWrapper::VIRTUAL_ROOT_ID, $preparation->prePruneForest[0]->id);
@@ -1037,10 +1038,11 @@ class ContentPipelineTest extends TestCase
         static::assertTrue($wrapper->requiresWrapping($specification, $layout->elements));
 
         $preparation = new StoredTreePreparer(
+            $this->typeRegistry(),
             $wrapper,
             new PartialRenderer(new ElementTreePruner(), new ContextDependencyAnalyzer(), new SubTreeExtractor()),
             static::createStub(DataLoaderConfigSerializerProvider::class),
-        )->prepare($layout->elements, $specification, RenderingMode::SKELETON);
+        )->prepare($layout->elements, $specification, RenderingMode::SKELETON, Generator::generateChannelContext());
 
         // Fixture guard, and what makes the order observable at all: both finishing steps are live, because
         // the prune left the virtual root heading the forest and the target it extracts is still under it.
@@ -1409,6 +1411,7 @@ class ContentPipelineTest extends TestCase
         return new ContentPipeline(
             $this->eventDispatcher,
             new StoredTreePreparer(
+                $this->typeRegistry(),
                 new VirtualRootWrapper(),
                 new PartialRenderer(new ElementTreePruner(), new ContextDependencyAnalyzer(), new SubTreeExtractor()),
                 $this->configSerializers,
