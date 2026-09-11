@@ -94,6 +94,12 @@ class MySQLFactory
                 $parameters['wrapperClass'] = PrimaryReadReplicaConnection::class;
             }
 
+            if (!\array_key_exists('keepReplica', $parameters)) {
+                $parameters['keepReplica'] = true;
+            } else {
+                $parameters['keepReplica'] = (bool) self::castValue($parameters['keepReplica']);
+            }
+
             // Primary connection should use parameters from the main url
             $parameters['primary'] = array_merge([
                 'charset' => $parameters['charset'],

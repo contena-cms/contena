@@ -3,11 +3,13 @@
 namespace Contena\Tests\Unit\Core\Framework;
 
 use Contena\Core\Framework\Adapter\Cache\StampedeProtectionConfigurator;
+use Contena\Core\Framework\Adapter\Database\ReplicaConnectionResetter;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\Framework;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -34,6 +36,7 @@ class FrameworkTest extends TestCase
 
         $container->set(FeatureFlagRegistry::class, $registry);
         $container->set(StampedeProtectionConfigurator::class, $stampedeProtectionConfigurator);
+        $container->set(ReplicaConnectionResetter::class, new ReplicaConnectionResetter(static::createStub(Connection::class)));
         $container->set(DefinitionInstanceRegistry::class, static::createStub(DefinitionInstanceRegistry::class));
         $container->setParameter('kernel.cache_dir', '/tmp');
         $container->setParameter('contena.cache.compress', true);

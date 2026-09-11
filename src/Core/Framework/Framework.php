@@ -7,6 +7,7 @@ use Contena\Core\Framework\Adapter\Cache\CacheCompilerPass;
 use Contena\Core\Framework\Adapter\Cache\CacheValueCompressor;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCompilerPass;
 use Contena\Core\Framework\Adapter\Cache\StampedeProtectionConfigurator;
+use Contena\Core\Framework\Adapter\Database\ReplicaConnectionResetter;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionsCompilerPass;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityCompiler;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AssetBundleRegistrationCompilerPass;
@@ -182,6 +183,9 @@ class Framework extends Bundle
 
         $stampedeProtectionConfigurator = $this->container->get(StampedeProtectionConfigurator::class);
         $stampedeProtectionConfigurator->apply();
+
+        // ServicesResetter only resets initialized services; initialize the resetter until Symfony does this itself.
+        $this->container->get(ReplicaConnectionResetter::class);
     }
 
     protected function getActionEventClasses(): array

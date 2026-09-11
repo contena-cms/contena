@@ -11,6 +11,7 @@ use Contena\Core\Framework\Adapter\Cache\Http\ChannelCacheKeySubscriber;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 use Contena\Core\Framework\Adapter\Command\S3FilesystemVisibilityCommand;
+use Contena\Core\Framework\Adapter\Database\ReplicaConnectionResetter;
 use Contena\Core\Framework\Adapter\Kernel\EnvIntOrNullProcessor;
 use Contena\Core\Framework\Adapter\Kernel\HttpCacheKernel;
 use Contena\Core\Framework\Adapter\Kernel\HttpKernel;
@@ -191,6 +192,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(QueryDataBagResolver::class)
         ->tag('controller.argument_value_resolver', ['priority' => 1000]);
+
+    $services->set(ReplicaConnectionResetter::class)
+        ->public()
+        ->args([service(Connection::class)])
+        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(RequestDataBagResolver::class)
         ->tag('controller.argument_value_resolver', ['priority' => 1000]);
