@@ -104,10 +104,17 @@ final class StoredElementWiringDecoder
                 );
             }
 
-            $providers[$key] = new ContextProvider(
-                $contextType,
-                $this->distributionConfig($strategy, $this->stringKeyed($config, $path))
+            $config = $this->stringKeyed($config, $path);
+            $distributionConfig = $this->distributionConfig($strategy, $config);
+
+            $this->rejectUnknownKeys(
+                $config,
+                ['type', ...array_keys($distributionConfig->toArray())],
+                $path,
+                'provider'
             );
+
+            $providers[$key] = new ContextProvider($contextType, $distributionConfig);
         }
 
         return $providers;

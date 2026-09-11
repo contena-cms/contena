@@ -173,7 +173,20 @@ final class StoredTreeWiringConstraints
             return;
         }
 
-        foreach ($configClass::buildConstraints() as $fieldName => $fieldConstraints) {
+        $constraints = $configClass::buildConstraints();
+        $knownKeys = ['type', 'distribution', ...array_keys($constraints)];
+
+        foreach (array_keys($value) as $fieldName) {
+            if (!\is_string($fieldName) || \in_array($fieldName, $knownKeys, true)) {
+                continue;
+            }
+
+            $context->buildViolation('This field was not expected.')
+                ->atPath("[$fieldName]")
+                ->addViolation();
+        }
+
+        foreach ($constraints as $fieldName => $fieldConstraints) {
             $fieldValue = $value[$fieldName] ?? null;
 
             foreach ($fieldConstraints as $constraint) {
