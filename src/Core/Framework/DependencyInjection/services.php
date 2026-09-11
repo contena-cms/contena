@@ -109,6 +109,7 @@ use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Snippet\Api\SnippetController;
 use Contena\Core\System\Snippet\Api\TranslationController;
 use Contena\Core\System\Snippet\Files\AppSnippetFileLoader;
+use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileCollectionFactory;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
@@ -445,8 +446,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(TranslationConfig::class),
             service(TranslationLoader::class),
             service('contena.filesystem.translation'),
-            service(SourceResolver::class),
-            service('logger'),
+            service(FrontendSnippetStorage::class),
         ]);
 
     $services->set(AppSnippetFileLoader::class)->args([param('kernel.project_dir')]);

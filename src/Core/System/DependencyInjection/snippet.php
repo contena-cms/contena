@@ -16,6 +16,8 @@ use Contena\Core\System\Snippet\Command\UpdateTranslationCommand;
 use Contena\Core\System\Snippet\Command\Util\CountryAgnosticFileLinter;
 use Contena\Core\System\Snippet\Command\ValidateSnippetsCommand;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
+use Contena\Core\System\Snippet\Files\FrontendSnippetLifecycleHandler;
+use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
 use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTask;
 use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTaskHandler;
 use Contena\Core\System\Snippet\Service\AbstractTranslationConfigLoader;
@@ -31,6 +33,8 @@ use Contena\Core\System\Snippet\SnippetFileHandler;
 use Contena\Core\System\Snippet\SnippetFixer;
 use Contena\Core\System\Snippet\SnippetValidator;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
+use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\System\Snippet\Subscriber\CustomFieldSubscriber;
 use Contena\Core\System\Snippet\Subscriber\LanguageDeletionSubscriber;
 use Doctrine\DBAL\Connection;
@@ -50,6 +54,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SnippetSetDefinition::class)
         ->tag('contena.entity.definition');
+
+    $services->set(FrontendSnippetStorage::class)
+        ->args([
+            service('contena.filesystem.translation'),
+            service(SourceResolver::class),
+            service('logger'),
+            param('kernel.cache_dir') . '/app-snippets',
+        ]);
+
+    $services->set(FrontendSnippetLifecycleHandler::class)
+        ->args([
+            service(FrontendSnippetStorage::class),
+            service(CacheInvalidator::class),
+            service(Connection::class),
+        ])
+        ->tag('contena.app_lifecycle.handler', ['priority' => -1400]);
 
     $services->set(SnippetDefinition::class)
         ->tag('contena.entity.definition');
