@@ -10,7 +10,7 @@
                 "operationId": "readContentHeader",
                 "parameters": [
                     {
-                        "name": "sw-language-id",
+                        "name": "ct-language-id",
                         "in": "header",
                         "description": "Instructs Contena to return the response in the given language.",
                         "required": false,
@@ -41,7 +41,7 @@
                 "operationId": "readContentHeaderDecomposed",
                 "parameters": [
                     {
-                        "name": "sw-language-id",
+                        "name": "ct-language-id",
                         "in": "header",
                         "description": "Instructs Contena to return the response in the given language.",
                         "required": false,
@@ -72,7 +72,7 @@
                 "operationId": "readContentHeaderSkeleton",
                 "parameters": [
                     {
-                        "name": "sw-language-id",
+                        "name": "ct-language-id",
                         "in": "header",
                         "description": "Instructs Contena to return the response in the given language.",
                         "required": false,
@@ -103,7 +103,7 @@
                 "operationId": "readContentHeaderData",
                 "parameters": [
                     {
-                        "name": "sw-language-id",
+                        "name": "ct-language-id",
                         "in": "header",
                         "description": "Instructs Contena to return the response in the given language.",
                         "required": false,

@@ -204,7 +204,7 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
                 'description' => 'Accepted response content types',
             ]),
             new Parameter([
-                'parameter' => 'swLanguageId',
+                'parameter' => 'ctLanguageId',
                 'name' => PlatformRequest::HEADER_LANGUAGE_ID,
                 'in' => 'header',
                 'required' => false,
@@ -215,7 +215,7 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
                 'description' => 'Instructs Contena to return the response in the given language.',
             ]),
             new Parameter([
-                'parameter' => 'swDomain',
+                'parameter' => 'ctDomain',
                 'name' => PlatformRequest::HEADER_DOMAIN,
                 'in' => 'header',
                 'required' => false,
@@ -522,8 +522,8 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
     private function injectContextHeaders(array &$specs): void
     {
         $headers = [
-            ['name' => PlatformRequest::HEADER_LANGUAGE_ID, 'ref' => '#/components/parameters/swLanguageId'],
-            ['name' => PlatformRequest::HEADER_DOMAIN, 'ref' => '#/components/parameters/swDomain'],
+            ['name' => PlatformRequest::HEADER_LANGUAGE_ID, 'ref' => '#/components/parameters/ctLanguageId'],
+            ['name' => PlatformRequest::HEADER_DOMAIN, 'ref' => '#/components/parameters/ctDomain'],
         ];
 
         foreach ($specs['paths'] as $path => &$pathDefinition) {

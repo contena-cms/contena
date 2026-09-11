@@ -1,0 +1,424 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/_action/channel-file/{fileFamily}/{channelId}": {
+            "get": {
+                "tags": [
+                    "Channel Files"
+                ],
+                "summary": "List discovered channel files",
+                "description": "Lists all discovered public files for a file family and channel, including content type and the stored channel configuration when one exists.",
+                "operationId": "listChannelFiles",
+                "parameters": [
+                    {
+                        "name": "fileFamily",
+                        "in": "path",
+                        "description": "File family below `Resources/views/files`, for example `agentic`.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 64,
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                        }
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "path",
+                        "description": "Identifier of the channel for which stored configuration should be loaded.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Discovered channel files for the given file family.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChannelFileListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid file family.",
+                        "$ref": "#/components/responses/400"
+                    }
+                }
+            }
+        },
+        "/_action/channel-file/{fileFamily}/{channelId}/detail": {
+            "get": {
+                "tags": [
+                    "Channel Files"
+                ],
+                "summary": "Load channel file detail",
+                "description": "Loads detail data for a discovered public file, including contributing Twig templates, their source content, and the stored channel configuration when one exists.",
+                "operationId": "getChannelFileDetail",
+                "parameters": [
+                    {
+                        "name": "fileFamily",
+                        "in": "path",
+                        "description": "File family below `Resources/views/files`, for example `agentic`.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 64,
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                        }
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "path",
+                        "description": "Identifier of the channel for which stored configuration should be loaded.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "name": "fileName",
+                        "in": "query",
+                        "description": "Public file path without a leading slash. Subfolders are supported, for example `.well-known/ucp.json`.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "examples": [
+                                "llms.txt",
+                                ".well-known/ucp.json"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail data for the discovered channel file.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChannelFileDetailResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid file family or file name.",
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "description": "The requested channel file was not discovered.",
+                        "$ref": "#/components/responses/404"
+                    }
+                }
+            }
+        },
+        "/_action/channel-file/{fileFamily}/{channelId}/preview": {
+            "post": {
+                "tags": [
+                    "Channel Files"
+                ],
+                "summary": "Preview a channel file",
+                "description": "Renders a discovered public file for a channel with the supplied Twig template overrides. This allows Administration previews without persisting the overrides first.",
+                "operationId": "previewChannelFile",
+                "parameters": [
+                    {
+                        "name": "fileFamily",
+                        "in": "path",
+                        "description": "File family below `Resources/views/files`, for example `agentic`.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 64,
+                            "pattern": "^[A-Za-z0-9_-]+$"
+                        }
+                    },
+                    {
+                        "name": "channelId",
+                        "in": "path",
+                        "description": "Identifier of the channel used to build the rendering context.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Preview input containing the public file name and optional Twig overrides keyed by Twig namespace.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChannelFilePreviewRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rendered preview content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChannelFilePreviewResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request payload, file family, or file name.",
+                        "$ref": "#/components/responses/400"
+                    },
+                    "404": {
+                        "description": "The requested channel file was not discovered.",
+                        "$ref": "#/components/responses/404"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ChannelFileConfiguration": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "enabled",
+                    "templateOverrides"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Identifier of the channel_file row.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "enabled": {
+                        "description": "Whether this file is served publicly for the channel.",
+                        "type": "boolean"
+                    },
+                    "templateOverrides": {
+                        "description": "Administrator-provided Twig overrides keyed by Twig namespace. The reserved `user_provided_content` key stores plain text for the dedicated append block when supported by the template chain.",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ChannelFileDescriptor": {
+                "type": "object",
+                "required": [
+                    "fileFamily",
+                    "fileName",
+                    "contentType",
+                    "configuration"
+                ],
+                "properties": {
+                    "fileFamily": {
+                        "description": "File family below `Resources/views/files`.",
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "fileName": {
+                        "description": "Public file path without a leading slash.",
+                        "type": "string",
+                        "examples": [
+                            "llms.txt",
+                            ".well-known/ucp.json"
+                        ]
+                    },
+                    "contentType": {
+                        "description": "Detected response content type for the public file.",
+                        "type": "string",
+                        "examples": [
+                            "text/plain; charset=utf-8"
+                        ]
+                    },
+                    "configuration": {
+                        "description": "Stored channel configuration for this file, or null when it has not been configured yet.",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ChannelFileConfiguration"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                }
+            },
+            "ChannelFileDetail": {
+                "type": "object",
+                "required": [
+                    "fileFamily",
+                    "fileName",
+                    "templatePath",
+                    "contentType",
+                    "templates",
+                    "supportsUserProvidedContent",
+                    "configuration"
+                ],
+                "properties": {
+                    "fileFamily": {
+                        "description": "File family below `Resources/views/files`.",
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "fileName": {
+                        "description": "Public file path without a leading slash.",
+                        "type": "string",
+                        "examples": [
+                            "llms.txt",
+                            ".well-known/ucp.json"
+                        ]
+                    },
+                    "templatePath": {
+                        "description": "Relative Twig template path used for rendering.",
+                        "type": "string",
+                        "examples": [
+                            "files/agentic/llms.txt.twig"
+                        ]
+                    },
+                    "contentType": {
+                        "description": "Detected response content type for the public file.",
+                        "type": "string",
+                        "examples": [
+                            "text/plain; charset=utf-8"
+                        ]
+                    },
+                    "templates": {
+                        "description": "Contributing Twig templates in resolved inheritance order.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ChannelFileTemplate"
+                        }
+                    },
+                    "supportsUserProvidedContent": {
+                        "description": "Whether the template chain exposes the `user_provided_content` block for simple appended administrator notes.",
+                        "type": "boolean"
+                    },
+                    "configuration": {
+                        "description": "Stored channel configuration for this file, or null when it has not been configured yet.",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ChannelFileConfiguration"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                }
+            },
+            "ChannelFileDetailResponse": {
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/ChannelFileDetail"
+                    }
+                }
+            },
+            "ChannelFileListResponse": {
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ChannelFileDescriptor"
+                        }
+                    }
+                }
+            },
+            "ChannelFilePreviewRequest": {
+                "type": "object",
+                "required": [
+                    "fileName"
+                ],
+                "properties": {
+                    "fileName": {
+                        "description": "Public file path without a leading slash.",
+                        "type": "string",
+                        "examples": [
+                            "llms.txt",
+                            ".well-known/ucp.json"
+                        ]
+                    },
+                    "templateOverrides": {
+                        "description": "Unsaved Twig overrides keyed by Twig namespace. The reserved `user_provided_content` key stores plain text for the dedicated append block when supported by the template chain.",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "ChannelFilePreviewResponse": {
+                "type": "object",
+                "required": [
+                    "fileName",
+                    "contentType",
+                    "content"
+                ],
+                "properties": {
+                    "fileName": {
+                        "description": "Public file path without a leading slash.",
+                        "type": "string"
+                    },
+                    "contentType": {
+                        "description": "Detected content type of the rendered file.",
+                        "type": "string"
+                    },
+                    "content": {
+                        "description": "Rendered file content.",
+                        "type": "string"
+                    }
+                }
+            },
+            "ChannelFileTemplate": {
+                "type": "object",
+                "required": [
+                    "twigNamespace",
+                    "templateName",
+                    "templateContent",
+                    "role"
+                ],
+                "properties": {
+                    "twigNamespace": {
+                        "description": "Twig namespace that contributed the template, for example `Framework` or a plugin name.",
+                        "type": "string"
+                    },
+                    "templateName": {
+                        "description": "Resolved Twig template name.",
+                        "type": "string",
+                        "examples": [
+                            "@Framework/files/agentic/llms.txt.twig"
+                        ]
+                    },
+                    "templateContent": {
+                        "description": "Original source template content. Administration clients can use this as the default text when editing a template override.",
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "Whether this source provides the base template or extends another source in the resolved template chain.",
+                        "type": "string",
+                        "enum": [
+                            "base",
+                            "extension"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

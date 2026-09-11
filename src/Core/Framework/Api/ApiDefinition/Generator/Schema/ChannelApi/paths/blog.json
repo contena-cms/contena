@@ -27,7 +27,7 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/swLanguageId"
+                        "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ],
                 "requestBody": {
@@ -139,7 +139,7 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/swLanguageId"
+                        "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ],
                 "requestBody": {

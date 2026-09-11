@@ -65,7 +65,7 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/swLanguageId"
+                        "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ]
             },
@@ -91,7 +91,7 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/swLanguageId"
+                        "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ],
                 "responses": {

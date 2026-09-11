@@ -11,7 +11,7 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\BundleWithAssociationEnrichmentPaths\BundleWithAssociationEnrichmentPaths;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\BundleWithPredeclaredSwLanguageId\BundleWithPredeclaredSwLanguageId;
+use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\BundleWithPredeclaredCtLanguageId\BundleWithPredeclaredCtLanguageId;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\ChannelSimpleDefinition;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\CustomBundleWithApiSchema\ContenaBundleWithName;
 use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\DefinitionWithAssociations;
@@ -323,15 +323,15 @@ class ChannelApiGeneratorTest extends TestCase
         static::assertContains('limit', $parameterNames);
         // ct-language-id and ct-domain are injected as $refs by the generator, not as inline parameters
         $parameterRefs = array_column($operation['parameters'], '$ref');
-        static::assertContains('#/components/parameters/swLanguageId', $parameterRefs);
-        static::assertContains('#/components/parameters/swDomain', $parameterRefs);
+        static::assertContains('#/components/parameters/ctLanguageId', $parameterRefs);
+        static::assertContains('#/components/parameters/ctDomain', $parameterRefs);
         // but not left-overs of replaced parameter groups
         static::assertCount(4, $operation['parameters']);
     }
 
-    public function testSwLanguageIdIsInjectedIntoEveryNonDeleteOperationOutsideInfo(): void
+    public function testCtLanguageIdIsInjectedIntoEveryNonDeleteOperationOutsideInfo(): void
     {
-        $bundle = new BundleWithPredeclaredSwLanguageId();
+        $bundle = new BundleWithPredeclaredCtLanguageId();
         $generator = new ChannelApiGenerator(
             new OpenApiSchemaBuilder('0.1.0'),
             new OpenApiDefinitionSchemaBuilder(),
@@ -348,7 +348,7 @@ class ChannelApiGeneratorTest extends TestCase
             $bundle->getName(),
         );
 
-        static::assertArrayHasKey('swLanguageId', $schema['components']['parameters']);
+        static::assertArrayHasKey('ctLanguageId', $schema['components']['parameters']);
 
         $assertedInjectedOperation = false;
         $assertedSkippedOperation = false;
@@ -365,7 +365,7 @@ class ChannelApiGeneratorTest extends TestCase
                 foreach ($parameters as $parameter) {
                     if (
                         (isset($parameter['name']) && strtolower((string) $parameter['name']) === 'ct-language-id')
-                        || (isset($parameter['$ref']) && $parameter['$ref'] === '#/components/parameters/swLanguageId')
+                        || (isset($parameter['$ref']) && $parameter['$ref'] === '#/components/parameters/ctLanguageId')
                     ) {
                         $hasHeader = true;
 
@@ -396,9 +396,9 @@ class ChannelApiGeneratorTest extends TestCase
         static::assertTrue($assertedSkippedOperation, 'Schema should contain at least one DELETE or /_info/ operation to test');
     }
 
-    public function testSwDomainIsInjectedIntoEveryNonDeleteOperationOutsideInfo(): void
+    public function testCtDomainIsInjectedIntoEveryNonDeleteOperationOutsideInfo(): void
     {
-        $bundle = new BundleWithPredeclaredSwLanguageId();
+        $bundle = new BundleWithPredeclaredCtLanguageId();
         $generator = new ChannelApiGenerator(
             new OpenApiSchemaBuilder('0.1.0'),
             new OpenApiDefinitionSchemaBuilder(),
@@ -415,8 +415,8 @@ class ChannelApiGeneratorTest extends TestCase
             $bundle->getName(),
         );
 
-        static::assertArrayHasKey('swDomain', $schema['components']['parameters']);
-        static::assertSame('ct-domain', $schema['components']['parameters']['swDomain']['name']);
+        static::assertArrayHasKey('ctDomain', $schema['components']['parameters']);
+        static::assertSame('ct-domain', $schema['components']['parameters']['ctDomain']['name']);
 
         $assertedInjectedOperation = false;
         $assertedSkippedOperation = false;
@@ -433,7 +433,7 @@ class ChannelApiGeneratorTest extends TestCase
                 foreach ($parameters as $parameter) {
                     if (
                         (isset($parameter['name']) && strtolower((string) $parameter['name']) === 'ct-domain')
-                        || (isset($parameter['$ref']) && $parameter['$ref'] === '#/components/parameters/swDomain')
+                        || (isset($parameter['$ref']) && $parameter['$ref'] === '#/components/parameters/ctDomain')
                     ) {
                         $hasHeader = true;
 
@@ -886,9 +886,9 @@ class ChannelApiGeneratorTest extends TestCase
         static::assertArrayHasKey('infoConfigResponse', $schema['components']['schemas']);
     }
 
-    public function testSwLanguageIdHeaderIsInjectedOrKeptWithoutDuplicationPerOperation(): void
+    public function testCtLanguageIdHeaderIsInjectedOrKeptWithoutDuplicationPerOperation(): void
     {
-        $bundle = new BundleWithPredeclaredSwLanguageId();
+        $bundle = new BundleWithPredeclaredCtLanguageId();
         $generator = new ChannelApiGenerator(
             new OpenApiSchemaBuilder('0.1.0'),
             new OpenApiDefinitionSchemaBuilder(),
@@ -905,12 +905,12 @@ class ChannelApiGeneratorTest extends TestCase
             $bundle->getName(),
         );
 
-        static::assertArrayHasKey('swLanguageId', $schema['components']['parameters']);
+        static::assertArrayHasKey('ctLanguageId', $schema['components']['parameters']);
 
         $noHeader = $schema['paths']['/no-header']['get'];
         $noHeaderRefs = array_filter(
             array_column($noHeader['parameters'], '$ref'),
-            static fn (string $ref): bool => $ref === '#/components/parameters/swLanguageId'
+            static fn (string $ref): bool => $ref === '#/components/parameters/ctLanguageId'
         );
         static::assertCount(1, $noHeaderRefs, 'ct-language-id should be injected exactly once into operations without it');
 
@@ -918,7 +918,7 @@ class ChannelApiGeneratorTest extends TestCase
         static::assertIsArray($noParametersKey['parameters']);
         $noParametersKeyRefs = array_filter(
             array_column($noParametersKey['parameters'], '$ref'),
-            static fn (string $ref): bool => $ref === '#/components/parameters/swLanguageId'
+            static fn (string $ref): bool => $ref === '#/components/parameters/ctLanguageId'
         );
         static::assertCount(1, $noParametersKeyRefs, 'ct-language-id should be injected when the operation omits the parameters key');
 
@@ -929,7 +929,7 @@ class ChannelApiGeneratorTest extends TestCase
         );
         $inlineRefs = array_filter(
             $inline['parameters'],
-            static fn (array $param): bool => ($param['$ref'] ?? null) === '#/components/parameters/swLanguageId'
+            static fn (array $param): bool => ($param['$ref'] ?? null) === '#/components/parameters/ctLanguageId'
         );
         static::assertCount(1, $inlineNames, 'Inline ct-language-id declaration should remain');
         static::assertCount(0, $inlineRefs, 'No $ref should be injected next to an existing inline ct-language-id');
@@ -937,7 +937,7 @@ class ChannelApiGeneratorTest extends TestCase
         $byRef = $schema['paths']['/predeclared-by-ref']['get'];
         $byRefMatches = array_filter(
             array_column($byRef['parameters'], '$ref'),
-            static fn (string $ref): bool => $ref === '#/components/parameters/swLanguageId'
+            static fn (string $ref): bool => $ref === '#/components/parameters/ctLanguageId'
         );
         static::assertCount(1, $byRefMatches, 'ct-language-id $ref should not be duplicated when already present');
 
@@ -948,7 +948,7 @@ class ChannelApiGeneratorTest extends TestCase
         );
         $mixedCaseRefs = array_filter(
             $mixedCase['parameters'],
-            static fn (array $param): bool => ($param['$ref'] ?? null) === '#/components/parameters/swLanguageId'
+            static fn (array $param): bool => ($param['$ref'] ?? null) === '#/components/parameters/ctLanguageId'
         );
         static::assertCount(1, $mixedCaseNames, 'Mixed-case ct-language-id declaration should remain');
         static::assertCount(0, $mixedCaseRefs, 'No $ref should be injected next to a mixed-case ct-language-id declaration');
@@ -956,7 +956,7 @@ class ChannelApiGeneratorTest extends TestCase
         $mutation = $schema['paths']['/mutation']['delete'];
         $mutationRefs = array_column($mutation['parameters'] ?? [], '$ref');
         static::assertNotContains(
-            '#/components/parameters/swLanguageId',
+            '#/components/parameters/ctLanguageId',
             $mutationRefs,
             'ct-language-id should not be injected into non-GET operations',
         );
@@ -964,7 +964,7 @@ class ChannelApiGeneratorTest extends TestCase
         $infoSample = $schema['paths']['/_info/sample']['get'];
         $infoRefs = array_column($infoSample['parameters'] ?? [], '$ref');
         static::assertNotContains(
-            '#/components/parameters/swLanguageId',
+            '#/components/parameters/ctLanguageId',
             $infoRefs,
             'ct-language-id should not be injected into /_info/* GET operations',
         );
