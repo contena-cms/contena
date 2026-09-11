@@ -32,7 +32,7 @@
                 "operationId": "readPredeclaredByRef",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/swLanguageId"
+                        "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ],
                 "responses": {
@@ -49,7 +49,7 @@
                 "operationId": "readPredeclaredByNameMixedCase",
                 "parameters": [
                     {
-                        "name": "Sw-Language-Id",
+                        "name": "Ct-Language-Id",
                         "in": "header",
                         "required": false,
                         "schema": {
