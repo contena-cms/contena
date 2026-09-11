@@ -6,6 +6,14 @@
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 
+/* Inherits, because the component sets this on the gallery root but it is consumed on the nav button inside it */
+@each $breakpoint, $value in $grid-breakpoints {
+    @property --ct-media-gallery-nav-button-display-#{$breakpoint} {
+        syntax: '*';
+        inherits: true;
+    }
+}
+
 .ct-media-gallery {
     --ct-media-thumbnail-border-color: var(--bs-gray-300);
     --ct-media-thumbnail-hover-border-color: var(--bs-primary);
@@ -72,6 +80,22 @@
     position: relative;
 }
 
+button.ct-media-gallery__preview-item {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+
+    &:focus-visible {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: -2px;
+    }
+}
+
 .ct-media-gallery__nav-button {
     --bs-btn-border-color: var(--bs-gray-300);
 
@@ -89,9 +113,13 @@
     }
 }
 
-/* Higher specificity than `.btn-icon` so desktop hide wins over icon-button display */
-.ct-media-gallery__nav-button.ct-button {
-    display: none;
+/* Higher specificity than `.btn-icon` so the breakpoint visibility wins over icon-button display */
+@each $breakpoint, $value in $grid-breakpoints {
+    @include media-breakpoint-only($breakpoint) {
+        .ct-media-gallery__nav-button.ct-button {
+            display: var(--ct-media-gallery-nav-button-display-#{$breakpoint}, none);
+        }
+    }
 }
 
 .ct-media-gallery__preview-item-badge {
@@ -122,9 +150,6 @@
         grid-template-columns: 100%;
     }
 
-    .ct-media-gallery__nav-button.ct-button {
-        display: inline-flex;
-    }
 }
 
 @include media-breakpoint-up(md) {

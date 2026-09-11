@@ -36,29 +36,36 @@
     >
         <twig:Ct:Icon :name="scrollBackwardIcon" size="sm" />
     </twig:Ct:Button>
-    <nav
-        class="ct-thumbnail-nav__inner"
+    <ul
+        class="ct-thumbnail-nav__inner list-unstyled"
         aria-label="{{ 'component.cms.mediaGallery.thumbnailNavAriaLabel'|trans|striptags }}"
     >
         {% for mediaItem in mediaItems %}
-            <button
-                class="ct-thumbnail-nav__button {% if loop.first %}is--active{% endif %}"
-                {% if loop.first %}aria-current="true"{% endif %}
-                type="button"
-                data-gallery-thumbnail-button="true"
-                data-target="{{ loop.index }}"
-                aria-label="{{ 'component.cms.mediaGallery.thumbnailNavButtonAriaLabel'|trans({'%index%': loop.index, '%total%': mediaItems|length})|striptags }}"
-            >
-                <twig:Ct:Media
-                    class="ct-thumbnail-nav__media"
-                    :media="mediaItem"
-                    :title="null"
-                    :previewMode="true"
-                    :sizes="thumbnailSize ~ 'px'"
-                />
-            </button>
+            {% set thumbnailLabel = 'component.cms.mediaGallery.thumbnailNavButtonAriaLabel'|trans({'%index%': loop.index, '%total%': mediaItems|length}) %}
+            {% if mediaItem.translated.alt %}
+                {% set thumbnailLabel = thumbnailLabel ~ ', ' ~ mediaItem.translated.alt|striptags %}
+            {% endif %}
+
+            <li>
+                <button
+                    class="ct-thumbnail-nav__button {% if loop.first %}is--active{% endif %}"
+                    {% if loop.first %}aria-current="true"{% endif %}
+                    type="button"
+                    data-gallery-thumbnail-button="true"
+                    data-target="{{ loop.index }}"
+                    aria-label="{{ thumbnailLabel|striptags }}"
+                >
+                    <twig:Ct:Media
+                        class="ct-thumbnail-nav__media"
+                        :media="mediaItem"
+                        :title="null"
+                        :previewMode="true"
+                        :sizes="thumbnailSize ~ 'px'"
+                    />
+                </button>
+            </li>
         {% endfor %}
-    </nav>
+    </ul>
     <twig:Ct:Button
         class="ct-thumbnail-nav__scroll-control is--forward"
         variant="light"
