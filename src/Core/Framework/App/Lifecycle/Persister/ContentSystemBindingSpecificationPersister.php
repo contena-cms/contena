@@ -34,7 +34,7 @@ class ContentSystemBindingSpecificationPersister
     /**
      * The app's element-type directory, scanned for inline `bindings:` sections. Own copy of the convention
      * string {@see \Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemElementTypePersister} and
-     * {@see \Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemElementTypeCompilerPass}
+     * {@see \Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemCompilerPass}
      * also declare; each consumer owns its copy by convention.
      */
     private const TYPES_DIRECTORY = 'Resources/content-system/types';

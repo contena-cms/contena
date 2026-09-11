@@ -19,8 +19,8 @@ use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemB
 use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPreset;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Specification\ContentSystemLayoutPresetSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
@@ -282,7 +282,7 @@ class InfoController extends AbstractController
     public function getContentSystemLayoutPresets(): JsonResponse
     {
         $presets = array_map(
-            static fn (LayoutPreset $preset) => $preset->toArray(),
+            static fn (ContentSystemLayoutPresetSpecification $preset) => $preset->toArray(),
             array_values($this->layoutPresetRegistry->all())
         );
 

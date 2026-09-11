@@ -284,6 +284,21 @@ CREATE TABLE IF NOT EXISTS `app_content_system_binding_specification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL,
             <<<'SQL'
+CREATE TABLE IF NOT EXISTS `app_content_system_layout_preset` (
+    `id` BINARY(16) NOT NULL,
+    `app_id` BINARY(16) NOT NULL,
+    `name` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `schema` JSON NOT NULL,
+    `hash` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq.app_content_system_layout_preset.name` (`name`),
+    KEY `fk.app_content_system_layout_preset.app_id` (`app_id`),
+    CONSTRAINT `fk.app_content_system_layout_preset.app_id` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL,
+            <<<'SQL'
 CREATE TABLE IF NOT EXISTS `app_flow_action` (
     `id` BINARY(16) NOT NULL,
     `app_id` BINARY(16) NOT NULL,

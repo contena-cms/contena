@@ -16,8 +16,8 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\AutoconfigureCompile
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ChannelApiMcpServerBuilderCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentLayoutAssignableCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentRouteCompilerPass;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemDataLoaderCompilerPass;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemElementTypeCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemStyleOptionCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\CreateGeneratorScaffoldingCommandPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\DefaultTransportCompilerPass;
@@ -145,7 +145,7 @@ class Framework extends Bundle
         $container->addCompilerPass(new MessageHandlerCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1000);
         $container->addCompilerPass(new ContentRouteCompilerPass());
         $container->addCompilerPass(new ContentSystemDataLoaderCompilerPass());
-        $container->addCompilerPass(new ContentSystemElementTypeCompilerPass());
+        $container->addCompilerPass(new ContentSystemCompilerPass());
         $container->addCompilerPass(new ContentSystemStyleOptionCompilerPass());
         $container->addCompilerPass(new ContentLayoutAssignableCompilerPass());
         $container->addCompilerPass(new ScheduledTaskExecutorCompilerPass());

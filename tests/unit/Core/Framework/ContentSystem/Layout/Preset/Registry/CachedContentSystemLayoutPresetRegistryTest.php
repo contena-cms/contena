@@ -3,9 +3,9 @@
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Preset\Registry;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPreset;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\CachedContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Specification\ContentSystemLayoutPresetSpecification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -105,8 +105,8 @@ class CachedContentSystemLayoutPresetRegistryTest extends TestCase
         $registry->get('core.unknown');
     }
 
-    private function createPreset(string $id): LayoutPreset
+    private function createPreset(string $id): ContentSystemLayoutPresetSpecification
     {
-        return new LayoutPreset($id, 'Name', null, null, []);
+        return new ContentSystemLayoutPresetSpecification($id, 'Name', null, null, []);
     }
 }

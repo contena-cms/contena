@@ -6,6 +6,7 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeCollection;
+use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemStyleOption\AppContentSystemStyleOptionCollection;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCollection;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationCollection;
@@ -119,6 +120,8 @@ class AppEntity extends Entity
     protected ?AppContentSystemStyleOptionCollection $styleOptions = null;
 
     protected ?AppContentSystemBindingSpecificationCollection $bindingSpecifications = null;
+
+    protected ?AppContentSystemLayoutPresetCollection $layoutPresets = null;
 
     protected int $templateLoadPriority;
 
@@ -527,6 +530,16 @@ class AppEntity extends Entity
     public function setBindingSpecifications(AppContentSystemBindingSpecificationCollection $bindingSpecifications): void
     {
         $this->bindingSpecifications = $bindingSpecifications;
+    }
+
+    public function getLayoutPresets(): ?AppContentSystemLayoutPresetCollection
+    {
+        return $this->layoutPresets;
+    }
+
+    public function setLayoutPresets(AppContentSystemLayoutPresetCollection $layoutPresets): void
+    {
+        $this->layoutPresets = $layoutPresets;
     }
 
     public function jsonSerialize(): array

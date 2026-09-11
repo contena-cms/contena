@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\ContentSystem\Layout\Preset\Registry;
 
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
-use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPreset;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Specification\ContentSystemLayoutPresetSpecification;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -36,7 +36,7 @@ class CachedContentSystemLayoutPresetRegistry extends AbstractContentSystemLayou
         return \array_key_exists($id, $this->all());
     }
 
-    public function get(string $id): LayoutPreset
+    public function get(string $id): ContentSystemLayoutPresetSpecification
     {
         return $this->all()[$id] ?? throw ContentSystemException::layoutPresetNotFound($id);
     }

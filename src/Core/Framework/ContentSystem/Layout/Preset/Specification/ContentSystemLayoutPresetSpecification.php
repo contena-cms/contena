@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\Framework\ContentSystem\Layout\Preset;
+namespace Contena\Core\Framework\ContentSystem\Layout\Preset\Specification;
 
 /**
  * @internal
  *
- * @phpstan-type PresetPayload list<array<string, mixed>>
+ * @codeCoverageIgnore
  */
-final readonly class LayoutPreset
+final readonly class ContentSystemLayoutPresetSpecification
 {
     /**
-     * @param PresetPayload $payload
+     * @param list<array<string, mixed>> $payload
      */
     public function __construct(
         public string $id,

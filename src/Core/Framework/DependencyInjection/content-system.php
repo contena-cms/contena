@@ -68,8 +68,12 @@ use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListFieldSeri
 use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteBoundary;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\LayoutPresetPayloadCompiler;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Loader\DatabaseLayoutPresetLoader;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Loader\LayoutPresetNameResolver;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Loader\YamlLayoutPresetLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\CachedContentSystemLayoutPresetRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\ContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Serialization\LayoutPresetSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\StoredTreePreparer;
 use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
@@ -483,9 +487,34 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(StoredElementCodec::class),
         ]);
 
+    $services->set(LayoutPresetSpecificationSerializer::class);
+
+    $services->set(LayoutPresetNameResolver::class);
+
+    $services->set(YamlLayoutPresetLoader::class)
+        ->args([
+            service(LayoutPresetSpecificationSerializer::class),
+            service(LayoutPresetPayloadCompiler::class),
+            service('validator'),
+            service(LayoutPresetNameResolver::class),
+        ])
+        ->arg('$directories', [])
+        ->tag('content_system.layout_preset_loader');
+
+    $services->set(DatabaseLayoutPresetLoader::class)
+        ->args([
+            service(LayoutPresetSpecificationSerializer::class),
+            service(LayoutPresetPayloadCompiler::class),
+            service('validator'),
+            service(Connection::class),
+            param('kernel.environment'),
+            service('logger'),
+        ])
+        ->tag('content_system.layout_preset_loader');
+
     $services->set(ContentSystemLayoutPresetRegistry::class)
         ->args([
-            service(LayoutPresetPayloadCompiler::class),
+            tagged_iterator('content_system.layout_preset_loader'),
         ]);
 
     $services->set(CachedContentSystemLayoutPresetRegistry::class)

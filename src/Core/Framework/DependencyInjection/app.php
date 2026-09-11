@@ -18,6 +18,7 @@ use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonDefinition;
 use Contena\Core\Framework\App\Aggregate\ActionButtonTranslation\ActionButtonTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeDefinition;
+use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemStyleOption\AppContentSystemStyleOptionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationDefinition;
@@ -91,6 +92,7 @@ use Contena\Core\Framework\App\Lifecycle\Handler\ActionButtonLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\CmsBlockLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemBindingSpecificationLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemElementTypeLifecycleHandler;
+use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemLayoutPresetLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ContentSystemStyleOptionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\CustomFieldLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowActionLifecycleHandler;
@@ -102,6 +104,7 @@ use Contena\Core\Framework\App\Lifecycle\Handler\WebhookLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\PermissionLifecycleService;
 use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemBindingSpecificationPersister;
 use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemElementTypePersister;
+use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemLayoutPresetPersister;
 use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemStyleOptionPersister;
 use Contena\Core\Framework\App\Lifecycle\Registration\AppRegistrationService;
 use Contena\Core\Framework\App\Lifecycle\Registration\HandshakeFactory;
@@ -134,6 +137,7 @@ use Contena\Core\Framework\App\Validation\AppRequirementsValidator;
 use Contena\Core\Framework\App\Validation\ConfigValidator;
 use Contena\Core\Framework\App\Validation\ContentSystemBindingSpecificationAppValidator;
 use Contena\Core\Framework\App\Validation\ContentSystemElementTypeAppValidator;
+use Contena\Core\Framework\App\Validation\ContentSystemLayoutPresetAppValidator;
 use Contena\Core\Framework\App\Validation\ContentSystemStyleOptionAppValidator;
 use Contena\Core\Framework\App\Validation\HookableValidator;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
@@ -147,6 +151,9 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\YamlStyleOp
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\ContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Validation\StyleOptionCollisionDetector;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Loader\YamlLayoutPresetLoader;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\ContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Serialization\LayoutPresetSpecificationSerializer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\YamlTypeLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
@@ -450,6 +457,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(YamlBindingSpecificationLoader::class),
             service(YamlTypeLoader::class),
+        ])
+        ->tag('contena.app_manifest.validator');
+
+    $services->set(ContentSystemLayoutPresetPersister::class)
+        ->args([
+            service('app_content_system_layout_preset.repository'),
+            service(YamlLayoutPresetLoader::class),
+            service(LayoutPresetSpecificationSerializer::class),
+            service(ContentSystemLayoutPresetRegistry::class),
+            service(Connection::class),
+            service('lock.factory'),
+        ]);
+
+    $services->set(ContentSystemLayoutPresetLifecycleHandler::class)
+        ->args([
+            service(ContentSystemLayoutPresetPersister::class),
+            service(ContentSystemLayoutPresetRegistry::class),
+        ])
+        ->tag('contena.app_lifecycle.handler', ['priority' => -1403]);
+
+    $services->set(ContentSystemLayoutPresetAppValidator::class)
+        ->args([
+            service(YamlLayoutPresetLoader::class),
         ])
         ->tag('contena.app_manifest.validator');
 
@@ -872,6 +902,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.entity.definition');
 
     $services->set(AppContentSystemBindingSpecificationDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(AppContentSystemLayoutPresetDefinition::class)
         ->tag('contena.entity.definition');
 
     $services->set(AppFlowActionLoadedSubscriber::class)

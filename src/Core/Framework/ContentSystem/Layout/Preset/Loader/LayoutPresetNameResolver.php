@@ -1,0 +1,36 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Layout\Preset\Loader;
+
+use Contena\Core\Framework\ContentSystem\ContentSystemException;
+
+use function Symfony\Component\String\u;
+
+/**
+ * @internal
+ */
+class LayoutPresetNameResolver
+{
+    private const SEGMENT_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+
+    public function resolve(string $relativePath, string $prefix): string
+    {
+        $path = preg_replace('/\.(yaml|yml)$/', '', $relativePath);
+        if (!\is_string($path)) {
+            throw ContentSystemException::layoutPresetInvalidFilename($relativePath, $relativePath);
+        }
+
+        $segments = explode('/', $path);
+        $resolved = [];
+
+        foreach ($segments as $segment) {
+            if (preg_match(self::SEGMENT_PATTERN, $segment) !== 1) {
+                throw ContentSystemException::layoutPresetInvalidFilename($segment, $relativePath);
+            }
+
+            $resolved[] = u($segment)->camel()->title()->toString();
+        }
+
+        return $prefix . ':' . implode(':', $resolved);
+    }
+}
