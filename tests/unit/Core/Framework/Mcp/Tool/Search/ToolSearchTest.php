@@ -86,8 +86,8 @@ class ToolSearchTest extends TestCase
         $search = new ToolSearch();
 
         $results = $search->search([
-            self::tool('state-transition', 'Cancel a customer blog'),
-        ], 'customer', 10);
+            self::tool('state-transition', 'Cancel a member blog'),
+        ], 'member', 10);
 
         static::assertNotEmpty($results);
         static::assertSame('state-transition', $results[0]->tool->name);
@@ -100,7 +100,7 @@ class ToolSearchTest extends TestCase
 
         static::assertSame([], $search->search([
             self::tool('blog-read', 'Read blogs'),
-        ], 'shipping method', 10));
+        ], 'media folder', 10));
     }
 
     public function testMaxResultsLowerThanOneStillReturnsOneResult(): void

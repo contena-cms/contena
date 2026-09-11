@@ -84,9 +84,9 @@ class McpAuthenticationListenerTest extends TestCase
             static::createStub(RateLimiter::class),
         );
 
-        // SWCH = channel key — a known prefix but not supported for Admin MCP
+        // CTCH = channel key — a known prefix but not supported for Admin MCP
         $event = $this->createControllerEvent('api.mcp.endpoint', [
-            'ct-access-key' => 'SWCHsomechannelkey1234',
+            'ct-access-key' => 'CTCHsomechannelkey1234',
             'ct-secret-access-key' => 'some-secret',
         ]);
 
@@ -107,7 +107,7 @@ class McpAuthenticationListenerTest extends TestCase
 
         $listener = new McpAuthenticationListener($clientRepository, $rateLimiter);
         $event = $this->createControllerEvent('api.mcp.endpoint', [
-            'ct-access-key' => 'SWIAvalidintegrationkey12',
+            'ct-access-key' => 'CTIAvalidintegrationkey12',
             'ct-secret-access-key' => 'wrong-secret',
         ]);
 
@@ -118,7 +118,7 @@ class McpAuthenticationListenerTest extends TestCase
 
     public function testRateLimitExceededPropagatesException(): void
     {
-        $accessKey = 'SWIAvalidintegrationkey12';
+        $accessKey = 'CTIAvalidintegrationkey12';
         $expected = new RateLimitExceededException(time() + 60);
 
         $rateLimiter = $this->createMock(RateLimiter::class);
@@ -144,7 +144,7 @@ class McpAuthenticationListenerTest extends TestCase
 
     public function testAuthenticatesSuccessfullyAndResetsRateLimiter(): void
     {
-        $accessKey = 'SWIAvalidintegrationkey12';
+        $accessKey = 'CTIAvalidintegrationkey12';
         $secret = 'my-secret-key';
 
         $clientRepository = static::createStub(ClientRepository::class);
@@ -173,7 +173,7 @@ class McpAuthenticationListenerTest extends TestCase
 
     public function testAuthenticatesSuccessfullyWithUserAccessKey(): void
     {
-        $accessKey = 'SWUAvaliduseraccesskey123';
+        $accessKey = 'CTUAvaliduseraccesskey123';
         $secret = 'my-secret-key';
 
         $clientRepository = static::createStub(ClientRepository::class);

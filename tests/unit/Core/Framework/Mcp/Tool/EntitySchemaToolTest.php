@@ -55,7 +55,7 @@ class EntitySchemaToolTest extends TestCase
         static::assertSame('string', $fieldMap['name']['type']);
         static::assertSame('bool', $fieldMap['active']['type']);
         static::assertSame('int', $fieldMap['position']['type']);
-        static::assertSame('float', $fieldMap['price']['type']);
+        static::assertSame('float', $fieldMap['rating']['type']);
         static::assertSame('datetime', $fieldMap['createdAt']['type']);
         static::assertSame('json', $fieldMap['config']['type']);
         static::assertSame('fk', $fieldMap['parentId']['type']);
@@ -140,7 +140,7 @@ class RichTestEntityDefinition extends EntityDefinition
             new StringField('name', 'name')->addFlags(new Required()),
             new BoolField('active', 'active'),
             new IntField('position', 'position'),
-            new FloatField('price', 'price'),
+            new FloatField('rating', 'rating'),
             new DateTimeField('created_at', 'createdAt'),
             new JsonField('config', 'config'),
             new FkField('parent_id', 'parentId', self::class),

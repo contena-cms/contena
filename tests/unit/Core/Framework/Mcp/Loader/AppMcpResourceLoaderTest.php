@@ -67,9 +67,9 @@ class AppMcpResourceLoaderTest extends TestCase
             ->method('registerResource')
             ->with(
                 static::callback(function (ResourceDefinition $resource): bool {
-                    static::assertSame('my-app-order-stats', $resource->name);
-                    static::assertSame('app-example://order-stats', $resource->uri);
-                    static::assertSame('Live order statistics', $resource->description);
+                    static::assertSame('my-app-content-stats', $resource->name);
+                    static::assertSame('app-example://content-stats', $resource->uri);
+                    static::assertSame('Live content statistics', $resource->description);
                     static::assertSame('application/json', $resource->mimeType);
 
                     return true;
@@ -130,10 +130,10 @@ class AppMcpResourceLoaderTest extends TestCase
         $executor->expects($this->once())
             ->method('execute')
             ->with(
-                'my-app-order-stats',
+                'my-app-content-stats',
                 'my-app',
-                'https://app.example.com/mcp/resource/order-stats',
-                ['uri' => 'app-example://order-stats'],
+                'https://app.example.com/mcp/resource/content-stats',
+                ['uri' => 'app-example://content-stats'],
             )
             ->willReturn('{"contents":[]}');
         $loader = new AppMcpResourceLoader($this->storage, $executor, $this->localeProvider, new NullLogger());
@@ -198,12 +198,12 @@ class AppMcpResourceLoaderTest extends TestCase
      * @param array<string, string> $description
      */
     private function resourceConfig(
-        string $name = 'order-stats',
-        string $uri = 'app-example://order-stats',
-        string $url = 'https://app.example.com/mcp/resource/order-stats',
+        string $name = 'content-stats',
+        string $uri = 'app-example://content-stats',
+        string $url = 'https://app.example.com/mcp/resource/content-stats',
         ?string $mimeType = 'application/json',
-        array $label = ['en-GB' => 'Order Stats'],
-        array $description = ['en-GB' => 'Live order statistics'],
+        array $label = ['en-GB' => 'Content Stats'],
+        array $description = ['en-GB' => 'Live content statistics'],
     ): McpResourceConfig {
         return new McpResourceConfig($name, $uri, $url, $mimeType, new TranslatedString($label), new TranslatedString($description));
     }

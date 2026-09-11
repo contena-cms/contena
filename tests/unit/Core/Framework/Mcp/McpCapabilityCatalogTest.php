@@ -99,10 +99,10 @@ class McpCapabilityCatalogTest extends TestCase
     public function testEnrichedToolsDerivesGroupFromLongestCommonNamePrefix(): void
     {
         $registry = new Registry();
-        $this->registerTool($registry, 'ct-my-plugin-orders', 'List orders');
-        $this->registerTool($registry, 'ct-my-plugin-products', 'List products');
-        $this->registerTool($registry, 'ct-other-plugin-customers', 'List customers');
-        $this->registerTool($registry, 'ct-other-plugin-products', 'List products');
+        $this->registerTool($registry, 'ct-my-plugin-categories', 'List categories');
+        $this->registerTool($registry, 'ct-my-plugin-blogs', 'List blogs');
+        $this->registerTool($registry, 'ct-other-plugin-members', 'List members');
+        $this->registerTool($registry, 'ct-other-plugin-blogs', 'List blogs');
 
         $catalog = new McpCapabilityCatalog($registry);
 
@@ -117,7 +117,7 @@ class McpCapabilityCatalogTest extends TestCase
     public function testEnrichedToolsUsesFirstNameSegmentForSingleUnconfiguredTool(): void
     {
         $registry = new Registry();
-        $this->registerTool($registry, 'ct-order-export', 'Export orders');
+        $this->registerTool($registry, 'ct-content-export', 'Export content');
 
         $catalog = new McpCapabilityCatalog($registry);
 
@@ -127,12 +127,12 @@ class McpCapabilityCatalogTest extends TestCase
     public function testFindToolUsesGroupDerivedFromAllRegisteredTools(): void
     {
         $registry = new Registry();
-        $this->registerTool($registry, 'ct-my-plugin-orders', 'List orders');
-        $this->registerTool($registry, 'ct-my-plugin-products', 'List products');
+        $this->registerTool($registry, 'ct-my-plugin-categories', 'List categories');
+        $this->registerTool($registry, 'ct-my-plugin-blogs', 'List blogs');
 
         $catalog = new McpCapabilityCatalog($registry);
 
-        static::assertSame('ct-my-plugin', $catalog->findTool('ct-my-plugin-orders')['group'] ?? null);
+        static::assertSame('ct-my-plugin', $catalog->findTool('ct-my-plugin-categories')['group'] ?? null);
     }
 
     public function testEnrichedToolsReturnsNullPrivilegesWhenNoneDeclared(): void

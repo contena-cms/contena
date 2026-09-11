@@ -63,7 +63,7 @@ class McpExceptionListenerTest extends TestCase
         static::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    #[TestDox('ignores GET /register so storefront customer-register navigation is unaffected')]
+    #[TestDox('ignores GET /register so storefront member-register navigation is unaffected')]
     public function testIgnoresGetRegister(): void
     {
         $listener = new McpExceptionListener();

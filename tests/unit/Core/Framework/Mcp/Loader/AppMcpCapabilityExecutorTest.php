@@ -61,7 +61,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $this->mockHandler->append(new Response(200, [], $expectedBody));
 
         $result = $this->executor->execute(
-            'sync-orders',
+            'publish-content',
             'my-app',
             'https://app.example.com/mcp/sync',
             ['foo' => 'bar'],
@@ -79,7 +79,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         static::assertNotEmpty($lastRequest->getHeaderLine(RequestSigner::CONTENA_INSTALLATION_SIGNATURE));
 
         $body = json_decode($lastRequest->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR);
-        static::assertSame('sync-orders', $body['tool']);
+        static::assertSame('publish-content', $body['tool']);
         static::assertSame(['foo' => 'bar'], $body['arguments']);
         static::assertSame('https://installation.example.com', $body['source']['url']);
         static::assertSame('test-installation-id', $body['source']['installationId']);
@@ -91,7 +91,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $this->mockHandler->append(new \RuntimeException('Connection refused'));
 
         $result = $this->executor->execute(
-            'sync-orders',
+            'publish-content',
             'my-app',
             'https://app.example.com/mcp/sync',
             [],
@@ -100,7 +100,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $decoded = json_decode($result, true);
         static::assertIsArray($decoded);
         static::assertFalse($decoded['success']);
-        static::assertStringContainsString('sync-orders', $decoded['error']);
+        static::assertStringContainsString('publish-content', $decoded['error']);
         static::assertStringContainsString('Connection refused', $decoded['error']);
     }
 
@@ -286,8 +286,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
     public function testSubrequestPropagatesPreAuthenticatedAttributesForAccessKeyAuth(): void
     {
         $parent = new Request();
-        $parent->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'mcp-SWIAKEY123');
-        $parent->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'SWIAKEY123');
+        $parent->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'mcp-CTIAKEY123');
+        $parent->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'CTIAKEY123');
         $parent->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_PRE_AUTHENTICATED, true);
 
         $requestStack = static::createStub(RequestStack::class);
@@ -300,8 +300,8 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $kernel->expects($this->once())->method('handle')->willReturnCallback(
             static function (Request $r, int $type = HttpKernelInterface::MAIN_REQUEST): SymfonyResponse {
                 static::assertTrue($r->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_PRE_AUTHENTICATED));
-                static::assertSame('mcp-SWIAKEY123', $r->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID));
-                static::assertSame('SWIAKEY123', $r->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID));
+                static::assertSame('mcp-CTIAKEY123', $r->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID));
+                static::assertSame('CTIAKEY123', $r->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID));
                 static::assertSame(HttpKernelInterface::SUB_REQUEST, $type);
 
                 return new SymfonyResponse('{"success":true}');
@@ -328,7 +328,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         $kernel->expects($this->once())->method('handle')->willReturnCallback(
             static function (Request $r, int $type = HttpKernelInterface::MAIN_REQUEST): SymfonyResponse {
                 static::assertSame('application/json', $r->headers->get('Content-Type'));
-                static::assertSame(['arguments' => ['entity' => 'product', 'limit' => 5]], json_decode($r->getContent(), true));
+                static::assertSame(['arguments' => ['entity' => 'blog', 'limit' => 5]], json_decode($r->getContent(), true));
                 static::assertSame(HttpKernelInterface::SUB_REQUEST, $type);
 
                 return new SymfonyResponse('{"success":true}');
@@ -336,7 +336,7 @@ class AppMcpCapabilityExecutorTest extends TestCase
         );
 
         $executor = $this->makeExecutorWithSubrequest($kernel, $requestStack, $router);
-        $executor->execute('my-tool', 'my-app', '/api/script/my-tool', ['entity' => 'product', 'limit' => 5]);
+        $executor->execute('my-tool', 'my-app', '/api/script/my-tool', ['entity' => 'blog', 'limit' => 5]);
     }
 
     public function testSubrequestExceptionReturnsError(): void

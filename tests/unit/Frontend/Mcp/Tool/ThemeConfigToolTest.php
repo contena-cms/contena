@@ -11,7 +11,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Contena\Frontend\Theme\ThemeService;
 use Doctrine\DBAL\Connection;
+use Mcp\Capability\Discovery\DocBlockParser;
+use Mcp\Capability\Discovery\SchemaGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -136,7 +139,7 @@ class ThemeConfigToolTest extends TestCase
             $this->createConnection($themeId, [$channelId]),
         );
 
-        $output = $tool('Web', 'get');
+        $output = $tool('Frontend', 'get');
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertTrue($data['success']);
@@ -158,7 +161,7 @@ class ThemeConfigToolTest extends TestCase
         $tool = new ThemeConfigTool(
             static::createStub(ThemeService::class),
             $contextProvider,
-            $this->createConnection(false, [], ['Web'], $lookupParams),
+            $this->createConnection(false, [], ['Frontend'], $lookupParams),
         );
 
         $output = $tool('not-a-uuid', 'get');
@@ -178,7 +181,7 @@ class ThemeConfigToolTest extends TestCase
         $tool = new ThemeConfigTool(
             static::createStub(ThemeService::class),
             $contextProvider,
-            $this->createConnection(false, [], ['Web', 'API']),
+            $this->createConnection(false, [], ['Frontend', 'Headless']),
         );
 
         $output = $tool('Storfront', 'get');
@@ -186,8 +189,8 @@ class ThemeConfigToolTest extends TestCase
 
         static::assertFalse($data['success']);
         static::assertStringContainsString('not found', $data['error']);
-        static::assertStringContainsString('"Web"', $data['error']);
-        static::assertStringContainsString('"API"', $data['error']);
+        static::assertStringContainsString('"Frontend"', $data['error']);
+        static::assertStringContainsString('"Headless"', $data['error']);
     }
 
     public function testAmbiguousChannelNameReturnsError(): void
@@ -204,7 +207,7 @@ class ThemeConfigToolTest extends TestCase
             $this->createConnection(false, [$firstId, $secondId]),
         );
 
-        $output = $tool('Web', 'get');
+        $output = $tool('Frontend', 'get');
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertFalse($data['success']);
@@ -252,7 +255,7 @@ class ThemeConfigToolTest extends TestCase
         $tool = new ThemeConfigTool(
             static::createStub(ThemeService::class),
             $contextProvider,
-            $this->createConnection(false, [], ['Web']),
+            $this->createConnection(false, [], ['Frontend']),
         );
 
         $output = $tool(Uuid::randomHex(), 'get');
@@ -333,7 +336,7 @@ class ThemeConfigToolTest extends TestCase
             $this->createConnection(false),
         );
 
-        $output = $tool('Web', 'get');
+        $output = $tool('Frontend', 'get');
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertFalse($data['success']);
@@ -397,11 +400,11 @@ class ThemeConfigToolTest extends TestCase
             $this->createConnection($themeId, [$channelId], [], $lookupParams),
         );
 
-        $output = $tool('  Web  ', 'get');
+        $output = $tool('  Frontend  ', 'get');
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertTrue($data['success']);
-        static::assertSame('Web', $lookupParams['name']);
+        static::assertSame('Frontend', $lookupParams['name']);
     }
 
     public function testUnknownActionReturnsError(): void
@@ -543,6 +546,23 @@ class ThemeConfigToolTest extends TestCase
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertFalse($data['success']);
+    }
+
+    #[TestDox('Every __invoke parameter carries a description into the SDK-generated input schema')]
+    public function testEveryParameterIsDescribedInTheInputSchema(): void
+    {
+        $method = new \ReflectionMethod(ThemeConfigTool::class, '__invoke');
+        $schema = new SchemaGenerator(new DocBlockParser())->generate($method);
+
+        static::assertIsArray($schema['properties']);
+        static::assertCount(\count($method->getParameters()), $schema['properties']);
+
+        foreach ($schema['properties'] as $name => $property) {
+            static::assertIsArray($property);
+            static::assertArrayHasKey('description', $property, \sprintf('$%s has no description', $name));
+            static::assertIsString($property['description']);
+            static::assertNotSame('', $property['description'], \sprintf('$%s has an empty description', $name));
+        }
     }
 
     /**

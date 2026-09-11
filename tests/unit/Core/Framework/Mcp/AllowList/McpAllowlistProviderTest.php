@@ -181,7 +181,7 @@ class McpAllowlistProviderTest extends TestCase
 
         $provider = new McpAllowlistProvider($connection, new RequestStack());
 
-        $result = $provider->forAccessKey('SWIA-test');
+        $result = $provider->forAccessKey('CTIA-test');
         static::assertSame(['contena-entity-search', 'contena-entity-schema'], $result->tools);
     }
 
@@ -194,7 +194,7 @@ class McpAllowlistProviderTest extends TestCase
             'contena-entity-delete' => ['contena-entity-search'],
         ]);
 
-        $result = $provider->forAccessKey('SWIA-test');
+        $result = $provider->forAccessKey('CTIA-test');
         static::assertNotNull($result->tools);
         static::assertContains('contena-entity-delete', $result->tools);
         static::assertContains('contena-entity-search', $result->tools);
@@ -207,7 +207,7 @@ class McpAllowlistProviderTest extends TestCase
 
         $provider = new McpAllowlistProvider($connection, new RequestStack());
 
-        $result = $provider->forAccessKey('SWIA-unknown');
+        $result = $provider->forAccessKey('CTIA-unknown');
         static::assertNull($result->tools);
         static::assertNull($result->resources);
         static::assertNull($result->prompts);
@@ -233,7 +233,7 @@ class McpAllowlistProviderTest extends TestCase
 
         $provider = new McpAllowlistProvider($connection, new RequestStack());
 
-        $result = $provider->forAccessKey('SWIA-test');
+        $result = $provider->forAccessKey('CTIA-test');
         static::assertNull($result->tools);
     }
 
@@ -242,7 +242,7 @@ class McpAllowlistProviderTest extends TestCase
     public function testBearerJwtClientCredentialsUsesIntegrationAllowlist(): void
     {
         // For client_credentials grants, SymfonyBearerTokenValidator sets ATTRIBUTE_OAUTH_CLIENT_ID
-        // to the integration's access key (SWIA...) from the JWT aud claim. No ATTRIBUTE_OAUTH_USER_ID
+        // to the integration's access key (CTIA...) from the JWT aud claim. No ATTRIBUTE_OAUTH_USER_ID
         // is set. The result is identical to a direct integration access key request.
         $connection = $this->createMock(Connection::class);
         $connection->method('fetchOne')
@@ -250,7 +250,7 @@ class McpAllowlistProviderTest extends TestCase
         $connection->expects($this->never())->method('fetchAssociative');
 
         $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'SWIAtestintegrationkey00');
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'CTIAtestintegrationkey00');
         // No ATTRIBUTE_OAUTH_USER_ID — distinguishes this from a password-grant JWT.
 
         $stack = new RequestStack();
@@ -275,7 +275,7 @@ class McpAllowlistProviderTest extends TestCase
             'admin' => false,
         ]);
 
-        // 'administration' is the OAuth client_id for password-grant JWTs — not a valid SWIA/SWUA key.
+        // 'administration' is the OAuth client_id for password-grant JWTs — not a valid CTIA/CTUA key.
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'administration');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $userId);
@@ -393,7 +393,7 @@ class McpAllowlistProviderTest extends TestCase
             'admin' => false,
         ]);
 
-        $result = new McpAllowlistProvider($connection, $this->requestStackWithKey('SWUAtestuseraccesskey00'))->forCurrentRequest();
+        $result = new McpAllowlistProvider($connection, $this->requestStackWithKey('CTUAtestuseraccesskey00'))->forCurrentRequest();
 
         static::assertSame(['user-key-tool'], $result->tools);
     }
@@ -404,12 +404,12 @@ class McpAllowlistProviderTest extends TestCase
         $connection->method('fetchOne')->willReturn(false);
         $connection->expects($this->never())->method('fetchAssociative');
 
-        $result = new McpAllowlistProvider($connection, $this->requestStackWithKey('SWUAtestuseraccesskey00'))->forCurrentRequest();
+        $result = new McpAllowlistProvider($connection, $this->requestStackWithKey('CTUAtestuseraccesskey00'))->forCurrentRequest();
 
         static::assertNull($result->tools);
     }
 
-    private function requestStackWithKey(string $accessKey = 'SWIAtestintegrationkey00'): RequestStack
+    private function requestStackWithKey(string $accessKey = 'CTIAtestintegrationkey00'): RequestStack
     {
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $accessKey);

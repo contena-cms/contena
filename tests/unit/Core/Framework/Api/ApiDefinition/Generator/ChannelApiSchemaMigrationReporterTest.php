@@ -40,7 +40,7 @@ class ChannelApiSchemaMigrationReporterTest extends TestCase
     public function createTemporaryDirectory(): void
     {
         $this->filesystem = new Filesystem();
-        $this->temporaryDirectory = sys_get_temp_dir() . '/store-api-schema-migration-reporter-test-' . bin2hex(random_bytes(4));
+        $this->temporaryDirectory = sys_get_temp_dir() . '/channel-api-schema-migration-reporter-test-' . bin2hex(random_bytes(4));
         $this->filesystem->mkdir($this->temporaryDirectory);
     }
 

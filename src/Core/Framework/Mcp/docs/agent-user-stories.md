@@ -1,86 +1,67 @@
 # Agent User Stories — Platform Primitives
 
-User stories for what an AI agent can accomplish using core Contena MCP tools (`contena-*`).
+User stories for what an AI agent can accomplish using core Contena MCP tools (`contena-*`). These examples map Shopware's generic DAL/MCP capability to Contena content entities and deliberately exclude commerce workflows.
 
-**Merchant workflow stories** (order summaries, customer lookup, product create, analytics, cart/checkout) are in the plugin:
-→ [CtMcpMerchantAssistant — merchant user stories](../../../../custom/plugins/CtMcpMerchantAssistant/docs/agent-user-stories.md)
+**Out of scope here**: Developer tasks such as code generation, testing, linting, cache clearing, and deployment.
 
-**Out of scope here**: Developer tasks such as code generation, testing, linting, cache clearing, and deployment. For developer-facing MCP tools see [contenaLabs/ai-coding-tools](https://github.com/contenaLabs/ai-coding-tools).
-
-**Status legend:** COVERED = fully working, PARTIAL = possible but limited, GAP = not yet possible
+**Status legend:** COVERED = fully working, PARTIAL = possible but limited, GAP = not yet possible.
 
 ## Category 1: Data Exploration
 
-- **US-1** [COVERED]: "What products are low on stock (below 5 units)?"
-  - Tools: `contena-entity-search` with range filter on `stock`
-- **US-2** [COVERED]: "Show me the schema of the customer entity"
-  - Tools: `contena-entity-schema`
+- **US-1** [COVERED]: "Which blogs were updated most recently?"
+  - Tools: `contena-entity-search` on `blog` with a descending `updatedAt` sort.
+- **US-2** [COVERED]: "Show me the schema of the member entity."
+  - Tools: `contena-entity-schema`.
+- **US-3** [COVERED]: "How many published blogs are in each category?"
+  - Tools: `contena-entity-aggregate` on `blog`.
 
-## Category 2: State Transitions
+## Category 2: Configuration
 
-- **US-3** [COVERED]: "Ship order #12345"
-  - Tools: `contena-order-state` with `orderNumber` and `deliveryAction: "ship"`
-- **US-4** [COVERED]: "Cancel order X and process the refund"
-  - Tools: `contena-order-state` with `orderAction: "cancel"`, `transactionAction: "refund"`, `deliveryAction: "cancel"`
+- **US-4** [COVERED]: "What are the current listing settings and how do I change the default sorting?"
+  - Tools: `contena-system-config-read` and `contena-system-config-write` with `dryRun`.
+- **US-5** [COVERED]: "Read the configuration for the Web channel."
+  - Tools: `contena-system-config-read` with the channel ID.
 
-## Category 3: Configuration
+## Category 3: Flow / Automation Discovery
 
-- **US-5** [COVERED]: "What are the current listing settings and how do I change the default sorting?"
-  - Tools: `contena-system-config-read` + `contena-system-config-write` with dryRun
-
-## Category 4: Flow / Automation Discovery
-
-- **US-6** [GAP]: "Set up an automation: when order status changes to 'shipped', send email to customer"
-  - Tools: `contena://business-events` resource + `contena://flow-actions` resource for discovery
-  - Gap: Can advise which event/action to use, but cannot create flows programmatically
+- **US-6** [PARTIAL]: "Which event and action can publish a notification when a blog changes?"
+  - Resources: `contena://business-events` and `contena://flow-actions`.
+  - Gap: the resources support discovery; creating a complete flow still uses generic entity writes and requires knowledge of the flow schema.
 - **US-7** [PARTIAL]: "What automations are currently configured?"
-  - Tools: `contena-entity-search` on `flow` with `sequences` association
-  - Note: Works, but `flow_sequence` structure is complex to interpret
+  - Tools: `contena-entity-search` on `flow` with its `sequences` association.
 
-## Category 5: Media Management
+## Category 4: Media Management
 
-- **US-8** [COVERED]: "Upload a product image from a URL and assign it to product X"
-  - Tools: `contena-media-upload` with `url` and `productId`
-- **US-9** [COVERED]: "Upload a new shop logo from a URL"
-  - Tools: `contena-media-upload` with `url`
+- **US-8** [COVERED]: "Upload an image or document from a URL."
+  - Tools: `contena-media-upload`.
+- **US-9** [COVERED]: "Attach an uploaded image to a blog."
+  - Tools: `contena-media-upload`, followed by `contena-entity-upsert` on `blog`.
 
-## Category 6: Theme / Appearance
+## Category 5: Theme / Appearance
 
-- **US-10** [COVERED]: "Change the primary brand color of my shop to blue"
-  - Tools: `contena-theme-config` with `action: "update"` and config `{"ct-color-brand-primary": {"value": "#0000ff"}}`
-- **US-11** [COVERED]: "Update the shop logo in the theme"
-  - Tools: `contena-media-upload` to upload the logo, then `contena-theme-config` to set the media ID in `ct-logo-desktop`
+- **US-10** [COVERED]: "Change the primary brand color of the Web channel to blue."
+  - Tools: `contena-theme-config` with `action: "update"` and `{"ct-color-brand-primary":{"value":"#0000ff"}}`.
+- **US-11** [COVERED]: "Update the channel logo in the theme."
+  - Tools: `contena-media-upload`, followed by `contena-theme-config` using the returned media ID.
 
-## Category 7: Promotions & Marketing
+## Category 6: Content Management
 
-- **US-12** [COVERED]: "What promotions are active right now?"
-  - Tools: `contena-entity-search` on `promotion` with `active: true` and date range filters
-- **US-13** [COVERED]: "How many newsletter subscribers do we have?"
-  - Tools: `contena-entity-aggregate` on `newsletter_recipient` with `count` and `status: optIn` filter
+- **US-12** [COVERED]: "Create a draft post."
+  - Tools: `contena-entity-upsert` on `blog` with `type: "post"` and `active: false`.
+- **US-13** [COVERED]: "Assign a blog to a category."
+  - Tools: `contena-entity-upsert` on `blog` with the `categories` association.
+- **US-14** [COVERED]: "Find landing pages available to a channel."
+  - Tools: `contena-entity-search` on `landing_page` with channel associations.
 
-## Category 8: Product Quality & Content
+## Category 7: Member and Channel Context
 
-- **US-14** [COVERED]: "Which products have no images?"
-  - Tools: `contena-entity-search` on `product` with `media` association count filter
-- **US-15** [COVERED]: "Change the price of product SW-001 to 39.99"
-  - Tools: `contena-entity-upsert` on `product` with nested price array
-- **US-16** [COVERED]: "Assign product X to category Y"
-  - Tools: `contena-entity-upsert` on `product` with `categories` association
-
-## Category 9: Customer Insights (via DAL)
-
-- **US-17** [COVERED]: "Show me all 1-star reviews from last month"
-  - Tools: `contena-entity-search` on `product_review` with `points` and `createdAt` filters
-- **US-18** [COVERED]: "How many customers haven't ordered in 6 months?"
-  - Tools: `contena-entity-search` on `customer` with `lastOrderDate` range filter
-- **US-19** [COVERED]: "What's the average order value this month?"
-  - Tools: `contena-entity-aggregate` on `order` with `avg` on `amountTotal`
-
-## Category 10: Sales Channel Operations
-
-- **US-20** [COVERED]: "Put my shop in maintenance mode"
-  - Tools: `contena-entity-upsert` on `channel` with `maintenance: true`
+- **US-15** [COVERED]: "List active members in a member group."
+  - Tools: `contena-entity-search` on `member`.
+- **US-16** [COVERED]: "Which languages and domains are configured for each channel?"
+  - Resources: `contena://channels` and `contena://languages`.
+- **US-17** [COVERED]: "Show the current public Channel API session context."
+  - Tools: `contena-channel-api-context` on `/channel-api/_mcp`.
 
 ## Postponed Improvements
 
-- **US-6** (flow creation): Postponed until event/action validation and multi-action flow support are implemented together
+- A dedicated flow authoring tool remains postponed until event/action validation and multi-action flow support can be implemented together.

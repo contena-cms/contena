@@ -23,13 +23,13 @@ describe('integrationApiService', () => {
         const { integrationApiService, clientMock } = getIntegrationApiService();
 
         clientMock.onGet('/_action/access-key/intergration').reply(200, {
-            accessKey: 'SWIA123',
+            accessKey: 'CTIA123',
             secretAccessKey: 'secret123',
         });
 
         const response = await integrationApiService.generateKey();
 
-        expect(response.accessKey).toBe('SWIA123');
+        expect(response.accessKey).toBe('CTIA123');
         expect(response.secretAccessKey).toBe('secret123');
     });
 

@@ -32,16 +32,16 @@ class AppMcpPrivilegeProviderTest extends TestCase
     {
         $storage = static::createStub(AppFeatureStorage::class);
         $storage->method('forActiveApps')->willReturn([
-            $this->feature('sync-orders', ['order:read', 'order:update'], 'my-erp'),
-            $this->feature('erp-status', ['system:read'], 'my-erp'),
+            $this->feature('publish-content', ['blog:read', 'blog:update'], 'my-cms'),
+            $this->feature('cms-status', ['system:read'], 'my-cms'),
         ]);
 
         $provider = new AppMcpPrivilegeProvider($storage, new NullLogger());
 
         static::assertSame(
             [
-                'my-erp-sync-orders' => ['order:read', 'order:update'],
-                'my-erp-erp-status' => ['system:read'],
+                'my-cms-publish-content' => ['blog:read', 'blog:update'],
+                'my-cms-cms-status' => ['system:read'],
             ],
             $provider->getAppToolPrivileges(),
         );
@@ -82,8 +82,8 @@ class AppMcpPrivilegeProviderTest extends TestCase
     {
         $storage = static::createStub(AppFeatureStorage::class);
         $storage->method('forActiveApps')->willReturn([
-            $this->feature('sync-orders', [], 'my-erp'),
-            $this->feature('read-stock', [], 'my-erp'),
+            $this->feature('publish-content', [], 'my-cms'),
+            $this->feature('read-metadata', [], 'my-cms'),
             $this->feature('do-thing', [], 'other-app'),
         ]);
 
@@ -91,8 +91,8 @@ class AppMcpPrivilegeProviderTest extends TestCase
 
         static::assertSame(
             [
-                'my-erp-sync-orders' => 'my-erp',
-                'my-erp-read-stock' => 'my-erp',
+                'my-cms-publish-content' => 'my-cms',
+                'my-cms-read-metadata' => 'my-cms',
                 'other-app-do-thing' => 'other-app',
             ],
             $provider->getAppToolGroups(),

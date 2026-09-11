@@ -21,13 +21,13 @@ class McpToolAnalysisCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition('mcp.server.builder')) {
+        if (!$container->hasDefinition('mcp.server.admin.builder')) {
             return;
         }
 
         // Build one param set per MCP scope so both endpoints get identical group/dependency/
-        // privilege analysis. Administration tools carry the 'mcp.tool' tag; Channel API tools
-        // carry 'contena.channel_api_mcp.tool'. Each scope writes under its own param prefix.
+        // privilege analysis. Admin tools carry the 'mcp.tool' tag; Channel API tools carry
+        // 'contena.channel_api_mcp.tool'. Each scope writes under its own param prefix.
         foreach ([['mcp.tool', 'contena.mcp.'], ['contena.channel_api_mcp.tool', 'contena.channel_api_mcp.']] as [$tag, $paramPrefix]) {
             $this->buildAndValidateToolDependencies($container, $tag, $paramPrefix);
             $this->buildToolPrivilegeMap($container, $tag, $paramPrefix);

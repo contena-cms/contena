@@ -46,9 +46,9 @@ class AccessKeyHelperTest extends TestCase
     public static function mappingIdentifier(): array
     {
         return [
-            ['SWUA', 'user'],
-            ['SWIA', 'integration'],
-            ['SWCH', 'channel'],
+            ['CTUA', 'user'],
+            ['CTIA', 'integration'],
+            ['CTCH', 'channel'],
         ];
     }
 }

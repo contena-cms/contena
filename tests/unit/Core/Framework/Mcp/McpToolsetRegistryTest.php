@@ -23,7 +23,7 @@ class McpToolsetRegistryTest extends TestCase
             McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
             'contena-entity-search',
             'contena-entity-read',
-            'contena-order-state',
+            'contena-blog-publish',
             'ungrouped-tool',
         ]);
 
@@ -34,7 +34,7 @@ class McpToolsetRegistryTest extends TestCase
                 McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
                 'contena-entity-search' => 'entity',
                 'contena-entity-read' => 'entity',
-                'contena-order-state' => 'order',
+                'contena-blog-publish' => 'content',
             ],
         ));
 
@@ -42,9 +42,9 @@ class McpToolsetRegistryTest extends TestCase
         $toolsetsByName = array_column($toolsets, null, 'name');
 
         // A tool without an explicit group uses its first name segment as an enable-able toolset.
-        static::assertSame(['entity', 'order', 'ungrouped'], array_keys($toolsetsByName));
+        static::assertSame(['content', 'entity', 'ungrouped'], array_keys($toolsetsByName));
         static::assertSame(['contena-entity-read', 'contena-entity-search'], $toolsetsByName['entity']['tools']);
-        static::assertSame(['contena-order-state'], $toolsetsByName['order']['tools']);
+        static::assertSame(['contena-blog-publish'], $toolsetsByName['content']['tools']);
         static::assertSame(['ungrouped-tool'], $toolsetsByName['ungrouped']['tools']);
         static::assertSame('Entity tools', $toolsetsByName['entity']['title']);
         static::assertSame('Ungrouped tools', $toolsetsByName['ungrouped']['title']);
@@ -80,7 +80,7 @@ class McpToolsetRegistryTest extends TestCase
             McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
             'contena-entity-search',
             'contena-entity-read',
-            'contena-order-state',
+            'contena-blog-publish',
         ]);
 
         $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
@@ -90,7 +90,7 @@ class McpToolsetRegistryTest extends TestCase
                 McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
                 'contena-entity-search' => 'entity',
                 'contena-entity-read' => 'entity',
-                'contena-order-state' => 'order',
+                'contena-blog-publish' => 'content',
             ],
         ));
 
@@ -106,11 +106,11 @@ class McpToolsetRegistryTest extends TestCase
 
         static::assertSame(
             [
+                'contena-blog-publish',
                 'contena-entity-read',
                 'contena-entity-search',
-                'contena-order-state',
             ],
-            $toolsetRegistry->advertisedTools(['entity', 'order']),
+            $toolsetRegistry->advertisedTools(['entity', 'content']),
         );
     }
 
@@ -120,7 +120,7 @@ class McpToolsetRegistryTest extends TestCase
             McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
             'contena-entity-search',
             'contena-entity-read',
-            'contena-order-state',
+            'contena-blog-publish',
         ]);
 
         $toolsetRegistry = new McpToolsetRegistry(
@@ -130,7 +130,7 @@ class McpToolsetRegistryTest extends TestCase
                     McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
                     'contena-entity-search' => 'entity',
                     'contena-entity-read' => 'entity',
-                    'contena-order-state' => 'order',
+                    'contena-blog-publish' => 'content',
                 ],
             ),
             $this->stubAllowlistProvider(['contena-entity-search']),
@@ -139,11 +139,11 @@ class McpToolsetRegistryTest extends TestCase
         $toolsetsByName = array_column($toolsetRegistry->toolsets(), null, 'name');
 
         // Discovery stays inside the allowlist: only the allowed tool surfaces. The denied
-        // "entity-read" and the entirely-denied "order" toolset never leak through list/enable.
+        // "entity-read" and the entirely-denied "content" toolset never leak through list/enable.
         static::assertSame(['entity'], array_keys($toolsetsByName));
         static::assertSame(['contena-entity-search'], $toolsetsByName['entity']['tools']);
-        static::assertNull($toolsetRegistry->find('order'));
-        static::assertSame([], $toolsetRegistry->advertisedTools(['order']));
+        static::assertNull($toolsetRegistry->find('content'));
+        static::assertSame([], $toolsetRegistry->advertisedTools(['content']));
     }
 
     /**

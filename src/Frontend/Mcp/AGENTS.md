@@ -6,7 +6,7 @@ MCP tools that depend on Frontend-specific services (e.g., `ThemeService`) must 
 
 Core MCP tools live in `src/Core/Framework/Mcp/Tool/` and only depend on Core services. Tools here depend on Frontend services and are registered with the `mcp.tool` tag in `src/Frontend/DependencyInjection/mcp.php`.
 
-The `McpToolCompilerPass` in Core discovers tools tagged `mcp.tool` from any bundle or plugin, so these tools are seamlessly integrated into the MCP server.
+`McpToolDiscoveryCompilerPass` in Core also picks up tools tagged `contena.mcp.tool` from any bundle or plugin, so those are integrated the same way.
 
 ## Tools
 
@@ -18,4 +18,4 @@ Every unresolvable input returns a `$this->error()` envelope listing the availab
 
 ## Registration
 
-Services are defined in `src/Frontend/DependencyInjection/mcp.php` with the `mcp.tool` tag (collected via `tagged_iterator('mcp.tool')` in Core's `mcp.php` -- same tag as Core in-tree bundle tools). MCP config uses PHP DI format (`PhpFileLoader`) for type-safe service definitions, matching the rest of the Frontend bundle.
+Services are defined in `src/Frontend/DependencyInjection/mcp.php` with the `mcp.tool` tag — the same tag as Core in-tree bundle tools. The MCP bundle collects it at compile time and assigns the tool to the Admin API server, whose `registry` prefixes in `packages/mcp.php` include `Contena\Frontend\Mcp\`. MCP config uses PHP DI format (`PhpFileLoader`) for type-safe service definitions, even though the rest of the Frontend bundle still loads XML via `XmlFileLoader`.

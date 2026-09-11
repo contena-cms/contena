@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
@@ -20,6 +19,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntityAggregateTool;
+use Mcp\Capability\Discovery\DocBlockParser;
+use Mcp\Capability\Discovery\SchemaGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -61,7 +62,7 @@ class EntityAggregateToolTest extends TestCase
         $result = new EntitySearchResult(0, new EntityCollection(), $aggregations, new Criteria(), $context);
 
         [$tool] = $this->createTool($context, $result);
-        $output = ($tool)('blog', '[{"type":"count","name":"total","field":"id"},{"type":"avg","name":"avgValue","field":"releaseDate"}]');
+        $output = ($tool)('blog', '[{"type":"count","name":"total","field":"id"},{"type":"avg","name":"avgValue","field":"position"}]');
 
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
@@ -80,7 +81,7 @@ class EntityAggregateToolTest extends TestCase
         $result = new EntitySearchResult(0, new EntityCollection(), $aggregations, new Criteria(), $context);
 
         [$tool] = $this->createTool($context, $result);
-        $output = ($tool)('blog', '[{"type":"avg","name":"myAvg","field":"releaseDate"}]');
+        $output = ($tool)('blog', '[{"type":"avg","name":"myAvg","field":"position"}]');
 
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
@@ -291,7 +292,7 @@ class EntityAggregateToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions([]);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $registry = $this->createMock(DefinitionInstanceRegistry::class);
         $registry->method('has')->willReturn(true);
@@ -313,7 +314,7 @@ class EntityAggregateToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $repository = $this->createMock(EntityRepository::class);
         $repository->expects($this->never())->method('search');
@@ -331,19 +332,19 @@ class EntityAggregateToolTest extends TestCase
         $criteriaValidator->expects($this->once())
             ->method('validate')
             ->with('blog', static::identicalTo($criteria), $context)
-            ->willReturn(['category:read']);
+            ->willReturn(['blog_category:read']);
 
         $contextProvider = static::createStub(McpContextProvider::class);
         $contextProvider->method('getContext')->willReturn($context);
 
         $tool = new EntityAggregateTool($registry, $criteriaBuilder, $contextProvider, $criteriaValidator);
-        $output = ($tool)('blog', '[{"type":"terms","name":"emails","field":"category.email"}]');
+        $output = ($tool)('blog', '[{"type":"terms","name":"emails","field":"categories.email"}]');
 
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertFalse($data['success']);
         static::assertStringContainsString('Missing privilege:', $data['error']);
-        static::assertStringContainsString('category:read', $data['error']);
+        static::assertStringContainsString('blog_category:read', $data['error']);
     }
 
     #[TestDox('A rejected aggregation is answered with the parser pointer and detail instead of escaping to the SDK\'s generic error')]
@@ -397,6 +398,23 @@ class EntityAggregateToolTest extends TestCase
         $this->expectExceptionObject(new \RuntimeException('bug, not bad input'));
 
         ($tool)('blog', '[{"type":"count","name":"c","field":"id"}]');
+    }
+
+    #[TestDox('Every __invoke parameter carries a description into the SDK-generated input schema')]
+    public function testEveryParameterIsDescribedInTheInputSchema(): void
+    {
+        $method = new \ReflectionMethod(EntityAggregateTool::class, '__invoke');
+        $schema = new SchemaGenerator(new DocBlockParser())->generate($method);
+
+        static::assertIsArray($schema['properties']);
+        static::assertCount(\count($method->getParameters()), $schema['properties']);
+
+        foreach ($schema['properties'] as $name => $property) {
+            static::assertIsArray($property);
+            static::assertArrayHasKey('description', $property, \sprintf('$%s has no description', $name));
+            static::assertIsString($property['description']);
+            static::assertNotSame('', $property['description'], \sprintf('$%s has an empty description', $name));
+        }
     }
 
     /**

@@ -157,5 +157,5 @@ The per-key "Edit MCP allowlist" context menu item and its modal were removed fr
 
 ## Known gaps / parking lot
 
-- **Access key labels**: user access keys show raw `SWUA...` strings with no human-readable name. Considered but parked — out of scope for this workstream.
+- **Access key labels**: user access keys show raw `CTUA...` strings with no human-readable name. Considered but parked — out of scope for this workstream.
 - **MCP-spec OAuth**: auth code + PKCE + DCR. Neither `mcp/sdk` nor `symfony/mcp-bundle` provide this. Tracked in separate gap doc.

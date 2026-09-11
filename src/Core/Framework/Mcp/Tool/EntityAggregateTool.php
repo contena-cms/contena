@@ -3,9 +3,8 @@
 namespace Contena\Core\Framework\Mcp\Tool;
 
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
@@ -46,7 +45,7 @@ class EntityAggregateTool extends McpToolResponse
         string $entity,
         #[Schema(description: 'A JSON ARRAY of Admin API aggregation definitions, as a string. Each element needs "name" and "type"; every type except "filter" also needs "field" — e.g. [{"name":"blog_count","type":"count","field":"id"}] to count blogs. A "filter" element takes no "field": it wraps another aggregation, so it needs "filter" (an array of filter definitions) and "aggregation" (the nested definition to apply inside it). A bare object rather than an array is the most common mistake and is rejected.')]
         string $aggregations,
-        #[Schema(description: 'A JSON array of Admin API filter definitions, as a string, narrowing what is aggregated — e.g. [{"type":"equals","field":"active","value":true}]. Defaults to no filter.')]
+        #[Schema(description: 'A JSON array of Admin API filter definitions, as a string, narrowing what is aggregated — e.g. [{"type":"equals","field":"stateId","value":"..."}]. Defaults to no filter.')]
         string $filters = '[]',
     ): string {
         $context = $this->contextProvider->getContext();
@@ -91,9 +90,11 @@ class EntityAggregateTool extends McpToolResponse
                 $definition,
                 $context,
             );
-        } catch (SearchRequestException|DataAbstractionLayerException $e) {
+        } catch (ContenaHttpException $e) {
             // Scoped to this call on purpose: a DAL failure from the search
             // below is a bug, not bad input, and must still reach the log.
+            // `fromArray()` only parses the payload and checks field flags, so
+            // every ContenaHttpException it raises is something the caller can fix.
             return $this->invalidCriteriaError($e);
         }
 

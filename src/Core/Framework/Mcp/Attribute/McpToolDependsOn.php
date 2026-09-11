@@ -13,9 +13,9 @@ namespace Contena\Core\Framework\Mcp\Attribute;
  * dependencies so an AI agent never calls an allowed tool whose peer is blocked.
  *
  * Example:
- *   #[McpTool(name: 'my-checkout', description: '...')]
- *   #[McpToolDependsOn('my-cart-manage')]
- *   class MyCheckoutTool extends McpToolResponse { ... }
+ *   #[McpTool(name: 'my-content-publisher', description: '...')]
+ *   #[McpToolDependsOn('my-media-upload')]
+ *   class MyContentPublisherTool extends McpToolResponse { ... }
  *
  * @codeCoverageIgnore
  */

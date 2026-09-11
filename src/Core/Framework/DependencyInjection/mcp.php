@@ -77,9 +77,6 @@ use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetsListTool;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Doctrine\DBAL\Connection;
-use Mcp\Capability\Registry;
-use Mcp\Server as McpServer;
-use Mcp\Server\Builder as McpServerBuilder;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -87,27 +84,37 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    $services->set('contena.mcp.discovery_cache', Psr16Cache::class)->args([service('cache.system')]);
-    $services->set('contena.mcp.session_registry_cache', Psr16Cache::class)->args([service('cache.system')]);
+    // The bundle dropped the flat "mcp.pagination_limit" parameter when it gained multiple servers:
+    // the limit became a per-server builder value. Keep one Contena-owned parameter as the single
+    // source of truth — McpServerBuilderCompilerPass applies it to every server builder, and the
+    // allowlist request handlers page with the same number.
+    $container->parameters()->set('contena.mcp.pagination_limit', 50);
 
-    $services->set(McpSessionRegistry::class)->args([
-        service('contena.mcp.session_registry_cache'),
-        'contena.mcp.active_session_ids',
-        service('lock.factory'),
-    ]);
-    $services->set(McpListChangedNotifier::class)->args([
-        service('mcp.session.store'),
-        service(McpSessionRegistry::class),
-        service('logger'),
-    ])->tag('monolog.logger', ['channel' => 'mcp']);
+    $services->set('contena.mcp.session_registry_cache', Psr16Cache::class)
+        ->args([service('cache.system')]);
+
+    $services->set(McpSessionRegistry::class)
+        ->args([
+            service('contena.mcp.session_registry_cache'),
+            'contena.mcp.active_session_ids',
+            service('lock.factory'),
+        ]);
+
+    $services->set(McpListChangedNotifier::class)
+        ->args([
+            service('mcp.server.admin.session.store'),
+            service(McpSessionRegistry::class),
+            service('logger'),
+        ])
+        ->tag('monolog.logger', ['channel' => 'mcp']);
 
     $services->set(AppMcpCapabilityDetector::class)
         ->args([service(AppFeatureStorage::class)]);
+
     $services->set(AppMcpCapabilityLifecycleSubscriber::class)
         ->args([
             service(AppMcpCapabilityDetector::class),
@@ -115,83 +122,89 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(McpContextProvider::class)->args([service('request_stack')]);
-    $services->set(ChannelApiMcpContextProvider::class)->args([service('request_stack')]);
+    $services->set(McpContextProvider::class)
+        ->args([service('request_stack')]);
+
+    $services->set(ChannelApiMcpContextProvider::class)
+        ->args([service('request_stack')]);
+
     $services->set(McpAllowlistFilter::class);
-    $services->set(McpAllowlistProvider::class)->args([
-        service(Connection::class),
-        service('request_stack'),
-        param('contena.mcp.tool_dependencies'),
-    ]);
-    $services->set(McpAllowlistListRequestHandler::class)->args([
-        service('mcp.registry'),
-        service(McpAllowlistProvider::class),
-        param('mcp.pagination_limit'),
-        param('contena.mcp.advertised_tools'),
-        service(McpToolsetRegistry::class),
-        service(McpToolsetSessionStorage::class),
-        service('request_stack'),
-    ])->tag('mcp.request_handler');
 
-    $services->set(McpAuthenticationListener::class)->args([
-        service(ClientRepository::class),
-        service(RateLimiter::class),
-    ])->tag('kernel.event_subscriber');
-    $services->set(McpExceptionListener::class)->tag('kernel.event_subscriber');
-    $services->set(McpSessionIdValidator::class);
-    $services->set(McpRateLimiter::class)->args([service(RateLimiter::class)]);
-    $services->set(McpAllowedHostsProvider::class)->args([
-        service(Connection::class),
-        env('APP_URL'),
-    ]);
-    $services->set(McpHttpTransportFactory::class)->args([
-        service('mcp.psr_http_factory'),
-        service('mcp.psr17_factory'),
-        service('mcp.psr17_factory'),
-        service('mcp.http_foundation_factory'),
-        service(McpAllowedHostsProvider::class),
-        service('logger'),
-    ])->tag('monolog.logger', ['channel' => 'mcp']);
+    $services->set(McpAllowlistProvider::class)
+        ->args([
+            service(Connection::class),
+            service('request_stack'),
+            param('contena.mcp.tool_dependencies'),
+        ]);
 
-    $services->set(McpServerController::class)->public()->args([
-        service('mcp.server'),
-        service(McpHttpTransportFactory::class),
-        service(McpRateLimiter::class),
-        service(McpSessionIdValidator::class),
-        service(McpAllowlistProvider::class),
-        service('logger'),
-        service(McpAllowlistFilter::class),
-        service(McpSessionRegistry::class),
-        service(McpListChangedNotifier::class),
-    ])->tag('controller.service_arguments')->tag('monolog.logger', ['channel' => 'mcp']);
-
-    $services->set('mcp.channel_api.registry', Registry::class)
-        ->args([service('event_dispatcher'), service('logger')])
-        ->tag('monolog.logger', ['channel' => 'mcp']);
-
-    $services->set('mcp.channel_api.server.builder', McpServerBuilder::class)
-        ->factory([McpServer::class, 'builder'])
-        ->call('setServerInfo', [
-            'Contena Channel API',
-            '1.0.0',
-            'Contena Channel API MCP server for channel and member-context operations.',
+    $services->set(McpAllowlistListRequestHandler::class)
+        ->args([
+            service('mcp.server.admin.registry'),
+            service(McpAllowlistProvider::class),
+            param('contena.mcp.pagination_limit'),
+            param('contena.mcp.advertised_tools'),
+            service(McpToolsetRegistry::class),
+            service(McpToolsetSessionStorage::class),
+            service('request_stack'),
         ])
-        ->call('setPaginationLimit', [param('mcp.pagination_limit')])
-        ->call('setInstructions', ['This MCP server exposes Channel API capabilities. All operations run in the current channel context and use Channel API authentication headers. The advertised tool list is not the full catalogue: if no advertised tool matches the requested action, call contena-tool-search first instead of assuming the action is unsupported, then use contena-toolsets-list and contena-toolset-enable to make a matched tool callable if your client cannot invoke it inline.'])
-        ->call('setEventDispatcher', [service('event_dispatcher')])
-        ->call('setRegistry', [service('mcp.channel_api.registry')])
-        ->call('setSession', [service('mcp.session.store')])
-        ->call('addRequestHandlers', [tagged_iterator('mcp.channel_api.request_handler')])
-        ->call('addNotificationHandlers', [tagged_iterator('mcp.channel_api.notification_handler')])
-        ->call('setLogger', [service('logger')])
+        ->tag('mcp.admin.request_handler');
+
+    $services->set(McpAuthenticationListener::class)
+        ->args([
+            service(ClientRepository::class),
+            service(RateLimiter::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(McpExceptionListener::class)
+        ->tag('kernel.event_subscriber');
+
+    $services->set(McpSessionIdValidator::class);
+
+    $services->set(McpRateLimiter::class)
+        ->args([service(RateLimiter::class)]);
+
+    $services->set(McpAllowedHostsProvider::class)
+        ->args([
+            service(Connection::class),
+            env('APP_URL'),
+        ]);
+
+    $services->set(McpHttpTransportFactory::class)
+        ->args([
+            service('mcp.psr_http_factory'),
+            service('mcp.psr17_factory'),
+            service('mcp.psr17_factory'),
+            service('mcp.http_foundation_factory'),
+            service(McpAllowedHostsProvider::class),
+            service('logger'),
+        ])
         ->tag('monolog.logger', ['channel' => 'mcp']);
 
-    $services->set('mcp.channel_api.server', McpServer::class)
-        ->factory([service('mcp.channel_api.server.builder'), 'build']);
+    $services->set(McpServerController::class)
+        ->public()
+        ->args([
+            service('mcp.server.admin'),
+            service(McpHttpTransportFactory::class),
+            service(McpRateLimiter::class),
+            service(McpSessionIdValidator::class),
+            service(McpAllowlistProvider::class),
+            service('logger'),
+            service(McpAllowlistFilter::class),
+            service(McpSessionRegistry::class),
+            service(McpListChangedNotifier::class),
+        ])
+        ->tag('controller.service_arguments')
+        ->tag('monolog.logger', ['channel' => 'mcp']);
 
+    // Store-api-scoped discovery stack: second instances of the scope-neutral discovery classes,
+    // pointed at the channel-api registry/params and an isolated session registry (own cache) so
+    // enabling an admin toolset never notifies channel-api sessions and vice versa.
     $services->set('mcp.channel_api.session_registry_cache', Psr16Cache::class)
         ->args([service('cache.system')]);
 
+    // Distinct cache key from the Admin registry so the two endpoints' active-session populations
+    // stay isolated even though both wrap the cache.system pool.
     $services->set('mcp.channel_api.session_registry', McpSessionRegistry::class)
         ->args([
             service('mcp.channel_api.session_registry_cache'),
@@ -201,7 +214,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('mcp.channel_api.list_changed_notifier', McpListChangedNotifier::class)
         ->args([
-            service('mcp.session.store'),
+            service('mcp.server.channel_api.session.store'),
             service('mcp.channel_api.session_registry'),
             service('logger'),
         ])
@@ -209,7 +222,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('mcp.channel_api.capability_catalog', McpCapabilityCatalog::class)
         ->args([
-            service('mcp.channel_api.registry'),
+            service('mcp.server.channel_api.registry'),
             service(AppMcpPrivilegeProvider::class),
             param('contena.channel_api_mcp.tool_dependencies'),
             param('contena.channel_api_mcp.tool_privileges'),
@@ -221,9 +234,9 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('mcp.channel_api.list_request_handler', McpAllowlistListRequestHandler::class)
         ->args([
-            service('mcp.channel_api.registry'),
+            service('mcp.server.channel_api.registry'),
             null,
-            param('mcp.pagination_limit'),
+            param('contena.mcp.pagination_limit'),
             param('contena.channel_api_mcp.advertised_tools'),
             service('mcp.channel_api.toolset_registry'),
             service(McpToolsetSessionStorage::class),
@@ -234,7 +247,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(ChannelApiMcpServerController::class)
         ->public()
         ->args([
-            service('mcp.channel_api.server'),
+            service('mcp.server.channel_api'),
             service(McpHttpTransportFactory::class),
             service(McpRateLimiter::class),
             service(McpSessionIdValidator::class),
@@ -245,63 +258,168 @@ return static function (ContainerConfigurator $container): void {
         ->tag('controller.service_arguments')
         ->tag('monolog.logger', ['channel' => 'mcp']);
 
-    $services->set(McpCapabilityCatalog::class)->args([
-        service('mcp.registry'),
-        service(AppMcpPrivilegeProvider::class),
-        param('contena.mcp.tool_dependencies'),
-        param('contena.mcp.tool_privileges'),
-        param('contena.mcp.tool_groups'),
-    ]);
-    $services->set(McpToolsetRegistry::class)->args([
-        service(McpCapabilityCatalog::class),
-        service(McpAllowlistProvider::class),
-    ]);
-    $services->set(McpToolListController::class)->public()->args([
-        service('mcp.server.builder'),
-        service(McpCapabilityCatalog::class),
-    ])->tag('controller.service_arguments');
-    $services->set(IntegrationMcpAllowlistController::class)->public()->args([
-        service('integration.repository'),
-    ])->tag('controller.service_arguments');
-    $services->set(UserMcpAllowlistController::class)->public()->args([
-        service('user.repository'),
-    ])->tag('controller.service_arguments');
-    $services->set(DebugMcpCommand::class)->args([
-        service('mcp.server.builder'),
-        service('mcp.registry'),
-        service(McpAllowlistProvider::class),
-        service(McpCapabilityCatalog::class),
-        service('mcp.channel_api.server.builder'),
-        service('mcp.channel_api.registry'),
-        service('mcp.channel_api.capability_catalog'),
-    ])->tag('console.command');
-
-    $services->set(ToolResultCacheStorage::class)->args([service(Connection::class), service(ClockInterface::class)]);
-    $services->set(ToolSearch::class);
-    $services->set(McpToolsetSessionStorage::class)->args([service(Connection::class), service(ClockInterface::class)]);
-    $services->set(McpToolsetSessionCleanupTask::class)->tag('contena.scheduled.task');
-    $services->set(McpToolsetSessionCleanupTaskHandler::class)->args([
-        service('scheduled_task.repository'), service('logger'), service(McpToolsetSessionStorage::class), service('mcp.session.store'),
-    ])->tag('messenger.message_handler');
-    $services->set(McpSessionCleanupSubscriber::class)->args([
-        service(ToolResultCacheStorage::class), service(McpToolsetSessionStorage::class), service(McpSessionRegistry::class), service('mcp.channel_api.session_registry'),
-    ])->tag('kernel.event_subscriber');
-    $services->instanceof(McpToolResponse::class)->call('setToolResultCache', [service(ToolResultCacheStorage::class), service('request_stack'), service('logger')])->tag('monolog.logger', ['channel' => 'mcp']);
-
-    $services->set(ToolSearchTool::class)->args([service('mcp.registry'), service(ToolSearch::class), service(McpAllowlistProvider::class)])->tag('mcp.tool');
-    $services->set(EntitySchemaTool::class)->args([service(DefinitionInstanceRegistry::class)])->tag('mcp.tool');
-    $services->set(EntitySearchTool::class)->args([service(DefinitionInstanceRegistry::class), service('api.request_criteria_builder'), service(McpContextProvider::class), service(JsonEntityEncoder::class), service(AclCriteriaValidator::class)])->tag('mcp.tool');
-    $services->set(EntityAggregateTool::class)->args([service(DefinitionInstanceRegistry::class), service('api.request_criteria_builder'), service(McpContextProvider::class), service(AclCriteriaValidator::class)])->tag('mcp.tool');
-    $services->set(EntityReadTool::class)->args([service(DefinitionInstanceRegistry::class), service('api.request_criteria_builder'), service(McpContextProvider::class), service(JsonEntityEncoder::class), service(AclCriteriaValidator::class)])->tag('mcp.tool');
-    $services->set(SystemConfigReadTool::class)->args([service(SystemConfigService::class), service(McpContextProvider::class)])->tag('mcp.tool');
-    $services->set(EntityUpsertTool::class)->args([service(DefinitionInstanceRegistry::class), service(McpContextProvider::class), service(Connection::class)])->tag('mcp.tool');
-    $services->set(EntityDeleteTool::class)->args([service(DefinitionInstanceRegistry::class), service(McpContextProvider::class), service(Connection::class)])->tag('mcp.tool');
-    $services->set(SystemConfigWriteTool::class)->args([service(SystemConfigService::class), service(McpContextProvider::class)])->tag('mcp.tool');
-    $services->set(MediaUploadTool::class)->args([service(MediaUploadService::class), service(McpContextProvider::class)])->tag('mcp.tool');
-
     $services->set(AppMcpPrivilegeProvider::class)
         ->args([service(AppFeatureStorage::class), service('logger')])
         ->tag('monolog.logger', ['channel' => 'mcp']);
+
+    $services->set(McpCapabilityCatalog::class)
+        ->args([
+            service('mcp.server.admin.registry'),
+            service(AppMcpPrivilegeProvider::class),
+            param('contena.mcp.tool_dependencies'),
+            param('contena.mcp.tool_privileges'),
+            param('contena.mcp.tool_groups'),
+        ]);
+
+    $services->set(McpToolsetRegistry::class)
+        ->args([
+            service(McpCapabilityCatalog::class),
+            service(McpAllowlistProvider::class),
+        ]);
+
+    $services->set(McpToolListController::class)
+        ->public()
+        ->args([
+            service('mcp.server.admin.builder'),
+            service(McpCapabilityCatalog::class),
+        ])
+        ->tag('controller.service_arguments');
+
+    $services->set(IntegrationMcpAllowlistController::class)
+        ->public()
+        ->args([service('integration.repository')])
+        ->tag('controller.service_arguments');
+
+    $services->set(UserMcpAllowlistController::class)
+        ->public()
+        ->args([service('user.repository')])
+        ->tag('controller.service_arguments');
+
+    $services->set(DebugMcpCommand::class)
+        ->args([
+            service('mcp.server.admin.builder'),
+            service('mcp.server.admin.registry'),
+            service(McpAllowlistProvider::class),
+            service(McpCapabilityCatalog::class),
+            service('mcp.server.channel_api.builder'),
+            service('mcp.server.channel_api.registry'),
+            service('mcp.channel_api.capability_catalog'),
+            param('mcp.servers.unassigned'),
+        ])
+        ->tag('console.command');
+
+    $services->set(ToolResultCacheStorage::class)
+        ->args([service(Connection::class), service(ClockInterface::class)]);
+
+    $services->set(ToolSearch::class);
+
+    $services->set(McpToolsetSessionStorage::class)
+        ->args([service(Connection::class), service(ClockInterface::class)]);
+
+    $services->set(McpToolsetSessionCleanupTask::class)
+        ->tag('contena.scheduled.task');
+
+    $services->set(McpToolsetSessionCleanupTaskHandler::class)
+        ->args([
+            service('scheduled_task.repository'),
+            service('logger'),
+            service(McpToolsetSessionStorage::class),
+            service('mcp.server.admin.session.store'),
+            service('mcp.server.channel_api.session.store'),
+        ])
+        ->tag('messenger.message_handler');
+
+    $services->set(McpSessionCleanupSubscriber::class)
+        ->args([
+            service(ToolResultCacheStorage::class),
+            service(McpToolsetSessionStorage::class),
+            service(McpSessionRegistry::class),
+            service('mcp.channel_api.session_registry'),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->instanceof(McpToolResponse::class)
+        ->call('setToolResultCache', [service(ToolResultCacheStorage::class), service('request_stack'), service('logger')])
+        ->tag('monolog.logger', ['channel' => 'mcp']);
+
+    // Tools
+    $services->set(ToolSearchTool::class)
+        ->args([
+            service('mcp.server.admin.registry'),
+            service(ToolSearch::class),
+            service(McpAllowlistProvider::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(EntitySchemaTool::class)
+        ->args([service(DefinitionInstanceRegistry::class)])
+        ->tag('mcp.tool');
+
+    $services->set(EntitySearchTool::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service('api.request_criteria_builder'),
+            service(McpContextProvider::class),
+            service(JsonEntityEncoder::class),
+            service(AclCriteriaValidator::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(EntityAggregateTool::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service('api.request_criteria_builder'),
+            service(McpContextProvider::class),
+            service(AclCriteriaValidator::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(EntityReadTool::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service('api.request_criteria_builder'),
+            service(McpContextProvider::class),
+            service(JsonEntityEncoder::class),
+            service(AclCriteriaValidator::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(SystemConfigReadTool::class)
+        ->args([
+            service(SystemConfigService::class),
+            service(McpContextProvider::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(EntityUpsertTool::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service(McpContextProvider::class),
+            service(Connection::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(EntityDeleteTool::class)
+        ->args([
+            service(DefinitionInstanceRegistry::class),
+            service(McpContextProvider::class),
+            service(Connection::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(SystemConfigWriteTool::class)
+        ->args([
+            service(SystemConfigService::class),
+            service(McpContextProvider::class),
+        ])
+        ->tag('mcp.tool');
+
+    $services->set(MediaUploadTool::class)
+        ->args([
+            service(MediaUploadService::class),
+            service(McpContextProvider::class),
+        ])
+        ->tag('mcp.tool');
 
     $services->set(ChannelApiContextTool::class)
         ->args([service(ChannelApiMcpContextProvider::class)])
@@ -309,7 +427,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set(ChannelApiToolSearchTool::class)
         ->args([
-            service('mcp.channel_api.registry'),
+            service('mcp.server.channel_api.registry'),
             service(ToolSearch::class),
             null,
         ])
@@ -330,19 +448,70 @@ return static function (ContainerConfigurator $container): void {
             service('request_stack'),
         ])
         ->tag('contena.channel_api_mcp.tool');
-    $services->set(ToolsetsListTool::class)->args([service(McpToolsetRegistry::class), service(McpToolsetSessionStorage::class), service('request_stack')])->tag('mcp.tool');
-    $services->set(ToolsetEnableTool::class)->args([service(McpToolsetRegistry::class), service(McpToolsetSessionStorage::class), service('request_stack')])->tag('mcp.tool');
 
-    $services->set(ContenaContextPrompt::class)->tag('mcp.prompt');
-    $services->set(EntityListResource::class)->args([service(DefinitionInstanceRegistry::class)])->tag('mcp.resource');
-    $services->set(LanguageListResource::class)->args([service('language.repository')])->tag('mcp.resource');
-    $services->set(StateMachineResource::class)->args([service('state_machine.repository')])->tag('mcp.resource');
-    $services->set(ExtensionsResource::class)->args([service(Connection::class), service('kernel')])->tag('mcp.resource');
-    $services->set(BusinessEventsResource::class)->args([service(BusinessEventCollector::class), service(McpContextProvider::class)])->tag('mcp.resource');
-    $services->set(FlowActionsResource::class)->args([service(FlowActionCollector::class), service(McpContextProvider::class)])->tag('mcp.resource');
-    $services->set(ChannelListResource::class)->args([service('channel.repository'), service(McpContextProvider::class)])->tag('mcp.resource');
-    $services->set(ToolResultResource::class)->args([service(ToolResultCacheStorage::class)])->tag('mcp.resource_template');
+    $services->set(ToolsetsListTool::class)
+        ->args([
+            service(McpToolsetRegistry::class),
+            service(McpToolsetSessionStorage::class),
+            service('request_stack'),
+        ])
+        ->tag('mcp.tool');
 
+    $services->set(ToolsetEnableTool::class)
+        ->args([
+            service(McpToolsetRegistry::class),
+            service(McpToolsetSessionStorage::class),
+            service('request_stack'),
+        ])
+        ->tag('mcp.tool');
+
+    // Prompt
+    $services->set(ContenaContextPrompt::class)
+        ->tag('mcp.prompt');
+
+    // Resources
+    $services->set(EntityListResource::class)
+        ->args([service(DefinitionInstanceRegistry::class)])
+        ->tag('mcp.resource');
+
+    $services->set(BusinessEventsResource::class)
+        ->args([
+            service(BusinessEventCollector::class),
+            service(McpContextProvider::class),
+        ])
+        ->tag('mcp.resource');
+
+    $services->set(FlowActionsResource::class)
+        ->args([
+            service(FlowActionCollector::class),
+            service(McpContextProvider::class),
+        ])
+        ->tag('mcp.resource');
+
+    $services->set(ChannelListResource::class)
+        ->args([service('channel.repository'), service(McpContextProvider::class)])
+        ->tag('mcp.resource');
+
+    $services->set(LanguageListResource::class)
+        ->args([service('language.repository')])
+        ->tag('mcp.resource');
+
+    $services->set(StateMachineResource::class)
+        ->args([service('state_machine.repository')])
+        ->tag('mcp.resource');
+
+    $services->set(ExtensionsResource::class)
+        ->args([
+            service(Connection::class),
+            service('kernel'),
+        ])
+        ->tag('mcp.resource');
+
+    $services->set(ToolResultResource::class)
+        ->args([service(ToolResultCacheStorage::class)])
+        ->tag('mcp.resource_template');
+
+    // App MCP Tool pipeline
     $services->set(AppMcpCapabilityExecutor::class)
         ->args([
             service('contena.app_system.guzzle'),
@@ -356,6 +525,7 @@ return static function (ContainerConfigurator $container): void {
             service(AppSecretResolver::class),
         ])
         ->tag('monolog.logger', ['channel' => 'mcp']);
+
     $services->set(AppMcpToolLoader::class)
         ->args([
             service(AppFeatureStorage::class),
@@ -364,8 +534,8 @@ return static function (ContainerConfigurator $container): void {
             service('logger'),
             param('contena.mcp.allowed_tools'),
         ])
-        ->tag('mcp.loader')
-        ->tag('monolog.logger', ['channel' => 'mcp']);
+        ->tag('mcp.loader');
+
     $services->set(AppMcpPromptLoader::class)
         ->args([
             service(AppFeatureStorage::class),
@@ -375,6 +545,7 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('mcp.loader')
         ->tag('monolog.logger', ['channel' => 'mcp']);
+
     $services->set(AppMcpResourceLoader::class)
         ->args([
             service(AppFeatureStorage::class),

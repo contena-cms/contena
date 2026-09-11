@@ -16,15 +16,15 @@ use PHPUnit\Framework\TestCase;
  * and asserts that every expected default tool, prompt, and resource name is present
  * in the server's response. Additional tools are discovered through contena-tool-search.
  *
- * This validates the full discovery stack:
- *   Core tools:   mcp.yaml scan_dirs → #[McpTool] attribute → mcp.tool DI tag
- *   Bundle tools: mcp.tool DI tag → MCP discovery registry
+ * This validates the full registration stack:
+ *   Core tools:   #[McpTool] attribute → mcp.tool DI tag → server assigned by the namespace
+ *                 prefixes in packages/mcp.php
+ *   Plugin tools: services.xml contena.mcp.tool tag → McpToolDiscoveryCompilerPass → mcp.tool tag
+ *                 → assigned to the Admin API server via mcp.servers.elements
  *
- * Unit tests that only load mcp.php do not catch scan_dirs problems (the gap
- * that caused contena-theme-config to silently disappear). This test does.
- *
- * Note: custom/plugins is intentionally NOT in scan_dirs. Plugin tools must be
- * registered via the contena.mcp.tool DI tag so they respect plugin lifecycle.
+ * Unit tests that only load mcp.php do not catch a capability that ends up assigned to no server
+ * (the failure mode that replaced the old scan_dirs gap, which once made contena-theme-config
+ * silently disappear). This test does.
  *
  * @internal
  */
@@ -40,7 +40,7 @@ class McpCapabilityDiscoveryTest extends TestCase
             $name,
             $this->listCapabilities('tools/list', 'tools'),
             \sprintf(
-                'Tool "%s" is missing from tools/list. Check mcp.yaml scan_dirs (core tools) or mcp.tool DI tag (plugin tools).',
+                'Tool "%s" is missing from tools/list. Check the mcp.tool DI tag, and that the class is claimed by the admin server in packages/mcp.php (see debug:mcp --native).',
                 $name,
             ),
         );
@@ -264,7 +264,6 @@ class McpCapabilityDiscoveryTest extends TestCase
         yield 'contena-entity-schema' => ['contena-entity-schema'];
         yield 'contena-entity-search' => ['contena-entity-search'];
         yield 'contena-tool-search' => ['contena-tool-search'];
-        yield 'contena-theme-config' => ['contena-theme-config'];
     }
 
     /**

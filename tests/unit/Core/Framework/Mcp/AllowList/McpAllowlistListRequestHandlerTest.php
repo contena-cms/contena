@@ -241,21 +241,21 @@ class McpAllowlistListRequestHandlerTest extends TestCase
     public function testToolsListKeepsAllowlistAsBoundaryForEnabledToolsetTools(): void
     {
         $registry = new Registry();
-        foreach (['contena-tool-search', McpToolsetRegistry::LIST_TOOLSETS_TOOL, McpToolsetRegistry::ENABLE_TOOLSET_TOOL, 'contena-order-state'] as $toolName) {
+        foreach (['contena-tool-search', McpToolsetRegistry::LIST_TOOLSETS_TOOL, McpToolsetRegistry::ENABLE_TOOLSET_TOOL, 'contena-blog-publish'] as $toolName) {
             $registry->registerTool($this->tool($toolName), static fn (): string => '');
         }
 
         $toolsetRegistry = $this->createMock(McpToolsetRegistry::class);
         $toolsetRegistry->expects($this->once())
             ->method('advertisedTools')
-            ->with(['order'])
-            ->willReturn(['contena-order-state']);
+            ->with(['content'])
+            ->willReturn(['contena-blog-publish']);
 
         $toolsetSessionStorage = $this->createMock(McpToolsetSessionStorage::class);
         $toolsetSessionStorage->expects($this->once())
             ->method('enabledToolsets')
             ->with('session-id')
-            ->willReturn(['order']);
+            ->willReturn(['content']);
 
         $requestStack = new RequestStack();
         $requestStack->push(new HttpFoundationRequest(server: ['HTTP_MCP_SESSION_ID' => 'session-id']));

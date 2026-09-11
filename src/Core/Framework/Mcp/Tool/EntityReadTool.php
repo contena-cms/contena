@@ -4,9 +4,8 @@ namespace Contena\Core\Framework\Mcp\Tool;
 
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
@@ -73,9 +72,11 @@ class EntityReadTool extends McpToolResponse
                 $definition,
                 $context,
             );
-        } catch (SearchRequestException|DataAbstractionLayerException $e) {
+        } catch (ContenaHttpException $e) {
             // Scoped to this call on purpose: a DAL failure from the read
             // below is a bug, not bad input, and must still reach the log.
+            // `fromArray()` only parses the payload and checks field flags, so
+            // every ContenaHttpException it raises is something the caller can fix.
             return $this->invalidCriteriaError($e);
         }
 

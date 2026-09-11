@@ -24,7 +24,7 @@ class AppMcpCapabilityDetectorTest extends TestCase
 {
     public function testDetectsPersistedCapabilitiesForApp(): void
     {
-        $config = new McpToolConfig('sync-orders', 'https://app.example.com/mcp/sync-orders', [], null, new TranslatedString([]), new TranslatedString([]));
+        $config = new McpToolConfig('publish-content', 'https://app.example.com/mcp/publish-content', [], null, new TranslatedString([]), new TranslatedString([]));
         $feature = new AppFeature('0189aaaabbbbcccc0000000000000001', 'my-app', true, '0.0.0', true, new \DateTimeImmutable(), $config);
 
         $storage = $this->createMock(AppFeatureStorage::class);

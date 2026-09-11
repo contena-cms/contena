@@ -3,19 +3,19 @@
 ## Overview
 
 Contena exposes a dedicated Model Context Protocol (MCP) server for the Channel API
-at `/channel-api/_mcp`. This endpoint lets AI agents operate in a Channel and Member
-context using standard Channel API credentials. No Admin API OAuth required.
+at `/channel-api/_mcp`. This endpoint lets AI agents operate in a channel and
+member context using standard Channel API credentials. No Admin API OAuth required.
 
 It is separate from the Admin API MCP endpoint (`/api/_mcp`) and runs its own
 capability registry, so plugins can register Channel API-specific tools, prompts,
-and resources that are only visible in the Frontend context.
+and resources that are only visible in the frontend context.
 
 ## Authentication
 
 The endpoint accepts standard Channel API headers:
 
-- `ct-access-key`: the Channel access key
-- `ct-context-token`: the current Member session token (optional; anonymous context is used when absent)
+- `ct-access-key`: the channel access key
+- `ct-context-token`: the current member session token (optional; anonymous context is used when absent)
 
 Example MCP client configuration:
 
@@ -23,9 +23,9 @@ Example MCP client configuration:
 {
   "mcpServers": {
     "contena-channel-api": {
-      "url": "https://your-shop.example/channel-api/_mcp",
+      "url": "https://your-cms.example/channel-api/_mcp",
       "headers": {
-        "ct-access-key": "SWSC...",
+        "ct-access-key": "CTSC...",
         "ct-context-token": "<member-context-token>"
       }
     }
@@ -51,21 +51,21 @@ Channel API MCP tool classes must live outside the `src/Core/Framework/Mcp` scan
 ### Example tool
 
 ```php
-#[McpTool(name: 'my-blog-finder', description: 'Find Blog entries for the current Channel')]
+#[McpTool(name: 'my-blog-finder', description: 'Find blogs for the current channel')]
 class MyBlogFinderTool extends McpToolResponse
 {
     public function __construct(
         private readonly ChannelApiMcpContextProvider $contextProvider,
-        private readonly BlogListingDataLoader $listingLoader,
+        private readonly BlogListingRoute $listingRoute,
     ) {}
 
     public function __invoke(string $query): string
     {
         $context = $this->contextProvider->getChannelContext();
         if ($context === null) {
-            return $this->error('No Channel context available.');
+            return $this->error('No channel context available.');
         }
-        // use $this->listingLoader with $context
+        // use $this->listingRoute with $context
         return $this->success([...]);
     }
 }
@@ -91,16 +91,18 @@ Channel API-specific tags:
 - `mcp.channel_api.request_handler`
 - `mcp.channel_api.notification_handler`
 
-These are intentionally separate from `mcp.request_handler` and `mcp.notification_handler`
-used by the Admin API server, so protocol extensions can target a specific API scope
-without affecting the other.
+These are intentionally separate from `mcp.admin.request_handler` and
+`mcp.admin.notification_handler` used by the Admin API server, so protocol extensions can
+target a specific API scope without affecting the other. The MCP bundle wires handlers from
+one global tag for every server it registers; `McpServerBuilderCompilerPass` replaces that
+with these per-server tags, because Contena's handlers are bound to one registry.
 
 ## Access Control
 
 No per-client allowlist is applied on the Channel API endpoint, unlike the Admin API which
 supports per-integration capability restrictions via `McpAllowlistProvider`. Any
 authenticated Channel API client can access all registered Channel API MCP capabilities.
-Fine-grained access control at the Channel or Member tier is a deliberate
+Fine-grained access control at the channel or member tier is a deliberate
 future extension point.
 
 ## Rate Limiting
@@ -109,7 +111,7 @@ Every request is rate-limited via `McpRateLimiter` before the protocol runs. The
 API endpoint uses its own bucket (`mcp_channel_api`, configured under
 `contena.api.rate_limiter` in `contena.yaml`), separate from the Admin API
 (`mcp_admin_api`). The key is `channelId + ct-context-token`, falling back to the
-client IP when no Channel context is present.
+client IP when no channel context is present.
 
 The Channel API limits are intentionally tighter than the Admin API: this endpoint is
 public and the context token is cheap to rotate, so the effective protection is closer to
@@ -130,23 +132,27 @@ The server assigns a session ID (UUID) on `initialize` and returns it in the
 `mcp-session-id` response header. A malformed `mcp-session-id` request header is
 rejected with HTTP 400 before it reaches the transport.
 
-Session state uses the MCP SDK's in-memory session store by default, which does not
-survive across PHP workers. For multi-worker or multi-server deployments, define the
-`mcp.session.store` service with an implementation of
-`Mcp\Server\Session\SessionStoreInterface` backed by shared storage (e.g. Redis); the
-Channel API server builder picks it up automatically.
+Each MCP server owns its own session store — `mcp.server.channel_api.session.store` here,
+`mcp.server.admin.session.store` for the Admin API. They must stay separate: session ids are
+not namespaced per server and the SDK accepts any id present in the store, so a shared store
+would make a session minted on one endpoint valid on the other.
+
+Both default to a file-based store under `%kernel.cache_dir%/mcp-sessions/<server>`. For
+multi-worker or multi-server deployments, configure a `session` store per server in
+`packages/mcp.php` (`cache` or `framework`), or override the service with an implementation of
+`Mcp\Server\Session\SessionStoreInterface` backed by shared storage (e.g. Redis).
 
 ## Built-in Capabilities
 
 | Name | Type | Description |
 |------|------|-------------|
-| `contena-channel-api-context` | Tool | Returns the current session metadata: Channel ID, context token, language, and Member authentication state |
+| `contena-channel-api-context` | Tool | Returns the current session metadata: channel ID, context token, language, and member authentication state |
 
 ## Known Limitations
 
 ### Cache bypass
 
-MCP tools that call service-layer code directly (e.g. `BlogListingDataLoader`, route loaders)
+MCP tools that call service-layer code directly (e.g. `BlogListingRoute`, other route loaders)
 bypass the HTTP-level full-page cache that normally sits in front of Channel API routes. This
 is intentional. AI agents need fresh, consistent data. Tool authors should keep it in
 mind when implementing tools that feed from high-traffic cached routes, as repeated MCP calls
@@ -155,24 +161,22 @@ will hit the database/service layer directly rather than the cache.
 ### No automatic discovery
 
 There is currently no automatic discovery mechanism for AI agents visiting the default
-Contena Frontend. A Frontend visitor does not automatically expose the MCP endpoint
-URL, the Channel access key, or a usable context token to an external agent.
+Contena frontend. A frontend visitor does not automatically expose the MCP endpoint
+URL, the channel access key, or a usable context token to an external agent.
 
-Missing pieces for full autonomous Frontend agent support:
+Missing pieces for full autonomous frontend agent support:
 - No `/.well-known/` advertisement of the MCP server URL or credentials
-- No session-to-context-token bridge for Frontend PHP session visitors
+- No session-to-context-token bridge for frontend PHP session visitors
 
-This gap is addressed by the **UCP (Unified Commerce Platform) SDK**, which provides
-the discovery and authentication flow on top of this endpoint. Without UCP, this endpoint
-is most useful for:
+Until a standard discovery and authentication bridge is added, this endpoint is most useful for:
 
-- **Headless Frontend** setups where the client already holds a `ct-access-key` and `ct-context-token`
+- **Headless CMS** setups where the client already holds a `ct-access-key` and `ct-context-token`
 - **Developer tooling** with pre-configured credentials
 - **Plugin development**: build and test Channel API MCP tools locally before UCP integration
 
-### No Frontend session bridge
+### No frontend session bridge
 
-A visitor on the default Contena Frontend has a PHP session but no `ct-context-token`
+A visitor on the default Contena frontend has a PHP session but no `ct-context-token`
 that an external agent can directly use. A future integration (e.g. a JavaScript snippet
 embedding the current session's context token) would be needed to bridge this gap for
-embedded AI experiences directly inside the Frontend.
+embedded AI experiences directly inside the frontend.

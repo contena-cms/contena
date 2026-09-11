@@ -46,7 +46,7 @@ async function createWrapper(privileges = [], integrations = null, options = {})
                 integrationService: {
                     generateKey: () => {
                         return Promise.resolve({
-                            accessKey: 'SWIANMDUSUR1Q2X0VURGAVDAQG',
+                            accessKey: 'CTIANMDUSUR1Q2X0VURGAVDAQG',
                             secretAccessKey: 'YzFnaFprUjdaZUI4WkJsSmVOcHNOTnI5bUNqc2o4YUx0WmFIb3Y',
                         });
                     },
@@ -181,7 +181,7 @@ describe('module/ct-integration/page/ct-integration-list', () => {
         await labelField.setValue('Test');
 
         const accessKeyField = wrapper.find('#ct-field--currentIntegration-accessKey');
-        expect(accessKeyField.element.value).toBe('SWIANMDUSUR1Q2X0VURGAVDAQG');
+        expect(accessKeyField.element.value).toBe('CTIANMDUSUR1Q2X0VURGAVDAQG');
 
         const secretKeyField = wrapper.find('#ct-field--currentIntegration-secretAccessKey');
         expect(secretKeyField.element.value).toBe('YzFnaFprUjdaZUI4WkJsSmVOcHNOTnI5bUNqc2o4YUx0WmFIb3Y');

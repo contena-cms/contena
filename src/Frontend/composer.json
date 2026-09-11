@@ -12,6 +12,7 @@
         "php": ">=8.5",
         "scssphp/scssphp": "v1.12.0",
         "contena/core": "*",
+        "mcp/sdk": "^0.8.1",
         "symfony/asset": "~7.4.0",
         "symfony/config": "~7.4.0",
         "symfony/console": "~7.4.0",

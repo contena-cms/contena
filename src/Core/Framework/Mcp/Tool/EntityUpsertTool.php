@@ -14,7 +14,7 @@ use Mcp\Capability\Attribute\Schema;
 #[McpTool(
     name: 'contena-entity-upsert',
     title: 'Entity Upsert',
-    description: 'Create or update Contena entity data. Always use dryRun=true (default) first to validate, then set dryRun=false to persist. Use contena-entity-schema to understand required fields before building the payload. Returns validation result in dryRun mode, or the written entity data on commit.'
+    description: 'Create or update Contena entity data. Always use dryRun=true (default) first to validate, then set dryRun=false to persist. If you don\'t already know the required fields, contena-entity-schema will tell you. Returns validation result in dryRun mode, or the written entity data on commit.'
 )]
 #[McpToolDependsOn('contena-entity-schema')]
 #[McpToolGroup('entity')]
@@ -34,7 +34,7 @@ class EntityUpsertTool extends McpToolResponse
     public function __invoke(
         #[Schema(description: 'Entity name to write, e.g. "blog" or "category". See the contena://entities resource for the full list.')]
         string $entity,
-        #[Schema(description: 'The entity\'s fields as a JSON string: one OBJECT, or an ARRAY of objects to write several records in a single call. Include "id" on a record to UPDATE it, omit it to CREATE one — e.g. {"id":"...","name":"News"} renames an existing category, and [{...},{...}] upserts both. contena-entity-schema lists the field names and which are required.')]
+        #[Schema(description: 'The entity\'s fields as a JSON string: one OBJECT, or an ARRAY of objects to write several records in a single call. Include "id" on a record to UPDATE it, omit it to CREATE one — e.g. {"id":"...","name":"Summer Sale"} renames an existing category, and [{...},{...}] upserts both. contena-entity-schema lists the field names and which are required.')]
         string $payload,
         #[Schema(description: 'Validate without writing. Leave true first, then call again with false to persist.')]
         bool $dryRun = true,

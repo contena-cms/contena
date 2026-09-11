@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
@@ -12,6 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
@@ -19,6 +19,8 @@ use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntityReadTool;
 use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
 use Contena\Core\Framework\Struct\ArrayEntity;
+use Mcp\Capability\Discovery\DocBlockParser;
+use Mcp\Capability\Discovery\SchemaGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +36,7 @@ class EntityReadToolTest extends TestCase
     {
         $context = Context::createDefaultContext();
         $entity = new ArrayEntity(['id' => 'prod-123', 'name' => 'Test Blog']);
+        $entity->internalSetEntityData('blog', new FieldVisibility([]));
         $collection = new EntitySearchResult(
             1,
             new EntityCollection([$entity]),
@@ -144,7 +147,7 @@ class EntityReadToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions([]);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $registry = $this->createMock(DefinitionInstanceRegistry::class);
         $registry->method('has')->willReturn(true);
@@ -167,7 +170,7 @@ class EntityReadToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $repository = $this->createMock(EntityRepository::class);
         $repository->expects($this->never())->method('search');
@@ -185,19 +188,19 @@ class EntityReadToolTest extends TestCase
         $criteriaValidator->expects($this->once())
             ->method('validate')
             ->with('blog', static::identicalTo($criteria), $context)
-            ->willReturn(['category:read']);
+            ->willReturn(['blog_category:read']);
 
         $contextProvider = static::createStub(McpContextProvider::class);
         $contextProvider->method('getContext')->willReturn($context);
 
         $tool = new EntityReadTool($registry, $criteriaBuilder, $contextProvider, static::createStub(JsonEntityEncoder::class), $criteriaValidator);
-        $output = ($tool)('blog', 'blog-id', '{"associations": {"category": {}}}');
+        $output = ($tool)('blog', 'blog-id', '{"associations": {"categories": {}}}');
 
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
 
         static::assertFalse($data['success']);
         static::assertStringContainsString('Missing privilege:', $data['error']);
-        static::assertStringContainsString('category:read', $data['error']);
+        static::assertStringContainsString('blog_category:read', $data['error']);
     }
 
     public function testUnknownEntityReturnsError(): void
@@ -252,7 +255,7 @@ class EntityReadToolTest extends TestCase
         );
 
         $data = json_decode(
-            ($tool)('blog', 'blog-123', '{"includes":"id"}'),
+            ($tool)('blog', 'prod-123', '{"includes":"id"}'),
             true,
             512,
             \JSON_THROW_ON_ERROR
@@ -287,6 +290,23 @@ class EntityReadToolTest extends TestCase
 
         $this->expectExceptionObject(new \RuntimeException('bug, not bad input'));
 
-        ($tool)('blog', 'blog-123');
+        ($tool)('blog', 'prod-123');
+    }
+
+    #[TestDox('Every __invoke parameter carries a description into the SDK-generated input schema')]
+    public function testEveryParameterIsDescribedInTheInputSchema(): void
+    {
+        $method = new \ReflectionMethod(EntityReadTool::class, '__invoke');
+        $schema = new SchemaGenerator(new DocBlockParser())->generate($method);
+
+        static::assertIsArray($schema['properties']);
+        static::assertCount(\count($method->getParameters()), $schema['properties']);
+
+        foreach ($schema['properties'] as $name => $property) {
+            static::assertIsArray($property);
+            static::assertArrayHasKey('description', $property, \sprintf('$%s has no description', $name));
+            static::assertIsString($property['description']);
+            static::assertNotSame('', $property['description'], \sprintf('$%s has an empty description', $name));
+        }
     }
 }

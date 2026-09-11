@@ -79,10 +79,16 @@ class AppMcpToolLoaderTest extends TestCase
             ->method('registerTool')
             ->with(
                 static::callback(function (Tool $tool): bool {
-                    static::assertSame('my-app-sync-orders', $tool->name);
-                    static::assertSame('Sync Orders', $tool->title);
-                    static::assertSame('Syncs orders', $tool->description);
-                    static::assertSame(['type' => 'object', 'properties' => [], 'required' => []], $tool->inputSchema);
+                    static::assertSame('my-app-publish-content', $tool->name);
+                    static::assertSame('Publish Content', $tool->title);
+                    static::assertSame('Publishes content', $tool->description);
+                    static::assertSame('object', $tool->inputSchema['type']);
+                    static::assertSame([], $tool->inputSchema['required']);
+                    // mcp/sdk normalizes an empty properties map to an object in the Tool
+                    // constructor, so it serializes as {} rather than [] — strict clients reject the
+                    // array form.
+                    static::assertInstanceOf(\stdClass::class, $tool->inputSchema['properties']);
+                    static::assertSame([], (array) $tool->inputSchema['properties']);
 
                     return true;
                 }),
@@ -104,7 +110,7 @@ class AppMcpToolLoaderTest extends TestCase
             ->with(
                 static::callback(function (Tool $tool): bool {
                     static::assertNull($tool->title);
-                    static::assertSame('Syncs orders', $tool->description);
+                    static::assertSame('Publishes content', $tool->description);
 
                     return true;
                 }),
@@ -133,7 +139,10 @@ class AppMcpToolLoaderTest extends TestCase
             ->method('registerTool')
             ->with(
                 static::callback(function (Tool $tool): bool {
-                    static::assertSame('my-app-sync-orders', $tool->name);
+                    static::assertSame('my-app-publish-content', $tool->name);
+                    // A populated properties map stays an array; mcp/sdk only swaps an empty one for
+                    // an object so it serializes as {}.
+                    static::assertIsArray($tool->inputSchema['properties']);
                     static::assertArrayHasKey('since', $tool->inputSchema['properties']);
                     static::assertSame('string', $tool->inputSchema['properties']['since']['type']);
                     static::assertSame('ISO date', $tool->inputSchema['properties']['since']['description']);
@@ -159,7 +168,13 @@ class AppMcpToolLoaderTest extends TestCase
             ->method('registerTool')
             ->with(
                 static::callback(function (Tool $tool): bool {
-                    static::assertSame(['type' => 'object', 'properties' => [], 'required' => []], $tool->inputSchema);
+                    static::assertSame('object', $tool->inputSchema['type']);
+                    static::assertSame([], $tool->inputSchema['required']);
+                    // mcp/sdk normalizes an empty properties map to an object in the Tool
+                    // constructor, so it serializes as {} rather than [] — strict clients reject the
+                    // array form.
+                    static::assertInstanceOf(\stdClass::class, $tool->inputSchema['properties']);
+                    static::assertSame([], (array) $tool->inputSchema['properties']);
 
                     return true;
                 }),
@@ -188,11 +203,11 @@ class AppMcpToolLoaderTest extends TestCase
         $registry->expects($this->once())
             ->method('registerTool')
             ->with(
-                static::callback(fn (Tool $tool): bool => $tool->name === 'my-app-sync-orders'),
+                static::callback(fn (Tool $tool): bool => $tool->name === 'my-app-publish-content'),
                 static::isCallable(),
             );
 
-        $loader = new AppMcpToolLoader($this->storage, $this->executor, $this->localeProvider, new NullLogger(), ['my-app-sync-orders']);
+        $loader = new AppMcpToolLoader($this->storage, $this->executor, $this->localeProvider, new NullLogger(), ['my-app-publish-content']);
         $loader->load($registry);
     }
 
@@ -227,7 +242,7 @@ class AppMcpToolLoaderTest extends TestCase
         $executor = $this->createMock(AppMcpCapabilityExecutor::class);
         $executor->expects($this->once())
             ->method('execute')
-            ->with('my-app-sync-orders', 'my-app', 'https://app.example.com/mcp/sync', ['since' => '2025-01-01'], '2.1.0')
+            ->with('my-app-publish-content', 'my-app', 'https://app.example.com/mcp/sync', ['since' => '2025-01-01'], '2.1.0')
             ->willReturn('{"success":true}');
         $loader = new AppMcpToolLoader($this->storage, $executor, $this->localeProvider, new NullLogger());
 
@@ -245,7 +260,7 @@ class AppMcpToolLoaderTest extends TestCase
 
         static::assertNotNull($capturedCallback);
 
-        $request = new CallToolRequest('my-app-sync-orders', ['since' => '2025-01-01']);
+        $request = new CallToolRequest('my-app-publish-content', ['since' => '2025-01-01']);
         $context = new RequestContext(static::createStub(SessionInterface::class), $request);
 
         $result = ($capturedCallback)($context);
@@ -259,7 +274,7 @@ class AppMcpToolLoaderTest extends TestCase
         $executor = $this->createMock(AppMcpCapabilityExecutor::class);
         $executor->expects($this->once())
             ->method('execute')
-            ->with('my-app-sync-orders', 'my-app', 'https://app.example.com/mcp/sync', [], '0.0.0')
+            ->with('my-app-publish-content', 'my-app', 'https://app.example.com/mcp/sync', [], '0.0.0')
             ->willReturn('{"success":true}');
         $loader = new AppMcpToolLoader($this->storage, $executor, $this->localeProvider, new NullLogger());
 
@@ -306,7 +321,7 @@ class AppMcpToolLoaderTest extends TestCase
             ->method('registerTool')
             ->with(
                 static::callback(function (Tool $tool): bool {
-                    static::assertSame('Sync Orders', $tool->description);
+                    static::assertSame('Publish Content', $tool->description);
 
                     return true;
                 }),
@@ -319,7 +334,7 @@ class AppMcpToolLoaderTest extends TestCase
     public function testLoadSkipsReservedContenaPrefixedToolName(): void
     {
         $this->storage->method('forActiveApps')->willReturn([
-            $this->feature($this->toolConfig(name: 'orders'), appName: 'contena'),
+            $this->feature($this->toolConfig(name: 'content'), appName: 'contena'),
         ]);
 
         $registry = $this->createMock(RegistryInterface::class);
@@ -357,11 +372,11 @@ class AppMcpToolLoaderTest extends TestCase
      * @param list<string> $requiredPrivileges
      */
     private function toolConfig(
-        string $name = 'sync-orders',
+        string $name = 'publish-content',
         string $url = 'https://app.example.com/mcp/sync',
         ?array $inputSchema = null,
-        array $label = ['en-GB' => 'Sync Orders'],
-        array $description = ['en-GB' => 'Syncs orders'],
+        array $label = ['en-GB' => 'Publish Content'],
+        array $description = ['en-GB' => 'Publishes content'],
         array $requiredPrivileges = [],
     ): McpToolConfig {
         return new McpToolConfig($name, $url, $requiredPrivileges, $inputSchema, new TranslatedString($label), new TranslatedString($description));

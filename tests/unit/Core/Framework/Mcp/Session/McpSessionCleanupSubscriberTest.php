@@ -67,15 +67,15 @@ class McpSessionCleanupSubscriberTest extends TestCase
         // Both registries share the cache pool but use distinct keys, mirroring production wiring.
         $cache = new Psr16Cache(new ArrayAdapter());
         $adminRegistry = new McpSessionRegistry($cache, 'contena.mcp.active_session_ids');
-        $storeApiRegistry = new McpSessionRegistry($cache, 'contena.mcp.channel_api.active_session_ids');
+        $channelApiRegistry = new McpSessionRegistry($cache, 'contena.mcp.channel_api.active_session_ids');
         $adminRegistry->register('shared-session-id');
-        $storeApiRegistry->register('shared-session-id');
+        $channelApiRegistry->register('shared-session-id');
 
         $subscriber = new McpSessionCleanupSubscriber(
             static::createStub(ToolResultCacheStorage::class),
             static::createStub(McpToolsetSessionStorage::class),
             $adminRegistry,
-            $storeApiRegistry,
+            $channelApiRegistry,
         );
 
         $request = Request::create('/channel-api/_mcp', 'DELETE');
@@ -88,7 +88,7 @@ class McpSessionCleanupSubscriberTest extends TestCase
         ));
 
         static::assertSame(['shared-session-id'], $adminRegistry->all(), 'a channel-api DELETE must not touch the Admin registry');
-        static::assertSame([], $storeApiRegistry->all(), 'a channel-api DELETE must clear the channel-api registry');
+        static::assertSame([], $channelApiRegistry->all(), 'a channel-api DELETE must clear the channel-api registry');
     }
 
     public function testIgnoresNonDeleteRequests(): void

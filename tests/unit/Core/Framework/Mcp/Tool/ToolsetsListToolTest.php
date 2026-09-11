@@ -29,10 +29,10 @@ class ToolsetsListToolTest extends TestCase
                 'tools' => ['contena-entity-search'],
             ],
             [
-                'name' => 'order',
-                'title' => 'Order tools',
-                'description' => 'Order',
-                'tools' => ['contena-order-state'],
+                'name' => 'content',
+                'title' => 'Content tools',
+                'description' => 'Content',
+                'tools' => ['contena-blog-publish'],
             ],
         ]);
 

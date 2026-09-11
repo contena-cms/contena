@@ -7,9 +7,9 @@ use Contena\Core\Framework\Util\Random;
 
 class AccessKeyHelper
 {
-    private const string USER_IDENTIFIER = 'SWUA';
-    private const string INTEGRATION_IDENTIFIER = 'SWIA';
-    private const string CHANNEL_IDENTIFIER = 'SWCH';
+    private const string USER_IDENTIFIER = 'CTUA';
+    private const string INTEGRATION_IDENTIFIER = 'CTIA';
+    private const string CHANNEL_IDENTIFIER = 'CTCH';
 
     /**
      * @var array<string, string>

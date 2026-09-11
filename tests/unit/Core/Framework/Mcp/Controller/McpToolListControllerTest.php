@@ -87,12 +87,12 @@ class McpToolListControllerTest extends TestCase
     public function testListIncludesPrivilegesFromCompileTimeConfig(): void
     {
         $page = new Page([self::makeTool('contena-entity-delete')], null);
-        $privileges = ['static' => ['product:read'], 'entityParam' => null, 'operations' => ['update']];
+        $privileges = ['static' => ['blog:read'], 'entityParam' => null, 'operations' => ['update']];
         $controller = $this->makeController($page, [], ['contena-entity-delete' => $privileges]);
 
         $data = json_decode((string) $controller->list()->getContent(), true);
 
-        static::assertSame(['product:read'], $data[0]['requiredPrivileges']['static']);
+        static::assertSame(['blog:read'], $data[0]['requiredPrivileges']['static']);
         static::assertNull($data[0]['requiredPrivileges']['entityParam']);
         static::assertSame(['update'], $data[0]['requiredPrivileges']['operations']);
     }

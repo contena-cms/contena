@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\Mcp\Tool;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
@@ -128,12 +128,17 @@ abstract class McpToolResponse
      *
      * `SearchRequestException` carries one entry per rejected pointer, so each
      * detail is prefixed with it: "/aggregations/0/avg/field" names the element
-     * that is wrong. The base `DataAbstractionLayerException` is accepted, not
-     * only its InvalidFilterQuery / InvalidAggregationQuery subclasses, because
-     * the builder throws the base class directly for some input errors, e.g.
-     * `expectedArrayWithType()` for `{"includes":"id"}`.
+     * that is wrong. Every other `ContenaHttpException` is rendered by its own
+     * message, because the builder reports bad input through several unrelated
+     * classes: `DataAbstractionLayerException` directly for e.g.
+     * `expectedArrayWithType()` on `{"includes":"id"}`,
+     * `FrameworkException::associationNotFound()` for an unknown association,
+     * and `ApiProtectionException` / `RuntimeFieldInCriteriaException` from
+     * `ApiCriteriaValidator` for a field the caller may not query. All of them
+     * name the offending part of the payload, so the message is what the caller
+     * needs; only the exception class differs.
      */
-    protected function invalidCriteriaError(SearchRequestException|DataAbstractionLayerException $e): string
+    protected function invalidCriteriaError(ContenaHttpException $e): string
     {
         if (!$e instanceof SearchRequestException) {
             return $this->error($e->getMessage());
@@ -188,7 +193,7 @@ abstract class McpToolResponse
     }
 
     /**
-     * Canonical error format for privilege denials -- all tools must use this
+     * Canonical error format for privilege denials — all tools must use this
      * so clients can match on a single "Missing privilege:" prefix.
      *
      * @param non-empty-list<string> $privileges

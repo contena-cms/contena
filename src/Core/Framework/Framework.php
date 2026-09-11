@@ -14,7 +14,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\AssetBundleRegistrat
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AssetRegistrationCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AttributeEntityCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AutoconfigureCompilerPass;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\ChannelApiMcpServerBuilderCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentLayoutAssignableCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentRouteCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ContentSystemCompilerPass;
@@ -28,6 +27,7 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\FeatureFlagCompilerP
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FilesystemConfigMigrationCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FrameworkMigrationReplacementCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\HttpCacheConfigCompilerPass;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\McpDebugCommandCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpServerBuilderCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolAnalysisCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolDiscoveryCompilerPass;
@@ -141,7 +141,7 @@ class Framework extends Bundle
         $container->addCompilerPass(new McpToolDiscoveryCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 900);
         $container->addCompilerPass(new McpToolAnalysisCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 800);
         $container->addCompilerPass(new McpServerBuilderCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 700);
-        $container->addCompilerPass(new ChannelApiMcpServerBuilderCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 600);
+        $container->addCompilerPass(new McpDebugCommandCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 600);
         $container->addCompilerPass(new HttpCacheConfigCompilerPass());
         $container->addCompilerPass(new MessageHandlerCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1000);
         $container->addCompilerPass(new ContentRouteCompilerPass());

@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Returns null for a type when no restriction is configured (all capabilities accessible).
  *
  * Auth mode → allowlist resolution:
- * - User access key (SWUA...) → user.mcp_allowlist via user_id lookup
- * - Integration access key (SWIA...) → integration.mcp_allowlist
+ * - User access key (CTUA...) → user.mcp_allowlist via user_id lookup
+ * - Integration access key (CTIA...) → integration.mcp_allowlist
  * - Bearer JWT, password grant → user.mcp_allowlist via ATTRIBUTE_OAUTH_USER_ID
  * - Bearer JWT, client_credentials → integration.mcp_allowlist via ATTRIBUTE_OAUTH_CLIENT_ID
  * - Admin users (admin=true) → always unrestricted regardless of auth mode

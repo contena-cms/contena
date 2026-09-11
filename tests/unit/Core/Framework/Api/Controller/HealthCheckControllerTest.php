@@ -49,7 +49,7 @@ class HealthCheckControllerTest extends TestCase
         $result = new Result(
             'SaleChannelReadiness',
             Status::OK,
-            'All sales channels are OK',
+            'All channels are OK',
             true,
             $extra
         );
@@ -68,7 +68,7 @@ class HealthCheckControllerTest extends TestCase
                     'name' => 'SaleChannelReadiness',
                     'healthy' => true,
                     'status' => 'OK',
-                    'message' => 'All sales channels are OK',
+                    'message' => 'All channels are OK',
                     'extra' => $extra,
                 ],
             ],

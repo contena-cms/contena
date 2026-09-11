@@ -17,7 +17,7 @@ use Mcp\Capability\Attribute\Schema;
  * This tool lives in the Frontend bundle because it depends on ThemeService,
  * which is a Frontend service. Placing it in Core/Framework would create an
  * inverted dependency (Core -> Frontend). The McpToolCompilerPass discovers
- * any service tagged mcp.tool regardless of bundle.
+ * any service tagged contena.mcp.tool regardless of bundle.
  */
 #[McpTool(
     name: 'contena-theme-config',
@@ -71,8 +71,8 @@ class ThemeConfigTool extends McpToolResponse
             return $error;
         }
 
-        // Resolving runs after the privilege check so the error hints cannot enumerate channel
-        // names. Infrastructure failures stay uncaught on purpose: per the McpToolResponse
+        // Resolving runs after the privilege check so the error hints cannot enumerate
+        // channel names. Infrastructure failures stay uncaught on purpose: per the McpToolResponse
         // contract only business errors become an error envelope.
         $resolved = $this->resolveChannelId($channelId);
 
@@ -203,10 +203,10 @@ class ThemeConfigTool extends McpToolResponse
             static fn (mixed $id): string => (string) $id,
             $this->connection->fetchFirstColumn(
                 <<<'SQL'
-                    SELECT DISTINCT LOWER(HEX(`c`.`id`))
-                    FROM `channel` `c`
-                    LEFT JOIN `channel_translation` `ct` ON `ct`.`channel_id` = `c`.`id`
-                    WHERE `c`.`id` = :id OR `ct`.`name` = :name
+                    SELECT DISTINCT LOWER(HEX(`sc`.`id`))
+                    FROM `channel` `sc`
+                    LEFT JOIN `channel_translation` `sct` ON `sct`.`channel_id` = `sc`.`id`
+                    WHERE `sc`.`id` = :id OR `sct`.`name` = :name
                     SQL,
                 [
                     // A non-UUID input binds NULL, which no ID can equal.

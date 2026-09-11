@@ -4,9 +4,8 @@ namespace Contena\Core\Framework\Mcp\Tool;
 
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
@@ -45,7 +44,7 @@ class EntitySearchTool extends McpToolResponse
         string $entity,
         #[Schema(description: 'A JSON OBJECT of Admin API criteria, as a string — "filter", "sort", "associations", "includes". E.g. {"sort":[{"field":"createdAt","order":"DESC"}]} for the most recent first, or {"filter":[{"type":"equals","field":"active","value":true}]} to narrow the result. Defaults to no criteria.')]
         string $criteria = '{}',
-        #[Schema(description: 'Records per page, 1-500.')]
+        #[Schema(description: 'Records per page, starting at 1. The upper bound is the configured Admin API limit (contena.api.max_limit); exceeding it returns an error naming the real maximum.')]
         int $limit = 25,
         #[Schema(description: 'Page number, starting at 1.')]
         int $page = 1,
@@ -86,7 +85,11 @@ class EntitySearchTool extends McpToolResponse
                 $definition,
                 $context,
             );
-        } catch (SearchRequestException|DataAbstractionLayerException $e) {
+        } catch (ContenaHttpException $e) {
+            // Scoped to this call on purpose: a DAL failure from the search
+            // below is a bug, not bad input, and must still reach the log.
+            // `fromArray()` only parses the payload and checks field flags, so
+            // every ContenaHttpException it raises is something the caller can fix.
             return $this->invalidCriteriaError($e);
         }
 

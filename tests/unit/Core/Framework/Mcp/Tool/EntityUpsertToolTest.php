@@ -16,7 +16,10 @@ use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntityUpsertTool;
 use Doctrine\DBAL\Connection;
+use Mcp\Capability\Discovery\DocBlockParser;
+use Mcp\Capability\Discovery\SchemaGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +33,7 @@ class EntityUpsertToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $registry = $this->createMock(DefinitionInstanceRegistry::class);
         $registry->method('has')->willReturn(true);
@@ -50,7 +53,7 @@ class EntityUpsertToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read', 'blog:create']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $registry = $this->createMock(DefinitionInstanceRegistry::class);
         $registry->method('has')->willReturn(true);
@@ -61,7 +64,7 @@ class EntityUpsertToolTest extends TestCase
 
         $tool = new EntityUpsertTool($registry, $contextProvider, static::createStub(Connection::class));
         // Payload with an id triggers an update operation, which requires :update privilege
-        $result = $this->decode(($tool)('blog', '{"id": "' . Defaults::LIVE_VERSION . '", "name": "Test"}'));
+        $result = $this->decode(($tool)('blog', '{"id": "' . Defaults::LANGUAGE_SYSTEM . '", "name": "Test"}'));
 
         static::assertFalse($result['success']);
         static::assertStringContainsString('blog:update', $result['error']);
@@ -71,7 +74,7 @@ class EntityUpsertToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read', 'blog:create']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $events = static::createStub(EntityWrittenContainerEvent::class);
         $events->method('getEvents')->willReturn(new NestedEventCollection([]));
@@ -97,7 +100,7 @@ class EntityUpsertToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions(['blog:read', 'blog:update']);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $events = static::createStub(EntityWrittenContainerEvent::class);
         $events->method('getEvents')->willReturn(new NestedEventCollection([]));
@@ -114,7 +117,7 @@ class EntityUpsertToolTest extends TestCase
 
         $tool = new EntityUpsertTool($registry, $contextProvider, static::createStub(Connection::class));
         // Payload with id — only update privilege needed
-        $result = $this->decode(($tool)('blog', '{"id": "' . Defaults::LIVE_VERSION . '", "name": "Test"}', false));
+        $result = $this->decode(($tool)('blog', '{"id": "' . Defaults::LANGUAGE_SYSTEM . '", "name": "Test"}', false));
 
         static::assertTrue($result['success']);
     }
@@ -123,7 +126,7 @@ class EntityUpsertToolTest extends TestCase
     {
         $source = new AdminApiSource(null, null);
         $source->setPermissions([]);
-        $context = new Context($source, [Defaults::LANGUAGE_SYSTEM]);
+        $context = new Context($source);
 
         $registry = static::createStub(DefinitionInstanceRegistry::class);
         $registry->method('has')->willReturn(true);
@@ -234,6 +237,23 @@ class EntityUpsertToolTest extends TestCase
         static::assertFalse($result['success']);
         static::assertStringContainsString('unknown_entity', $result['error']);
         static::assertStringContainsString('contena://entities', $result['error']);
+    }
+
+    #[TestDox('Every __invoke parameter carries a description into the SDK-generated input schema')]
+    public function testEveryParameterIsDescribedInTheInputSchema(): void
+    {
+        $method = new \ReflectionMethod(EntityUpsertTool::class, '__invoke');
+        $schema = new SchemaGenerator(new DocBlockParser())->generate($method);
+
+        static::assertIsArray($schema['properties']);
+        static::assertCount(\count($method->getParameters()), $schema['properties']);
+
+        foreach ($schema['properties'] as $name => $property) {
+            static::assertIsArray($property);
+            static::assertArrayHasKey('description', $property, \sprintf('$%s has no description', $name));
+            static::assertIsString($property['description']);
+            static::assertNotSame('', $property['description'], \sprintf('$%s has an empty description', $name));
+        }
     }
 
     /**

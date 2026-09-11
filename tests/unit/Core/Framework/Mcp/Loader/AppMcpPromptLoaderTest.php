@@ -67,9 +67,9 @@ class AppMcpPromptLoaderTest extends TestCase
             ->method('registerPrompt')
             ->with(
                 static::callback(function (Prompt $prompt): bool {
-                    static::assertSame('my-app-order-context', $prompt->name);
-                    static::assertSame('Order Context', $prompt->title);
-                    static::assertSame('Context for order management', $prompt->description);
+                    static::assertSame('my-app-content-context', $prompt->name);
+                    static::assertSame('Content Context', $prompt->title);
+                    static::assertSame('Context for content management', $prompt->description);
 
                     return true;
                 }),
@@ -92,7 +92,7 @@ class AppMcpPromptLoaderTest extends TestCase
             ->with(
                 static::callback(function (Prompt $prompt): bool {
                     static::assertNull($prompt->title);
-                    static::assertSame('Context for order management', $prompt->description);
+                    static::assertSame('Context for content management', $prompt->description);
 
                     return true;
                 }),
@@ -133,7 +133,7 @@ class AppMcpPromptLoaderTest extends TestCase
         $executor = $this->createMock(AppMcpCapabilityExecutor::class);
         $executor->expects($this->once())
             ->method('execute')
-            ->with('my-app-order-context', 'my-app', 'https://app.example.com/mcp/prompt/order-context', [])
+            ->with('my-app-content-context', 'my-app', 'https://app.example.com/mcp/prompt/content-context', [])
             ->willReturn('{"messages":[]}');
         $loader = new AppMcpPromptLoader($this->storage, $executor, $this->localeProvider, new NullLogger());
 
@@ -197,10 +197,10 @@ class AppMcpPromptLoaderTest extends TestCase
      * @param array<string, string> $description
      */
     private function promptConfig(
-        string $name = 'order-context',
-        string $url = 'https://app.example.com/mcp/prompt/order-context',
-        array $label = ['en-GB' => 'Order Context'],
-        array $description = ['en-GB' => 'Context for order management'],
+        string $name = 'content-context',
+        string $url = 'https://app.example.com/mcp/prompt/content-context',
+        array $label = ['en-GB' => 'Content Context'],
+        array $description = ['en-GB' => 'Context for content management'],
     ): McpPromptConfig {
         return new McpPromptConfig($name, $url, new TranslatedString($label), new TranslatedString($description));
     }

@@ -75,7 +75,7 @@ class SystemConfigReadToolTest extends TestCase
                 static::assertSame('core.listing.defaultSorting', $key);
                 static::assertSame($channelId, $sc);
 
-                return 'price-asc';
+                return 'created-at-desc';
             });
 
         $contextProvider = static::createStub(McpContextProvider::class);
@@ -86,7 +86,7 @@ class SystemConfigReadToolTest extends TestCase
 
         $data = json_decode($output, true, 512, \JSON_THROW_ON_ERROR);
         static::assertTrue($data['success']);
-        static::assertSame('price-asc', $data['data']['value']);
+        static::assertSame('created-at-desc', $data['data']['value']);
     }
 
     public function testNoDotTreatedAsDomain(): void
