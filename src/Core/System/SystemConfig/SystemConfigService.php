@@ -175,13 +175,6 @@ class SystemConfigService implements ResetInterface
                 }
             }
 
-            $inheritedValuePresent = \array_key_exists($key, $merged);
-            $valueConsideredEmpty = \in_array($value, [null, '', '0', 0, 0.0, []], true);
-
-            if ($inheritedValuePresent && $valueConsideredEmpty) {
-                continue;
-            }
-
             $merged[$key] = $value;
         }
 
