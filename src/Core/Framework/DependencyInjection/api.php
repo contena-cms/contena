@@ -43,6 +43,7 @@ use Contena\Core\Framework\Api\Controller\UserController;
 use Contena\Core\Framework\Api\EventListener\Authentication\ApiAuthenticationListener;
 use Contena\Core\Framework\Api\EventListener\Authentication\UserCredentialsChangedSubscriber;
 use Contena\Core\Framework\Api\EventListener\CorsListener;
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\EventListener\ExpectationSubscriber;
 use Contena\Core\Framework\Api\EventListener\JsonRequestTransformerListener;
 use Contena\Core\Framework\Api\EventListener\ResponseExceptionListener;
@@ -124,6 +125,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('setContainer', [service('service_container')]);
 
     $services->set(CorsListener::class)
+        ->args([
+            tagged_iterator(CorsHeaderProviderInterface::SERVICE_TAG),
+        ])
         ->tag('kernel.event_subscriber');
 
     $services->set(ResponseExceptionListener::class)

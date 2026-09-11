@@ -3,6 +3,7 @@
 namespace Contena\Tests\Unit\Core\Framework\Api\EventListener;
 
 use Contena\Core\Framework\Api\EventListener\CorsListener;
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @internal
@@ -96,5 +98,71 @@ class CorsListenerTest extends TestCase
         $listener->onKernelResponse($event);
 
         static::assertFalse($event->getResponse()->headers->has('Access-Control-Allow-Origin'));
+    }
+
+    public function testDefaultHeadersIncludeChannelAndMcpHeaders(): void
+    {
+        $headers = $this->dispatchResponse(new CorsListener());
+
+        static::assertStringContainsString(PlatformRequest::HEADER_INCLUDE_SEO_URLS, (string) $headers->get('Access-Control-Allow-Headers'));
+        static::assertStringContainsString(PlatformRequest::HEADER_MCP_SESSION_ID, (string) $headers->get('Access-Control-Allow-Headers'));
+        static::assertStringContainsString(PlatformRequest::HEADER_MCP_PROTOCOL_VERSION, (string) $headers->get('Access-Control-Expose-Headers'));
+    }
+
+    public function testProvidersContributeAdditionalHeaders(): void
+    {
+        $listener = new CorsListener([
+            new StaticCorsHeaderProvider(['ct-subscription-plan'], []),
+            new StaticCorsHeaderProvider([], ['ct-subscription-state']),
+        ]);
+
+        $headers = $this->dispatchResponse($listener);
+        static::assertStringContainsString('ct-subscription-plan', (string) $headers->get('Access-Control-Allow-Headers'));
+        static::assertStringNotContainsString('ct-subscription-state', (string) $headers->get('Access-Control-Allow-Headers'));
+        static::assertStringContainsString('ct-subscription-state', (string) $headers->get('Access-Control-Expose-Headers'));
+    }
+
+    public function testContributedHeadersAreDeduplicatedCaseInsensitively(): void
+    {
+        $listener = new CorsListener([
+            new StaticCorsHeaderProvider(['Authorization', 'CT-Context-Token'], []),
+            new StaticCorsHeaderProvider(['authorization'], []),
+        ]);
+
+        $allowed = explode(',', (string) $this->dispatchResponse($listener)->get('Access-Control-Allow-Headers'));
+        static::assertCount(1, array_keys($allowed, 'Authorization', true));
+        static::assertNotContains('CT-Context-Token', $allowed);
+        static::assertContains(PlatformRequest::HEADER_CONTEXT_TOKEN, $allowed);
+    }
+
+    private function dispatchResponse(CorsListener $listener): ResponseHeaderBag
+    {
+        $event = new ResponseEvent(
+            static::createStub(HttpKernelInterface::class),
+            Request::create('/channel-api/subscription/plan', 'POST'),
+            HttpKernelInterface::MAIN_REQUEST,
+            new Response(),
+        );
+
+        $listener->onKernelResponse($event);
+
+        return $event->getResponse()->headers;
+    }
+}
+
+class StaticCorsHeaderProvider implements CorsHeaderProviderInterface
+{
+    public function __construct(private readonly array $allowed, private readonly array $exposed)
+    {
+    }
+
+    public function getAllowedHeaders(): array
+    {
+        return $this->allowed;
+    }
+
+    public function getExposedHeaders(): array
+    {
+        return $this->exposed;
     }
 }

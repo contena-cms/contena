@@ -6,6 +6,7 @@ use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\BulkEntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
@@ -54,6 +55,10 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
         $container
             ->registerForAutoconfiguration(PeriodicMetricCollectorInterface::class)
             ->addTag('contena.telemetry.periodic_metric_collector');
+
+        $container
+            ->registerForAutoconfiguration(CorsHeaderProviderInterface::class)
+            ->addTag(CorsHeaderProviderInterface::SERVICE_TAG);
 
         $container
             ->registerForAutoconfiguration(EntityIndexer::class)
