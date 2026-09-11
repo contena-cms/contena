@@ -2,13 +2,20 @@
 
 namespace Contena\Core\Framework\ContentSystem\Layout\Type\Specification;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TranslatableTypeValidator;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnumValidator;
 
 /**
  * $type accepts primitives (`string`, `integer`, `boolean`, `number`), `object`,
  * class-string<Struct> FQCNs, and lists for union-like declarations.
- * `enum` and `translatable` are ignored for non-primitive types. {@see TypedEnumValidator} {@see TranslatableTypeValidator}
+ * `enum` is ignored for non-primitive types; `translatable` is a declaration error on any type but the lone
+ * `string`. {@see TypedEnumValidator} {@see TranslatableTypeValidator}
+ *
+ * Three members serve the stored tree rather than the published schema: {@see translatable()} reads the flag,
+ * {@see storedDefault()} is the one shape rule for a declared default in storage, and {@see admits()} is the one
+ * conformance predicate answering whether a stored value matches this declared type.
  *
  * @phpstan-type PropertyTypeSchema = array{
  *     type: string|list<string>,
@@ -73,6 +80,69 @@ final readonly class PropertyType
     public function default(): string|int|float|bool|null
     {
         return $this->default;
+    }
+
+    public function translatable(): bool
+    {
+        return $this->translatable;
+    }
+
+    /**
+     * @return string|int|float|bool|array<string, string|int|float|bool>|null
+     */
+    public function storedDefault(): string|int|float|bool|array|null
+    {
+        if ($this->default === null) {
+            return null;
+        }
+
+        if (!$this->translatable) {
+            return $this->default;
+        }
+
+        return [Defaults::LANGUAGE_SYSTEM => $this->default];
+    }
+
+    public function admits(StoredValue $value): bool
+    {
+        if ($this->translatable) {
+            $raw = $value->jsonSerialize();
+
+            if (!\is_array($raw) || array_is_list($raw)) {
+                return false;
+            }
+
+            foreach ($raw as $entry) {
+                if (!\is_string($entry)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if ($value->isNull()) {
+            return true;
+        }
+
+        $types = \is_string($this->type) ? [$this->type] : $this->type;
+
+        if ($types === [] || \array_diff($types, self::PRIMITIVE_TYPES) !== []) {
+            return true;
+        }
+
+        $raw = $value->jsonSerialize();
+
+        foreach ($types as $type) {
+            if (($type === 'string' && \is_string($raw))
+                || ($type === 'integer' && \is_int($raw))
+                || ($type === 'number' && (\is_int($raw) || \is_float($raw)))
+                || ($type === 'boolean' && \is_bool($raw))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isPrimitive(): bool

@@ -123,6 +123,10 @@ final readonly class StoredSchemaResolver
                 $entry['default'] = $default;
             }
 
+            if ($propertyType->translatable()) {
+                $entry['translatable'] = true;
+            }
+
             $entries[(string) $key] = $entry;
         }
 
