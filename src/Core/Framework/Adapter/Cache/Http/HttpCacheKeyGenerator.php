@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Util\Hasher;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
+use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +69,10 @@ class HttpCacheKeyGenerator
         $this->addVariantHeaders($request, $event);
 
         $this->addCookies($request, $response, $event);
+
+        if ($request->headers->get(PlatformRequest::HEADER_CONTEXT_SOURCE) === SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION) {
+            $event->isCacheable = false;
+        }
 
         $this->dispatcher->dispatch($event);
 

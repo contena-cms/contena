@@ -13,6 +13,7 @@ final class PlatformRequest
      * Context headers
      */
     public const string HEADER_CONTEXT_TOKEN = 'ct-context-token';
+    public const string HEADER_CONTEXT_SOURCE = 'ct-context-source';
     public const string HEADER_TENANT_ID = 'ct-tenant-id';
     public const string HEADER_ACCESS_KEY = 'ct-access-key';
     public const string HEADER_DOMAIN = 'ct-domain';

@@ -71,6 +71,9 @@ use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Routing\Annotation\CriteriaValueResolver;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
+use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
+use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\ContextResolverListener;
 use Contena\Core\Framework\Routing\CoreSubscriber;
@@ -124,6 +127,7 @@ use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -153,6 +157,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Populated by RouteScopeCompilerPass with all route prefixes from the registers RouteScopes
     $parameters->set('contena.routing.registered_api_prefixes', []);
+    $parameters->set('contena.routing.session_context_token.enabled', true);
 
     // Migration config
     $parameters->set('core.migration.directories', []);
@@ -291,7 +296,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // Routing
     $services->set(ContextResolverListener::class)
         ->args([
-            service(ApiRequestContextResolver::class),
+            service(ChannelRequestContextResolver::class),
         ])
         ->tag('kernel.event_subscriber');
 
@@ -598,6 +603,31 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(Connection::class),
             service(RouteScopeRegistry::class),
+        ]);
+
+    $services->set(SessionContextTokenAccessor::class)
+        ->args([
+            param('session.storage.options'),
+            param('contena.routing.session_context_token.enabled'),
+            service(SystemConfigService::class),
+        ]);
+
+    $services->set(SessionContextTokenSubscriber::class)
+        ->args([
+            service(SessionContextTokenAccessor::class),
+            service('request_stack'),
+            service(RouteScopeRegistry::class),
+        ])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(ChannelRequestContextResolver::class)
+        ->decorate(ApiRequestContextResolver::class)
+        ->args([
+            service(ChannelRequestContextResolver::class . '.inner'),
+            service(ChannelContextServiceInterface::class),
+            service('event_dispatcher'),
+            service(RouteScopeRegistry::class),
+            service(SessionContextTokenAccessor::class),
         ]);
 
     $services->set(RouteScope::class)

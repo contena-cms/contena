@@ -23,6 +23,17 @@ class RoutingException extends HttpException
     public const string MISSING_ROUTE_ATTRIBUTE = 'FRAMEWORK__ROUTING_ROUTE_ATTRIBUTE_MISSING';
     public const string CHANNEL_DOMAIN_NOT_FOUND = 'FRAMEWORK__ROUTING_CHANNEL_DOMAIN_NOT_FOUND';
     public const string CHANNEL_MEMBER_NOT_LOGGED_IN = 'FRAMEWORK__ROUTING_CHANNEL_MEMBER_NOT_LOGGED_IN';
+    public const string SESSION_CONTEXT_NOT_RESOLVABLE = 'FRAMEWORK__ROUTING_SESSION_CONTEXT_NOT_RESOLVABLE';
+
+    public static function sessionContextNotResolvable(string $reason): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::SESSION_CONTEXT_NOT_RESOLVABLE,
+            'The channel context cannot be resolved from the frontend session: {{ reason }}',
+            ['reason' => $reason]
+        );
+    }
 
     public static function channelDomainNotFound(string $domainUrl): self
     {
