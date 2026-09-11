@@ -13,6 +13,9 @@ class SeoUrlRouteConfig
         private string $template,
         private bool $skipInvalid = true,
         private readonly ?string $primaryKeyParameterKey = null,
+        private readonly ?string $targetRouteName = null,
+        /** @var array<string, string> */
+        private readonly array $routeParameters = [],
     ) {
     }
 
@@ -24,6 +27,11 @@ class SeoUrlRouteConfig
     public function getRouteName(): string
     {
         return $this->routeName;
+    }
+
+    public function getTargetRouteName(): string
+    {
+        return $this->targetRouteName ?? $this->routeName;
     }
 
     public function getTemplate(): string
@@ -55,6 +63,6 @@ class SeoUrlRouteConfig
             throw SeoUrlRouteConfigException::routeConfigMissingParameterKeyForPrimaryKey($this->definition->getEntityName());
         }
 
-        return [$this->primaryKeyParameterKey => $primaryKey];
+        return [...$this->routeParameters, $this->primaryKeyParameterKey => $primaryKey];
     }
 }

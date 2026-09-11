@@ -28,6 +28,7 @@ class Migration1785930000CreateChannel extends MigrationStep
         $this->createChannelAnalytics($connection);
         $this->createChannel($connection);
         $this->createContentAssociations($connection);
+        $this->createAppSeoUrlRoute($connection);
         $this->createSeo($connection);
         $this->addChannelToSystemConfig($connection);
         $this->createChannelAssociations($connection);
@@ -375,6 +376,31 @@ SQL
         }
     }
 
+    private function createAppSeoUrlRoute(Connection $connection): void
+    {
+        $connection->executeStatement(<<<'SQL'
+CREATE TABLE IF NOT EXISTS `app_seo_url_route` (
+    `id` BINARY(16) NOT NULL,
+    `app_id` BINARY(16) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `route_name` VARCHAR(255) NOT NULL,
+    `hook` VARCHAR(255) NOT NULL,
+    `entity_name` VARCHAR(64) NULL,
+    `default_template` VARCHAR(750) NULL,
+    `paths` JSON NULL,
+    `label` JSON NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk.app_seo_url_route.app_id` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE KEY `uniq.app_seo_url_route.app_id_name` (`app_id`, `name`),
+    UNIQUE KEY `uniq.app_seo_url_route.route_name` (`route_name`),
+    CONSTRAINT `json.app_seo_url_route.paths` CHECK (JSON_VALID(`paths`)),
+    CONSTRAINT `json.app_seo_url_route.label` CHECK (JSON_VALID(`label`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+    }
+
     private function createSeo(Connection $connection): void
     {
         $connection->executeStatement(<<<'SQL'
@@ -384,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `seo_url` (
     `language_id`    BINARY(16)                               NOT NULL,
     `channel_id`     BINARY(16)                               NULL,
     `foreign_key`    BINARY(16)                               NOT NULL,
-    `route_name`     VARCHAR(50) COLLATE utf8mb4_unicode_ci   NOT NULL,
+    `route_name`     VARCHAR(255) COLLATE utf8mb4_unicode_ci   NOT NULL,
     `path_info`      VARCHAR(750) COLLATE utf8mb4_unicode_ci  NOT NULL,
     `seo_path_info`  VARCHAR(750) COLLATE utf8mb4_unicode_ci  NOT NULL,
     `is_canonical`   TINYINT(1)                               NULL,

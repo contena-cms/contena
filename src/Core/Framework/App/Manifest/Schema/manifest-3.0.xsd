@@ -178,7 +178,18 @@
     <xs:complexType name="frontend">
         <xs:choice maxOccurs="unbounded">
             <xs:element name="template-load-priority" maxOccurs="1" minOccurs="0" type="xs:int"/>
+            <xs:element name="seo-url" maxOccurs="unbounded" minOccurs="0" type="frontend-seo-url"/>
         </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="frontend-seo-url">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="label" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="path" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="default-template" type="xs:string" minOccurs="0"/>
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="hook" type="xs:string" use="optional"/>
+        <xs:attribute name="entity" type="xs:string" use="optional"/>
     </xs:complexType>
     <xs:complexType name="permissions">
         <xs:choice maxOccurs="unbounded">

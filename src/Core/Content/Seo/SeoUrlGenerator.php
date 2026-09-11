@@ -129,7 +129,7 @@ class SeoUrlGenerator
 
             $seoUrl->setError($mapping->getError());
 
-            $pathInfo = $this->router->generate($config->getRouteName(), $mapping->getInfoPathContext());
+            $pathInfo = $this->router->generate($config->getTargetRouteName(), $mapping->getInfoPathContext());
             $pathInfo = $this->removePrefix($pathInfo, $basePath);
 
             $seoUrl->setPathInfo($pathInfo);

@@ -39,7 +39,11 @@
         <main-module source="https://main-module"/>
         <base-app-url>https://base-url.com</base-app-url>
     </admin>
-    <frontend><template-load-priority>100</template-load-priority></frontend>
+    <frontend>
+        <template-load-priority>100</template-load-priority>
+        <seo-url name="imprint"><label>Imprint</label><path>imprint</path></seo-url>
+        <seo-url name="blog-detail" entity="ce_blog"><label>Blog post</label><default-template>blog/{{ ceBlog.translated.title }}</default-template></seo-url>
+    </frontend>
     <permissions>
         <create>blog</create>
         <update>blog</update>

@@ -9,6 +9,13 @@ use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
+use Contena\Core\Content\Seo\SeoUrlPersister;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Frontend\Framework\Seo\App\AppSeoUrlLifecycleHandler;
+use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
+use Contena\Frontend\Framework\Seo\App\AppSeoUrlUpdateListener;
+use Contena\Frontend\Framework\Seo\App\AppStaticSeoUrlSynchronizer;
+use Doctrine\DBAL\Connection;
 use Contena\Frontend\Framework\Seo\FrontendCategoryUrlGenerator;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\LandingPageSeoUrlRoute;
@@ -18,9 +25,27 @@ use Contena\Frontend\Framework\Seo\SeoUrlRouteNameEnumProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(AppSeoUrlRouteLoader::class)
+        ->args([service(Connection::class), service(DefinitionInstanceRegistry::class), service('cache.object')])
+        ->tag('contena.seo_url.route_loader')
+        ->tag('kernel.event_subscriber')
+        ->tag('kernel.reset', ['method' => 'reset']);
+
+    $services->set(AppStaticSeoUrlSynchronizer::class)
+        ->args([service(AppSeoUrlRouteLoader::class), service('channel.repository'), service(SeoUrlPersister::class)]);
+
+    $services->set(AppSeoUrlLifecycleHandler::class)
+        ->args([service(AppSeoUrlRouteLoader::class), service(AppStaticSeoUrlSynchronizer::class), service(SeoUrlUpdater::class), service(DefinitionInstanceRegistry::class)])
+        ->tag('contena.app_lifecycle.handler', ['priority' => -1500]);
+
+    $services->set(AppSeoUrlUpdateListener::class)
+        ->args([service(AppSeoUrlRouteLoader::class), service(AppStaticSeoUrlSynchronizer::class), service(SeoUrlUpdater::class)])
+        ->tag('kernel.event_subscriber');
 
     $services->set(BlogPageSeoUrlRoute::class)
         ->args([

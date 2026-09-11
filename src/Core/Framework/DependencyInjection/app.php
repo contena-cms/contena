@@ -19,6 +19,7 @@ use Contena\Core\Framework\App\Aggregate\ActionButtonTranslation\ActionButtonTra
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetDefinition;
+use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemStyleOption\AppContentSystemStyleOptionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationDefinition;
@@ -101,6 +102,7 @@ use Contena\Core\Framework\App\Lifecycle\Handler\RuleConditionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TemplateLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\WebhookLifecycleHandler;
+use Contena\Core\Framework\App\Lifecycle\Handler\SeoUrlRouteLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\PermissionLifecycleService;
 use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemBindingSpecificationPersister;
 use Contena\Core\Framework\App\Lifecycle\Persister\ContentSystemElementTypePersister;
@@ -141,8 +143,10 @@ use Contena\Core\Framework\App\Validation\ContentSystemLayoutPresetAppValidator;
 use Contena\Core\Framework\App\Validation\ContentSystemStyleOptionAppValidator;
 use Contena\Core\Framework\App\Validation\HookableValidator;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
+use Contena\Core\Framework\App\Validation\FrontendSeoUrlValidator;
 use Contena\Core\Framework\App\Validation\Requirements\PublicAccess;
 use Contena\Core\Framework\App\Validation\Requirements\SecureUrlValidator;
+use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 use Contena\Core\Framework\App\Validation\TranslationValidator;
 use Contena\Core\Framework\ContentSystem\Binding\Loader\YamlBindingSpecificationLoader;
 use Contena\Core\Framework\ContentSystem\Binding\Registry\ContentSystemBindingSpecificationRegistry;
@@ -233,6 +237,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AppNameValidator::class)
         ->args([
             service(SourceResolver::class),
+        ])
+        ->tag('contena.app_manifest.validator');
+
+    $services->set(FrontendSeoUrlValidator::class)
+        ->args([
+            service(RouteBlocklistService::class),
         ])
         ->tag('contena.app_manifest.validator');
 
@@ -906,6 +916,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AppContentSystemLayoutPresetDefinition::class)
         ->tag('contena.entity.definition');
+
+    $services->set(AppSeoUrlRouteDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(SeoUrlRouteLifecycleHandler::class)
+        ->args([
+            service('app_seo_url_route.repository'),
+            service(Connection::class),
+            service(ClockInterface::class),
+        ])
+        ->tag('contena.app_lifecycle.handler', ['priority' => -1400]);
 
     $services->set(AppFlowActionLoadedSubscriber::class)
         ->tag('kernel.event_subscriber');

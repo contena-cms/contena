@@ -7,6 +7,7 @@ use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetDefinition;
+use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteDefinition;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemStyleOption\AppContentSystemStyleOptionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationDefinition;
@@ -131,6 +132,7 @@ class AppDefinition extends EntityDefinition
             new OneToManyAssociationField('styleOptions', AppContentSystemStyleOptionDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('bindingSpecifications', AppContentSystemBindingSpecificationDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('layoutPresets', AppContentSystemLayoutPresetDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
+            new OneToManyAssociationField('seoUrlRoutes', AppSeoUrlRouteDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('flowActions', AppFlowActionDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('flowEvents', AppFlowEventDefinition::class, 'app_id')->addFlags(new CascadeDelete()),
         ]);

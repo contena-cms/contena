@@ -7,6 +7,7 @@ use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemBindingSpecification\AppContentSystemBindingSpecificationCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemElementType\AppContentSystemElementTypeCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetCollection;
+use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemStyleOption\AppContentSystemStyleOptionCollection;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCollection;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationCollection;
@@ -122,6 +123,18 @@ class AppEntity extends Entity
     protected ?AppContentSystemBindingSpecificationCollection $bindingSpecifications = null;
 
     protected ?AppContentSystemLayoutPresetCollection $layoutPresets = null;
+
+    protected ?AppSeoUrlRouteCollection $seoUrlRoutes = null;
+
+    public function getSeoUrlRoutes(): ?AppSeoUrlRouteCollection
+    {
+        return $this->seoUrlRoutes;
+    }
+
+    public function setSeoUrlRoutes(AppSeoUrlRouteCollection $seoUrlRoutes): void
+    {
+        $this->seoUrlRoutes = $seoUrlRoutes;
+    }
 
     protected int $templateLoadPriority;
 

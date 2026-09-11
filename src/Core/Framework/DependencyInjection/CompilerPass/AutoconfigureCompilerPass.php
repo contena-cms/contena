@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
+use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
@@ -87,6 +88,9 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
         $container
             ->registerForAutoconfiguration(SeoUrlRouteInterface::class)
             ->addTag('contena.seo_url.route');
+
+        $container->registerForAutoconfiguration(SeoUrlRouteLoaderInterface::class)
+            ->addTag('contena.seo_url.route_loader');
 
         $container
             ->registerForAutoconfiguration(TemplateNamespaceHierarchyBuilderInterface::class)
