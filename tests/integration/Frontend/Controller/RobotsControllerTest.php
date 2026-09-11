@@ -112,6 +112,8 @@ class RobotsControllerTest extends TestCase
         Allow: /*theme/
 
         Allow: /media/*?ts=
+
+        Allow: /thumbnail/*?ts=
         TXT;
 
         static::assertStringStartsWith($expectedCoreRules, $html);
