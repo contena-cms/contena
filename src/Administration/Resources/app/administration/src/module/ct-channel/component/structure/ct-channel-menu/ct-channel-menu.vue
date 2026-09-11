@@ -1,6 +1,6 @@
 <template>
     <ct-block name="ct_channel_menu">
-        <div class="ct-channel-menu">
+        <div class="ct-channel-menu" :class="channelMenuClasses">
             <ct-block name="ct_channel_menu_modal">
                 <ct-channel-modal v-if="showModal" @modal-close="showModal = false" />
             </ct-block>
@@ -141,6 +141,7 @@ import { computed, getCurrentInstance, inject, onBeforeUnmount, onMounted, ref, 
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import type AclService from 'src/app/service/acl.service';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
 
@@ -186,6 +187,9 @@ const channelRepository = computed(() => repositoryFactory.create('channel'));
 const canCreateChannels = computed(() => acl.can('channel.creator'));
 const channelFavoritesService = computed(() => Contena.Service('channelFavorites'));
 const channelFavorites = computed(() => channelFavoritesService.value.getFavoriteIds());
+const channelMenuClasses = computed(() => ({
+    'is--module-colored': useModuleIconColors().enabled.value,
+}));
 const showAddChannelMenuItem = computed(() => {
     return (
         channelsLoaded.value && channels.value.length === 0 && channelFavorites.value.length === 0 && canCreateChannels.value

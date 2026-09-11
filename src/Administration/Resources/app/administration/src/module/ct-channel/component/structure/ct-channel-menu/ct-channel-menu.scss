@@ -1,4 +1,17 @@
 .ct-channel-menu {
+    &.is--module-colored .ct-admin-menu__navigation-link.router-link-active {
+        background: var(--color-interaction-secondary-hover);
+        color: var(--color-text-primary-default);
+
+        .collapsible-text {
+            color: var(--color-text-primary-default);
+        }
+
+        .ct-admin-menu__navigation-link-icon {
+            color: var(--color-icon-primary-default);
+        }
+    }
+
     .ct-channel-menu-domain-link {
         flex-shrink: 0;
         overflow: hidden;

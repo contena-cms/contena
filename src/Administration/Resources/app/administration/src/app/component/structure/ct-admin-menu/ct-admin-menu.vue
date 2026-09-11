@@ -246,7 +246,8 @@
                         id="ct-admin-menu-flyout"
                         ref="ctAdminMenuFlyout"
                         class="ct-admin-menu__flyout-content"
-                        :class="{ 'is--closing': isFlyoutClosing }"
+                        :class="flyoutContentClass"
+                        :style="flyoutContentStyle"
                         tabindex="-1"
                         @mouseenter="cancelFlyoutClose"
                         @focusin="cancelFlyoutClose"
@@ -299,6 +300,7 @@ import { ref, computed, inject, watch, nextTick, onMounted, onBeforeUnmount, get
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import useShortcut from 'src/app/composables/use-shortcut';
+import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 
 const route = useRoute();
 const router = useRouter();
@@ -438,6 +440,20 @@ const adminMenuClasses = computed(() => {
         'is--toggling': isTogglingSidebar.value,
         'is--viewport-resizing': isViewportResizing.value,
     };
+});
+const flyoutModuleColor = computed(() => {
+    if (!useModuleIconColors().enabled.value) {
+        return undefined;
+    }
+
+    return activeEntry.value?.entry?.color;
+});
+const flyoutContentClass = computed(() => ({
+    'is--closing': isFlyoutClosing.value,
+    'is--module-colored': !!flyoutModuleColor.value,
+}));
+const flyoutContentStyle = computed(() => {
+    return flyoutModuleColor.value ? { '--ct-admin-menu-module-color': flyoutModuleColor.value } : null;
 });
 const userName = computed(() => {
     if (!currentUser.value) {

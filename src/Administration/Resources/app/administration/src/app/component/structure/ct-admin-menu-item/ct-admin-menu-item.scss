@@ -231,7 +231,8 @@ $nesting-line-indent: 36px;
 
 // An active sub item picks up the same neutral background as its colored parent row and keeps
 // the regular text color, so only the marker signals the active state.
-.navigation-list-item__level-1.is--module-colored .navigation-list-item--nested {
+.navigation-list-item__level-1.is--module-colored .navigation-list-item--nested,
+.ct-admin-menu__flyout-content.is--module-colored .navigation-list-item--nested {
     > .ct-admin-menu__navigation-item-row > .ct-admin-menu__navigation-link.router-link-active {
         color: var(--color-text-primary-default);
         background: var(--color-interaction-secondary-hover);
