@@ -8,7 +8,7 @@ Stores an externally supplied, **unsaved** draft layout behind a short-lived tok
 
 Before anything is stored, the draft is admitted through the same `Api/ContentPreviewPageBuilder::build()` that opening the returned URL runs, and the built page is discarded, so the mint and the render cannot drift apart. A draft that gate refuses is a 400 and never becomes a token. Minting pays one full build.
 
-The payload is held by `Api/ContentPreviewPayloadStore` under a 32-character token in the application cache for five minutes (`expiresAfter(300)`), never in the database. The returned URL points at the Frontend render route `GET /content-system/preview/{token}` (`frontend.content-system.preview`), which loads the payload back, builds the page through the same `ContentPreviewPageBuilder`, and serves the full-format `ContentPage` as an embeddable page (its `frame-ancestors` CSP is derived from the request `Referer`). An expired or unknown token renders a `404`.
+The payload is held by `Api/ContentPreviewPayloadStore` under a 32-character token in the application cache for five minutes (`expiresAfter(300)`), never in the database: `store(ContentPreviewRequest): string` mints the token, `load(string $token): ?ContentPreviewRequest` reads it back. The returned URL points at the Frontend render route `GET /content-system/preview/{token}` (`frontend.content-system.preview`), which loads the payload back, builds the page through the same `ContentPreviewPageBuilder`, and serves the full-format `ContentPage` as an embeddable page (its `frame-ancestors` CSP is derived from the request `Referer`). An expired or unknown token renders a `404` (`load()` returns `null` for a token with no cache entry); a hit that is not exactly what `ContentPreviewRequest` declares — its field set, read off the constructor by reflection, and its constraint attributes, validated against the rebuilt DTO — throws `previewPayloadInvalid` (500, `CONTENT_SYSTEM__PREVIEW_PAYLOAD_INVALID`) instead, a server fault since the store writes only validated envelopes.
 
 ## Request
 
@@ -19,8 +19,8 @@ The `ContentPreviewRequest` envelope:
 | `layout` | yes | Raw element-tree array; decoded through the same path as a stored layout (`Layout/Codec/StoredElementCodec::decode()`). |
 | `entityType` | yes | One of the `content-system-entity-types.json` values; selected by exact match, never as a URL segment. |
 | `entityId` | yes | Id of the entity to hydrate against; the entity must exist. |
-| `channelId` | yes | Channel whose context is synthesized for rendering. |
-| `languageId`, `domainId`, `memberId` | no | Override the synthesized channel context. |
+| `salesChannelId` | yes | Sales channel whose context is synthesized for rendering. |
+| `languageId`, `currencyId`, `domainId`, `customerId` | no | Override the synthesized channel context. |
 | `queryParameters` | no | Forwarded as request query; `elementId` selects a single element for partial preview. Member names must not be strings PHP casts to integers (`0`, `12`, `-3`) — the stored envelope is a string-keyed map. |
 
 ## Response
@@ -39,7 +39,7 @@ Envelope and intrinsic-layout failures are rejected with `400 Bad Request` (`Con
 |---|---|---|
 | Missing/invalid envelope field | 400 | `#[MapRequestPayload]` validation (forced to 400) |
 | A `queryParameters` member name PHP casts to an integer | 400 | `ContentPreviewRequest::rejectNonStringQueryParameterNames()`, through the same `#[MapRequestPayload]` validation |
-| An `includes` or `excludes` parameter in any of the attribute, query or request bag | 400 | `fieldSelectionNotSupported` — field selection is refused here as it is on the channel-api content routes |
+| An `includes` or `excludes` parameter in any of the attribute, query or request bag | 400 | `fieldSelectionNotSupported` — field selection is refused here as it is on the store-api content routes |
 | `entityType` matches no specification source | 400 | `unknownEntityType` |
 | Layout element missing a non-empty string `id`/`component`; a duplicate element `id`, nesting past the maximum depth, or a non-array nested child; or an element config that is a client defect | 400 | `invalidLayoutStructure` |
 | Layout has any intrinsic-scope error `LayoutDiagnostics` reports | 400 | `elementTypesInvalid` (via `DraftLayoutChecker`, which surfaces every intrinsic-scope error from `LayoutDiagnostics`; the message carries the violation, not its code) |

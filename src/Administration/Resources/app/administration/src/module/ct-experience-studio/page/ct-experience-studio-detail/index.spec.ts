@@ -2,6 +2,8 @@
 import { createCollection, createMutationResponse, createWrapper, resetWrappers } from './index.spec/test.helper';
 
 describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
+    const ANCHOR_LANGUAGE_ID = '2fbb5fe2e29a4d70aa5854ce7ce3e20b';
+    const GERMAN_LANGUAGE_ID = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
     afterEach(() => {
         resetWrappers();
     });
@@ -58,7 +60,7 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
         const pushToHistory = jest.spyOn(wrapper.vm.editorStore, 'pushToHistory');
 
         wrapper.vm.onInlineEditStart({ elementId: 'element-1' });
-        wrapper.vm.onInlineEditCommit({
+        await wrapper.vm.onInlineEditCommit({
             elementId: 'element-1',
             value: '<p>Before</p>',
         });
@@ -66,12 +68,127 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
 
         wrapper.vm.onInlineEditStart({ elementId: 'element-1' });
         wrapper.vm.onInlineEditChange({ elementId: 'element-1', value: '<p>After</p>' });
-        wrapper.vm.onInlineEditCommit({
+        await wrapper.vm.onInlineEditCommit({
             elementId: 'element-1',
             value: '<p>After</p>',
         });
         expect(pushToHistory).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.layout.layout[0].properties.text).toBe('<p>After</p>');
+    });
+
+    it('commits translatable inline text through update-element-properties while preserving other languages', async () => {
+        const updatedElement = {
+            id: 'element-1',
+            component: 'Ct:Content:Text',
+            properties: {
+                text: {
+                    [ANCHOR_LANGUAGE_ID]: 'Hello again',
+                    [GERMAN_LANGUAGE_ID]: 'Hallo',
+                },
+            },
+        };
+        const updateElementProperties = jest.fn().mockResolvedValue(createMutationResponse([updatedElement], ['element-1']));
+        const { wrapper } = await createWrapper({
+            services: {
+                contentSystemLayoutDraftMutationService: { updateElementProperties },
+            },
+        });
+        const originalElement = {
+            id: 'element-1',
+            component: 'Ct:Content:Text',
+            properties: {
+                text: {
+                    [ANCHOR_LANGUAGE_ID]: 'Hello',
+                    [GERMAN_LANGUAGE_ID]: 'Hallo',
+                },
+            },
+        };
+        wrapper.vm.layout = { id: 'layout-1', rootSource: 'blog', layout: [originalElement] };
+        wrapper.vm.elementTypeStore.typesByName = {
+            'Ct:Content:Text': {
+                name: 'Ct:Content:Text',
+                properties: { text: { translatable: true, adminUI: { component: 'text-editor' } } },
+            },
+        };
+
+        wrapper.vm.onInlineEditStart({ elementId: 'element-1' });
+        await wrapper.vm.onInlineEditCommit({ elementId: 'element-1', value: 'Hello again' });
+
+        expect(updateElementProperties).toHaveBeenCalledWith({
+            layout: [originalElement],
+            rootSource: 'blog',
+            elementId: 'element-1',
+            values: {
+                text: {
+                    [ANCHOR_LANGUAGE_ID]: 'Hello again',
+                    [GERMAN_LANGUAGE_ID]: 'Hallo',
+                },
+            },
+        });
+        expect(wrapper.vm.layout.layout).toEqual([updatedElement]);
+        expect(wrapper.vm.selectedElementId).toBe('element-1');
+    });
+
+    it('reads an empty string when no anchor-chain language carries a translatable text entry', async () => {
+        const { wrapper } = await createWrapper();
+        wrapper.vm.elementTypeStore.typesByName = {
+            'Ct:Content:Text': {
+                name: 'Ct:Content:Text',
+                properties: { text: { translatable: true } },
+            },
+        };
+
+        expect(
+            wrapper.vm.getElementTextValue({
+                id: 'element-1',
+                component: 'Ct:Content:Text',
+                properties: { text: { [GERMAN_LANGUAGE_ID]: 'Hallo' } },
+            }),
+        ).toBe('');
+    });
+
+    it('commits a translatable settings field through update-element-properties', async () => {
+        const element = {
+            id: 'element-1',
+            component: 'Ct:Media:Image',
+            properties: {
+                caption: {
+                    [ANCHOR_LANGUAGE_ID]: 'Caption',
+                    [GERMAN_LANGUAGE_ID]: 'Bildunterschrift',
+                },
+            },
+        };
+        const updateElementProperties = jest.fn().mockResolvedValue(createMutationResponse([element], ['element-1']));
+        const { wrapper } = await createWrapper({
+            services: {
+                contentSystemLayoutDraftMutationService: { updateElementProperties },
+            },
+        });
+        wrapper.vm.layout = { id: 'layout-1', rootSource: 'blog', layout: [element] };
+        wrapper.vm.elementTypeStore.typesByName = {
+            'Ct:Media:Image': {
+                name: 'Ct:Media:Image',
+                properties: { caption: { translatable: true } },
+            },
+        };
+
+        await wrapper.vm.onElementSettingsChange({
+            elementId: 'element-1',
+            propertyKey: 'caption',
+            value: 'Caption updated',
+        });
+
+        expect(updateElementProperties).toHaveBeenCalledWith({
+            layout: [element],
+            rootSource: 'blog',
+            elementId: 'element-1',
+            values: {
+                caption: {
+                    [ANCHOR_LANGUAGE_ID]: 'Caption updated',
+                    [GERMAN_LANGUAGE_ID]: 'Bildunterschrift',
+                },
+            },
+        });
     });
 
     it('clears inline session on cancel for matching element', async () => {

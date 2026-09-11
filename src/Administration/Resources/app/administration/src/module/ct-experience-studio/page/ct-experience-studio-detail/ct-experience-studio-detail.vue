@@ -130,6 +130,7 @@ import type {
     ContentLayoutDraftMovePayload,
     ContentLayoutDraftMutationResponse,
     ContentLayoutDraftRemovePayload,
+    ContentLayoutDraftUpdatePropertiesPayload,
 } from 'src/core/service/api/content-system-layout-draft-mutation.api.service';
 import type { ContentSystemLayoutPreset } from 'src/core/service/api/content-system-layout-preset.api.service';
 import type { ExperienceStudioElementTypeStore } from 'src/module/ct-experience-studio/store/experience-studio-element-type.store';
@@ -142,6 +143,7 @@ import {
     updateElementPropertiesInLayout,
     updateElementStyleInLayout,
 } from 'src/module/ct-experience-studio/util/content-element.util';
+import { resolveTranslatableEntry, withLanguageEntry } from 'src/module/ct-experience-studio/util/element-settings.util';
 import 'src/module/ct-experience-studio/store/experience-studio-editor.store';
 import 'src/module/ct-experience-studio/store/experience-studio-element-type.store';
 import 'src/module/ct-experience-studio/store/experience-studio-layout-preset.store';
@@ -185,7 +187,7 @@ type LayoutAssignmentConfig = {
     entityIdField: 'blogId' | 'categoryId' | 'landingPageId';
 };
 
-type DraftMutationOperation = 'insert' | 'remove' | 'duplicate' | 'move' | 'insert-preset';
+type DraftMutationOperation = 'insert' | 'remove' | 'duplicate' | 'move' | 'insert-preset' | 'update-properties';
 type LayoutMutator = (layoutValue: ContentElementNode[]) => LayoutMutationResult;
 type SelectedElementIdResolver = (response: ContentLayoutDraftMutationResponse) => string | null;
 type ContentSystemLayoutDraftMutationService = {
@@ -194,6 +196,9 @@ type ContentSystemLayoutDraftMutationService = {
     duplicateElement: (payload: ContentLayoutDraftDuplicatePayload) => Promise<ContentLayoutDraftMutationResponse>;
     moveElement: (payload: ContentLayoutDraftMovePayload) => Promise<ContentLayoutDraftMutationResponse>;
     insertPreset: (payload: ContentLayoutDraftInsertPresetPayload) => Promise<ContentLayoutDraftMutationResponse>;
+    updateElementProperties: (
+        payload: ContentLayoutDraftUpdatePropertiesPayload,
+    ) => Promise<ContentLayoutDraftMutationResponse>;
 };
 type ContentSystemEntityTypeService = {
     getEntityTypes: () => Promise<string[]>;
@@ -781,7 +786,7 @@ const onInlineEditChange = (payload: { elementId: string; value: string }) => {
         draftValue: normalizedValue,
     };
 };
-const onInlineEditCommit = (payload: { elementId: string; value: string }) => {
+const onInlineEditCommit = async (payload: { elementId: string; value: string }) => {
     if (!inlineEditSession.value || inlineEditSession.value.elementId !== payload.elementId) {
         return;
     }
@@ -791,6 +796,28 @@ const onInlineEditCommit = (payload: { elementId: string; value: string }) => {
     clearInlineEditSession();
 
     if (normalizedValue === session.originalValue) {
+        return;
+    }
+
+    const element = findElementById(payload.elementId);
+
+    if (!element) {
+        return;
+    }
+
+    if (isTranslatableProperty(element.component, 'text')) {
+        await executeStructuralDraftMutation(
+            'update-properties',
+            layout.value ? layout.value.layout : [],
+            {
+                elementId: payload.elementId,
+                values: {
+                    text: withLanguageEntry(element.properties?.text, Contena.Defaults.systemLanguageId, normalizedValue),
+                },
+            },
+            () => payload.elementId,
+        );
+
         return;
     }
 
@@ -1052,9 +1079,43 @@ const validateMoveTarget = (payload: MoveElementPayload) => {
         payload.elementId,
     );
 };
-const onElementSettingsChange = (payload: { elementId: string; properties: Record<string, unknown> }) => {
+const onElementSettingsChange = async (payload: { elementId: string; propertyKey: string; value: unknown }) => {
+    const element = findElementById(payload.elementId);
+
+    if (!element) {
+        return;
+    }
+
+    if (isTranslatableProperty(element.component, payload.propertyKey)) {
+        // A non-string control value cannot be a language-map entry; it travels raw so the write route rejects it.
+        const value =
+            typeof payload.value === 'string'
+                ? withLanguageEntry(
+                      element.properties?.[payload.propertyKey],
+                      Contena.Defaults.systemLanguageId,
+                      payload.value,
+                  )
+                : payload.value;
+
+        await executeStructuralDraftMutation(
+            'update-properties',
+            layout.value ? layout.value.layout : [],
+            {
+                elementId: payload.elementId,
+                values: {
+                    [payload.propertyKey]: value,
+                },
+            },
+            () => payload.elementId,
+        );
+
+        return;
+    }
+
     applyLayoutMutation((layout) => {
-        return updateElementPropertiesInLayout(layout, payload.elementId, payload.properties) ? {} : false;
+        return updateElementPropertiesInLayout(layout, payload.elementId, { [payload.propertyKey]: payload.value })
+            ? {}
+            : false;
     });
 };
 const onElementStyleChange = (payload: { elementId: string; style: Record<string, unknown> }) => {
@@ -1094,6 +1155,9 @@ const notifyMutationError = (codes: string[]) => {
         'CONTENT_SYSTEM__MUTATION_SLOT_REQUIRED',
         'CONTENT_SYSTEM__MUTATION_INVALID_WRAP_TARGETS',
         'CONTENT_SYSTEM__MUTATION_UNKNOWN_TYPE',
+        'CONTENT_SYSTEM__MUTATION_PROPERTY_UNKNOWN',
+        'CONTENT_SYSTEM__MUTATION_PROPERTY_CONFLICT',
+        'CONTENT_SYSTEM__MUTATION_PROPERTY_VALUE_REJECTED',
         'CONTENT_SYSTEM__INVALID_LAYOUT_STRUCTURE',
         'CONTENT_SYSTEM__UNKNOWN_ROOT_SOURCE',
     ]);
@@ -1112,7 +1176,8 @@ const notifyMutationError = (codes: string[]) => {
 };
 const createDraftMutationPayload = (layout: ContentElementNode[], operationPayload: Record<string, unknown>) => {
     return {
-        layout,
+        // Working-tree layout data crossing an outbound boundary is cloned at the call site.
+        layout: cloneDeep(layout),
         rootSource: resolveMutationRootSource(),
         ...operationPayload,
     };
@@ -1139,6 +1204,10 @@ const requestDraftMutation = async (
 
     if (operation === 'insert-preset') {
         return service.insertPreset(payload as ContentLayoutDraftInsertPresetPayload);
+    }
+
+    if (operation === 'update-properties') {
+        return service.updateElementProperties(payload as ContentLayoutDraftUpdatePropertiesPayload);
     }
 
     return service.duplicateElement(payload as ContentLayoutDraftDuplicatePayload);
@@ -1312,12 +1381,25 @@ const isTextElement = (element: ContentElementNode | null) => {
 
     return typeSpecification.properties.text?.adminUI?.component === 'text-editor';
 };
+const isTranslatableProperty = (component: string, propertyKey: string) => {
+    const typeSpecification = elementTypeStore.value.getByName(component);
+
+    return typeSpecification?.properties[propertyKey]?.translatable === true;
+};
 const getElementTextValue = (element: ContentElementNode | null) => {
     if (!element) {
         return '';
     }
 
-    return typeof element.properties?.text === 'string' ? element.properties.text : '';
+    const storedValue = element.properties?.text;
+
+    if (isTranslatableProperty(element.component, 'text')) {
+        const entry = resolveTranslatableEntry(storedValue, [Contena.Defaults.systemLanguageId]);
+
+        return entry.state === 'missing' ? '' : entry.value;
+    }
+
+    return typeof storedValue === 'string' ? storedValue : '';
 };
 const onUndo = () => {
     if (!layout.value || !canUndo.value) {
@@ -1552,6 +1634,7 @@ ctDefinePublic({
     clearInlineEditSession,
     findElementById,
     isTextElement,
+    isTranslatableProperty,
     getElementTextValue,
     onUndo,
     onRedo,

@@ -3,6 +3,8 @@ import { shallowMount } from '@vue/test-utils';
 import elementSettingsComponent from './index';
 
 describe('module/ct-experience-studio/component/ct-experience-studio-element-settings', () => {
+    const ANCHOR_LANGUAGE_ID = '2fbb5fe2e29a4d70aa5854ce7ce3e20b';
+    const GERMAN_LANGUAGE_ID = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
     const imageType = {
         properties: {
             media: {},
@@ -52,7 +54,8 @@ describe('module/ct-experience-studio/component/ct-experience-studio-element-set
             [
                 {
                     elementId: 'image-element',
-                    properties: { mediaId: 'media-id' },
+                    propertyKey: 'mediaId',
+                    value: 'media-id',
                 },
             ],
         ]);
@@ -82,6 +85,81 @@ describe('module/ct-experience-studio/component/ct-experience-studio-element-set
                 property,
                 breakpointAware: true,
             },
+        ]);
+    });
+
+    const textType = {
+        properties: {
+            text: {
+                type: 'string',
+                translatable: true,
+                default: 'Placeholder',
+            },
+        },
+        bindingSpecifications: {},
+    };
+
+    it('presents the anchor chain entry of a translatable property to the field controls', () => {
+        const wrapper = shallowMount(elementSettingsComponent, {
+            props: {
+                selectedElement: {
+                    properties: {
+                        text: {
+                            [GERMAN_LANGUAGE_ID]: 'Hallo',
+                            [ANCHOR_LANGUAGE_ID]: 'Hello',
+                        },
+                    },
+                },
+                selectedElementType: textType,
+            },
+        });
+
+        expect(wrapper.vm.elementPropertyValues).toEqual({ text: 'Hello' });
+    });
+
+    it('leaves a translatable property without an anchor chain entry absent so its declared default applies', () => {
+        const wrapper = shallowMount(elementSettingsComponent, {
+            props: {
+                selectedElement: {
+                    properties: {
+                        text: { [GERMAN_LANGUAGE_ID]: 'Hallo' },
+                    },
+                },
+                selectedElementType: textType,
+            },
+        });
+
+        expect(wrapper.vm.elementPropertyValues).toEqual({});
+        expect(Object.prototype.hasOwnProperty.call(wrapper.vm.elementPropertyValues, 'text')).toBe(false);
+    });
+
+    it('emits the raw control value of a translatable property under its own key', () => {
+        const wrapper = shallowMount(elementSettingsComponent, {
+            props: {
+                selectedElement: {
+                    id: 'text-element',
+                    properties: {
+                        text: {
+                            [ANCHOR_LANGUAGE_ID]: 'Hello',
+                            [GERMAN_LANGUAGE_ID]: 'Hallo',
+                        },
+                    },
+                },
+                selectedElementType: textType,
+                allowEdit: true,
+            },
+        });
+
+        wrapper.vm.onUpdateElementField({ key: 'text', value: 'Hello again' });
+
+        expect(wrapper.emitted('update-properties')).toEqual([
+            [
+                {
+                    elementId: 'text-element',
+                    propertyKey: 'text',
+                    value: 'Hello again',
+                },
+            ],
         ]);
     });
 });

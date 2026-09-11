@@ -17,10 +17,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\ApiRequestContextResolver;
 use Contena\Core\Framework\Routing\ChannelApiDomainResolver;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
-use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\Framework\Validation\DataValidator;
@@ -349,15 +347,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ApiRouteInfoResolver::class),
         ])
         ->public();
-
-    $services->set(ChannelRequestContextResolver::class)
-        ->decorate(ApiRequestContextResolver::class)
-        ->args([
-            service(ChannelRequestContextResolver::class . '.inner'),
-            service(ChannelContextServiceInterface::class),
-            service('event_dispatcher'),
-            service(RouteScopeRegistry::class),
-        ]);
 
     $services->set(ChannelAuthenticationListener::class)
         ->args([

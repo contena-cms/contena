@@ -168,7 +168,7 @@
         "twig/string-extra": "^3.24.0",
         "twig/twig": "^3.26.0",
         "yansongda/pay": "^3.7",
-        "zircote/swagger-php": "^4.9.2"
+        "zircote/swagger-php": "^6.4"
     },
     "suggest": {
         "league/flysystem-async-aws-s3": "Required to use the Flysystem S3 driver (^3.10.3)",

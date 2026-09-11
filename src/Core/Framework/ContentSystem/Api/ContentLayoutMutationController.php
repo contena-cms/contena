@@ -15,6 +15,7 @@ use Contena\Core\Framework\ContentSystem\Mutation\Op\MoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\RemoveElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\ReplaceElement;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\UnwrapElement;
+use Contena\Core\Framework\ContentSystem\Mutation\Op\UpdateElementProperties;
 use Contena\Core\Framework\ContentSystem\Mutation\Op\WrapElements;
 use Contena\Core\Framework\ContentSystem\Mutation\PersistedLayoutMutator;
 use Contena\Core\Framework\Context;
@@ -149,6 +150,18 @@ class ContentLayoutMutationController
         Context $context,
     ): Response {
         $mutation = new BindElement($this->bindingRegistry, $payload->bindingSpecificationId, $payload->elementId, $this->bindingApplicator);
+
+        return $this->respond($layoutId, $payload->expectedVersion, $mutation, $context);
+    }
+
+    #[Route(path: '/api/_action/content-system/layout/{layoutId}/update-element-properties', name: 'api.action.content_system.layout.persisted_update_element_properties', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['content_layout:update']], methods: [Request::METHOD_POST])]
+    public function updateProperties(
+        string $layoutId,
+        #[MapRequestPayload(serializationContext: [AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false], validationFailedStatusCode: Response::HTTP_BAD_REQUEST)]
+        ContentLayoutUpdateElementPropertiesRequest $payload,
+        Context $context,
+    ): Response {
+        $mutation = new UpdateElementProperties($this->registry, $payload->elementId, $payload->values, $payload->removeKeys);
 
         return $this->respond($layoutId, $payload->expectedVersion, $mutation, $context);
     }

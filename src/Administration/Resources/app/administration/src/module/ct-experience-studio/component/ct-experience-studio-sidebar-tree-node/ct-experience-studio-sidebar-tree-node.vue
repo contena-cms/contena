@@ -223,7 +223,7 @@ const elementTypeStore = computed(() => {
     return Contena.Store.get('experienceStudioElementType' as never) as ExperienceStudioElementTypeStore;
 });
 const label = computed(() => {
-    return getContentElementLabel(contentElement.value);
+    return getContentElementLabel(contentElement.value, [Contena.Defaults.systemLanguageId]);
 });
 const typeIcon = computed(() => {
     const configuredIcon = elementTypeStore.value.getByName(contentElement.value.component)?.icon;

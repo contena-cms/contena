@@ -56,6 +56,15 @@ export type ContentLayoutDraftInsertPresetPayload = ContentLayoutDraftMutationEn
     slot?: string | null;
 };
 
+/**
+ * @private
+ */
+export type ContentLayoutDraftUpdatePropertiesPayload = ContentLayoutDraftMutationEnvelope & {
+    elementId: string;
+    values?: Record<string, unknown>;
+    removeKeys?: string[];
+};
+
 type ContentLayoutDraftMutationDiagnostics = {
     wellFormed: boolean;
     resolvable: boolean;
@@ -136,6 +145,12 @@ class ContentSystemLayoutDraftMutationApiService extends ApiService {
 
     insertPreset(payload: ContentLayoutDraftInsertPresetPayload): Promise<ContentLayoutDraftMutationResponse> {
         return this.mutate('insert-preset', payload);
+    }
+
+    updateElementProperties(
+        payload: ContentLayoutDraftUpdatePropertiesPayload,
+    ): Promise<ContentLayoutDraftMutationResponse> {
+        return this.mutate('update-element-properties', payload);
     }
 
     private mutate(

@@ -91,6 +91,7 @@ import {
     getInitialPropertyValue,
     getPropertyControlType,
     isPropertyVisible,
+    resolveTranslatableEntry,
 } from '../../util/element-settings.util';
 import { getEditableStyleFields } from '../../util/style-settings.util';
 import './ct-experience-studio-element-settings.scss';
@@ -162,6 +163,12 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+function projectTranslatableValue(value: unknown): string | undefined {
+    const entry = resolveTranslatableEntry(value, [Contena.Defaults.systemLanguageId]);
+
+    return entry.state === 'missing' ? undefined : entry.value;
+}
+
 const $t = t;
 const activeSettingsTab = ref('element' as 'element' | 'layout');
 
@@ -190,11 +197,25 @@ const elementPropertyValues = computed(() => {
         return values;
     }
 
-    for (const key of Object.keys(typeSpecification.properties)) {
+    for (const [
+        key,
+        property,
+    ] of Object.entries(typeSpecification.properties)) {
         const storageKey = getElementPropertyStorageKey(typeSpecification, key);
 
         if (storageKey !== key && Object.prototype.hasOwnProperty.call(properties, storageKey)) {
             values[key] = properties[storageKey];
+        }
+
+        // An absent key stays absent so the field controls still fall back to the declared default.
+        if (property.translatable && Object.prototype.hasOwnProperty.call(values, key)) {
+            const projectedValue = projectTranslatableValue(values[key]);
+
+            if (projectedValue === undefined) {
+                delete values[key];
+            } else {
+                values[key] = projectedValue;
+            }
         }
     }
 
@@ -223,9 +244,10 @@ const elementFields = computed(() => {
         ) => {
             const storageKey = getElementPropertyStorageKey(typeSpecification, key);
             const elementProperties = selectedElement?.properties ?? {};
-            const currentValue = Object.prototype.hasOwnProperty.call(elementProperties, storageKey)
+            const storedValue = Object.prototype.hasOwnProperty.call(elementProperties, storageKey)
                 ? elementProperties[storageKey]
                 : elementProperties[key];
+            const currentValue = property.translatable ? projectTranslatableValue(storedValue) : storedValue;
             accumulator[key] = getInitialPropertyValue(property, currentValue);
 
             return accumulator;
@@ -302,9 +324,8 @@ const onUpdateElementField = (payload: { key: string; value: unknown }) => {
 
     emit('update-properties', {
         elementId: selectedElement.id,
-        properties: {
-            [storageKey]: payload.value,
-        },
+        propertyKey: storageKey,
+        value: payload.value,
     });
 };
 const onUpdateLayoutField = (payload: { key: string; value: unknown }) => {

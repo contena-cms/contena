@@ -32,6 +32,23 @@ describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tre
         expect(wrapper.vm.typeIcon).toBe('regular-align-left');
     });
 
+    it('labels the node through the anchor-only language chain', () => {
+        getByName.mockReturnValue({ icon: null });
+        const wrapper = createWrapper({
+            element: {
+                id: 'element-id',
+                component: 'Ct:Content:Text',
+                properties: {
+                    title: {
+                        [Contena.Defaults.systemLanguageId]: 'Headline',
+                    },
+                },
+            },
+        });
+
+        expect(wrapper.vm.label).toBe('Headline');
+    });
+
     it('falls back to generic icon when no type icon exists', () => {
         getByName.mockReturnValue({ icon: null });
         const wrapper = createWrapper({

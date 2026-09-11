@@ -28,6 +28,10 @@ Core routing no longer includes rule-engine integration. Existing installations 
 
 ## API
 
+### Content system layout property mutations
+
+Administration clients can update or remove declared primitive properties on one content-layout element through the new draft and persisted `update-element-properties` mutation actions. Both actions preserve every unmentioned property, validate values against the registered element type, and return the standard mutation response; persisted updates retain the existing optimistic-concurrency contract.
+
 Payment HTTP paths and JSON request/response field names remain unchanged. HTTP DTOs now belong to OpenApi; PHP callers must use the four modules' domain inputs. Synchronous aggregate status transitions now enqueue merchant notifications through the same transactional path as provider callbacks. Outbound delivery rejects private-network destinations.
 
 Missing refund, transfer, subscription and execution-record lookups now return their respective `PAYMENT__*_NOT_FOUND` codes with HTTP 404, instead of a generic invalid request or an unrelated order-not-found error.
