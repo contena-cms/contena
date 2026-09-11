@@ -399,7 +399,7 @@ final class ThemeLifecycleService
     private function addParentTheme(FrontendPluginConfiguration $configuration, array $themeData, Context $context): array
     {
         $lastNotSameTheme = null;
-        foreach (array_reverse($configuration->getConfigInheritance()) as $themeName) {
+        foreach ($configuration->getConfigInheritance() as $themeName) {
             if (
                 $themeName === '@' . FrontendPluginRegistry::BASE_THEME_NAME
                 || $themeName === '@' . $themeData['technicalName']
