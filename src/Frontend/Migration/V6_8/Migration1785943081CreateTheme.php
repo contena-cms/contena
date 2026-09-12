@@ -128,14 +128,18 @@ SQL);
     private function createDefaultMediaFolder(Connection $connection): void
     {
         $defaultFolderId = $connection->fetchOne(
-            'SELECT `id` FROM `media_default_folder` WHERE `entity` = :entity',
-            ['entity' => 'theme']
+            'SELECT `id` FROM `media_default_folder` WHERE `data_scope_id` = :dataScopeId AND `entity` = :entity',
+            [
+                'dataScopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                'entity' => 'theme',
+            ]
         );
 
         if ($defaultFolderId === false) {
             $defaultFolderId = Uuid::randomBytes();
             $connection->insert('media_default_folder', [
                 'id' => $defaultFolderId,
+                'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                 'entity' => 'theme',
                 'created_at' => new \DateTimeImmutable()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ]);
@@ -152,10 +156,12 @@ SQL);
         $configurationId = Uuid::randomBytes();
         $connection->insert('media_folder_configuration', [
             'id' => $configurationId,
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'created_at' => $createdAt,
         ]);
         $connection->insert('media_folder', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'name' => 'Theme Media',
             'default_folder_id' => $defaultFolderId,
             'media_folder_configuration_id' => $configurationId,
@@ -169,22 +175,20 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `header_content_layout` (
-    `tenant_id`        BINARY(16) NULL,
+    `data_scope_id`    BINARY(16) NOT NULL,
     `id`               BINARY(16) NOT NULL,
     `domain_id`        BINARY(16) NULL,
     `channel_id`       BINARY(16) NULL,
+    `layout_target_id` BINARY(16) AS (COALESCE(`domain_id`, `channel_id`, `data_scope_id`)) STORED,
     `content_layout_id` BINARY(16) NOT NULL,
     `created_at`       DATETIME(3) NOT NULL,
     `updated_at`       DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq.header_content_layout.domain_channel` (`domain_id`, `channel_id`),
-    KEY `idx.header_content_layout.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.header_content_layout.tenant_id`
-        FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.header_content_layout.domain_id`
-        FOREIGN KEY (`domain_id`) REFERENCES `channel_domain` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk.header_content_layout.channel_id`
-        FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE,
+    UNIQUE KEY `uniq.header_content_layout.scope_target` (`data_scope_id`, `layout_target_id`),
+    KEY `idx.header_content_layout.data_scope_id` (`data_scope_id`),
+    -- MySQL rejects foreign keys in this generated-target layout; DAL scope validation enforces the same boundary.
+    -- MySQL does not allow foreign keys on columns participating in this generated-target uniqueness layout;
+    -- DAL validation enforces domain/channel references and scope boundaries.
     CONSTRAINT `fk.header_content_layout.content_layout_id`
         FOREIGN KEY (`content_layout_id`) REFERENCES `content_layout` (`id`) ON DELETE RESTRICT,
     CONSTRAINT `chk.header_content_layout.domain_requires_channel`
@@ -194,22 +198,20 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `footer_content_layout` (
-    `tenant_id`        BINARY(16) NULL,
+    `data_scope_id`    BINARY(16) NOT NULL,
     `id`               BINARY(16) NOT NULL,
     `domain_id`        BINARY(16) NULL,
     `channel_id`       BINARY(16) NULL,
+    `layout_target_id` BINARY(16) AS (COALESCE(`domain_id`, `channel_id`, `data_scope_id`)) STORED,
     `content_layout_id` BINARY(16) NOT NULL,
     `created_at`       DATETIME(3) NOT NULL,
     `updated_at`       DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq.footer_content_layout.domain_channel` (`domain_id`, `channel_id`),
-    KEY `idx.footer_content_layout.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.footer_content_layout.tenant_id`
-        FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.footer_content_layout.domain_id`
-        FOREIGN KEY (`domain_id`) REFERENCES `channel_domain` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk.footer_content_layout.channel_id`
-        FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE,
+    UNIQUE KEY `uniq.footer_content_layout.scope_target` (`data_scope_id`, `layout_target_id`),
+    KEY `idx.footer_content_layout.data_scope_id` (`data_scope_id`),
+    -- MySQL rejects foreign keys in this generated-target layout; DAL scope validation enforces the same boundary.
+    -- MySQL does not allow foreign keys on columns participating in this generated-target uniqueness layout;
+    -- DAL validation enforces domain/channel references and scope boundaries.
     CONSTRAINT `fk.footer_content_layout.content_layout_id`
         FOREIGN KEY (`content_layout_id`) REFERENCES `content_layout` (`id`) ON DELETE RESTRICT,
     CONSTRAINT `chk.footer_content_layout.domain_requires_channel`

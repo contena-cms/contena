@@ -36,7 +36,7 @@ class DataDictionaryAuditSubscriber implements EventSubscriberInterface
             'entity' => $event->getEntityName(),
             'ids' => $event->getIds(),
             'source' => $event->getContext()->getSource()::class,
-            'tenantId' => $event->getContext()->getTenantId(),
+            'dataScopeId' => $event->getContext()->getDataScopeId(),
         ]);
     }
 }

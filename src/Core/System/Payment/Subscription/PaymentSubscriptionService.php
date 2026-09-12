@@ -53,11 +53,11 @@ class PaymentSubscriptionService extends AbstractPaymentSubscriptionService
 
     public function subscribe(PaymentAppEntity $app, SubscriptionRequest $request, Context $context): PaymentResult
     {
-        if (!$app->status || $app->tenantId !== $context->getTenantId()) {
+        if (!$app->status || $app->dataScopeId !== $context->getDataScopeId()) {
             throw PaymentException::appNotFound($app->appCode);
         }
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment operations require a platform or tenant context.');
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment operations require an exact data-scope context.');
         }
 
         $criteria = new Criteria()

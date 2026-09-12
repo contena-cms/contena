@@ -91,7 +91,7 @@ class MemberFlowEventsSubscriberTest extends TestCase
         $memberIndexer = $this->createMock(MemberIndexer::class);
         $memberIndexer->expects($this->once())
             ->method('handle')
-            ->with(new MemberIndexingMessage([$memberId]));
+            ->with(new MemberIndexingMessage([$memberId], Context::createDefaultContext()));
 
         $restorer = $this->createMock(ChannelContextRestorer::class);
         $restorer->expects($this->once())
@@ -112,7 +112,7 @@ class MemberFlowEventsSubscriberTest extends TestCase
         $memberIndexer = $this->createMock(MemberIndexer::class);
         $memberIndexer->expects($this->once())
             ->method('handle')
-            ->with(new MemberIndexingMessage([$memberId]));
+            ->with(new MemberIndexingMessage([$memberId], Context::createDefaultContext()));
 
         $member = new MemberEntity();
         $channelContext = Generator::generateChannelContext(member: $member);

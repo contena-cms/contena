@@ -10,6 +10,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Output\PartialRenderer;
 use Contena\Core\Framework\ContentSystem\PlaceholderValues;
+use Contena\Core\Framework\ContentSystem\Rendering\ElementLowering;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
 use Contena\Core\System\Channel\ChannelContext;
@@ -24,7 +25,8 @@ use Contena\Core\System\Channel\ChannelContext;
  * resolving into values it discards is work no reader can observe.
  *
  * Language reduction is a value-level collapse inside preparation, which is why it is not named a lowering:
- * that role name belongs to the stored-to-rendered model translation. The two passes are distinct.
+ * that role name belongs to the stored-to-rendered model translation, which {@see ElementLowering} runs. The
+ * two passes are distinct.
  *
  * @internal
  */
@@ -47,9 +49,11 @@ final class StoredTreePreparer
         RenderingMode $mode,
         ChannelContext $channelContext,
     ): TreePreparationResult {
+        // Placeholders substitute into string values and never descend into a map, so they see a translatable
+        // property only once reduction has collapsed it to the selected string.
         if ($mode === RenderingMode::FULL) {
             $tree = $this->reduceTreeLanguage($tree, $channelContext);
-            $tree = $this->resolveTreePlaceholders($tree, $specification, $mode);
+            $tree = $this->resolveTreePlaceholders($tree, $specification);
         }
 
         $virtualRootWrapped = $this->virtualRootWrapper->requiresWrapping($specification, $tree);
@@ -83,6 +87,11 @@ final class StoredTreePreparer
         );
     }
 
+    /**
+     * Collapses one element's translatable properties to the request language and recurses into its slot
+     * children. Each element is judged by its own component, so an unregistered parent still has its
+     * registered children reduced.
+     */
     private function reduceLanguage(StoredElement $element, ChannelContext $channelContext): StoredElement
     {
         $slots = [];
@@ -99,6 +108,9 @@ final class StoredTreePreparer
     }
 
     /**
+     * A component no type declares keeps every value it carries: nothing says which of its keys are
+     * translatable, so collapsing one would be a guess.
+     *
      * @return array<string, StoredValue>
      */
     private function reduceProperties(StoredElement $element, ChannelContext $channelContext): array
@@ -121,6 +133,15 @@ final class StoredTreePreparer
     }
 
     /**
+     * The value of the first chain entry the map carries, verbatim. A key outside the chain is never
+     * selected, so a dangling language id cannot reach serving, and a map carrying no chain entry collapses
+     * to the null variant, which the rendered-tree mint skips.
+     *
+     * The map variant is recognised the way {@see StoredValue::fromDecoded()} assigns it — an unwrapped array
+     * whose keys are not a zero-based sequence — because no variant predicate is exposed. Anything else, and a
+     * selected entry that is not a string, is an internal fault: every client-supplied path rejects both on a
+     * translatable property before a render can reach one.
+     *
      * @param non-empty-list<string> $languageIdChain
      */
     private function selectTranslation(string $elementId, string $key, StoredValue $value, array $languageIdChain): StoredValue
@@ -136,12 +157,16 @@ final class StoredTreePreparer
         }
 
         $map = $value->asMap();
+
         foreach ($languageIdChain as $languageId) {
             if (!\array_key_exists($languageId, $map)) {
                 continue;
             }
 
             $selected = $map[$languageId];
+
+            // The map shape alone does not make every downstream stage see a plain string: the entry is what
+            // is served, so a non-string entry is the same internal fault as a non-map value.
             if (!$selected->isString()) {
                 throw ContentSystemException::translationShapeInvalid($elementId, $key, 'a map with a non-string entry');
             }
@@ -157,12 +182,8 @@ final class StoredTreePreparer
      *
      * @return list<StoredElement>
      */
-    private function resolveTreePlaceholders(array $tree, RenderingSpecification $specification, RenderingMode $mode): array
+    private function resolveTreePlaceholders(array $tree, RenderingSpecification $specification): array
     {
-        if ($mode !== RenderingMode::FULL) {
-            return $tree;
-        }
-
         return array_map(
             fn (StoredElement $element): StoredElement => $this->resolvePlaceholders($element, $specification->placeholderValues),
             $tree

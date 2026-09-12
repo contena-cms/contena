@@ -18,6 +18,7 @@ class SeoException extends HttpException
     public const ROUTE_NAME_PARAMETER_IS_MISSING = 'FRAMEWORK__ROUTE_NAME_PARAMETER_IS_MISSING';
     public const ENTITY_NAME_PARAMETER_IS_MISSING = 'FRAMEWORK__ENTITY_NAME_PARAMETER_IS_MISSING';
     public const CHANNEL_NOT_FOUND = 'FRAMEWORK__CHANNEL_NOT_FOUND';
+    public const DATA_SCOPE_MISMATCH = 'CONTENT__SEO_DATA_SCOPE_MISMATCH';
     public const SEO_URL_ROUTE_NOT_FOUND = 'CONTENT__SEO_URL_ROUTE_NOT_FOUND';
 
     public static function invalidChannelId(string $channelId): ContenaHttpException
@@ -84,6 +85,15 @@ class SeoException extends HttpException
     public static function invalidTemplate(string $message): HttpException
     {
         return new InvalidTemplateException($message);
+    }
+
+    public static function dataScopeMismatch(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::DATA_SCOPE_MISMATCH,
+            'The channel and SEO URL context must belong to the same data scope.',
+        );
     }
 
     public static function unexpectedType(mixed $givenType, string $expectedType): UnexpectedTypeException

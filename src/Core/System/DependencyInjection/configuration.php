@@ -20,6 +20,7 @@ use Contena\Core\System\SystemConfig\Store\MemoizedSystemConfigStore;
 use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigLoader;
+use Contena\Core\System\SystemConfig\SystemConfigScopeResolver;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\System\SystemConfig\Validation\SystemConfigValidator;
@@ -88,6 +89,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SymfonySystemConfigService::class),
             service(CacheTagCollector::class),
             service(ClockInterface::class),
+            service(SystemConfigScopeResolver::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
@@ -110,7 +112,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(Connection::class),
             service(KernelInterface::class),
+            service(SystemConfigScopeResolver::class),
         ]);
+
+    $services->set(SystemConfigScopeResolver::class)
+        ->args([service(Connection::class)]);
 
     $services->set(ConfiguredSystemConfigLoader::class)
         ->decorate(SystemConfigLoader::class, null, -1500)

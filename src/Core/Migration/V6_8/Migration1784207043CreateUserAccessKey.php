@@ -19,7 +19,6 @@ class Migration1784207043CreateUserAccessKey extends MigrationStep
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `user_access_key` (
-    `tenant_id`        BINARY(16)   NULL,
     `id`                BINARY(16)   NOT NULL,
     `user_id`           BINARY(16)   NOT NULL,
     `access_key`        VARCHAR(255) NOT NULL,
@@ -29,14 +28,11 @@ CREATE TABLE IF NOT EXISTS `user_access_key` (
     `created_at`        DATETIME(3)  NOT NULL,
     `updated_at`        DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
-    INDEX `idx.user_access_key.tenant_id` (`tenant_id`),
     INDEX `idx.user_access_key.user_id_` (`user_id`),
     UNIQUE KEY `uniq.user_access_key.access_key` (`access_key`),
     CONSTRAINT `json.user_access_key.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.user_access_key.user_id` FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.user_access_key.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

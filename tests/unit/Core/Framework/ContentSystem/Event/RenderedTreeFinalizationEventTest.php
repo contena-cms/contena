@@ -41,30 +41,36 @@ class RenderedTreeFinalizationEventTest extends TestCase
      * @param array<array-key, mixed> $replacement
      */
     #[DataProvider('foreignForestProvider')]
+    #[TestDox('refuses a replacement that is not a rendered forest: $_dataName')]
     public function testReplaceTreeRefusesAForeignForest(array $replacement, ContentSystemException $expected): void
     {
         $event = $this->createEvent([new RenderedElement('root-id', 'section')]);
+
         $this->expectExceptionObject($expected);
-        $event->replaceTree($replacement); // @phpstan-ignore argument.type
+
+        $event->replaceTree($replacement); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
     }
 
     /**
      * @param array<array-key, mixed> $replacement
      */
     #[DataProvider('foreignForestProvider')]
+    #[TestDox('refuses a construction that is not a rendered forest: $_dataName')]
     public function testConstructorRefusesAForeignForest(array $replacement, ContentSystemException $expected): void
     {
         $this->expectExceptionObject($expected);
-        $this->createEvent($replacement); // @phpstan-ignore argument.type
+
+        $this->createEvent($replacement); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
     }
 
+    #[TestDox('keeps the forest it holds when a replacement is refused')]
     public function testRefusedReplacementLeavesTheForestInPlace(): void
     {
         $tree = [new RenderedElement('root-id', 'section')];
         $event = $this->createEvent($tree);
 
         try {
-            $event->replaceTree([new StoredElement('stored-id', 'text')]); // @phpstan-ignore argument.type
+            $event->replaceTree([new StoredElement('stored-id', 'text')]); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
         } catch (ContentSystemException) {
         }
 
@@ -72,15 +78,39 @@ class RenderedTreeFinalizationEventTest extends TestCase
     }
 
     /**
+     * The stored model is the case the guard exists for: it is what a listener holds when it confuses the two
+     * sides of the storage/render split, and it carries an `id`, so the pipeline's own post-event check waves it
+     * through. The remaining cases are the shapes the `list<RenderedElement>` docblock also promises and the
+     * runtime `array` type does not.
+     *
      * @return iterable<string, array{array<array-key, mixed>, ContentSystemException}>
      */
     public static function foreignForestProvider(): iterable
     {
-        yield 'a stored element' => [[new StoredElement('stored-id', 'text')], ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, StoredElement::class)];
-        yield 'a stored element behind a valid one' => [[new RenderedElement('root-id', 'section'), new StoredElement('stored-id', 'text')], ContentSystemException::invalidMapValue('Rendered content tree', '1', RenderedElement::class, StoredElement::class)];
-        yield 'an element still in array form' => [[['id' => 'root-id', 'component' => 'section']], ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, 'array')];
-        yield 'a forest keyed by element id' => [['root-id' => new RenderedElement('root-id', 'section')], ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys')];
-        yield 'a forest with a gap left by an unset root' => [[0 => new RenderedElement('first-id', 'section'), 2 => new RenderedElement('third-id', 'section')], ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys')];
+        yield 'a stored element' => [
+            [new StoredElement('stored-id', 'text')],
+            ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, StoredElement::class),
+        ];
+
+        yield 'a stored element behind a valid one' => [
+            [new RenderedElement('root-id', 'section'), new StoredElement('stored-id', 'text')],
+            ContentSystemException::invalidMapValue('Rendered content tree', '1', RenderedElement::class, StoredElement::class),
+        ];
+
+        yield 'an element still in array form' => [
+            [['id' => 'root-id', 'component' => 'section']],
+            ContentSystemException::invalidMapValue('Rendered content tree', '0', RenderedElement::class, 'array'),
+        ];
+
+        yield 'a forest keyed by element id' => [
+            ['root-id' => new RenderedElement('root-id', 'section')],
+            ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys'),
+        ];
+
+        yield 'a forest with a gap left by an unset root' => [
+            [0 => new RenderedElement('first-id', 'section'), 2 => new RenderedElement('third-id', 'section')],
+            ContentSystemException::invalidMapValue('Rendered content tree', 'tree', 'list<RenderedElement>', 'array with non-list keys'),
+        ];
     }
 
     /**

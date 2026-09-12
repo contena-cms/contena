@@ -4,9 +4,9 @@ namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowPlatformOwnedReference;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\Aggregate\PaymentChannelConfig\PaymentChannelConfigDefinition;
@@ -59,14 +58,14 @@ class PaymentTransferDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new FkField('payment_app_id', 'paymentAppId', PaymentAppDefinition::class)->addFlags(new ApiAware(), new Required()),
             new StringField('transfer_no', 'transferNo', 64)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new StringField('external_transfer_no', 'externalTransferNo', 64)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new IntField('amount', 'amount')->addFlags(new ApiAware(), new Required()),
             new StringField('currency_code', 'currencyCode', 3)->addFlags(new ApiAware(), new Required()),
             new StringField('channel_code', 'channelCode', 32)->addFlags(new ApiAware(), new Required()),
-            new FkField('channel_config_id', 'channelConfigId', PaymentChannelConfigDefinition::class)->addFlags(new ApiAware(), new Required(), new AllowPlatformOwnedReference()),
+            new FkField('channel_config_id', 'channelConfigId', PaymentChannelConfigDefinition::class)->addFlags(new ApiAware(), new Required()),
             new StateMachineStateField('state_id', 'stateId', PaymentTransferStates::STATE_MACHINE)->addFlags(new ApiAware(), new Required()),
             new StringField('payee', 'payee', 128)->addFlags(new ApiAware(), new Required()),
             new StringField('payee_name', 'payeeName', 64)->addFlags(new ApiAware(), new Required()),

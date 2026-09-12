@@ -19,14 +19,14 @@ class Migration1784207065CreateRuleTag extends MigrationStep
     {
         $connection->executeStatement(<<<'SQL'
             CREATE TABLE IF NOT EXISTS `rule_tag` (
-                `tenant_id` BINARY(16) NULL,
+                `data_scope_id` BINARY(16) NOT NULL,
                 `rule_id` BINARY(16) NOT NULL,
                 `tag_id` BINARY(16) NOT NULL,
                 PRIMARY KEY (`rule_id`, `tag_id`),
-                INDEX `idx.rule_tag.tenant_id` (`tenant_id`),
+                INDEX `idx.rule_tag.data_scope_id` (`data_scope_id`),
                 CONSTRAINT `fk.rule_tag.rule_id` FOREIGN KEY (`rule_id`) REFERENCES `rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
                 CONSTRAINT `fk.rule_tag.tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT `fk.rule_tag.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT `fk.rule_tag.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             SQL);
     }

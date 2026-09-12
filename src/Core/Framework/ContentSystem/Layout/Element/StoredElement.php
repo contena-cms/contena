@@ -234,6 +234,13 @@ final readonly class StoredElement implements \JsonSerializable
     }
 
     /**
+     * A foreign slot child is a 500 rather than a layout rejection because no client input can produce one:
+     * {@see StoredElementCodec::decodeSlots()} already rejects a malformed slot map, a non-list child list and
+     * a non-array child as client defects, and mints every child it admits through the codec itself. So a
+     * child that is not a stored element got here from a caller holding instances — core, a plugin, or a
+     * preparation listener — and that is a producer defect. The rendered counterpart guards its own slots on
+     * the same argument.
+     *
      * @param array<array-key, mixed> $slots
      */
     private function rejectMalformedSlots(array $slots): void

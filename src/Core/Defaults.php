@@ -9,6 +9,11 @@ namespace Contena\Core;
  */
 final class Defaults
 {
+    /**
+     * Canonical owner id for platform-scoped business data.
+     */
+    public const string PLATFORM_DATA_SCOPE = '606ed13c2ebca5e6d58d9adcb53dcc00';
+
     public const string LANGUAGE_SYSTEM = '2fbb5fe2e29a4d70aa5854ce7ce3e20b';
 
     public const string DEFAULT_LOCALE = 'zh-CN';

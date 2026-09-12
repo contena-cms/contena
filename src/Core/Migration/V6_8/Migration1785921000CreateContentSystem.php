@@ -41,7 +41,7 @@ class Migration1785921000CreateContentSystem extends MigrationStep
     {
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `content_layout` (
-    `tenant_id`   BINARY(16)                               NULL,
+    `data_scope_id`   BINARY(16)                               NOT NULL,
     `id`          BINARY(16)                               NOT NULL,
     `name`        VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `version`     VARCHAR(20) COLLATE utf8mb4_unicode_ci  NOT NULL,
@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS `content_layout` (
     `updated_at`  DATETIME(3)                              NULL,
     PRIMARY KEY (`id`),
     UNIQUE `uniq.content_layout.name_version` (`name`, `version`),
-    KEY `idx.content_layout.tenant_id` (`tenant_id`),
+    KEY `idx.content_layout.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.content_layout.layout` CHECK (JSON_VALID(`layout`)),
-    CONSTRAINT `fk.content_layout.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.content_layout.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }
@@ -63,7 +63,7 @@ SQL);
     {
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `category` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`                        BINARY(16)                              NOT NULL,
     `version_id`                BINARY(16)                              NOT NULL,
     `auto_increment`            INT                                     NOT NULL AUTO_INCREMENT,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `category` (
     `created_at`                DATETIME(3)                             NOT NULL,
     `updated_at`                DATETIME(3)                             NULL,
     PRIMARY KEY (`id`, `version_id`),
-    KEY `idx.category.tenant_id` (`tenant_id`),
+    KEY `idx.category.data_scope_id` (`data_scope_id`),
     UNIQUE KEY `uniq.category.auto_increment` (`auto_increment`),
     KEY `idx.category.level` (`level`),
     KEY `fk.category.media_id` (`media_id`),
@@ -93,14 +93,14 @@ CREATE TABLE IF NOT EXISTS `category` (
         REFERENCES `media` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `fk.category.parent_id` FOREIGN KEY (`parent_id`, `parent_version_id`)
         REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.category.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.category.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `category_translation` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `category_id`         BINARY(16)                              NOT NULL,
     `category_version_id` BINARY(16)                              NOT NULL,
     `language_id`         BINARY(16)                              NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `category_translation` (
     `created_at`          DATETIME(3)                             NOT NULL,
     `updated_at`          DATETIME(3)                             NULL,
     PRIMARY KEY (`category_id`, `category_version_id`, `language_id`),
-    KEY `idx.category_translation.tenant_id` (`tenant_id`),
+    KEY `idx.category_translation.data_scope_id` (`data_scope_id`),
     KEY `fk.category_translation.language_id` (`language_id`),
     CONSTRAINT `fk.category_translation.category_id` FOREIGN KEY (`category_id`, `category_version_id`)
         REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -126,22 +126,22 @@ CREATE TABLE IF NOT EXISTS `category_translation` (
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `json.category_translation.breadcrumb` CHECK (JSON_VALID(`breadcrumb`)),
     CONSTRAINT `json.category_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.category_translation.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.category_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `category_tag` (
-    `tenant_id`          BINARY(16) NULL,
+    `data_scope_id`          BINARY(16) NOT NULL,
     `category_id`         BINARY(16) NOT NULL,
     `category_version_id` BINARY(16) NOT NULL,
     `tag_id`              BINARY(16) NOT NULL,
     PRIMARY KEY (`category_id`, `category_version_id`, `tag_id`),
-    KEY `idx.category_tag.tenant_id` (`tenant_id`),
+    KEY `idx.category_tag.data_scope_id` (`data_scope_id`),
     KEY `fk.category_tag.tag_id` (`tag_id`),
-    CONSTRAINT `fk.category_tag.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.category_tag.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.category_tag.category_id` FOREIGN KEY (`category_id`, `category_version_id`)
         REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.category_tag.tag_id` FOREIGN KEY (`tag_id`)
@@ -154,22 +154,22 @@ SQL);
     {
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `landing_page` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`         BINARY(16)  NOT NULL,
     `version_id` BINARY(16)  NOT NULL,
     `active`     TINYINT(1)  NOT NULL DEFAULT 1,
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`, `version_id`),
-    KEY `idx.landing_page.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.landing_page.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    KEY `idx.landing_page.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.landing_page.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `landing_page_translation` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `landing_page_id`         BINARY(16)                              NOT NULL,
     `landing_page_version_id` BINARY(16)                              NOT NULL,
     `language_id`             BINARY(16)                              NOT NULL,
@@ -182,30 +182,30 @@ CREATE TABLE IF NOT EXISTS `landing_page_translation` (
     `created_at`              DATETIME(3)                             NOT NULL,
     `updated_at`              DATETIME(3)                             NULL,
     PRIMARY KEY (`landing_page_id`, `landing_page_version_id`, `language_id`),
-    KEY `idx.landing_page_translation.tenant_id` (`tenant_id`),
+    KEY `idx.landing_page_translation.data_scope_id` (`data_scope_id`),
     KEY `fk.landing_page_translation.language_id` (`language_id`),
     CONSTRAINT `fk.landing_page_translation.landing_page_id` FOREIGN KEY (`landing_page_id`, `landing_page_version_id`)
         REFERENCES `landing_page` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.landing_page_translation.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `json.landing_page_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.landing_page_translation.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.landing_page_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `landing_page_tag` (
-    `tenant_id`               BINARY(16) NULL,
+    `data_scope_id`               BINARY(16) NOT NULL,
     `landing_page_id`         BINARY(16) NOT NULL,
     `landing_page_version_id` BINARY(16) NOT NULL,
     `tag_id`                  BINARY(16) NOT NULL,
     PRIMARY KEY (`landing_page_id`, `landing_page_version_id`, `tag_id`),
-    KEY `idx.landing_page_tag.tenant_id` (`tenant_id`),
+    KEY `idx.landing_page_tag.data_scope_id` (`data_scope_id`),
     KEY `fk.landing_page_tag.tag_id` (`tag_id`),
-    CONSTRAINT `fk.landing_page_tag.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.landing_page_tag.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.landing_page_tag.landing_page_id` FOREIGN KEY (`landing_page_id`, `landing_page_version_id`)
         REFERENCES `landing_page` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.landing_page_tag.tag_id` FOREIGN KEY (`tag_id`)
@@ -218,7 +218,7 @@ SQL);
     {
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`                    BINARY(16)                              NOT NULL,
     `version_id`            BINARY(16)                              NOT NULL,
     `auto_increment`        INT                                     NOT NULL AUTO_INCREMENT,
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `blog` (
     `created_at`            DATETIME(3)                             NOT NULL,
     `updated_at`            DATETIME(3)                             NULL,
     PRIMARY KEY (`id`, `version_id`),
-    KEY `idx.blog.tenant_id` (`tenant_id`),
+    KEY `idx.blog.data_scope_id` (`data_scope_id`),
     UNIQUE KEY `uniq.blog.auto_increment` (`auto_increment`),
     KEY `fk.blog.blog_media_id` (`blog_media_id`, `blog_media_version_id`),
     KEY `fk.blog.open_graph_media_id` (`open_graph_media_id`),
@@ -243,8 +243,8 @@ CREATE TABLE IF NOT EXISTS `blog` (
     CONSTRAINT `json.blog.category_tree` CHECK (JSON_VALID(`category_tree`)),
     CONSTRAINT `json.blog.category_ids` CHECK (JSON_VALID(`category_ids`)),
     CONSTRAINT `json.blog.tag_ids` CHECK (JSON_VALID(`tag_ids`)),
-    CONSTRAINT `fk.blog.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
@@ -258,7 +258,7 @@ SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_translation` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `blog_id`            BINARY(16)                              NOT NULL,
     `blog_version_id`    BINARY(16)                              NOT NULL,
     `language_id`        BINARY(16)                              NOT NULL,
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `blog_translation` (
     `created_at`         DATETIME(3)                             NOT NULL,
     `updated_at`         DATETIME(3)                             NULL,
     PRIMARY KEY (`blog_id`, `blog_version_id`, `language_id`),
-    KEY `idx.blog_translation.tenant_id` (`tenant_id`),
+    KEY `idx.blog_translation.data_scope_id` (`data_scope_id`),
     KEY `fk.blog_translation.language_id` (`language_id`),
     CONSTRAINT `fk.blog_translation.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
         REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -283,15 +283,15 @@ CREATE TABLE IF NOT EXISTS `blog_translation` (
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `json.blog_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `json.blog_translation.custom_search_keywords` CHECK (JSON_VALID(`custom_search_keywords`)),
-    CONSTRAINT `fk.blog_translation.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_search_keyword` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`              BINARY(16)                              NOT NULL,
     `version_id`      BINARY(16)                              NOT NULL,
     `language_id`     BINARY(16)                              NOT NULL,
@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `blog_search_keyword` (
     `created_at`      DATETIME(3)                             NOT NULL,
     `updated_at`      DATETIME(3)                             NULL,
     PRIMARY KEY (`id`, `version_id`, `language_id`),
-    KEY `idx.blog_search_keyword.tenant_id` (`tenant_id`),
+    KEY `idx.blog_search_keyword.data_scope_id` (`data_scope_id`),
     KEY `idx.blog_search_keyword.blog_id` (`blog_id`, `blog_version_id`),
     KEY `idx.blog_search_keyword.keyword_language` (`keyword`, `language_id`),
     KEY `idx.blog_search_keyword.language_id` (`language_id`),
@@ -310,33 +310,33 @@ CREATE TABLE IF NOT EXISTS `blog_search_keyword` (
         REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_search_keyword.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.blog_search_keyword.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_search_keyword.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_keyword_dictionary` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`          BINARY(16)                              NOT NULL,
     `language_id` BINARY(16)                              NOT NULL,
     `keyword`     VARCHAR(500) COLLATE utf8mb4_unicode_ci NOT NULL,
     `reversed`    VARCHAR(500) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (REVERSE(`keyword`)) STORED,
     PRIMARY KEY (`id`, `language_id`),
-    UNIQUE KEY `uniq.blog_keyword_dictionary.tenant_id_language_id_keyword` (`tenant_id`, `language_id`, `keyword`),
-    KEY `idx.blog_keyword_dictionary.tenant_id` (`tenant_id`),
+    UNIQUE KEY `uniq.blog_keyword_dictionary.data_scope_id_language_id_keyword` (`data_scope_id`, `language_id`, `keyword`),
+    KEY `idx.blog_keyword_dictionary.data_scope_id` (`data_scope_id`),
     KEY `idx.blog_keyword_dictionary.language_id` (`language_id`),
     CONSTRAINT `fk.blog_keyword_dictionary.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.blog_keyword_dictionary.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_keyword_dictionary.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_search_config` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`                BINARY(16)  NOT NULL,
     `language_id`       BINARY(16)  NOT NULL,
     `and_logic`         TINYINT(1)  NOT NULL DEFAULT 1,
@@ -345,20 +345,20 @@ CREATE TABLE IF NOT EXISTS `blog_search_config` (
     `created_at`        DATETIME(3) NOT NULL,
     `updated_at`        DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.blog_search_config.tenant_id` (`tenant_id`),
-    UNIQUE KEY `uniq.blog_search_config.tenant_id_language_id` (`tenant_id`, `language_id`),
+    KEY `idx.blog_search_config.data_scope_id` (`data_scope_id`),
+    UNIQUE KEY `uniq.blog_search_config.data_scope_id_language_id` (`data_scope_id`, `language_id`),
     CONSTRAINT `json.blog_search_config.excluded_terms` CHECK (JSON_VALID(`excluded_terms`)),
     CONSTRAINT `fk.blog_search_config.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.blog_search_config.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_search_config.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_search_config_field` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`                    BINARY(16)                              NOT NULL,
     `blog_search_config_id` BINARY(16)                              NOT NULL,
     `custom_field_id`       BINARY(16)                              NULL,
@@ -370,22 +370,22 @@ CREATE TABLE IF NOT EXISTS `blog_search_config_field` (
     `created_at`            DATETIME(3)                             NOT NULL,
     `updated_at`            DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.blog_search_config_field.tenant_id` (`tenant_id`),
+    KEY `idx.blog_search_config_field.data_scope_id` (`data_scope_id`),
     UNIQUE KEY `uniq.blog_search_config_field.field_config_id` (`field`, `blog_search_config_id`),
     KEY `fk.blog_search_config_field.custom_field_id` (`custom_field_id`),
     CONSTRAINT `fk.blog_search_config_field.search_config_id` FOREIGN KEY (`blog_search_config_id`)
         REFERENCES `blog_search_config` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_search_config_field.custom_field_id` FOREIGN KEY (`custom_field_id`)
         REFERENCES `custom_field` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.blog_search_config_field.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_search_config_field.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_media` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`              BINARY(16)  NOT NULL,
     `version_id`      BINARY(16)  NOT NULL,
     `position`        INT         NOT NULL DEFAULT 1,
@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `blog_media` (
     `created_at`      DATETIME(3) NOT NULL,
     `updated_at`      DATETIME(3) NULL,
     PRIMARY KEY (`id`, `version_id`),
-    KEY `idx.blog_media.tenant_id` (`tenant_id`),
+    KEY `idx.blog_media.data_scope_id` (`data_scope_id`),
     KEY `fk.blog_media.media_id` (`media_id`),
     KEY `fk.blog_media.blog_id` (`blog_id`, `blog_version_id`),
     CONSTRAINT `fk.blog_media.media_id` FOREIGN KEY (`media_id`)
@@ -404,8 +404,8 @@ CREATE TABLE IF NOT EXISTS `blog_media` (
     CONSTRAINT `fk.blog_media.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
         REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `json.blog_media.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.blog_media.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.blog_media.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
@@ -413,16 +413,16 @@ SQL);
         foreach (['blog_category', 'blog_category_tree'] as $table) {
             $this->executeDdlStatement($connection, str_replace('#table#', $table, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `#table#` (
-    `tenant_id`          BINARY(16) NULL,
+    `data_scope_id`          BINARY(16) NOT NULL,
     `blog_id`            BINARY(16) NOT NULL,
     `blog_version_id`    BINARY(16) NOT NULL,
     `category_id`        BINARY(16) NOT NULL,
     `category_version_id` BINARY(16) NOT NULL,
     PRIMARY KEY (`blog_id`, `blog_version_id`, `category_id`, `category_version_id`),
-    KEY `idx.#table#.tenant_id` (`tenant_id`),
+    KEY `idx.#table#.data_scope_id` (`data_scope_id`),
     KEY `fk.#table#.category_id` (`category_id`, `category_version_id`),
-    CONSTRAINT `fk.#table#.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.#table#.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.#table#.category_id` FOREIGN KEY (`category_id`, `category_version_id`)
         REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.#table#.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
@@ -433,15 +433,15 @@ SQL));
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_tag` (
-    `tenant_id`      BINARY(16) NULL,
+    `data_scope_id`      BINARY(16) NOT NULL,
     `blog_id`         BINARY(16) NOT NULL,
     `blog_version_id` BINARY(16) NOT NULL,
     `tag_id`          BINARY(16) NOT NULL,
     PRIMARY KEY (`blog_id`, `blog_version_id`, `tag_id`),
-    KEY `idx.blog_tag.tenant_id` (`tenant_id`),
+    KEY `idx.blog_tag.data_scope_id` (`data_scope_id`),
     KEY `fk.blog_tag.tag_id` (`tag_id`),
-    CONSTRAINT `fk.blog_tag.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_tag.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_tag.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
         REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_tag.tag_id` FOREIGN KEY (`tag_id`)
@@ -454,6 +454,7 @@ SQL);
     {
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_sorting` (
+    `data_scope_id` BINARY(16)                              NOT NULL,
     `id`         BINARY(16)                              NOT NULL,
     `url_key`    VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `priority`   INT UNSIGNED                            NOT NULL,
@@ -463,19 +464,24 @@ CREATE TABLE IF NOT EXISTS `blog_sorting` (
     `created_at` DATETIME(3)                             NOT NULL,
     `updated_at` DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq.blog_sorting.url_key` (`url_key`),
+    UNIQUE KEY `uniq.blog_sorting.scope_url_key` (`data_scope_id`, `url_key`),
+    KEY `idx.blog_sorting.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.blog_sorting.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `json.blog_sorting.fields` CHECK (JSON_VALID(`fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $this->executeDdlStatement($connection, <<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_sorting_translation` (
+    `data_scope_id`    BINARY(16)                              NOT NULL,
     `blog_sorting_id` BINARY(16)                              NOT NULL,
     `language_id`     BINARY(16)                              NOT NULL,
     `label`           VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `created_at`      DATETIME(3)                             NOT NULL,
     `updated_at`      DATETIME(3)                             NULL,
     PRIMARY KEY (`blog_sorting_id`, `language_id`),
+    KEY `idx.blog_sorting_translation.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.blog_sorting_translation.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_sorting_translation.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_sorting_translation.blog_sorting_id` FOREIGN KEY (`blog_sorting_id`)

@@ -17,20 +17,21 @@ use Psr\Log\LoggerInterface;
 #[CoversClass(DataDictionaryAuditSubscriber::class)]
 class DataDictionaryAuditSubscriberTest extends TestCase
 {
-    public function testAuditIncludesTenantId(): void
+    public function testAuditIncludesDataScopeId(): void
     {
+        $dataScopeId = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('info')
             ->with(
                 'Data dictionary entity changed.',
-                static::callback(static fn (array $context): bool => $context['tenantId'] === 'tenant-a'),
+                static::callback(static fn (array $context): bool => $context['dataScopeId'] === $dataScopeId),
             );
 
         $event = new EntityWrittenEvent(
             DataDictionaryDefinition::ENTITY_NAME,
             [new EntityWriteResult('dictionary-id', [], DataDictionaryDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE)],
-            Context::createTenantContext('tenant-a'),
+            Context::createTenantContext($dataScopeId),
         );
 
         new DataDictionaryAuditSubscriber($logger)->audit($event);

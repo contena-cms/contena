@@ -13,7 +13,7 @@ class MediaThumbnailSizeEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     /**
      * @var int<1, max>
@@ -29,14 +29,14 @@ class MediaThumbnailSizeEntity extends Entity
 
     protected ?MediaThumbnailCollection $mediaThumbnails = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     /**

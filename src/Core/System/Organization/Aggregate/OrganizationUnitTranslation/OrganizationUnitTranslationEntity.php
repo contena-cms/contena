@@ -7,7 +7,7 @@ use Contena\Core\System\Organization\Aggregate\OrganizationUnit\OrganizationUnit
 
 class OrganizationUnitTranslationEntity extends TranslationEntity
 {
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $organizationUnitId;
 
@@ -17,14 +17,14 @@ class OrganizationUnitTranslationEntity extends TranslationEntity
 
     protected ?OrganizationUnitEntity $organizationUnit = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getOrganizationUnitId(): string

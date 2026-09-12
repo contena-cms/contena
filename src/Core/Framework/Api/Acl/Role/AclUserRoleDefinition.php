@@ -3,11 +3,11 @@
 namespace Contena\Core\Framework\Api\Acl\Role;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
@@ -30,7 +30,7 @@ class AclUserRoleDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned user role assignment.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for user role assignment.'),
             new FkField('user_id', 'userId', UserDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new FkField('acl_role_id', 'aclRoleId', AclRoleDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             // MappingEntityDefinitions have no default fields, so createdAt and updatedAt need to be defined here

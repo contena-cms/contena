@@ -55,8 +55,8 @@ final class AppNotificationService
 
     public function deliverPending(Context $context): int
     {
-        if ($context->hasGlobalTenantAccess()) {
-            throw OpenApiException::invalidRequest('App notifications must be delivered with a platform or tenant context.');
+        if ($context->allowsCrossScopeReads()) {
+            throw OpenApiException::invalidRequest('App notifications must be delivered with an exact data-scope context.');
         }
 
         $delivered = 0;
@@ -102,30 +102,21 @@ final class AppNotificationService
     private function claim(string $recordId, Context $context): bool
     {
         $now = $this->clock->now();
-        $tenantId = $context->getTenantId();
-        $tenantCondition = '`tenant_id` IS NULL';
         $parameters = [
             'id' => Uuid::fromHexToBytes($recordId),
+            'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
             'pending' => PaymentNotifyRecordStatus::STATUS_PENDING,
             'processing' => PaymentNotifyRecordStatus::STATUS_PROCESSING,
             'now' => $this->format($now),
             'leaseUntil' => $this->format($now->modify('+' . self::LEASE_SECONDS . ' seconds')),
         ];
 
-        if ($tenantId !== null) {
-            $tenantCondition = '`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
-
         return $this->connection->executeStatement(
-            \sprintf(
-                'UPDATE `payment_notify_record`
+            'UPDATE `payment_notify_record`
                     SET `status` = :processing, `available_at` = :leaseUntil, `updated_at` = :now
-                    WHERE `id` = :id AND %s
+                    WHERE `id` = :id AND `data_scope_id` = :dataScopeId
                       AND `status` IN (:pending, :processing)
                       AND (`available_at` IS NULL OR `available_at` <= :now)',
-                $tenantCondition,
-            ),
             $parameters,
         ) === 1;
     }

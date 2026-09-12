@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Command;
 
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\RefreshIndexEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -54,7 +55,7 @@ class RefreshIndexCommand extends Command implements EventSubscriberInterface
         $skip = \is_string($input->getOption('skip')) ? explode(',', $input->getOption('skip')) : [];
         $only = \is_string($input->getOption('only')) ? explode(',', $input->getOption('only')) : [];
 
-        $this->registry->index($input->getOption('use-queue'), $skip, $only);
+        $this->registry->index(Context::createCLIContext(), $input->getOption('use-queue'), $skip, $only);
 
         $skipEntities = array_map(static fn ($indexer) => str_replace('.indexer', '', $indexer), $skip);
 

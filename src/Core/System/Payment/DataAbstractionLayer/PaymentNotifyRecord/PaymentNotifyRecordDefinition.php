@@ -4,6 +4,7 @@ namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentNotifyRecord;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
@@ -14,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRecurring\PaymentRecurringDefinition;
@@ -54,7 +54,7 @@ class PaymentNotifyRecordDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new FkField('order_id', 'orderId', PaymentOrderDefinition::class)->addFlags(new ApiAware()),
             new FkField('refund_id', 'refundId', PaymentRefundDefinition::class)->addFlags(new ApiAware()),
             new FkField('transfer_id', 'transferId', PaymentTransferDefinition::class)->addFlags(new ApiAware()),

@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\System\Member\Event\MemberLoginEvent;
-use Contena\Core\System\Member\Event\MemberLogoutEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Member\Event\MemberLoginEvent;
+use Contena\Core\System\Member\Event\MemberLogoutEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;

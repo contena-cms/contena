@@ -17,20 +17,20 @@ class SystemConfigEntity extends Entity
      */
     protected array|bool|float|int|string|null $configurationValue = null;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected ?string $channelId = null;
 
     protected ?ChannelEntity $channel = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getConfigurationKey(): string

@@ -12,7 +12,7 @@ class MemberGroupTranslationEntity extends TranslationEntity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $memberGroupId;
 
@@ -26,14 +26,14 @@ class MemberGroupTranslationEntity extends TranslationEntity
 
     protected ?string $registrationSeoMetaDescription = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getMemberGroupId(): string

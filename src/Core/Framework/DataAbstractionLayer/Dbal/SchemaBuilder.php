@@ -19,6 +19,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CronIntervalField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateIntervalField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
@@ -51,8 +53,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\SerializedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreeBreadcrumbField;
@@ -86,8 +86,8 @@ class SchemaBuilder
         CreatedByField::class => Types::BINARY,
         UpdatedByField::class => Types::BINARY,
         StateMachineStateField::class => Types::BINARY,
-        TenantField::class => Types::BINARY,
-        TenantMembershipField::class => Types::BINARY,
+        DataScopeField::class => Types::BINARY,
+        DataScopeMembershipField::class => Types::BINARY,
 
         CreatedAtField::class => Types::DATETIME_MUTABLE,
         UpdatedAtField::class => Types::DATETIME_MUTABLE,

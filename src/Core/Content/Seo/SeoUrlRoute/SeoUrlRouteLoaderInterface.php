@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
-use Contena\Core\Framework\Log\Package;
-
-#[Package('inventory')]
+/**
+ * @internal
+ */
 interface SeoUrlRouteLoaderInterface
 {
     /**

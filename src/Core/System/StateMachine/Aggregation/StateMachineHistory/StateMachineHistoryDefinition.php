@@ -3,6 +3,7 @@
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineHistory;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -11,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
@@ -46,7 +46,7 @@ class StateMachineHistoryDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of state machine history.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for platform state history.'),
+            new DataScopeField()->setDescription('Unique identity of the owning tenant, or null for platform state history.'),
             new IdField('referenced_id', 'referencedId')->addFlags(new Required())->setDescription('Unique identity of reference.'),
             new IdField('referenced_version_id', 'referencedVersionId')->addFlags(new Required())->setDescription('Unique identity of reference\'s version.'),
 

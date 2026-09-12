@@ -12,7 +12,9 @@ class Frontend extends XmlElement
 {
     protected int $templateLoadPriority = 0;
 
-    /** @var list<SeoUrl> */
+    /**
+     * @var list<SeoUrl>
+     */
     protected array $seoUrls = [];
 
     public function getTemplateLoadPriority(): int
@@ -20,7 +22,9 @@ class Frontend extends XmlElement
         return $this->templateLoadPriority;
     }
 
-    /** @return list<SeoUrl> */
+    /**
+     * @return list<SeoUrl>
+     */
     public function getSeoUrls(): array
     {
         return $this->seoUrls;

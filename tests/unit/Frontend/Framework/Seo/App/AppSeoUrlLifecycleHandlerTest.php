@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
@@ -23,6 +21,8 @@ use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlLifecycleHandler;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
 use Contena\Frontend\Framework\Seo\App\AppStaticSeoUrlSynchronizer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Validation;
 

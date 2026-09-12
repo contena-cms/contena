@@ -2,18 +2,18 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Api\EventListener;
 
-use Contena\Core\Framework\Api\EventListener\CorsListener;
 use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
+use Contena\Core\Framework\Api\EventListener\CorsListener;
 use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @internal

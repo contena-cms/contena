@@ -14,7 +14,9 @@ class SeoUrlRouteConfig
         private bool $skipInvalid = true,
         private readonly ?string $primaryKeyParameterKey = null,
         private readonly ?string $targetRouteName = null,
-        /** @var array<string, string> */
+        /**
+         * @var array<string, string>
+         */
         private readonly array $routeParameters = [],
     ) {
     }

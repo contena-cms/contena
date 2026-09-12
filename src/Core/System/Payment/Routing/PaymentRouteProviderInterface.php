@@ -8,7 +8,8 @@ interface PaymentRouteProviderInterface
 
     /**
      * Supply candidates in preference order. Providers must respect the app and
-     * tenant scope; platform fallback is only for shared channel configurations.
+     * exact data scope; tenant operations never fall back to platform-owned
+     * configuration implicitly.
      *
      * @return iterable<PaymentRoute>
      */

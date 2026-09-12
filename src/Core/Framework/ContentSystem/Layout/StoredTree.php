@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\ContentSystem\Layout;
 
 use Contena\Core\Framework\ContentSystem\Diagnostics\Violation;
-use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 
 /**
@@ -24,7 +23,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
  * raises it before calling the mutating operation.
  *
  * Node-local invariants (numeric wiring keys) throw from the element constructor. Tree-global
- * well-formedness is reported, not thrown: {@see validate()} returns the violations it finds.
+ * well-formedness is reported, not thrown: {@see duplicateElementIds()} names the ids it finds repeated.
  */
 final readonly class StoredTree
 {
@@ -108,36 +107,37 @@ final readonly class StoredTree
     }
 
     /**
-     * The tree-global well-formedness report. Ids must be unique across the whole forest, because partial
-     * rendering and every mutation address an element by id alone and search all roots for it.
+     * The tree-global well-formedness report: every id that appears more than once, each named once however
+     * often it repeats. Ids must be unique across the whole forest, because partial rendering and every
+     * mutation address an element by id alone and search all roots for it.
      *
      * An element placed under two parents shows up here as well: it contributes its id twice, so shared
      * ownership is already a duplicate id and needs no separate rule.
      *
-     * @return list<Violation>
+     * Plain ids rather than {@see Violation} objects: `InternalClassRule::CONTENT_SYSTEM_PUBLIC_SURFACE`
+     * lists this class as module extension surface, so it carries no `@internal` — and an `@internal` type in
+     * its signature would hand a caller something it may not use, while leaving the marker on that type
+     * meaningless. A caller that needs the violation mints it with {@see Violation::duplicateElementId()}.
+     *
+     * @return list<string>
      */
-    public function validate(): array
+    public function duplicateElementIds(): array
     {
         $counts = [];
         foreach ($this->ids() as $id) {
             $counts[$id] = ($counts[$id] ?? 0) + 1;
         }
 
-        $violations = [];
+        $duplicates = [];
         foreach ($counts as $id => $count) {
             if ($count < 2) {
                 continue;
             }
 
-            $violations[] = new Violation(
-                ViolationCode::DuplicateElementId,
-                (string) $id,
-                null,
-                \sprintf('Element id "%s" is not unique across the layout.', $id),
-            );
+            $duplicates[] = (string) $id;
         }
 
-        return $violations;
+        return $duplicates;
     }
 
     /**

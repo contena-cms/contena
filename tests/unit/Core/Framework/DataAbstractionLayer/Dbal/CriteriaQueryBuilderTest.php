@@ -12,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\JoinGroupBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeMembershipAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -20,12 +22,15 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\ParseResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Doctrine\QueryBuilderDataExtractor;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -39,6 +44,121 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(CriteriaQueryBuilder::class)]
 class CriteriaQueryBuilderTest extends TestCase
 {
+    public function testBuildRestrictsOwnedRowsToTheContextsDataScope(): void
+    {
+        $queryBuilder = new QueryBuilder(static::createStub(Connection::class));
+        $context = Context::createTenantContext(Uuid::randomHex());
+
+        $parser = $this->createMock(SqlQueryParser::class);
+        $parser->expects($this->exactly(2))
+            ->method('parse')
+            ->willReturnCallback(static function (Filter $filter) use ($context): ParseResult {
+                if (!$filter instanceof EqualsFilter) {
+                    return new ParseResult();
+                }
+
+                static::assertSame('dataScopeId', $filter->getField());
+                static::assertSame($context->getDataScopeId(), $filter->getValue());
+
+                $result = new ParseResult();
+                $result->addWhere('data-scope-filter');
+
+                return $result;
+            });
+
+        $helper = $this->createMock(EntityDefinitionQueryHelper::class);
+        $helper->expects($this->once())->method('getBaseQuery')->willReturn($queryBuilder);
+
+        $builder = new CriteriaQueryBuilder(
+            $parser,
+            $helper,
+            static::createStub(SearchTermInterpreter::class),
+            static::createStub(EntityScoreQueryBuilder::class),
+            static::createStub(JoinGroupBuilder::class),
+            static::createStub(CriteriaPartResolver::class),
+        );
+
+        $definition = $this->returnDataScopedDefinition();
+        $definition->compile(static::createStub(DefinitionInstanceRegistry::class));
+        $builder->build($queryBuilder, $definition, new Criteria(), $context);
+
+        static::assertSame('data-scope-filter', (string) QueryBuilderDataExtractor::getWhere($queryBuilder));
+    }
+
+    public function testBuildRestrictsSharedRowsToTheContextsDataScopeMembership(): void
+    {
+        $queryBuilder = new QueryBuilder(static::createStub(Connection::class));
+        $context = Context::createTenantContext(Uuid::randomHex());
+
+        $parser = $this->createMock(SqlQueryParser::class);
+        $parser->expects($this->exactly(2))
+            ->method('parse')
+            ->willReturnCallback(static function (Filter $filter) use ($context): ParseResult {
+                if (!$filter instanceof EqualsFilter) {
+                    return new ParseResult();
+                }
+
+                static::assertSame('dataScopes.id', $filter->getField());
+                static::assertSame($context->getDataScopeId(), $filter->getValue());
+
+                $result = new ParseResult();
+                $result->addWhere('data-scope-membership-filter');
+
+                return $result;
+            });
+
+        $helper = $this->createMock(EntityDefinitionQueryHelper::class);
+        $helper->expects($this->once())->method('getBaseQuery')->willReturn($queryBuilder);
+
+        $builder = new CriteriaQueryBuilder(
+            $parser,
+            $helper,
+            static::createStub(SearchTermInterpreter::class),
+            static::createStub(EntityScoreQueryBuilder::class),
+            static::createStub(JoinGroupBuilder::class),
+            static::createStub(CriteriaPartResolver::class),
+        );
+
+        $definition = $this->returnMembershipScopedDefinition();
+        $definition->compile(static::createStub(DefinitionInstanceRegistry::class));
+        $builder->build($queryBuilder, $definition, new Criteria(), $context);
+
+        static::assertSame('data-scope-membership-filter', (string) QueryBuilderDataExtractor::getWhere($queryBuilder));
+    }
+
+    public function testBuildDoesNotRestrictCrossScopeReads(): void
+    {
+        $queryBuilder = new QueryBuilder(static::createStub(Connection::class));
+        $context = Context::createGlobalContext();
+
+        $parser = $this->createMock(SqlQueryParser::class);
+        $parser->expects($this->once())
+            ->method('parse')
+            ->willReturnCallback(static function (Filter $filter): ParseResult {
+                static::assertNotInstanceOf(EqualsFilter::class, $filter);
+
+                return new ParseResult();
+            });
+
+        $helper = $this->createMock(EntityDefinitionQueryHelper::class);
+        $helper->expects($this->once())->method('getBaseQuery')->willReturn($queryBuilder);
+
+        $builder = new CriteriaQueryBuilder(
+            $parser,
+            $helper,
+            static::createStub(SearchTermInterpreter::class),
+            static::createStub(EntityScoreQueryBuilder::class),
+            static::createStub(JoinGroupBuilder::class),
+            static::createStub(CriteriaPartResolver::class),
+        );
+
+        $definition = $this->returnDataScopedDefinition();
+        $definition->compile(static::createStub(DefinitionInstanceRegistry::class));
+        $builder->build($queryBuilder, $definition, new Criteria(), $context);
+
+        static::assertNull(QueryBuilderDataExtractor::getWhere($queryBuilder));
+    }
+
     public function testBuildWithWhereCondition(): void
     {
         $queryBuilder = new QueryBuilder(static::createStub(Connection::class));
@@ -202,6 +322,48 @@ class CriteriaQueryBuilderTest extends TestCase
                     new IdField('id', 'id')->addFlags(new Required(), new PrimaryKey()),
                     new TranslatedField('name')->addFlags(new ApiAware()),
                     new TranslatedField('description'),
+                ]);
+            }
+        };
+    }
+
+    private function returnDataScopedDefinition(): EntityDefinition
+    {
+        return new class extends EntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'data_scoped';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    new IdField('id', 'id')->addFlags(new Required(), new PrimaryKey()),
+                    new DataScopeField(),
+                ]);
+            }
+        };
+    }
+
+    private function returnMembershipScopedDefinition(): EntityDefinition
+    {
+        return new class extends EntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'membership_scoped';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    new IdField('id', 'id')->addFlags(new Required(), new PrimaryKey()),
+                    new DataScopeMembershipAssociationField(
+                        'dataScopes',
+                        'data_scope',
+                        'membership_scoped_data_scope',
+                        'entity_id',
+                        'data_scope_id',
+                    ),
                 ]);
             }
         };

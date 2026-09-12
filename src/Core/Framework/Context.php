@@ -6,6 +6,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
+use Contena\Core\Framework\DataAbstractionLayer\DataScopeReadMode;
 use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -36,6 +38,8 @@ class Context extends Struct
      */
     private array $scopeStates = [];
 
+    private DataScope $dataScope;
+
     /**
      * @param non-empty-list<string> $languageIdChain
      * @param list<string> $ruleIds
@@ -46,9 +50,11 @@ class Context extends Struct
         protected string $versionId = Defaults::LIVE_VERSION,
         protected bool $considerInheritance = false,
         protected array $ruleIds = [],
-        private ?string $tenantId = null,
-        private bool $globalTenantAccess = false,
+        ?DataScope $dataScope = null,
+        private DataScopeReadMode $dataScopeReadMode = DataScopeReadMode::Exact,
     ) {
+        $this->dataScope = $dataScope ?? DataScope::platform();
+
         if ($source instanceof SystemSource) {
             $this->scope = self::SYSTEM_SCOPE;
         }
@@ -78,8 +84,8 @@ class Context extends Struct
             $this->ruleIds,
             $this->scope,
             $this->states,
-            $this->tenantId,
-            $this->globalTenantAccess,
+            $this->dataScope,
+            $this->dataScopeReadMode,
         ];
     }
 
@@ -96,14 +102,13 @@ class Context extends Struct
             $this->ruleIds,
             $this->scope,
             $this->states,
-            $this->tenantId,
-            $this->globalTenantAccess,
+            $this->dataScope,
+            $this->dataScopeReadMode,
         ] = $data;
     }
 
     /**
-     * Creates a context restricted to platform-owned data. Reads and writes on
-     * tenant-aware entities are limited to rows with no tenant.
+     * Creates a context restricted to the explicit platform data scope.
      *
      * @internal
      */
@@ -111,18 +116,22 @@ class Context extends Struct
     {
         $source ??= new SystemSource();
 
-        return new self($source);
+        return new self($source, dataScope: DataScope::platform());
     }
 
     /**
-     * Creates the platform management context with cross-tenant read access.
-     * Writes to tenant-aware entities remain limited to platform-owned rows.
+     * Creates the platform management context with cross-scope read access.
+     * Writes remain restricted to the platform data scope.
      */
     public static function createGlobalContext(?ContextSource $source = null): self
     {
         $source ??= new SystemSource();
 
-        return new self($source, globalTenantAccess: true);
+        return new self(
+            $source,
+            dataScope: DataScope::platform(),
+            dataScopeReadMode: DataScopeReadMode::All,
+        );
     }
 
     public static function createCLIContext(?ContextSource $source = null): self
@@ -138,34 +147,36 @@ class Context extends Struct
     {
         $source ??= new SystemSource();
 
-        return new self($source, tenantId: $tenantId);
+        return new self($source, dataScope: DataScope::tenant($tenantId));
     }
 
+    public function getDataScope(): DataScope
+    {
+        return $this->dataScope;
+    }
+
+    public function getDataScopeId(): string
+    {
+        return $this->dataScope->getId();
+    }
+
+    public function getDataScopeReadMode(): DataScopeReadMode
+    {
+        return $this->dataScopeReadMode;
+    }
+
+    public function allowsCrossScopeReads(): bool
+    {
+        return $this->dataScopeReadMode === DataScopeReadMode::All;
+    }
+
+    /**
+     * Returns the tenant identity for tenant-domain operations. Data ownership
+     * must use {@see getDataScopeId()} instead.
+     */
     public function getTenantId(): ?string
     {
-        return $this->tenantId;
-    }
-
-    public function hasGlobalTenantAccess(): bool
-    {
-        return $this->globalTenantAccess;
-    }
-
-    /**
-     * @internal Binds the context to a tenant. Used by the request context
-     * resolvers once the authenticated actor (user or channel) is known.
-     */
-    public function setTenantId(?string $tenantId): void
-    {
-        $this->tenantId = $tenantId;
-    }
-
-    /**
-     * @internal Grants the context cross-tenant read access.
-     */
-    public function setGlobalTenantAccess(bool $globalTenantAccess): void
-    {
-        $this->globalTenantAccess = $globalTenantAccess;
+        return $this->dataScope->getTenantId();
     }
 
     public function getSource(): ContextSource
@@ -207,8 +218,31 @@ class Context extends Struct
             $versionId,
             $this->considerInheritance,
             $this->ruleIds,
-            $this->tenantId,
-            $this->globalTenantAccess,
+            $this->dataScope,
+            $this->dataScopeReadMode,
+        );
+        $context->scope = $this->scope;
+
+        foreach ($this->getExtensions() as $key => $extension) {
+            $context->addExtension($key, $extension);
+        }
+
+        return $context;
+    }
+
+    /**
+     * Creates an exact-scope copy while preserving the current context settings.
+     */
+    public function createWithDataScope(DataScope $dataScope): self
+    {
+        $context = new self(
+            $this->source,
+            $this->languageIdChain,
+            $this->versionId,
+            $this->considerInheritance,
+            $this->ruleIds,
+            $dataScope,
+            DataScopeReadMode::Exact,
         );
         $context->scope = $this->scope;
 
@@ -224,29 +258,14 @@ class Context extends Struct
      */
     public function createWithTenantId(string $tenantId): self
     {
-        $context = new self(
-            $this->source,
-            $this->languageIdChain,
-            $this->versionId,
-            $this->considerInheritance,
-            $this->ruleIds,
-            $tenantId,
-            false,
-        );
-        $context->scope = $this->scope;
-
-        foreach ($this->getExtensions() as $key => $extension) {
-            $context->addExtension($key, $extension);
-        }
-
-        return $context;
+        return $this->createWithDataScope(DataScope::tenant($tenantId));
     }
 
     /**
-     * Creates a copy with cross-tenant read access while preserving the current context settings.
-     * Writes remain platform-scoped because the copied context has no tenant id.
+     * Creates a copy with cross-scope read access while preserving the current context settings.
+     * Writes remain restricted to the explicit platform scope.
      */
-    public function createWithGlobalTenantAccess(): self
+    public function createWithCrossScopeReadAccess(): self
     {
         $context = new self(
             $this->source,
@@ -254,7 +273,8 @@ class Context extends Struct
             $this->versionId,
             $this->considerInheritance,
             $this->ruleIds,
-            globalTenantAccess: true,
+            dataScope: DataScope::platform(),
+            dataScopeReadMode: DataScopeReadMode::All,
         );
         $context->scope = $this->scope;
 

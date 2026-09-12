@@ -10,7 +10,7 @@ use Contena\Core\Content\Cookie\ScheduledTask\CleanupCookieConsentLogTask;
 use Contena\Core\Content\Cookie\ScheduledTask\CleanupCookieConsentLogTaskHandler;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -60,7 +60,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(Connection::class),
             service(ClockInterface::class),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('messenger.message_handler');
 };

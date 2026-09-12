@@ -52,6 +52,7 @@ class FailedMessageSubscriber implements EventSubscriberInterface
 
         $this->connection->insert('log_entry', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'message' => 'mail.message.failed',
             'level' => Level::Error->value,
             'channel' => 'mail',

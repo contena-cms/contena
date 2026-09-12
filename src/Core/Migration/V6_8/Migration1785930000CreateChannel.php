@@ -45,17 +45,27 @@ class Migration1785930000CreateChannel extends MigrationStep
 
     private function addChannelToSystemConfig(Connection $connection): void
     {
-        if (!TableHelper::columnExists($connection, 'system_config', 'tenant_id')) {
-            $this->executeDdlStatement($connection, <<<'SQL'
-ALTER TABLE `system_config`
-    ADD COLUMN `tenant_id` BINARY(16) NULL AFTER `id`
-SQL);
+        if (!TableHelper::tableExists($connection, 'system_config')) {
+            return;
+        }
+
+        if (!TableHelper::columnExists($connection, 'system_config', 'data_scope_id')) {
+            return;
         }
 
         if (!TableHelper::columnExists($connection, 'system_config', 'channel_id')) {
             $this->executeDdlStatement($connection, <<<'SQL'
 ALTER TABLE `system_config`
     ADD COLUMN `channel_id` BINARY(16) NULL AFTER `configuration_value`
+SQL);
+        }
+
+        if (!TableHelper::columnExists($connection, 'system_config', 'configuration_target_id')) {
+            $this->executeDdlStatement($connection, <<<'SQL'
+ALTER TABLE `system_config`
+    ADD COLUMN `configuration_target_id` BINARY(16)
+        GENERATED ALWAYS AS (COALESCE(`channel_id`, `data_scope_id`)) STORED
+        AFTER `channel_id`
 SQL);
         }
 
@@ -73,33 +83,18 @@ ALTER TABLE `system_config`
 SQL);
         }
 
-        if (!TableHelper::indexExists($connection, 'system_config', 'uniq.system_config.configuration_key__channel_id__tenant_id')) {
+        if (TableHelper::indexExists($connection, 'system_config', 'uniq.system_config.configuration_key__channel_id__data_scope_id')) {
             $this->executeDdlStatement($connection, <<<'SQL'
 ALTER TABLE `system_config`
-    ADD CONSTRAINT `uniq.system_config.configuration_key__channel_id__tenant_id` UNIQUE (`configuration_key`, `channel_id`, `tenant_id`)
+    DROP INDEX `uniq.system_config.configuration_key__channel_id__data_scope_id`
 SQL);
         }
 
-        if (!TableHelper::indexExists($connection, 'system_config', 'idx.system_config.tenant_id')) {
+        if (!TableHelper::indexExists($connection, 'system_config', 'uniq.system_config.scope_target_key')) {
             $this->executeDdlStatement($connection, <<<'SQL'
 ALTER TABLE `system_config`
-    ADD KEY `idx.system_config.tenant_id` (`tenant_id`)
-SQL);
-        }
-
-        if (!$this->foreignKeyExists($connection, 'system_config', 'fk.system_config.tenant_id')) {
-            $this->executeDdlStatement($connection, <<<'SQL'
-ALTER TABLE `system_config`
-    ADD CONSTRAINT `fk.system_config.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-SQL);
-        }
-
-        if (!$this->foreignKeyExists($connection, 'system_config', 'fk.system_config.channel_id')) {
-            $this->executeDdlStatement($connection, <<<'SQL'
-ALTER TABLE `system_config`
-    ADD CONSTRAINT `fk.system_config.channel_id` FOREIGN KEY (`channel_id`)
-        REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ADD CONSTRAINT `uniq.system_config.scope_target_key`
+        UNIQUE (`data_scope_id`, `configuration_target_id`, `configuration_key`)
 SQL);
         }
     }
@@ -108,21 +103,21 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_group` (
-    `tenant_id`          BINARY(16)  NULL,
+    `data_scope_id`          BINARY(16)  NOT NULL,
     `id`                  BINARY(16)  NOT NULL,
     `registration_active` TINYINT(1)  NOT NULL DEFAULT 0,
     `created_at`          DATETIME(3) NOT NULL,
     `updated_at`          DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.member_group.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.member_group.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    KEY `idx.member_group.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.member_group.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_group_translation` (
-    `tenant_id`                            BINARY(16)                              NULL,
+    `data_scope_id`                            BINARY(16)                              NOT NULL,
     `member_group_id`                       BINARY(16)                              NOT NULL,
     `language_id`                           BINARY(16)                              NOT NULL,
     `name`                                  VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -133,10 +128,10 @@ CREATE TABLE IF NOT EXISTS `member_group_translation` (
     `created_at`                            DATETIME(3)                             NOT NULL,
     `updated_at`                            DATETIME(3)                             NULL,
     PRIMARY KEY (`member_group_id`, `language_id`),
-    KEY `idx.member_group_translation.tenant_id` (`tenant_id`),
+    KEY `idx.member_group_translation.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.member_group_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.member_group_translation.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.member_group_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member_group_translation.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.member_group_translation.member_group_id` FOREIGN KEY (`member_group_id`)
@@ -186,7 +181,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel` (
     `id`                         BINARY(16)                              NOT NULL,
-    `tenant_id`                  BINARY(16)                              NULL,
+    `data_scope_id`                  BINARY(16)                              NOT NULL,
     `type_id`                    BINARY(16)                              NOT NULL,
     `short_name`                 VARCHAR(45) COLLATE utf8mb4_unicode_ci  NULL,
     `configuration`              JSON                                    NULL,
@@ -213,11 +208,11 @@ CREATE TABLE IF NOT EXISTS `channel` (
     `updated_at`                 DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.channel.access_key` (`access_key`),
-    KEY `idx.channel.tenant_id` (`tenant_id`),
+    KEY `idx.channel.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.channel.configuration` CHECK (JSON_VALID(`configuration`)),
     CONSTRAINT `json.channel.maintenance_ip_allowlist` CHECK (JSON_VALID(`maintenance_ip_allowlist`)),
-    CONSTRAINT `fk.channel.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.channel.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel.country_id` FOREIGN KEY (`country_id`)
         REFERENCES `country` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel.language_id` FOREIGN KEY (`language_id`)
@@ -241,7 +236,7 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_translation` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `channel_id`           BINARY(16)                              NOT NULL,
     `language_id`          BINARY(16)                              NOT NULL,
     `name`                 VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
@@ -254,14 +249,14 @@ CREATE TABLE IF NOT EXISTS `channel_translation` (
     `created_at`           DATETIME(3)                             NOT NULL,
     `updated_at`           DATETIME(3)                             NULL,
     PRIMARY KEY (`channel_id`, `language_id`),
-    KEY `idx.channel_translation.tenant_id` (`tenant_id`),
+    KEY `idx.channel_translation.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.channel_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.channel_translation.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_translation.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.channel_translation.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.channel_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
@@ -271,15 +266,15 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `landing_page_channel` (
-    `tenant_id`               BINARY(16) NULL,
+    `data_scope_id`               BINARY(16) NOT NULL,
     `landing_page_id`         BINARY(16) NOT NULL,
     `landing_page_version_id` BINARY(16) NOT NULL,
     `channel_id`              BINARY(16) NOT NULL,
     PRIMARY KEY (`landing_page_id`, `landing_page_version_id`, `channel_id`),
-    KEY `idx.landing_page_channel.tenant_id` (`tenant_id`),
+    KEY `idx.landing_page_channel.data_scope_id` (`data_scope_id`),
     KEY `fk.landing_page_channel.channel_id` (`channel_id`),
-    CONSTRAINT `fk.landing_page_channel.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.landing_page_channel.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.landing_page_channel.landing_page_id` FOREIGN KEY (`landing_page_id`, `landing_page_version_id`)
         REFERENCES `landing_page` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.landing_page_channel.channel_id` FOREIGN KEY (`channel_id`)
@@ -289,7 +284,7 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_visibility` (
-    `tenant_id`       BINARY(16)  NULL,
+    `data_scope_id`       BINARY(16)  NOT NULL,
     `id`              BINARY(16)  NOT NULL,
     `blog_id`         BINARY(16)  NOT NULL,
     `blog_version_id` BINARY(16)  NOT NULL,
@@ -299,11 +294,11 @@ CREATE TABLE IF NOT EXISTS `blog_visibility` (
     `updated_at`      DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.blog_visibility.blog_id__channel_id` (`blog_id`, `blog_version_id`, `channel_id`),
-    KEY `idx.blog_visibility.tenant_id` (`tenant_id`),
+    KEY `idx.blog_visibility.data_scope_id` (`data_scope_id`),
     KEY `idx.blog_visibility.blog_id` (`blog_id`, `blog_version_id`),
     KEY `idx.blog_visibility.channel_id` (`channel_id`),
-    CONSTRAINT `fk.blog_visibility.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_visibility.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_visibility.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
         REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_visibility.channel_id` FOREIGN KEY (`channel_id`)
@@ -313,7 +308,7 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_main_category` (
-    `tenant_id`          BINARY(16)  NULL,
+    `data_scope_id`          BINARY(16)  NOT NULL,
     `id`                  BINARY(16)  NOT NULL,
     `blog_id`             BINARY(16)  NOT NULL,
     `blog_version_id`     BINARY(16)  NOT NULL,
@@ -324,11 +319,11 @@ CREATE TABLE IF NOT EXISTS `blog_main_category` (
     `updated_at`          DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.blog_main_category.channel_blog` (`blog_id`, `blog_version_id`, `channel_id`),
-    KEY `idx.blog_main_category.tenant_id` (`tenant_id`),
+    KEY `idx.blog_main_category.data_scope_id` (`data_scope_id`),
     KEY `fk.blog_main_category.channel_id` (`channel_id`),
     KEY `fk.blog_main_category.category_id` (`category_id`, `category_version_id`),
-    CONSTRAINT `fk.blog_main_category.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_main_category.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_main_category.category_id` FOREIGN KEY (`category_id`, `category_version_id`)
         REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.blog_main_category.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
@@ -353,7 +348,7 @@ SQL);
                 <<<'SQL'
 CREATE TABLE IF NOT EXISTS `#table#` (
     `id`                BINARY(16)  NOT NULL,
-    `tenant_id`         BINARY(16)  NULL,
+    `data_scope_id`         BINARY(16)  NOT NULL,
     `#entity_id#`       BINARY(16)  NOT NULL,
     `channel_id`        BINARY(16)  NULL,
     `content_layout_id` BINARY(16)  NOT NULL,
@@ -361,11 +356,11 @@ CREATE TABLE IF NOT EXISTS `#table#` (
     `updated_at`        DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `#unique#` (`#entity_id#`, `channel_id`),
-    KEY `idx.#table#.tenant_id` (`tenant_id`),
+    KEY `idx.#table#.data_scope_id` (`data_scope_id`),
     KEY `fk.#table#.channel_id` (`channel_id`),
     KEY `fk.#table#.content_layout_id` (`content_layout_id`),
-    CONSTRAINT `fk.#table#.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.#table#.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.#table#.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk.#table#.content_layout_id` FOREIGN KEY (`content_layout_id`)
@@ -405,7 +400,7 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `seo_url` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`             BINARY(16)                               NOT NULL,
     `language_id`    BINARY(16)                               NOT NULL,
     `channel_id`     BINARY(16)                               NULL,
@@ -420,27 +415,27 @@ CREATE TABLE IF NOT EXISTS `seo_url` (
     `created_at`     DATETIME(3)                              NOT NULL,
     `updated_at`     DATETIME(3)                              NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.seo_url.tenant_id` (`tenant_id`),
-    UNIQUE KEY `uniq.seo_url.seo_path_info` (`language_id`, `channel_id`, `seo_path_info`),
-    UNIQUE KEY `uniq.seo_url.foreign_key` (`language_id`, `channel_id`, `foreign_key`, `route_name`, `is_canonical`),
-    KEY `idx.seo_url.foreign_key` (`language_id`, `foreign_key`, `channel_id`, `is_canonical`),
-    KEY `idx.seo_url.path_info` (`language_id`, `channel_id`, `is_canonical`, `path_info`),
-    KEY `idx.seo_url.delete_query` (`foreign_key`, `channel_id`),
+    KEY `idx.seo_url.data_scope_id` (`data_scope_id`),
+    UNIQUE KEY `uniq.seo_url.seo_path_info` (`data_scope_id`, `language_id`, `channel_id`, `seo_path_info`),
+    UNIQUE KEY `uniq.seo_url.foreign_key` (`data_scope_id`, `language_id`, `channel_id`, `foreign_key`, `route_name`, `is_canonical`),
+    KEY `idx.seo_url.foreign_key` (`data_scope_id`, `language_id`, `foreign_key`, `channel_id`, `is_canonical`),
+    KEY `idx.seo_url.path_info` (`data_scope_id`, `language_id`, `channel_id`, `is_canonical`, `path_info`),
+    KEY `idx.seo_url.delete_query` (`data_scope_id`, `foreign_key`, `channel_id`),
     KEY `fk.seo_url.channel_id` (`channel_id`),
     CONSTRAINT `fk.seo_url.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.seo_url.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `json.seo_url.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.seo_url.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.seo_url.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `seo_url_template` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id`            BINARY(16)                              NOT NULL,
     `channel_id`    BINARY(16)                              NULL,
     `route_name`    VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -451,14 +446,14 @@ CREATE TABLE IF NOT EXISTS `seo_url_template` (
     `custom_fields` JSON                                    NULL,
     `created_at`    DATETIME(3)                             NOT NULL,
     `updated_at`    DATETIME(3)                             NULL,
+    `template_target_id` BINARY(16) GENERATED ALWAYS AS (COALESCE(`channel_id`, `data_scope_id`)) STORED,
     PRIMARY KEY (`id`),
-    KEY `idx.seo_url_template.tenant_id` (`tenant_id`),
-    UNIQUE KEY `uniq.seo_url_template.route_name` (`channel_id`, `route_name`),
-    CONSTRAINT `fk.seo_url_template.channel_id` FOREIGN KEY (`channel_id`)
-        REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY `idx.seo_url_template.data_scope_id` (`data_scope_id`),
+    UNIQUE KEY `uniq.seo_url_template.route_name` (`data_scope_id`, `template_target_id`, `route_name`),
+    KEY `idx.seo_url_template.channel_id` (`channel_id`),
     CONSTRAINT `json.seo_url_template.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.seo_url_template.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    -- MySQL rejects foreign keys in this generated-target layout; DAL scope validation enforces the same boundary.
+    KEY `idx.seo_url_template.data_scope_id_fk` (`data_scope_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
@@ -469,16 +464,16 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_analytics` (
     `id`           BINARY(16)                              NOT NULL,
-    `tenant_id`    BINARY(16)                              NULL,
+    `data_scope_id`    BINARY(16)                              NOT NULL,
     `tracking_id`  VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
     `active`       TINYINT(1)                              NOT NULL DEFAULT 0,
     `anonymize_ip` TINYINT(1)                              NOT NULL DEFAULT 0,
     `created_at`   DATETIME(3)                             NOT NULL,
     `updated_at`   DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.channel_analytics.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.channel_analytics.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    KEY `idx.channel_analytics.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.channel_analytics.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }
@@ -487,13 +482,13 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_language` (
-    `tenant_id`   BINARY(16) NULL,
+    `data_scope_id`   BINARY(16) NOT NULL,
     `channel_id`  BINARY(16) NOT NULL,
     `language_id` BINARY(16) NOT NULL,
     PRIMARY KEY (`channel_id`, `language_id`),
-    KEY `idx.channel_language.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.channel_language.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.channel_language.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.channel_language.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_language.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_language.language_id` FOREIGN KEY (`language_id`)
@@ -503,13 +498,13 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_country` (
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `channel_id` BINARY(16) NOT NULL,
     `country_id` BINARY(16) NOT NULL,
     PRIMARY KEY (`channel_id`, `country_id`),
-    KEY `idx.channel_country.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.channel_country.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.channel_country.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.channel_country.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_country.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_country.country_id` FOREIGN KEY (`country_id`)
@@ -519,13 +514,13 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_group_registration_channel` (
-    `tenant_id`      BINARY(16) NULL,
+    `data_scope_id`      BINARY(16) NOT NULL,
     `member_group_id` BINARY(16) NOT NULL,
     `channel_id`      BINARY(16) NOT NULL,
     PRIMARY KEY (`member_group_id`, `channel_id`),
-    KEY `idx.member_group_registration_channel.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.member_group_registration_channel.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.member_group_registration_channel.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.member_group_registration_channel.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member_group_registration_channel.member_group_id` FOREIGN KEY (`member_group_id`)
         REFERENCES `member_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.member_group_registration_channel.channel_id` FOREIGN KEY (`channel_id`)
@@ -539,7 +534,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_domain` (
     `id`                       BINARY(16)                              NOT NULL,
-    `tenant_id`                BINARY(16)                              NULL,
+    `data_scope_id`                BINARY(16)                              NOT NULL,
     `channel_id`               BINARY(16)                              NOT NULL,
     `language_id`              BINARY(16)                              NOT NULL,
     `url`                      VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -554,10 +549,10 @@ CREATE TABLE IF NOT EXISTS `channel_domain` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.channel_domain.url` (`url`),
     UNIQUE KEY `uniq.channel_domain.external_frontend` (`external_frontend_language_id`, `channel_id`),
-    KEY `idx.channel_domain.tenant_id` (`tenant_id`),
+    KEY `idx.channel_domain.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.channel_domain.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.channel_domain.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.channel_domain.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_domain.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_domain.language_id` FOREIGN KEY (`channel_id`, `language_id`)
@@ -573,7 +568,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_file` (
     `id`                 BINARY(16)   NOT NULL,
-    `tenant_id`          BINARY(16)   NULL,
+    `data_scope_id`          BINARY(16)   NOT NULL,
     `channel_id`         BINARY(16)   NOT NULL,
     `file_family`        VARCHAR(64)  NOT NULL,
     `file_name`          VARCHAR(512) NOT NULL,
@@ -583,10 +578,10 @@ CREATE TABLE IF NOT EXISTS `channel_file` (
     `updated_at`         DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.channel_file.channel_id_family_file_name` (`channel_id`, `file_family`, `file_name`),
-    KEY `idx.channel_file.tenant_id` (`tenant_id`),
+    KEY `idx.channel_file.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.channel_file.template_overrides` CHECK (JSON_VALID(`template_overrides`)),
-    CONSTRAINT `fk.channel_file.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.channel_file.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.channel_file.channel_id` FOREIGN KEY (`channel_id`)
         REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -598,7 +593,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member` (
     `id`                           BINARY(16)                              NOT NULL,
-    `tenant_id`                    BINARY(16)                              NULL,
+    `data_scope_id`                    BINARY(16)                              NOT NULL,
     `auto_increment`               BIGINT UNSIGNED                         NOT NULL AUTO_INCREMENT,
     `member_group_id`              BINARY(16)                              NOT NULL,
     `channel_id`                   BINARY(16)                              NOT NULL,
@@ -629,11 +624,11 @@ CREATE TABLE IF NOT EXISTS `member` (
     UNIQUE KEY `uniq.member.auto_increment` (`auto_increment`),
     KEY `idx.member.email` (`email`),
     KEY `idx.member.member_number` (`member_number`),
-    KEY `idx.member.tenant_id` (`tenant_id`),
+    KEY `idx.member.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.member.tag_ids` CHECK (JSON_VALID(`tag_ids`)),
     CONSTRAINT `json.member.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.member.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.member.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member.member_group_id` FOREIGN KEY (`member_group_id`)
         REFERENCES `member_group` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member.channel_id` FOREIGN KEY (`channel_id`)
@@ -651,16 +646,16 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_recovery` (
     `id`         BINARY(16)                              NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `member_id`  BINARY(16)                              NOT NULL,
     `hash`       VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
     `created_at` DATETIME(3)                             NOT NULL,
     `updated_at` DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq.member_recovery.member_id` (`member_id`),
-    KEY `idx.member_recovery.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.member_recovery.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.member_recovery.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.member_recovery.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member_recovery.member_id` FOREIGN KEY (`member_id`)
         REFERENCES `member` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -672,7 +667,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_address` (
     `id`                         BINARY(16)                              NOT NULL,
-    `tenant_id`                  BINARY(16)                              NULL,
+    `data_scope_id`                  BINARY(16)                              NOT NULL,
     `member_id`                  BINARY(16)                              NOT NULL,
     `country_id`                 BINARY(16)                              NOT NULL,
     `region_id`                  BINARY(16)                              NULL,
@@ -689,10 +684,10 @@ CREATE TABLE IF NOT EXISTS `member_address` (
     `created_at`                 DATETIME(3)                             NOT NULL,
     `updated_at`                 DATETIME(3)                             NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.member_address.tenant_id` (`tenant_id`),
+    KEY `idx.member_address.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.member_address.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.member_address.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.member_address.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member_address.member_id` FOREIGN KEY (`member_id`)
         REFERENCES `member` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.member_address.country_id` FOREIGN KEY (`country_id`)
@@ -707,13 +702,13 @@ SQL);
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `member_tag` (
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `member_id`  BINARY(16) NOT NULL,
     `tag_id`     BINARY(16) NOT NULL,
     PRIMARY KEY (`member_id`, `tag_id`),
-    KEY `idx.member_tag.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.member_tag.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.member_tag.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.member_tag.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.member_tag.member_id` FOREIGN KEY (`member_id`)
         REFERENCES `member` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.member_tag.tag_id` FOREIGN KEY (`tag_id`)
@@ -773,7 +768,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `cookie_consent_log` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `channel_id` BINARY(16) NOT NULL,
     `language_id` BINARY(16) NOT NULL,
     `consent_action` VARCHAR(32) NOT NULL,
@@ -782,19 +777,19 @@ CREATE TABLE IF NOT EXISTS `cookie_consent_log` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.cookie_consent_log.tenant_id` (`tenant_id`),
+    KEY `idx.cookie_consent_log.data_scope_id` (`data_scope_id`),
     KEY `idx.cookie_consent_log.created_at` (`created_at`),
     KEY `idx.cookie_consent_log.config_hash` (`config_hash`),
     CONSTRAINT `json.cookie_consent_log.accepted_groups` CHECK (JSON_VALID(`accepted_groups`)),
-    CONSTRAINT `fk.cookie_consent_log.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.cookie_consent_log.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `cookie_consent_config_version` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `config_hash` VARCHAR(255) NOT NULL,
     `channel_id` BINARY(16) NOT NULL,
     `language_id` BINARY(16) NOT NULL,
@@ -802,11 +797,11 @@ CREATE TABLE IF NOT EXISTS `cookie_consent_config_version` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq.cookie_consent_config_version.config_hash` (`tenant_id`, `config_hash`, `channel_id`, `language_id`),
-    KEY `idx.cookie_consent_config_version.tenant_id` (`tenant_id`),
+    UNIQUE KEY `uniq.cookie_consent_config_version.config_hash` (`data_scope_id`, `config_hash`, `channel_id`, `language_id`),
+    KEY `idx.cookie_consent_config_version.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.cookie_consent_config_version.cookie_groups` CHECK (JSON_VALID(`cookie_groups`)),
-    CONSTRAINT `fk.cookie_consent_config_version.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.cookie_consent_config_version.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

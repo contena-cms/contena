@@ -11,6 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AutoIncrementField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildCountField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
@@ -28,7 +29,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreeLevelField;
@@ -91,7 +91,7 @@ class CategoryDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         $fields = new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of category.'),
             new VersionField()->addFlags(new ApiAware()),
 

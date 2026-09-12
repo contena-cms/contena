@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Maintenance\User\Service;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
@@ -23,22 +24,35 @@ class UserProvisionerTest extends TestCase
         $localeId = Uuid::randomBytes();
         $connection = $this->createMock(Connection::class);
 
-        $connection->expects($this->once())
+        $userId = null;
+        $connection->expects($this->exactly(2))
             ->method('insert')
-            ->with(
-                'user',
-                static::callback(static function (array $data) use ($localeId): bool {
+            ->willReturnCallback(static function (string $table, array $data) use ($localeId, &$userId): int {
+                if ($table === 'user') {
+                    $userId = $data['id'];
                     static::assertSame('admin', $data['username']);
                     static::assertSame('first last', $data['name']);
                     static::assertSame('test@test.com', $data['email']);
                     static::assertSame($localeId, $data['locale_id']);
-                    static::assertSame(1, $data['admin']);
+                    static::assertArrayNotHasKey('data_scope_id', $data);
+                    static::assertArrayNotHasKey('admin', $data);
+                    static::assertArrayNotHasKey('user_code', $data);
                     static::assertTrue($data['active']);
                     static::assertSame('Asia/Shanghai', $data['time_zone']);
+                    static::assertTrue(password_verify('contenaAdmin', (string) $data['password']));
 
-                    return password_verify('contenaAdmin', (string) $data['password']);
-                })
-            );
+                    return 1;
+                }
+
+                static::assertSame('user_data_scope', $table);
+                static::assertSame($userId, $data['user_id']);
+                static::assertSame(Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE), $data['data_scope_id']);
+                static::assertSame(1, $data['admin']);
+                static::assertSame(1, $data['read_all_scopes']);
+                static::assertSame('10000', $data['user_code']);
+
+                return 1;
+            });
         $connection->expects($this->once())->method('fetchOne')->willReturn(json_encode(['_value' => 8], \JSON_THROW_ON_ERROR));
         $connection->expects($this->exactly(2))->method('createQueryBuilder')->willReturnOnConsecutiveCalls(
             new FakeQueryBuilder($connection, []),
@@ -48,6 +62,7 @@ class UserProvisionerTest extends TestCase
         $user = [
             'name' => 'first last',
             'email' => 'test@test.com',
+            'readAllScopes' => true,
         ];
 
         $provisioner = new UserProvisioner($connection, new NativeClock(), $this->createNumberRangeGenerator());
@@ -82,12 +97,19 @@ class UserProvisionerTest extends TestCase
         $userId = null;
         $connection = $this->createMock(Connection::class);
 
-        $connection->expects($this->exactly(2))
+        $connection->expects($this->exactly(3))
             ->method('insert')
             ->willReturnCallback(static function (string $table, array $data) use (&$userId, $roleId): int {
                 if ($table === 'user') {
                     $userId = $data['id'];
                     static::assertSame('admin', $data['username']);
+                    static::assertArrayNotHasKey('admin', $data);
+
+                    return 1;
+                }
+
+                if ($table === 'user_data_scope') {
+                    static::assertSame($userId, $data['user_id']);
                     static::assertSame(0, $data['admin']);
 
                     return 1;
@@ -96,6 +118,7 @@ class UserProvisionerTest extends TestCase
                 static::assertSame('acl_user_role', $table);
                 static::assertSame($userId, $data['user_id']);
                 static::assertSame($roleId, $data['acl_role_id']);
+                static::assertSame(Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE), $data['data_scope_id']);
 
                 return 1;
             });

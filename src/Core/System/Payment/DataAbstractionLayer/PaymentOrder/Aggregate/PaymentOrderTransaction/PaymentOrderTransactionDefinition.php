@@ -4,6 +4,7 @@ namespace Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\Aggregat
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -15,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
@@ -48,7 +48,7 @@ class PaymentOrderTransactionDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new FkField('order_id', 'orderId', PaymentOrderDefinition::class)->addFlags(new ApiAware(), new Required()),
             new StringField('transaction_no', 'transactionNo', 64)->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new StringField('channel_code', 'channelCode', 32)->addFlags(new ApiAware(), new Required()),

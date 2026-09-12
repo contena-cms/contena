@@ -13,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry\IndexerMetric
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
 use Contena\Core\Framework\Struct\ArrayEntity;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +37,8 @@ class EntityIndexerRegistryTest extends TestCase
 
     private IndexerMetricsInstrumentor&Stub $instrumentorStub;
 
+    private DataScopeContextProvider&Stub $dataScopeContextProviderStub;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,6 +49,7 @@ class EntityIndexerRegistryTest extends TestCase
         $this->indexerMock1 = static::createStub(EntityIndexer::class);
         $this->indexerMock2 = static::createStub(EntityIndexer::class);
         $this->instrumentorStub = static::createStub(IndexerMetricsInstrumentor::class);
+        $this->dataScopeContextProviderStub = static::createStub(DataScopeContextProvider::class);
     }
 
     public function testIndexSuccessful(): void
@@ -61,14 +65,20 @@ class EntityIndexerRegistryTest extends TestCase
                 return null;
             });
 
-        $registry = new EntityIndexerRegistry([$this->indexerMock1, $this->indexerMock2], $this->messageBusMock, $dispatcher, $this->instrumentorStub);
-        $registry->index(false);
+        $registry = new EntityIndexerRegistry(
+            [$this->indexerMock1, $this->indexerMock2],
+            $this->messageBusMock,
+            $dispatcher,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
+        $registry->index(Context::createDefaultContext(), false);
     }
 
     public function testIndexSuccessfulFullEntity(): void
     {
         $fullEntityIndexerMessageMock = $this->createMock(FullEntityIndexerMessage::class);
-        $context = Context::createTenantContext('tenant-a');
+        $context = Context::createTenantContext('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
         $skip = ['indexer1'];
         $only = ['indexer2'];
@@ -76,13 +86,13 @@ class EntityIndexerRegistryTest extends TestCase
         $indexers = [$this->indexerMock1, $this->indexerMock2];
 
         $registryMock = $this->getMockBuilder(EntityIndexerRegistry::class)
-            ->setConstructorArgs([$indexers, $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub])
+            ->setConstructorArgs([$indexers, $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub, $this->dataScopeContextProviderStub])
             ->onlyMethods(['index'])
             ->getMock();
 
         $registryMock->expects($this->once())
             ->method('index')
-            ->with(true, $skip, $only, false, $context);
+            ->with($context, true, $skip, $only, false);
 
         $fullEntityIndexerMessageMock->expects($this->once())
             ->method('getSkip')
@@ -112,8 +122,14 @@ class EntityIndexerRegistryTest extends TestCase
         $indexer1->expects($this->never())->method('iterate');
         $indexer2->expects($this->atLeastOnce())->method('iterate');
 
-        $registry = new EntityIndexerRegistry([$indexer1, $indexer2], $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub);
-        $registry->index(false, $skip, $only);
+        $registry = new EntityIndexerRegistry(
+            [$indexer1, $indexer2],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
+        $registry->index(Context::createDefaultContext(), false, $skip, $only);
     }
 
     public function testGetIndexersReturnsNormalIndexersAndOptions(): void
@@ -130,6 +146,7 @@ class EntityIndexerRegistryTest extends TestCase
             $this->messageBusMock,
             $this->dispatcherMock,
             $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
         );
 
         static::assertSame(['normal.indexer' => ['normal.option']], $registry->getIndexers());
@@ -137,31 +154,127 @@ class EntityIndexerRegistryTest extends TestCase
 
     public function testFullIndexBindsIteratorMessagesToTenantContext(): void
     {
-        $context = Context::createTenantContext('tenant-a');
-        $message = $this->createMock(EntityIndexingMessage::class);
-        $message->expects($this->once())->method('setContext')->with($context);
+        $context = Context::createTenantContext('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        $message = static::createStub(EntityIndexingMessage::class);
 
         $indexer = $this->createMock(EntityIndexer::class);
         $indexer->method('getName')->willReturn('indexer');
         $indexer->expects($this->exactly(2))
             ->method('iterate')
+            ->with(null, $context)
             ->willReturnOnConsecutiveCalls($message, null);
 
-        $registry = new EntityIndexerRegistry([$indexer], $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub);
-        $registry->index(true, context: $context);
+        $registry = new EntityIndexerRegistry(
+            [$indexer],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
+        $registry->index($context, true);
     }
 
     public function testFullIndexControlMessageCarriesTenantContext(): void
     {
-        $context = Context::createTenantContext('tenant-a');
+        $context = Context::createTenantContext('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
         $messageBus = $this->createMock(MessageBusInterface::class);
         $messageBus->expects($this->once())
             ->method('dispatch')
             ->with(static::callback(static fn (FullEntityIndexerMessage $message): bool => $message->getContext() === $context))
             ->willReturn(new Envelope(new \stdClass()));
 
-        $registry = new EntityIndexerRegistry([], $messageBus, $this->dispatcherMock, $this->instrumentorStub);
-        $registry->sendFullIndexingMessage(context: $context);
+        $registry = new EntityIndexerRegistry(
+            [],
+            $messageBus,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
+        $registry->sendFullIndexingMessage($context);
+    }
+
+    public function testGlobalFullIndexControlMessageFansOutIntoExactScopeMessages(): void
+    {
+        $globalContext = Context::createGlobalContext();
+        $platformContext = Context::createDefaultContext();
+        $tenantContext = Context::createTenantContext('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
+        $contextProvider = $this->createMock(DataScopeContextProvider::class);
+        $contextProvider->expects($this->once())
+            ->method('getContexts')
+            ->with($globalContext)
+            ->willReturn((static function () use ($platformContext, $tenantContext): \Generator {
+                yield $platformContext;
+                yield $tenantContext;
+            })());
+
+        $dispatchedScopeIds = [];
+        $messageBus = $this->createMock(MessageBusInterface::class);
+        $messageBus->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnCallback(static function (FullEntityIndexerMessage $message) use (&$dispatchedScopeIds): Envelope {
+                static::assertFalse($message->getContext()->allowsCrossScopeReads());
+                $dispatchedScopeIds[] = $message->getContext()->getDataScopeId();
+
+                return new Envelope($message);
+            });
+
+        $registry = new EntityIndexerRegistry(
+            [],
+            $messageBus,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $contextProvider,
+        );
+        $registry->sendFullIndexingMessage($globalContext);
+
+        static::assertSame([
+            $platformContext->getDataScopeId(),
+            $tenantContext->getDataScopeId(),
+        ], $dispatchedScopeIds);
+    }
+
+    public function testGlobalSynchronousIndexRunsEachExactScopeSeparately(): void
+    {
+        $globalContext = Context::createGlobalContext();
+        $platformContext = Context::createDefaultContext();
+        $tenantContext = Context::createTenantContext('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
+        $contextProvider = $this->createMock(DataScopeContextProvider::class);
+        $contextProvider->expects($this->once())
+            ->method('getContexts')
+            ->with($globalContext)
+            ->willReturn((static function () use ($platformContext, $tenantContext): \Generator {
+                yield $platformContext;
+                yield $tenantContext;
+            })());
+
+        $iteratedScopeIds = [];
+        $indexer = $this->createMock(EntityIndexer::class);
+        $indexer->method('getName')->willReturn('indexer');
+        $indexer->expects($this->exactly(2))
+            ->method('iterate')
+            ->willReturnCallback(static function (?array $offset, Context $context) use (&$iteratedScopeIds): ?EntityIndexingMessage {
+                static::assertNull($offset);
+                static::assertFalse($context->allowsCrossScopeReads());
+                $iteratedScopeIds[] = $context->getDataScopeId();
+
+                return null;
+            });
+
+        $registry = new EntityIndexerRegistry(
+            [$indexer],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $contextProvider,
+        );
+        $registry->index($globalContext, false);
+
+        static::assertSame([
+            $platformContext->getDataScopeId(),
+            $tenantContext->getDataScopeId(),
+        ], $iteratedScopeIds);
     }
 
     public function testRefreshMethod(): void
@@ -207,13 +320,19 @@ class EntityIndexerRegistryTest extends TestCase
             ->method('addSkip')
             ->with('skip1', 'skip2');
 
-        $registry = new EntityIndexerRegistry([$indexer1, $this->indexerMock2], $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub);
+        $registry = new EntityIndexerRegistry(
+            [$indexer1, $this->indexerMock2],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
         $registry->refresh($eventMock);
     }
 
     public function testHandleIsRoutedThroughTheMetricsInstrumentor(): void
     {
-        $message = new EntityIndexingMessage(['id-1'], null, null, false, true);
+        $message = new EntityIndexingMessage(['id-1'], Context::createDefaultContext(), isFullIndexing: true);
         $message->setIndexer('indexer1');
 
         $indexer1 = $this->createMock(EntityIndexer::class);
@@ -229,7 +348,13 @@ class EntityIndexerRegistryTest extends TestCase
 
         $indexer1->expects($this->once())->method('handle')->with($message);
 
-        $registry = new EntityIndexerRegistry([$indexer1, $this->indexerMock2], $this->messageBusMock, $this->dispatcherMock, $metricsInstrumentor);
+        $registry = new EntityIndexerRegistry(
+            [$indexer1, $this->indexerMock2],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $metricsInstrumentor,
+            $this->dataScopeContextProviderStub,
+        );
         $registry->__invoke($message);
     }
 
@@ -251,7 +376,13 @@ class EntityIndexerRegistryTest extends TestCase
                 return null;
             });
 
-        $registry = new EntityIndexerRegistry([$indexer], $this->messageBusMock, $this->dispatcherMock, $this->instrumentorStub);
+        $registry = new EntityIndexerRegistry(
+            [$indexer],
+            $this->messageBusMock,
+            $this->dispatcherMock,
+            $this->instrumentorStub,
+            $this->dataScopeContextProviderStub,
+        );
 
         try {
             $registry->refresh($event);

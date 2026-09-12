@@ -37,6 +37,6 @@ readonly class CategoryTreeMovedSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->indexerRegistry->sendIndexingMessage(['category.indexer'], context: $event->getContext());
+        $this->indexerRegistry->sendIndexingMessage($event->getContext(), ['category.indexer']);
     }
 }

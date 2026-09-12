@@ -104,16 +104,16 @@ class TenantOwnedPaymentAggregateTest extends TestCase
             );
         }
 
-        $expectedTenants = [
-            'platform' => null,
+        $expectedDataScopes = [
+            'platform' => Defaults::PLATFORM_DATA_SCOPE,
             'tenant-a' => $this->tenantA,
             'tenant-b' => $this->tenantB,
-            'global' => null,
+            'global' => Defaults::PLATFORM_DATA_SCOPE,
         ];
         foreach ($ids as $scope => $scopeIds) {
-            $this->assertStoredTenant('payment_app_translation', 'payment_app_id', $scopeIds['app'], $expectedTenants[$scope]);
+            $this->assertStoredDataScope('payment_app_translation', 'payment_app_id', $scopeIds['app'], $expectedDataScopes[$scope]);
             foreach ($this->entityIdMap() as $entityName => $idKey) {
-                $this->assertStoredTenant($entityName, 'id', $scopeIds[$idKey], $expectedTenants[$scope]);
+                $this->assertStoredDataScope($entityName, 'id', $scopeIds[$idKey], $expectedDataScopes[$scope]);
             }
         }
 
@@ -350,14 +350,14 @@ class TenantOwnedPaymentAggregateTest extends TestCase
         ];
     }
 
-    private function assertStoredTenant(string $table, string $idColumn, string $id, ?string $expectedTenantId): void
+    private function assertStoredDataScope(string $table, string $idColumn, string $id, string $expectedDataScopeId): void
     {
-        $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
+        $dataScopeId = static::getContainer()->get(Connection::class)->fetchOne(
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
             ['id' => Uuid::fromHexToBytes($id)],
         );
 
-        static::assertSame($expectedTenantId, $tenantId === false ? null : $tenantId);
+        static::assertSame($expectedDataScopeId, $dataScopeId === false ? null : $dataScopeId);
     }
 
     private function assertWriteRejected(\Closure $write, string $message): void

@@ -10,6 +10,7 @@ use Contena\Core\System\SystemConfig\Store\MemoizedSystemConfigStore;
 use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Contena\Core\System\SystemConfig\SystemConfigLoader;
+use Contena\Core\System\SystemConfig\SystemConfigScopeResolver;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\Test\TestDefaults;
@@ -38,7 +39,8 @@ class SystemConfigServiceTest extends TestCase
             static::getContainer()->get('event_dispatcher'),
             new SymfonySystemConfigService([]),
             static::getContainer()->get(CacheTagCollector::class),
-            new NativeClock()
+            new NativeClock(),
+            static::getContainer()->get(SystemConfigScopeResolver::class),
         );
     }
 

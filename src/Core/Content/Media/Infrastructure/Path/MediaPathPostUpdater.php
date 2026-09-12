@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Media\Infrastructure\Path;
 
 use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
 use Contena\Core\Content\Media\DataAbstractionLayer\MediaIndexingMessage;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
@@ -32,9 +33,9 @@ class MediaPathPostUpdater extends SynchronousPostUpdateIndexer
         return 'media.path.post_update';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator('media', $offset);
+        $iterator = $this->iteratorFactory->createIterator('media', $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -42,7 +43,7 @@ class MediaPathPostUpdater extends SynchronousPostUpdateIndexer
             return null;
         }
 
-        return new EntityIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new EntityIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -69,14 +70,14 @@ class MediaPathPostUpdater extends SynchronousPostUpdateIndexer
 
         // Because the thumbnails are changed we need to trigger the media indexer as well,
         // because the thumbnail struct is denormalized into the media table
-        $mediaMessage = new MediaIndexingMessage($message->getData(), $message->getOffset(), $message->getContext());
+        $mediaMessage = new MediaIndexingMessage($message->getData(), $message->getContext(), $message->getOffset());
         $mediaMessage->setIndexer('media.indexer');
         $this->indexerRegistry->__invoke($mediaMessage);
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator('media', null)->fetchCount();
+        return $this->iteratorFactory->createIterator('media', $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\Maintenance\Member\Service;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -49,8 +50,8 @@ class MemberProvisionerTest extends TestCase
         static::assertIsArray($channel);
         static::assertSame($channel['member_group_id'], $member->getGroupId());
         static::assertSame($channel['language_id'], $member->getLanguageId());
-        static::assertNull($connection->fetchOne(
-            'SELECT LOWER(HEX(`tenant_id`)) FROM `member` WHERE `id` = :id',
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $connection->fetchOne(
+            'SELECT LOWER(HEX(`data_scope_id`)) FROM `member` WHERE `id` = :id',
             ['id' => Uuid::fromHexToBytes($member->getId())],
         ) ?: null);
 

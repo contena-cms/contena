@@ -54,12 +54,8 @@ class KeywordLoader
         $query->andWhere('(' . implode(' OR ', $wheres) . ')');
         $query->addOrderBy('keyword', 'ASC');
 
-        if ($context->getTenantId() !== null) {
-            $query->andWhere('tenant_id = :tenantId');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($context->getTenantId()));
-        } else {
-            $query->andWhere('tenant_id IS NULL');
-        }
+        $query->andWhere('data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($context->getDataScopeId()));
 
         $query->setParameter('language', Uuid::fromHexToBytes($context->getLanguageId()));
 

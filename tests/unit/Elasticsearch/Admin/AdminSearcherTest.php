@@ -6,6 +6,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Flow\FlowCollection;
 use Contena\Core\Content\Flow\FlowDefinition;
 use Contena\Core\Content\Flow\FlowEntity;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -37,6 +38,10 @@ use Psr\Log\NullLogger;
 #[CoversClass(AdminSearcher::class)]
 class AdminSearcherTest extends TestCase
 {
+    private const string TENANT_A = '809c1844f4734243b6aa04aba860cd45';
+
+    private const string TENANT_B = 'b7d2554b0ce847cd82f3ac9bd1c0dfca';
+
     private Client&MockObject $client;
 
     private AdminSearcher $searcher;
@@ -120,10 +125,10 @@ class AdminSearcherTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('msearch')
-            ->with($this->getQueryBody('elasticsearch*', '5s', 'tenant-a'))
+            ->with($this->getQueryBody('elasticsearch*', '5s', self::TENANT_A))
             ->willReturn($this->getMockResponse('c1a28776116d4431a2208eb2960ec340 elasticsearch'));
 
-        $data = $this->searcher->search('elasticsearch', ['blog'], Context::createTenantContext('tenant-a'));
+        $data = $this->searcher->search('elasticsearch', ['blog'], Context::createTenantContext(self::TENANT_A));
 
         $this->assertSearchResult($data, 1, 'blog-listing', 'ct-admin-blog-listing');
     }
@@ -133,10 +138,10 @@ class AdminSearcherTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('msearch')
-            ->with($this->getQueryBody('elasticsearch*', '5s', 'tenant-b'))
+            ->with($this->getQueryBody('elasticsearch*', '5s', self::TENANT_B))
             ->willReturn($this->getMockResponse('c1a28776116d4431a2208eb2960ec340 elasticsearch'));
 
-        $data = $this->searcher->search('elasticsearch', ['blog'], Context::createTenantContext('tenant-b'));
+        $data = $this->searcher->search('elasticsearch', ['blog'], Context::createTenantContext(self::TENANT_B));
 
         $this->assertSearchResult($data, 1, 'blog-listing', 'ct-admin-blog-listing');
     }
@@ -146,7 +151,7 @@ class AdminSearcherTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('msearch')
-            ->with($this->getQueryBody('elasticsearch*', '5s', platformOnly: false))
+            ->with($this->getQueryBody('elasticsearch*', '5s', null))
             ->willReturn($this->getMockResponse('c1a28776116d4431a2208eb2960ec340 elasticsearch'));
 
         $data = $this->searcher->search('elasticsearch', ['blog'], Context::createGlobalContext());
@@ -355,8 +360,11 @@ class AdminSearcherTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    private function getQueryBody(string $query, string $timeout = '5s', ?string $tenantId = null, bool $platformOnly = true): array
-    {
+    private function getQueryBody(
+        string $query,
+        string $timeout = '5s',
+        ?string $dataScopeId = Defaults::PLATFORM_DATA_SCOPE,
+    ): array {
         $originalTerm = rtrim($query, '*');
         $splitTerms = explode(' ', $originalTerm);
         $lastPart = (string) end($splitTerms);
@@ -406,16 +414,10 @@ class AdminSearcherTest extends TestCase
         ];
 
         $bool = ['should' => $shouldQueries];
-        if ($tenantId !== null) {
+        if ($dataScopeId !== null) {
             $bool['filter'] = [
-                ['term' => ['tenantId' => $tenantId]],
+                ['term' => ['dataScopeId' => $dataScopeId]],
             ];
-        } elseif ($platformOnly) {
-            $bool['filter'] = [[
-                'bool' => [
-                    'must_not' => [['exists' => ['field' => 'tenantId']]],
-                ],
-            ]];
         }
 
         return [

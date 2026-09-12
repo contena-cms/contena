@@ -54,7 +54,7 @@ class DomainLoader extends AbstractDomainLoader
         $query->leftJoin('channel', 'theme_channel', 'theme_channel', 'channel.id = theme_channel.channel_id');
         $query->leftJoin('theme_channel', 'theme', 'theme', 'theme_channel.theme_id = theme.id');
         $query->leftJoin('theme', 'theme', 'parentTheme', 'theme.parent_theme_id = parentTheme.id');
-        $query->where('channel.tenant_id = UNHEX(:tenantId)');
+        $query->where('channel.data_scope_id = UNHEX(:tenantId)');
         $query->andWhere('channel.type_id = UNHEX(:typeId)');
         $query->andWhere('channel.active = 1');
         $query->setParameter('tenantId', $tenantId);

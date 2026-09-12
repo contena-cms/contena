@@ -17,9 +17,9 @@ class IterateEntityIndexerMessage implements AsyncMessageInterface, Deduplicatab
      */
     public function __construct(
         protected string $indexer,
-        protected ?array $offset,
+        private readonly Context $context,
+        protected ?array $offset = null,
         protected array $skip = [],
-        private readonly ?Context $context = null,
     ) {
     }
 
@@ -54,7 +54,7 @@ class IterateEntityIndexerMessage implements AsyncMessageInterface, Deduplicatab
 
     public function getContext(): Context
     {
-        return $this->context ?? Context::createCLIContext();
+        return $this->context;
     }
 
     public function deduplicationId(): ?string

@@ -72,7 +72,7 @@ class SendMailActionTenantTest extends TestCase
         $logger->expects($this->once())->method('error')->with('Could not send flow mail.', [
             'exception' => $exception,
             'flowEvent' => 'tenant.flow.event',
-            'tenantId' => $tenant->id,
+            'dataScopeId' => $tenant->id,
         ]);
 
         $this->action($mailService, $logger)->handleFlow($this->flow($context));

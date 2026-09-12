@@ -61,9 +61,6 @@ class SendMailAction extends FlowAction implements DelayableAction
 
         $context = $flow->getContext();
         $templateCriteria = new Criteria([$templateId]);
-        if ($context->hasGlobalTenantAccess()) {
-            $templateCriteria->addFilter(new EqualsFilter('tenantId', null));
-        }
 
         $template = $this->mailTemplateRepository->search($templateCriteria, $context)->getEntities()->first();
         if (!$template instanceof MailTemplateEntity) {
@@ -94,7 +91,7 @@ class SendMailAction extends FlowAction implements DelayableAction
             $this->logger->error('Could not send flow mail.', [
                 'exception' => $exception,
                 'flowEvent' => $flow->getName(),
-                'tenantId' => $context->getTenantId(),
+                'dataScopeId' => $context->getDataScopeId(),
             ]);
         }
     }
@@ -119,10 +116,6 @@ class SendMailAction extends FlowAction implements DelayableAction
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('admin', true));
         $criteria->addFilter(new EqualsFilter('active', true));
-        if ($context->hasGlobalTenantAccess()) {
-            $criteria->addFilter(new EqualsFilter('tenantId', null));
-        }
-
         $recipients = [];
         foreach ($this->userRepository->search($criteria, $context)->getEntities() as $user) {
             if ($user instanceof UserEntity) {

@@ -83,7 +83,7 @@ final class MemberGroupAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             '
             SELECT LOWER(HEX(member_group.id)) as id,
-                   LOWER(HEX(member_group.tenant_id)) as tenantId,
+                   LOWER(HEX(member_group.data_scope_id)) as dataScopeId,
                    GROUP_CONCAT(DISTINCT member_group_translation.name SEPARATOR " ") as name
             FROM member_group
                 INNER JOIN member_group_translation
@@ -105,7 +105,7 @@ final class MemberGroupAdminSearchIndexer extends AbstractAdminIndexer
             $text = \implode(' ', array_filter([$id, $row['name'] ?? '']));
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => \strtolower($text),
                 'completion' => $this->buildCompletion([\is_string($row['name'] ?? null) ? $row['name'] : null]),
             ];

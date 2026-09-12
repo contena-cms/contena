@@ -6,6 +6,7 @@ use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslat
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
@@ -54,14 +55,14 @@ class CategoryIndexer extends EntityIndexer
         return 'category.indexer';
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->getIterator(null)->fetchCount();
+        return $this->getIterator(null, $context)->fetchCount();
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->getIterator($offset);
+        $iterator = $this->getIterator($offset, $context);
 
         $ids = $iterator->fetch();
 
@@ -71,7 +72,8 @@ class CategoryIndexer extends EntityIndexer
 
         return new CategoryIndexingMessage(
             data: array_values($ids),
-            offset: $iterator->getOffset()
+            context: $context,
+            offset: $iterator->getOffset(),
         );
     }
 
@@ -157,7 +159,7 @@ class CategoryIndexer extends EntityIndexer
         $updatersSkips = $this->getSkipUpdaters($runAllUpdaters, $parentIdChanged, $nameChanged);
 
         foreach ($chunks as $chunk) {
-            $childrenIndexingMessage = new CategoryIndexingMessage($chunk, null, $event->getContext());
+            $childrenIndexingMessage = new CategoryIndexingMessage($chunk, $event->getContext());
             $childrenIndexingMessage->setIndexer($this->getName());
             $childrenIndexingMessage->addSkip(...$updatersSkips);
             $childrenIndexingMessage->setChildCountOnlyIds($childCountOnlyIds);
@@ -166,7 +168,7 @@ class CategoryIndexer extends EntityIndexer
             $this->messageBus->dispatch($childrenIndexingMessage);
         }
 
-        $message = new CategoryIndexingMessage($idsForReturnedMessage, null, $event->getContext());
+        $message = new CategoryIndexingMessage($idsForReturnedMessage, $event->getContext());
         $message->addSkip(...$updatersSkips);
         $message->setChildCountOnlyIds($childCountOnlyIds);
 
@@ -268,9 +270,9 @@ SQL;
     /**
      * @param array{offset: int|null}|null $offset
      */
-    private function getIterator(?array $offset): IterableQuery
+    private function getIterator(?array $offset, Context $context): IterableQuery
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
     }
 
     /**

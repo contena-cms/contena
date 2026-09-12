@@ -22,7 +22,7 @@ class MediaEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected ?string $userId = null;
 
@@ -100,14 +100,14 @@ class MediaEntity extends Entity
         return parent::get($property);
     }
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getUserId(): ?string

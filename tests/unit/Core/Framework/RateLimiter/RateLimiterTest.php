@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\RateLimiter;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterException;
@@ -18,8 +19,9 @@ use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 #[CoversClass(RateLimiter::class)]
 class RateLimiterTest extends TestCase
 {
-    public function testTenantContextScopesLimiterKeyWhilePlatformContextKeepsTheOriginalKey(): void
+    public function testEveryContextScopesLimiterKeyByItsExplicitDataScope(): void
     {
+        $tenantId = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
         $keys = [];
         $limiter = new FixedWindowLimiter('test', 2, new \DateInterval('PT1M'), new InMemoryStorage());
 
@@ -35,9 +37,12 @@ class RateLimiterTest extends TestCase
         $rateLimiter = new RateLimiter();
         $rateLimiter->registerLimiterFactory('some-route', $factory);
         $rateLimiter->ensureAccepted('some-route', 'some-key', Context::createDefaultContext());
-        $rateLimiter->ensureAccepted('some-route', 'some-key', Context::createTenantContext('tenant-a'));
+        $rateLimiter->ensureAccepted('some-route', 'some-key', Context::createTenantContext($tenantId));
 
-        static::assertSame(['some-key', 'tenant:tenant-a:some-key'], $keys);
+        static::assertSame([
+            'data-scope:' . Defaults::PLATFORM_DATA_SCOPE . ':some-key',
+            'data-scope:' . $tenantId . ':some-key',
+        ], $keys);
     }
 
     public function testExceptionIsThrownForUnknownRoute(): void
@@ -98,11 +103,12 @@ class RateLimiterTest extends TestCase
         $limiter = new FixedWindowLimiter('test', 1, new \DateInterval('PT1M'), new InMemoryStorage());
 
         $factory = $this->createMock(RateLimiterFactory::class);
-        $factory->expects($this->exactly(3))->method('create')->with('tenant:tenant-a:some-key')->willReturn($limiter);
+        $tenantId = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+        $factory->expects($this->exactly(3))->method('create')->with('data-scope:' . $tenantId . ':some-key')->willReturn($limiter);
 
         $rateLimiter = new RateLimiter();
         $rateLimiter->registerLimiterFactory('some-route', $factory);
-        $context = Context::createTenantContext('tenant-a');
+        $context = Context::createTenantContext($tenantId);
         $rateLimiter->ensureAcceptedIfConfigured('some-route', 'some-key', $context);
         $rateLimiter->resetIfConfigured('some-route', 'some-key', $context);
 

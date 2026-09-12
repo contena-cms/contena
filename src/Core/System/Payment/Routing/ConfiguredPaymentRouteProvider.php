@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Payment\Routing;
 
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -34,35 +33,34 @@ final class ConfiguredPaymentRouteProvider implements PaymentRouteProviderInterf
             return;
         }
 
-        foreach ([$routing->app->getId(), null] as $appId) {
-            $context = $appId === null ? Context::createDefaultContext() : $routing->context;
-            $criteria = new Criteria();
-            $criteria->addFilter(new EqualsFilter('paymentAppId', $appId));
-            $criteria->addFilter(new EqualsFilter('status', true));
-            $criteria->addFilter(new EqualsFilter('channel.status', true));
-            $criteria->addAssociation('channel');
-            $criteria->addSorting(new FieldSorting('channel.sort'), new FieldSorting('id'));
+        $appId = $routing->app->getId();
+        $context = $routing->context;
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('paymentAppId', $appId));
+        $criteria->addFilter(new EqualsFilter('status', true));
+        $criteria->addFilter(new EqualsFilter('channel.status', true));
+        $criteria->addAssociation('channel');
+        $criteria->addSorting(new FieldSorting('channel.sort'), new FieldSorting('id'));
 
-            $configs = $this->configRepository->search($criteria, $context)->getEntities();
-            // Method assignment order takes precedence over channel order.
-            foreach ($channels ?? array_map(static fn ($config): string => $config->channel->code ?? '', $configs->getElements())
-                |> array_unique(...)
-                |> array_values(...) as $channel) {
-                foreach ($configs as $config) {
-                    $configuredChannel = $config->channel;
-                    if ($configuredChannel === null || !$config->status || !$configuredChannel->status) {
-                        continue;
-                    }
-                    if ($config->paymentAppId !== $appId || $config->tenantId !== $context->getTenantId()) {
-                        continue;
-                    }
-                    if ($configuredChannel->code !== $channel || !$this->gatewayRegistry->has($channel)) {
-                        continue;
-                    }
-
-                    $gateway = $this->gatewayRegistry->get($channel);
-                    yield new PaymentRoute($gateway, $config->getId(), $config->config ?? [], $appId === null);
+        $configs = $this->configRepository->search($criteria, $context)->getEntities();
+        // Method assignment order takes precedence over channel order.
+        foreach ($channels ?? array_map(static fn ($config): string => $config->channel->code ?? '', $configs->getElements())
+            |> array_unique(...)
+            |> array_values(...) as $channel) {
+            foreach ($configs as $config) {
+                $configuredChannel = $config->channel;
+                if ($configuredChannel === null || !$config->status || !$configuredChannel->status) {
+                    continue;
                 }
+                if ($config->paymentAppId !== $appId || $config->dataScopeId !== $context->getDataScopeId()) {
+                    continue;
+                }
+                if ($configuredChannel->code !== $channel || !$this->gatewayRegistry->has($channel)) {
+                    continue;
+                }
+
+                $gateway = $this->gatewayRegistry->get($channel);
+                yield new PaymentRoute($gateway, $config->getId(), $config->config ?? []);
             }
         }
     }

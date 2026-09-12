@@ -158,7 +158,7 @@ class ContentLayoutAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('terms of service 1.0 page 809c1844f4734243b6aa04aba860cd45', $document['text']);
         static::assertSame('Terms of service', $document['name']);
         static::assertSame('1.0', $document['version']);
@@ -173,7 +173,7 @@ class ContentLayoutAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'name' => 'Terms of service',
                     'version' => '1.0',
                     'rootSource' => 'page',

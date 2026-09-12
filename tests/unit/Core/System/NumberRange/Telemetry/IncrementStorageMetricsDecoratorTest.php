@@ -2,11 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\System\NumberRange\Telemetry;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\Telemetry\IncrementStorageMetricsDecorator;
 use Contena\Core\System\NumberRange\Telemetry\NumberRangeTypeResolver;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementState;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +29,8 @@ class IncrementStorageMetricsDecoratorTest extends TestCase
         $decorated = static::createStub(AbstractIncrementStorage::class);
         $decorated->method('reserve')->willReturn(42);
 
-        $result = $this->createDecorator($decorated, 'mysql')->reserve($this->config('member'));
+        $context = Context::createDefaultContext();
+        $result = $this->createDecorator($decorated, 'mysql')->reserve($this->config('member', $context), $context);
 
         static::assertSame(42, $result);
 
@@ -50,9 +54,10 @@ class IncrementStorageMetricsDecoratorTest extends TestCase
         $decorated->method('reserve')->willReturn(1);
 
         // creating config with missing technical_name
-        $config = $this->config(null);
+        $context = Context::createDefaultContext();
+        $config = $this->config(null, $context);
 
-        $this->createDecorator($decorated, 'mysql')->reserve($config);
+        $this->createDecorator($decorated, 'mysql')->reserve($config, $context);
 
         $duration = $this->getMetric('number_range.allocation.duration');
         static::assertInstanceOf(ConfiguredMetric::class, $duration);
@@ -66,9 +71,10 @@ class IncrementStorageMetricsDecoratorTest extends TestCase
         $decorated->method('reserve')->willThrowException($exception);
 
         $thrown = null;
+        $context = Context::createDefaultContext();
 
         try {
-            $this->createDecorator($decorated, 'mysql')->reserve($this->config('member'));
+            $this->createDecorator($decorated, 'mysql')->reserve($this->config('member', $context), $context);
         } catch (\RuntimeException $e) {
             $thrown = $e;
         }
@@ -85,37 +91,43 @@ class IncrementStorageMetricsDecoratorTest extends TestCase
 
     public function testPreviewDelegatesAndEmitsNothing(): void
     {
-        $config = $this->config('member');
+        $context = Context::createDefaultContext();
+        $config = $this->config('member', $context);
 
         $decorated = $this->createMock(AbstractIncrementStorage::class);
         $decorated->expects($this->once())
             ->method('preview')
-            ->with($config)
+            ->with($config, $context)
             ->willReturn(7);
 
-        static::assertSame(7, $this->createDecorator($decorated, 'mysql')->preview($config));
+        static::assertSame(7, $this->createDecorator($decorated, 'mysql')->preview($config, $context));
         static::assertSame([], $this->emitted);
     }
 
     public function testListDelegatesAndEmitsNothing(): void
     {
+        $context = Context::createDefaultContext();
+        $state = new IncrementState($context->getDataScopeId(), Uuid::randomHex(), 5);
         $decorated = $this->createMock(AbstractIncrementStorage::class);
         $decorated->expects($this->once())
             ->method('list')
-            ->willReturn(['config-id' => 5]);
+            ->with($context)
+            ->willReturn([$state->numberRangeId => $state]);
 
-        static::assertSame(['config-id' => 5], $this->createDecorator($decorated, 'mysql')->list());
+        static::assertSame([$state->numberRangeId => $state], $this->createDecorator($decorated, 'mysql')->list($context));
         static::assertSame([], $this->emitted);
     }
 
     public function testSetDelegatesAndEmitsNothing(): void
     {
+        $context = Context::createDefaultContext();
+        $state = new IncrementState($context->getDataScopeId(), Uuid::randomHex(), 99);
         $decorated = $this->createMock(AbstractIncrementStorage::class);
         $decorated->expects($this->once())
             ->method('set')
-            ->with('config-id', 99);
+            ->with($state, $context);
 
-        $this->createDecorator($decorated, 'mysql')->set('config-id', 99);
+        $this->createDecorator($decorated, 'mysql')->set($state, $context);
 
         static::assertSame([], $this->emitted);
     }
@@ -144,12 +156,13 @@ class IncrementStorageMetricsDecoratorTest extends TestCase
     }
 
     /**
-     * @return array{id: string, pattern: string, start: ?int, technical_name?: string}
+     * @return array{id: string, dataScopeId: string, pattern: string, start: ?int, technical_name?: string}
      */
-    private function config(?string $technicalName): array
+    private function config(?string $technicalName, Context $context): array
     {
         $config = [
-            'id' => 'config-id',
+            'id' => Uuid::randomHex(),
+            'dataScopeId' => $context->getDataScopeId(),
             'pattern' => '{n}',
             'start' => 1,
         ];

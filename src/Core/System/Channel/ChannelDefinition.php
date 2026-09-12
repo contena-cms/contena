@@ -10,6 +10,7 @@ use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingP
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
@@ -25,7 +26,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
@@ -78,7 +78,7 @@ class ChannelDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of channel.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned channel.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for channel.'),
             new FkField('type_id', 'typeId', ChannelTypeDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of channel type.'),
             new FkField('language_id', 'languageId', LanguageDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of the default language.'),
             new FkField('country_id', 'countryId', CountryDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of the default country.'),

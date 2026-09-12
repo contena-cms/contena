@@ -21,7 +21,7 @@ class ReplicaConnectionResetterTest extends TestCase
         $connection->method('isConnectedToPrimary')->willReturn(true);
         $connection->expects($this->once())->method('ensureConnectedToReplica');
 
-        (new ReplicaConnectionResetter($connection))->reset();
+        new ReplicaConnectionResetter($connection)->reset();
     }
 
     public function testKeepsConnectionDuringOpenTransaction(): void
@@ -31,7 +31,7 @@ class ReplicaConnectionResetterTest extends TestCase
         $connection->method('isConnectedToPrimary')->willReturn(true);
         $connection->expects($this->never())->method('ensureConnectedToReplica');
 
-        (new ReplicaConnectionResetter($connection))->reset();
+        new ReplicaConnectionResetter($connection)->reset();
     }
 
     public function testDoesNothingWhenAlreadyOnReplica(): void
@@ -41,7 +41,7 @@ class ReplicaConnectionResetterTest extends TestCase
         $connection->method('isConnectedToPrimary')->willReturn(false);
         $connection->expects($this->never())->method('ensureConnectedToReplica');
 
-        (new ReplicaConnectionResetter($connection))->reset();
+        new ReplicaConnectionResetter($connection)->reset();
     }
 
     public function testIgnoresConnectionWithoutReplica(): void
@@ -49,6 +49,6 @@ class ReplicaConnectionResetterTest extends TestCase
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->never())->method(static::anything());
 
-        (new ReplicaConnectionResetter($connection))->reset();
+        new ReplicaConnectionResetter($connection)->reset();
     }
 }

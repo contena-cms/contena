@@ -78,7 +78,7 @@ final readonly class SendMailHandler
     {
         return [
             'mailDataPath' => $message->mailDataPath,
-            'tenantId' => $message->tenantId,
+            'dataScopeId' => $message->dataScopeId,
             ...$context,
         ];
     }

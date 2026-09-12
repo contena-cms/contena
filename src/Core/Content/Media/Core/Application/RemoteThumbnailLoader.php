@@ -151,15 +151,11 @@ class RemoteThumbnailLoader implements ResetInterface
             return $this->mediaFolderThumbnailSizes[$cacheKey];
         }
 
-        $tenantId = $context->getTenantId();
         $parameters = [];
         $tenantCondition = '';
-        if (!$context->hasGlobalTenantAccess()) {
-            $tenantCondition = ' WHERE mfcmts.tenant_id IS NULL AND mts.tenant_id IS NULL';
-            if ($tenantId !== null) {
-                $tenantCondition = ' WHERE mfcmts.tenant_id = :tenantId AND mts.tenant_id = :tenantId';
-                $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-            }
+        if (!$context->allowsCrossScopeReads()) {
+            $tenantCondition = ' WHERE mfcmts.data_scope_id = :dataScopeId AND mts.data_scope_id = :dataScopeId';
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
         }
 
         /** @var list<array{configuration_id: string, media_thumbnail_size_id: string, width: string, height: string}> $sizes */
@@ -189,11 +185,8 @@ class RemoteThumbnailLoader implements ResetInterface
         }
 
         $folderTenantCondition = '';
-        if (!$context->hasGlobalTenantAccess()) {
-            $folderTenantCondition = ' AND mf.tenant_id IS NULL AND mfc.tenant_id IS NULL';
-            if ($tenantId !== null) {
-                $folderTenantCondition = ' AND mf.tenant_id = :tenantId AND mfc.tenant_id = :tenantId';
-            }
+        if (!$context->allowsCrossScopeReads()) {
+            $folderTenantCondition = ' AND mf.data_scope_id = :dataScopeId AND mfc.data_scope_id = :dataScopeId';
         }
 
         /** @var list<array{folder_id: string, configuration_id: string, create_thumbnails: string}> $folderConfigurations */
@@ -231,11 +224,11 @@ class RemoteThumbnailLoader implements ResetInterface
 
     private function getTenantCacheKey(Context $context): string
     {
-        if ($context->hasGlobalTenantAccess()) {
+        if ($context->allowsCrossScopeReads()) {
             return 'global';
         }
 
-        return $context->getTenantId() ?? 'platform';
+        return $context->getDataScopeId();
     }
 
     private function getBaseUrl(): string

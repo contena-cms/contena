@@ -8,16 +8,13 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Notification\NotificationCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
-use Contena\Core\System\Tenant\TenantEntity;
 
 class IntegrationEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
-
-    protected ?TenantEntity $tenant = null;
+    protected string $dataScopeId;
 
     protected string $label;
 
@@ -37,24 +34,14 @@ class IntegrationEntity extends Entity
 
     protected ?NotificationCollection $createdNotifications = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
-    }
-
-    public function getTenant(): ?TenantEntity
-    {
-        return $this->tenant;
-    }
-
-    public function setTenant(?TenantEntity $tenant): void
-    {
-        $this->tenant = $tenant;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getLabel(): string

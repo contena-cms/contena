@@ -11,7 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -78,7 +78,7 @@ class DeleteThumbnailsCommandTest extends TestCase
             $this->thumbnailRepository,
             static::getContainer()->get('contena.filesystem.public'),
             static::getContainer()->get('contena.filesystem.private'),
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
             true,
         );
 

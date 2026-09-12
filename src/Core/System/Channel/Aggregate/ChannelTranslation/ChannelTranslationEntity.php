@@ -10,7 +10,7 @@ class ChannelTranslationEntity extends TranslationEntity
 {
     use EntityCustomFieldsTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $channelId;
 
@@ -28,14 +28,14 @@ class ChannelTranslationEntity extends TranslationEntity
 
     protected ?ChannelEntity $channel = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getChannelId(): string

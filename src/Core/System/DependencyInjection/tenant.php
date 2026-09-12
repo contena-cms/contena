@@ -2,12 +2,14 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
+use Contena\Core\System\DataScope\DataScopeEntity;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Core\System\Tenant\Resolver\SubdomainTenantResolver;
 use Contena\Core\System\Tenant\Resolver\TenantResolverChain;
 use Contena\Core\System\Tenant\Subscriber\ResolvedTenantSubscriber;
 use Contena\Core\System\Tenant\Subscriber\TenantCodeImmutableSubscriber;
+use Contena\Core\System\Tenant\Subscriber\TenantDataScopeSubscriber;
 use Contena\Core\System\Tenant\TenantEntity;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -16,6 +18,8 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
+
+    $services->set(DataScopeEntity::class)->autoconfigure();
 
     // Attribute-based entity; autoconfiguration applies the `contena.entity`
     // tag which registers `tenant.definition` and `tenant.repository`.
@@ -40,6 +44,10 @@ return static function (ContainerConfigurator $container): void {
         ->args([service(Connection::class)])
         ->tag('kernel.event_subscriber');
 
-    $services->set(TenantScopeContextProvider::class)
+    $services->set(TenantDataScopeSubscriber::class)
+        ->args([service(Connection::class)])
+        ->tag('kernel.event_subscriber');
+
+    $services->set(DataScopeContextProvider::class)
         ->args([service(Connection::class)]);
 };

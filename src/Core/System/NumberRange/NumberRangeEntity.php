@@ -14,6 +14,8 @@ class NumberRangeEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
+    protected string $dataScopeId;
+
     protected ?string $typeId = null;
 
     protected bool $global;
@@ -31,6 +33,16 @@ class NumberRangeEntity extends Entity
     protected ?NumberRangeStateEntity $state = null;
 
     protected ?NumberRangeTranslationCollection $translations = null;
+
+    public function getDataScopeId(): string
+    {
+        return $this->dataScopeId;
+    }
+
+    public function setDataScopeId(string $dataScopeId): void
+    {
+        $this->dataScopeId = $dataScopeId;
+    }
 
     public function getName(): ?string
     {

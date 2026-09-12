@@ -142,7 +142,7 @@ final class MemberAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(member.id)) AS id,
-                   LOWER(HEX(member.tenant_id)) AS tenantId,
+                   LOWER(HEX(member.data_scope_id)) AS dataScopeId,
                    tag_agg.tags,
                    tag_agg.tagIds,
                    address_agg.country,
@@ -228,7 +228,7 @@ SQL,
 
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => strtolower($text),
                 'completion' => $completion,
             ];

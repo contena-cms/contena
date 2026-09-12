@@ -11,9 +11,13 @@ interface CorsHeaderProviderInterface
 {
     public const string SERVICE_TAG = 'contena.api.cors_header_provider';
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     */
     public function getAllowedHeaders(): array;
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     */
     public function getExposedHeaders(): array;
 }

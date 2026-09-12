@@ -48,9 +48,8 @@ class AdministrationControllerTest extends TestCase
     public function testResetExcludedSearchTerm(Context $context, string|false $englishLanguageId, array $excludedTerms): void
     {
         $searchConfigId = Uuid::randomBytes();
-        $tenantId = $context->getTenantId();
-        $tenantCondition = $tenantId === null ? 'tenant_id IS NULL' : 'tenant_id = :tenant_id';
-        $tenantParameters = $tenantId === null ? [] : ['tenant_id' => Uuid::fromHexToBytes($tenantId)];
+        $tenantCondition = 'data_scope_id = :data_scope_id';
+        $tenantParameters = ['data_scope_id' => Uuid::fromHexToBytes($context->getDataScopeId())];
 
         $connection = $this->createMock(Connection::class);
         $fetchCount = 0;

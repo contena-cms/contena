@@ -2,10 +2,13 @@
 
 namespace Contena\Tests\Migration\Core\V6_8;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_8\Migration1784207014CreateSystemConfig;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +37,7 @@ class Migration1784207014CreateSystemConfigTest extends TestCase
         $this->connection->executeStatement('ALTER TABLE `system_config` ADD CONSTRAINT `json.system_config.configuration_value` CHECK (JSON_VALID(`configuration_value`))');
     }
 
-    public function testCreatesGlobalSystemConfigTableIdempotently(): void
+    public function testCreatesDataScopedSystemConfigTableIdempotently(): void
     {
         $migration = new Migration1784207014CreateSystemConfig();
 
@@ -43,10 +46,33 @@ class Migration1784207014CreateSystemConfigTest extends TestCase
 
         static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'configuration_key'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'configuration_value'));
-        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'tenant_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'data_scope_id'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'channel_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'configuration_target_id'));
+        static::assertFalse(TableHelper::columnExists($this->connection, 'system_config', 'tenant_id'));
         static::assertFalse(TableHelper::columnExists($this->connection, 'system_config', 'scope_type'));
         static::assertFalse(TableHelper::columnExists($this->connection, 'system_config', 'scope_id'));
-        static::assertTrue(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.configuration_key'));
+        static::assertTrue(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.scope_target_key'));
+    }
+
+    public function testRejectsDuplicateScopeWideKeys(): void
+    {
+        new Migration1784207014CreateSystemConfig()->update($this->connection);
+
+        $row = [
+            'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+            'configuration_key' => 'duplicate.scope.key',
+            'configuration_value' => '{"_value":true}',
+            'channel_id' => null,
+            'created_at' => '2026-01-01 00:00:00.000',
+        ];
+        $this->connection->insert('system_config', $row);
+
+        $this->expectException(UniqueConstraintViolationException::class);
+        $this->connection->insert('system_config', [
+            ...$row,
+            'id' => Uuid::randomBytes(),
+        ]);
     }
 }

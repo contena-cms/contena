@@ -48,8 +48,8 @@ readonly class FlowFactory
             $context->getVersionId(),
             $context->considerInheritance(),
             $context->getRuleIds(),
-            tenantId: $context->getTenantId(),
-            globalTenantAccess: $context->hasGlobalTenantAccess(),
+            dataScope: $context->getDataScope(),
+            dataScopeReadMode: $context->getDataScopeReadMode(),
         );
         $systemContext->setExtensions($context->getExtensions());
 

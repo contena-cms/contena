@@ -142,7 +142,7 @@ class MemberAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('member name 987654321 test@example.com 12345 test tag viet nam ha noi address firstname address lastname da nang street 550000 123 line 1 line 2 809c1844f4734243b6aa04aba860cd45', $document['text']);
         static::assertSame(['member name', '987654321', 'test@example.com'], $document['completion']);
         static::assertTrue($document['active']);
@@ -165,7 +165,7 @@ class MemberAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'tags' => 'test Tag',
                     'tagIds' => 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6',
                     'country' => 'Viet Nam',

@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Sitemap\Service;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -36,12 +35,7 @@ class SitemapChannelProvider
      */
     public function getChannels(Criteria $criteria): \Generator
     {
-        yield from $this->iterate($criteria, Context::createDefaultContext());
-
-        $tenantCriteria = clone $criteria;
-        $tenantCriteria->addFilter(new NotEqualsFilter('tenantId', null));
-
-        yield from $this->iterate($tenantCriteria, Context::createGlobalContext());
+        yield from $this->iterate($criteria, Context::createGlobalContext());
     }
 
     /**

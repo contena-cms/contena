@@ -78,10 +78,10 @@ class TenantOwnedChannelAggregateTest extends TestCase
         }
 
         $expectedTenants = [
-            'platform' => null,
+            'platform' => Defaults::PLATFORM_DATA_SCOPE,
             'tenant-a' => $this->tenantA,
             'tenant-b' => $this->tenantB,
-            'global' => null,
+            'global' => Defaults::PLATFORM_DATA_SCOPE,
         ];
         foreach ($ids as $scope => $scopeIds) {
             $expectedTenant = $expectedTenants[$scope];
@@ -261,7 +261,7 @@ class TenantOwnedChannelAggregateTest extends TestCase
     private function assertStoredTenant(string $table, string $idColumn, string $id, ?string $expectedTenantId): void
     {
         $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
             ['id' => Uuid::fromHexToBytes($id)],
         );
 

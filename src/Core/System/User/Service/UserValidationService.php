@@ -27,7 +27,7 @@ class UserValidationService
      */
     public function checkEmailUnique(string $userEmail, string $userId, Context $context): bool
     {
-        $context = $this->writeScopeContext($context);
+        $context = $this->globalIdentityContext($context);
         $criteria = new Criteria();
 
         $criteria->addFilter(
@@ -48,7 +48,7 @@ class UserValidationService
      */
     public function checkUsernameUnique(string $userUsername, string $userId, Context $context): bool
     {
-        $context = $this->writeScopeContext($context);
+        $context = $this->globalIdentityContext($context);
         $criteria = new Criteria();
 
         $criteria->addFilter(
@@ -64,12 +64,8 @@ class UserValidationService
         return $this->userRepo->searchIds($criteria, $context)->getTotal() === 0;
     }
 
-    private function writeScopeContext(Context $context): Context
+    private function globalIdentityContext(Context $context): Context
     {
-        if ($context->hasGlobalTenantAccess()) {
-            return Context::createDefaultContext($context->getSource());
-        }
-
-        return $context;
+        return Context::createGlobalContext($context->getSource());
     }
 }

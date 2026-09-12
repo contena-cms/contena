@@ -34,6 +34,7 @@ class AdminConfigurationService
             'name' => $user['name'],
             'email' => $user['email'],
             'admin' => true,
+            'readAllScopes' => true,
         ];
 
         if ($isDefaultAdmin) {

@@ -69,7 +69,7 @@ class ElasticsearchBlogDefinition extends AbstractElasticsearchDefinition
             ]],
             'properties' => [
                 'id' => self::KEYWORD_FIELD,
-                'tenantId' => self::KEYWORD_FIELD,
+                'dataScopeId' => self::KEYWORD_FIELD,
                 'name' => $technicalLanguageFieldsWithExact,
                 'description' => $languageFieldsWithLengthNorm,
                 'descriptionTeaser' => $languageFields,
@@ -168,7 +168,7 @@ class ElasticsearchBlogDefinition extends AbstractElasticsearchDefinition
 
             $documents[$id] = [
                 'id' => $id,
-                'tenantId' => $item['tenantId'],
+                'dataScopeId' => $item['dataScopeId'],
                 'autoIncrement' => (float) $item['autoIncrement'],
                 'active' => (bool) $item['active'],
                 'type' => $item['type'],
@@ -225,7 +225,7 @@ class ElasticsearchBlogDefinition extends AbstractElasticsearchDefinition
         $sql = <<<'SQL'
 SELECT
     LOWER(HEX(blog.id)) AS id,
-    LOWER(HEX(blog.tenant_id)) AS tenantId,
+    LOWER(HEX(blog.data_scope_id)) AS dataScopeId,
     blog.active,
     blog.type,
     blog.auto_increment AS autoIncrement,
@@ -244,27 +244,22 @@ FROM blog
     LEFT JOIN blog_tag
         ON blog_tag.blog_id = blog.id AND blog_tag.blog_version_id = blog.version_id
     LEFT JOIN tag ON tag.id = blog_tag.tag_id
-WHERE blog.id IN (:ids) AND blog.version_id = :liveVersionId #tenant-filter#
+WHERE blog.id IN (:ids) AND blog.version_id = :liveVersionId #data-scope-filter#
 GROUP BY blog.id
 SQL;
 
-        $tenantFilter = '';
+        $dataScopeFilter = '';
         $parameters = [
             'ids' => $ids,
             'liveVersionId' => Uuid::fromHexToBytes($context->getVersionId()),
         ];
-        if (!$context->hasGlobalTenantAccess()) {
-            $tenantId = $context->getTenantId();
-            if ($tenantId === null) {
-                $tenantFilter = 'AND blog.tenant_id IS NULL';
-            } else {
-                $tenantFilter = 'AND blog.tenant_id = :tenantId';
-                $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-            }
+        if (!$context->allowsCrossScopeReads()) {
+            $dataScopeFilter = 'AND blog.data_scope_id = :dataScopeId';
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
         }
 
         $mapping = [
-            '#tenant-filter#' => $tenantFilter,
+            '#data-scope-filter#' => $dataScopeFilter,
             '#tags#' => SqlHelper::objectArray([
                 'name' => 'tag.name',
                 'id' => 'LOWER(HEX(tag.id))',

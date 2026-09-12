@@ -4,6 +4,7 @@ namespace Contena\Core\System\NumberRange\Aggregate\NumberRangeTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -41,6 +42,7 @@ class NumberRangeTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new StringField('name', 'name')->addFlags(new Required()),
             new StringField('description', 'description'),
             new CustomFields(),

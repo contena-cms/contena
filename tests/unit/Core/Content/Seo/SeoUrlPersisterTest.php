@@ -3,6 +3,7 @@
 namespace Contena\Tests\Unit\Core\Content\Seo;
 
 use Contena\Core\Content\Seo\SeoUrlPersister;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -60,6 +61,7 @@ class SeoUrlPersisterTest extends TestCase
 
         $seoChannel = new ChannelEntity();
         $seoChannel->setId(Uuid::randomHex());
+        $seoChannel->setDataScopeId(Defaults::PLATFORM_DATA_SCOPE);
 
         $seoUrlPersister->updateSeoUrls(
             Context::createDefaultContext(),
@@ -202,6 +204,7 @@ class SeoUrlPersisterTest extends TestCase
 
         $seoChannel = new ChannelEntity();
         $seoChannel->setId(Uuid::randomHex());
+        $seoChannel->setDataScopeId(Defaults::PLATFORM_DATA_SCOPE);
 
         $seoUrlPersister->forceUpdateSeoUrls(
             Context::createDefaultContext(),
@@ -275,6 +278,7 @@ class SeoUrlPersisterTest extends TestCase
 
         $seoChannel = new ChannelEntity();
         $seoChannel->setId(Uuid::randomHex());
+        $seoChannel->setDataScopeId(Defaults::PLATFORM_DATA_SCOPE);
 
         $seoUrlPersister->updateSeoUrls(
             Context::createDefaultContext(),
@@ -360,6 +364,7 @@ class SeoUrlPersisterTest extends TestCase
 
         $channel = new ChannelEntity();
         $channel->setId($channelId);
+        $channel->setDataScopeId(Defaults::PLATFORM_DATA_SCOPE);
 
         $seoUrlPersister = $this->createSeoUrlPersister($connection);
         $context = Context::createDefaultContext();

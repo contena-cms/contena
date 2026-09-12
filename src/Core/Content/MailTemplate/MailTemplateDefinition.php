@@ -7,6 +7,7 @@ use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateTranslation\MailTemp
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
@@ -16,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
@@ -50,7 +50,7 @@ class MailTemplateDefinition extends EntityDefinition
     {
         $fields = new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned mail template.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for mail template.'),
 
             new FkField('mail_template_type_id', 'mailTemplateTypeId', MailTemplateTypeDefinition::class)->addFlags(new Required()),
             new BoolField('system_default', 'systemDefault')->addFlags(new ApiAware()),

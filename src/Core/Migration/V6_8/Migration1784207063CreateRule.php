@@ -20,7 +20,7 @@ class Migration1784207063CreateRule extends MigrationStep
         $connection->executeStatement(<<<'SQL'
             CREATE TABLE IF NOT EXISTS `rule` (
                 `id` BINARY(16) NOT NULL,
-                `tenant_id` BINARY(16) NULL,
+                `data_scope_id` BINARY(16) NOT NULL,
                 `name` VARCHAR(500) NOT NULL,
                 `description` LONGTEXT NULL,
                 `priority` INT NOT NULL DEFAULT 1,
@@ -31,10 +31,10 @@ class Migration1784207063CreateRule extends MigrationStep
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
                 PRIMARY KEY (`id`),
-                INDEX `idx.rule.tenant_id` (`tenant_id`),
+                INDEX `idx.rule.data_scope_id` (`data_scope_id`),
                 CONSTRAINT `json.rule.areas` CHECK (JSON_VALID(`areas`)),
                 CONSTRAINT `json.rule.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-                CONSTRAINT `fk.rule.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT `fk.rule.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             SQL);
     }

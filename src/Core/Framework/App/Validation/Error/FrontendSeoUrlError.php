@@ -9,7 +9,7 @@ use Contena\Core\Framework\Log\Package;
  * @internal only for use by the app-system
  */
 #[Package('framework')]
-class FrontendSeoUrlError extends Error
+class FrontendSeoUrlError implements Error
 {
     private const KEY = 'manifest-invalid-frontend-seo-url';
 
@@ -22,7 +22,6 @@ class FrontendSeoUrlError extends Error
             "The following frontend SEO URLs are invalid:\n- %s",
             implode("\n- ", $violations)
         );
-
     }
 
     public function getMessageKey(): string
@@ -30,8 +29,23 @@ class FrontendSeoUrlError extends Error
         return self::KEY;
     }
 
-    public function getMessage(): string { return $this->message; }
-    public function getErrorCode(): string { return AppException::VALIDATION_FAILED; }
-    public function getParameters(): array { return []; }
-    public function isBlocking(): bool { return true; }
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function getErrorCode(): string
+    {
+        return AppException::VALIDATION_FAILED;
+    }
+
+    public function getParameters(): array
+    {
+        return [];
+    }
+
+    public function isBlocking(): bool
+    {
+        return true;
+    }
 }

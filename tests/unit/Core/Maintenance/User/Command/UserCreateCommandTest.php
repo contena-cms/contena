@@ -70,6 +70,28 @@ class UserCreateCommandTest extends TestCase
         static::assertStringContainsString('User "contena" successfully created.', $commandTester->getDisplay());
     }
 
+    public function testReadAllScopesOptionIsForwardedToThePlatformGrant(): void
+    {
+        $provisioner = $this->createMock(UserProvisioner::class);
+        $provisioner->expects($this->once())
+            ->method('provision')
+            ->with(
+                self::TEST_USERNAME,
+                'contenaAdmin',
+                ['readAllScopes' => true],
+            )
+            ->willReturn('contenaAdmin');
+
+        $commandTester = new CommandTester(new UserCreateCommand($provisioner));
+        $commandTester->execute([
+            'username' => self::TEST_USERNAME,
+            '--password' => 'contenaAdmin',
+            '--read-all-scopes' => true,
+        ]);
+
+        static::assertStringContainsString('User "contena" successfully created.', $commandTester->getDisplay());
+    }
+
     private function getCommandTester(): CommandTester
     {
         $generator = static::createStub(AbstractNumberRangeValueGenerator::class);

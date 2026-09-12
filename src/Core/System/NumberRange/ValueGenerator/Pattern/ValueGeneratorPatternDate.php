@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ValueGeneratorPatternDate extends AbstractValueGenerator
@@ -13,7 +14,7 @@ class ValueGeneratorPatternDate extends AbstractValueGenerator
         return 'date';
     }
 
-    public function generate(array $config, ?array $args = null, ?bool $preview = false): string
+    public function generate(array $config, Context $context, ?array $args = null, bool $preview = false): string
     {
         if ($args === null || $args === []) {
             $args[] = self::STANDARD_FORMAT;

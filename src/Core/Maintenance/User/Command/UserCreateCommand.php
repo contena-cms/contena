@@ -30,6 +30,7 @@ class UserCreateCommand extends Command
         $this
             ->addArgument('username', InputArgument::REQUIRED, 'Username for the user')
             ->addOption('admin', 'a', InputOption::VALUE_NONE, 'Mark the user as admin')
+            ->addOption('read-all-scopes', null, InputOption::VALUE_NONE, 'Allow the platform grant to read across every data scope')
             ->addOption('password', 'p', InputOption::VALUE_REQUIRED, 'Password for the user')
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'The user\'s display name')
             ->addOption('phoneNumber', null, InputOption::VALUE_REQUIRED, 'The user\'s phone number')
@@ -69,6 +70,10 @@ class UserCreateCommand extends Command
 
         if ($input->getOption('admin')) {
             $additionalData['admin'] = true;
+        }
+
+        if ($input->getOption('read-all-scopes')) {
+            $additionalData['readAllScopes'] = true;
         }
 
         $savedPassword = $this->userProvisioner->provision($username, $password, $additionalData);

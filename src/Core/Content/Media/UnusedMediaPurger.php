@@ -20,7 +20,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -46,7 +46,7 @@ class UnusedMediaPurger
         private readonly Connection $connection,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly ClockInterface $clock,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
     }
 
@@ -60,7 +60,7 @@ class UnusedMediaPurger
         $limit ??= 50;
         $gracePeriodDays ??= 0;
 
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             foreach ($this->getNotUsedMediaForContext($context, $limit, $offset, $gracePeriodDays, $folderEntity) as $media) {
                 yield $media;
             }
@@ -78,7 +78,7 @@ class UnusedMediaPurger
 
         $totalMedia = 0;
         $totalCandidates = 0;
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $totalMedia += $this->getTotal(new Criteria(), $context);
             $totalCandidates += $this->getTotal($this->createFilterForNotUsedMedia($folderEntity, $context), $context);
         }
@@ -86,7 +86,7 @@ class UnusedMediaPurger
         $this->eventDispatcher->dispatch(new UnusedMediaSearchStartEvent($totalMedia, $totalCandidates));
 
         $totalDeleted = 0;
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             foreach ($this->getUnusedMediaIds($context, $limit, $offset, $folderEntity) as $idBatch) {
                 $idBatch = $this->filterOutNewMedia($idBatch, $gracePeriodDays, $context);
 
@@ -307,12 +307,9 @@ class UnusedMediaPurger
         }
 
         if ($folderEntity) {
-            $tenantId = $context->getTenantId();
-            $tenantCondition = $tenantId === null ? 'media_folder.tenant_id IS NULL' : 'media_folder.tenant_id = :tenantId';
+            $tenantCondition = 'media_folder.data_scope_id = :dataScopeId';
             $parameters = ['entity' => $folderEntity];
-            if ($tenantId !== null) {
-                $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-            }
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
 
             $rootMediaFolderId = $this->connection->fetchOne(
                 \sprintf(<<<'SQL'
@@ -328,11 +325,9 @@ class UnusedMediaPurger
                 throw MediaException::defaultMediaFolderWithEntityNotFound($folderEntity);
             }
 
-            $folderTenantCondition = $tenantId === null ? 'tenant_id IS NULL' : 'tenant_id = :tenantId';
+            $folderTenantCondition = 'data_scope_id = :dataScopeId';
             $folderParameters = ['id' => $rootMediaFolderId];
-            if ($tenantId !== null) {
-                $folderParameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-            }
+            $folderParameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
 
             /** @var array<string, array{id: string, parent_id: string}> $folders */
             $folders = $this->connection->fetchAllAssociativeIndexed(

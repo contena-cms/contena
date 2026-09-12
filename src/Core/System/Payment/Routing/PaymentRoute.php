@@ -17,7 +17,6 @@ final class PaymentRoute extends Struct
         public readonly GatewayInterface $gateway,
         public readonly string $channelConfigId,
         public readonly array $config,
-        public readonly bool $platformConfig,
     ) {
     }
 }

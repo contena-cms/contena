@@ -95,7 +95,10 @@ class IndexerQueuer
     private static function upsert(Connection $connection, ?string $id, array $indexerList): void
     {
         if ($indexerList === [] && $id !== null) {
-            $connection->delete('system_config', ['id' => $id]);
+            $connection->delete('system_config', [
+                'id' => $id,
+                'data_scope_id' => self::platformScopeId(),
+            ]);
 
             return;
         }
@@ -106,13 +109,14 @@ class IndexerQueuer
             $connection->update(
                 'system_config',
                 ['configuration_value' => $newValue, 'updated_at' => $date],
-                ['id' => $id]
+                ['id' => $id, 'data_scope_id' => self::platformScopeId()]
             );
         } else {
             $connection->insert(
                 'system_config',
                 [
                     'id' => Uuid::randomBytes(),
+                    'data_scope_id' => self::platformScopeId(),
                     'configuration_key' => self::INDEXER_KEY,
                     'configuration_value' => $newValue,
                     'created_at' => $date,
@@ -129,8 +133,10 @@ class IndexerQueuer
         $currentRow = $connection->fetchAssociative(
             'SELECT id, configuration_value
              FROM system_config
-             WHERE configuration_key = :key AND tenant_id IS NULL AND channel_id IS NULL',
-            ['key' => self::INDEXER_KEY]
+             WHERE configuration_key = :key
+               AND data_scope_id = :dataScopeId
+               AND channel_id IS NULL',
+            ['key' => self::INDEXER_KEY, 'dataScopeId' => self::platformScopeId()]
         );
 
         if ($currentRow === false) {
@@ -139,5 +145,10 @@ class IndexerQueuer
 
         /* @phpstan-ignore return.type (PHPStan cannot properly determine the array type from the DB) */
         return $currentRow;
+    }
+
+    private static function platformScopeId(): string
+    {
+        return Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
     }
 }

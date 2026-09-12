@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildCountField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -22,7 +23,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreePathField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
@@ -59,7 +59,7 @@ class MediaFolderDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of media folder.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new BoolField('use_parent_configuration', 'useParentConfiguration')->setDescription('When boolean value is `true`, the folder inherits the configuration settings of its parent folder.'),
             new FkField('media_folder_configuration_id', 'configurationId', MediaFolderConfigurationDefinition::class)->addFlags(new Required())->setDescription('Unique identity of configuration.'),
             new FkField('default_folder_id', 'defaultFolderId', MediaDefaultFolderDefinition::class)->setDescription('Unique identity of default folder.'),

@@ -40,10 +40,10 @@ use Contena\Core\Framework\Api\Controller\InfoController;
 use Contena\Core\Framework\Api\Controller\IntegrationController;
 use Contena\Core\Framework\Api\Controller\SyncController;
 use Contena\Core\Framework\Api\Controller\UserController;
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\EventListener\Authentication\ApiAuthenticationListener;
 use Contena\Core\Framework\Api\EventListener\Authentication\UserCredentialsChangedSubscriber;
 use Contena\Core\Framework\Api\EventListener\CorsListener;
-use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\EventListener\ExpectationSubscriber;
 use Contena\Core\Framework\Api\EventListener\JsonRequestTransformerListener;
 use Contena\Core\Framework\Api\EventListener\ResponseExceptionListener;
@@ -465,7 +465,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('acl_user_role.repository'),
             service('acl_role.repository'),
             service('user_access_key.repository'),
-            service('user_tenant.repository'),
+            service('user_data_scope.repository'),
             service(UserDefinition::class),
             service(RefreshTokenRepository::class),
             service(AbstractNumberRangeValueGenerator::class),

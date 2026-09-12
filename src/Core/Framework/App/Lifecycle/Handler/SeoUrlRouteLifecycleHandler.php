@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\App\Lifecycle\Handler;
 
-use Doctrine\DBAL\Connection;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteCollection;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteDefinition;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
 
 /**
  * @internal only for use by the app-system

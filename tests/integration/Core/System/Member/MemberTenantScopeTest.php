@@ -75,7 +75,7 @@ class MemberTenantScopeTest extends TestCase
 
         $address = $member->getAddresses()->first();
         static::assertInstanceOf(MemberAddressEntity::class, $address);
-        static::assertSame($tenantA, $address->getTenantId());
+        static::assertSame($tenantA, $address->getDataScopeId());
     }
 
     /**

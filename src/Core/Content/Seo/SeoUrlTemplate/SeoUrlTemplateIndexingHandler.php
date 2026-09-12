@@ -62,6 +62,7 @@ final class SeoUrlTemplateIndexingHandler
         $definition = $this->definitionRegistry->getByEntityName($entityName);
         $iterator = $this->iteratorFactory->createIterator(
             $definition,
+            $message->getContext(),
             $message->offset,
             self::ITERATE_BATCH_SIZE,
             $definition->isVersionAware() ? Defaults::LIVE_VERSION : null

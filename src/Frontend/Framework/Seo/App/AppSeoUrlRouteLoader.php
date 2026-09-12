@@ -2,13 +2,13 @@
 
 namespace Contena\Frontend\Framework\Seo\App;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\TableNotFoundException;
 use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Log\Package;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;

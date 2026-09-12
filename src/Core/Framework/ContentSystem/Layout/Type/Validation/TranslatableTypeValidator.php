@@ -28,5 +28,4 @@ final class TranslatableTypeValidator extends ConstraintValidator
                 ->addViolation();
         }
     }
-
 }

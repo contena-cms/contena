@@ -32,6 +32,5 @@ class Migration1784274647CreateAppConfigTest extends TestCase
 
         static::assertTrue(TableHelper::columnExists($this->connection, 'app_config', 'key'));
         static::assertTrue(TableHelper::columnExists($this->connection, 'app_config', 'value'));
-
     }
 }

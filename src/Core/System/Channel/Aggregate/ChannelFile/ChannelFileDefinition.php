@@ -5,6 +5,7 @@ namespace Contena\Core\System\Channel\Aggregate\ChannelFile;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -13,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 
@@ -50,7 +50,7 @@ class ChannelFileDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required(), new ApiAware(AdminApiSource::class))->setDescription('Unique identity of the channel file configuration.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned channel file configuration.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for channel file configuration.'),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new Required(), new ApiAware(AdminApiSource::class))->setDescription('Unique identity of the configured channel.'),
             new StringField('file_family', 'fileFamily', 64)->addFlags(new Required(), new ApiAware(AdminApiSource::class))->setDescription('File family below Resources/views/files.'),
             new StringField('file_name', 'fileName', 512)->addFlags(new Required(), new ApiAware(AdminApiSource::class))->setDescription('Normalized public file path without a leading slash.'),

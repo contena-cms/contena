@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\System\NumberRange\NumberRangeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
@@ -31,13 +32,13 @@ class IncrementStorageRegistry
         return $this->storages->get($storage);
     }
 
-    public function migrate(string $from, string $to): void
+    public function migrate(string $from, string $to, Context $context): void
     {
         $fromStorage = $this->getStorage($from);
         $toStorage = $this->getStorage($to);
 
-        foreach ($fromStorage->list() as $numberRangeId => $state) {
-            $toStorage->set($numberRangeId, $state);
+        foreach ($fromStorage->list($context) as $state) {
+            $toStorage->set($state, $context);
         }
     }
 }

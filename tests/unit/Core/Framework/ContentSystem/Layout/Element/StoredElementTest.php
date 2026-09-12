@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
@@ -11,6 +12,8 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequ
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyle;
+use Contena\Core\Framework\ContentSystem\Rendering\RenderedElement;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use Contena\Core\Test\Stub\ContentSystem\StubLoaderConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -92,6 +95,24 @@ class StoredElementTest extends TestCase
 
         static::assertSame(
             ['headline' => 'Hello', 'tags' => ['a', 'b']],
+            $element->jsonSerialize()['properties']
+        );
+    }
+
+    /**
+     * The storage side is language-blind: reduction to the request language belongs to serving, so the admin
+     * round-trip and every mutation response carry every entry the element holds.
+     */
+    #[TestDox('serializes a language map with every entry it holds')]
+    public function testJsonSerializeEmitsALanguageMapInFull(): void
+    {
+        $childLanguageId = Uuid::randomHex();
+        $element = StoredElementBuilder::create('core:text', 'element-1')
+            ->withProperty('headline', [Defaults::LANGUAGE_SYSTEM => 'anchor copy', $childLanguageId => 'child copy'])
+            ->build();
+
+        static::assertSame(
+            ['headline' => [Defaults::LANGUAGE_SYSTEM => 'anchor copy', $childLanguageId => 'child copy']],
             $element->jsonSerialize()['properties']
         );
     }
@@ -181,6 +202,64 @@ class StoredElementTest extends TestCase
         $this->expectExceptionObject(ContentSystemException::invalidMapKey($mapType, 'int'));
 
         $construct($key);
+    }
+
+    /**
+     * @param callable(): StoredElement $construct
+     */
+    #[DataProvider('malformedSlotProvider')]
+    #[TestDox('rejects a malformed slot: $_dataName')]
+    public function testConstructorRejectsAMalformedSlot(callable $construct, ContentSystemException $expected): void
+    {
+        $this->expectExceptionObject($expected);
+
+        $construct();
+    }
+
+    /**
+     * A slot holds the same model as its parent, which is what makes the guard on the two lifecycle events
+     * sufficient at the roots alone. Every shape here is unreachable from client input — the codec rejects it
+     * long before a constructor sees it — so each is a producer defect and none is a client-defect code.
+     *
+     * @return iterable<string, array{callable(): StoredElement, ContentSystemException}>
+     */
+    public static function malformedSlotProvider(): iterable
+    {
+        yield 'a rendered element as a child' => [
+            static fn (): StoredElement => new StoredElement(
+                'element-1',
+                'core:section',
+                slots: ['main' => [new RenderedElement('child-1', 'core:text')]], // @phpstan-ignore argument.type (intentionally passing the rendered model to test the guard branch)
+            ),
+            ContentSystemException::invalidMapValue('Element slot child list', 'main', StoredElement::class, RenderedElement::class),
+        ];
+
+        yield 'a child still in array form' => [
+            static fn (): StoredElement => new StoredElement(
+                'element-1',
+                'core:section',
+                slots: ['main' => [['id' => 'child-1', 'component' => 'core:text']]], // @phpstan-ignore argument.type (intentionally passing an undecoded child to test the guard branch)
+            ),
+            ContentSystemException::invalidMapValue('Element slot child list', 'main', StoredElement::class, 'array'),
+        ];
+
+        yield 'a child list keyed by element id' => [
+            static fn (): StoredElement => new StoredElement(
+                'element-1',
+                'core:section',
+                slots: ['main' => ['child-1' => StoredElementBuilder::create('core:text', 'child-1')->build()]], // @phpstan-ignore argument.type (intentionally passing a map instead of a list to test the guard branch)
+            ),
+            ContentSystemException::invalidMapValue('Element slot map', 'main', 'list', 'array'),
+        ];
+
+        yield 'a lone child instead of a list' => [
+            static fn (): StoredElement => new StoredElement(
+                'element-1',
+                'core:section',
+                slots: ['main' => StoredElementBuilder::create('core:text', 'child-1')->build()], // @phpstan-ignore argument.type (intentionally passing a bare child to test the guard branch)
+            ),
+            ContentSystemException::invalidMapValue('Element slot map', 'main', 'list', StoredElement::class),
+        ];
     }
 
     /**

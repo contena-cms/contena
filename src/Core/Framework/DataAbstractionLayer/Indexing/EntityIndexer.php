@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 
 abstract class EntityIndexer
@@ -18,7 +19,7 @@ abstract class EntityIndexer
      *
      * @param array{offset: int|null}|null $offset
      */
-    abstract public function iterate(?array $offset): ?EntityIndexingMessage;
+    abstract public function iterate(?array $offset, Context $context): ?EntityIndexingMessage;
 
     /**
      * Called when entities are updated over the DAL. This function should react to the provided entity written events
@@ -32,7 +33,7 @@ abstract class EntityIndexer
      */
     abstract public function handle(EntityIndexingMessage $message): void;
 
-    abstract public function getTotal(): int;
+    abstract public function getTotal(Context $context): int;
 
     abstract public function getDecorated(): EntityIndexer;
 

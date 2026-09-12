@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Log;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
@@ -11,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class LogEntryDefinition extends EntityDefinition
@@ -41,7 +41,7 @@ class LogEntryDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of log entry.'),
 
             new LongTextField('message', 'message')->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Indicates text or content of a log entry.'),

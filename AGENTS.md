@@ -43,14 +43,14 @@ contena/
 
 ### Platform And Tenant Data Modes
 - Tenancy is optional. A system with no tenant rows must install and run with the complete platform feature set.
-- `TenantField` marks data that can belong either to the platform (`tenant_id = NULL`) or to one tenant (`tenant_id = <UUID>`). Entities without `TenantField` are shared platform infrastructure.
+- `DataScopeField` marks business data owned by exactly one scope. Its non-null `data_scope_id` points to the canonical platform scope or to one tenant scope; tenant scope IDs equal tenant IDs. Entities without `DataScopeField` are shared platform infrastructure unless a `DataScopeMembershipAssociationField` explicitly defines their visibility through scope grants.
 - `Context::createDefaultContext()` is platform-scoped: it reads and writes only platform-owned rows. This is the safe default for business workflows and for systems that run without tenants.
 - `Context::createGlobalContext()` is the platform management view: it reads across platform and tenant data but may write only platform-owned rows. `Context::createCLIContext()` uses this global scope. Never use a global Context to create, update, or delete tenant-owned business data.
 - To administer tenant-owned data from a platform workflow, resolve the target tenant first and perform the write with `Context::createTenantContext($tenantId)`. Tenant Contexts automatically inject/filter that tenant and must never access platform-owned or another tenant's rows.
-- Background maintenance that covers every business-data scope must use `TenantScopeContextProvider`, which yields the platform first and tenants in keyset-paginated batches. Consume its generator as a stream; do not cache or materialize the complete tenant Context list.
-- Tenant ownership is immutable. Moving data between platform and tenant scopes, or between tenants, requires an explicit platform migration/tool rather than a normal DAL update.
-- Preserve the resolved tenant through async messages, scheduled work, cache keys/tags, logs, search indices, filesystem paths, and nested DAL writes.
-- Every entity definition containing a `TenantField` must test the four-context read and write matrix: Default/platform, target tenant, another tenant, and Global. Verify both platform-owned and tenant-owned fixtures; use the target tenant Context for tenant writes, and prove that Default, another tenant, and Global cannot mutate the target tenant's data. Infrastructure that derives or transports such entity data must repeat the matrix against its own read and write paths.
+- Background maintenance that covers every business-data scope must use `DataScopeContextProvider`, which streams the platform exact-scope Context first and then tenant exact-scope Contexts in keyset-paginated batches. Consume its generator as a stream; do not cache or materialize the complete Context list.
+- Data-scope ownership is immutable. Moving data between platform and tenant scopes, or between tenants, requires an explicit platform migration/tool rather than a normal DAL update.
+- Preserve the resolved data scope through async messages, scheduled work, cache keys/tags, logs, search indices, filesystem paths, and nested DAL writes. Use `Context::getDataScopeId()` for ownership and `getTenantId()` only for tenant-domain behavior.
+- Every entity definition containing a `DataScopeField` must test the four-context read and write matrix: Default/platform, target tenant, another tenant, and Global. Verify both platform-owned and tenant-owned fixtures; use the target tenant Context for tenant writes, and prove that Default, another tenant, and Global cannot mutate the target tenant's data. Infrastructure that derives or transports such entity data must repeat the matrix against its own read and write paths.
 
 ## AI Skills
 

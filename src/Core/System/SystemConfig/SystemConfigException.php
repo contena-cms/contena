@@ -18,7 +18,7 @@ class SystemConfigException extends HttpException
     public const string INVALID_SETTING_VALUE = 'SYSTEM__INVALID_SETTING_VALUE';
     public const string INVALID_KEY = 'SYSTEM__INVALID_KEY';
     public const string MISSING_REQUEST_PARAMETER_CODE = 'SYSTEM__CONFIG_MISSING_REQUEST_PARAMETER';
-    public const string TENANT_CONTEXT_MISMATCH = 'SYSTEM__CONFIG_TENANT_CONTEXT_MISMATCH';
+    public const string DATA_SCOPE_CONTEXT_MISMATCH = 'SYSTEM__CONFIG_DATA_SCOPE_CONTEXT_MISMATCH';
 
     public static function systemConfigKeyIsManagedBySystems(string $configKey): self
     {
@@ -88,12 +88,12 @@ class SystemConfigException extends HttpException
         );
     }
 
-    public static function tenantContextMismatch(?string $channelId): self
+    public static function dataScopeContextMismatch(?string $channelId): self
     {
         return new self(
             Response::HTTP_FORBIDDEN,
-            self::TENANT_CONTEXT_MISMATCH,
-            'The system configuration scope does not belong to the current tenant context.',
+            self::DATA_SCOPE_CONTEXT_MISMATCH,
+            'The system configuration target does not belong to the current data scope.',
             ['channelId' => $channelId],
         );
     }

@@ -20,6 +20,7 @@ class Migration1784207036CreateNumberRangeTranslation extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `number_range_translation` (
     `number_range_id` BINARY(16) NOT NULL,
+    `data_scope_id`   BINARY(16) NOT NULL,
     `name`            VARCHAR(64) NULL,
     `description`     VARCHAR(255) NULL,
     `custom_fields`   JSON NULL,
@@ -27,9 +28,13 @@ CREATE TABLE IF NOT EXISTS `number_range_translation` (
     `created_at`      DATETIME(3) NOT NULL,
     `updated_at`      DATETIME(3) NULL,
     PRIMARY KEY (`number_range_id`, `language_id`),
+    INDEX `idx.number_range_translation.data_scope_id` (`data_scope_id`),
+    INDEX `idx.number_range_translation.scope_number_range` (`data_scope_id`, `number_range_id`),
     CONSTRAINT `json.number_range_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.number_range_translation.number_range_id` FOREIGN KEY (`number_range_id`)
-        REFERENCES `number_range` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.number_range_translation.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.number_range_translation.number_range_scope` FOREIGN KEY (`data_scope_id`, `number_range_id`)
+        REFERENCES `number_range` (`data_scope_id`, `id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.number_range_translation.language_id` FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

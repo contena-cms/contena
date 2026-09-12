@@ -50,14 +50,8 @@ class CachedSystemConfigLoader extends AbstractSystemConfigLoader
 
     private function getContextKey(?Context $context): string
     {
-        if ($context === null) {
-            return 'implicit';
-        }
+        $context ??= Context::createDefaultContext();
 
-        if ($context->getTenantId() !== null) {
-            return 'tenant-' . $context->getTenantId();
-        }
-
-        return $context->hasGlobalTenantAccess() ? 'global' : 'platform';
+        return 'data-scope-' . $context->getDataScopeId();
     }
 }

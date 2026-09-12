@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Loader;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\DatabaseTypeLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\Dto\ElementTypeSpecificationDtoCollection;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -19,8 +20,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(DatabaseTypeLoader::class)]
 class DatabaseTypeLoaderTest extends TestCase
 {
-    #[TestDox('loads element type definitions from the database in production environment')]
-    public function testLoadsDefinitionsFromDatabaseInProductionEnvironment(): void
+    #[TestDox('loads element type definitions from the database in blogion environment')]
+    public function testLoadsDefinitionsFromDatabaseInBlogionEnvironment(): void
     {
         $definitions = $this->loader([['name' => 'App:Demo:Hero', 'schema' => json_encode($this->schema(), \JSON_THROW_ON_ERROR), 'app_name' => 'DemoApp']])->load();
         static::assertSame('App:Demo:Hero', $definitions[0]->name());
@@ -87,13 +88,21 @@ class DatabaseTypeLoaderTest extends TestCase
     public function testValidatesAllRowsTogetherAndFailsTheWholeLoad(): void
     {
         $violations = new ConstraintViolationList([new ConstraintViolation('Invalid label', null, [], null, 'types[App:Bad:Type].label', '')]);
-        $validator = static::createStub(ValidatorInterface::class);
-        $validator->method('validate')->willReturn($violations);
+        $validator = $this->createMock(ValidatorInterface::class);
+        $validator->expects($this->once())
+            ->method('validate')
+            ->with(static::callback(static function (mixed $value): bool {
+                static::assertInstanceOf(ElementTypeSpecificationDtoCollection::class, $value);
+                static::assertSame(['App:Good:Hero', 'App:Bad:Type'], array_keys($value->types));
+
+                return true;
+            }))
+            ->willReturn($violations);
         $loader = $this->loader([
             ['name' => 'App:Good:Hero', 'schema' => json_encode($this->schema(), \JSON_THROW_ON_ERROR), 'app_name' => 'GoodApp'],
             ['name' => 'App:Bad:Type', 'schema' => json_encode($this->schema(), \JSON_THROW_ON_ERROR), 'app_name' => 'BadApp'],
         ], $validator);
-        $this->expectExceptionObject(ContentSystemException::elementTypesInvalid($violations));
+        $this->expectExceptionObject(ContentSystemException::elementTypeLoadValidationFailed($violations));
         $loader->load();
     }
 

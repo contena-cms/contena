@@ -8,6 +8,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminChannelApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Event\ContextCreatedEvent;
@@ -41,13 +42,13 @@ class ContextFactory
         SELECT
           channel.id as channel_id,
           channel.language_id as channel_default_language_id,
-          LOWER(HEX(channel.tenant_id)) as channel_tenant_id,
+          LOWER(HEX(channel.data_scope_id)) as channel_data_scope_id,
           GROUP_CONCAT(LOWER(HEX(channel_language.language_id))) as channel_language_ids
         FROM channel
             LEFT JOIN channel_language
                 ON channel_language.channel_id = channel.id
         WHERE channel.id = :id
-        GROUP BY channel.id, channel.language_id, channel.tenant_id';
+        GROUP BY channel.id, channel.language_id, channel.data_scope_id';
 
         $data = $this->connection->fetchAssociative($sql, [
             'id' => Uuid::fromHexToBytes($channelId),
@@ -72,7 +73,10 @@ class ContextFactory
         $languageChain = $this->buildLanguageChain($options, $defaultLanguageId, $languageIds);
         $versionId = $options[ChannelContextService::VERSION_ID] ?? $originalContext?->getVersionId() ?? Defaults::LIVE_VERSION;
         $considerInheritance = $originalContext?->considerInheritance() ?? true;
-        $tenantId = $data['channel_tenant_id'] ?? null;
+        $dataScopeId = (string) $data['channel_data_scope_id'];
+        $dataScope = $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+            ? DataScope::platform()
+            : DataScope::tenant($dataScopeId);
 
         // Channel contexts inherit the tenant of their channel.
         $context = new Context(
@@ -80,7 +84,7 @@ class ContextFactory
             $languageChain,
             $versionId,
             $considerInheritance,
-            tenantId: $tenantId,
+            dataScope: $dataScope,
         );
 
         return $this->eventDispatcher->dispatch(new ContextCreatedEvent($context))->context;

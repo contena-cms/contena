@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\Payment\Notification;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\System\Payment\Notification\Struct\PaymentNotificationTarget;
 use Contena\Core\System\Payment\Struct\GatewayResult;
 
@@ -14,7 +15,7 @@ interface PaymentNotificationHandlerInterface
 
     public function getType(): int;
 
-    public function resolve(string $resourceNo, string $channelConfigId): PaymentNotificationTarget;
+    public function resolve(string $resourceNo, string $channelConfigId, Context $context): PaymentNotificationTarget;
 
     public function apply(string $channel, string $channelConfigId, PaymentNotificationTarget $target, GatewayResult $result): void;
 }

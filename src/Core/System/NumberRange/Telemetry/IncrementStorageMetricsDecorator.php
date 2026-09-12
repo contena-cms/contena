@@ -2,10 +2,12 @@
 
 namespace Contena\Core\System\NumberRange\Telemetry;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Telemetry\Instrumentation\ElapsedTimer;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementState;
 
 /**
  * Emits `number_range.allocation.duration` around {@see AbstractIncrementStorage::reserve()} - the
@@ -36,13 +38,13 @@ class IncrementStorageMetricsDecorator extends AbstractIncrementStorage
     ) {
     }
 
-    public function reserve(array $config): int
+    public function reserve(array $config, Context $context): int
     {
         $result = self::RESULT_SUCCESS;
         $timer = ElapsedTimer::start();
 
         try {
-            return $this->decorated->reserve($config);
+            return $this->decorated->reserve($config, $context);
         } catch (\Throwable $e) {
             $result = self::RESULT_FAILED;
 
@@ -60,19 +62,19 @@ class IncrementStorageMetricsDecorator extends AbstractIncrementStorage
         }
     }
 
-    public function preview(array $config): int
+    public function preview(array $config, Context $context): int
     {
-        return $this->decorated->preview($config);
+        return $this->decorated->preview($config, $context);
     }
 
-    public function list(): array
+    public function list(Context $context): array
     {
-        return $this->decorated->list();
+        return $this->decorated->list($context);
     }
 
-    public function set(string $configurationId, int $value): void
+    public function set(IncrementState $state, Context $context): void
     {
-        $this->decorated->set($configurationId, $value);
+        $this->decorated->set($state, $context);
     }
 
     public function getDecorated(): AbstractIncrementStorage

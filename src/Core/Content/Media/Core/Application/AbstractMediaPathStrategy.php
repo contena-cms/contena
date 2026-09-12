@@ -112,21 +112,16 @@ abstract class AbstractMediaPathStrategy
     }
 
     /**
-     * Prefixes tenant media files with a tenant shard directory, so every
-     * tenant gets its own subtree inside the media folder. Platform-global
-     * files (no tenant) keep the legacy layout.
+     * Prefixes media files with their owning scope, so platform and tenants
+     * always have separate storage subtrees.
      */
-    private function tenantShard(MediaLocationStruct|ThumbnailLocationStruct $location): ?string
+    private function tenantShard(MediaLocationStruct|ThumbnailLocationStruct $location): string
     {
-        $tenantId = $location instanceof ThumbnailLocationStruct
-            ? $location->media->tenantId
-            : $location->tenantId;
+        $dataScopeId = $location instanceof ThumbnailLocationStruct
+            ? $location->media->dataScopeId
+            : $location->dataScopeId;
 
-        if ($tenantId === null || $tenantId === '') {
-            return null;
-        }
-
-        return 'tenant/' . substr($tenantId, 0, 2) . '/' . $tenantId;
+        return 'scope/' . substr($dataScopeId, 0, 2) . '/' . $dataScopeId;
     }
 
     private function hasFile(ThumbnailLocationStruct|MediaLocationStruct $location): bool

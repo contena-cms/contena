@@ -36,7 +36,7 @@ class SitemapGenerateCommandTest extends TestCase
             ->with(static::callback(static function (object $event): bool {
                 static::assertInstanceOf(SitemapChannelCriteriaEvent::class, $event);
 
-                return $event->getContext()->hasGlobalTenantAccess();
+                return $event->getContext()->allowsCrossScopeReads();
             }))
             ->willReturnArgument(0);
 

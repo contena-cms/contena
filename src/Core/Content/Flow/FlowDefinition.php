@@ -9,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
@@ -20,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class FlowDefinition extends EntityDefinition
@@ -51,7 +51,7 @@ class FlowDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned flow.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for flow.'),
             new StringField('name', 'name', 255)->addFlags(new Required()),
             new StringField('event_name', 'eventName', 255)->addFlags(new Required()),
             new IntField('priority', 'priority'),

@@ -41,19 +41,17 @@ final class PaymentOrderNotificationHandler implements PaymentNotificationHandle
         return PaymentNotificationTypes::PAYMENT;
     }
 
-    public function resolve(string $resourceNo, string $channelConfigId): PaymentNotificationTarget
+    public function resolve(string $resourceNo, string $channelConfigId, Context $context): PaymentNotificationTarget
     {
         $criteria = new Criteria()
             ->addFilter(new EqualsFilter('orderNo', $resourceNo))
             ->addFilter(new EqualsFilter('channelConfigId', $channelConfigId))
             ->setLimit(2);
-        $entities = $this->repository->search($criteria, Context::createGlobalContext())->getEntities();
+        $entities = $this->repository->search($criteria, $context)->getEntities();
         $entity = $entities->first();
         if ($entities->count() !== 1 || $entity === null) {
             throw PaymentException::notificationResourceNotFound($resourceNo);
         }
-
-        $context = $entity->tenantId === null ? Context::createDefaultContext() : Context::createTenantContext($entity->tenantId);
 
         return new PaymentNotificationTarget(PaymentOrderDefinition::ENTITY_NAME, $entity->getId(), $context, 'orderId');
     }

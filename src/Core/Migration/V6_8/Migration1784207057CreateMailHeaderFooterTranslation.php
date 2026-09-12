@@ -21,7 +21,7 @@ class Migration1784207057CreateMailHeaderFooterTranslation extends MigrationStep
 CREATE TABLE IF NOT EXISTS `mail_header_footer_translation` (
     `mail_header_footer_id` BINARY(16)   NOT NULL,
     `language_id`           BINARY(16)   NOT NULL,
-    `tenant_id`             BINARY(16)   NULL,
+    `data_scope_id`             BINARY(16)   NOT NULL,
     `name`                  VARCHAR(255) NULL,
     `description`           LONGTEXT     NULL,
     `header_html`           LONGTEXT     NULL,
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS `mail_header_footer_translation` (
     `created_at`            DATETIME(3)  NOT NULL,
     `updated_at`            DATETIME(3)  NULL,
     PRIMARY KEY (`mail_header_footer_id`, `language_id`),
-    KEY `idx.mail_header_footer_translation.tenant_id` (`tenant_id`),
+    KEY `idx.mail_header_footer_translation.data_scope_id` (`data_scope_id`),
     CONSTRAINT `fk.mail_header_footer_translation.mail_header_footer_id`
         FOREIGN KEY (`mail_header_footer_id`) REFERENCES `mail_header_footer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.mail_header_footer_translation.language_id`
         FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.mail_header_footer_translation.tenant_id`
-        FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.mail_header_footer_translation.data_scope_id`
+        FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

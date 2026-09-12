@@ -2,6 +2,7 @@
 
 namespace Contena\Frontend\Theme\DataAbstractionLayer;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
@@ -38,16 +39,16 @@ class ThemeIndexer extends EntityIndexer
         return 'theme.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->getIterator($offset);
+        $iterator = $this->getIterator($offset, $context);
         $ids = $iterator->fetch();
 
         if ($ids === []) {
             return null;
         }
 
-        return new ThemeIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new ThemeIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -58,7 +59,7 @@ class ThemeIndexer extends EntityIndexer
             return null;
         }
 
-        return new ThemeIndexingMessage(array_values($updates), null, $event->getContext());
+        return new ThemeIndexingMessage(array_values($updates), $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -97,9 +98,9 @@ class ThemeIndexer extends EntityIndexer
         $this->eventDispatcher->dispatch(new ThemeIndexerEvent($ids, $context, $message->getSkip()));
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->getIterator(null)->fetchCount();
+        return $this->getIterator(null, $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer
@@ -110,8 +111,8 @@ class ThemeIndexer extends EntityIndexer
     /**
      * @param array{offset: int|null}|null $offset
      */
-    private function getIterator(?array $offset): IterableQuery
+    private function getIterator(?array $offset, Context $context): IterableQuery
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
     }
 }

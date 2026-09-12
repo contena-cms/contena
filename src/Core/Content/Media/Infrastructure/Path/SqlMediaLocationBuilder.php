@@ -46,7 +46,7 @@ class SqlMediaLocationBuilder implements MediaLocationBuilder
                     file_extension,
                     file_name,
                     uploaded_at,
-                    LOWER(HEX(tenant_id)) as tenant_id
+                    LOWER(HEX(data_scope_id)) as data_scope_id
             FROM media
             WHERE id IN (:ids)',
             ['ids' => Uuid::fromHexToBytesList($ids)],
@@ -61,7 +61,7 @@ class SqlMediaLocationBuilder implements MediaLocationBuilder
                 $row['file_extension'],
                 $row['file_name'],
                 $row['uploaded_at'] ? new \DateTimeImmutable($row['uploaded_at']) : null,
-                $row['tenant_id'] ?? null,
+                $row['data_scope_id'],
             );
         }
 
@@ -88,7 +88,7 @@ class SqlMediaLocationBuilder implements MediaLocationBuilder
                     media.file_extension,
                     media.file_name,
                     LOWER(HEX(media.id)) as media_id,
-                    LOWER(HEX(media.tenant_id)) as tenant_id,
+                    LOWER(HEX(media.data_scope_id)) as data_scope_id,
                     width,
                     height,
                     uploaded_at
@@ -107,7 +107,7 @@ class SqlMediaLocationBuilder implements MediaLocationBuilder
                 $row['file_extension'],
                 $row['file_name'],
                 $row['uploaded_at'] ? new \DateTimeImmutable($row['uploaded_at']) : null,
-                $row['tenant_id'] ?? null,
+                $row['data_scope_id'],
             );
 
             $locations[(string) $key] = new ThumbnailLocationStruct(

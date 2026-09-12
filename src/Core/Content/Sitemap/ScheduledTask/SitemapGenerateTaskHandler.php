@@ -7,6 +7,7 @@ use Contena\Core\Content\Sitemap\Service\SitemapChannelProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -58,8 +59,10 @@ final class SitemapGenerateTaskHandler extends ScheduledTaskHandler
         );
 
         foreach ($this->channelProvider->getChannels($criteria) as $channel) {
-            $tenantId = $channel->getTenantId();
-            $context = $tenantId === null ? Context::createCLIContext() : Context::createTenantContext($tenantId);
+            $dataScopeId = $channel->getDataScopeId();
+            $context = $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+                ? $context->createWithDataScope(DataScope::platform())
+                : Context::createTenantContext($dataScopeId);
             if (!$this->usesScheduledGeneration($context)) {
                 continue;
             }
@@ -73,7 +76,7 @@ final class SitemapGenerateTaskHandler extends ScheduledTaskHandler
             $languageIds = array_unique($languageIds);
 
             foreach ($languageIds as $languageId) {
-                $this->messageBus->dispatch(new SitemapMessage($channel->getId(), $languageId, null, null, false, $tenantId));
+                $this->messageBus->dispatch(new SitemapMessage($channel->getId(), $languageId, null, null, false, $dataScopeId));
             }
         }
     }

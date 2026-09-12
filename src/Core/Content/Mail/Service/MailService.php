@@ -300,7 +300,7 @@ class MailService extends AbstractMailService
         $this->logger->log($level, $errorMessage, array_merge([
             'template' => $template,
             'exception' => (string) $exception,
-            'tenantId' => $context->getTenantId(),
+            'dataScopeId' => $context->getDataScopeId(),
         ], $templateData));
     }
 

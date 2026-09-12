@@ -47,7 +47,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
             ->with(static::callback(static function (object $event): bool {
                 static::assertInstanceOf(SitemapChannelCriteriaEvent::class, $event);
 
-                return $event->getContext()->hasGlobalTenantAccess();
+                return $event->getContext()->allowsCrossScopeReads();
             }))
             ->willReturnArgument(0);
 
@@ -75,7 +75,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
 
         $channel = new ChannelEntity();
         $channel->setId($channelId);
-        $channel->setTenantId($tenantId);
+        $channel->setDataScopeId($tenantId);
         $channel->setDomains(new ChannelDomainCollection([$domain]));
 
         $channelProvider = static::createStub(SitemapChannelProvider::class);
@@ -100,7 +100,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
                 static::assertInstanceOf(SitemapMessage::class, $message);
                 static::assertSame($channelId, $message->getLastChannelId());
                 static::assertSame($languageId, $message->getLastLanguageId());
-                static::assertSame($tenantId, $message->getTenantId());
+                static::assertSame($tenantId, $message->getDataScopeId());
 
                 return true;
             }))

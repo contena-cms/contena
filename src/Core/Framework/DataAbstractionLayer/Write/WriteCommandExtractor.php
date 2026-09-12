@@ -8,6 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
@@ -20,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
@@ -335,7 +335,7 @@ class WriteCommandExtractor
         $create = !$existence->exists() || $existence->childChangedToParent();
 
         if (
-            (!$field instanceof UpdatedAtField && !$field instanceof CreatedByField && !$field instanceof UpdatedByField && !$field instanceof WasModifiedByUserField && !$field instanceof TenantField)
+            (!$field instanceof UpdatedAtField && !$field instanceof CreatedByField && !$field instanceof UpdatedByField && !$field instanceof WasModifiedByUserField && !$field instanceof DataScopeField)
             && (!$create || !$field->is(Required::class))
         ) {
             return true;

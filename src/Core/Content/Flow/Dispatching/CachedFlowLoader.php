@@ -80,10 +80,6 @@ class CachedFlowLoader extends AbstractFlowLoader implements EventSubscriberInte
 
     private static function getScopeKey(Context $context): string
     {
-        if ($context->getTenantId() !== null) {
-            return 'tenant-' . $context->getTenantId();
-        }
-
-        return $context->hasGlobalTenantAccess() ? 'global' : 'platform';
+        return ($context->allowsCrossScopeReads() ? 'all-' : 'exact-') . $context->getDataScopeId();
     }
 }

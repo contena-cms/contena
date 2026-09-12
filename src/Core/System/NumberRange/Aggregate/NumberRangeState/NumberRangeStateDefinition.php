@@ -3,6 +3,7 @@
 namespace Contena\Core\System\NumberRange\Aggregate\NumberRangeState;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -45,6 +46,7 @@ class NumberRangeStateDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            new DataScopeField()->addFlags(new PrimaryKey())->setDescription('Non-null identity of the owning data scope.'),
             new IdField('id', 'id')->addFlags(new Required())->setDescription('Unique identity of number range\'s state.'),
             new FkField('number_range_id', 'numberRangeId', NumberRangeDefinition::class)->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of number range.'),
             new IntField('last_value', 'lastValue')->addFlags(new Required()),

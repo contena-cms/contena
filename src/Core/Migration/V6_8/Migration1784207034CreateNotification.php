@@ -20,7 +20,7 @@ class Migration1784207034CreateNotification extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `notification` (
     `id`                        BINARY(16)   NOT NULL,
-    `tenant_id`                 BINARY(16)   NULL,
+    `data_scope_id`                 BINARY(16)   NOT NULL,
     `status`                    VARCHAR(255) NOT NULL,
     `message`                   LONGTEXT     NOT NULL,
     `admin_only`                TINYINT(1)   NOT NULL DEFAULT 0,
@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS `notification` (
     `created_at`                DATETIME(3)  NOT NULL,
     `updated_at`                DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.notification.tenant_id` (`tenant_id`),
+    KEY `idx.notification.data_scope_id` (`data_scope_id`),
     CONSTRAINT `fk.notification.created_by_integration_id` FOREIGN KEY (`created_by_integration_id`)
         REFERENCES `integration` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `fk.notification.created_by_user_id` FOREIGN KEY (`created_by_user_id`)
         REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT `fk.notification.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.notification.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

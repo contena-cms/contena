@@ -49,6 +49,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CreatedAtFieldSe
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CreatedByFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CronIntervalFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CustomFieldsSerializer;
+use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DataScopeFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DateFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DateIntervalFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DateTimeFieldSerializer;
@@ -71,7 +72,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ReferenceVersion
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\RemoteAddressFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StateMachineStateFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSerializer;
-use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TenantFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TimeZoneFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslatedFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslationsAssociationFieldSerializer;
@@ -121,9 +121,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterfac
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteResultFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\ConstraintBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\DataScopeForeignKeyValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\LockValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\ParentRelationValidator;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\TenantForeignKeyValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteCommandExtractor;
 use Contena\Core\Framework\Migration\IndexerQueuer;
 use Contena\Core\Framework\Script\AppContextCreator;
@@ -134,6 +134,7 @@ use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\Language\LanguageLoader;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -559,7 +560,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ])
     ->tag('contena.field_serializer');
 
-    $services->set(TenantFieldSerializer::class)
+    $services->set(DataScopeFieldSerializer::class)
         ->args([
             service('validator'),
             service(DefinitionInstanceRegistry::class),
@@ -785,7 +786,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(TenantForeignKeyValidator::class)
+    $services->set(DataScopeForeignKeyValidator::class)
         ->args([
             service(Connection::class),
             service(DefinitionInstanceRegistry::class),
@@ -835,6 +836,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('messenger.default_bus'),
             service('event_dispatcher'),
             service(IndexerMetricsInstrumentor::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('messenger.message_handler');
 

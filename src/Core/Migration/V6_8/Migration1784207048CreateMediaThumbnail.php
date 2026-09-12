@@ -20,7 +20,7 @@ class Migration1784207048CreateMediaThumbnail extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `media_thumbnail` (
     `id`                      BINARY(16)   NOT NULL,
-    `tenant_id`               BINARY(16)   NULL,
+    `data_scope_id`               BINARY(16)   NOT NULL,
     `media_id`                BINARY(16)   NOT NULL,
     `media_thumbnail_size_id` BINARY(16)   NOT NULL,
     `width`                   INT(10) UNSIGNED NOT NULL,
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS `media_thumbnail` (
     `created_at`              DATETIME(3)  NOT NULL,
     `updated_at`              DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.media_thumbnail.tenant_id` (`tenant_id`),
+    KEY `idx.media_thumbnail.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.media_thumbnail.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.media_thumbnail.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.media_thumbnail.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.media_thumbnail.media_id` FOREIGN KEY (`media_id`)
         REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.media_thumbnail.media_thumbnail_size_id` FOREIGN KEY (`media_thumbnail_size_id`)

@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem;
 
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\ContentSystem\Cache\RenderingCacheContext;
 use Contena\Core\Framework\ContentSystem\ContentPipeline;
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
@@ -46,6 +48,7 @@ use Contena\Core\Framework\ContentSystem\Rendering\RenderedTreeFactory;
 use Contena\Core\Framework\ContentSystem\Rendering\WiringPlanner;
 use Contena\Core\Framework\ContentSystem\RenderingMode;
 use Contena\Core\Framework\ContentSystem\RenderingSpecification;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Language\ContentSystem\DataLoader\LanguageLoaderConfig;
 use Contena\Core\Test\Generator;
@@ -193,9 +196,6 @@ class ContentPipelineTest extends TestCase
             new Request()
         );
 
-        // Fixture guard: without page-level data requirements the pipeline never wraps at all.
-        static::assertTrue(new VirtualRootWrapper()->requiresWrapping($specification, $layout->elements));
-
         $observed = null;
         $this->eventDispatcher->method('dispatch')->willReturnCallback(
             function (object $event) use (&$observed) {
@@ -215,6 +215,9 @@ class ContentPipelineTest extends TestCase
             false,
             Generator::generateChannelContext()
         );
+
+        // Fixture guard: without page-level data requirements the pipeline never wraps at all.
+        static::assertTrue(new VirtualRootWrapper()->requiresWrapping($specification, $layout->elements));
 
         static::assertSame(['root-id'], $observed);
     }
@@ -256,6 +259,71 @@ class ContentPipelineTest extends TestCase
         // Fixture guard: the placeholder really was resolvable, so the step ran after the dispatch.
         $elements = $result->tree;
         static::assertSame('resolved-blog', $elements[0]->properties['title']);
+    }
+
+    #[TestDox('exposes an unreduced language map to preparation subscribers')]
+    public function testPreparationSubscribersSeeTheLanguageMap(): void
+    {
+        $root = StoredElementBuilder::create('text', 'root-id')
+            ->withProperty('headline', [Defaults::LANGUAGE_SYSTEM => 'anchor copy'])
+            ->build();
+        $layout = $this->createSingleRootLayout($root);
+
+        $observed = null;
+        $this->eventDispatcher->method('dispatch')->willReturnCallback(
+            static function (object $event) use (&$observed) {
+                if ($event instanceof ContentTreePreparationEvent) {
+                    $observed = $event->tree()[0]->property('headline')?->jsonSerialize();
+                }
+
+                return $event;
+            }
+        );
+
+        $result = $this->createPipeline()->load(
+            $layout,
+            new RenderingSpecification([], PlaceholderValues::from([]), new Request()),
+            new RenderingCacheContext(),
+            RenderingMode::FULL,
+            false,
+            Generator::generateChannelContext()
+        );
+
+        static::assertSame([Defaults::LANGUAGE_SYSTEM => 'anchor copy'], $observed);
+        // Fixture guard: the map really was reducible, so the step ran after the dispatch.
+        static::assertSame('anchor copy', $result->tree[0]->properties['headline']);
+    }
+
+    /**
+     * The context is the pipeline's own argument rather than anything it derives, and only a chain the
+     * default context does not carry can tell the two apart: reducing against a fabricated default would
+     * serve the anchor entry here.
+     */
+    #[TestDox('reduces a language map against the channel context load() received')]
+    public function testLoadReducesAgainstTheContextItReceived(): void
+    {
+        $root = StoredElementBuilder::create('text', 'root-id')
+            ->withProperty('headline', [
+                Defaults::LANGUAGE_SYSTEM => 'anchor copy',
+                'language-child' => 'child copy',
+            ])
+            ->build();
+        $layout = $this->createSingleRootLayout($root);
+
+        $this->eventDispatcher->method('dispatch')->willReturnArgument(0);
+
+        $result = $this->createPipeline()->load(
+            $layout,
+            new RenderingSpecification([], PlaceholderValues::from([]), new Request()),
+            new RenderingCacheContext(),
+            RenderingMode::FULL,
+            false,
+            Generator::generateChannelContext(
+                new Context(new SystemSource(), [], Defaults::CURRENCY, ['language-child', Defaults::LANGUAGE_SYSTEM])
+            )
+        );
+
+        static::assertSame('child copy', $result->tree[0]->properties['headline']);
     }
 
     #[TestDox('exposes unexpanded redistribute consumers to preparation subscribers')]
@@ -648,10 +716,6 @@ class ContentPipelineTest extends TestCase
             ->build();
         $layout = $this->createSingleRootLayout($root);
 
-        // Fixture guard: the authored value differs from the replacement, so the served title can only
-        // read 'replaced-title' if the result carries the forest the subscriber handed back.
-        static::assertSame('authored-title', $root->property('title')?->asString());
-
         $this->eventDispatcher->method('dispatch')->willReturnCallback(
             static function (object $event) {
                 if ($event instanceof RenderedTreeFinalizationEvent) {
@@ -671,6 +735,10 @@ class ContentPipelineTest extends TestCase
             Generator::generateChannelContext()
         );
 
+        // Fixture guard: the authored value differs from the replacement, so the served title can only
+        // read 'replaced-title' if the result carries the forest the subscriber handed back.
+        static::assertSame('authored-title', $root->property('title')?->asString());
+
         $elements = $result->tree;
         static::assertCount(1, $elements);
         static::assertSame('replaced-title', $elements[0]->properties['title']);
@@ -680,10 +748,6 @@ class ContentPipelineTest extends TestCase
     public function testLoadServesAnElementAddedDuringFinalization(): void
     {
         $layout = $this->createSingleRootLayout(StoredElementBuilder::create('text', 'root-id')->build());
-
-        // Fixture guard: the added element exists nowhere in the stored tree, so it can only reach the result
-        // by being minted inside the subscriber.
-        static::assertSame(['root-id'], $this->collectStoredIds($layout->elements));
 
         $this->eventDispatcher->method('dispatch')->willReturnCallback(
             static function (object $event) {
@@ -706,6 +770,10 @@ class ContentPipelineTest extends TestCase
             false,
             Generator::generateChannelContext()
         );
+
+        // Fixture guard: the added element exists nowhere in the stored tree, so it can only reach the result
+        // by being minted inside the subscriber.
+        static::assertSame(['root-id'], $this->collectStoredIds($layout->elements));
 
         static::assertSame(['root-id', 'added-id'], $this->collectRenderedIds($result->tree));
         static::assertSame('added-title', $this->renderedElement($result->tree, 'added-id')->properties['title']);
@@ -901,7 +969,6 @@ class ContentPipelineTest extends TestCase
             $this->typeRegistry(),
             new VirtualRootWrapper(),
             new PartialRenderer(new ElementTreePruner(), new ContextDependencyAnalyzer(), new SubTreeExtractor()),
-            static::createStub(DataLoaderConfigSerializerProvider::class),
         )->prepare($layout->elements, $specification, RenderingMode::FULL, Generator::generateChannelContext());
         static::assertFalse($preparation->scaffolding->virtualRootSurvivedPrune);
         static::assertSame(['middle-id', 'consumer-id'], $this->collectStoredIds($preparation->tree));
@@ -1467,15 +1534,17 @@ class ContentPipelineTest extends TestCase
 
     /**
      * A rendered property map is derived from the element's type, not copied from storage, so a stored key
-     * only renders where the type declares it. `text` therefore declares the one primitive whose stored
-     * value a test below reads back off the served element. Every other component these fixtures use stores
-     * nothing it serves and stays unregistered, which is also the shape the virtual root is in.
+     * only renders where the type declares it. `text` therefore declares the two primitives whose stored
+     * values a test below reads back off the served element, one plain and one translatable. Every other
+     * component these fixtures use stores nothing it serves and stays unregistered, which is also the shape
+     * the virtual root is in.
      */
     private function typeRegistry(): AbstractContentSystemElementTypeRegistry
     {
         $specs = [
             'text' => ContentSystemElementTypeSpecificationBuilder::create('text')
                 ->primitive('title', 'string')
+                ->primitive('headline', 'string', translatable: true)
                 ->build(),
         ];
 

@@ -134,11 +134,9 @@ class TemplateDataExtension extends AbstractExtension implements GlobalsInterfac
      */
     private function tenantCondition(ChannelContext $context, string $alias = ''): array
     {
-        $tenantId = $context->getContext()->getTenantId();
-        if ($tenantId === null) {
-            return [$alias . '`tenant_id` IS NULL', []];
-        }
-
-        return [$alias . '`tenant_id` = :tenantId', ['tenantId' => Uuid::fromHexToBytes($tenantId)]];
+        return [
+            $alias . '`data_scope_id` = :dataScopeId',
+            ['dataScopeId' => Uuid::fromHexToBytes($context->getContext()->getDataScopeId())],
+        ];
     }
 }

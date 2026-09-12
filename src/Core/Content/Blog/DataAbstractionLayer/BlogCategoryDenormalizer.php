@@ -37,8 +37,7 @@ class BlogCategoryDenormalizer
 
         $versionId = Uuid::fromHexToBytes($context->getVersionId());
         $liveVersionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
-        $tenantId = $context->getTenantId();
-        $tenantId = $tenantId !== null ? Uuid::fromHexToBytes($tenantId) : null;
+        $dataScopeId = Uuid::fromHexToBytes($context->getDataScopeId());
 
         $inserts = [];
         $updates = [];
@@ -60,7 +59,7 @@ class BlogCategoryDenormalizer
 
             foreach ($categoryIds as $id) {
                 $inserts[] = [
-                    'tenant_id' => $tenantId,
+                    'data_scope_id' => $dataScopeId,
                     'blog_id' => $blogId,
                     'blog_version_id' => $versionId,
                     'category_id' => Uuid::fromHexToBytes($id),
@@ -69,19 +68,19 @@ class BlogCategoryDenormalizer
             }
         }
 
-        RetryableTransaction::retryable($this->connection, function () use ($allIds, $versionId): void {
+        RetryableTransaction::retryable($this->connection, function () use ($allIds, $versionId, $dataScopeId): void {
             $this->connection->executeStatement(
-                'DELETE FROM blog_category_tree WHERE `blog_id` IN (:ids) AND `blog_version_id` = :version',
-                ['ids' => $allIds, 'version' => $versionId],
+                'DELETE FROM blog_category_tree WHERE `blog_id` IN (:ids) AND `blog_version_id` = :version AND `data_scope_id` = :dataScopeId',
+                ['ids' => $allIds, 'version' => $versionId, 'dataScopeId' => $dataScopeId],
                 ['ids' => ArrayParameterType::BINARY]
             );
         });
 
-        RetryableTransaction::retryable($this->connection, function () use ($updates): void {
-            $query = $this->connection->prepare('UPDATE blog SET category_tree = :tree WHERE id = :id AND version_id = :version');
+        RetryableTransaction::retryable($this->connection, function () use ($updates, $dataScopeId): void {
+            $query = $this->connection->prepare('UPDATE blog SET category_tree = :tree WHERE id = :id AND version_id = :version AND data_scope_id = :dataScopeId');
 
             foreach ($updates as $update) {
-                StatementHelper::executeStatement($query, $update);
+                StatementHelper::executeStatement($query, [...$update, 'dataScopeId' => $dataScopeId]);
             }
         });
 
@@ -122,22 +121,24 @@ class BlogCategoryDenormalizer
             'blog',
             'blog_category',
             'mapping',
-            'mapping.blog_id = blog.id AND mapping.blog_version_id = blog.version_id'
+            'mapping.blog_id = blog.id AND mapping.blog_version_id = blog.version_id AND mapping.data_scope_id = blog.data_scope_id'
         );
         $query->leftJoin(
             'mapping',
             'category',
             'category',
-            'mapping.category_id = category.id AND mapping.category_version_id = category.version_id AND mapping.category_version_id = :live'
+            'mapping.category_id = category.id AND mapping.category_version_id = category.version_id AND mapping.category_version_id = :live AND category.data_scope_id = blog.data_scope_id'
         );
 
         $query->addGroupBy('blog.id');
 
         $query->andWhere('blog.id IN (:ids)');
         $query->andWhere('blog.version_id = :version');
+        $query->andWhere('blog.data_scope_id = :dataScopeId');
 
         $query->setParameter('version', Uuid::fromHexToBytes($context->getVersionId()));
         $query->setParameter('live', Uuid::fromHexToBytes(Defaults::LIVE_VERSION));
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($context->getDataScopeId()));
 
         $bytes = array_map(static fn (string $id) => Uuid::fromHexToBytes($id), $ids);
 

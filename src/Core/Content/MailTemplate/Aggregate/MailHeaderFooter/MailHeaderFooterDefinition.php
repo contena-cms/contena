@@ -5,11 +5,11 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooterTranslation\MailHeaderFooterTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -37,7 +37,7 @@ class MailHeaderFooterDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of mail\'s header and footer component.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned mail header and footer.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for mail header and footer.'),
             new BoolField('system_default', 'systemDefault')->addFlags(new ApiAware()),
 
             // translatable fields->setDescription('Unused field. To be removed in future.')

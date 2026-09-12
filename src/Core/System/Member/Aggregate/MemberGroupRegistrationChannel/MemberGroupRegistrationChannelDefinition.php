@@ -2,11 +2,11 @@
 
 namespace Contena\Core\System\Member\Aggregate\MemberGroupRegistrationChannel;
 
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
@@ -29,7 +29,7 @@ class MemberGroupRegistrationChannelDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned member group registration.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for member group registration.'),
             new FkField('member_group_id', 'memberGroupId', MemberGroupDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new ManyToOneAssociationField('memberGroup', 'member_group_id', MemberGroupDefinition::class, 'id', false),

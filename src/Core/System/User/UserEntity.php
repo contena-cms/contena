@@ -10,10 +10,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Notification\NotificationCollection;
+use Contena\Core\System\DataScope\DataScopeEntity;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\Position\PositionCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
-use Contena\Core\System\Tenant\TenantEntity;
 use Contena\Core\System\User\Aggregate\UserAccessKey\UserAccessKeyCollection;
 use Contena\Core\System\User\Aggregate\UserConfig\UserConfigCollection;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
@@ -24,9 +24,9 @@ class UserEntity extends Entity
     use EntityIdTrait;
 
     /**
-     * @var EntityCollection<TenantEntity>|null
+     * @var EntityCollection<DataScopeEntity>|null
      */
-    protected ?EntityCollection $tenants = null;
+    protected ?EntityCollection $dataScopes = null;
 
     protected string $localeId;
 
@@ -49,9 +49,13 @@ class UserEntity extends Entity
 
     protected string $email;
 
-    protected bool $active;
+    protected bool $accountActive;
 
-    protected bool $admin;
+    protected ?bool $active = null;
+
+    protected ?bool $admin = null;
+
+    protected ?bool $readAllScopes = null;
 
     protected ?\DateTimeInterface $firstLogin = null;
 
@@ -82,19 +86,19 @@ class UserEntity extends Entity
     protected string $timeZone;
 
     /**
-     * @return EntityCollection<TenantEntity>|null
+     * @return EntityCollection<DataScopeEntity>|null
      */
-    public function getTenants(): ?EntityCollection
+    public function getDataScopes(): ?EntityCollection
     {
-        return $this->tenants;
+        return $this->dataScopes;
     }
 
     /**
-     * @param EntityCollection<TenantEntity> $tenants
+     * @param EntityCollection<DataScopeEntity> $dataScopes
      */
-    public function setTenants(EntityCollection $tenants): void
+    public function setDataScopes(EntityCollection $dataScopes): void
     {
-        $this->tenants = $tenants;
+        $this->dataScopes = $dataScopes;
     }
 
     public function getUserCode(): ?string
@@ -205,12 +209,22 @@ class UserEntity extends Entity
         $this->email = $email;
     }
 
-    public function getActive(): bool
+    public function getAccountActive(): bool
+    {
+        return $this->accountActive;
+    }
+
+    public function setAccountActive(bool $accountActive): void
+    {
+        $this->accountActive = $accountActive;
+    }
+
+    public function getActive(): ?bool
     {
         return $this->active;
     }
 
-    public function setActive(bool $active): void
+    public function setActive(?bool $active): void
     {
         $this->active = $active;
     }
@@ -277,7 +291,7 @@ class UserEntity extends Entity
 
     public function isAdmin(): bool
     {
-        return $this->admin;
+        return $this->admin ?? false;
     }
 
     public function getFirstLogin(): ?\DateTimeInterface
@@ -300,9 +314,19 @@ class UserEntity extends Entity
         $this->lastLogin = $lastLogin;
     }
 
-    public function setAdmin(bool $admin): void
+    public function setAdmin(?bool $admin): void
     {
         $this->admin = $admin;
+    }
+
+    public function getReadAllScopes(): ?bool
+    {
+        return $this->readAllScopes;
+    }
+
+    public function setReadAllScopes(?bool $readAllScopes): void
+    {
+        $this->readAllScopes = $readAllScopes;
     }
 
     public function getAclRoles(): ?AclRoleCollection

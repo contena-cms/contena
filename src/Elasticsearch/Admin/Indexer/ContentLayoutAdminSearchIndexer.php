@@ -85,14 +85,14 @@ final class ContentLayoutAdminSearchIndexer extends AbstractAdminIndexer
     /**
      * @param array<string> $ids
      *
-     * @return array<string, array{id: string, tenantId: mixed, text: string, completion: list<string>, name: string, version: string, rootSource: string}>
+     * @return array<string, array{id: string, dataScopeId: mixed, text: string, completion: list<string>, name: string, version: string, rootSource: string}>
      */
     public function fetch(array $ids): array
     {
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(content_layout.id)) AS id,
-                   LOWER(HEX(content_layout.tenant_id)) AS tenantId,
+                   LOWER(HEX(content_layout.data_scope_id)) AS dataScopeId,
                    content_layout.name,
                    content_layout.version,
                    content_layout.root_source AS rootSource
@@ -111,7 +111,7 @@ SQL,
             $rootSource = (string) $row['rootSource'];
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => strtolower(implode(' ', [$name, $version, $rootSource, $id])),
                 'completion' => $this->buildCompletion([$name]),
                 'name' => $name,

@@ -2,16 +2,17 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\Validation;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeMembershipAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowPlatformOwnedReference;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -29,9 +30,9 @@ use Symfony\Component\Validator\ConstraintViolationList;
  *
  * @see \Contena\Tests\Integration\Core\System\User\TenantOwnedUserAggregateTest
  */
-class TenantForeignKeyValidator implements EventSubscriberInterface
+class DataScopeForeignKeyValidator implements EventSubscriberInterface
 {
-    final public const string VIOLATION_TENANT_MISMATCH = 'FRAMEWORK__TENANT_FOREIGN_KEY_MISMATCH';
+    final public const string VIOLATION_DATA_SCOPE_MISMATCH = 'FRAMEWORK__DATA_SCOPE_FOREIGN_KEY_MISMATCH';
 
     public function __construct(
         private readonly Connection $connection,
@@ -51,8 +52,8 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
             return;
         }
 
-        $expectedTenantId = $event->getContext()->getTenantId();
-        $expectedTenant = $expectedTenantId !== null ? Uuid::fromHexToBytes($expectedTenantId) : null;
+        $expectedDataScope = Uuid::fromHexToBytes($event->getContext()->getDataScopeId());
+        $platformDataScope = Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
         $violations = new ConstraintViolationList();
 
         foreach ($references as $reference) {
@@ -61,16 +62,16 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
             foreach ($reference['commands'] as $commandReference) {
                 $valueKey = $this->valueKey($commandReference['value']);
                 if (!\array_key_exists($valueKey, $owners)) {
-                    if (!$reference['membership'] || $expectedTenant === null) {
+                    if (!$reference['membership']) {
                         continue;
                     }
-                } elseif (\in_array($expectedTenant, $owners[$valueKey], true)) {
+                } elseif (\in_array($expectedDataScope, $owners[$valueKey], true)) {
                     continue;
-                } elseif ($reference['allowPlatformOwned'] && $expectedTenant !== null && \in_array(null, $owners[$valueKey], true)) {
+                } elseif ($reference['allowPlatformOwned'] && \in_array($platformDataScope, $owners[$valueKey], true)) {
                     continue;
                 }
 
-                $message = 'The referenced tenant-scoped entity does not belong to the current tenant context.';
+                $message = 'The referenced entity is not visible in the current data scope.';
                 $violations->add(new ConstraintViolation(
                     $message,
                     $message,
@@ -79,7 +80,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     $commandReference['command']->getPath() . '/' . $commandReference['property'],
                     $reference['binary'] ? Uuid::fromBytesToHex($commandReference['value']) : $commandReference['value'],
                     null,
-                    self::VIOLATION_TENANT_MISMATCH,
+                    self::VIOLATION_DATA_SCOPE_MISMATCH,
                 ));
             }
         }
@@ -100,14 +101,14 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
 
         foreach ($commands as $command) {
             $definition = $this->definitionRegistry->getByEntityName($command->getEntityName());
-            if (!$definition->getFields()->filterInstance(TenantField::class)->first() instanceof TenantField) {
+            if (!$definition->getFields()->filterInstance(DataScopeField::class)->first() instanceof DataScopeField) {
                 continue;
             }
 
             foreach ($definition->getFields()->filterInstance(FkField::class) as $field) {
                 if (!$field instanceof FkField
-                    || $field instanceof TenantField
-                    || $field instanceof TenantMembershipField
+                    || $field instanceof DataScopeField
+                    || $field instanceof DataScopeMembershipField
                     || $field instanceof CreatedByField
                     || $field instanceof UpdatedByField
                     || !$command->hasField($field->getStorageName())
@@ -121,9 +122,9 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                 }
 
                 $referenceDefinition = $field->getReferenceDefinition();
-                $membership = $referenceDefinition->getFields()->filterInstance(TenantMembershipAssociationField::class)->first();
-                $tenantField = $referenceDefinition->getFields()->filterInstance(TenantField::class)->first();
-                if (!$tenantField instanceof TenantField && !$membership instanceof TenantMembershipAssociationField) {
+                $membership = $referenceDefinition->getFields()->filterInstance(DataScopeMembershipAssociationField::class)->first();
+                $dataScopeField = $referenceDefinition->getFields()->filterInstance(DataScopeField::class)->first();
+                if (!$dataScopeField instanceof DataScopeField && !$membership instanceof DataScopeMembershipAssociationField) {
                     continue;
                 }
 
@@ -135,7 +136,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
 
                 $table = $referenceDefinition->getEntityName();
                 $referenceStorageField = $referenceField->getStorageName();
-                if ($membership instanceof TenantMembershipAssociationField) {
+                if ($membership instanceof DataScopeMembershipAssociationField) {
                     $table = $membership->getMappingDefinition()->getEntityName();
                     $referenceStorageField = $membership->getMappingLocalColumn();
                 }
@@ -146,7 +147,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     'table' => $table,
                     'field' => $referenceStorageField,
                     'binary' => $referenceField instanceof IdField,
-                    'membership' => $membership instanceof TenantMembershipAssociationField,
+                    'membership' => $membership instanceof DataScopeMembershipAssociationField,
                     'allowPlatformOwned' => $allowPlatformOwned,
                     'values' => [],
                     'commands' => [],
@@ -171,7 +172,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
     /**
      * @param list<string> $values
      *
-     * @return array<string, list<string|null>>
+     * @return array<string, list<string>>
      */
     private function loadOwners(string $table, string $field, array $values, bool $binary): array
     {
@@ -179,7 +180,7 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
 
         foreach (array_chunk($values, 500) as $chunk) {
             $rows = $this->connection->createQueryBuilder()
-                ->select(EntityDefinitionQueryHelper::escape($field) . ' AS `reference_value`', '`tenant_id`')
+                ->select(EntityDefinitionQueryHelper::escape($field) . ' AS `reference_value`', '`data_scope_id`')
                 ->from(EntityDefinitionQueryHelper::escape($table))
                 ->where(EntityDefinitionQueryHelper::escape($field) . ' IN (:values)')
                 ->setParameter('values', $chunk, $binary ? ArrayParameterType::BINARY : ArrayParameterType::STRING)
@@ -191,7 +192,9 @@ class TenantForeignKeyValidator implements EventSubscriberInterface
                     continue;
                 }
 
-                $owners[$this->valueKey($row['reference_value'])][] = \is_string($row['tenant_id']) ? $row['tenant_id'] : null;
+                if (\is_string($row['data_scope_id'])) {
+                    $owners[$this->valueKey($row['reference_value'])][] = $row['data_scope_id'];
+                }
             }
         }
 

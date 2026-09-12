@@ -3,8 +3,10 @@
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Content\Category\CategoryCollection;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
@@ -17,7 +19,7 @@ use Contena\Core\Test\TestDefaults;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Verifies the tenant isolation mechanism of {@see TenantField} against the
+ * Verifies the data-scope isolation mechanism of {@see DataScopeField} against the
  * first tenant-scoped entity (channel): automatic write injection, automatic
  * read filtering, cross-tenant write protection and independent platform data
  * operation.
@@ -44,7 +46,7 @@ class TenantScopeTest extends TestCase
 
         $channel = $this->findChannel('channel-a', Context::createGlobalContext());
         static::assertInstanceOf(ChannelEntity::class, $channel);
-        static::assertSame($this->tenantA, $channel->getTenantId());
+        static::assertSame($this->tenantA, $channel->getDataScopeId());
     }
 
     public function testReadsAreFilteredByTheTenantOfTheContext(): void
@@ -85,7 +87,7 @@ class TenantScopeTest extends TestCase
     {
         static::expectException(WriteException::class);
 
-        $this->createChannel('channel-a', Context::createTenantContext($this->tenantA), ['tenantId' => $this->tenantB]);
+        $this->createChannel('channel-a', Context::createTenantContext($this->tenantA), ['dataScopeId' => $this->tenantB]);
     }
 
     public function testGlobalContextCreatesPlatformOwnedRows(): void
@@ -94,8 +96,8 @@ class TenantScopeTest extends TestCase
 
         $channel = $this->findChannel('platform-channel', Context::createGlobalContext());
         static::assertInstanceOf(ChannelEntity::class, $channel);
-        static::assertNull($channel->getTenantId());
-        static::assertNull($channel->getTranslations()?->first()?->getTenantId());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $channel->getDataScopeId());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $channel->getTranslations()?->first()?->getDataScopeId());
         static::assertNull($this->findChannel('platform-channel', Context::createTenantContext($this->tenantA)));
     }
 
@@ -103,7 +105,7 @@ class TenantScopeTest extends TestCase
     {
         static::expectException(WriteException::class);
 
-        $this->createChannel('global-created-tenant-channel', Context::createGlobalContext(), ['tenantId' => $this->tenantA]);
+        $this->createChannel('global-created-tenant-channel', Context::createGlobalContext(), ['dataScopeId' => $this->tenantA]);
     }
 
     public function testGlobalContextCanNotModifyTenantOwnedRows(): void
@@ -194,7 +196,7 @@ class TenantScopeTest extends TestCase
 
         $channel = $this->findChannel('channel-a', Context::createGlobalContext());
         static::assertInstanceOf(ChannelEntity::class, $channel);
-        static::assertSame($this->tenantA, $channel->getTenantId());
+        static::assertSame($this->tenantA, $channel->getDataScopeId());
     }
 
     public function testUpdatesCanNotMoveTheRowToAnotherTenant(): void
@@ -206,7 +208,7 @@ class TenantScopeTest extends TestCase
         static::expectException(WriteException::class);
 
         $this->channelRepository()->update([
-            ['id' => $channel->getId(), 'tenantId' => $this->tenantB],
+            ['id' => $channel->getId(), 'dataScopeId' => $this->tenantB],
         ], Context::createTenantContext($this->tenantB));
     }
 

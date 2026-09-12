@@ -13,6 +13,7 @@ use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\Migration\Traits\StateMachineMigration;
 use Contena\Core\Migration\Traits\StateMachineMigrationTrait;
 use Contena\Core\Migration\Traits\Translations;
+use Contena\Core\Migration\Traits\TranslationWriteResult;
 use Contena\Core\System\DataDictionary\DataDictionaryDefinition;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentMethods;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
@@ -425,7 +426,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
 
         sort($privileges);
 
-        $connection->insert('acl_role', [
+        $this->insertPlatformScoped($connection, 'acl_role', [
             'id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID),
             'code' => 'administrator',
             'name' => '管理员',
@@ -449,7 +450,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         ]);
 
         $templateId = Uuid::randomBytes();
-        $connection->insert('mail_template', [
+        $this->insertPlatformScoped($connection, 'mail_template', [
             'id' => $templateId,
             'mail_template_type_id' => $typeId,
             'system_default' => 1,
@@ -510,7 +511,7 @@ TEXT,
                 'created_at' => $this->createdAt(),
             ]);
 
-            $connection->insert('mail_template_translation', [
+            $this->insertPlatformScoped($connection, 'mail_template_translation', [
                 'mail_template_id' => $templateId,
                 'language_id' => $languageId,
                 'sender_name' => $translation['senderName'],
@@ -575,7 +576,7 @@ TEXT,
     ): void {
         $ruleId = Uuid::fromHexToBytes($id);
         $createdAt = $this->createdAt();
-        $connection->insert('rule', [
+        $this->insertPlatformScoped($connection, 'rule', [
             'id' => $ruleId,
             'name' => $name,
             'description' => $description,
@@ -584,7 +585,7 @@ TEXT,
         ]);
 
         foreach ($conditions as $condition) {
-            $connection->insert('rule_condition', [
+            $this->insertPlatformScoped($connection, 'rule_condition', [
                 'id' => Uuid::fromHexToBytes($condition['id']),
                 'type' => $condition['type'],
                 'rule_id' => $ruleId,
@@ -601,7 +602,7 @@ TEXT,
         $flowId = Uuid::fromHexToBytes(self::USER_RECOVERY_FLOW_ID);
         $sequenceId = Uuid::fromHexToBytes(self::USER_RECOVERY_FLOW_SEQUENCE_ID);
         $createdAt = $this->createdAt();
-        $connection->insert('flow', [
+        $this->insertPlatformScoped($connection, 'flow', [
             'id' => $flowId,
             'name' => '用户密码恢复邮件',
             'description' => '用户请求重置密码时发送恢复邮件。',
@@ -611,7 +612,7 @@ TEXT,
             'created_at' => $createdAt,
         ]);
 
-        $connection->insert('flow_sequence', [
+        $this->insertPlatformScoped($connection, 'flow_sequence', [
             'id' => $sequenceId,
             'flow_id' => $flowId,
             'action_name' => 'action.mail.send',
@@ -679,7 +680,7 @@ TEXT,
         ];
 
         foreach ($options as $key => $value) {
-            $connection->insert('system_config', [
+            $this->insertPlatformScoped($connection, 'system_config', [
                 'id' => Uuid::randomBytes(),
                 'configuration_key' => $key,
                 'configuration_value' => json_encode(['_value' => $value], \JSON_THROW_ON_ERROR),
@@ -691,7 +692,7 @@ TEXT,
     private function createDefaultMailHeaderFooter(Connection $connection): void
     {
         $headerFooterId = Uuid::randomBytes();
-        $connection->insert('mail_header_footer', [
+        $this->insertPlatformScoped($connection, 'mail_header_footer', [
             'id' => $headerFooterId,
             'system_default' => 1,
             'created_at' => $this->createdAt(),
@@ -747,7 +748,7 @@ HTML,
         foreach ($translations as $languageId => $translation) {
             $languageId = Uuid::fromHexToBytes($languageId);
 
-            $connection->insert('mail_header_footer_translation', [
+            $this->insertPlatformScoped($connection, 'mail_header_footer_translation', [
                 'mail_header_footer_id' => $headerFooterId,
                 'language_id' => $languageId,
                 'name' => $translation['name'],
@@ -763,7 +764,7 @@ HTML,
 
     private function ensureDefaultMediaThumbnailSize(Connection $connection): void
     {
-        $connection->insert('media_thumbnail_size', [
+        $this->insertPlatformScoped($connection, 'media_thumbnail_size', [
             'id' => Uuid::randomBytes(),
             'width' => 200,
             'height' => 200,
@@ -906,18 +907,18 @@ HTML,
 
         foreach (self::DEFAULT_MEDIA_FOLDERS as $entity => $folderName) {
             $defaultFolderId = Uuid::randomBytes();
-            $connection->insert('media_default_folder', [
+            $this->insertPlatformScoped($connection, 'media_default_folder', [
                 'id' => $defaultFolderId,
                 'entity' => $entity,
                 'created_at' => $createdAt,
             ]);
 
             $configurationId = Uuid::randomBytes();
-            $connection->insert('media_folder_configuration', [
+            $this->insertPlatformScoped($connection, 'media_folder_configuration', [
                 'id' => $configurationId,
                 'created_at' => $createdAt,
             ]);
-            $connection->insert('media_folder', [
+            $this->insertPlatformScoped($connection, 'media_folder', [
                 'id' => Uuid::randomBytes(),
                 'name' => $folderName,
                 'default_folder_id' => $defaultFolderId,
@@ -1123,7 +1124,7 @@ HTML,
         }
 
         $numberRangeId = Uuid::randomBytes();
-        $connection->insert('number_range', [
+        $this->insertPlatformScoped($connection, 'number_range', [
             'id' => $numberRangeId,
             'type_id' => $typeId,
             'global' => 1,
@@ -1134,7 +1135,7 @@ HTML,
 
         foreach ($languages as $language) {
             $name = $language['code'] === Defaults::DEFAULT_LOCALE ? '用户编码' : 'User codes';
-            $connection->insert('number_range_translation', [
+            $this->insertPlatformScoped($connection, 'number_range_translation', [
                 'number_range_id' => $numberRangeId,
                 'language_id' => $language['id'],
                 'name' => $name,
@@ -1172,7 +1173,7 @@ HTML,
         }
 
         $numberRangeId = Uuid::randomBytes();
-        $connection->insert('number_range', [
+        $this->insertPlatformScoped($connection, 'number_range', [
             'id' => $numberRangeId,
             'type_id' => $typeId,
             'global' => 1,
@@ -1183,7 +1184,7 @@ HTML,
 
         foreach ($languages as $language) {
             $name = $language['code'] === Defaults::DEFAULT_LOCALE ? '会员编码' : 'Member codes';
-            $connection->insert('number_range_translation', [
+            $this->insertPlatformScoped($connection, 'number_range_translation', [
                 'number_range_id' => $numberRangeId,
                 'language_id' => $language['id'],
                 'name' => $name,
@@ -1291,15 +1292,17 @@ HTML,
             }
 
             $numberRangeExists = $connection->fetchOne(
-                'SELECT 1 FROM `number_range` WHERE `type_id` = :typeId LIMIT 1',
-                ['typeId' => $typeId]
+                'SELECT 1 FROM `number_range`
+                 WHERE `type_id` = :typeId AND `data_scope_id` = :dataScopeId
+                 LIMIT 1',
+                ['typeId' => $typeId, 'dataScopeId' => $this->platformScopeId()]
             );
             if ($numberRangeExists) {
                 continue;
             }
 
             $numberRangeId = Uuid::randomBytes();
-            $connection->insert('number_range', [
+            $this->insertPlatformScoped($connection, 'number_range', [
                 'id' => $numberRangeId,
                 'type_id' => $typeId,
                 'global' => 1,
@@ -1307,7 +1310,7 @@ HTML,
                 'start' => 10,
                 'created_at' => $this->createdAt(),
             ]);
-            $this->importTranslation('number_range_translation', new Translations(
+            $this->importPlatformTranslation('number_range_translation', new Translations(
                 ['number_range_id' => $numberRangeId, 'name' => $range['zh'] . '编号'],
                 ['number_range_id' => $numberRangeId, 'name' => $range['en'] . ' numbers']
             ), $connection);
@@ -1348,7 +1351,10 @@ HTML,
         ];
 
         foreach ($channels as $code => $channel) {
-            $channelId = $connection->fetchOne('SELECT `id` FROM `payment_channel` WHERE `code` = :code', ['code' => $code]);
+            $channelId = $connection->fetchOne(
+                'SELECT `id` FROM `payment_channel` WHERE `code` = :code',
+                ['code' => $code],
+            );
             $schema = Json::encode($reader->read($channel['schema']));
 
             if (!$channelId) {
@@ -1366,14 +1372,21 @@ HTML,
                     ['payment_channel_id' => $channelId, 'name' => $channel['en']]
                 ), $connection);
             } else {
-                $connection->update('payment_channel', ['config_schema' => $schema], ['id' => $channelId]);
+                $connection->update('payment_channel', ['config_schema' => $schema], [
+                    'id' => $channelId,
+                ]);
             }
 
             $sort = 10;
             foreach ($channel['methods'] as $methodCode => $method) {
                 $methodId = $connection->fetchOne(
-                    'SELECT `id` FROM `payment_channel_method` WHERE `channel_id` = :channelId AND `method_code` = :method',
-                    ['channelId' => $channelId, 'method' => $methodCode]
+                    'SELECT `id` FROM `payment_channel_method`
+                     WHERE `channel_id` = :channelId
+                       AND `method_code` = :method',
+                    [
+                        'channelId' => $channelId,
+                        'method' => $methodCode,
+                    ]
                 );
                 if ($methodId) {
                     $sort += 10;
@@ -1402,8 +1415,12 @@ HTML,
     private function addPaymentPrivilegesToDefaultAdministrator(Connection $connection): void
     {
         $encoded = $connection->fetchOne(
-            'SELECT `privileges` FROM `acl_role` WHERE `id` = :id',
-            ['id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID)]
+            'SELECT `privileges` FROM `acl_role`
+             WHERE `id` = :id AND `data_scope_id` = :dataScopeId',
+            [
+                'id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID),
+                'dataScopeId' => $this->platformScopeId(),
+            ]
         );
         if (!\is_string($encoded)) {
             return;
@@ -1428,7 +1445,10 @@ HTML,
         $connection->update(
             'acl_role',
             ['privileges' => Json::encode(array_values(array_unique($privileges)))],
-            ['id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID)]
+            [
+                'id' => Uuid::fromHexToBytes(self::DEFAULT_ADMINISTRATOR_ROLE_ID),
+                'data_scope_id' => $this->platformScopeId(),
+            ]
         );
     }
 
@@ -1446,7 +1466,7 @@ HTML,
             $unitId = Uuid::randomBytes();
             $unitIds[$technicalName] = $unitId;
 
-            $connection->insert('organization_unit', [
+            $this->insertPlatformScoped($connection, 'organization_unit', [
                 'id' => $unitId,
                 'technical_name' => $technicalName,
                 'position' => $unit['position'],
@@ -1454,7 +1474,7 @@ HTML,
                 'created_at' => $createdAt,
             ]);
 
-            $this->importTranslation('organization_unit_translation', new Translations(
+            $this->importPlatformTranslation('organization_unit_translation', new Translations(
                 ['organization_unit_id' => $unitId, 'name' => $unit['zh-CN']],
                 ['organization_unit_id' => $unitId, 'name' => $unit['en-GB']]
             ), $connection);
@@ -1468,7 +1488,7 @@ HTML,
             $organizationId = Uuid::fromHexToBytes(Hasher::hash('contena:organization:' . $code));
             $organizationIds[$code] = $organizationId;
 
-            $connection->insert('organization', [
+            $this->insertPlatformScoped($connection, 'organization', [
                 'id' => $organizationId,
                 'parent_id' => $parentId,
                 'organization_unit_id' => $unitIds[$organization['unit']],
@@ -1481,7 +1501,7 @@ HTML,
                 'created_at' => $createdAt,
             ]);
 
-            $this->importTranslation('organization_translation', new Translations(
+            $this->importPlatformTranslation('organization_translation', new Translations(
                 ['organization_id' => $organizationId, 'name' => $organization['zh-CN']],
                 ['organization_id' => $organizationId, 'name' => $organization['en-GB']]
             ), $connection);
@@ -1497,7 +1517,7 @@ HTML,
         foreach (self::DEFAULT_POSITIONS as $code => $position) {
             $positionId = Uuid::fromHexToBytes(Hasher::hash('contena:position:' . $code));
 
-            $connection->insert('position', [
+            $this->insertPlatformScoped($connection, 'position', [
                 'id' => $positionId,
                 'code' => $code,
                 'position' => $position['position'],
@@ -1505,7 +1525,7 @@ HTML,
                 'created_at' => $createdAt,
             ]);
 
-            $this->importTranslation('position_translation', new Translations(
+            $this->importPlatformTranslation('position_translation', new Translations(
                 ['position_id' => $positionId, 'name' => $position['zh-CN']],
                 ['position_id' => $positionId, 'name' => $position['en-GB']]
             ), $connection);
@@ -1534,7 +1554,7 @@ HTML,
                 'priority' => 1,
                 'naturalSorting' => 0,
             ], $fieldConfig);
-            $connection->insert('blog_sorting', [
+            $this->insertPlatformScoped($connection, 'blog_sorting', [
                 'id' => $id,
                 'url_key' => $key,
                 'priority' => $priority,
@@ -1544,7 +1564,7 @@ HTML,
                 'created_at' => $createdAt,
             ]);
 
-            $this->importTranslation('blog_sorting_translation', new Translations(
+            $this->importPlatformTranslation('blog_sorting_translation', new Translations(
                 ['blog_sorting_id' => $id, 'label' => $chineseLabel],
                 ['blog_sorting_id' => $id, 'label' => $englishLabel]
             ), $connection);
@@ -1555,7 +1575,7 @@ HTML,
             'core.listing.defaultSearchResultSorting' => 'score',
         ];
         foreach ($defaults as $configurationKey => $sortingKey) {
-            $connection->insert('system_config', [
+            $this->insertPlatformScoped($connection, 'system_config', [
                 'id' => Uuid::randomBytes(),
                 'configuration_key' => $configurationKey,
                 'configuration_value' => json_encode(['_value' => Uuid::fromBytesToHex($sortingIds[$sortingKey])], \JSON_THROW_ON_ERROR),
@@ -1579,7 +1599,7 @@ HTML,
 
         foreach ($languageIds as $languageId) {
             $configId = Uuid::randomBytes();
-            $connection->insert('blog_search_config', [
+            $this->insertPlatformScoped($connection, 'blog_search_config', [
                 'id' => $configId,
                 'language_id' => $languageId,
                 'and_logic' => 0,
@@ -1589,7 +1609,7 @@ HTML,
             ]);
 
             foreach ($fields as [$field, $ranking, $tokenize, $useExactSubfield]) {
-                $connection->insert('blog_search_config_field', [
+                $this->insertPlatformScoped($connection, 'blog_search_config_field', [
                     'id' => Uuid::randomBytes(),
                     'blog_search_config_id' => $configId,
                     'field' => $field,
@@ -1617,17 +1637,22 @@ HTML,
         $memberGroupId = Uuid::fromHexToBytes(self::DEFAULT_MEMBER_GROUP_ID);
         $navigationCategoryId = $this->createDefaultNavigationCategory($connection, $createdAt);
 
-        $connection->insert('member_group', [
+        $this->insertPlatformScoped($connection, 'member_group', [
             'id' => $memberGroupId,
             'created_at' => $createdAt,
         ]);
 
-        $this->importTranslation('member_group_translation', new Translations(
+        $this->importPlatformTranslation('member_group_translation', new Translations(
             ['member_group_id' => $memberGroupId, 'name' => '默认会员组'],
             ['member_group_id' => $memberGroupId, 'name' => 'Default member group']
         ), $connection);
 
-        $mailHeaderFooterId = $connection->fetchOne('SELECT `id` FROM `mail_header_footer` WHERE `system_default` = 1 ORDER BY `created_at` LIMIT 1');
+        $mailHeaderFooterId = $connection->fetchOne(
+            'SELECT `id` FROM `mail_header_footer`
+             WHERE `system_default` = 1 AND `data_scope_id` = :dataScopeId
+             ORDER BY `created_at` LIMIT 1',
+            ['dataScopeId' => $this->platformScopeId()],
+        );
 
         $this->createChannelTypeData($connection, Defaults::CHANNEL_TYPE_API, 'API', 'API', '仅提供 API 的渠道', 'API-only channel', 'regular-rocket', $createdAt);
         $this->createChannelTypeData($connection, Defaults::CHANNEL_TYPE_WEB, 'Web', 'Web', '提供 HTML 页面的渠道', 'Channel with HTML pages', 'regular-globe', $createdAt);
@@ -1695,7 +1720,7 @@ HTML,
         ];
 
         foreach ($templates as $template) {
-            $connection->insert('seo_url_template', [
+            $this->insertPlatformScoped($connection, 'seo_url_template', [
                 'id' => Uuid::randomBytes(),
                 'channel_id' => null,
                 'route_name' => $template['route_name'],
@@ -1712,14 +1737,14 @@ HTML,
         $categoryId = Uuid::fromHexToBytes(self::DEFAULT_NAVIGATION_CATEGORY_ID);
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
 
-        $connection->insert('category', [
+        $this->insertPlatformScoped($connection, 'category', [
             'id' => $categoryId,
             'version_id' => $versionId,
             'type' => 'page',
             'created_at' => $createdAt,
         ]);
 
-        $this->importTranslation('category_translation', new Translations(
+        $this->importPlatformTranslation('category_translation', new Translations(
             ['category_id' => $categoryId, 'category_version_id' => $versionId, 'name' => '内容', 'breadcrumb' => json_encode(['内容'], \JSON_THROW_ON_ERROR)],
             ['category_id' => $categoryId, 'category_version_id' => $versionId, 'name' => 'Content', 'breadcrumb' => json_encode(['Content'], \JSON_THROW_ON_ERROR)]
         ), $connection);
@@ -1770,7 +1795,7 @@ HTML,
             ? Uuid::fromHexToBytes(self::DEFAULT_API_CHANNEL_ID)
             : Uuid::fromHexToBytes(self::DEFAULT_WEB_CHANNEL_ID);
 
-        $connection->insert('channel', [
+        $this->insertPlatformScoped($connection, 'channel', [
             'id' => $channelId,
             'type_id' => $typeId,
             'access_key' => AccessKeyHelper::generateAccessKey('channel'),
@@ -1784,7 +1809,7 @@ HTML,
             'created_at' => $createdAt,
         ]);
 
-        $translationWriteResult = $this->importTranslation('channel_translation', new Translations(
+        $translationWriteResult = $this->importPlatformTranslation('channel_translation', new Translations(
             ['channel_id' => $channelId, 'name' => $chineseName],
             ['channel_id' => $channelId, 'name' => $englishName]
         ), $connection);
@@ -1792,12 +1817,12 @@ HTML,
         foreach (array_merge($translationWriteResult->getChineseLanguages(), $translationWriteResult->getEnglishLanguages()) as $translationLanguageId) {
             $translationLanguageId = Uuid::fromHexToBytes($translationLanguageId);
 
-            $connection->insert('channel_language', ['channel_id' => $channelId, 'language_id' => $translationLanguageId]);
+            $this->insertPlatformScoped($connection, 'channel_language', ['channel_id' => $channelId, 'language_id' => $translationLanguageId]);
         }
 
-        $connection->insert('channel_country', ['channel_id' => $channelId, 'country_id' => $countryId]);
+        $this->insertPlatformScoped($connection, 'channel_country', ['channel_id' => $channelId, 'country_id' => $countryId]);
 
-        $connection->insert('channel_domain', [
+        $this->insertPlatformScoped($connection, 'channel_domain', [
             'id' => Uuid::randomBytes(),
             'channel_id' => $channelId,
             'language_id' => $languageId,
@@ -1854,7 +1879,7 @@ HTML,
             'version_id' => $versionId,
         ]);
 
-        $connection->insert('blog', [
+        $this->insertPlatformScoped($connection, 'blog', [
             'id' => $blogId,
             'version_id' => $versionId,
             'active' => 1,
@@ -1865,12 +1890,12 @@ HTML,
             'created_at' => $createdAt,
         ]);
 
-        $this->importTranslation('blog_translation', new Translations(
+        $this->importPlatformTranslation('blog_translation', new Translations(
             ['blog_id' => $blogId, 'blog_version_id' => $versionId, 'name' => '欢迎使用 Contena', 'meta_title' => '欢迎使用 Contena', 'meta_description' => '用于发布结构化数字体验的灵活平台。'],
             ['blog_id' => $blogId, 'blog_version_id' => $versionId, 'name' => 'Welcome to Contena', 'meta_title' => 'Welcome to Contena', 'meta_description' => 'A flexible platform for publishing structured digital experiences.']
         ), $connection);
 
-        $connection->insert('blog_visibility', [
+        $this->insertPlatformScoped($connection, 'blog_visibility', [
             'id' => Uuid::randomBytes(),
             'blog_id' => $blogId,
             'blog_version_id' => $versionId,
@@ -1878,25 +1903,25 @@ HTML,
             'visibility' => 30,
             'created_at' => $createdAt,
         ]);
-        $connection->insert('blog_category', [
+        $this->insertPlatformScoped($connection, 'blog_category', [
             'blog_id' => $blogId,
             'blog_version_id' => $versionId,
             'category_id' => $blogCategoryId,
             'category_version_id' => $versionId,
         ]);
-        $connection->insert('blog_category_tree', [
+        $this->insertPlatformScoped($connection, 'blog_category_tree', [
             'blog_id' => $blogId,
             'blog_version_id' => $versionId,
             'category_id' => $navigationCategoryId,
             'category_version_id' => $versionId,
         ]);
-        $connection->insert('blog_category_tree', [
+        $this->insertPlatformScoped($connection, 'blog_category_tree', [
             'blog_id' => $blogId,
             'blog_version_id' => $versionId,
             'category_id' => $blogCategoryId,
             'category_version_id' => $versionId,
         ]);
-        $connection->insert('blog_main_category', [
+        $this->insertPlatformScoped($connection, 'blog_main_category', [
             'id' => Uuid::randomBytes(),
             'blog_id' => $blogId,
             'blog_version_id' => $versionId,
@@ -1963,7 +1988,7 @@ HTML,
         ];
 
         foreach ($layouts as $layout) {
-            $connection->insert('content_layout', [
+            $this->insertPlatformScoped($connection, 'content_layout', [
                 'id' => Uuid::fromHexToBytes($layout['id']),
                 'name' => $layout['name'],
                 'version' => '1.0.0',
@@ -1986,7 +2011,7 @@ HTML,
     ): void {
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
 
-        $connection->insert('category', [
+        $this->insertPlatformScoped($connection, 'category', [
             'id' => $categoryId,
             'version_id' => $versionId,
             'parent_id' => $parentId,
@@ -1999,7 +2024,7 @@ HTML,
             'created_at' => $createdAt,
         ]);
 
-        $this->importTranslation('category_translation', new Translations(
+        $this->importPlatformTranslation('category_translation', new Translations(
             array_merge(['category_id' => $categoryId, 'category_version_id' => $versionId], $translations->getChinese()),
             array_merge(['category_id' => $categoryId, 'category_version_id' => $versionId], $translations->getEnglish())
         ), $connection);
@@ -2013,19 +2038,19 @@ HTML,
     ): void {
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
 
-        $connection->insert('landing_page', [
+        $this->insertPlatformScoped($connection, 'landing_page', [
             'id' => $landingPageId,
             'version_id' => $versionId,
             'active' => 1,
             'created_at' => $createdAt,
         ]);
 
-        $this->importTranslation('landing_page_translation', new Translations(
+        $this->importPlatformTranslation('landing_page_translation', new Translations(
             ['landing_page_id' => $landingPageId, 'landing_page_version_id' => $versionId, 'name' => '关于 Contena', 'url' => 'about', 'meta_title' => '关于 Contena', 'meta_description' => '了解更多关于 Contena 的信息。'],
             ['landing_page_id' => $landingPageId, 'landing_page_version_id' => $versionId, 'name' => 'About Contena', 'url' => 'about', 'meta_title' => 'About Contena', 'meta_description' => 'Learn more about Contena.']
         ), $connection);
 
-        $connection->insert('landing_page_channel', [
+        $this->insertPlatformScoped($connection, 'landing_page_channel', [
             'landing_page_id' => $landingPageId,
             'landing_page_version_id' => $versionId,
             'channel_id' => $channelId,
@@ -2043,12 +2068,41 @@ HTML,
         $table = $entity . '_content_layout';
         $entityIdField = $entity . '_id';
 
-        $connection->insert($table, [
+        $this->insertPlatformScoped($connection, $table, [
             'id' => Uuid::randomBytes(),
             $entityIdField => $entityId,
             'channel_id' => $channelId,
             'content_layout_id' => Uuid::fromHexToBytes($contentLayoutId),
             'created_at' => $createdAt,
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function insertPlatformScoped(Connection $connection, string $table, array $data): void
+    {
+        $connection->insert($table, [
+            'data_scope_id' => $this->platformScopeId(),
+            ...$data,
+        ]);
+    }
+
+    private function importPlatformTranslation(
+        string $table,
+        Translations $translations,
+        Connection $connection
+    ): TranslationWriteResult {
+        $scope = ['data_scope_id' => $this->platformScopeId()];
+
+        return $this->importTranslation($table, new Translations(
+            [...$scope, ...$translations->getChinese()],
+            [...$scope, ...$translations->getEnglish()],
+        ), $connection);
+    }
+
+    private function platformScopeId(): string
+    {
+        return Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
     }
 }

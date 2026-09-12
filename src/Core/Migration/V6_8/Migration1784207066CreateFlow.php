@@ -20,7 +20,7 @@ class Migration1784207066CreateFlow extends MigrationStep
         $connection->executeStatement(<<<'SQL'
             CREATE TABLE IF NOT EXISTS `flow` (
                 `id` BINARY(16) NOT NULL,
-                `tenant_id` BINARY(16) NULL,
+                `data_scope_id` BINARY(16) NOT NULL,
                 `name` VARCHAR(255) NOT NULL,
                 `description` VARCHAR(500) NULL,
                 `event_name` VARCHAR(255) NOT NULL,
@@ -32,9 +32,9 @@ class Migration1784207066CreateFlow extends MigrationStep
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
                 PRIMARY KEY (`id`),
-                INDEX `idx.flow.event_name` (`tenant_id`, `event_name`, `priority`),
+                INDEX `idx.flow.event_name` (`data_scope_id`, `event_name`, `priority`),
                 CONSTRAINT `json.flow.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-                CONSTRAINT `fk.flow.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT `fk.flow.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
             SQL);
     }

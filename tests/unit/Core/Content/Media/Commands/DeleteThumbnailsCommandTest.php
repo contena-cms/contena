@@ -4,12 +4,13 @@ namespace Contena\Tests\Unit\Core\Content\Media\Commands;
 
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Content\Media\Commands\DeleteThumbnailsCommand;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Doctrine\DBAL\Connection;
 use League\Flysystem\DirectoryListing;
@@ -124,7 +125,8 @@ class DeleteThumbnailsCommandTest extends TestCase
         );
 
         $connection->expects($this->once())->method('executeStatement')->with(
-            'UPDATE `media` SET `thumbnails_ro` = NULL WHERE `tenant_id` IS NULL',
+            'UPDATE `media` SET `thumbnails_ro` = NULL WHERE `data_scope_id` = :dataScopeId',
+            ['dataScopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE)],
         );
         $filesystemPublic->expects($this->once())->method('deleteDirectory')->with('thumbnail');
         $filesystemPrivate->expects($this->once())->method('deleteDirectory')->with('thumbnail');
@@ -200,9 +202,9 @@ class DeleteThumbnailsCommandTest extends TestCase
     /**
      * @param list<Context> $contexts
      */
-    private function createContextProvider(array $contexts): TenantScopeContextProvider
+    private function createContextProvider(array $contexts): DataScopeContextProvider
     {
-        $contextProvider = static::createStub(TenantScopeContextProvider::class);
+        $contextProvider = static::createStub(DataScopeContextProvider::class);
         $contextProvider->method('getContexts')->willReturn((static function () use ($contexts): \Generator {
             yield from $contexts;
         })());

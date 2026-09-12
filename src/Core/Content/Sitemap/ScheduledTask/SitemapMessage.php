@@ -15,7 +15,7 @@ class SitemapMessage implements AsyncMessageInterface
         private readonly ?string $lastProvider,
         private readonly ?int $nextOffset,
         private readonly bool $finished,
-        private readonly ?string $tenantId,
+        private readonly string $dataScopeId,
     ) {
     }
 
@@ -44,8 +44,8 @@ class SitemapMessage implements AsyncMessageInterface
         return $this->finished;
     }
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 }

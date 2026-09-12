@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Specification;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * `PropertyType` sits on the coverage-source exclude list, so it is not a valid coverage target.

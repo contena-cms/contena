@@ -477,7 +477,7 @@ class AdminSearchRegistry implements EventSubscriberInterface
                 'textBoosted' => AbstractAdminIndexer::TEXT_FIELD,
                 'text' => AbstractAdminIndexer::TEXT_FIELD,
                 'completion' => AbstractAdminIndexer::COMPLETION_FIELD,
-                'tenantId' => AbstractElasticsearchDefinition::KEYWORD_FIELD,
+                'dataScopeId' => AbstractElasticsearchDefinition::KEYWORD_FIELD,
                 'entityName' => AbstractElasticsearchDefinition::KEYWORD_FIELD,
                 'parameters' => AbstractElasticsearchDefinition::KEYWORD_FIELD,
             ],

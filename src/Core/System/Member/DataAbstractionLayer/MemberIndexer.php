@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\Member\DataAbstractionLayer;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -40,9 +41,9 @@ class MemberIndexer extends EntityIndexer
     /**
      * @param array{offset: int|null}|null $offset
      */
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -50,7 +51,7 @@ class MemberIndexer extends EntityIndexer
             return null;
         }
 
-        return new MemberIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new MemberIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -61,7 +62,7 @@ class MemberIndexer extends EntityIndexer
             return null;
         }
 
-        $indexing = new MemberIndexingMessage(array_values($updates), null, $event->getContext());
+        $indexing = new MemberIndexingMessage(array_values($updates), $event->getContext());
 
         if ($getIdsWithProfileChange = $event->getPrimaryKeysWithPropertyChange(MemberDefinition::ENTITY_NAME, self::PRIMARY_KEYS_WITH_PROPERTY_CHANGE)) {
             $indexing->setIds($getIdsWithProfileChange);
@@ -96,9 +97,9 @@ class MemberIndexer extends EntityIndexer
         return [self::MANY_TO_MANY_ID_FIELD_UPDATER];
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

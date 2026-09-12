@@ -11,7 +11,7 @@ class EntityIndexingMessage implements AsyncMessageInterface, DeduplicatableMess
 {
     protected string $indexer;
 
-    private Context $context;
+    private readonly Context $context;
 
     /**
      * @var array<string>
@@ -24,12 +24,12 @@ class EntityIndexingMessage implements AsyncMessageInterface, DeduplicatableMess
      */
     public function __construct(
         protected array|string $data,
+        Context $context,
         protected ?array $offset = null,
-        ?Context $context = null,
         public bool $forceQueue = false,
         public bool $isFullIndexing = false
     ) {
-        $this->context = $context ?? Context::createDefaultContext();
+        $this->context = $context;
     }
 
     /**
@@ -67,15 +67,6 @@ class EntityIndexingMessage implements AsyncMessageInterface, DeduplicatableMess
     public function getContext(): Context
     {
         return $this->context;
-    }
-
-    /**
-     * @internal Used by full-index control messages to bind iterator batches to
-     * the tenant context that requested the indexing run.
-     */
-    public function setContext(Context $context): void
-    {
-        $this->context = $context;
     }
 
     public function forceQueue(): bool

@@ -141,7 +141,7 @@ final class CategoryAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(category.id)) as id,
-                   LOWER(HEX(category.tenant_id)) as tenantId,
+                   LOWER(HEX(category.data_scope_id)) as dataScopeId,
                    LOWER(HEX(category.parent_id)) as parentId,
                    GROUP_CONCAT(DISTINCT category_translation.name SEPARATOR " ") as name,
                    JSON_ARRAYAGG(JSON_OBJECT(
@@ -182,7 +182,7 @@ SQL,
             if (!Feature::isActive('ENABLE_OPENSEARCH_FOR_ADMIN_API')) {
                 $mapped[$id] = [
                     'id' => $id,
-                    'tenantId' => $row['tenantId'] ?? null,
+                    'dataScopeId' => $row['dataScopeId'],
                     'text' => \strtolower($text),
                     'completion' => $completion,
                 ];
@@ -192,7 +192,7 @@ SQL,
 
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'parentId' => $row['parentId'] ?? null,
                 'text' => \strtolower($text),
                 'completion' => $completion,

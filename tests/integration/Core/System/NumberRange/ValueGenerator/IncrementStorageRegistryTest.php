@@ -2,9 +2,11 @@
 
 namespace Contena\Tests\Integration\Core\System\NumberRange\ValueGenerator;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementSqlStorage;
+use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementState;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementStorageRegistry;
 use Contena\Core\Test\Stub\System\NumberRange\ValueGenerator\IncrementArrayStorage;
 use Doctrine\DBAL\Connection;
@@ -22,69 +24,81 @@ class IncrementStorageRegistryTest extends TestCase
 
     private Connection $connection;
 
+    private Context $context;
+
     protected function setUp(): void
     {
-        $this->registry = static::getContainer()->get(IncrementStorageRegistry::class);
-
         $this->connection = static::getContainer()->get(Connection::class);
-
         $this->connection->executeStatement('DELETE FROM `number_range_state`');
+        $this->context = Context::createDefaultContext();
     }
 
     public function testGetDefaultStorage(): void
     {
+        $this->registry = static::getContainer()->get(IncrementStorageRegistry::class);
+
         static::assertInstanceOf(IncrementSqlStorage::class, $this->registry->getStorage());
     }
 
     public function testMigrateToSqlStorage(): void
     {
-        $arrayStorage = new IncrementArrayStorage([
-            Uuid::randomHex() => 10,
-            Uuid::randomHex() => 4,
-        ]);
+        $first = $this->createConfigAndState(10);
+        $second = $this->createConfigAndState(4);
+        $arrayStorage = new IncrementArrayStorage([$first, $second]);
         $sqlStorage = static::getContainer()->get(IncrementSqlStorage::class);
 
-        $registry = new IncrementStorageRegistry(
+        $this->registry = new IncrementStorageRegistry(
             new ServiceLocator([
                 'SQL' => static fn () => $sqlStorage,
                 'Array' => static fn () => $arrayStorage,
             ]),
-            'SQL'
+            'SQL',
         );
 
-        static::assertEmpty($sqlStorage->list());
+        static::assertEmpty($sqlStorage->list($this->context));
+        $this->registry->migrate('Array', 'SQL', $this->context);
 
-        $registry->migrate('Array', 'SQL');
-
-        static::assertSame($arrayStorage->list(), $sqlStorage->list());
+        static::assertEquals($arrayStorage->list($this->context), $sqlStorage->list($this->context));
     }
 
     public function testMigrateFromSqlStorage(): void
     {
-        $states = [
-            Uuid::randomHex() => 10,
-            Uuid::randomHex() => 4,
-        ];
+        $first = $this->createConfigAndState(10);
+        $second = $this->createConfigAndState(4);
         $sqlStorage = static::getContainer()->get(IncrementSqlStorage::class);
-        foreach ($states as $key => $value) {
-            $sqlStorage->set($key, $value);
-        }
-
-        static::assertSame($states, $sqlStorage->list());
+        $sqlStorage->set($first, $this->context);
+        $sqlStorage->set($second, $this->context);
         $arrayStorage = new IncrementArrayStorage([]);
 
-        $registry = new IncrementStorageRegistry(
+        $this->registry = new IncrementStorageRegistry(
             new ServiceLocator([
                 'SQL' => static fn () => $sqlStorage,
                 'Array' => static fn () => $arrayStorage,
             ]),
-            'SQL'
+            'SQL',
         );
 
-        static::assertEmpty($arrayStorage->list());
+        static::assertEmpty($arrayStorage->list($this->context));
+        $this->registry->migrate('SQL', 'Array', $this->context);
 
-        $registry->migrate('SQL', 'Array');
+        static::assertEquals($sqlStorage->list($this->context), $arrayStorage->list($this->context));
+    }
 
-        static::assertSame($sqlStorage->list(), $arrayStorage->list());
+    private function createConfigAndState(int $value): IncrementState
+    {
+        $id = Uuid::randomHex();
+        $typeId = $this->connection->fetchOne('SELECT `id` FROM `number_range_type` LIMIT 1');
+        static::assertIsString($typeId);
+        $this->connection->insert('number_range', [
+            'id' => Uuid::fromHexToBytes($id),
+            'data_scope_id' => Uuid::fromHexToBytes($this->context->getDataScopeId()),
+            'type_id' => $typeId,
+            'global' => 1,
+            'pattern' => '{n}',
+            'start' => 1,
+            'created_at' => '2026-01-01 00:00:00.000',
+        ]);
+
+        return new IncrementState($this->context->getDataScopeId(), $id, $value);
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
+use Contena\Core\Framework\Context;
+
 /**
- * @phpstan-type ValueGeneratorConfig array{id: string, pattern: string, start: ?int, technical_name?: string}
+ * @phpstan-type ValueGeneratorConfig array{id: string, dataScopeId: string, pattern: string, start: ?int, technical_name?: string}
  */
 abstract class AbstractValueGenerator
 {
@@ -15,7 +17,7 @@ abstract class AbstractValueGenerator
      * @param ValueGeneratorConfig $config
      * @param ?array<int, string> $args
      */
-    abstract public function generate(array $config, ?array $args = null, ?bool $preview = false): string;
+    abstract public function generate(array $config, Context $context, ?array $args = null, bool $preview = false): string;
 
     /**
      * returns the ID of the Pattern

@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
@@ -29,10 +30,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Verifies the tenant binding of the request contexts:
- * platform users get global access and may switch into a tenant, tenant
- * users are bound to their tenant, and channel sources inherit the tenant
- * of their channel.
+ * Verifies that request contexts are derived only from explicit data-scope
+ * grants and that cross-scope reads never imply tenant write authority.
  *
  * @internal
  */
@@ -41,44 +40,78 @@ class TenantContextResolverTest extends TestCase
     use IntegrationTestBehaviour;
     use TenantIsolationTestTrait;
 
-    public function testPlatformUserGetsGlobalAccess(): void
+    public function testUserWithoutAnyGrantIsRejected(): void
     {
-        $userId = $this->createUser(null);
+        $userId = $this->createUser();
+
+        static::expectExceptionObject(RoutingException::dataScopeAccessForbidden());
+
+        $this->resolveAdminContext($userId);
+    }
+
+    public function testUserWithoutGrantCanNotSelectTenant(): void
+    {
+        $tenantId = $this->seedTenant('resolver-a');
+        $userId = $this->createUser();
+
+        static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
+
+        $this->resolveAdminContext($userId, $tenantId);
+    }
+
+    public function testPlatformGrantUsesExactPlatformScope(): void
+    {
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE);
 
         $context = $this->resolveAdminContext($userId);
 
-        static::assertTrue($context->hasGlobalTenantAccess());
+        static::assertFalse($context->allowsCrossScopeReads());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $context->getDataScopeId());
         static::assertNull($context->getTenantId());
     }
 
-    public function testPlatformUserCanSwitchIntoATenant(): void
+    public function testExplicitPlatformReadAllGrantGetsCrossScopeReads(): void
     {
-        $tenantId = $this->seedTenant('resolver-a');
-        $userId = $this->createUser(null);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
 
-        $context = $this->resolveAdminContext($userId, $tenantId);
+        $context = $this->resolveAdminContext($userId);
 
-        static::assertFalse($context->hasGlobalTenantAccess());
-        static::assertSame($tenantId, $context->getTenantId());
+        static::assertTrue($context->allowsCrossScopeReads());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $context->getDataScopeId());
+    }
+
+    public function testReadAllGrantDoesNotPermitTenantSwitchWithoutTenantGrant(): void
+    {
+        $tenantId = $this->seedTenant('resolver-read-all');
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
+
+        static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
+
+        $this->resolveAdminContext($userId, $tenantId);
     }
 
     public function testTenantUserIsBoundToTheirTenant(): void
     {
         $tenantId = $this->seedTenant('resolver-b');
-        $userId = $this->createUser($tenantId);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId);
 
         $context = $this->resolveAdminContext($userId, $tenantId);
 
-        static::assertFalse($context->hasGlobalTenantAccess());
+        static::assertFalse($context->allowsCrossScopeReads());
         static::assertSame($tenantId, $context->getTenantId());
     }
 
     public function testTenantUserWithoutTenantHeaderIsRejected(): void
     {
         $tenantId = $this->seedTenant('resolver-b2');
-        $userId = $this->createUser($tenantId);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId);
 
-        static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
+        static::expectExceptionObject(RoutingException::dataScopeAccessForbidden());
 
         $this->resolveAdminContext($userId);
     }
@@ -87,7 +120,8 @@ class TenantContextResolverTest extends TestCase
     {
         $tenantId = $this->seedTenant('resolver-c');
         $otherTenantId = $this->seedTenant('resolver-d');
-        $userId = $this->createUser($tenantId);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId);
 
         static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
 
@@ -98,11 +132,49 @@ class TenantContextResolverTest extends TestCase
     {
         $tenantA = $this->seedTenant('resolver-member-a');
         $tenantB = $this->seedTenant('resolver-member-b');
-        $userId = $this->createUser($tenantA);
-        $this->addUserMembership($userId, $tenantB);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantA);
+        $this->addUserDataScopeGrant($userId, $tenantB);
 
         static::assertSame($tenantA, $this->resolveAdminContext($userId, $tenantA)->getTenantId());
         static::assertSame($tenantB, $this->resolveAdminContext($userId, $tenantB)->getTenantId());
+    }
+
+    public function testInactiveGrantIsRejected(): void
+    {
+        $tenantId = $this->seedTenant('resolver-inactive');
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId, active: false);
+
+        static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
+
+        $this->resolveAdminContext($userId, $tenantId);
+    }
+
+    public function testInactiveIdentityIsRejectedDespiteActivePlatformGrant(): void
+    {
+        $userId = $this->createUser(accountActive: false);
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
+
+        static::expectExceptionObject(RoutingException::dataScopeAccessForbidden());
+
+        $this->resolveAdminContext($userId);
+    }
+
+    public function testReadAllUserWithTenantGrantUsesTenantExactWhenSelected(): void
+    {
+        $tenantId = $this->seedTenant('resolver-read-all-member');
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
+        $this->addUserDataScopeGrant($userId, $tenantId);
+
+        $platformContext = $this->resolveAdminContext($userId);
+        $tenantContext = $this->resolveAdminContext($userId, $tenantId);
+
+        static::assertTrue($platformContext->allowsCrossScopeReads());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $platformContext->getDataScopeId());
+        static::assertFalse($tenantContext->allowsCrossScopeReads());
+        static::assertSame($tenantId, $tenantContext->getDataScopeId());
     }
 
     public function testChannelSourceInheritsTheTenantOfTheChannel(): void
@@ -125,21 +197,22 @@ class TenantContextResolverTest extends TestCase
         static::assertSame($tenantId, $context->getTenantId());
     }
 
-    public function testPlatformUserDefaultsToTheDomainTenant(): void
+    public function testPlatformReadAllUserNeedsExplicitDomainTenantGrant(): void
     {
-        $tenant = $this->seedTenantByCode('resolver-f');
-        $userId = $this->createUser(null);
+        $this->seedTenantByCode('resolver-f');
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
 
-        $context = $this->resolveAdminContext($userId, null, 'resolver-f.contena.cn');
+        static::expectExceptionObject(RoutingException::tenantDomainMismatch());
 
-        static::assertFalse($context->hasGlobalTenantAccess());
-        static::assertSame($tenant, $context->getTenantId());
+        $this->resolveAdminContext($userId, null, 'resolver-f.contena.cn');
     }
 
     public function testTenantUserOnTheirOwnDomainIsBoundWithoutHeader(): void
     {
         $tenant = $this->seedTenantByCode('resolver-g');
-        $userId = $this->createUser($tenant);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenant);
 
         $context = $this->resolveAdminContext($userId, null, 'resolver-g.contena.cn');
 
@@ -150,21 +223,33 @@ class TenantContextResolverTest extends TestCase
     {
         $tenant = $this->seedTenantByCode('resolver-h');
         $this->seedTenantByCode('resolver-i');
-        $userId = $this->createUser($tenant);
+        $userId = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenant);
 
         static::expectExceptionObject(RoutingException::tenantDomainMismatch());
 
         $this->resolveAdminContext($userId, null, 'resolver-i.contena.cn');
     }
 
-    public function testPlatformIntegrationGetsGlobalAccess(): void
+    public function testPlatformIntegrationUsesExactPlatformScope(): void
     {
         $accessKey = $this->createIntegration(null);
 
         $context = $this->resolveIntegrationContext($accessKey);
 
-        static::assertTrue($context->hasGlobalTenantAccess());
+        static::assertFalse($context->allowsCrossScopeReads());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $context->getDataScopeId());
         static::assertNull($context->getTenantId());
+    }
+
+    public function testPlatformIntegrationCanNotSwitchIntoTenant(): void
+    {
+        $tenantId = $this->seedTenant('resolver-platform-integration');
+        $accessKey = $this->createIntegration(null);
+
+        static::expectExceptionObject(RoutingException::tenantSwitchForbidden());
+
+        $this->resolveIntegrationContext($accessKey, $tenantId);
     }
 
     public function testTenantIntegrationIsBoundToItsTenant(): void
@@ -174,7 +259,7 @@ class TenantContextResolverTest extends TestCase
 
         $context = $this->resolveIntegrationContext($accessKey, $tenantId);
 
-        static::assertFalse($context->hasGlobalTenantAccess());
+        static::assertFalse($context->allowsCrossScopeReads());
         static::assertSame($tenantId, $context->getTenantId());
     }
 
@@ -200,7 +285,7 @@ class TenantContextResolverTest extends TestCase
         return $id;
     }
 
-    private function createUser(?string $tenantId): string
+    private function createUser(bool $accountActive = true): string
     {
         $userId = Uuid::randomHex();
         $this->userRepository()->create([[
@@ -209,26 +294,26 @@ class TenantContextResolverTest extends TestCase
             'password' => 'i am safe',
             'email' => \bin2hex(\random_bytes(4)) . '@example.com',
             'name' => 'Tenant Scope User',
-            'active' => true,
-            'admin' => false,
+            'accountActive' => $accountActive,
             'localeId' => $this->systemLocaleId(),
         ]], Context::createDefaultContext());
-
-        if ($tenantId !== null) {
-            $this->addUserMembership($userId, $tenantId);
-        }
 
         return $userId;
     }
 
-    private function addUserMembership(string $userId, string $tenantId): void
-    {
-        static::getContainer()->get('user_tenant.repository')->create([[
+    private function addUserDataScopeGrant(
+        string $userId,
+        string $dataScopeId,
+        bool $active = true,
+        bool $readAllScopes = false,
+    ): void {
+        static::getContainer()->get('user_data_scope.repository')->create([[
             'userId' => $userId,
-            'tenantId' => $tenantId,
-            'active' => true,
+            'dataScopeId' => $dataScopeId,
+            'active' => $active,
             'admin' => false,
-        ]], $this->createTenantContext($tenantId));
+            'readAllScopes' => $readAllScopes,
+        ]], Context::createDefaultContext());
     }
 
     private function createIntegration(?string $tenantId): string
@@ -272,9 +357,9 @@ class TenantContextResolverTest extends TestCase
         ]], Context::createDefaultContext());
 
         static::getContainer()->get(Connection::class)->executeStatement(
-            'UPDATE channel SET tenant_id = :tenantId WHERE id = :channelId',
+            'UPDATE channel SET data_scope_id = :dataScopeId WHERE id = :channelId',
             [
-                'tenantId' => Uuid::fromHexToBytes($tenantId),
+                'dataScopeId' => Uuid::fromHexToBytes($tenantId),
                 'channelId' => Uuid::fromHexToBytes($channelId),
             ],
         );

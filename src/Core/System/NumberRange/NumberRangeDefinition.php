@@ -4,6 +4,7 @@ namespace Contena\Core\System\NumberRange;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -47,6 +48,7 @@ class NumberRangeDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of number range.'),
 
             new FkField('type_id', 'typeId', NumberRangeTypeDefinition::class)->addFlags(new Required())->setDescription('Unique identity of type.'),

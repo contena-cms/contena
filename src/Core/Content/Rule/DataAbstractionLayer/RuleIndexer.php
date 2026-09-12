@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Rule\DataAbstractionLayer;
 use Contena\Core\Content\Rule\Event\RuleIndexerEvent;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Content\Rule\RuleDefinition;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -40,19 +41,19 @@ class RuleIndexer extends EntityIndexer
         return 'rule.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
         $ids = $iterator->fetch();
 
-        return $ids === [] ? null : new RuleIndexingMessage(array_values($ids), $iterator->getOffset());
+        return $ids === [] ? null : new RuleIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
     {
         $ids = $event->getPrimaryKeys(RuleDefinition::ENTITY_NAME);
         if ($ids !== []) {
-            $this->handle(new RuleIndexingMessage(array_values($ids), null, $event->getContext()));
+            $this->handle(new RuleIndexingMessage(array_values($ids), $event->getContext()));
         }
 
         return null;
@@ -81,7 +82,7 @@ class RuleIndexer extends EntityIndexer
             return;
         }
 
-        if ($message->isFullIndexing && $context->hasGlobalTenantAccess()) {
+        if ($message->isFullIndexing && $context->allowsCrossScopeReads()) {
             if ($message->allow(self::AREA_UPDATER)) {
                 $this->areaUpdater->update($ids);
             }
@@ -103,9 +104,9 @@ class RuleIndexer extends EntityIndexer
         }
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

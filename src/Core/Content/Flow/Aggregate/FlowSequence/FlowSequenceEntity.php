@@ -15,7 +15,7 @@ class FlowSequenceEntity extends Entity implements IdAware
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $flowId;
 
@@ -48,14 +48,14 @@ class FlowSequenceEntity extends Entity implements IdAware
 
     protected ?AppFlowActionEntity $appFlowAction = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getFlowId(): string

@@ -37,9 +37,11 @@ class IncrementRedisStorage extends AbstractIncrementStorage
      * this implementation is ensured to not block requests and will not produce the value twice, but at the tradeoff
      * that the continuity of the number ranges is not guaranteed in those edge cases
      */
-    public function reserve(array $config): int
+    public function reserve(array $config, Context $context): int
     {
-        $key = $this->getKey($config['id']);
+        $this->assertConfigurationMatchesContext($config, $context);
+
+        $key = $this->getKey($context->getDataScopeId(), $config['id']);
         $increment = $this->redis->incr($key);
         \assert(\is_int($increment));
         $start = $config['start'] ?? 1;
@@ -52,7 +54,11 @@ class IncrementRedisStorage extends AbstractIncrementStorage
 
         // if the configured start value is greater than the current increment
         // we need a lock so that the value be only set once to the start value
-        $lock = $this->lockFactory->createLock('number-range-' . $config['id']);
+        $lock = $this->lockFactory->createLock(\sprintf(
+            'number-range-%s-%s',
+            $context->getDataScopeId(),
+            $config['id'],
+        ));
 
         if (!$lock->acquire()) {
             // we can't acquire the lock, meaning another request will increase the increment value to the new start value
@@ -75,9 +81,11 @@ class IncrementRedisStorage extends AbstractIncrementStorage
     /**
      * {@inheritDoc}
      */
-    public function preview(array $config): int
+    public function preview(array $config, Context $context): int
     {
-        $lastNumber = $this->redis->get($this->getKey($config['id']));
+        $this->assertConfigurationMatchesContext($config, $context);
+
+        $lastNumber = $this->redis->get($this->getKey($context->getDataScopeId(), $config['id']));
         $start = $config['start'] ?? 1;
 
         if (!$lastNumber || (int) $lastNumber < $start) {
@@ -92,19 +100,19 @@ class IncrementRedisStorage extends AbstractIncrementStorage
      * We fetch all number range ids from the database and try to get the value stored for them in redis.
      * We don't use the `KEYS` command in redis to find all stored keys, because that would search the whole keyspace which can be huge
      */
-    public function list(): array
+    public function list(Context $context): array
     {
-        $numberRangeIds = $this->getNumberRangeIds();
+        $numberRangeIds = $this->getNumberRangeIds($context);
         $states = [];
 
         foreach ($numberRangeIds as $id) {
-            $state = $this->redis->get($this->getKey($id));
+            $state = $this->redis->get($this->getKey($context->getDataScopeId(), $id));
 
             if (!$state) {
                 continue;
             }
 
-            $states[$id] = (int) $state;
+            $states[$id] = new IncrementState($context->getDataScopeId(), $id, (int) $state);
         }
 
         return $states;
@@ -113,9 +121,14 @@ class IncrementRedisStorage extends AbstractIncrementStorage
     /**
      * {@inheritDoc}
      */
-    public function set(string $configurationId, int $value): void
+    public function set(IncrementState $state, Context $context): void
     {
-        $this->redis->set($this->getKey($configurationId), $value);
+        $this->assertStateMatchesContext($state, $context);
+
+        $this->redis->set(
+            $this->getKey($state->dataScopeId, $state->numberRangeId),
+            $state->value,
+        );
     }
 
     public function getDecorated(): AbstractIncrementStorage
@@ -123,16 +136,20 @@ class IncrementRedisStorage extends AbstractIncrementStorage
         throw new DecorationPatternException(self::class);
     }
 
-    private function getKey(string $id): string
+    private function getKey(string $dataScopeId, string $id): string
     {
-        return 'number_range:' . $id;
+        return \sprintf('number_range:%s:%s', $dataScopeId, $id);
     }
 
     /**
      * @return list<string>
      */
-    private function getNumberRangeIds(): array
+    private function getNumberRangeIds(Context $context): array
     {
-        return $this->numberRangeRepository->searchIds(new Criteria(), Context::createDefaultContext())->getIds();
+        // Increment-storage administration is intentionally exact-scope even
+        // when the supplied Context also permits cross-scope reads.
+        $context = $context->createWithDataScope($context->getDataScope());
+
+        return $this->numberRangeRepository->searchIds(new Criteria(), $context)->getIds();
     }
 }

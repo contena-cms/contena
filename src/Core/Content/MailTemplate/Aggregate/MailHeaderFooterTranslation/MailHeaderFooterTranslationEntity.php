@@ -7,7 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 
 class MailHeaderFooterTranslationEntity extends TranslationEntity
 {
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected ?string $name = null;
 
@@ -25,14 +25,14 @@ class MailHeaderFooterTranslationEntity extends TranslationEntity
 
     protected string $mailHeaderFooterId;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getMailHeaderFooterId(): string

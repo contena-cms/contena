@@ -58,8 +58,10 @@ class Migration1785943081CreateThemeTest extends TestCase
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'theme_child', 'fk.theme_child.child_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'theme_channel', 'fk.theme_channel.theme_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'theme_channel', 'fk.theme_channel.channel_id'));
-        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'header_content_layout', 'fk.header_content_layout.channel_id'));
-        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'footer_content_layout', 'fk.footer_content_layout.channel_id'));
+        // MySQL rejects FKs on columns participating in the generated target uniqueness layout;
+        // DAL validation owns these references instead.
+        static::assertFalse(TableHelper::foreignKeyExists($this->connection, 'header_content_layout', 'fk.header_content_layout.channel_id'));
+        static::assertFalse(TableHelper::foreignKeyExists($this->connection, 'footer_content_layout', 'fk.footer_content_layout.channel_id'));
         static::assertSame('1', $this->connection->fetchOne('SELECT COUNT(*) FROM `media_default_folder` WHERE `entity` = :entity', ['entity' => 'theme']));
     }
 }

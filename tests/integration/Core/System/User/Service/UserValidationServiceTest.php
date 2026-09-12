@@ -134,7 +134,7 @@ class UserValidationServiceTest extends TestCase
         static::assertFalse($this->userValidationService->checkUsernameUnique('some User', $userIdToTest, $context));
     }
 
-    public function testUniquenessIsEvaluatedWithinTheWriteTenant(): void
+    public function testIdentityUniquenessIsGlobalAcrossDataScopes(): void
     {
         $tenantA = $this->createTenant('User validation tenant A')->id;
         $tenantB = $this->createTenant('User validation tenant B')->id;
@@ -144,32 +144,18 @@ class UserValidationServiceTest extends TestCase
         $localeId = $this->localeRepository->searchIds(new Criteria(), $platformContext)->firstId();
         static::assertIsString($localeId);
 
-        foreach ([$tenantAContext, $tenantBContext] as $index => $context) {
-            $this->userRepository->create([[
-                'id' => Uuid::randomHex(),
-                'username' => 'shared-user',
-                'name' => 'Tenant user ' . $index,
-                'localeId' => $localeId,
-                'email' => 'shared-user@example.com',
-                'password' => TestDefaults::HASHED_PASSWORD,
-            ]], $context);
-        }
-
-        $candidateId = Uuid::randomHex();
-        static::assertFalse($this->userValidationService->checkEmailUnique('shared-user@example.com', $candidateId, $tenantAContext));
-        static::assertFalse($this->userValidationService->checkUsernameUnique('shared-user', $candidateId, $tenantBContext));
-        static::assertTrue($this->userValidationService->checkEmailUnique('shared-user@example.com', $candidateId, Context::createGlobalContext()));
-        static::assertTrue($this->userValidationService->checkUsernameUnique('shared-user', $candidateId, Context::createGlobalContext()));
-
         $this->userRepository->create([[
             'id' => Uuid::randomHex(),
             'username' => 'shared-user',
-            'name' => 'Platform user',
+            'name' => 'Shared identity',
             'localeId' => $localeId,
             'email' => 'shared-user@example.com',
             'password' => TestDefaults::HASHED_PASSWORD,
         ]], $platformContext);
 
+        $candidateId = Uuid::randomHex();
+        static::assertFalse($this->userValidationService->checkEmailUnique('shared-user@example.com', $candidateId, $tenantAContext));
+        static::assertFalse($this->userValidationService->checkUsernameUnique('shared-user', $candidateId, $tenantBContext));
         static::assertFalse($this->userValidationService->checkEmailUnique('shared-user@example.com', $candidateId, Context::createGlobalContext()));
         static::assertFalse($this->userValidationService->checkUsernameUnique('shared-user', $candidateId, Context::createGlobalContext()));
     }

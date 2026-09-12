@@ -83,7 +83,7 @@ final class ChannelAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             '
             SELECT LOWER(HEX(channel.id)) as id,
-                   LOWER(HEX(channel.tenant_id)) as tenantId,
+                   LOWER(HEX(channel.data_scope_id)) as dataScopeId,
                    GROUP_CONCAT(DISTINCT channel_translation.name SEPARATOR " ") as name
             FROM channel
                 INNER JOIN channel_translation
@@ -105,7 +105,7 @@ final class ChannelAdminSearchIndexer extends AbstractAdminIndexer
             $text = \implode(' ', array_filter([$id, $row['name'] ?? '']));
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => \strtolower($text),
                 'completion' => $this->buildCompletion([\is_string($row['name'] ?? null) ? $row['name'] : null]),
             ];

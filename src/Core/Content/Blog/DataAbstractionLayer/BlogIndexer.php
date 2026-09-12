@@ -7,6 +7,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Blog\Events\InvalidateBlogCache;
 use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
@@ -51,16 +52,16 @@ class BlogIndexer extends EntityIndexer
         return 'blog.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->getIterator($offset);
+        $iterator = $this->getIterator($offset, $context);
         $ids = $iterator->fetch();
 
         if ($ids === []) {
             return null;
         }
 
-        return new BlogIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new BlogIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -71,12 +72,12 @@ class BlogIndexer extends EntityIndexer
             return null;
         }
 
-        return new BlogIndexingMessage(array_values($ids), null, $event->getContext());
+        return new BlogIndexingMessage(array_values($ids), $event->getContext());
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->getIterator(null)->fetchCount();
+        return $this->getIterator(null, $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer
@@ -119,10 +120,14 @@ class BlogIndexer extends EntityIndexer
             });
         }
 
-        RetryableQuery::retryable($this->connection, function () use ($ids): void {
+        RetryableQuery::retryable($this->connection, function () use ($ids, $context): void {
             $this->connection->executeStatement(
-                'UPDATE blog SET updated_at = :now WHERE id IN (:ids)',
-                ['ids' => Uuid::fromHexToBytesList($ids), 'now' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT)],
+                'UPDATE blog SET updated_at = :now WHERE id IN (:ids) AND data_scope_id = :dataScopeId',
+                [
+                    'ids' => Uuid::fromHexToBytesList($ids),
+                    'now' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                    'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
+                ],
                 ['ids' => ArrayParameterType::BINARY]
             );
         });
@@ -146,8 +151,8 @@ class BlogIndexer extends EntityIndexer
     /**
      * @param array{offset: int|null}|null $offset
      */
-    private function getIterator(?array $offset): IterableQuery
+    private function getIterator(?array $offset, Context $context): IterableQuery
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
     }
 }

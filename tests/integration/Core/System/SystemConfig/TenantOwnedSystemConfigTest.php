@@ -61,11 +61,9 @@ class TenantOwnedSystemConfigTest extends TestCase
         static::assertNull($this->systemConfig->get('tenant.matrix.default', context: $tenantB));
         static::assertSame('tenant-a-channel', $this->systemConfig->get('tenant.matrix.channel', $this->channelA, $tenantA));
         static::assertSame('tenant-b-channel', $this->systemConfig->get('tenant.matrix.channel', $this->channelB, $tenantB));
-        static::assertSame('tenant-a-channel', $this->systemConfig->get('tenant.matrix.channel', $this->channelA, $global));
-        static::assertSame('tenant-b-channel', $this->systemConfig->get('tenant.matrix.channel', $this->channelB, $global));
-
         $this->assertReadRejected($this->channelA, $platform);
         $this->assertReadRejected($this->channelA, $tenantB);
+        $this->assertReadRejected($this->channelA, $global);
         $this->assertWriteRejected($this->channelA, $platform);
         $this->assertWriteRejected($this->channelA, $tenantB);
         $this->assertWriteRejected($this->channelA, $global);
@@ -78,9 +76,9 @@ class TenantOwnedSystemConfigTest extends TestCase
     {
         try {
             $this->systemConfig->get('tenant.matrix.channel', $channelId, $context);
-            static::fail('Expected tenant configuration read protection.');
+            static::fail('Expected data-scope configuration read protection.');
         } catch (SystemConfigException $exception) {
-            static::assertSame(SystemConfigException::TENANT_CONTEXT_MISMATCH, $exception->getErrorCode());
+            static::assertSame(SystemConfigException::DATA_SCOPE_CONTEXT_MISMATCH, $exception->getErrorCode());
         }
     }
 
@@ -88,9 +86,9 @@ class TenantOwnedSystemConfigTest extends TestCase
     {
         try {
             $this->systemConfig->set('tenant.matrix.channel', 'rejected', $channelId, context: $context);
-            static::fail('Expected tenant configuration write protection.');
+            static::fail('Expected data-scope configuration write protection.');
         } catch (SystemConfigException $exception) {
-            static::assertSame(SystemConfigException::TENANT_CONTEXT_MISMATCH, $exception->getErrorCode());
+            static::assertSame(SystemConfigException::DATA_SCOPE_CONTEXT_MISMATCH, $exception->getErrorCode());
         }
     }
 

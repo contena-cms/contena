@@ -39,7 +39,8 @@ class IndexingControllerTest extends TestCase
         } else {
             $blogIndexer->method('iterate')->willReturn(new BlogIndexingMessage(
                 [Uuid::randomHex()],
-                ['offset' => $offset + 50]
+                Context::createDefaultContext(),
+                ['offset' => $offset + 50],
             ));
         }
 

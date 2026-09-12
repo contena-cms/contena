@@ -87,8 +87,10 @@ class RateLimiter
 
     private function scopeKey(string $key, ?Context $context): string
     {
-        $tenantId = $context?->getTenantId();
+        if ($context === null) {
+            return $key;
+        }
 
-        return $tenantId === null ? $key : \sprintf('tenant:%s:%s', $tenantId, $key);
+        return \sprintf('data-scope:%s:%s', $context->getDataScopeId(), $key);
     }
 }

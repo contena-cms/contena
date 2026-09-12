@@ -19,13 +19,13 @@ class Migration1784207023CreateMediaFolderConfigurationMediaThumbnailSize extend
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `media_folder_configuration_media_thumbnail_size` (
-    `tenant_id`                    BINARY(16) NULL,
+    `data_scope_id`                    BINARY(16) NOT NULL,
     `media_folder_configuration_id` BINARY(16) NOT NULL,
     `media_thumbnail_size_id`        BINARY(16) NOT NULL,
     PRIMARY KEY (`media_folder_configuration_id`, `media_thumbnail_size_id`),
-    KEY `idx.media_folder_configuration_media_thumbnail_size.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.media_folder_configuration_media_thumbnail_size.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    KEY `idx.media_folder_configuration_media_thumbnail_scope` (`data_scope_id`),
+    CONSTRAINT `fk.media_folder_configuration_media_thumbnail_size.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.media_folder_configuration_media_thumbnail_size.conf_id` FOREIGN KEY (`media_folder_configuration_id`)
         REFERENCES `media_folder_configuration` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk.media_folder_configuration_media_thumbnail_size.size_id` FOREIGN KEY (`media_thumbnail_size_id`)

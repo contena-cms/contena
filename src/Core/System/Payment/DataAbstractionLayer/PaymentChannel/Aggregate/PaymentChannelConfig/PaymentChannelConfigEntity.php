@@ -14,7 +14,7 @@ class PaymentChannelConfigEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    public protected(set) ?string $tenantId = null;
+    public protected(set) string $dataScopeId;
 
     public protected(set) ?string $paymentAppId = null;
 

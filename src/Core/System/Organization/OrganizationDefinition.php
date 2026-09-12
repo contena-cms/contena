@@ -7,6 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildCountField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
@@ -19,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreeLevelField;
@@ -65,7 +65,7 @@ class OrganizationDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned organization.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for organization.'),
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the organization.'),
             new ParentFkField(self::class)->addFlags(new ApiAware())->setDescription('Unique identity of the parent organization.'),
             new TreeLevelField('level', 'level')->addFlags(new ApiAware())->setDescription('Organization hierarchy level maintained by the DAL tree updater.'),

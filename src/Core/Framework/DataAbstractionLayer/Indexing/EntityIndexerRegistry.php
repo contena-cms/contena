@@ -12,6 +12,7 @@ use Contena\Core\Framework\Event\ProgressAdvancedEvent;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
 use Contena\Core\Framework\Struct\ArrayEntity;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -41,6 +42,7 @@ class EntityIndexerRegistry
         private readonly MessageBusInterface $messageBus,
         private readonly EventDispatcherInterface $dispatcher,
         private readonly IndexerMetricsInstrumentor $indexerMetrics,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
     }
 
@@ -50,7 +52,7 @@ class EntityIndexerRegistry
     public function __invoke(EntityIndexingMessage|IterateEntityIndexerMessage|FullEntityIndexerMessage $message): void
     {
         if ($message instanceof FullEntityIndexerMessage) {
-            $this->index(true, $message->getSkip(), $message->getOnly(), context: $message->getContext());
+            $this->index($message->getContext(), true, $message->getSkip(), $message->getOnly());
 
             return;
         }
@@ -65,22 +67,46 @@ class EntityIndexerRegistry
             return;
         }
 
+        if ($message->getContext()->allowsCrossScopeReads()) {
+            foreach ($this->dataScopeContextProvider->getContexts($message->getContext()) as $context) {
+                $this->messageBus->dispatch(new IterateEntityIndexerMessage(
+                    $message->getIndexer(),
+                    $context,
+                    $message->getOffset(),
+                    $message->getSkip(),
+                ));
+            }
+
+            return;
+        }
+
         $next = $this->iterateIndexer($message->getIndexer(), $message->getOffset(), $message->getSkip(), $message->getContext());
 
         if (!$next) {
             return;
         }
 
-        $this->messageBus->dispatch(new IterateEntityIndexerMessage($message->getIndexer(), $next->getOffset(), $message->getSkip(), $message->getContext()));
+        $this->messageBus->dispatch(new IterateEntityIndexerMessage(
+            $message->getIndexer(),
+            $message->getContext(),
+            $next->getOffset(),
+            $message->getSkip(),
+        ));
     }
 
     /**
      * @param list<string> $skip
      * @param list<string> $only
      */
-    public function index(bool $useQueue, array $skip = [], array $only = [], bool $postUpdate = false, ?Context $context = null): void
+    public function index(Context $context, bool $useQueue, array $skip = [], array $only = [], bool $postUpdate = false): void
     {
-        $context ??= Context::createCLIContext();
+        if ($context->allowsCrossScopeReads()) {
+            foreach ($this->dataScopeContextProvider->getContexts($context) as $scopeContext) {
+                $this->index($scopeContext, $useQueue, $skip, $only, $postUpdate);
+            }
+
+            return;
+        }
 
         foreach ($this->indexer as $indexer) {
             // when we are not in post update mode, skip all post update indexer
@@ -97,10 +123,9 @@ class EntityIndexerRegistry
 
             $offset = null;
 
-            $this->dispatcher->dispatch(new ProgressStartedEvent($indexer->getName(), $indexer->getTotal()));
+            $this->dispatcher->dispatch(new ProgressStartedEvent($indexer->getName(), $indexer->getTotal($context)));
 
-            while ($message = $indexer->iterate($offset)) {
-                $message->setContext($context);
+            while ($message = $indexer->iterate($offset, $context)) {
                 $message->setIndexer($indexer->getName());
                 $message->addSkip(...$skip);
                 $message->isFullIndexing = true;
@@ -201,9 +226,15 @@ class EntityIndexerRegistry
      * @param list<string> $indexer
      * @param array<string> $skip
      */
-    public function sendIndexingMessage(array $indexer = [], array $skip = [], bool $postUpdate = false, ?Context $context = null): void
+    public function sendIndexingMessage(Context $context, array $indexer = [], array $skip = [], bool $postUpdate = false): void
     {
-        $context ??= Context::createCLIContext();
+        if ($context->allowsCrossScopeReads()) {
+            foreach ($this->dataScopeContextProvider->getContexts($context) as $scopeContext) {
+                $this->sendIndexingMessage($scopeContext, $indexer, $skip, $postUpdate);
+            }
+
+            return;
+        }
 
         if ($indexer === []) {
             $indexer = [];
@@ -227,7 +258,7 @@ class EntityIndexerRegistry
                 continue;
             }
 
-            $this->messageBus->dispatch(new IterateEntityIndexerMessage($name, null, $skip, $context));
+            $this->messageBus->dispatch(new IterateEntityIndexerMessage($name, $context, null, $skip));
         }
     }
 
@@ -235,9 +266,17 @@ class EntityIndexerRegistry
      * @param list<string> $skip
      * @param list<string> $only
      */
-    public function sendFullIndexingMessage(array $skip = [], array $only = [], ?Context $context = null): void
+    public function sendFullIndexingMessage(Context $context, array $skip = [], array $only = []): void
     {
-        $this->messageBus->dispatch(new FullEntityIndexerMessage($skip, $only, $context ?? Context::createCLIContext()));
+        if ($context->allowsCrossScopeReads()) {
+            foreach ($this->dataScopeContextProvider->getContexts($context) as $scopeContext) {
+                $this->sendFullIndexingMessage($scopeContext, $skip, $only);
+            }
+
+            return;
+        }
+
+        $this->messageBus->dispatch(new FullEntityIndexerMessage($context, $skip, $only));
     }
 
     public function has(string $name): bool
@@ -306,12 +345,11 @@ class EntityIndexerRegistry
             throw DataAbstractionLayerException::entityIndexerNotFound($name);
         }
 
-        $message = $indexer->iterate($offset);
+        $message = $indexer->iterate($offset, $context);
         if (!$message) {
             return null;
         }
 
-        $message->setContext($context);
         $message->setIndexer($indexer->getName());
         $message->addSkip(...$skip);
         $message->isFullIndexing = true;

@@ -207,7 +207,7 @@ class ConsentRepositoryTest extends TestCase
         $userRepo->create([
             [
                 'id' => $userId,
-                'tenantId' => $tenantId,
+                'dataScopeId' => $tenantId,
                 'username' => $name,
                 'name' => 'Consent Test User',
                 'email' => $name . '@example.com',

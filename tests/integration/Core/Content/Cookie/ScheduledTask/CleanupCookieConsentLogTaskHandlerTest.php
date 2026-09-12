@@ -10,7 +10,7 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -125,11 +125,9 @@ class CleanupCookieConsentLogTaskHandlerTest extends TestCase
     {
         $versionId = $this->insertConfigVersion($scope, $context, $createdAtModifier);
         $logId = Uuid::randomHex();
-        $tenantId = $context->getTenantId();
-
         $this->connection->insert('cookie_consent_log', [
             'id' => Uuid::fromHexToBytes($logId),
-            'tenant_id' => $tenantId === null ? null : Uuid::fromHexToBytes($tenantId),
+            'data_scope_id' => Uuid::fromHexToBytes($context->getDataScopeId()),
             'channel_id' => Uuid::randomBytes(),
             'language_id' => Uuid::randomBytes(),
             'consent_action' => 'accept_all',
@@ -144,11 +142,9 @@ class CleanupCookieConsentLogTaskHandlerTest extends TestCase
     private function insertConfigVersion(string $scope, Context $context, string $createdAtModifier): string
     {
         $versionId = Uuid::randomHex();
-        $tenantId = $context->getTenantId();
-
         $this->connection->insert('cookie_consent_config_version', [
             'id' => Uuid::fromHexToBytes($versionId),
-            'tenant_id' => $tenantId === null ? null : Uuid::fromHexToBytes($tenantId),
+            'data_scope_id' => Uuid::fromHexToBytes($context->getDataScopeId()),
             'config_hash' => $scope,
             'channel_id' => Uuid::randomBytes(),
             'language_id' => Uuid::randomBytes(),
@@ -161,9 +157,9 @@ class CleanupCookieConsentLogTaskHandlerTest extends TestCase
 
     private function createHandler(Context ...$contexts): CleanupCookieConsentLogTaskHandler
     {
-        $contextProvider = static::getContainer()->get(TenantScopeContextProvider::class);
+        $contextProvider = static::getContainer()->get(DataScopeContextProvider::class);
         if ($contexts !== []) {
-            $contextProvider = static::createStub(TenantScopeContextProvider::class);
+            $contextProvider = static::createStub(DataScopeContextProvider::class);
             $contextProvider->method('getContexts')->willReturnCallback(
                 static function () use ($contexts): \Generator {
                     yield from $contexts;

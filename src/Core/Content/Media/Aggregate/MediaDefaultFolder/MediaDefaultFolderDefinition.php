@@ -5,12 +5,12 @@ namespace Contena\Core\Content\Media\Aggregate\MediaDefaultFolder;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MediaDefaultFolderDefinition extends EntityDefinition
@@ -41,7 +41,7 @@ class MediaDefaultFolderDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of media default folder.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned media default folder.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for media default folder.'),
 
             new StringField('entity', 'entity')->addFlags(new Required())->setDescription('Indicates in which particular entity.'),
             new OneToOneAssociationField('folder', 'id', 'default_folder_id', MediaFolderDefinition::class),

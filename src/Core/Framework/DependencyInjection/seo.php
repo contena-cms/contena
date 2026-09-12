@@ -24,7 +24,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\ChannelApiSeoUrlUpdateListener;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageChannelApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
-use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateChangeSubscriber;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateIndexingHandler;

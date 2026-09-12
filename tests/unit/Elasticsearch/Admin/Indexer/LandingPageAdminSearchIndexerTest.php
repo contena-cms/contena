@@ -139,7 +139,7 @@ class LandingPageAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('landing page landing page tags 809c1844f4734243b6aa04aba860cd45', $document['text']);
         static::assertTrue($document['active']);
         static::assertIsArray($document['name']);
@@ -155,7 +155,7 @@ class LandingPageAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'name' => 'Landing page',
                     'translatedNames' => json_encode([
                         ['languageId' => $languageId, 'name' => 'Landing page'],

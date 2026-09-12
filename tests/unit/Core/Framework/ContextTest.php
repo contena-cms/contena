@@ -6,6 +6,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Struct\Serializer\StructNormalizer;
@@ -38,11 +39,11 @@ class ContextTest extends TestCase
         static::assertInstanceOf(SystemSource::class, $context->getSource());
         static::assertSame(Context::SYSTEM_SCOPE, $context->getScope());
         static::assertSame(Defaults::LIVE_VERSION, $context->getVersionId());
-        static::assertFalse($context->hasGlobalTenantAccess());
+        static::assertFalse($context->allowsCrossScopeReads());
         static::assertNull($context->getTenantId());
-        static::assertTrue(Context::createGlobalContext()->hasGlobalTenantAccess());
-        static::assertTrue(Context::createCLIContext()->hasGlobalTenantAccess());
-        static::assertFalse(Context::createTenantContext('tenant-a')->hasGlobalTenantAccess());
+        static::assertTrue(Context::createGlobalContext()->allowsCrossScopeReads());
+        static::assertTrue(Context::createCLIContext()->allowsCrossScopeReads());
+        static::assertFalse(Context::createTenantContext(Uuid::randomHex())->allowsCrossScopeReads());
     }
 
     public function testScope(): void
@@ -120,20 +121,22 @@ class ContextTest extends TestCase
 
     public function testTenantChangeCreatesAnIndependentContextWithPreservedSettings(): void
     {
+        $tenantA = Uuid::randomHex();
+        $tenantB = Uuid::randomHex();
         $context = new Context(
             new AdminApiSource('user-id'),
             ['de-DE', Defaults::LANGUAGE_SYSTEM],
             Uuid::randomHex(),
             true,
             ['rule-a'],
-            'tenant-a',
+            DataScope::tenant($tenantA),
         );
         $context->addExtension('foo', new ArrayEntity());
 
-        $tenantContext = $context->createWithTenantId('tenant-b');
+        $tenantContext = $context->createWithTenantId($tenantB);
 
-        static::assertSame('tenant-b', $tenantContext->getTenantId());
-        static::assertFalse($tenantContext->hasGlobalTenantAccess());
+        static::assertSame($tenantB, $tenantContext->getTenantId());
+        static::assertFalse($tenantContext->allowsCrossScopeReads());
         static::assertSame($context->getSource(), $tenantContext->getSource());
         static::assertSame($context->getLanguageIdChain(), $tenantContext->getLanguageIdChain());
         static::assertSame($context->getVersionId(), $tenantContext->getVersionId());
@@ -141,22 +144,23 @@ class ContextTest extends TestCase
         static::assertSame(['rule-a'], $tenantContext->getRuleIds());
         static::assertNotNull($tenantContext->getExtension('foo'));
 
-        static::assertSame('tenant-a', $context->getTenantId());
-        static::assertFalse($context->hasGlobalTenantAccess());
+        static::assertSame($tenantA, $context->getTenantId());
+        static::assertFalse($context->allowsCrossScopeReads());
     }
 
     public function testGlobalTenantAccessCreatesAnIndependentPlatformWriteContext(): void
     {
-        $context = Context::createTenantContext('tenant-a', new AdminApiSource('user-id'));
+        $tenantId = Uuid::randomHex();
+        $context = Context::createTenantContext($tenantId, new AdminApiSource('user-id'));
 
-        $globalContext = $context->createWithGlobalTenantAccess();
+        $globalContext = $context->createWithCrossScopeReadAccess();
 
         static::assertNull($globalContext->getTenantId());
-        static::assertTrue($globalContext->hasGlobalTenantAccess());
+        static::assertTrue($globalContext->allowsCrossScopeReads());
         static::assertSame($context->getSource(), $globalContext->getSource());
         static::assertSame(Context::USER_SCOPE, $globalContext->getScope());
-        static::assertSame('tenant-a', $context->getTenantId());
-        static::assertFalse($context->hasGlobalTenantAccess());
+        static::assertSame($tenantId, $context->getTenantId());
+        static::assertFalse($context->allowsCrossScopeReads());
     }
 
     public function testRuleIdsArePreservedAcrossVersionAndSerialization(): void
@@ -172,18 +176,19 @@ class ContextTest extends TestCase
 
     public function testTenantScopeIsPreservedAcrossVersionAndSerialization(): void
     {
-        $tenantContext = new Context(new SystemSource(), tenantId: 'tenant-a');
-        $globalContext = new Context(new SystemSource(), globalTenantAccess: true);
+        $tenantId = Uuid::randomHex();
+        $tenantContext = new Context(new SystemSource(), dataScope: DataScope::tenant($tenantId));
+        $globalContext = Context::createGlobalContext();
 
         $versionTenantContext = $tenantContext->createWithVersionId(Uuid::randomHex());
         $versionGlobalContext = $globalContext->createWithVersionId(Uuid::randomHex());
         $deserializedTenantContext = Serialization::assertRoundTrip($tenantContext);
         $deserializedGlobalContext = Serialization::assertRoundTrip($globalContext);
 
-        static::assertSame('tenant-a', $versionTenantContext->getTenantId());
-        static::assertSame('tenant-a', $deserializedTenantContext->getTenantId());
-        static::assertTrue($versionGlobalContext->hasGlobalTenantAccess());
-        static::assertTrue($deserializedGlobalContext->hasGlobalTenantAccess());
+        static::assertSame($tenantId, $versionTenantContext->getTenantId());
+        static::assertSame($tenantId, $deserializedTenantContext->getTenantId());
+        static::assertTrue($versionGlobalContext->allowsCrossScopeReads());
+        static::assertTrue($deserializedGlobalContext->allowsCrossScopeReads());
     }
 
     public function testRuleIdsCanBeChangedUntilTheyAreLocked(): void

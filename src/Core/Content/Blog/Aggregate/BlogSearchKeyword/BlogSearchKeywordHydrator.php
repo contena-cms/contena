@@ -12,8 +12,8 @@ class BlogSearchKeywordHydrator extends EntityHydrator
 {
     protected function assign(EntityDefinition $definition, Entity $entity, string $root, array $row, Context $context): Entity
     {
-        if (isset($row[$root . '.tenantId'])) {
-            $entity->tenantId = Uuid::fromBytesToHex($row[$root . '.tenantId']);
+        if (isset($row[$root . '.dataScopeId'])) {
+            $entity->dataScopeId = Uuid::fromBytesToHex($row[$root . '.dataScopeId']);
         }
         if (isset($row[$root . '.id'])) {
             $entity->id = Uuid::fromBytesToHex($row[$root . '.id']);

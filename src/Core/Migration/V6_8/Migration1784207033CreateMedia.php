@@ -20,7 +20,7 @@ class Migration1784207033CreateMedia extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `media` (
     `id`              BINARY(16)                                 NOT NULL,
-    `tenant_id`       BINARY(16)                                 NULL,
+    `data_scope_id`       BINARY(16)                                 NOT NULL,
     `user_id`         BINARY(16)                                 NULL,
     `media_folder_id` BINARY(16)                                 NULL,
     `mime_type`       VARCHAR(255) COLLATE utf8mb4_unicode_ci    NULL,
@@ -40,15 +40,15 @@ CREATE TABLE IF NOT EXISTS `media` (
     `created_at`      DATETIME(3)                                NOT NULL,
     `updated_at`      DATETIME(3)                                NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.media.tenant_id` (`tenant_id`),
+    KEY `idx.media.data_scope_id` (`data_scope_id`),
     INDEX `idx.media.file_extension` (`file_extension`),
     INDEX `idx.media.file_name` (`file_name`(768)),
     INDEX `idx.media.file_hash` (`file_hash`),
     INDEX `idx.media.uploaded_at_created_at_id` (`uploaded_at`, `created_at`, `id`),
     INDEX `idx.media.media_folder_id_created_at_id` (`media_folder_id`, `created_at`, `id`),
     CONSTRAINT `json.media.meta_data` CHECK (JSON_VALID(`meta_data`)),
-    CONSTRAINT `fk.media.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.media.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.media.user_id` FOREIGN KEY (`user_id`)
         REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `fk.media.media_folder_id` FOREIGN KEY (`media_folder_id`)

@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Psr\Clock\ClockInterface;
@@ -33,7 +33,7 @@ final class CleanupMemberRecoveryTaskHandler extends ScheduledTaskHandler
         LoggerInterface $logger,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
@@ -42,28 +42,22 @@ final class CleanupMemberRecoveryTaskHandler extends ScheduledTaskHandler
     {
         $threshold = $this->clock->now()->modify('-48 hour');
 
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $this->cleanup($context, $threshold);
         }
     }
 
     private function cleanup(Context $context, \DateTimeInterface $threshold): void
     {
-        $tenantId = $context->getTenantId();
-        $tenantCondition = '`tenant_id` IS NULL';
         $parameters = [
             'timestamp' => $threshold->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             'limit' => self::BATCH_SIZE,
+            'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
         ];
-
-        if ($tenantId !== null) {
-            $tenantCondition = '`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
 
         do {
             $result = $this->connection->executeStatement(
-                \sprintf('DELETE FROM `member_recovery` WHERE %s AND `created_at` <= :timestamp LIMIT :limit', $tenantCondition),
+                'DELETE FROM `member_recovery` WHERE `data_scope_id` = :dataScopeId AND `created_at` <= :timestamp LIMIT :limit',
                 $parameters,
                 [
                     'limit' => ParameterType::INTEGER,

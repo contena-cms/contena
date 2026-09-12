@@ -23,22 +23,17 @@ class FlowLoader extends AbstractFlowLoader
 
     public function load(Context $context): array
     {
-        $tenantCondition = '';
+        $scopeCondition = '';
         $parameters = [];
-        if (!$context->hasGlobalTenantAccess()) {
-            $tenantCondition = $context->getTenantId() === null
-                ? ' AND `tenant_id` IS NULL'
-                : ' AND `tenant_id` = :tenantId';
-
-            if ($context->getTenantId() !== null) {
-                $parameters['tenantId'] = Uuid::fromHexToBytes($context->getTenantId());
-            }
+        if (!$context->allowsCrossScopeReads()) {
+            $scopeCondition = ' AND `data_scope_id` = :dataScopeId';
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
         }
 
         $flows = $this->connection->fetchAllAssociative(
             'SELECT `event_name`, LOWER(HEX(`id`)) as `id`, `name`, `payload` FROM `flow`
                 WHERE `active` = 1 AND `invalid` = 0 AND `payload` IS NOT NULL
-                ' . $tenantCondition . '
+                ' . $scopeCondition . '
                 ORDER BY `priority` DESC',
             $parameters,
         );

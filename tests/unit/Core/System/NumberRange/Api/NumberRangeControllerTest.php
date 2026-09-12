@@ -40,15 +40,17 @@ class NumberRangeControllerTest extends TestCase
     public function testPreviewPatternByNumberRangeIdUsesValueGenerator(): void
     {
         $numberRangeId = Uuid::randomHex();
+        $context = Context::createDefaultContext();
 
         $valueGenerator = $this->createMock(AbstractNumberRangeValueGenerator::class);
         $valueGenerator->expects($this->once())
             ->method('previewPatternByNumberRangeId')
-            ->with($numberRangeId, 'ORD-{n}', 10)
+            ->with($numberRangeId, $context, 'ORD-{n}', 10)
             ->willReturn('ORD-10');
 
         $response = new NumberRangeController($valueGenerator)->previewPatternByNumberRange(
             $numberRangeId,
+            $context,
             new Request(['pattern' => 'ORD-{n}', 'start' => '10'])
         );
 

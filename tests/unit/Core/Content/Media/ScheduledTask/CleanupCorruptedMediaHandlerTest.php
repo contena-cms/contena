@@ -12,7 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -102,7 +102,7 @@ class CleanupCorruptedMediaHandlerTest extends TestCase
 
     private function createHandler(): CleanupCorruptedMediaHandler
     {
-        $contextProvider = static::createStub(TenantScopeContextProvider::class);
+        $contextProvider = static::createStub(DataScopeContextProvider::class);
         $contextProvider->method('getContexts')->willReturn((static function (): \Generator {
             yield Context::createDefaultContext();
         })());

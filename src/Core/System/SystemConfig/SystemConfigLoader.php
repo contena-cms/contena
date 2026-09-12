@@ -18,6 +18,7 @@ class SystemConfigLoader extends AbstractSystemConfigLoader
     public function __construct(
         protected Connection $connection,
         protected Kernel $kernel,
+        private readonly SystemConfigScopeResolver $scopeResolver,
     ) {
     }
 
@@ -28,7 +29,7 @@ class SystemConfigLoader extends AbstractSystemConfigLoader
 
     public function load(?string $channelId, ?Context $context = null): array
     {
-        $tenantId = $this->resolveTenantId($channelId, $context);
+        $dataScopeId = $this->scopeResolver->resolve($channelId, $context);
         $query = $this->connection->createQueryBuilder();
 
         $query->from('system_config');
@@ -41,14 +42,9 @@ class SystemConfigLoader extends AbstractSystemConfigLoader
             $query->setParameter('channelId', Uuid::fromHexToBytes($channelId));
         }
 
-        if ($tenantId === null) {
-            $query->andWhere('tenant_id IS NULL');
-        } else {
-            $query->andWhere('(tenant_id IS NULL OR tenant_id = :tenantId)');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        }
+        $query->andWhere('data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
-        $query->addOrderBy('tenant_id', 'ASC');
         $query->addOrderBy('channel_id', 'ASC');
 
         $result = $query->executeQuery();
@@ -82,34 +78,6 @@ class SystemConfigLoader extends AbstractSystemConfigLoader
         }
 
         return $this->filterNotActivatedPlugins($configValues);
-    }
-
-    private function resolveTenantId(?string $channelId, ?Context $context): ?string
-    {
-        $channelExists = false;
-        $channelTenantId = null;
-        if ($channelId !== null) {
-            $channel = $this->connection->fetchAssociative(
-                'SELECT LOWER(HEX(tenant_id)) AS tenant_id FROM channel WHERE id = :id',
-                ['id' => Uuid::fromHexToBytes($channelId)],
-            );
-            $channelExists = $channel !== false;
-            $channelTenantId = $channel['tenant_id'] ?? null;
-        }
-
-        if ($context?->getTenantId() !== null) {
-            if ($channelExists && $channelTenantId !== $context->getTenantId()) {
-                throw SystemConfigException::tenantContextMismatch($channelId);
-            }
-
-            return $context->getTenantId();
-        }
-
-        if ($channelTenantId !== null && $context !== null && !$context->hasGlobalTenantAccess()) {
-            throw SystemConfigException::tenantContextMismatch($channelId);
-        }
-
-        return $channelTenantId;
     }
 
     /**

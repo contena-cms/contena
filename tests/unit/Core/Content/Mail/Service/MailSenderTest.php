@@ -111,7 +111,7 @@ class MailSenderTest extends TestCase
             ->expects($this->once())
             ->method('write')
             ->willReturnCallback(static function ($path, $content) use ($mail, $testStruct, $context): void {
-                static::assertStringStartsWith('mail-data/' . $context->getTenantId() . '/', $path);
+                static::assertStringStartsWith('mail-data/' . $context->getDataScopeId() . '/', $path);
                 static::assertSame(serialize($mail), $content);
                 $testStruct->set('mailDataPath', $path);
             });
@@ -122,7 +122,7 @@ class MailSenderTest extends TestCase
             ->willReturnCallback(static function ($message) use ($testStruct, $context): Envelope {
                 static::assertInstanceOf(SendMailMessage::class, $message);
                 static::assertSame($testStruct->get('mailDataPath'), $message->mailDataPath);
-                static::assertSame($context->getTenantId(), $message->tenantId);
+                static::assertSame($context->getDataScopeId(), $message->dataScopeId);
 
                 return new Envelope($message);
             });

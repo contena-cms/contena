@@ -14,7 +14,7 @@ class BlogSearchConfigExceptionHandler implements ExceptionHandlerInterface
 
     public function matchException(\Throwable $e): ?\Throwable
     {
-        if (preg_match('/SQLSTATE\[23000\]:.*1062 Duplicate.*uniq.blog_search_config.tenant_id_language_id\'/', $e->getMessage())) {
+        if (preg_match('/SQLSTATE\[23000\]:.*1062 Duplicate.*uniq.blog_search_config.data_scope_id_language_id\'/', $e->getMessage())) {
             return new DuplicateBlogSearchConfigLanguageException('', $e);
         }
 

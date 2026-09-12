@@ -13,7 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\NativeClock;
@@ -240,7 +240,7 @@ class UnusedMediaPurgerTest extends TestCase
             $connection,
             $eventDispatcher,
             $clock,
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
     }
 }

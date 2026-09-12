@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Routing;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
@@ -32,17 +33,17 @@ final class PaymentRoutingExtensionTest extends TestCase
 {
     public function testPluginProvidersAndStrategySelectOnlyEligibleCapableCandidates(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'routing', 'status' => true]);
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'routing', 'status' => true]);
         $context = Context::createDefaultContext();
         $gateway = static::createStub(PaymentHandlerInterface::class);
         $gateway->method('code')->willReturn('capable');
         $unsupported = static::createStub(GatewayInterface::class);
         $unsupported->method('code')->willReturn('unsupported');
-        $denied = new PaymentRoute($gateway, Uuid::randomHex(), [], false);
-        $first = new PaymentRoute($gateway, Uuid::randomHex(), [], false);
-        $preferred = new PaymentRoute($gateway, Uuid::randomHex(), [], false);
+        $denied = new PaymentRoute($gateway, Uuid::randomHex(), []);
+        $first = new PaymentRoute($gateway, Uuid::randomHex(), []);
+        $preferred = new PaymentRoute($gateway, Uuid::randomHex(), []);
         $provider = static::createStub(PaymentRouteProviderInterface::class);
-        $provider->method('provide')->willReturn([new PaymentRoute($unsupported, Uuid::randomHex(), [], false), $denied, $first, $preferred, $preferred]);
+        $provider->method('provide')->willReturn([new PaymentRoute($unsupported, Uuid::randomHex(), []), $denied, $first, $preferred, $preferred]);
         $strategy = $this->createMock(PaymentRouteSelectionStrategyInterface::class);
         $strategy->expects($this->once())->method('select')->willReturnCallback(static function (array $candidates, PaymentRoutingContext $routing) use ($first, $preferred, $context): PaymentRoute {
             static::assertSame([$first, $preferred], $candidates);
@@ -69,11 +70,11 @@ final class PaymentRoutingExtensionTest extends TestCase
 
     public function testStrategyCannotInventARouteOutsideTheCandidateSet(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'routing', 'status' => true]);
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'routing', 'status' => true]);
         $gateway = static::createStub(PaymentHandlerInterface::class);
         $gateway->method('code')->willReturn('gateway');
         $strategy = static::createStub(PaymentRouteSelectionStrategyInterface::class);
-        $strategy->method('select')->willReturn(new PaymentRoute($gateway, Uuid::randomHex(), [], false));
+        $strategy->method('select')->willReturn(new PaymentRoute($gateway, Uuid::randomHex(), []));
         $resolver = new PaymentRouteResolver([], [$strategy], new EventDispatcher());
 
         $this->expectExceptionObject(PaymentException::invalidRequest('A routing strategy must select an eligible payment route.'));

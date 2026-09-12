@@ -16,7 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -250,7 +250,7 @@ class GenerateThumbnailsCommandTest extends TestCase
             $this->mediaRepository,
             $this->mediaFolderRepository,
             static::getContainer()->get('messenger.default_bus'),
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
 
         $commandTester = new CommandTester($command);
@@ -273,7 +273,7 @@ class GenerateThumbnailsCommandTest extends TestCase
             $this->mediaRepository,
             $this->mediaFolderRepository,
             static::getContainer()->get('messenger.default_bus'),
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
 
         $commandTester = new CommandTester($command);
@@ -306,7 +306,7 @@ class GenerateThumbnailsCommandTest extends TestCase
             $this->mediaRepository,
             $this->mediaFolderRepository,
             $messageBusMock,
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
 
         $commandTester = new CommandTester($command);
@@ -336,7 +336,7 @@ class GenerateThumbnailsCommandTest extends TestCase
             $this->mediaRepository,
             $this->mediaFolderRepository,
             $messageBus,
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
 
         new CommandTester($command)->execute(['--async' => true, '--force' => true]);
@@ -365,7 +365,7 @@ class GenerateThumbnailsCommandTest extends TestCase
             $this->mediaRepository,
             $this->mediaFolderRepository,
             $messageBus,
-            static::getContainer()->get(TenantScopeContextProvider::class),
+            static::getContainer()->get(DataScopeContextProvider::class),
         );
 
         new CommandTester($command)->execute([

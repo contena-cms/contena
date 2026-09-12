@@ -17,6 +17,7 @@
   "general": {
     "homeLink": "Home",
     "menuLink": "Menu",
+    "breadcrumbPlaceholder": "Breadcrumb not available",
     "star": "*",
     "offcanvasCloseMenu": "Close menu",
     "noscriptNotice": "To use the full range of Contena features, we recommend enabling JavaScript in your browser.",

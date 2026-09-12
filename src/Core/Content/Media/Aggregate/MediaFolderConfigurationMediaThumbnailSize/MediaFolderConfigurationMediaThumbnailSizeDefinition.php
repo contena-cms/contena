@@ -4,11 +4,11 @@ namespace Contena\Core\Content\Media\Aggregate\MediaFolderConfigurationMediaThum
 
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 
@@ -29,7 +29,7 @@ class MediaFolderConfigurationMediaThumbnailSizeDefinition extends MappingEntity
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned media folder thumbnail size assignment.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for media folder thumbnail size assignment.'),
             new FkField('media_folder_configuration_id', 'mediaFolderConfigurationId', MediaFolderConfigurationDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new FkField('media_thumbnail_size_id', 'mediaThumbnailSizeId', MediaThumbnailSizeDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new ManyToOneAssociationField('mediaFolderConfiguration', 'media_folder_configuration_id', MediaFolderConfigurationDefinition::class, 'id', false),

@@ -29,7 +29,7 @@ class IndexingController extends AbstractController
     {
         $indexingSkips = array_filter(explode(',', (string) $request->headers->get(PlatformRequest::HEADER_INDEXING_SKIP, '')));
 
-        $this->registry->sendIndexingMessage([], $indexingSkips, context: $context);
+        $this->registry->sendIndexingMessage($context, [], $indexingSkips);
 
         return new JsonResponse();
     }
@@ -46,13 +46,12 @@ class IndexingController extends AbstractController
         $indexer = $this->registry->getIndexer($indexer);
 
         $offset = ['offset' => RequestParamHelper::get($request, 'offset')];
-        $message = $indexer ? $indexer->iterate($offset) : null;
+        $message = $indexer ? $indexer->iterate($offset, $context) : null;
 
         if ($message === null) {
             return new JsonResponse(['finish' => true]);
         }
 
-        $message->setContext($context);
         $message->addSkip(...$indexingSkips);
 
         if ($indexer) {

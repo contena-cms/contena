@@ -6,6 +6,7 @@ use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaDefinition;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -42,13 +43,13 @@ class MediaIndexer extends EntityIndexer
         return 'media.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
         if ($this->remoteThumbnailsEnabled) {
             return null;
         }
 
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -56,7 +57,7 @@ class MediaIndexer extends EntityIndexer
             return null;
         }
 
-        return new MediaIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new MediaIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -71,7 +72,7 @@ class MediaIndexer extends EntityIndexer
             return null;
         }
 
-        return new MediaIndexingMessage(array_values($updates), null, $event->getContext());
+        return new MediaIndexingMessage(array_values($updates), $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -97,7 +98,7 @@ class MediaIndexer extends EntityIndexer
 
         $query = new RetryableQuery(
             $this->connection,
-            $this->connection->prepare('UPDATE `media` SET thumbnails_ro = :thumbnails_ro WHERE id = :id')
+            $this->connection->prepare('UPDATE `media` SET thumbnails_ro = :thumbnails_ro WHERE id = :id AND data_scope_id = :dataScopeId')
         );
 
         $all = $this->thumbnailRepository
@@ -110,15 +111,16 @@ class MediaIndexer extends EntityIndexer
             $query->execute([
                 'thumbnails_ro' => serialize($thumbnails),
                 'id' => Uuid::fromHexToBytes($id),
+                'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
             ]);
         }
 
         $this->eventDispatcher->dispatch(new MediaIndexerEvent($ids, $context, array_values($message->getSkip())));
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

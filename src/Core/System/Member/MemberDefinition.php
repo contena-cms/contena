@@ -8,6 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AutoIncrementField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\EmailField;
@@ -26,7 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\RemoteAddressField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
@@ -83,7 +83,7 @@ class MemberDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the member.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned member.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for member.'),
             new FkField('member_group_id', 'groupId', MemberGroupDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of member group.'),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of channel.'),
             new FkField('language_id', 'languageId', LanguageDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of language.'),

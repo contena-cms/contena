@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout;
 
-use Contena\Core\Framework\ContentSystem\Diagnostics\ViolationCode;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
@@ -195,27 +194,22 @@ class StoredTreeTest extends TestCase
         static::assertSame($this->serialize($tree), $this->serialize($tree->replace('absent', $this->element('replacement'))));
     }
 
-    #[TestDox('validate reports nothing for a forest whose ids are all unique')]
-    public function testValidateReportsNothingForAWellFormedForest(): void
+    #[TestDox('names no duplicate for a forest whose ids are all unique')]
+    public function testNamesNoDuplicateForAWellFormedForest(): void
     {
-        static::assertSame([], $this->tree()->validate());
+        static::assertSame([], $this->tree()->duplicateElementIds());
     }
 
-    #[TestDox('validate reports an id reused across two roots')]
-    public function testValidateReportsAnIdReusedAcrossRoots(): void
+    #[TestDox('names an id reused across two roots')]
+    public function testNamesAnIdReusedAcrossRoots(): void
     {
         $tree = new StoredTree([$this->element('root-1'), $this->element('root-1')]);
 
-        $violations = $tree->validate();
-
-        static::assertCount(1, $violations);
-        static::assertSame(ViolationCode::DuplicateElementId, $violations[0]->code);
-        static::assertSame('root-1', $violations[0]->elementId);
-        static::assertSame('Element id "root-1" is not unique across the layout.', $violations[0]->message);
+        static::assertSame(['root-1'], $tree->duplicateElementIds());
     }
 
-    #[TestDox('validate reports an id reused at a different nesting depth')]
-    public function testValidateReportsAnIdReusedAcrossNestingDepths(): void
+    #[TestDox('names an id reused at a different nesting depth')]
+    public function testNamesAnIdReusedAcrossNestingDepths(): void
     {
         $deep = StoredElementBuilder::create('core:section', 'root-1')
             ->withSlot('main', [
@@ -225,14 +219,11 @@ class StoredTreeTest extends TestCase
             ])
             ->build();
 
-        $violations = new StoredTree([$deep])->validate();
-
-        static::assertCount(1, $violations);
-        static::assertSame('root-1', $violations[0]->elementId);
+        static::assertSame(['root-1'], new StoredTree([$deep])->duplicateElementIds());
     }
 
-    #[TestDox('validate reports one violation per duplicated id, not one per occurrence')]
-    public function testValidateReportsOneViolationPerDuplicatedId(): void
+    #[TestDox('names a duplicated id once, not once per occurrence')]
+    public function testNamesADuplicatedIdOncePerId(): void
     {
         $tree = new StoredTree([
             $this->element('root-1'),
@@ -240,7 +231,7 @@ class StoredTreeTest extends TestCase
             $this->element('root-1'),
         ]);
 
-        static::assertCount(1, $tree->validate());
+        static::assertSame(['root-1'], $tree->duplicateElementIds());
     }
 
     private function tree(): StoredTree

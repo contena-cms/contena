@@ -187,7 +187,7 @@ class UserConfigControllerTest extends TestCase
         static::assertSame([$configKey => [$newValue]], json_decode($content, true, 512, \JSON_THROW_ON_ERROR)['data']);
     }
 
-    public function testPlatformUserConfigRemainsPlatformOwnedWhenManagingATenant(): void
+    public function testUserConfigIsOwnedByTheSelectedTenantDataScope(): void
     {
         $tenantId = Uuid::randomHex();
         static::getContainer()->get('tenant.repository')->create([[
@@ -196,27 +196,34 @@ class UserConfigControllerTest extends TestCase
             'code' => 'user-config-' . \substr($tenantId, 0, 8),
             'status' => true,
         ]], Context::createDefaultContext());
+        static::getContainer()->get('user_data_scope.repository')->create([[
+            'userId' => $this->getUserId(),
+            'dataScopeId' => $tenantId,
+            'active' => true,
+            'admin' => false,
+            'readAllScopes' => false,
+        ]], Context::createDefaultContext());
 
-        $configKey = 'platform-user.' . Uuid::randomHex();
+        $configKey = 'tenant-user.' . Uuid::randomHex();
         $client = $this->getBrowser();
         $client->setServerParameter('HTTP_SW_TENANT_ID', $tenantId);
-        $client->jsonRequest('POST', '/api/_info/config-me', [$configKey => ['platform-value']]);
+        $client->jsonRequest('POST', '/api/_info/config-me', [$configKey => ['tenant-value']]);
 
         static::assertSame(Response::HTTP_NO_CONTENT, $client->getResponse()->getStatusCode());
 
-        $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(`tenant_id`)) FROM `user_config` WHERE `user_id` = :userId AND `key` = :key',
+        $dataScopeId = static::getContainer()->get(Connection::class)->fetchOne(
+            'SELECT LOWER(HEX(`data_scope_id`)) FROM `user_config` WHERE `user_id` = :userId AND `key` = :key',
             [
                 'userId' => Uuid::fromHexToBytes($this->getUserId()),
                 'key' => $configKey,
             ],
         );
-        static::assertNull($tenantId);
+        static::assertSame($tenantId, $dataScopeId);
 
         $client->request('GET', '/api/_info/config-me', ['keys' => [$configKey]]);
         $content = $client->getResponse()->getContent();
         static::assertIsString($content);
-        static::assertSame([$configKey => ['platform-value']], json_decode($content, true, 512, \JSON_THROW_ON_ERROR)['data']);
+        static::assertSame([$configKey => ['tenant-value']], json_decode($content, true, 512, \JSON_THROW_ON_ERROR)['data']);
     }
 
     public function testCreateWithSendingEmptyParameter(): void

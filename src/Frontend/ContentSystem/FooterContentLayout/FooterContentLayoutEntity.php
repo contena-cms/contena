@@ -12,20 +12,20 @@ use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
  */
 class FooterContentLayoutEntity extends AbstractContentLayoutAssignmentEntity
 {
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected ?string $domainId = null;
 
     protected ?ChannelDomainEntity $domain = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getDomainId(): ?string

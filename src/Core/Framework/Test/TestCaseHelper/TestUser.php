@@ -35,8 +35,10 @@ class TestUser
 
         $userId = Uuid::randomBytes();
         $avatarId = Uuid::randomBytes();
+        $platformDataScope = Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
 
         $connection->insert('media', [
+            'data_scope_id' => $platformDataScope,
             'id' => $avatarId,
             'mime_type' => 'image/png',
             'file_size' => 1024,
@@ -52,8 +54,16 @@ class TestUser
             'password' => TestDefaults::HASHED_PASSWORD,
             'locale_id' => self::getLocaleOfSystemLanguage($connection),
             'active' => 1,
-            'admin' => 0,
             'avatar_id' => $avatarId,
+            'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_FORMAT),
+        ]);
+
+        $connection->insert('user_data_scope', [
+            'user_id' => $userId,
+            'data_scope_id' => $platformDataScope,
+            'active' => 1,
+            'admin' => 0,
+            'read_all_scopes' => 1,
             'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_FORMAT),
         ]);
 
@@ -62,6 +72,7 @@ class TestUser
             $connection->insert(
                 'acl_user_role',
                 [
+                    'data_scope_id' => $platformDataScope,
                     'user_id' => $userId,
                     'acl_role_id' => $roleId,
                     'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_FORMAT),
@@ -142,6 +153,7 @@ class TestUser
         $roleName = Uuid::randomHex();
 
         $connection->insert('acl_role', [
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'id' => $roleId,
             'code' => 'test_' . Uuid::randomHex(),
             'name' => $roleName,

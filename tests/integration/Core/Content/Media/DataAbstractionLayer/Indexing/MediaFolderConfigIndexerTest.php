@@ -204,7 +204,7 @@ class MediaFolderConfigIndexerTest extends TestCase
             )
             ->executeStatement();
 
-        $message = $this->configIndexer->iterate(['offset' => 0]);
+        $message = $this->configIndexer->iterate(['offset' => 0], $this->context);
         static::assertNotNull($message);
         $this->configIndexer->handle($message);
 

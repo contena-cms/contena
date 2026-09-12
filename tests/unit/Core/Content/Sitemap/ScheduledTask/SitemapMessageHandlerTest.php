@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 #[CoversClass(SitemapMessageHandler::class)]
 class SitemapMessageHandlerTest extends TestCase
 {
-    public function testUsesThePreservedTenantContextForConfigAndGeneration(): void
+    public function testUsesThePreservedDataScopeForConfigAndGeneration(): void
     {
         $tenantId = Uuid::randomHex();
         $channelId = Uuid::randomHex();
@@ -59,7 +59,7 @@ class SitemapMessageHandlerTest extends TestCase
         $handler(new SitemapMessage($channelId, $languageId, null, null, false, $tenantId));
     }
 
-    public function testRejectsAMessageFromAnotherTenant(): void
+    public function testRejectsAMessageFromAnotherDataScope(): void
     {
         $channelId = Uuid::randomHex();
         $languageId = Uuid::randomHex();
@@ -72,7 +72,7 @@ class SitemapMessageHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error')
-            ->with('Sitemap message tenant does not match the channel tenant.');
+            ->with('Sitemap message data scope does not match the channel scope.');
 
         $systemConfigService = $this->createMock(SystemConfigService::class);
         $systemConfigService->expects($this->never())->method('getInt');

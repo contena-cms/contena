@@ -11,8 +11,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-type MessageData array{
  *     array<string>|string,
+ *     Context,
  *     array{offset: int|null}|null,
- *     Context|null,
  *     bool,
  *     bool
  * }
@@ -58,66 +58,64 @@ class EntityIndexingMessageTest extends TestCase
         $context = Context::createDefaultContext();
 
         yield 'same data' => [
-            [['id1', 'id2'], null, $context, false, false],
-            [['id1', 'id2'], null, $context, false, false],
+            [['id1', 'id2'], $context, null, false, false],
+            [['id1', 'id2'], $context, null, false, false],
             true,
         ];
 
         yield 'different order same data' => [
-            [['id2', 'id1'], null, $context, false, false],
-            [['id1', 'id2'], null, $context, false, false],
+            [['id2', 'id1'], $context, null, false, false],
+            [['id1', 'id2'], $context, null, false, false],
             true,
         ];
 
         yield 'different data' => [
-            [['id1', 'id2'], null, $context, false, false],
-            [['id1', 'id3'], null, $context, false, false],
+            [['id1', 'id2'], $context, null, false, false],
+            [['id1', 'id3'], $context, null, false, false],
             false,
         ];
 
         yield 'different offset' => [
-            [['id1', 'id2'], ['offset' => 10], $context, false, false],
-            [['id1', 'id2'], ['offset' => 20], $context, false, false],
+            [['id1', 'id2'], $context, ['offset' => 10], false, false],
+            [['id1', 'id2'], $context, ['offset' => 20], false, false],
             false,
         ];
 
         yield 'different skip arrays' => [
-            [['id1', 'id2'], null, $context, false, false],
-            [['id1', 'id2'], null, $context, false, false],
+            [['id1', 'id2'], $context, null, false, false],
+            [['id1', 'id2'], $context, null, false, false],
             true,
         ];
 
         yield 'different forceQueue' => [
-            [['id1', 'id2'], null, $context, true, false],
-            [['id1', 'id2'], null, $context, false, false],
+            [['id1', 'id2'], $context, null, true, false],
+            [['id1', 'id2'], $context, null, false, false],
             false,
         ];
 
         yield 'different isFullIndexing' => [
-            [['id1', 'id2'], null, $context, false, true],
-            [['id1', 'id2'], null, $context, false, false],
+            [['id1', 'id2'], $context, null, false, true],
+            [['id1', 'id2'], $context, null, false, false],
             false,
         ];
 
         yield 'string data' => [
-            ['single-id', null, $context, false, false],
-            ['single-id', null, $context, false, false],
+            ['single-id', $context, null, false, false],
+            ['single-id', $context, null, false, false],
             true,
         ];
 
         yield 'different string data' => [
-            ['single-id-1', null, $context, false, false],
-            ['single-id-2', null, $context, false, false],
+            ['single-id-1', $context, null, false, false],
+            ['single-id-2', $context, null, false, false],
             false,
         ];
     }
 
-    public function testContextCanBeBoundByFullIndexControlMessage(): void
+    public function testContextIsRequiredWhenMessageIsCreated(): void
     {
-        $message = new EntityIndexingMessage(['id']);
-        $context = Context::createTenantContext('tenant-a');
-
-        $message->setContext($context);
+        $context = Context::createDefaultContext();
+        $message = new EntityIndexingMessage(['id'], $context);
 
         static::assertSame($context, $message->getContext());
     }

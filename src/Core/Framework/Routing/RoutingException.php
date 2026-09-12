@@ -14,6 +14,7 @@ class RoutingException extends HttpException
     public const string MISSING_REQUEST_PARAMETER_CODE = 'FRAMEWORK__MISSING_REQUEST_PARAMETER';
     public const string TENANT_SWITCH_FORBIDDEN_CODE = 'FRAMEWORK__TENANT_SWITCH_FORBIDDEN';
     public const string TENANT_DOMAIN_MISMATCH_CODE = 'FRAMEWORK__TENANT_DOMAIN_MISMATCH';
+    public const string DATA_SCOPE_ACCESS_FORBIDDEN_CODE = 'FRAMEWORK__DATA_SCOPE_ACCESS_FORBIDDEN';
     public const string INVALID_REQUEST_PARAMETER_CODE = 'FRAMEWORK__INVALID_REQUEST_PARAMETER';
     public const string LANGUAGE_NOT_FOUND = 'FRAMEWORK__LANGUAGE_NOT_FOUND';
     public const string ACCESS_DENIED_FOR_XML_HTTP_REQUEST = 'FRAMEWORK__ACCESS_DENIED_FOR_XML_HTTP_REQUEST';
@@ -89,6 +90,15 @@ class RoutingException extends HttpException
             Response::HTTP_FORBIDDEN,
             self::TENANT_DOMAIN_MISMATCH_CODE,
             'The tenant of the current domain does not match the user\'s tenant.',
+        );
+    }
+
+    public static function dataScopeAccessForbidden(): self
+    {
+        return new self(
+            Response::HTTP_FORBIDDEN,
+            self::DATA_SCOPE_ACCESS_FORBIDDEN_CODE,
+            'The authenticated actor has no active grant for the requested data scope.',
         );
     }
 

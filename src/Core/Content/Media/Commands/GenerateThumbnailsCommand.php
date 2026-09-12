@@ -15,7 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,7 +50,7 @@ class GenerateThumbnailsCommand extends Command
         private readonly EntityRepository $mediaRepository,
         private readonly EntityRepository $mediaFolderRepository,
         private readonly MessageBusInterface $messageBus,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
         private readonly bool $remoteThumbnailsEnable = false,
     ) {
         parent::__construct();
@@ -272,7 +272,7 @@ class GenerateThumbnailsCommand extends Command
         $folderName = \is_string($folderName) && $folderName !== '' ? $folderName : null;
         $hasMatchingContext = false;
 
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $folderFilter = $folderName === null ? null : $this->getFolderFilter($folderName, $context);
             if ($folderName !== null && $folderFilter === null) {
                 continue;

@@ -175,6 +175,16 @@ class ContentPreviewPayloadStoreTest extends TestCase
     }
 
     /**
+     * The container's validator has attribute mapping enabled (`framework.validation.enable_attributes`), and
+     * the DTO declares its constraints as attributes, so a bare validator would find none and the
+     * constraint cases below would pass without validating anything.
+     */
+    private static function validator(): ValidatorInterface
+    {
+        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+    }
+
+    /**
      * @param array<string, mixed> $stored
      */
     private static function storeHolding(array $stored): ContentPreviewPayloadStore
@@ -185,11 +195,6 @@ class ContentPreviewPayloadStoreTest extends TestCase
         $cache->save($item);
 
         return new ContentPreviewPayloadStore($cache, self::validator());
-    }
-
-    private static function validator(): ValidatorInterface
-    {
-        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     }
 
     /**

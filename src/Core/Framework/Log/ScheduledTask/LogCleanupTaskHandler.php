@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Psr\Clock\ClockInterface;
@@ -30,14 +30,14 @@ final class LogCleanupTaskHandler extends ScheduledTaskHandler
         private readonly SystemConfigService $systemConfigService,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public function run(): void
     {
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $this->cleanup($context);
         }
     }
@@ -46,21 +46,13 @@ final class LogCleanupTaskHandler extends ScheduledTaskHandler
     {
         $entryLifetimeSeconds = $this->systemConfigService->getInt('core.logging.entryLifetimeSeconds', context: $context);
         $maxEntries = $this->systemConfigService->getInt('core.logging.entryLimit', context: $context);
-        $tenantId = $context->getTenantId();
-        $tenantCondition = '`tenant_id` IS NULL';
-        $aliasedTenantCondition = '`entry`.`tenant_id` IS NULL';
-        $parameters = [];
-        if ($tenantId !== null) {
-            $tenantCondition = '`tenant_id` = :tenantId';
-            $aliasedTenantCondition = '`entry`.`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
+        $parameters = ['dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId())];
 
         if ($entryLifetimeSeconds !== -1) {
             $deleteBefore = $this->clock->now()->modify(\sprintf('-%d seconds', $entryLifetimeSeconds))
                 ->format(Defaults::STORAGE_DATE_TIME_FORMAT);
             $this->connection->executeStatement(
-                \sprintf('DELETE FROM `log_entry` WHERE %s AND `created_at` < :before', $tenantCondition),
+                'DELETE FROM `log_entry` WHERE `data_scope_id` = :dataScopeId AND `created_at` < :before',
                 ['before' => $deleteBefore, ...$parameters],
             );
         }
@@ -77,7 +69,7 @@ final class LogCleanupTaskHandler extends ScheduledTaskHandler
                         ) ranked
                         WHERE ranked.`scope_position` > :maxEntries
                     ) expired ON expired.`id` = ld.`id`',
-                $aliasedTenantCondition,
+                '`entry`.`data_scope_id` = :dataScopeId',
             );
 
             $this->connection->executeStatement(

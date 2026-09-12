@@ -26,14 +26,20 @@ final class PaymentGatewayResolver
 
     public function resolve(string $channelConfigId, Context $context): PaymentRoute
     {
-        $config = $this->configById($channelConfigId, $context)
-            ?? $this->configById($channelConfigId, Context::createDefaultContext());
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment operations require an exact data-scope context.');
+        }
+
+        $config = $this->configById($channelConfigId, $context);
+        if ($config !== null && $config->dataScopeId !== $context->getDataScopeId()) {
+            $config = null;
+        }
         $channel = $config?->channel?->code;
         if (!$config instanceof PaymentChannelConfigEntity || $channel === null) {
             throw PaymentException::channelConfigNotFound($channelConfigId);
         }
 
-        return new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $config->config ?? [], $config->paymentAppId === null);
+        return new PaymentRoute($this->gatewayRegistry->get($channel), $config->getId(), $config->config ?? []);
     }
 
     private function configById(string $channelConfigId, Context $context): ?PaymentChannelConfigEntity
@@ -43,6 +49,9 @@ final class PaymentGatewayResolver
 
         $config = $this->configRepository->search($criteria, $context)->getEntities()->first();
 
-        return $config instanceof PaymentChannelConfigEntity ? $config : null;
+        return $config instanceof PaymentChannelConfigEntity
+            && $config->dataScopeId === $context->getDataScopeId()
+            ? $config
+            : null;
     }
 }

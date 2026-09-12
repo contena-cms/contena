@@ -11,10 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
@@ -269,11 +269,11 @@ class EntityWriteGateway implements EntityWriteGatewayInterface
         $query->from(EntityDefinitionQueryHelper::escape($definition->getEntityName()));
         $query->addSelect('1 as `exists`');
 
-        // Carry the stored tenant of tenant-scoped entities, so the write
+        // Carry the stored data scope of data-scope-owned entities, so the write
         // serializers can guard it against being dropped or changed.
-        $tenantField = $definition->getFields()->filterInstance(TenantField::class)->first();
-        if ($tenantField instanceof TenantField) {
-            $query->addSelect(EntityDefinitionQueryHelper::escape($tenantField->getStorageName()));
+        $dataScopeField = $definition->getFields()->filterInstance(DataScopeField::class)->first();
+        if ($dataScopeField instanceof DataScopeField) {
+            $query->addSelect(EntityDefinitionQueryHelper::escape($dataScopeField->getStorageName()));
         }
 
         if ($definition->isChildrenAware()) {
@@ -706,11 +706,11 @@ class EntityWriteGateway implements EntityWriteGatewayInterface
 
         $query->addSelect('1 as `exists`');
 
-        // Carry the stored tenant of tenant-scoped entities, so the write
+        // Carry the stored data scope of data-scope-owned entities, so the write
         // serializers can guard it against being dropped or changed.
-        $tenantField = $definition->getFields()->filterInstance(TenantField::class)->first();
-        if ($tenantField instanceof TenantField) {
-            $query->addSelect(EntityDefinitionQueryHelper::escape($tenantField->getStorageName()));
+        $dataScopeField = $definition->getFields()->filterInstance(DataScopeField::class)->first();
+        if ($dataScopeField instanceof DataScopeField) {
+            $query->addSelect(EntityDefinitionQueryHelper::escape($dataScopeField->getStorageName()));
         }
 
         if ($definition->isChildrenAware()) {

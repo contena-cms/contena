@@ -37,14 +37,14 @@ class UserController extends AbstractController
      * @param EntityRepository<EntityCollection<Entity>> $userRoleRepository
      * @param EntityRepository<AclRoleCollection> $roleRepository
      * @param EntityRepository<UserAccessKeyCollection> $keyRepository
-     * @param EntityRepository<EntityCollection<Entity>> $userTenantRepository
+     * @param EntityRepository<EntityCollection<Entity>> $userDataScopeRepository
      */
     public function __construct(
         private readonly EntityRepository $userRepository,
         private readonly EntityRepository $userRoleRepository,
         private readonly EntityRepository $roleRepository,
         private readonly EntityRepository $keyRepository,
-        private readonly EntityRepository $userTenantRepository,
+        private readonly EntityRepository $userDataScopeRepository,
         private readonly UserDefinition $userDefinition,
         private readonly RefreshTokenRepository $refreshTokenRepository,
         private readonly AbstractNumberRangeValueGenerator $numberRangeValueGenerator,
@@ -67,15 +67,9 @@ class UserController extends AbstractController
             throw ApiException::userNotLoggedIn();
         }
         $criteria = new Criteria([$userId]);
-        $criteria->addAssociations(['aclRoles', 'avatarMedia', 'tenants']);
+        $criteria->addAssociations(['aclRoles', 'avatarMedia', 'dataScopes']);
 
         $user = $this->userRepository->search($criteria, $context)->getEntities()->first();
-        if (!$user && $context->getTenantId() !== null) {
-            $user = $this->userRepository->search(
-                $criteria,
-                Context::createGlobalContext($context->getSource()),
-            )->getEntities()->first();
-        }
         if (!$user) {
             throw OAuthServerException::invalidCredentials();
         }
@@ -129,13 +123,6 @@ class UserController extends AbstractController
         }
         $result = $this->userRepository->searchIds(new Criteria([$userId]), $context);
 
-        if ($result->getTotal() === 0 && $context->getTenantId() !== null) {
-            $result = $this->userRepository->searchIds(
-                new Criteria([$userId]),
-                Context::createGlobalContext($context->getSource()),
-            );
-        }
-
         if ($result->getTotal() === 0) {
             throw OAuthServerException::invalidCredentials();
         }
@@ -186,9 +173,9 @@ class UserController extends AbstractController
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($userId): void {
             if ($context->getTenantId() !== null) {
-                $this->userTenantRepository->delete([[
+                $this->userDataScopeRepository->delete([[
                     'userId' => $userId,
-                    'tenantId' => $context->getTenantId(),
+                    'dataScopeId' => $context->getDataScopeId(),
                 ]], $context);
 
                 return;
@@ -245,73 +232,78 @@ class UserController extends AbstractController
         }
 
         $isTryingToChangeAdmin = isset($data['admin']);
+        $isTryingToChangeReadAllScopes = \array_key_exists('readAllScopes', $data);
 
         $isNewUser = $data['id'] === null;
         if ($isNewUser) {
             $data['id'] = Uuid::randomHex();
-            $userCode = $data['userCode'] ?? null;
-            if ($userCode === null || $userCode === '') {
-                $data['userCode'] = $this->numberRangeValueGenerator->getValue('user', $context);
-            }
         }
 
         if (!$source->isAdmin() && $isTryingToChangeAdmin) {
             throw new PermissionDeniedException();
         }
 
+        if ($isTryingToChangeReadAllScopes
+            && (!$context->getDataScope()->isPlatform()
+                || !$source->isAllowed('user_data_scope:grant_read_all_scopes'))
+        ) {
+            throw new PermissionDeniedException();
+        }
+
         $entityId = $data['id'];
         \assert(\is_string($entityId));
 
-        $membership = [];
-        $tenantRelations = [];
-        if ($context->getTenantId() !== null) {
-            foreach (['active', 'admin', 'userCode'] as $property) {
-                if (!\array_key_exists($property, $data)) {
-                    continue;
-                }
-
-                $membership[$property] = $data[$property];
-                unset($data[$property]);
+        $grant = [];
+        foreach (['active', 'admin', 'readAllScopes', 'userCode'] as $property) {
+            if (!\array_key_exists($property, $data)) {
+                continue;
             }
 
-            if ($isNewUser) {
-                $membership += ['active' => true, 'admin' => false];
-            }
+            $grant[$property] = $data[$property];
+            unset($data[$property]);
+        }
 
-            foreach (['aclRoles', 'positions', 'tags', 'configs'] as $association) {
-                if (!\array_key_exists($association, $data)) {
-                    continue;
-                }
-
-                $tenantRelations[$association] = $data[$association];
-                unset($data[$association]);
+        if ($isNewUser) {
+            $grant += ['active' => true, 'admin' => false, 'readAllScopes' => false];
+            if (($grant['userCode'] ?? null) === null || $grant['userCode'] === '') {
+                $grant['userCode'] = $this->numberRangeValueGenerator->getValue('user', $context);
             }
         }
 
-        $tenantId = $context->getTenantId();
-        $writeContext = $tenantId !== null
-            ? Context::createTenantContext($tenantId, $context->getSource())
-            : Context::createGlobalContext($context->getSource());
-        $writeContext->scope(Context::SYSTEM_SCOPE, function (Context $writeContext) use ($data, $entityId, $membership, $tenantRelations, $isNewUser, $tenantId): void {
-            if ($isNewUser || array_keys($data) !== ['id']) {
-                $this->userRepository->upsert([$data], $writeContext);
+        $scopeRelations = [];
+        foreach (['aclRoles', 'positions', 'tags', 'configs'] as $association) {
+            if (!\array_key_exists($association, $data)) {
+                continue;
             }
 
-            if ($tenantId !== null) {
-                $this->userTenantRepository->upsert([[
-                    'userId' => $entityId,
-                    'tenantId' => $tenantId,
-                    ...$membership,
-                ]], $writeContext);
+            $scopeRelations[$association] = $data[$association];
+            unset($data[$association]);
+        }
 
-                if ($tenantRelations !== []) {
-                    $this->userRepository->upsert([[
-                        'id' => $entityId,
-                        ...$tenantRelations,
-                    ]], $writeContext);
-                }
+        $identityContext = Context::createDefaultContext($context->getSource());
+        $identityContext->scope(Context::SYSTEM_SCOPE, function (Context $identityContext) use ($data, $entityId, $grant, $isNewUser, $context): void {
+            if ($isNewUser || array_keys($data) !== ['id']) {
+                $this->userRepository->upsert([$data], $identityContext);
+            }
+
+            if ($isNewUser || $grant !== []) {
+                $this->userDataScopeRepository->upsert([[
+                    'userId' => $entityId,
+                    'dataScopeId' => $context->getDataScopeId(),
+                    ...$grant,
+                ]], $identityContext);
             }
         });
+
+        if ($scopeRelations !== []) {
+            $scopeContext = $context->getTenantId() !== null
+                ? Context::createTenantContext($context->getTenantId(), $context->getSource())
+                : Context::createDefaultContext($context->getSource());
+            $scopeContext->scope(Context::SYSTEM_SCOPE, fn (Context $scopeContext) => $this->userRepository->upsert([[
+                'id' => $entityId,
+                ...$scopeRelations,
+            ]], $scopeContext));
+        }
 
         return $factory->createRedirectResponse($this->userRepository->getDefinition(), $entityId, $request, $context);
     }
@@ -344,7 +336,7 @@ class UserController extends AbstractController
         $data = $request->request->all();
 
         if (!isset($data['id'])) {
-            $data['id'] = $roleId ?? null;
+            $data['id'] = $roleId;
         }
 
         $events = $context->scope(Context::SYSTEM_SCOPE, fn (Context $context) => $this->roleRepository->upsert([$data], $context));

@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Indexing\Telemetry;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry\IndexerMetricsInstrumentor;
@@ -147,6 +148,6 @@ class IndexerMetricsInstrumentorTest extends TestCase
      */
     private function createMessage(array|string $data, bool $isFullIndexing): EntityIndexingMessage
     {
-        return new EntityIndexingMessage($data, null, null, false, $isFullIndexing);
+        return new EntityIndexingMessage($data, Context::createDefaultContext(), isFullIndexing: $isFullIndexing);
     }
 }

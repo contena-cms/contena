@@ -36,6 +36,7 @@ class SystemConfigService implements ResetInterface
         private readonly SymfonySystemConfigService $symfonySystemConfigService,
         private readonly CacheTagCollector $cacheTagCollector,
         private readonly ClockInterface $clock,
+        private readonly SystemConfigScopeResolver $scopeResolver,
     ) {
     }
 
@@ -135,7 +136,7 @@ class SystemConfigService implements ResetInterface
             throw SystemConfigException::invalidDomain('Empty domain');
         }
 
-        $tenantId = $this->resolveTenantId($channelId, $context, false);
+        $dataScopeId = $this->scopeResolver->resolve($channelId, $context);
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('configuration_key', 'configuration_value')
             ->from('system_config');
@@ -152,13 +153,11 @@ class SystemConfigService implements ResetInterface
         $escapedDomain = str_replace('%', '\\%', $domain);
 
         $queryBuilder->andWhere('configuration_key LIKE :prefix')
-            ->andWhere('tenant_id ' . ($tenantId === null ? 'IS NULL' : '= :tenantId'))
+            ->andWhere('data_scope_id = :dataScopeId')
             ->addOrderBy('channel_id', 'ASC')
             ->setParameter('prefix', $escapedDomain . '%')
-            ->setParameter('channelId', $channelId ? Uuid::fromHexToBytes($channelId) : null);
-        if ($tenantId !== null) {
-            $queryBuilder->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        }
+            ->setParameter('channelId', $channelId ? Uuid::fromHexToBytes($channelId) : null)
+            ->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
         $configs = $queryBuilder->executeQuery()->fetchAllNumeric();
 
@@ -200,7 +199,7 @@ class SystemConfigService implements ResetInterface
      */
     public function setMultiple(array $values, ?string $channelId = null, bool $silent = true, ?Context $context = null): void
     {
-        $tenantId = $this->resolveTenantId($channelId, $context, true);
+        $dataScopeId = $this->scopeResolver->resolve($channelId, $context);
 
         foreach ($values as $key => $value) {
             if ($this->symfonySystemConfigService->has($key)) {
@@ -225,12 +224,12 @@ class SystemConfigService implements ResetInterface
         $values = $beforeChangedEvent->getConfig();
 
         $where = $channelId ? 'channel_id = :channelId' : 'channel_id IS NULL';
-        $where .= $tenantId === null ? ' AND tenant_id IS NULL' : ' AND tenant_id = :tenantId';
+        $where .= ' AND data_scope_id = :dataScopeId';
         $existingIds = $this->connection->fetchAllKeyValue(
             'SELECT configuration_key, id FROM system_config WHERE ' . $where . ' AND configuration_key IN (:configurationKeys)',
             [
                 'channelId' => $channelId ? Uuid::fromHexToBytes($channelId) : null,
-                'tenantId' => $tenantId ? Uuid::fromHexToBytes($tenantId) : null,
+                'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
                 'configurationKeys' => array_keys($values),
             ],
             ['configurationKeys' => ArrayParameterType::STRING],
@@ -280,7 +279,7 @@ class SystemConfigService implements ResetInterface
                 'system_config',
                 [
                     'id' => Uuid::randomBytes(),
-                    'tenant_id' => $tenantId ? Uuid::fromHexToBytes($tenantId) : null,
+                    'data_scope_id' => Uuid::fromHexToBytes($dataScopeId),
                     'configuration_key' => $key,
                     'configuration_value' => Json::encode(['_value' => $value]),
                     'channel_id' => $channelId ? Uuid::fromHexToBytes($channelId) : null,
@@ -305,12 +304,8 @@ class SystemConfigService implements ResetInterface
                 $qb->andWhere('channel_id IS NULL');
             }
 
-            if ($tenantId !== null) {
-                $qb->andWhere('tenant_id = :tenantId')
-                    ->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-            } else {
-                $qb->andWhere('tenant_id IS NULL');
-            }
+            $qb->andWhere('data_scope_id = :dataScopeId')
+                ->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
             $qb->delete('system_config')
                 ->executeStatement();
@@ -398,7 +393,7 @@ class SystemConfigService implements ResetInterface
         }
 
         $scopes = $this->connection->fetchAllAssociative(
-            'SELECT DISTINCT channel_id, tenant_id FROM system_config WHERE configuration_key IN (:keys)',
+            'SELECT DISTINCT channel_id, data_scope_id FROM system_config WHERE configuration_key IN (:keys)',
             ['keys' => $configKeys],
             ['keys' => ArrayParameterType::STRING],
         );
@@ -408,16 +403,12 @@ class SystemConfigService implements ResetInterface
 
         foreach ($scopes as $scope) {
             $channelId = $scope['channel_id'] === null ? null : Uuid::fromBytesToHex((string) $scope['channel_id']);
-            $tenantId = $scope['tenant_id'] === null ? null : Uuid::fromBytesToHex((string) $scope['tenant_id']);
-            if ($tenantId === null) {
-                if ($channelId !== null) {
-                    $this->setMultiple($keysForDelete, $channelId, false, Context::createDefaultContext());
-                }
+            $dataScopeId = Uuid::fromBytesToHex((string) $scope['data_scope_id']);
+            $scopeContext = $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+                ? Context::createDefaultContext()
+                : Context::createTenantContext($dataScopeId);
 
-                continue;
-            }
-
-            $this->setMultiple($keysForDelete, $channelId, false, Context::createTenantContext($tenantId));
+            $this->setMultiple($keysForDelete, $channelId, false, $scopeContext);
         }
     }
 
@@ -431,35 +422,5 @@ class SystemConfigService implements ResetInterface
         if ($key === '') {
             throw SystemConfigException::invalidKey('key may not be empty');
         }
-    }
-
-    private function resolveTenantId(?string $channelId, ?Context $context, bool $write): ?string
-    {
-        $channelExists = false;
-        $channelTenantId = null;
-        if ($channelId !== null) {
-            $channel = $this->connection->fetchAssociative(
-                'SELECT LOWER(HEX(tenant_id)) AS tenant_id FROM channel WHERE id = :id',
-                ['id' => Uuid::fromHexToBytes($channelId)],
-            );
-            $channelExists = $channel !== false;
-            $channelTenantId = $channel['tenant_id'] ?? null;
-        }
-
-        if ($context?->getTenantId() !== null) {
-            if ($channelExists && $channelTenantId !== $context->getTenantId()) {
-                throw SystemConfigException::tenantContextMismatch($channelId);
-            }
-
-            return $context->getTenantId();
-        }
-
-        if ($channelTenantId !== null && $context !== null) {
-            if (!$context->hasGlobalTenantAccess() || $write) {
-                throw SystemConfigException::tenantContextMismatch($channelId);
-            }
-        }
-
-        return $channelTenantId;
     }
 }

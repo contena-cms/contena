@@ -72,17 +72,17 @@ class CookieConsentLogRoute extends AbstractCookieConsentLogRoute
         $now = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
         $channelId = $channelContext->getChannelId();
         $languageId = $channelContext->getLanguageId();
-        $tenantId = $channelContext->getContext()->getTenantId();
+        $dataScopeId = $channelContext->getContext()->getDataScopeId();
 
-        $this->connection->transactional(function () use ($payload, $currentConfig, $configHash, $now, $channelId, $languageId, $tenantId): void {
+        $this->connection->transactional(function () use ($payload, $currentConfig, $configHash, $now, $channelId, $languageId, $dataScopeId): void {
             $this->connection->executeStatement(
                 'INSERT IGNORE INTO `cookie_consent_config_version`
-                    (`id`, `tenant_id`, `config_hash`, `channel_id`, `language_id`, `cookie_groups`, `created_at`)
+                    (`id`, `data_scope_id`, `config_hash`, `channel_id`, `language_id`, `cookie_groups`, `created_at`)
                 VALUES
-                    (:id, :tenantId, :configHash, :channelId, :languageId, :cookieGroups, :createdAt)',
+                    (:id, :dataScopeId, :configHash, :channelId, :languageId, :cookieGroups, :createdAt)',
                 [
                     'id' => Uuid::randomBytes(),
-                    'tenantId' => $tenantId === null ? null : Uuid::fromHexToBytes($tenantId),
+                    'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
                     'configHash' => $currentConfig->getHash(),
                     'channelId' => Uuid::fromHexToBytes($channelId),
                     'languageId' => Uuid::fromHexToBytes($languageId),
@@ -93,12 +93,12 @@ class CookieConsentLogRoute extends AbstractCookieConsentLogRoute
 
             $this->connection->executeStatement(
                 'INSERT INTO `cookie_consent_log`
-                    (`id`, `tenant_id`, `channel_id`, `language_id`, `consent_action`, `accepted_groups`, `config_hash`, `created_at`)
+                    (`id`, `data_scope_id`, `channel_id`, `language_id`, `consent_action`, `accepted_groups`, `config_hash`, `created_at`)
                 VALUES
-                    (:id, :tenantId, :channelId, :languageId, :consentAction, :acceptedGroups, :configHash, :createdAt)',
+                    (:id, :dataScopeId, :channelId, :languageId, :consentAction, :acceptedGroups, :configHash, :createdAt)',
                 [
                     'id' => Uuid::randomBytes(),
-                    'tenantId' => $tenantId === null ? null : Uuid::fromHexToBytes($tenantId),
+                    'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
                     'channelId' => Uuid::fromHexToBytes($channelId),
                     'languageId' => Uuid::fromHexToBytes($languageId),
                     'consentAction' => $payload['consentAction'],

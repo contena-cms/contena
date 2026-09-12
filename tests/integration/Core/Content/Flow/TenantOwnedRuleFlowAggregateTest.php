@@ -281,7 +281,7 @@ class TenantOwnedRuleFlowAggregateTest extends TestCase
         foreach ($this->contexts as $scope => $context) {
             $restoredContext = $factory->restore(self::EVENT_NAME, $context)->getContext();
             static::assertSame($context->getTenantId(), $restoredContext->getTenantId(), 'Unexpected restored tenant for ' . $scope);
-            static::assertSame($context->hasGlobalTenantAccess(), $restoredContext->hasGlobalTenantAccess(), 'Unexpected restored global access for ' . $scope);
+            static::assertSame($context->allowsCrossScopeReads(), $restoredContext->allowsCrossScopeReads(), 'Unexpected restored global access for ' . $scope);
         }
     }
 
@@ -303,7 +303,7 @@ class TenantOwnedRuleFlowAggregateTest extends TestCase
     private function assertStoredTenant(string $table, string $idColumn, string $id, ?string $expectedTenantId): void
     {
         $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
             ['id' => Uuid::fromHexToBytes($id)],
         );
 

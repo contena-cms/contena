@@ -2,7 +2,9 @@
 
 namespace Contena\Core\System\Payment\Notification;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -53,8 +55,9 @@ final class GatewayNotificationService
     public function process(string $channel, string $channelConfigId, GatewayNotification $notification): GatewayNotificationResponse
     {
         $config = $this->loadConfig($channel, $channelConfigId);
+        $configContext = $this->contextForDataScope($config->dataScopeId);
         $notificationKey = Hasher::hash($this->storedPayload($notification), 'sha256');
-        $existing = $this->findRecord($channelConfigId, $notificationKey);
+        $existing = $this->findRecord($channelConfigId, $notificationKey, $configContext);
         if ($existing instanceof PaymentChannelNotifyRecordEntity && $existing->status === PaymentChannelNotifyRecordStatus::STATUS_PROCESSED) {
             return $this->responseFromRecord($existing);
         }
@@ -67,8 +70,11 @@ final class GatewayNotificationService
         $result = $gateway->handleNotification($notification, $config->config ?? []);
         $response = new GatewayNotificationResponse($result->responseBody, $result->responseContentType, $result->responseStatus);
         $handler = $this->handlerRegistry->get($result->type);
-        $target = $handler->resolve($result->resourceNo, $channelConfigId);
-        $recordId = $this->claimRecord($channel, $channelConfigId, $notificationKey, $notification, $result, $target, $existing);
+        $target = $handler->resolve($result->resourceNo, $channelConfigId, $configContext);
+        if ($target->context->getDataScopeId() !== $config->dataScopeId) {
+            throw PaymentException::notificationConfigurationMismatch($channelConfigId);
+        }
+        $recordId = $this->claimRecord($channel, $channelConfigId, $notificationKey, $notification, $result, $target, $existing, $configContext);
 
         try {
             return $this->connection->transactional(function () use ($channel, $channelConfigId, $recordId, $result, $response, $target, $handler): GatewayNotificationResponse {
@@ -108,6 +114,7 @@ final class GatewayNotificationService
         GatewayNotificationResult $result,
         PaymentNotificationTarget $target,
         ?PaymentChannelNotifyRecordEntity $existing,
+        Context $configContext,
     ): string {
         if ($existing instanceof PaymentChannelNotifyRecordEntity) {
             return $existing->getId();
@@ -129,7 +136,7 @@ final class GatewayNotificationService
 
             return $recordId;
         } catch (UniqueConstraintViolationException) {
-            $record = $this->findRecord($channelConfigId, $notificationKey);
+            $record = $this->findRecord($channelConfigId, $notificationKey, $configContext);
             if (!$record instanceof PaymentChannelNotifyRecordEntity) {
                 throw PaymentException::invalidRequest('The payment notification could not be claimed.');
             }
@@ -153,15 +160,24 @@ final class GatewayNotificationService
         return $config;
     }
 
-    private function findRecord(string $channelConfigId, string $notificationKey): ?PaymentChannelNotifyRecordEntity
+    private function findRecord(string $channelConfigId, string $notificationKey, Context $context): ?PaymentChannelNotifyRecordEntity
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('channelConfigId', $channelConfigId));
         $criteria->addFilter(new EqualsFilter('notificationKey', $notificationKey));
         $criteria->setLimit(1);
-        $record = $this->channelNotifyRecordRepository->search($criteria, Context::createGlobalContext())->getEntities()->first();
+        $record = $this->channelNotifyRecordRepository->search($criteria, $context)->getEntities()->first();
 
         return $record instanceof PaymentChannelNotifyRecordEntity ? $record : null;
+    }
+
+    private function contextForDataScope(string $dataScopeId): Context
+    {
+        return Context::createDefaultContext()->createWithDataScope(
+            $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+                ? DataScope::platform()
+                : DataScope::tenant($dataScopeId),
+        );
     }
 
     private function loadRecord(string $recordId, Context $context): PaymentChannelNotifyRecordEntity
@@ -228,16 +244,19 @@ final class GatewayNotificationService
      */
     private function lock(string $id, Context $context): array
     {
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment writes require a platform or tenant context.');
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment writes require an exact data-scope context.');
         }
-        $parameters = ['id' => Uuid::fromHexToBytes($id)];
-        $scope = '`tenant_id` IS NULL';
-        if ($context->getTenantId() !== null) {
-            $scope = '`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($context->getTenantId());
-        }
-        $row = $this->connection->fetchAssociative('SELECT `status`, `response_body` AS `responseBody`, `response_content_type` AS `responseContentType`, `response_status` AS `responseStatus` FROM `payment_channel_notify_record` WHERE `id` = :id AND ' . $scope . ' FOR UPDATE', $parameters);
+        $row = $this->connection->fetchAssociative(
+            'SELECT `status`, `response_body` AS `responseBody`, `response_content_type` AS `responseContentType`, `response_status` AS `responseStatus`
+             FROM `payment_channel_notify_record`
+             WHERE `id` = :id AND `data_scope_id` = :dataScopeId
+             FOR UPDATE',
+            [
+                'id' => Uuid::fromHexToBytes($id),
+                'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
+            ],
+        );
         if ($row === false) {
             throw PaymentException::notificationResourceNotFound($id);
         }

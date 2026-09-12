@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword;
 
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -12,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Language\LanguageDefinition;
@@ -54,7 +54,7 @@ class BlogSearchKeywordDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of Blog Search Keyword.'),
             new VersionField(),
             new FkField('language_id', 'languageId', LanguageDefinition::class)->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of language.'),

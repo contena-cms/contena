@@ -7,25 +7,24 @@ use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
+use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
-use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlLifecycleHandler;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlUpdateListener;
 use Contena\Frontend\Framework\Seo\App\AppStaticSeoUrlSynchronizer;
-use Doctrine\DBAL\Connection;
 use Contena\Frontend\Framework\Seo\FrontendCategoryUrlGenerator;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\LandingPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\SeoUrlUpdateListener;
 use Contena\Frontend\Framework\Seo\SeoUrlRouteNameEnumProvider;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

@@ -205,19 +205,14 @@ class AdministrationController extends AbstractController
     )]
     public function resetExcludedSearchTerm(Context $context): JsonResponse
     {
-        $tenantId = $context->getTenantId();
-        $tenantCondition = 'tenant_id IS NULL';
-        $tenantParameters = [];
-        if ($tenantId !== null) {
-            $tenantCondition = 'tenant_id = :tenant_id';
-            $tenantParameters['tenant_id'] = Uuid::fromHexToBytes($tenantId);
-        }
+        $scopeCondition = 'data_scope_id = :data_scope_id';
+        $scopeParameters = ['data_scope_id' => Uuid::fromHexToBytes($context->getDataScopeId())];
 
         $searchConfigId = $this->connection->fetchOne(
-            'SELECT id FROM blog_search_config WHERE language_id = :language_id AND ' . $tenantCondition,
+            'SELECT id FROM blog_search_config WHERE language_id = :language_id AND ' . $scopeCondition,
             [
                 'language_id' => Uuid::fromHexToBytes($context->getLanguageId()),
-                ...$tenantParameters,
+                ...$scopeParameters,
             ]
         );
 
@@ -235,11 +230,11 @@ class AdministrationController extends AbstractController
         }
 
         $this->connection->executeStatement(
-            'UPDATE `blog_search_config` SET `excluded_terms` = :excludedTerms WHERE `id` = :id AND ' . $tenantCondition,
+            'UPDATE `blog_search_config` SET `excluded_terms` = :excludedTerms WHERE `id` = :id AND ' . $scopeCondition,
             [
                 'excludedTerms' => json_encode($defaultExcludedTerms, \JSON_THROW_ON_ERROR),
                 'id' => $searchConfigId,
-                ...$tenantParameters,
+                ...$scopeParameters,
             ]
         );
 

@@ -30,6 +30,31 @@ class ContentSystemExceptionTest extends TestCase
         static::assertStringContainsString($expectedMessageFragment, $exception->getMessage());
     }
 
+    /**
+     * @param \Closure(ConstraintViolationList): ContentSystemException $factory
+     */
+    #[DataProvider('definitionValidationFailureProvider')]
+    #[TestDox('classifies $_dataName')]
+    public function testDefinitionValidationFailureClassification(
+        \Closure $factory,
+        int $expectedStatus,
+        string $expectedErrorCode,
+    ): void {
+        $violations = new ConstraintViolationList([
+            new ConstraintViolation('must not be blank', null, [], null, 'definitions[first].label', null),
+            new ConstraintViolation('is invalid', null, [], null, 'definitions[second].type', null),
+        ]);
+
+        $exception = $factory($violations);
+
+        static::assertSame($expectedStatus, $exception->getStatusCode());
+        static::assertSame($expectedErrorCode, $exception->getErrorCode());
+        static::assertStringContainsString(
+            'definitions[first].label: must not be blank; definitions[second].type: is invalid',
+            $exception->getMessage(),
+        );
+    }
+
     #[DataProvider('classifiesClientDefectProvider')]
     #[TestDox('classifies $_dataName')]
     public function testIsClientDefect(ContentSystemException $exception, bool $isClientDefect): void
@@ -75,6 +100,15 @@ class ContentSystemExceptionTest extends TestCase
         static::assertFalse(ContentSystemException::isClientDefect(new \RuntimeException('boom')));
     }
 
+    #[TestDox('propagates previous throwable when loading element type fails')]
+    public function testPreservesPreviousThrowableOnLoadFailed(): void
+    {
+        $previous = new \RuntimeException('parse error');
+        $e = ContentSystemException::elementTypeLoadFailed('test.yaml', 'invalid syntax', $previous);
+
+        static::assertSame($previous, $e->getPrevious());
+    }
+
     #[DataProvider('configSerializerMessageFormProvider')]
     #[TestDox('formats the message for $_dataName')]
     public function testConfigSerializerNotRegisteredMessageForm(string $source, ?string $elementId, string $expectedMessage): void
@@ -86,15 +120,6 @@ class ContentSystemExceptionTest extends TestCase
         static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
     }
 
-    #[TestDox('propagates previous throwable when loading element type fails')]
-    public function testPreservesPreviousThrowableOnLoadFailed(): void
-    {
-        $previous = new \RuntimeException('parse error');
-        $e = ContentSystemException::elementTypeLoadFailed('test.yaml', 'invalid syntax', $previous);
-
-        static::assertSame($previous, $e->getPrevious());
-    }
-
     #[TestDox('propagates previous throwable when a data loader config is invalid')]
     public function testPreservesPreviousThrowableOnInvalidLoaderConfig(): void
     {
@@ -102,6 +127,50 @@ class ContentSystemExceptionTest extends TestCase
         $e = ContentSystemException::invalidLoaderConfig('navigation', $previous);
 
         static::assertSame($previous, $e->getPrevious());
+    }
+
+    #[TestDox('builds the assignment mismatch violation from the mismatch exception')]
+    public function testRootSourceAssignmentMismatchViolation(): void
+    {
+        $violation = ContentSystemException::rootSourceAssignmentMismatchViolation('blog_detail', 'category', '/0/contentLayoutId');
+
+        static::assertSame(
+            'Cannot assign a "category" entity to a content layout whose root source is "blog_detail".',
+            $violation->getMessage()
+        );
+        static::assertSame(
+            'Cannot assign a "category" entity to a content layout whose root source is "blog_detail".',
+            $violation->getMessageTemplate()
+        );
+        static::assertSame([], $violation->getParameters());
+        static::assertNull($violation->getRoot());
+        static::assertSame('/0/contentLayoutId', $violation->getPropertyPath());
+        static::assertSame('blog_detail', $violation->getInvalidValue());
+        static::assertSame('CONTENT_SYSTEM__ROOT_SOURCE_ASSIGNMENT_MISMATCH', $violation->getCode());
+    }
+
+    #[TestDox('wraps a decode defect into a single-violation layout write rejection')]
+    public function testLayoutWriteRejection(): void
+    {
+        $defect = ContentSystemException::invalidElementId('12', 'it reads as an integer');
+        $rejectedValue = [['id' => '12', 'type' => 'Ct:Text']];
+
+        $rejection = ContentSystemException::layoutWriteRejection($defect, 'layout', $rejectedValue, '/0/layout');
+
+        static::assertSame('/0/layout', $rejection->getPath());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $rejection->getStatusCode());
+        static::assertSame('FRAMEWORK__WRITE_CONSTRAINT_VIOLATION', $rejection->getErrorCode());
+        static::assertCount(1, $rejection->getViolations());
+
+        $violation = $rejection->getViolations()->get(0);
+        static::assertInstanceOf(ConstraintViolation::class, $violation);
+        static::assertSame('Element id "12" is not accepted: it reads as an integer.', $violation->getMessage());
+        static::assertSame('Element id "12" is not accepted: it reads as an integer.', $violation->getMessageTemplate());
+        static::assertSame([], $violation->getParameters());
+        static::assertNull($violation->getRoot());
+        static::assertSame('/layout', $violation->getPropertyPath());
+        static::assertSame($rejectedValue, $violation->getInvalidValue());
+        static::assertSame('CONTENT_SYSTEM__INVALID_ELEMENT_ID', $violation->getCode());
     }
 
     /**
@@ -113,16 +182,59 @@ class ContentSystemExceptionTest extends TestCase
         // so a client typo must become an invalid_config diagnostic, not a 500 that aborts the write. The exact
         // catalogue membership is pinned by a separate test.
         yield 'a code in the client-defect catalogue as a client defect' => [ContentSystemException::unknownLoaderEntity('prodct'), true];
-        yield 'a provider delivery collision as a client defect' => [ContentSystemException::providerDeliveryCollision('item', 'blog', 'category', 'el-1'), true];
-        yield 'a root scope combined with redistribute as a client defect' => [ContentSystemException::rootScopeWithRedistribute('blog'), true];
         // A code outside the catalogue is an internal fault that must propagate, never relabelled as the client's mistake.
         yield 'a code outside the client-defect catalogue as an internal fault' => [ContentSystemException::invalidFieldType('A', 'B'), false];
         // A served layout is stored data, not client input, so a corrupt forest is an internal fault.
         yield 'a duplicate element id as an internal fault' => [ContentSystemException::duplicateElementId('repeated-id'), false];
+        // Every client-supplied path rejects a non-map value on a translatable property before serving, so a
+        // value reaching language reduction with one is an internal fault on the same argument.
+        yield 'an invalid translation shape as an internal fault' => [ContentSystemException::translationShapeInvalid('el-1', 'text', 'string'), false];
         // The two halves of the split: an HTTP 500 that is nonetheless a client defect, so the strict draft
         // decode turns it into a 400 and the lintable one collects it as a 200 violation, while the
         // stored-column read keeps the fault status.
-        yield 'an invalid element id as a client defect despite its 500' => [ContentSystemException::invalidElementId('12', 'PHP casts it to an integer array key'), true];
+        yield 'an invalid element id as a client defect despite its 500' => [ContentSystemException::invalidElementId('12', 'it reads as an integer'), true];
+    }
+
+    /**
+     * @return iterable<string, array{\Closure(ConstraintViolationList): ContentSystemException, int, string}>
+     */
+    public static function definitionValidationFailureProvider(): iterable
+    {
+        yield 'an element-type request validation failure as a client error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::elementTypesInvalid($violations),
+            Response::HTTP_BAD_REQUEST,
+            ContentSystemException::ELEMENT_TYPES_INVALID,
+        ];
+
+        yield 'a style-option request validation failure as a client error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::styleOptionsInvalid($violations),
+            Response::HTTP_BAD_REQUEST,
+            ContentSystemException::STYLE_OPTIONS_INVALID,
+        ];
+
+        yield 'a binding request validation failure as a client error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::bindingSpecificationsInvalid($violations),
+            Response::HTTP_BAD_REQUEST,
+            ContentSystemException::BINDING_SPECIFICATIONS_INVALID,
+        ];
+
+        yield 'an element-type load validation failure as a server error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::elementTypeLoadValidationFailed($violations),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            ContentSystemException::ELEMENT_TYPE_LOAD_FAILED,
+        ];
+
+        yield 'a style-option load validation failure as a server error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::styleOptionLoadValidationFailed($violations),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            ContentSystemException::STYLE_OPTION_LOAD_FAILED,
+        ];
+
+        yield 'a binding load validation failure as a server error' => [
+            static fn (ConstraintViolationList $violations): ContentSystemException => ContentSystemException::bindingSpecificationLoadValidationFailed($violations),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            ContentSystemException::BINDING_SPECIFICATION_LOAD_FAILED,
+        ];
     }
 
     /**
@@ -141,7 +253,7 @@ class ContentSystemExceptionTest extends TestCase
         // DAL write wraps it into an unconditional 400 and the draft routes answer 400 or 200 by catalogue
         // membership, so the one path where this status IS the response is the stored-column read.
         yield 'invalid element id' => [
-            ContentSystemException::invalidElementId('12', 'PHP casts it to an integer array key'),
+            ContentSystemException::invalidElementId('12', 'it reads as an integer'),
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'CONTENT_SYSTEM__INVALID_ELEMENT_ID',
             '12',
@@ -161,13 +273,6 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'CONTENT_SYSTEM__PREVIEW_PAYLOAD_INVALID',
             'layout',
-        ];
-
-        yield 'config serializer not registered' => [
-            ContentSystemException::configSerializerNotRegistered('yaml'),
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            'CONTENT_SYSTEM__CONFIG_SERIALIZER_NOT_REGISTERED',
-            'yaml',
         ];
 
         yield 'invalid field type' => [
@@ -210,6 +315,13 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'CONTENT_SYSTEM__DUPLICATE_ELEMENT_ID',
             'repeated-id',
+        ];
+
+        yield 'invalid translation shape' => [
+            ContentSystemException::translationShapeInvalid('el-1', 'text', 'string'),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            'CONTENT_SYSTEM__TRANSLATION_SHAPE_INVALID',
+            'Property "text" of element "el-1" is translatable and must hold a language map, but holds string.',
         ];
 
         yield 'layout assignment not found' => [
@@ -345,18 +457,6 @@ class ContentSystemExceptionTest extends TestCase
             'Ct:Blog:Card',
         ];
 
-        yield 'element types invalid with batch violations' => [
-            ContentSystemException::elementTypesInvalid(
-                new ConstraintViolationList([
-                    new ConstraintViolation('must not be blank', null, [], null, '[Ct:Bad:A].label', null),
-                    new ConstraintViolation('too short', null, [], null, '[Ct:Bad:B].description', null),
-                ])
-            ),
-            Response::HTTP_BAD_REQUEST,
-            'CONTENT_SYSTEM__ELEMENT_TYPES_INVALID',
-            '[Ct:Bad:A].label: must not be blank; [Ct:Bad:B].description: too short',
-        ];
-
         yield 'element type invalid filename' => [
             ContentSystemException::elementTypeInvalidFilename('bad segment', 'path/to/file.yaml'),
             Response::HTTP_BAD_REQUEST,
@@ -411,17 +511,6 @@ class ContentSystemExceptionTest extends TestCase
             '/path/x.yaml',
         ];
 
-        yield 'binding specifications invalid' => [
-            ContentSystemException::bindingSpecificationsInvalid(
-                new ConstraintViolationList([
-                    new ConstraintViolation('must not be blank', null, [], null, 'resolves[media]', null),
-                ])
-            ),
-            Response::HTTP_BAD_REQUEST,
-            'CONTENT_SYSTEM__BINDING_SPECIFICATIONS_INVALID',
-            'resolves[media]',
-        ];
-
         yield 'binding specification not found' => [
             ContentSystemException::bindingSpecificationNotFound('ghost'),
             Response::HTTP_BAD_REQUEST,
@@ -455,6 +544,33 @@ class ContentSystemExceptionTest extends TestCase
             Response::HTTP_BAD_REQUEST,
             'CONTENT_SYSTEM__MUTATION_PROPERTY_VALUE_REJECTED',
             'Value for property "columns" of element "el-1" does not match its declared type, but is string.',
+        ];
+
+        // The Admin mutation 404 half of the pair whose other half is the 'layout not found' row above: that one
+        // is the Store-API render-time 500 for a layout that should exist, this one answers an unknown {layoutId}.
+        yield 'content layout not found as the admin mutation 404' => [
+            ContentSystemException::contentLayoutNotFound('layout-1'),
+            Response::HTTP_NOT_FOUND,
+            'CONTENT_SYSTEM__CONTENT_LAYOUT_NOT_FOUND',
+            'Content layout "layout-1" was not found.',
+        ];
+
+        // The gated half of the root-source pair: membership is checked with this 400 on every write and
+        // mutation path, before resolve()/sourceFor() is reached.
+        yield 'unknown root source as the gating 400' => [
+            ContentSystemException::unknownRootSource('mystery_source'),
+            Response::HTTP_BAD_REQUEST,
+            'CONTENT_SYSTEM__UNKNOWN_ROOT_SOURCE',
+            'Unknown root source "mystery_source". It is not a registered root source.',
+        ];
+
+        // The ungated half: reaching the registry's resolve() with an unregistered id is a programming error in
+        // a caller that skipped the membership gate, so a 500 rather than the client-facing 400 above.
+        yield 'root source resolution unsupported as the ungated-caller 500' => [
+            ContentSystemException::rootSourceResolutionUnsupported('mystery_source'),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            'CONTENT_SYSTEM__ROOT_SOURCE_RESOLUTION_UNSUPPORTED',
+            'is not registered and cannot be resolved',
         ];
     }
 

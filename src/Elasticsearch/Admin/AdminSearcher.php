@@ -6,8 +6,8 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Feature;
@@ -19,7 +19,6 @@ use OpenSearch\Client;
 use OpenSearchDSL\Query\Compound\BoolQuery;
 use OpenSearchDSL\Query\FullText\MatchQuery;
 use OpenSearchDSL\Query\FullText\SimpleQueryStringQuery;
-use OpenSearchDSL\Query\TermLevel\ExistsQuery;
 use OpenSearchDSL\Query\TermLevel\PrefixQuery;
 use OpenSearchDSL\Query\TermLevel\TermQuery;
 use OpenSearchDSL\Search;
@@ -216,7 +215,7 @@ class AdminSearcher
             'ignore_unavailable' => true,
         ];
         $query = $indexer->globalCriteria($term, $this->buildSearch($term));
-        $this->addTenantFilter($entityName, $query, $context);
+        $this->addDataScopeFilter($entityName, $query, $context);
         $this->paginate($query, $limit);
 
         $query = $query->toArray();
@@ -228,23 +227,21 @@ class AdminSearcher
         return $index;
     }
 
-    private function addTenantFilter(string $entityName, Search $search, Context $context): void
+    private function addDataScopeFilter(string $entityName, Search $search, Context $context): void
     {
-        if ($context->hasGlobalTenantAccess()) {
+        if ($context->allowsCrossScopeReads()) {
             return;
         }
 
         $definition = $this->definitionInstanceRegistry->getByEntityName($entityName);
-        if (!$definition->getFields()->filterInstance(TenantField::class)->first() instanceof TenantField) {
+        if (!$definition->getFields()->filterInstance(DataScopeField::class)->first() instanceof DataScopeField) {
             return;
         }
 
-        $tenantId = $context->getTenantId();
-        $query = $tenantId === null
-            ? new BoolQuery([BoolQuery::MUST_NOT => new ExistsQuery('tenantId')])
-            : new TermQuery('tenantId', $tenantId);
-
-        $search->addQuery($query, BoolQuery::FILTER);
+        $search->addQuery(
+            new TermQuery('dataScopeId', $context->getDataScopeId()),
+            BoolQuery::FILTER,
+        );
     }
 
     private function buildSearch(string $term): Search

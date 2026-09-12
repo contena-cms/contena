@@ -12,8 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class LayoutPresetSpecificationDtoCollection
 {
     /**
-     * Keyed by resolved preset id (e.g. "Sw:CategoryPage") so Symfony includes
-     * the id in violation property paths: presets[Sw:CategoryPage].layout
+     * Keyed by resolved preset id (e.g. "Ct:CategoryPage") so Symfony includes
+     * the id in violation property paths: presets[Ct:CategoryPage].layout
      *
      * @param array<string, LayoutPresetSpecificationDto> $presets
      */

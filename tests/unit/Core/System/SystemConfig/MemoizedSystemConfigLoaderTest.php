@@ -50,7 +50,7 @@ class MemoizedSystemConfigLoaderTest extends TestCase
         static::assertSame($expectedConfig, $decorated->load(null));
     }
 
-    public function testMemoizesTenantDefaultsIndependently(): void
+    public function testMemoizesDataScopesIndependently(): void
     {
         $tenantA = Context::createTenantContext(Uuid::randomHex());
         $tenantB = Context::createTenantContext(Uuid::randomHex());
@@ -59,13 +59,13 @@ class MemoizedSystemConfigLoaderTest extends TestCase
         $loader->expects($this->exactly(2))
             ->method('load')
             ->willReturnCallback(static fn (?string $channelId, ?Context $context): array => [
-                'tenant' => $context?->getTenantId(),
+                'dataScope' => $context?->getDataScopeId(),
             ]);
 
         $service = new MemoizedSystemConfigLoader($loader, new MemoizedSystemConfigStore());
 
-        static::assertSame(['tenant' => $tenantA->getTenantId()], $service->load(null, $tenantA));
-        static::assertSame(['tenant' => $tenantB->getTenantId()], $service->load(null, $tenantB));
-        static::assertSame(['tenant' => $tenantA->getTenantId()], $service->load(null, $tenantA));
+        static::assertSame(['dataScope' => $tenantA->getDataScopeId()], $service->load(null, $tenantA));
+        static::assertSame(['dataScope' => $tenantB->getDataScopeId()], $service->load(null, $tenantB));
+        static::assertSame(['dataScope' => $tenantA->getDataScopeId()], $service->load(null, $tenantA));
     }
 }

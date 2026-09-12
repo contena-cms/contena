@@ -115,11 +115,11 @@ class TenantOwnedCookieConsentTest extends TestCase
         ])), $channelContext);
 
         $rows = static::getContainer()->get(Connection::class)->fetchAllAssociative(
-            'SELECT LOWER(HEX(`tenant_id`)) AS `tenant_id` FROM `cookie_consent_log` WHERE `channel_id` = :channelId',
+            'SELECT LOWER(HEX(`data_scope_id`)) AS `data_scope_id` FROM `cookie_consent_log` WHERE `channel_id` = :channelId',
             ['channelId' => Uuid::fromHexToBytes($channelId)],
         );
         static::assertCount(1, $rows);
-        static::assertSame($this->tenantA, $rows[0]['tenant_id']);
+        static::assertSame($this->tenantA, $rows[0]['data_scope_id']);
     }
 
     /**
@@ -180,7 +180,7 @@ class TenantOwnedCookieConsentTest extends TestCase
     private function assertStoredTenant(string $table, string $id, ?string $expectedTenantId): void
     {
         $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `id` = :id', $table),
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `id` = :id', $table),
             ['id' => Uuid::fromHexToBytes($id)],
         );
         static::assertSame($expectedTenantId, $tenantId === false ? null : $tenantId);

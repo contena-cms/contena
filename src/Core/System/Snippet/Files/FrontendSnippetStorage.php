@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToReadFile;
-use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Util\Hasher;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToReadFile;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem as Io;
 use Symfony\Component\Filesystem\Path;
 

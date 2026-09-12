@@ -46,7 +46,7 @@ class SearchConfigLoaderTenantTest extends TestCase
         $createdAt = new \DateTimeImmutable()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
 
         $this->connection()->insert('blog_search_config', [
-            'tenant_id' => $tenantId,
+            'data_scope_id' => $tenantId,
             'id' => $configId,
             'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
             'and_logic' => 0,
@@ -55,7 +55,7 @@ class SearchConfigLoaderTenantTest extends TestCase
             'created_at' => $createdAt,
         ]);
         $this->connection()->insert('blog_search_config_field', [
-            'tenant_id' => $tenantId,
+            'data_scope_id' => $tenantId,
             'id' => Uuid::randomBytes(),
             'blog_search_config_id' => $configId,
             'field' => $field,

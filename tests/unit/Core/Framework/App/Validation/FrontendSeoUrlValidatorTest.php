@@ -2,14 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\Error\FrontendSeoUrlError;
 use Contena\Core\Framework\App\Validation\FrontendSeoUrlValidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;

@@ -84,7 +84,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Clock\ClockInterface;
@@ -157,7 +157,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('logger'),
             service('media.repository'),
             service(ClockInterface::class),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('messenger.message_handler');
     // endregion Message handlers
@@ -240,7 +240,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('media.repository'),
             service('media_folder.repository'),
             service('messenger.default_bus'),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
             param('contena.media.remote_thumbnails.enable'),
         ])
         ->tag('console.command');
@@ -249,7 +249,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(TypeDetector::class),
             service('media.repository'),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('console.command');
 
@@ -267,7 +267,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('media_thumbnail.repository'),
             service('contena.filesystem.public'),
             service('contena.filesystem.private'),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
             param('contena.media.remote_thumbnails.enable'),
         ])
         ->tag('console.command');
@@ -374,7 +374,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
             service('event_dispatcher'),
             service(ClockInterface::class),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ]);
 
     $services->set(MediaFolderService::class)

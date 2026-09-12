@@ -71,7 +71,7 @@ readonly class PresignedMediaUploadService
         }
 
         try {
-            $result = $this->generatePresignedUrl($mediaId, $payload, $uploadedAt, $isPrivate, $context->getTenantId());
+            $result = $this->generatePresignedUrl($mediaId, $payload, $uploadedAt, $isPrivate, $context->getDataScopeId());
         } catch (\Throwable $e) {
             if (!$isReplace) {
                 $this->deleteMediaEntity($mediaId, $context);
@@ -177,14 +177,14 @@ readonly class PresignedMediaUploadService
         return ['mediaId' => $mediaId, 'uploadedAt' => $uploadedAt, 'private' => $payload->private];
     }
 
-    private function generatePresignedUrl(string $mediaId, PresignedUploadPreparePayload $payload, \DateTimeImmutable $uploadedAt, bool $private, ?string $tenantId): PresignedUrlResult
+    private function generatePresignedUrl(string $mediaId, PresignedUploadPreparePayload $payload, \DateTimeImmutable $uploadedAt, bool $private, string $dataScopeId): PresignedUrlResult
     {
         $location = new MediaLocationStruct(
             $mediaId,
             $payload->extension,
             $payload->fileName,
             $uploadedAt,
-            $tenantId,
+            $dataScopeId,
         );
 
         return $this->presignedUrlGenerator->generate($location, $payload->mimeType, $private);
@@ -343,7 +343,7 @@ readonly class PresignedMediaUploadService
             $payload->extension,
             $payload->fileName,
             $uploadedAt instanceof \DateTime ? \DateTimeImmutable::createFromMutable($uploadedAt) : $uploadedAt,
-            $media->getTenantId(),
+            $media->getDataScopeId(),
         );
 
         $paths = $this->mediaPathStrategy->generate([$location]);

@@ -34,7 +34,7 @@ class Migration1786014691CreatePayment extends MigrationStep
             $connection,
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_app` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id` BINARY(16) NOT NULL,
     `app_code` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Business application code, e.g. biz_app_001',
     `app_secret` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Application secret (encrypted at rest)',
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS `payment_app` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_app.tenant_id` (`tenant_id`),
+    KEY `idx.payment_app.data_scope_id` (`data_scope_id`),
     UNIQUE `uniq.payment_app.app_code` (`app_code`),
-    CONSTRAINT `fk.payment_app.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_app.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -58,17 +58,17 @@ SQL
 CREATE TABLE IF NOT EXISTS `payment_app_translation` (
     `payment_app_id` BINARY(16) NOT NULL,
     `language_id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `name` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Name',
     `custom_fields` JSON NULL COMMENT 'Custom fields',
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`payment_app_id`, `language_id`),
-    KEY `idx.payment_app_translation.tenant_id` (`tenant_id`),
+    KEY `idx.payment_app_translation.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.payment_app_translation.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_app_translation.app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_app_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_app_translation.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_app_translation.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
         );
@@ -155,7 +155,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_app_channel_method` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id` BINARY(16) NULL,
+    `data_scope_id` BINARY(16) NOT NULL,
     `payment_app_id` BINARY(16) NOT NULL,
     `channel_method_id` BINARY(16) NOT NULL,
     `config` JSON NULL COMMENT 'App-level method parameters (e.g. limits)',
@@ -167,14 +167,14 @@ CREATE TABLE IF NOT EXISTS `payment_app_channel_method` (
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     UNIQUE `uniq.payment_app_channel_method.app_method` (`payment_app_id`, `channel_method_id`),
-    KEY `idx.payment_app_channel_method.tenant_id` (`tenant_id`),
+    KEY `idx.payment_app_channel_method.data_scope_id` (`data_scope_id`),
     KEY `idx.payment_app_channel_method.rule_id` (`rule_id`),
     CONSTRAINT `json.payment_app_channel_method.config` CHECK (JSON_VALID(`config`)),
     CONSTRAINT `json.payment_app_channel_method.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_app_channel_method.payment_app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_app_channel_method.channel_method_id` FOREIGN KEY (`channel_method_id`) REFERENCES `payment_channel_method` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_app_channel_method.rule_id` FOREIGN KEY (`rule_id`) REFERENCES `rule` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_app_channel_method.tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_app_channel_method.data_scope_id` FOREIGN KEY (`data_scope_id`) REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
         );
@@ -185,7 +185,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_channel_config` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `payment_app_id` BINARY(16) NULL COMMENT 'Owning app; NULL = platform unified collection config shared by all apps',
     `channel_id` BINARY(16) NOT NULL,
     `config` JSON NULL COMMENT 'Channel-specific parameters defined by the channel adapter (account identity, app id, keys, certificates, endpoints)',
@@ -195,16 +195,16 @@ CREATE TABLE IF NOT EXISTS `payment_channel_config` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_channel_config.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_channel_config.app_channel` (`tenant_id`, `payment_app_id`, `channel_id`),
+    KEY `idx.payment_channel_config.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_channel_config.app_channel` (`data_scope_id`, `payment_app_id`, `channel_id`),
     KEY `idx.payment_channel_config.rule_id` (`rule_id`),
     CONSTRAINT `json.payment_channel_config.config` CHECK (JSON_VALID(`config`)),
     CONSTRAINT `json.payment_channel_config.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_channel_config.payment_app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_channel_config.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `payment_channel` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_channel_config.rule_id` FOREIGN KEY (`rule_id`) REFERENCES `rule` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_channel_config.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_channel_config.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -216,7 +216,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_recurring` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `payment_app_id` BINARY(16) NOT NULL COMMENT 'Initiating app ID',
     `recurring_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform agreement no',
     `external_recurring_no` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'External agreement no (merchant sign no, idempotency key)',
@@ -244,9 +244,9 @@ CREATE TABLE IF NOT EXISTS `payment_recurring` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_recurring.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_recurring.agreement_no` (`tenant_id`, `recurring_no`),
-    UNIQUE `uniq.payment_recurring.app_external_recurring_no` (`tenant_id`, `payment_app_id`, `external_recurring_no`),
+    KEY `idx.payment_recurring.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_recurring.agreement_no` (`data_scope_id`, `recurring_no`),
+    UNIQUE `uniq.payment_recurring.app_external_recurring_no` (`data_scope_id`, `payment_app_id`, `external_recurring_no`),
     KEY `idx.payment_recurring.payment_app_id` (`payment_app_id`),
     KEY `idx.payment_recurring.channel_config_id` (`channel_config_id`),
     CONSTRAINT `json.payment_recurring.channel_params` CHECK (JSON_VALID(`channel_params`)),
@@ -255,8 +255,8 @@ CREATE TABLE IF NOT EXISTS `payment_recurring` (
     CONSTRAINT `json.payment_recurring.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_recurring.payment_app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_recurring.channel_config_id` FOREIGN KEY (`channel_config_id`) REFERENCES `payment_channel_config` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_recurring.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_recurring.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -268,7 +268,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_order` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `payment_app_id` BINARY(16) NOT NULL,
     `order_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform order no',
     `external_order_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'External system order no (idempotency key per app)',
@@ -296,9 +296,9 @@ CREATE TABLE IF NOT EXISTS `payment_order` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_order.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_order.order_no` (`tenant_id`, `order_no`),
-    UNIQUE `uniq.payment_order.app_external_order_no` (`tenant_id`, `payment_app_id`, `external_order_no`),
+    KEY `idx.payment_order.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_order.order_no` (`data_scope_id`, `order_no`),
+    UNIQUE `uniq.payment_order.app_external_order_no` (`data_scope_id`, `payment_app_id`, `external_order_no`),
     KEY `idx.payment_order.channel_trade_no` (`channel_trade_no`),
     KEY `idx.payment_order.channel_created` (`channel_code`, `created_at`),
     KEY `idx.payment_order.state_expire_time` (`state_id`, `expire_time`),
@@ -314,8 +314,8 @@ CREATE TABLE IF NOT EXISTS `payment_order` (
     CONSTRAINT `fk.payment_order.payment_app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_order.state_id` FOREIGN KEY (`state_id`) REFERENCES `state_machine_state` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_order.channel_config_id` FOREIGN KEY (`channel_config_id`) REFERENCES `payment_channel_config` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_order.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_order.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -327,7 +327,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_refund` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `refund_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Refund no',
     `order_id` BINARY(16) NOT NULL COMMENT 'Order ID',
     `external_refund_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'External system refund no (idempotency key)',
@@ -345,16 +345,16 @@ CREATE TABLE IF NOT EXISTS `payment_refund` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_refund.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_refund.refund_no` (`tenant_id`, `refund_no`),
-    UNIQUE `uniq.payment_refund.order_external_refund_no` (`tenant_id`, `order_id`, `external_refund_no`),
-    UNIQUE `uniq.payment_refund.channel_refund` (`tenant_id`, `channel_code`, `channel_refund_no`),
+    KEY `idx.payment_refund.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_refund.refund_no` (`data_scope_id`, `refund_no`),
+    UNIQUE `uniq.payment_refund.order_external_refund_no` (`data_scope_id`, `order_id`, `external_refund_no`),
+    UNIQUE `uniq.payment_refund.channel_refund` (`data_scope_id`, `channel_code`, `channel_refund_no`),
     KEY `idx.payment_refund.order_id` (`order_id`),
     CONSTRAINT `chk.payment_refund.amount_positive` CHECK (`refund_amount` > 0),
     CONSTRAINT `json.payment_refund.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_refund.order_id` FOREIGN KEY (`order_id`) REFERENCES `payment_order` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_refund.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_refund.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -366,7 +366,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_transfer` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `payment_app_id` BINARY(16) NOT NULL COMMENT 'Initiating app ID',
     `transfer_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform transfer no',
     `external_transfer_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'External system transfer no (idempotency key)',
@@ -391,9 +391,9 @@ CREATE TABLE IF NOT EXISTS `payment_transfer` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_transfer.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_transfer.transfer_no` (`tenant_id`, `transfer_no`),
-    UNIQUE `uniq.payment_transfer.app_external_transfer_no` (`tenant_id`, `payment_app_id`, `external_transfer_no`),
+    KEY `idx.payment_transfer.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_transfer.transfer_no` (`data_scope_id`, `transfer_no`),
+    UNIQUE `uniq.payment_transfer.app_external_transfer_no` (`data_scope_id`, `payment_app_id`, `external_transfer_no`),
     KEY `idx.payment_transfer.payment_app_id` (`payment_app_id`),
     KEY `idx.payment_transfer.channel_config_id` (`channel_config_id`),
     CONSTRAINT `chk.payment_transfer.amount_positive` CHECK (`amount` > 0),
@@ -403,8 +403,8 @@ CREATE TABLE IF NOT EXISTS `payment_transfer` (
     CONSTRAINT `fk.payment_transfer.payment_app_id` FOREIGN KEY (`payment_app_id`) REFERENCES `payment_app` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_transfer.channel_config_id` FOREIGN KEY (`channel_config_id`) REFERENCES `payment_channel_config` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_transfer.state_id` FOREIGN KEY (`state_id`) REFERENCES `state_machine_state` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_transfer.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_transfer.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -416,7 +416,7 @@ SQL
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_order_transaction` (
     `id` BINARY(16) NOT NULL,
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `order_id` BINARY(16) NOT NULL COMMENT 'Order ID',
     `transaction_no` VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Platform transaction no',
     `channel_code` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Channel code (snapshot)',
@@ -432,9 +432,9 @@ CREATE TABLE IF NOT EXISTS `payment_order_transaction` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_order_transaction.tenant_id` (`tenant_id`),
-    UNIQUE `uniq.payment_order_transaction.transaction_no` (`tenant_id`, `transaction_no`),
-    UNIQUE `uniq.payment_order_transaction.channel_request` (`tenant_id`, `channel_code`, `channel_request_no`),
+    KEY `idx.payment_order_transaction.data_scope_id` (`data_scope_id`),
+    UNIQUE `uniq.payment_order_transaction.transaction_no` (`data_scope_id`, `transaction_no`),
+    UNIQUE `uniq.payment_order_transaction.channel_request` (`data_scope_id`, `channel_code`, `channel_request_no`),
     KEY `idx.payment_order_transaction.order_id_created_at` (`order_id`, `created_at`),
     KEY `idx.payment_order_transaction.channel_trade_no` (`channel_code`, `channel_trade_no`),
     KEY `idx.payment_order_transaction.state_created_at` (`state_id`, `created_at`),
@@ -442,8 +442,8 @@ CREATE TABLE IF NOT EXISTS `payment_order_transaction` (
     CONSTRAINT `json.payment_order_transaction.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
     CONSTRAINT `fk.payment_order_transaction.order_id` FOREIGN KEY (`order_id`) REFERENCES `payment_order` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT `fk.payment_order_transaction.state_id` FOREIGN KEY (`state_id`) REFERENCES `state_machine_state` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_order_transaction.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_order_transaction.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -465,7 +465,7 @@ SQL
             $connection,
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_channel_notify_record` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id` BINARY(16) NOT NULL,
     `channel_code` VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Channel code',
     `channel_config_id` BINARY(16) NOT NULL COMMENT 'Channel configuration used to verify the notification',
@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `payment_channel_notify_record` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_channel_notify_record.tenant_id` (`tenant_id`),
+    KEY `idx.payment_channel_notify_record.data_scope_id` (`data_scope_id`),
     KEY `idx.payment_channel_notify_record.channel_created` (`channel_code`, `created_at`),
     UNIQUE `uniq.payment_channel_notify_record.config_notification` (`channel_config_id`, `notification_key`),
     KEY `idx.payment_channel_notify_record.order_id` (`order_id`),
@@ -498,8 +498,8 @@ CREATE TABLE IF NOT EXISTS `payment_channel_notify_record` (
     CONSTRAINT `fk.payment_channel_notify_record.transfer_id` FOREIGN KEY (`transfer_id`) REFERENCES `payment_transfer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT `fk.payment_channel_notify_record.recurring_id` FOREIGN KEY (`recurring_id`) REFERENCES `payment_recurring` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT `fk.payment_channel_notify_record.channel_config_id` FOREIGN KEY (`channel_config_id`) REFERENCES `payment_channel_config` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT `fk.payment_channel_notify_record.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_channel_notify_record.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL
@@ -510,7 +510,7 @@ SQL
             $connection,
             <<<'SQL'
 CREATE TABLE IF NOT EXISTS `payment_notify_record` (
-    `tenant_id`  BINARY(16)                              NULL,
+    `data_scope_id`  BINARY(16)                              NOT NULL,
     `id` BINARY(16) NOT NULL,
     `order_id` BINARY(16) NULL COMMENT 'Order ID (for payment and close notifications; exactly one of order_id/refund_id must be set, enforced in application layer)',
     `refund_id` BINARY(16) NULL COMMENT 'Refund ID (for refund notifications; exactly one of order_id/refund_id must be set, enforced in application layer)',
@@ -528,7 +528,7 @@ CREATE TABLE IF NOT EXISTS `payment_notify_record` (
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.payment_notify_record.tenant_id` (`tenant_id`),
+    KEY `idx.payment_notify_record.data_scope_id` (`data_scope_id`),
     KEY `idx.payment_notify_record.status_available_at` (`status`, `available_at`),
     KEY `idx.payment_notify_record.order_id` (`order_id`),
     KEY `idx.payment_notify_record.refund_id` (`refund_id`),
@@ -539,8 +539,8 @@ CREATE TABLE IF NOT EXISTS `payment_notify_record` (
     CONSTRAINT `fk.payment_notify_record.refund_id` FOREIGN KEY (`refund_id`) REFERENCES `payment_refund` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT `fk.payment_notify_record.transfer_id` FOREIGN KEY (`transfer_id`) REFERENCES `payment_transfer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT `fk.payment_notify_record.recurring_id` FOREIGN KEY (`recurring_id`) REFERENCES `payment_recurring` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `fk.payment_notify_record.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.payment_notify_record.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL

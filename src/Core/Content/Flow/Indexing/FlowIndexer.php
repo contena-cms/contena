@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Flow\Indexing;
 use Contena\Core\Content\Flow\Events\FlowIndexerEvent;
 use Contena\Core\Content\Flow\FlowCollection;
 use Contena\Core\Content\Flow\FlowDefinition;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -38,9 +39,9 @@ class FlowIndexer extends EntityIndexer
         return self::NAME;
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -48,7 +49,7 @@ class FlowIndexer extends EntityIndexer
             return null;
         }
 
-        return new FlowIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new FlowIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -59,7 +60,7 @@ class FlowIndexer extends EntityIndexer
             return null;
         }
 
-        $this->handle(new FlowIndexingMessage(array_values($updates), null, $event->getContext()));
+        $this->handle(new FlowIndexingMessage(array_values($updates), $event->getContext()));
 
         return null;
     }
@@ -77,7 +78,7 @@ class FlowIndexer extends EntityIndexer
         }
 
         $context = $message->getContext();
-        if ($message->isFullIndexing && $context->hasGlobalTenantAccess()) {
+        if ($message->isFullIndexing && $context->allowsCrossScopeReads()) {
             foreach ($this->payloadUpdater->updateAllScopes($ids) as $batch) {
                 $this->eventDispatcher->dispatch(new FlowIndexerEvent($batch['ids'], $batch['context']));
             }
@@ -91,9 +92,9 @@ class FlowIndexer extends EntityIndexer
         }
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

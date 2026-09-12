@@ -28,7 +28,7 @@ class DoctrineSQLHandler extends AbstractProcessingHandler
     {
         $envelope = [
             'id' => Uuid::randomBytes(),
-            'tenant_id' => $this->getTenantId($record),
+            'data_scope_id' => $this->getDataScopeId($record),
             'message' => $record->message,
             'level' => $record->level->value,
             'channel' => $record->channel,
@@ -47,10 +47,14 @@ class DoctrineSQLHandler extends AbstractProcessingHandler
         }
     }
 
-    private function getTenantId(LogRecord $record): ?string
+    private function getDataScopeId(LogRecord $record): string
     {
-        $tenantId = $record->context['tenantId'] ?? null;
+        $dataScopeId = $record->context['dataScopeId'] ?? null;
 
-        return \is_string($tenantId) && Uuid::isValid($tenantId) ? Uuid::fromHexToBytes($tenantId) : null;
+        if (!\is_string($dataScopeId) || !Uuid::isValid($dataScopeId)) {
+            $dataScopeId = Defaults::PLATFORM_DATA_SCOPE;
+        }
+
+        return Uuid::fromHexToBytes($dataScopeId);
     }
 }

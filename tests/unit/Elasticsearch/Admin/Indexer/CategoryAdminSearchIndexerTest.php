@@ -114,7 +114,7 @@ class CategoryAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('category tag 809c1844f4734243b6aa04aba860cd45', $document['text']);
         static::assertTrue($document['active']);
         static::assertTrue($document['visible']);
@@ -157,7 +157,7 @@ class CategoryAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'name' => 'Category',
                     'translatedNames' => json_encode([
                         ['languageId' => $languageId, 'name' => 'Category'],

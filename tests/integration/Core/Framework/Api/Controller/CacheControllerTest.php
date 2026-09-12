@@ -118,7 +118,7 @@ class CacheControllerTest extends TestCase
         static::assertInstanceOf(FullEntityIndexerMessage::class, $message);
 
         static::assertContains('category.indexer', $message->getSkip());
-        static::assertTrue($message->getContext()->hasGlobalTenantAccess());
+        static::assertTrue($message->getContext()->allowsCrossScopeReads());
     }
 
     public function testCacheIndexEndpointWithOnlyParameter(): void

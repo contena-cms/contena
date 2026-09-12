@@ -37,8 +37,8 @@ class AppContextCreator
             $hook->getContext()->getVersionId(),
             $hook->getContext()->considerInheritance(),
             $hook->getContext()->getRuleIds(),
-            $hook->getContext()->getTenantId(),
-            $hook->getContext()->hasGlobalTenantAccess(),
+            $hook->getContext()->getDataScope(),
+            $hook->getContext()->getDataScopeReadMode(),
         );
     }
 

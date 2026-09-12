@@ -9,7 +9,7 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Member\CleanupMemberRecoveryTaskHandler;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -108,7 +108,6 @@ class CleanupMemberRecoveryTaskHandlerTest extends TestCase
     private function createRecoveryFixture(string $scope, string $age, string $createdAtModifier, Context $context): string
     {
         $recoveryId = Uuid::randomHex();
-        $tenantId = $context->getTenantId();
         $createdAt = new \DateTimeImmutable(self::NOW)->modify($createdAtModifier);
 
         // This adapter only reads recovery columns; the member aggregate integrity is covered separately.
@@ -116,7 +115,7 @@ class CleanupMemberRecoveryTaskHandlerTest extends TestCase
         try {
             $this->connection->insert('member_recovery', [
                 'id' => Uuid::fromHexToBytes($recoveryId),
-                'tenant_id' => $tenantId === null ? null : Uuid::fromHexToBytes($tenantId),
+                'data_scope_id' => Uuid::fromHexToBytes($context->getDataScopeId()),
                 'member_id' => Uuid::randomBytes(),
                 'hash' => 'recovery-' . $scope . '-' . $age . '-' . $recoveryId,
                 'created_at' => $createdAt->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -130,10 +129,10 @@ class CleanupMemberRecoveryTaskHandlerTest extends TestCase
 
     private function createHandler(Context ...$contexts): CleanupMemberRecoveryTaskHandler
     {
-        $contextProvider = static::getContainer()->get(TenantScopeContextProvider::class);
+        $contextProvider = static::getContainer()->get(DataScopeContextProvider::class);
 
         if ($contexts !== []) {
-            $contextProvider = static::createStub(TenantScopeContextProvider::class);
+            $contextProvider = static::createStub(DataScopeContextProvider::class);
             $contextProvider->method('getContexts')->willReturnCallback(
                 static function () use ($contexts): \Generator {
                     yield from $contexts;

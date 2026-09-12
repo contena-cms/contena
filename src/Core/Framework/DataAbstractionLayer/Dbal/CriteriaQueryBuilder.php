@@ -7,11 +7,14 @@ use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver\CriteriaPartResolver;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeMembershipAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
@@ -19,6 +22,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
+use Contena\Core\Framework\Uuid\Uuid;
 
 /**
  * @internal
@@ -51,6 +55,7 @@ class CriteriaQueryBuilder
     public function build(QueryBuilder $query, EntityDefinition $definition, Criteria $criteria, Context $context, array $paths = []): QueryBuilder
     {
         $query = $this->helper->getBaseQuery($query, $definition, $context);
+        $this->addDataScopeFilter($definition, $query, $context);
 
         if ($definition->isInheritanceAware() && $context->considerInheritance()) {
             $parent = $definition->getFields()->get('parent');
@@ -161,6 +166,51 @@ class CriteriaQueryBuilder
                 $accessor = 'MIN(' . $accessor . ')';
             }
             $query->addOrderBy($accessor, $sorting->getDirection());
+        }
+    }
+
+    /**
+     * Enforces the context's read scope at the common SQL criteria boundary.
+     * This also covers direct DAL reads which do not pass through a repository.
+     */
+    private function addDataScopeFilter(EntityDefinition $definition, QueryBuilder $query, Context $context): void
+    {
+        if ($context->allowsCrossScopeReads()) {
+            return;
+        }
+
+        $field = $definition->getFields()->filterInstance(DataScopeField::class)->first();
+        if ($field instanceof DataScopeField) {
+            $this->addFilter(
+                $definition,
+                new EqualsFilter($field->getPropertyName(), $context->getDataScopeId()),
+                $query,
+                $context,
+            );
+
+            return;
+        }
+
+        $membership = $definition->getFields()->filterInstance(DataScopeMembershipAssociationField::class)->first();
+        if ($membership instanceof DataScopeMembershipAssociationField) {
+            // Use an EXISTS predicate instead of a many-to-many join. Besides
+            // avoiding duplicate root rows, this keeps the scope boundary
+            // independent from association alias resolution (which may be
+            // deferred until criteria filters are processed).
+            $mapping = $membership->getMappingDefinition()->getEntityName();
+            $root = EntityDefinitionQueryHelper::escape($definition->getEntityName());
+            $mappingAlias = EntityDefinitionQueryHelper::escape('scope_membership');
+            $mappingTable = EntityDefinitionQueryHelper::escape($mapping);
+            $sourceColumn = EntityDefinitionQueryHelper::escape($membership->getLocalField());
+            $mappingLocalColumn = EntityDefinitionQueryHelper::escape($membership->getMappingLocalColumn());
+            $mappingScopeColumn = EntityDefinitionQueryHelper::escape($membership->getMappingReferenceColumn());
+
+            $query->andWhere(
+                'EXISTS (SELECT 1 FROM ' . $mappingTable . ' ' . $mappingAlias
+                . ' WHERE ' . $mappingAlias . '.' . $mappingLocalColumn . ' = ' . $root . '.' . $sourceColumn
+                . ' AND ' . $mappingAlias . '.' . $mappingScopeColumn . ' = :dataScopeMembership)',
+            );
+            $query->setParameter('dataScopeMembership', Uuid::fromHexToBytes($context->getDataScopeId()));
         }
     }
 

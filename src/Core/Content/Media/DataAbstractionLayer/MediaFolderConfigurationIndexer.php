@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Media\DataAbstractionLayer;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationDefinition;
 use Contena\Core\Content\Media\Event\MediaFolderConfigurationIndexerEvent;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -37,9 +38,9 @@ class MediaFolderConfigurationIndexer extends EntityIndexer
         return 'media_folder_configuration.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -47,7 +48,7 @@ class MediaFolderConfigurationIndexer extends EntityIndexer
             return null;
         }
 
-        return new MediaIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new MediaIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -58,7 +59,7 @@ class MediaFolderConfigurationIndexer extends EntityIndexer
             return null;
         }
 
-        return new MediaIndexingMessage(array_values($updates), null, $event->getContext());
+        return new MediaIndexingMessage(array_values($updates), $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -95,9 +96,9 @@ class MediaFolderConfigurationIndexer extends EntityIndexer
         $this->eventDispatcher->dispatch(new MediaFolderConfigurationIndexerEvent($ids, $context, array_values($message->getSkip())));
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->repository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->repository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

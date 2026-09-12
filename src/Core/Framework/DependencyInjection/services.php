@@ -71,10 +71,8 @@ use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Routing\Annotation\CriteriaValueResolver;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
-use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
-use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
-use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\ContextResolverListener;
 use Contena\Core\Framework\Routing\CoreSubscriber;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
@@ -86,6 +84,8 @@ use Contena\Core\Framework\Routing\RouteParamsCleanupListener;
 use Contena\Core\Framework\Routing\RouteScope;
 use Contena\Core\Framework\Routing\RouteScopeListener;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
+use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Routing\SymfonyRouteScopeWhitelist;
 use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
 use Contena\Core\Framework\Routing\Telemetry\DomainResolver;
@@ -99,6 +99,7 @@ use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\Framework\Util\HtmlPurifierConfigProvider;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Kernel;
+use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
 use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
 use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
@@ -128,8 +129,7 @@ use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -659,7 +659,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(Connection::class),
             service(ClockInterface::class),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('messenger.message_handler');
 

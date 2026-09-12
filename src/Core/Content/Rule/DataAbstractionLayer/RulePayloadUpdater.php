@@ -49,10 +49,10 @@ class RulePayloadUpdater implements EventSubscriberInterface
             return [];
         }
 
-        [$tenantCondition, $tenantParameters] = $this->getTenantCondition($context);
+        [$dataScopeCondition, $dataScopeParameters] = $this->getDataScopeCondition($context);
         $eligibleIds = $this->connection->fetchFirstColumn(
-            'SELECT LOWER(HEX(`id`)) FROM `rule` WHERE `id` IN (:ids) AND ' . $tenantCondition,
-            ['ids' => Uuid::fromHexToBytesList($ids), ...$tenantParameters],
+            'SELECT LOWER(HEX(`id`)) FROM `rule` WHERE `id` IN (:ids) AND ' . $dataScopeCondition,
+            ['ids' => Uuid::fromHexToBytesList($ids), ...$dataScopeParameters],
             ['ids' => ArrayParameterType::BINARY],
         );
         $eligibleIds = array_values(array_filter($eligibleIds, 'is_string'));
@@ -65,15 +65,15 @@ class RulePayloadUpdater implements EventSubscriberInterface
                 rs.script, rs.identifier, rs.updated_at AS lastModified
              FROM rule_condition rc
              LEFT JOIN app_script_condition rs ON rc.script_id = rs.id AND rs.active = 1
-             WHERE rc.rule_id IN (:ids) AND ' . str_replace('`tenant_id`', 'rc.`tenant_id`', $tenantCondition) . ' ORDER BY rc.rule_id, rc.position',
-            ['ids' => Uuid::fromHexToBytesList($eligibleIds), ...$tenantParameters],
+             WHERE rc.rule_id IN (:ids) AND ' . str_replace('`data_scope_id`', 'rc.`data_scope_id`', $dataScopeCondition) . ' ORDER BY rc.rule_id, rc.position',
+            ['ids' => Uuid::fromHexToBytesList($eligibleIds), ...$dataScopeParameters],
             ['ids' => ArrayParameterType::BINARY],
         );
 
         /** @var array<string, list<array<string, string|null>>> $rules */
         $rules = FetchModeHelper::group($conditions);
         $now = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
-        $query = new RetryableQuery($this->connection, $this->connection->prepare('UPDATE `rule` SET payload = :payload, invalid = :invalid, updated_at = :updatedAt WHERE id = :id AND ' . $tenantCondition));
+        $query = new RetryableQuery($this->connection, $this->connection->prepare('UPDATE `rule` SET payload = :payload, invalid = :invalid, updated_at = :updatedAt WHERE id = :id AND ' . $dataScopeCondition));
 
         $updated = [];
         foreach ($eligibleIds as $id) {
@@ -91,7 +91,7 @@ class RulePayloadUpdater implements EventSubscriberInterface
                 'payload' => $serialized,
                 'invalid' => (int) $invalid,
                 'updatedAt' => $now,
-                ...$tenantParameters,
+                ...$dataScopeParameters,
             ]);
             $updated[$id] = ['payload' => $serialized, 'invalid' => $invalid];
         }
@@ -126,10 +126,10 @@ class RulePayloadUpdater implements EventSubscriberInterface
     public function updateAllScopes(array $ids): array
     {
         $batches = [];
-        foreach ($this->groupIdsByTenant($ids) as $tenantId => $scopeIds) {
-            $context = $tenantId === 'platform'
+        foreach ($this->groupIdsByDataScope($ids) as $dataScopeId => $scopeIds) {
+            $context = $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
                 ? Context::createDefaultContext()
-                : Context::createTenantContext($tenantId);
+                : Context::createTenantContext($dataScopeId);
             $updatedIds = array_keys($this->update($scopeIds, $context));
             if ($updatedIds !== []) {
                 $batches[] = ['context' => $context, 'ids' => $updatedIds];
@@ -193,13 +193,9 @@ class RulePayloadUpdater implements EventSubscriberInterface
     /**
      * @return array{string, array<string, string>}
      */
-    private function getTenantCondition(Context $context): array
+    private function getDataScopeCondition(Context $context): array
     {
-        if ($context->getTenantId() === null) {
-            return ['`tenant_id` IS NULL', []];
-        }
-
-        return ['`tenant_id` = :tenantId', ['tenantId' => Uuid::fromHexToBytes($context->getTenantId())]];
+        return ['`data_scope_id` = :dataScopeId', ['dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId())]];
     }
 
     /**
@@ -207,14 +203,14 @@ class RulePayloadUpdater implements EventSubscriberInterface
      *
      * @return array<string, list<string>>
      */
-    private function groupIdsByTenant(array $ids): array
+    private function groupIdsByDataScope(array $ids): array
     {
         if ($ids === []) {
             return [];
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(`id`)) AS `id`, LOWER(HEX(`tenant_id`)) AS `tenant_id` FROM `rule` WHERE `id` IN (:ids)',
+            'SELECT LOWER(HEX(`id`)) AS `id`, LOWER(HEX(`data_scope_id`)) AS `data_scope_id` FROM `rule` WHERE `id` IN (:ids)',
             ['ids' => Uuid::fromHexToBytesList($ids)],
             ['ids' => ArrayParameterType::BINARY],
         );
@@ -225,8 +221,11 @@ class RulePayloadUpdater implements EventSubscriberInterface
                 continue;
             }
 
-            $tenantId = \is_string($row['tenant_id']) ? $row['tenant_id'] : 'platform';
-            $grouped[$tenantId][] = $row['id'];
+            if (!\is_string($row['data_scope_id'])) {
+                continue;
+            }
+
+            $grouped[$row['data_scope_id']][] = $row['id'];
         }
 
         return $grouped;

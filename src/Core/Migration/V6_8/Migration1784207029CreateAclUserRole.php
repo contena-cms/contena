@@ -20,19 +20,19 @@ class Migration1784207029CreateAclUserRole extends MigrationStep
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `acl_user_role` (
-    `tenant_id`   BINARY(16) NULL,
+    `data_scope_id`   BINARY(16) NOT NULL,
     `user_id`    BINARY(16) NOT NULL,
     `acl_role_id` BINARY(16) NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`user_id`, `acl_role_id`),
-    KEY `idx.acl_user_role.tenant_id` (`tenant_id`),
+    KEY `idx.acl_user_role.data_scope_id` (`data_scope_id`),
     CONSTRAINT `fk.acl_user_role.user_id` FOREIGN KEY (`user_id`)
         REFERENCES `user` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk.acl_user_role.acl_role_id` FOREIGN KEY (`acl_role_id`)
         REFERENCES `acl_role` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk.acl_user_role.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.acl_user_role.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 

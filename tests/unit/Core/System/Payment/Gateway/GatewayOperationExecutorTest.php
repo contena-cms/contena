@@ -97,6 +97,6 @@ final class GatewayOperationExecutorTest extends TestCase
         $gateway = static::createStub(GatewayInterface::class);
         $gateway->method('code')->willReturn('test');
 
-        return new PaymentRoute($gateway, Uuid::randomHex(), [], false);
+        return new PaymentRoute($gateway, Uuid::randomHex(), []);
     }
 }

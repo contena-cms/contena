@@ -11,15 +11,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchResultLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantMembershipAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
@@ -203,29 +200,6 @@ class EntityRepository
     }
 
     /**
-     * Scopes tenant-aware entities to the platform or tenant of the context.
-     * Only contexts with explicit global tenant access read unfiltered.
-     */
-    private function applyTenantFilter(Criteria $criteria, Context $context): void
-    {
-        if ($context->hasGlobalTenantAccess()) {
-            return;
-        }
-
-        $field = $this->definition->getFields()->filterInstance(TenantField::class)->first();
-        if ($field instanceof TenantField) {
-            $criteria->addFilter(new EqualsFilter($field->getPropertyName(), $context->getTenantId()));
-
-            return;
-        }
-
-        $membership = $this->definition->getFields()->filterInstance(TenantMembershipAssociationField::class)->first();
-        if ($membership instanceof TenantMembershipAssociationField) {
-            $criteria->addFilter(new EqualsFilter($membership->getPropertyName() . '.id', $context->getTenantId()));
-        }
-    }
-
-    /**
      * @return TEntityCollection
      */
     private function read(Criteria $criteria, Context $context): EntityCollection
@@ -253,7 +227,6 @@ class EntityRepository
     private function _search(Criteria $criteria, Context $context): EntitySearchResult
     {
         $criteria = clone $criteria;
-        $this->applyTenantFilter($criteria, $context);
 
         $aggregations = null;
         if ($criteria->getAggregations()) {
@@ -313,7 +286,6 @@ class EntityRepository
     private function _aggregate(Criteria $criteria, Context $context): AggregationResultCollection
     {
         $criteria = clone $criteria;
-        $this->applyTenantFilter($criteria, $context);
 
         $this->eventDispatcher->dispatch(new BeforeEntityAggregationEvent($criteria, $this->definition, $context));
 
@@ -328,7 +300,6 @@ class EntityRepository
     private function _searchIds(Criteria $criteria, Context $context): IdSearchResult
     {
         $criteria = clone $criteria;
-        $this->applyTenantFilter($criteria, $context);
 
         $this->eventDispatcher->dispatch(new EntitySearchedEvent($criteria, $this->definition, $context));
 

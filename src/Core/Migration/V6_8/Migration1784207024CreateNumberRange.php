@@ -20,7 +20,7 @@ class Migration1784207024CreateNumberRange extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `number_range` (
     `id`         BINARY(16)   NOT NULL,
-    `tenant_id`  BINARY(16)   NULL,
+    `data_scope_id`  BINARY(16)   NOT NULL,
     `type_id`    BINARY(16)   NOT NULL,
     `global`     TINYINT(1)   NOT NULL,
     `pattern`    VARCHAR(255) NOT NULL,
@@ -28,9 +28,10 @@ CREATE TABLE IF NOT EXISTS `number_range` (
     `created_at` DATETIME(3)  NOT NULL,
     `updated_at` DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.number_range.tenant_id` (`tenant_id`),
-    CONSTRAINT `fk.number_range.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    UNIQUE KEY `uniq.number_range.data_scope_id_id` (`data_scope_id`, `id`),
+    KEY `idx.number_range.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.number_range.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

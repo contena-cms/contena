@@ -8,6 +8,7 @@ use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigMultipleChangedEven
 use Contena\Core\System\SystemConfig\Event\SystemConfigMultipleChangedEvent;
 use Contena\Core\System\SystemConfig\SymfonySystemConfigService;
 use Contena\Core\System\SystemConfig\SystemConfigException;
+use Contena\Core\System\SystemConfig\SystemConfigScopeResolver;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Doctrine\DBAL\Connection;
@@ -50,7 +51,8 @@ class SystemConfigServiceTest extends TestCase
             $this->eventDispatcher,
             new SymfonySystemConfigService([]),
             static::createStub(CacheTagCollector::class),
-            new NativeClock()
+            new NativeClock(),
+            new SystemConfigScopeResolver($this->connection),
         );
     }
 
@@ -88,7 +90,8 @@ class SystemConfigServiceTest extends TestCase
             $eventDispatcher,
             new SymfonySystemConfigService([]),
             static::createStub(CacheTagCollector::class),
-            new NativeClock()
+            new NativeClock(),
+            new SystemConfigScopeResolver($this->connection),
         );
 
         $configService->setMultiple(['foo.bar' => 'value', 'bar.foo' => 50]);
@@ -103,7 +106,8 @@ class SystemConfigServiceTest extends TestCase
             $this->eventDispatcher,
             new SymfonySystemConfigService(['default' => ['core.test' => true]]),
             static::createStub(CacheTagCollector::class),
-            new NativeClock()
+            new NativeClock(),
+            new SystemConfigScopeResolver($this->connection),
         );
 
         // Setting the same value is okay
@@ -137,7 +141,8 @@ class SystemConfigServiceTest extends TestCase
             $this->eventDispatcher,
             new SymfonySystemConfigService(['default' => ['foo.bar.key1' => 'value1', 'baz.qux.key2' => 'value2']]),
             static::createStub(CacheTagCollector::class),
-            new NativeClock()
+            new NativeClock(),
+            new SystemConfigScopeResolver($this->connection),
         );
 
         $this->eventDispatcher->method('dispatch')->willReturnArgument(0);

@@ -5,6 +5,7 @@ namespace Contena\Core\System\Channel\Aggregate\ChannelDomain;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -13,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Language\LanguageDefinition;
@@ -52,7 +52,7 @@ class ChannelDomainDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of channel domain.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned channel domain.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for channel domain.'),
 
             new StringField('url', 'url', 255)->addFlags(new ApiAware(), new Required())->setDescription('URL of the channel domain.'),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of channel.'),

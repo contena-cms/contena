@@ -29,18 +29,22 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
 
     public function getValue(string $type, Context $context, bool $preview = false): string
     {
-        $config = $this->getConfiguration($type, $context->getTenantId());
+        $config = $this->getConfiguration($type, $context->getDataScopeId());
 
         $parsedPattern = $this->parsePattern($config['pattern']);
 
-        $generatedValue = \is_array($parsedPattern) ? $this->generate($parsedPattern, $config, $preview) : '';
+        $generatedValue = \is_array($parsedPattern) ? $this->generate($parsedPattern, $config, $context, $preview) : '';
 
         return $this->endEvent($generatedValue, $type, $context, $preview);
     }
 
-    public function previewPatternByNumberRangeId(string $numberRangeId, ?string $pattern = null, ?int $start = null): string
-    {
-        $config = $this->getConfigurationByNumberRangeId($numberRangeId);
+    public function previewPatternByNumberRangeId(
+        string $numberRangeId,
+        Context $context,
+        ?string $pattern = null,
+        ?int $start = null,
+    ): string {
+        $config = $this->getConfigurationByNumberRangeId($numberRangeId, $context->getDataScopeId());
 
         if ($pattern) {
             $config['pattern'] = $pattern;
@@ -52,7 +56,7 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
 
         $parsedPattern = $this->parsePattern($config['pattern']);
 
-        return \is_array($parsedPattern) ? $this->generate($parsedPattern, $config, true) : '';
+        return \is_array($parsedPattern) ? $this->generate($parsedPattern, $config, $context, true) : '';
     }
 
     protected function getDecorated(): AbstractNumberRangeValueGenerator
@@ -88,31 +92,24 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
     }
 
     /**
-     * Resolves the number range of the current tenant. Tenant-specific ranges
-     * win over platform-global ranges; contexts without a tenant use the
-     * global ranges only.
+     * Resolves a number range only inside the Context's exact data scope.
      *
-     * @return array{id: string, pattern: string, start: int, technical_name: string}
+     * @return array{id: string, dataScopeId: string, pattern: string, start: int, technical_name: string}
      */
-    private function getConfiguration(string $definition, ?string $tenantId): array
+    private function getConfiguration(string $definition, string $dataScopeId): array
     {
-        $params = ['typeName' => $definition];
-        $tenantCondition = '`number_range`.`tenant_id` IS NULL';
-
-        if ($tenantId !== null) {
-            $tenantCondition = '(`number_range`.`tenant_id` = :tenantId OR `number_range`.`tenant_id` IS NULL)';
-            $params['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
-
-        /** @var array{id: string, pattern: string, start: int, technical_name: string}|false $config */
+        /** @var array{id: string, dataScopeId: string, pattern: string, start: int, technical_name: string}|false $config */
         $config = $this->connection->fetchAssociative('
-            SELECT LOWER(HEX(`number_range`.`id`)) AS `id`, `number_range`.`pattern`, `number_range`.`start`, `number_range_type`.`technical_name`
+            SELECT LOWER(HEX(`number_range`.`id`)) AS `id`, LOWER(HEX(`number_range`.`data_scope_id`)) AS `dataScopeId`, `number_range`.`pattern`, `number_range`.`start`, `number_range_type`.`technical_name`
             FROM number_range
             INNER JOIN number_range_type ON number_range_type.id = number_range.type_id
             WHERE `number_range_type`.`technical_name` = :typeName
-                AND ' . $tenantCondition . '
-            ORDER BY (`number_range`.`tenant_id` IS NULL) ASC, number_range.global ASC
-        ', $params);
+                AND `number_range`.`data_scope_id` = :dataScopeId
+            ORDER BY number_range.global ASC
+        ', [
+            'typeName' => $definition,
+            'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
+        ]);
 
         if (!$config) {
             throw NumberRangeException::noConfigurationForEntity($definition);
@@ -124,16 +121,20 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
     }
 
     /**
-     * @return array{id: string, pattern: string, start: int}
+     * @return array{id: string, dataScopeId: string, pattern: string, start: int}
      */
-    private function getConfigurationByNumberRangeId(string $numberRangeId): array
+    private function getConfigurationByNumberRangeId(string $numberRangeId, string $dataScopeId): array
     {
-        /** @var array{id: string, pattern: string, start: int}|false $config */
+        /** @var array{id: string, dataScopeId: string, pattern: string, start: int}|false $config */
         $config = $this->connection->fetchAssociative('
-            SELECT LOWER(HEX(`number_range`.`id`)) AS `id`, `number_range`.`pattern`, `number_range`.`start`
+            SELECT LOWER(HEX(`number_range`.`id`)) AS `id`, LOWER(HEX(`number_range`.`data_scope_id`)) AS `dataScopeId`, `number_range`.`pattern`, `number_range`.`start`
             FROM number_range
             WHERE `number_range`.`id` = :numberRangeId
-        ', ['numberRangeId' => Uuid::fromHexToBytes($numberRangeId)]);
+                AND `number_range`.`data_scope_id` = :dataScopeId
+        ', [
+            'numberRangeId' => Uuid::fromHexToBytes($numberRangeId),
+            'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
+        ]);
 
         if (!$config) {
             throw NumberRangeException::numberRangeNotFound($numberRangeId);
@@ -148,7 +149,7 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
      * @param ValueGeneratorConfig $config
      * @param array<string> $parsedPattern
      */
-    private function generate(array $parsedPattern, array $config, ?bool $preview = false): string
+    private function generate(array $parsedPattern, array $config, Context $context, bool $preview = false): string
     {
         $generated = '';
         $startPattern = false;
@@ -167,7 +168,14 @@ class NumberRangeValueGenerator extends AbstractNumberRangeValueGenerator
             if ($startPattern === true) {
                 $patternArg = explode('_', $patternPart);
                 $pattern = array_shift($patternArg);
-                $generated .= $this->valueGeneratorPatternRegistry->generatePattern($pattern, $patternPart, $config, $patternArg, $preview);
+                $generated .= $this->valueGeneratorPatternRegistry->generatePattern(
+                    $pattern,
+                    $patternPart,
+                    $config,
+                    $context,
+                    $patternArg,
+                    $preview,
+                );
 
                 $startPattern = false;
 

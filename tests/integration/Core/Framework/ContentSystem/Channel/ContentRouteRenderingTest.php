@@ -407,7 +407,7 @@ class ContentRouteRenderingTest extends TestCase
         // would have something to write. Without it the un-enriched body below would prove nothing.
         static::assertSame([$this->ids->get('seo-url')], $this->storedCanonicalSeoUrlIds());
 
-        $this->browser->setServerParameter('HTTP_sw-include-seo-urls', '1');
+        $this->browser->setServerParameter('HTTP_ct-include-seo-urls', '1');
 
         $root = $this->rootElements($this->requestJson($this->uri('content')))[0];
 

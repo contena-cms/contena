@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Content\Media\Core\Params;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
@@ -19,7 +20,7 @@ class MediaLocationStruct extends Struct
         public ?string $extension,
         public ?string $fileName,
         public ?\DateTimeImmutable $uploadedAt,
-        public ?string $tenantId = null,
+        public string $dataScopeId = Defaults::PLATFORM_DATA_SCOPE,
     ) {
     }
 }

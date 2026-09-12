@@ -8,6 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectio
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\ReadProtection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -16,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\User\UserDefinition;
@@ -65,7 +65,7 @@ class NotificationDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of notification.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform notification.'),
+            new DataScopeField()->setDescription('Unique identity of the owning tenant, or null for a platform notification.'),
             new StringField('status', 'status')->addFlags(new Required())->setDescription('When status is set, the Notification is made visible.'),
             new LongTextField('message', 'message')->addFlags(new Required())->setDescription('Indicates text or content of a notification message.'),
             new BoolField('admin_only', 'adminOnly')->setDescription('Parameter within a notification configuration that determines whether a notification is intended for administrators only.'),

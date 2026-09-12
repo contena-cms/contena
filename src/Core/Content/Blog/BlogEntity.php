@@ -21,7 +21,7 @@ class BlogEntity extends Entity implements \Stringable
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected int $autoIncrement;
 
@@ -98,14 +98,14 @@ class BlogEntity extends Entity implements \Stringable
         return (string) ($this->getTranslation('name') ?? $this->name);
     }
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getAutoIncrement(): int

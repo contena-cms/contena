@@ -7,17 +7,16 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Notification\NotificationDefinition;
 use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
@@ -57,8 +56,7 @@ class IntegrationDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned integration.'),
-            new ManyToOneAssociationField('tenant', 'tenant_id', 'tenant', 'id', false)->setDescription('Owning tenant of the integration.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for integration.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of Integration.'),
             new StringField('label', 'label')->addFlags(new Required())->setDescription('Label given to Integration.'),
             new StringField('access_key', 'accessKey')->addFlags(new Required())->setDescription('Access key to store api.'),

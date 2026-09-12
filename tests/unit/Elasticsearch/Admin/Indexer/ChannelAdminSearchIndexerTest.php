@@ -133,8 +133,8 @@ class ChannelAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertArrayHasKey('tenantId', $document);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertArrayHasKey('dataScopeId', $document);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('809c1844f4734243b6aa04aba860cd45 headless', $document['text']);
     }
 
@@ -146,7 +146,7 @@ class ChannelAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'name' => 'Headless',
                 ],
             ],

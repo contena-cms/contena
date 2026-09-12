@@ -26,7 +26,7 @@ Tests should read like executable examples.
 
 ## Tenant Isolation Matrix
 
-Every entity definition containing a `TenantField` is subject to the four-context matrix. Any behavior that stores, reads, indexes, caches, queues, schedules, serves MCP data, or logs such entity data must exercise all four contexts against both platform-owned and tenant-owned fixtures:
+Every entity definition containing a `DataScopeField` is subject to the four-context matrix. Any behavior that stores, reads, indexes, caches, queues, schedules, serves MCP data, or logs such entity data must exercise all four contexts against both platform-owned and tenant-owned fixtures:
 
 | Context | Reads | Writes |
 | --- | --- | --- |

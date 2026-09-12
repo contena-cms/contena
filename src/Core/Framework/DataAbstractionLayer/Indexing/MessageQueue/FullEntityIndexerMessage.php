@@ -16,9 +16,9 @@ class FullEntityIndexerMessage implements AsyncMessageInterface, DeduplicatableM
      * @param list<string> $only
      */
     public function __construct(
+        private readonly Context $context,
         protected array $skip = [],
         protected array $only = [],
-        private readonly ?Context $context = null,
     ) {
     }
 
@@ -40,7 +40,7 @@ class FullEntityIndexerMessage implements AsyncMessageInterface, DeduplicatableM
 
     public function getContext(): Context
     {
-        return $this->context ?? Context::createCLIContext();
+        return $this->context;
     }
 
     public function deduplicationId(): ?string

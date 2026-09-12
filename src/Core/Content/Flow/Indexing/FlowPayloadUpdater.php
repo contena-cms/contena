@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Flow\Indexing;
 
 use Contena\Core\Content\Flow\Dispatching\CachedFlowLoader;
 use Contena\Core\Content\Flow\Indexing\FlowBuilder\Sequence;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
@@ -35,7 +36,7 @@ class FlowPayloadUpdater
             return [];
         }
 
-        [$tenantCondition, $tenantParameters] = $this->getTenantCondition($context, '`flow`.');
+        [$scopeCondition, $scopeParameters] = $this->getScopeCondition($context, '`flow`.');
         $listFlowSequence = $this->connection->fetchAllAssociative(
             'SELECT LOWER(HEX(`flow`.`id`)) as array_key,
             LOWER(HEX(`flow`.`id`)) as `flow_id`,
@@ -49,21 +50,21 @@ class FlowPayloadUpdater
             `flow_sequence`.`config` as `config`,
             `flow_sequence`.`true_case` as `true_case`
             FROM `flow`
-            LEFT JOIN `flow_sequence` ON `flow`.`id` = `flow_sequence`.`flow_id` AND `flow_sequence`.`tenant_id` <=> `flow`.`tenant_id`
+            LEFT JOIN `flow_sequence` ON `flow`.`id` = `flow_sequence`.`flow_id` AND `flow_sequence`.`data_scope_id` = `flow`.`data_scope_id`
             WHERE `flow`.`active` = 1
                 AND (`flow_sequence`.`id` IS NULL OR (`flow_sequence`.`rule_id` IS NOT NULL OR `flow_sequence`.`action_name` IS NOT NULL))
                 AND `flow`.`id` IN (:ids)
-                AND ' . $tenantCondition,
-            ['ids' => Uuid::fromHexToBytesList($ids), ...$tenantParameters],
+                AND ' . $scopeCondition,
+            ['ids' => Uuid::fromHexToBytesList($ids), ...$scopeParameters],
             ['ids' => ArrayParameterType::BINARY]
         );
 
         $listFlowSequence = FetchModeHelper::group($listFlowSequence);
 
-        [$updateTenantCondition, $updateTenantParameters] = $this->getTenantCondition($context);
+        [$updateScopeCondition, $updateScopeParameters] = $this->getScopeCondition($context);
         $update = new RetryableQuery(
             $this->connection,
-            $this->connection->prepare('UPDATE `flow` SET payload = :payload, invalid = :invalid WHERE `id` = :id AND ' . $updateTenantCondition)
+            $this->connection->prepare('UPDATE `flow` SET payload = :payload, invalid = :invalid WHERE `id` = :id AND ' . $updateScopeCondition)
         );
 
         $updated = [];
@@ -99,7 +100,7 @@ class FlowPayloadUpdater
                     'id' => Uuid::fromHexToBytes($flowId),
                     'payload' => $serialized,
                     'invalid' => (int) $invalid,
-                    ...$updateTenantParameters,
+                    ...$updateScopeParameters,
                 ]);
             }
 
@@ -119,10 +120,10 @@ class FlowPayloadUpdater
     public function updateAllScopes(array $ids): array
     {
         $batches = [];
-        foreach ($this->groupIdsByTenant($ids) as $tenantId => $scopeIds) {
-            $context = $tenantId === 'platform'
+        foreach ($this->groupIdsByScope($ids) as $dataScopeId => $scopeIds) {
+            $context = $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
                 ? Context::createDefaultContext()
-                : Context::createTenantContext($tenantId);
+                : Context::createTenantContext($dataScopeId);
             $updatedIds = array_keys($this->update($scopeIds, $context));
             if ($updatedIds !== []) {
                 $batches[] = ['context' => $context, 'ids' => $updatedIds];
@@ -135,13 +136,9 @@ class FlowPayloadUpdater
     /**
      * @return array{string, array<string, string>}
      */
-    private function getTenantCondition(Context $context, string $qualifier = ''): array
+    private function getScopeCondition(Context $context, string $qualifier = ''): array
     {
-        if ($context->getTenantId() === null) {
-            return [$qualifier . '`tenant_id` IS NULL', []];
-        }
-
-        return [$qualifier . '`tenant_id` = :tenantId', ['tenantId' => Uuid::fromHexToBytes($context->getTenantId())]];
+        return [$qualifier . '`data_scope_id` = :dataScopeId', ['dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId())]];
     }
 
     /**
@@ -149,14 +146,14 @@ class FlowPayloadUpdater
      *
      * @return array<string, list<string>>
      */
-    private function groupIdsByTenant(array $ids): array
+    private function groupIdsByScope(array $ids): array
     {
         if ($ids === []) {
             return [];
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(`id`)) AS `id`, LOWER(HEX(`tenant_id`)) AS `tenant_id` FROM `flow` WHERE `id` IN (:ids)',
+            'SELECT LOWER(HEX(`id`)) AS `id`, LOWER(HEX(`data_scope_id`)) AS `data_scope_id` FROM `flow` WHERE `id` IN (:ids)',
             ['ids' => Uuid::fromHexToBytesList($ids)],
             ['ids' => ArrayParameterType::BINARY],
         );
@@ -167,8 +164,11 @@ class FlowPayloadUpdater
                 continue;
             }
 
-            $tenantId = \is_string($row['tenant_id']) ? $row['tenant_id'] : 'platform';
-            $grouped[$tenantId][] = $row['id'];
+            if (!\is_string($row['data_scope_id'])) {
+                continue;
+            }
+
+            $grouped[$row['data_scope_id']][] = $row['id'];
         }
 
         return $grouped;

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @phpstan-type MessageData array{
+ *     Context,
  *     list<string>,
  *     list<string>
  * }
@@ -48,49 +49,53 @@ class FullEntityIndexerMessageTest extends TestCase
      */
     public static function provideDeduplicationData(): iterable
     {
+        $context = Context::createDefaultContext();
+
         yield 'same data' => [
-            [[], []],
-            [[], []],
+            [$context, [], []],
+            [$context, [], []],
             true,
         ];
 
         yield 'different skip arrays' => [
-            [['skip1'], []],
-            [['skip2'], []],
+            [$context, ['skip1'], []],
+            [$context, ['skip2'], []],
             false,
         ];
 
         yield 'different order same skip arrays' => [
-            [['skip1', 'skip2'], []],
-            [['skip2', 'skip1'], []],
+            [$context, ['skip1', 'skip2'], []],
+            [$context, ['skip2', 'skip1'], []],
             true,
         ];
 
         yield 'different only arrays' => [
-            [[], ['only1']],
-            [[], ['only2']],
+            [$context, [], ['only1']],
+            [$context, [], ['only2']],
             false,
         ];
 
         yield 'different order same only arrays' => [
-            [[], ['only1', 'only2']],
-            [[], ['only2', 'only1']],
+            [$context, [], ['only1', 'only2']],
+            [$context, [], ['only2', 'only1']],
             true,
         ];
 
         yield 'both arrays same but different order' => [
-            [['skip1', 'skip2'], ['only1', 'only2']],
-            [['skip2', 'skip1'], ['only2', 'only1']],
+            [$context, ['skip1', 'skip2'], ['only1', 'only2']],
+            [$context, ['skip2', 'skip1'], ['only2', 'only1']],
             true,
         ];
     }
 
     public function testTenantContextParticipatesInDeduplication(): void
     {
-        $tenantA = new FullEntityIndexerMessage(context: Context::createTenantContext('tenant-a'));
-        $tenantB = new FullEntityIndexerMessage(context: Context::createTenantContext('tenant-b'));
+        $tenantAId = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+        $tenantBId = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+        $tenantA = new FullEntityIndexerMessage(Context::createTenantContext($tenantAId));
+        $tenantB = new FullEntityIndexerMessage(Context::createTenantContext($tenantBId));
 
-        static::assertSame('tenant-a', $tenantA->getContext()->getTenantId());
+        static::assertSame($tenantAId, $tenantA->getContext()->getDataScopeId());
         static::assertNotSame($tenantA->deduplicationId(), $tenantB->deduplicationId());
     }
 }

@@ -78,7 +78,7 @@ use Contena\Core\System\Member\Validation\MemberValidationFactory;
 use Contena\Core\System\Member\Validation\PasswordValidationFactory;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -414,7 +414,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('logger'),
             service(Connection::class),
             service(ClockInterface::class),
-            service(TenantScopeContextProvider::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('messenger.message_handler');
 

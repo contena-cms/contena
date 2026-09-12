@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -42,7 +43,7 @@ class YamlTypeLoaderTest extends TestCase
     public function testLoadsSpecificationsFromInjectedDirectories(): void
     {
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('bundle-a', self::BUNDLE_A_TYPES_DIR, 'CT'),
+            new ElementTypeSourceDirectory('bundle-a', self::BUNDLE_A_TYPES_DIR, 'Ct'),
             new ElementTypeSourceDirectory('test-plugin', self::PLUGIN_TYPES_DIR, 'TestPlugin'),
         ]);
 
@@ -64,7 +65,7 @@ class YamlTypeLoaderTest extends TestCase
     {
         $loader = $this->createLoader([]);
 
-        $dtos = $loader->loadDtosFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'CT');
+        $dtos = $loader->loadDtosFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'Ct');
 
         static::assertCount(1, $dtos);
         static::assertSame('Ct:Test:Element', $dtos[0]->name);
@@ -76,7 +77,7 @@ class YamlTypeLoaderTest extends TestCase
     {
         $loader = $this->createLoader([]);
 
-        $definitions = $loader->loadFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'CT');
+        $definitions = $loader->loadFromDirectory(self::BUNDLE_A_TYPES_DIR, 'test-source', 'Ct');
 
         static::assertCount(1, $definitions);
         static::assertSame('Ct:Test:Element', $definitions[0]->name());
@@ -88,7 +89,7 @@ class YamlTypeLoaderTest extends TestCase
     {
         $loaderDirectory = \dirname((string) new \ReflectionClass(YamlTypeLoader::class)->getFileName());
         $definitions = $this->createLoader([
-            new ElementTypeSourceDirectory('core', $loaderDirectory . '/../Definitions', 'CT'),
+            new ElementTypeSourceDirectory('core', $loaderDirectory . '/../Definitions', 'Ct'),
         ])->load();
 
         $byName = [];
@@ -177,7 +178,7 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/button.yaml', self::MINIMAL_VALID_YAML);
         file_put_contents($this->tempDir . '/card.yaml', self::MINIMAL_VALID_YAML);
 
-        $overlay = $this->createLoader([])->loadOverlayFromDirectory($this->tempDir, 'test-source', 'CT');
+        $overlay = $this->createLoader([])->loadOverlayFromDirectory($this->tempDir, 'test-source', 'Ct');
 
         static::assertCount(2, $overlay);
         static::assertArrayHasKey('Ct:Button', $overlay);
@@ -226,8 +227,8 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($dirB . '/dup.yaml', self::MINIMAL_VALID_YAML);
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source-a', $dirA, 'CT'),
-            new ElementTypeSourceDirectory('source-b', $dirB, 'CT'),
+            new ElementTypeSourceDirectory('source-a', $dirA, 'Ct'),
+            new ElementTypeSourceDirectory('source-b', $dirB, 'Ct'),
         ]);
 
         $this->expectExceptionObject(
@@ -243,7 +244,7 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/button.yml', self::MINIMAL_VALID_YAML);
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source', $this->tempDir, 'CT'),
+            new ElementTypeSourceDirectory('source', $this->tempDir, 'Ct'),
         ]);
 
         $this->expectExceptionObject(
@@ -258,7 +259,7 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/bad.yaml', "meta:\n  label: \"Bad\n  broken: [");
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source', $this->tempDir, 'CT'),
+            new ElementTypeSourceDirectory('source', $this->tempDir, 'Ct'),
         ]);
 
         // Parse message varies by Symfony version, so assert file path + error prefix
@@ -273,7 +274,7 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/scalar.yaml', 'just a string');
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source', $this->tempDir, 'CT'),
+            new ElementTypeSourceDirectory('source', $this->tempDir, 'Ct'),
         ]);
 
         $this->expectExceptionObject(
@@ -292,12 +293,17 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/invalid.yaml', $yaml);
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source', $this->tempDir, 'CT'),
+            new ElementTypeSourceDirectory('source', $this->tempDir, 'Ct'),
         ]);
 
-        $this->expectException(ContentSystemException::class);
-        $this->expectExceptionMessageMatches('/types\[Ct:Invalid\]\.label/');
-        $loader->load();
+        try {
+            $loader->load();
+            static::fail('Expected the invalid type definition to abort the load.');
+        } catch (ContentSystemException $exception) {
+            static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+            static::assertSame(ContentSystemException::ELEMENT_TYPE_LOAD_FAILED, $exception->getErrorCode());
+            static::assertMatchesRegularExpression('/types\[Ct:Invalid\]\.label/', $exception->getMessage());
+        }
     }
 
     #[TestDox('batch validation reports violations from multiple invalid files')]
@@ -310,7 +316,7 @@ class YamlTypeLoaderTest extends TestCase
         file_put_contents($this->tempDir . '/b/invalid-b.yaml', $yaml);
 
         $loader = $this->createLoader([
-            new ElementTypeSourceDirectory('source', $this->tempDir, 'CT'),
+            new ElementTypeSourceDirectory('source', $this->tempDir, 'Ct'),
         ]);
 
         $this->expectException(ContentSystemException::class);

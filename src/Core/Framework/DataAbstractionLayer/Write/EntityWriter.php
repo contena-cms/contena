@@ -10,13 +10,13 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SetNullOnDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
-use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TenantFieldSerializer;
+use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DataScopeFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\CascadeDeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
@@ -427,12 +427,12 @@ class EntityWriter implements EntityWriterInterface
             $existence = $this->gateway->getExistence($definition, $mappedBytes, [], $commandQueue);
 
             if ($existence->exists()) {
-                $tenantField = $definition->getFields()->filterInstance(TenantField::class)->first();
-                if ($tenantField instanceof TenantField) {
-                    $serializer = $tenantField->getSerializer();
-                    \assert($serializer instanceof TenantFieldSerializer);
+                $dataScopeField = $definition->getFields()->filterInstance(DataScopeField::class)->first();
+                if ($dataScopeField instanceof DataScopeField) {
+                    $serializer = $dataScopeField->getSerializer();
+                    \assert($serializer instanceof DataScopeFieldSerializer);
                     try {
-                        $serializer->validateExistingOwnership($tenantField, $existence, $parameters);
+                        $serializer->validateExistingOwnership($dataScopeField, $existence, $parameters);
                     } catch (WriteConstraintViolationException $exception) {
                         $writeContext->getExceptions()->add($exception);
 

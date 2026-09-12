@@ -13,6 +13,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequ
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\StoredTree;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
@@ -68,8 +69,8 @@ class LayoutDiagnostics
         $styleOptions = $this->styleOptionRegistry->all();
         $languageIds = $this->existingLanguageIds();
 
-        foreach ($this->duplicateIdViolations($elements) as $violation) {
-            $violations[] = $violation;
+        foreach (new StoredTree($tree)->duplicateElementIds() as $id) {
+            $violations[] = Violation::duplicateElementId($id);
         }
 
         foreach ($elements as $element) {
@@ -141,35 +142,6 @@ class LayoutDiagnostics
         }
 
         return new LayoutAnalysis(new DiagnosticsReport($violations), $resolutions);
-    }
-
-    /**
-     * @param list<StoredElement> $elements
-     *
-     * @return list<Violation>
-     */
-    private function duplicateIdViolations(array $elements): array
-    {
-        $counts = [];
-        foreach ($elements as $element) {
-            $counts[$element->id] = ($counts[$element->id] ?? 0) + 1;
-        }
-
-        $violations = [];
-        foreach ($counts as $id => $count) {
-            if ($count < 2) {
-                continue;
-            }
-
-            $violations[] = new Violation(
-                ViolationCode::DuplicateElementId,
-                (string) $id,
-                null,
-                \sprintf('Element id "%s" is not unique across the layout.', $id),
-            );
-        }
-
-        return $violations;
     }
 
     /**
@@ -667,7 +639,7 @@ class LayoutDiagnostics
      *
      * Translatable, a value counts when its language map carries the anchor entry `Defaults::LANGUAGE_SYSTEM`
      * and that entry's value is a string variant. The anchor terminates every language chain a
-     * `SalesChannelContext` is built with, so an anchor entry resolves on every request while any other entry
+     * `ChannelContext` is built with, so an anchor entry resolves on every request while any other entry
      * may not. An empty string satisfies, as it does for any other primitive. An anchor entry holding the null
      * variant does not satisfy and an absent anchor key does not satisfy; the two are distinct stored states
      * that this rule maps to the same answer.

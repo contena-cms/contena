@@ -10,6 +10,8 @@ class NumberRangeTranslationEntity extends TranslationEntity
 {
     use EntityCustomFieldsTrait;
 
+    protected string $dataScopeId;
+
     protected string $numberRangeId;
 
     protected ?string $name = null;
@@ -17,6 +19,16 @@ class NumberRangeTranslationEntity extends TranslationEntity
     protected ?string $description = null;
 
     protected ?NumberRangeEntity $numberRange = null;
+
+    public function getDataScopeId(): string
+    {
+        return $this->dataScopeId;
+    }
+
+    public function setDataScopeId(string $dataScopeId): void
+    {
+        $this->dataScopeId = $dataScopeId;
+    }
 
     public function getNumberRangeId(): string
     {

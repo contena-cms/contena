@@ -57,15 +57,15 @@ class AppSeoUrlRouteDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new StringField('name', 'name'))->addFlags(new Required()),
-            (new StringField('route_name', 'routeName'))->addFlags(new Required()),
-            (new StringField('hook', 'hook'))->addFlags(new Required()),
+            new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required()),
+            new StringField('name', 'name')->addFlags(new Required()),
+            new StringField('route_name', 'routeName')->addFlags(new Required()),
+            new StringField('hook', 'hook')->addFlags(new Required()),
             new StringField('entity_name', 'entityName', 64),
             new StringField('default_template', 'defaultTemplate', 750),
             new JsonField('paths', 'paths'),
             new JsonField('label', 'label'),
-            (new FkField('app_id', 'appId', AppDefinition::class))->addFlags(new Required()),
+            new FkField('app_id', 'appId', AppDefinition::class)->addFlags(new Required()),
             new ManyToOneAssociationField('app', 'app_id', AppDefinition::class),
         ]);
     }

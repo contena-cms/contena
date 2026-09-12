@@ -86,7 +86,7 @@ class ElasticsearchBlogDefinitionTest extends TestCase
 
         static::assertSame([
             'id',
-            'tenantId',
+            'dataScopeId',
             'name',
             'description',
             'descriptionTeaser',
@@ -112,7 +112,7 @@ class ElasticsearchBlogDefinitionTest extends TestCase
             'visibility_' . TestDefaults::CHANNEL,
         ], array_keys($mapping['properties']));
         static::assertSame(AbstractElasticsearchDefinition::KEYWORD_FIELD, $mapping['properties']['id']);
-        static::assertSame(AbstractElasticsearchDefinition::KEYWORD_FIELD, $mapping['properties']['tenantId']);
+        static::assertSame(AbstractElasticsearchDefinition::KEYWORD_FIELD, $mapping['properties']['dataScopeId']);
         static::assertSame(AbstractElasticsearchDefinition::BOOLEAN_FIELD, $mapping['properties']['active']);
         static::assertSame(AbstractElasticsearchDefinition::KEYWORD_FIELD, $mapping['properties']['type']);
         static::assertSame(AbstractElasticsearchDefinition::KEYWORD_FIELD, $mapping['properties']['categoryIds']);
@@ -241,7 +241,7 @@ class ElasticsearchBlogDefinitionTest extends TestCase
         static::assertArrayHasKey($uuid, $documents);
         $document = $documents[$uuid];
         static::assertSame($uuid, $document['id']);
-        static::assertNull($document['tenantId']);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $document['dataScopeId']);
         static::assertSame(1.0, $document['autoIncrement']);
         static::assertTrue($document['active']);
         static::assertSame(BlogDefinition::TYPE_POST, $document['type']);
@@ -338,7 +338,7 @@ class ElasticsearchBlogDefinitionTest extends TestCase
         $calls = [[
             $this->ids->get('blog-1') => [
                 'id' => $this->ids->get('blog-1'),
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
                 'active' => true,
                 'type' => BlogDefinition::TYPE_POST,
                 'autoIncrement' => 1,

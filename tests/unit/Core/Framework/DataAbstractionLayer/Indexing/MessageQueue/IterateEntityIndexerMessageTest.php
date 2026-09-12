@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @phpstan-type MessageData array{
  *     string,
+ *     Context,
  *     array{offset: int|null}|null,
  *     array<string>
  * }
@@ -49,49 +50,53 @@ class IterateEntityIndexerMessageTest extends TestCase
      */
     public static function provideDeduplicationData(): iterable
     {
+        $context = Context::createDefaultContext();
+
         yield 'same data' => [
-            ['test.indexer', null, []],
-            ['test.indexer', null, []],
+            ['test.indexer', $context, null, []],
+            ['test.indexer', $context, null, []],
             true,
         ];
 
         yield 'different indexer' => [
-            ['test.indexer', null, []],
-            ['other.indexer', null, []],
+            ['test.indexer', $context, null, []],
+            ['other.indexer', $context, null, []],
             false,
         ];
 
         yield 'different offset' => [
-            ['test.indexer', ['offset' => 10], []],
-            ['test.indexer', ['offset' => 20], []],
+            ['test.indexer', $context, ['offset' => 10], []],
+            ['test.indexer', $context, ['offset' => 20], []],
             false,
         ];
 
         yield 'same offset' => [
-            ['test.indexer', ['offset' => 10], []],
-            ['test.indexer', ['offset' => 10], []],
+            ['test.indexer', $context, ['offset' => 10], []],
+            ['test.indexer', $context, ['offset' => 10], []],
             true,
         ];
 
         yield 'different skip arrays' => [
-            ['test.indexer', null, ['skip1']],
-            ['test.indexer', null, ['skip2']],
+            ['test.indexer', $context, null, ['skip1']],
+            ['test.indexer', $context, null, ['skip2']],
             false,
         ];
 
         yield 'different order same skip arrays' => [
-            ['test.indexer', null, ['skip1', 'skip2']],
-            ['test.indexer', null, ['skip2', 'skip1']],
+            ['test.indexer', $context, null, ['skip1', 'skip2']],
+            ['test.indexer', $context, null, ['skip2', 'skip1']],
             true,
         ];
     }
 
     public function testTenantContextParticipatesInDeduplication(): void
     {
-        $tenantA = new IterateEntityIndexerMessage('test.indexer', null, context: Context::createTenantContext('tenant-a'));
-        $tenantB = new IterateEntityIndexerMessage('test.indexer', null, context: Context::createTenantContext('tenant-b'));
+        $tenantAId = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+        $tenantBId = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+        $tenantA = new IterateEntityIndexerMessage('test.indexer', Context::createTenantContext($tenantAId));
+        $tenantB = new IterateEntityIndexerMessage('test.indexer', Context::createTenantContext($tenantBId));
 
-        static::assertSame('tenant-a', $tenantA->getContext()->getTenantId());
+        static::assertSame($tenantAId, $tenantA->getContext()->getDataScopeId());
         static::assertNotSame($tenantA->deduplicationId(), $tenantB->deduplicationId());
     }
 }

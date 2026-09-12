@@ -5,7 +5,7 @@ namespace Contena\Elasticsearch\Framework;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
@@ -15,7 +15,6 @@ use Contena\Elasticsearch\Framework\DataAbstractionLayer\CriteriaParser;
 use OpenSearch\Client;
 use OpenSearchDSL\Query\Compound\BoolQuery;
 use OpenSearchDSL\Query\FullText\MatchQuery;
-use OpenSearchDSL\Query\TermLevel\ExistsQuery;
 use OpenSearchDSL\Query\TermLevel\TermQuery;
 use OpenSearchDSL\Search;
 use Psr\Log\LoggerInterface;
@@ -118,7 +117,7 @@ class ElasticsearchHelper
 
     public function addFilters(EntityDefinition $definition, Criteria $criteria, Search $search, Context $context): void
     {
-        $this->addTenantFilter($definition, $search, $context);
+        $this->addDataScopeFilter($definition, $search, $context);
 
         $filters = $criteria->getFilters();
         if ($filters === []) {
@@ -264,22 +263,20 @@ class ElasticsearchHelper
         return $this->registry->has($entityName);
     }
 
-    private function addTenantFilter(EntityDefinition $definition, Search $search, Context $context): void
+    private function addDataScopeFilter(EntityDefinition $definition, Search $search, Context $context): void
     {
-        if ($context->hasGlobalTenantAccess()) {
+        if ($context->allowsCrossScopeReads()) {
             return;
         }
 
-        if (!$definition->getFields()->filterInstance(TenantField::class)->first() instanceof TenantField) {
+        if (!$definition->getFields()->filterInstance(DataScopeField::class)->first() instanceof DataScopeField) {
             return;
         }
 
-        $tenantId = $context->getTenantId();
-        $query = $tenantId === null
-            ? new BoolQuery([BoolQuery::MUST_NOT => new ExistsQuery('tenantId')])
-            : new TermQuery('tenantId', $tenantId);
-
-        $search->addQuery($query, BoolQuery::FILTER);
+        $search->addQuery(
+            new TermQuery('dataScopeId', $context->getDataScopeId()),
+            BoolQuery::FILTER,
+        );
     }
 
     private function resolveMinScore(Context $context): float

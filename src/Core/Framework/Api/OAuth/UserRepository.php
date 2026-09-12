@@ -43,26 +43,22 @@ class UserRepository implements UserRepositoryInterface
         $builder = $this->connection->createQueryBuilder();
         $user = $builder->select('user.id', 'user.password', 'user.active')
             ->from('user', 'user')
+            ->innerJoin(
+                'user',
+                'user_data_scope',
+                'scope_grant',
+                'scope_grant.user_id = user.id AND scope_grant.data_scope_id = :dataScopeId AND scope_grant.active = 1',
+            )
             ->where('username = :username')
-            ->setParameter('username', $username);
-
-        if ($resolution instanceof TenantResolution) {
-            $builder->addSelect('COALESCE(membership.active, user.active) AS active')
-                ->leftJoin(
-                    'user',
-                    'user_tenant',
-                    'membership',
-                    'membership.user_id = user.id AND membership.tenant_id = :tenantId AND membership.active = 1',
-                )
-                ->andWhere(<<<'SQL'
-membership.user_id IS NOT NULL
-OR NOT EXISTS (SELECT 1 FROM user_tenant any_membership WHERE any_membership.user_id = user.id)
-SQL)
-                ->setParameter('tenantId', Uuid::fromHexToBytes($resolution->tenantId))
-                ->addOrderBy('membership.user_id IS NULL', 'ASC');
-        } else {
-            $builder->andWhere('NOT EXISTS (SELECT 1 FROM user_tenant membership WHERE membership.user_id = user.id)');
-        }
+            ->setParameter('username', $username)
+            ->setParameter(
+                'dataScopeId',
+                Uuid::fromHexToBytes(
+                    $resolution instanceof TenantResolution
+                        ? $resolution->tenantId
+                        : Defaults::PLATFORM_DATA_SCOPE,
+                ),
+            );
 
         $user = $builder->fetchAssociative();
 

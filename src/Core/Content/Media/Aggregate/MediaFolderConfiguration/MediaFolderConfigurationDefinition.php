@@ -9,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -17,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MediaFolderConfigurationDefinition extends EntityDefinition
@@ -59,7 +59,7 @@ class MediaFolderConfigurationDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of media folder configuration.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned media folder configuration.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for media folder configuration.'),
             new BoolField('create_thumbnails', 'createThumbnails')->setDescription('When boolean value is `true`, it enables thumbnail creation automatically.'),
             new BoolField('keep_aspect_ratio', 'keepAspectRatio')->setDescription('When boolean value is `true`, the system maintains the aspect ratio of media files when generating.'),
             new IntField('thumbnail_quality', 'thumbnailQuality', 0, 100)->setDescription('Parameter that controls the balance between image quality and size when creating thumbnail images.'),

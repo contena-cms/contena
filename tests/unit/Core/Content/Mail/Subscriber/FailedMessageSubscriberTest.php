@@ -3,6 +3,8 @@
 namespace Contena\Tests\Unit\Core\Content\Mail\Subscriber;
 
 use Contena\Core\Content\Mail\Subscriber\FailedMessageSubscriber;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +36,7 @@ class FailedMessageSubscriberTest extends TestCase
                 static::equalTo('log_entry'),
                 static::callback(static function (array $entry) {
                     static::assertArrayHasKey('id', $entry);
+                    static::assertSame(Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE), $entry['data_scope_id']);
                     static::assertArrayHasKey('message', $entry);
                     static::assertArrayHasKey('level', $entry);
                     static::assertArrayHasKey('channel', $entry);

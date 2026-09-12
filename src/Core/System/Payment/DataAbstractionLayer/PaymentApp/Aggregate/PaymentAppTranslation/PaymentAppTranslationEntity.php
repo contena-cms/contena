@@ -10,7 +10,7 @@ class PaymentAppTranslationEntity extends TranslationEntity
 {
     use EntityCustomFieldsTrait;
 
-    public protected(set) ?string $tenantId = null;
+    public protected(set) string $dataScopeId;
 
     public protected(set) string $paymentAppId;
 

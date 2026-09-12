@@ -23,8 +23,7 @@ class SeoUrlRouteRegistry
     public function __construct(
         iterable $seoUrlRoutes,
         private readonly iterable $loaders = [],
-    )
-    {
+    ) {
         foreach ($seoUrlRoutes as $seoUrlRoute) {
             $config = $seoUrlRoute->getConfig();
 
@@ -63,7 +62,9 @@ class SeoUrlRouteRegistry
         return $routes;
     }
 
-    /** @return array<string, SeoUrlRouteInterface> */
+    /**
+     * @return array<string, SeoUrlRouteInterface>
+     */
     private function loadRuntimeRoutes(): array
     {
         $routes = [];

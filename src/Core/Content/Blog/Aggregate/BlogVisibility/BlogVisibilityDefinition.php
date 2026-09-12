@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogVisibility;
 
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -12,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 
@@ -59,7 +59,7 @@ class BlogVisibilityDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned blog visibility.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for blog visibility.'),
             new IdField('id', 'id')->addFlags(new Required(), new PrimaryKey())->setDescription('Unique identity of blog visibility.'),
 
             new FkField('blog_id', 'blogId', BlogDefinition::class)->addFlags(new Required())->setDescription('Unique identity of the blog.'),

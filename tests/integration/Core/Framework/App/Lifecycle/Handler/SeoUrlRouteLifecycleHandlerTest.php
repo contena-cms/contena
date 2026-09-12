@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle\Handler;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
@@ -16,6 +14,8 @@ use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -248,7 +248,7 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
             'is_canonical' => 1,
             'is_modified' => 1,
             'is_deleted' => 0,
-            'created_at' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            'created_at' => new \DateTimeImmutable()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);
     }
 }

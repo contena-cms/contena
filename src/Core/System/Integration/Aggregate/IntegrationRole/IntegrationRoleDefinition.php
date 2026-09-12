@@ -3,11 +3,11 @@
 namespace Contena\Core\System\Integration\Aggregate\IntegrationRole;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\System\Integration\IntegrationDefinition;
@@ -29,7 +29,7 @@ class IntegrationRoleDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned integration role assignment.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for integration role assignment.'),
             new FkField('integration_id', 'integrationId', IntegrationDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new FkField('acl_role_id', 'aclRoleId', AclRoleDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new ManyToOneAssociationField('integration', 'integration_id', IntegrationDefinition::class, 'id', false),

@@ -20,7 +20,7 @@ class Migration1784207039CreateStateMachineHistory extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `state_machine_history` (
     `id`                    BINARY(16)  NOT NULL,
-    `tenant_id`             BINARY(16)  NULL,
+    `data_scope_id`             BINARY(16)  NOT NULL,
     `referenced_id`         BINARY(16)  NOT NULL,
     `referenced_version_id` BINARY(16)  NOT NULL,
     `state_machine_id`      BINARY(16)  NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `state_machine_history` (
     `created_at`            DATETIME(3) NOT NULL,
     `updated_at`            DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    INDEX `idx.state_machine_history.tenant_id` (`tenant_id`),
+    INDEX `idx.state_machine_history.data_scope_id` (`data_scope_id`),
     INDEX `idx.state_machine_history.referenced_entity` (`referenced_id`, `referenced_version_id`),
     CONSTRAINT `fk.state_machine_history.state_machine_id` FOREIGN KEY (`state_machine_id`)
         REFERENCES `state_machine` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `state_machine_history` (
         REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `fk.state_machine_history.integration_id` FOREIGN KEY (`integration_id`)
         REFERENCES `integration` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT `fk.state_machine_history.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.state_machine_history.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

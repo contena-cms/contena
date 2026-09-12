@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Payment;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
@@ -33,10 +34,10 @@ final class PaymentOrderConverterTest extends TestCase
     {
         $this->dispatcher = new EventDispatcher();
         $this->converter = new PaymentOrderConverter($this->dispatcher);
-        $this->app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'converter', 'status' => true]);
+        $this->app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'converter', 'status' => true]);
         $gateway = static::createStub(GatewayInterface::class);
         $gateway->method('code')->willReturn('test');
-        $this->route = new PaymentRoute($gateway, Uuid::randomHex(), [], false);
+        $this->route = new PaymentRoute($gateway, Uuid::randomHex(), []);
     }
 
     public function testConversionReturnsOnlyFlatOrderDataWithoutAllocatingIdentitiesOrTransactions(): void

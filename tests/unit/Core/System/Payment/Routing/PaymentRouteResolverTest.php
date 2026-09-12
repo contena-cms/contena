@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\System\Payment\Routing;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -39,7 +40,7 @@ final class PaymentRouteResolverTest extends TestCase
 {
     public function testResolverRejectsDisabledApplicationBeforeLoadingCandidates(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'disabled-app', 'status' => false]);
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'disabled-app', 'status' => false]);
         $resolver = new PaymentRouteResolver([], [], new EventDispatcher());
         $this->expectExceptionObject(PaymentException::appNotFound('disabled-app'));
 
@@ -48,9 +49,9 @@ final class PaymentRouteResolverTest extends TestCase
 
     public function testResolverRejectsGlobalExecutionScope(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'platform-app', 'status' => true]);
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'platform-app', 'status' => true]);
         $resolver = new PaymentRouteResolver([], [], new EventDispatcher());
-        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require a platform or tenant context.'));
+        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require an exact data-scope context.'));
 
         $resolver->resolve($app, Context::createGlobalContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class));
     }
@@ -67,6 +68,7 @@ final class PaymentRouteResolverTest extends TestCase
         ]);
         $config = new PaymentChannelConfigEntity()->assign([
             'id' => $configId,
+            'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
             'channelId' => $channel->getId(),
             'channel' => $channel,
             'config' => ['merchantId' => 'merchant-1'],
@@ -91,7 +93,7 @@ final class PaymentRouteResolverTest extends TestCase
 
     public function testDisabledAssignmentIsNotRouted(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'app-1', 'status' => true]);
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'app-1', 'status' => true]);
         $firstGateway = new RoutingPaymentGateway('first');
         $secondGateway = new RoutingPaymentGateway('second');
         $assignments = new PaymentAppChannelMethodCollection([
@@ -113,13 +115,14 @@ final class PaymentRouteResolverTest extends TestCase
         static::assertSame(['key' => 'second'], $route->config);
     }
 
-    public function testPluginCanRejectAppConfigurationAndAllowPlatformFallback(): void
+    public function testPluginCanRejectAppConfigurationWithoutFallingBackToPlatformConfiguration(): void
     {
-        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'appCode' => 'app-2', 'status' => true]);
+        $tenantId = Uuid::randomHex();
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => $tenantId, 'appCode' => 'app-2', 'status' => true]);
         $gateway = new RoutingPaymentGateway('platform-fallback');
         $assignment = $this->assignment($app, $gateway->code(), 1);
-        $appConfig = $this->config($app->getId(), $gateway->code(), ['key' => 'app']);
-        $platformConfig = $this->config(null, $gateway->code(), ['key' => 'platform']);
+        $appConfig = $this->config($app->getId(), $gateway->code(), ['key' => 'app'], $tenantId);
+        $platformConfig = $this->config(null, $gateway->code(), ['key' => 'platform'], Defaults::PLATFORM_DATA_SCOPE);
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(PaymentRouteCandidateEvent::class, static function (PaymentRouteCandidateEvent $event) use ($appConfig): void {
             if ($event->route->channelConfigId === $appConfig->getId()) {
@@ -136,11 +139,8 @@ final class PaymentRouteResolverTest extends TestCase
             $dispatcher,
         );
 
-        $route = $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
-
-        static::assertSame($platformConfig->getId(), $route->channelConfigId);
-        static::assertSame(['key' => 'platform'], $route->config);
-        static::assertTrue($route->platformConfig);
+        $this->expectExceptionObject(PaymentException::routeNotFound($app->getId(), 'h5'));
+        $resolver->resolve($app, Context::createTenantContext($tenantId), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
     }
 
     /**
@@ -175,6 +175,7 @@ final class PaymentRouteResolverTest extends TestCase
 
         return new PaymentAppChannelMethodEntity()->assign([
             'id' => Uuid::randomHex(),
+            'dataScopeId' => $app->dataScopeId,
             'paymentAppId' => $app->getId(),
             'channelMethodId' => $method->getId(),
             'channelMethod' => $method,
@@ -186,7 +187,7 @@ final class PaymentRouteResolverTest extends TestCase
     /**
      * @param array<string, mixed> $values
      */
-    private function config(?string $appId, string $channelCode, array $values): PaymentChannelConfigEntity
+    private function config(?string $appId, string $channelCode, array $values, string $dataScopeId = Defaults::PLATFORM_DATA_SCOPE): PaymentChannelConfigEntity
     {
         $channel = new PaymentChannelEntity()->assign([
             'id' => Uuid::randomHex(),
@@ -198,6 +199,7 @@ final class PaymentRouteResolverTest extends TestCase
 
         return new PaymentChannelConfigEntity()->assign([
             'id' => Uuid::randomHex(),
+            'dataScopeId' => $dataScopeId,
             'paymentAppId' => $appId,
             'channelId' => $channel->getId(),
             'channel' => $channel,

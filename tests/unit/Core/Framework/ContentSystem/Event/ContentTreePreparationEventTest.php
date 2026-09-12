@@ -48,7 +48,7 @@ class ContentTreePreparationEventTest extends TestCase
 
         $this->expectExceptionObject($expected);
 
-        $event->replaceTree($replacement); // @phpstan-ignore argument.type
+        $event->replaceTree($replacement); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
     }
 
     /**
@@ -60,7 +60,7 @@ class ContentTreePreparationEventTest extends TestCase
     {
         $this->expectExceptionObject($expected);
 
-        $this->createEvent($replacement); // @phpstan-ignore argument.type
+        $this->createEvent($replacement); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
     }
 
     #[TestDox('keeps the forest it holds when a replacement is refused')]
@@ -70,7 +70,7 @@ class ContentTreePreparationEventTest extends TestCase
         $event = $this->createEvent($tree);
 
         try {
-            $event->replaceTree([new RenderedElement('rendered-id', 'text')]); // @phpstan-ignore argument.type
+            $event->replaceTree([new RenderedElement('rendered-id', 'text')]); // @phpstan-ignore argument.type (the guard answers for callers static analysis does not see)
         } catch (ContentSystemException) {
         }
 
@@ -78,6 +78,11 @@ class ContentTreePreparationEventTest extends TestCase
     }
 
     /**
+     * The rendered model is the case the guard exists for: it is what a listener holds when it confuses the two
+     * sides of the storage/render split, and it carries an `id`, so the pipeline's own post-event check waves it
+     * through. The remaining cases are the shapes the `list<StoredElement>` docblock also promises and the
+     * runtime `array` type does not.
+     *
      * @return iterable<string, array{array<array-key, mixed>, ContentSystemException}>
      */
     public static function foreignForestProvider(): iterable
@@ -87,7 +92,7 @@ class ContentTreePreparationEventTest extends TestCase
             ContentSystemException::invalidMapValue('Stored content tree', '0', StoredElement::class, RenderedElement::class),
         ];
 
-        yield 'a rendered element behind a valid one' => [
+        yield 'a stored element behind a valid one' => [
             [new StoredElement('root-id', 'section'), new RenderedElement('rendered-id', 'text')],
             ContentSystemException::invalidMapValue('Stored content tree', '1', StoredElement::class, RenderedElement::class),
         ];

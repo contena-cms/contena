@@ -66,8 +66,11 @@ class AdministrationControllerTenantTest extends TestCase
     private function platformConfigId(): string
     {
         $id = $this->connection()->fetchOne(
-            'SELECT LOWER(HEX(`id`)) FROM `blog_search_config` WHERE `language_id` = :languageId AND `tenant_id` IS NULL',
-            ['languageId' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM)],
+            'SELECT LOWER(HEX(`id`)) FROM `blog_search_config` WHERE `language_id` = :languageId AND `data_scope_id` = :scopeId',
+            [
+                'languageId' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+                'scopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+            ],
         );
         static::assertIsString($id);
 
@@ -78,7 +81,7 @@ class AdministrationControllerTenantTest extends TestCase
     {
         $id = Uuid::randomHex();
         $this->connection()->insert('blog_search_config', [
-            'tenant_id' => Uuid::fromHexToBytes($tenantId),
+            'data_scope_id' => Uuid::fromHexToBytes($tenantId),
             'id' => Uuid::fromHexToBytes($id),
             'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
             'and_logic' => 1,

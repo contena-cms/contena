@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -162,7 +163,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
         ];
     }
 
-    #[TestDox('surfaces the produced-type mismatch through the YAML load path as a bindingSpecificationsInvalid exception')]
+    #[TestDox('surfaces the produced-type mismatch through the YAML load path as a server-side load failure')]
     public function testLoadPathThrowsForProducedTypeMismatch(): void
     {
         $directory = sys_get_temp_dir() . '/' . uniqid('content-system-binding-spec-test-', true);
@@ -170,7 +171,7 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
         $filesystem->mkdir($directory . '/media');
 
         try {
-            // The type is implicit: media/image.yaml under prefix Sw resolves to the registered Ct:Media:Image,
+            // The type is implicit: media/image.yaml under prefix Ct resolves to the registered Ct:Media:Image,
             // whose "media" reference is a MediaEntity, so the entity loader producing a BlogEntity is a
             // produced-type mismatch caught at load time.
             file_put_contents($directory . '/media/image.yaml', Yaml::dump([
@@ -194,10 +195,11 @@ class TypeConsistentBindingSpecificationValidationTest extends TestCase
             );
 
             try {
-                $loader->loadDtosFromTypeDirectory($directory, 'test', 'Sw');
+                $loader->loadDtosFromTypeDirectory($directory, 'test', 'Ct');
                 static::fail('Expected the loader to reject the produced-type mismatch.');
             } catch (ContentSystemException $exception) {
-                static::assertSame(ContentSystemException::BINDING_SPECIFICATIONS_INVALID, $exception->getErrorCode());
+                static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+                static::assertSame(ContentSystemException::BINDING_SPECIFICATION_LOAD_FAILED, $exception->getErrorCode());
                 static::assertStringContainsString('resolves[media]', $exception->getMessage());
             }
         } finally {

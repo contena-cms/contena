@@ -122,7 +122,7 @@ class CategoryUrlProvider extends AbstractUrlProvider
             $lastId = ['offset' => $offset];
         }
 
-        $iterator = $this->iteratorFactory->createIterator($this->definition, $lastId);
+        $iterator = $this->iteratorFactory->createIterator($this->definition, $context->getContext(), $lastId);
         $query = $iterator->getQuery();
         $query->setMaxResults($limit);
 

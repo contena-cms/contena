@@ -76,6 +76,12 @@ class RenderedTreeFinalizationEvent implements ContenaChannelEvent
     }
 
     /**
+     * The `list<RenderedElement>` the signature can only promise in a docblock, and the symmetric half of the
+     * guard {@see ContentTreePreparationEvent} carries. The one check the pipeline already runs on what this
+     * event hands back reads `id` and `slots`, which the stored model carries too, so it waves a forest of the
+     * wrong model through to the encoders rather than reporting it. Depth needs no walk here: every
+     * {@see RenderedElement} refuses a foreign slot child, so a list of rendered roots is a rendered forest.
+     *
      * @param array<array-key, mixed> $tree
      */
     private function rejectForeignTree(array $tree): void

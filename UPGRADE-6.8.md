@@ -4,6 +4,12 @@
 
 <details>
 
+## Data-scope-aware entity indexers
+
+Custom DAL indexers must change `EntityIndexer::iterate(?array $offset)` to `iterate(?array $offset, Context $context)` and `EntityIndexer::getTotal()` to `getTotal(Context $context)`. Pass that Context to `IteratorFactory::createIterator()` as its new second argument and construct every `EntityIndexingMessage` with the Context as its second argument; indexing messages no longer create a fallback Context or allow their Context to be replaced after construction.
+
+Calls to `EntityIndexerRegistry::index()`, `sendIndexingMessage()`, and `sendFullIndexingMessage()` must now provide the Context as their first argument. When it permits cross-scope reads, the registry streams the platform and tenant scopes from `DataScopeContextProvider` and schedules an independent exact-scope run for each one. Extensions must not use a cross-scope Context to issue derived writes directly.
+
 ## Payment module contracts and routing rules
 
 PHP payment callers must use `Payment\Struct\PaymentRequest`, `Refund\Struct\RefundRequest`, `Transfer\Struct\TransferRequest` and `Subscription\Struct\SubscriptionRequest` under `Contena\Core\System\Payment`. Payment queries now accept `?string $orderNo` and `?string $externalOrderNo` directly; remove construction of the former `Payment\Struct\OrderReference`. The former `Order` namespace is now `Payment`, not an umbrella for refund or transfer orders. Update service, converter, state-handler and request imports accordingly. DAL entity/table names are unchanged. The HTTP/validation DTOs live in `OpenApi\Struct` and are mapped at the controller boundary. Inject the corresponding module's abstract service contract; the root `AbstractPaymentService` remains the delegating facade used by OpenApi. HTTP routes and JSON field names are unchanged.
@@ -40,33 +46,31 @@ Integration, Administration user, and Channel API access keys are now globally u
 
 Before upgrading, replace duplicate access keys in `integration`, `user_access_key`, or `channel`. Generated access keys already include a credential-type prefix and enough random data; integrations that provide access keys manually must ensure uniqueness across all tenants.
 
-## Platform, global, and CLI contexts have distinct tenant scopes
+## Canonical non-null data scopes replace nullable tenant ownership
 
-`Context::createDefaultContext()` reads and writes only platform-owned rows with a `NULL` tenant. `Context::createGlobalContext()` reads across platform and tenant data but still writes only platform-owned rows, and `Context::createCLIContext()` uses this global management scope. Platform workflows that administer tenant data must resolve the target tenant and perform the write with `Context::createTenantContext($tenantId)`.
+Scope-owned business rows now use the required `data_scope_id` foreign key. The canonical platform scope has ID `606ed13c2ebca5e6d58d9adcb53dcc00`; tenant scope IDs equal their tenant IDs. The `data_scope` table is the single foreign-key target, and tenant creation/deletion maintains its matching scope record. A platform-only installation contains the canonical platform scope and retains the complete feature set without creating a tenant.
 
-Admin OpenSearch documents for tenant-scoped entities now contain a `tenantId` field and tenant API searches filter on it. Rebuild the Admin OpenSearch indices with `bin/console es:admin:index` after upgrading so existing documents receive the field.
+`Context::createDefaultContext()` reads and writes the exact platform scope. `Context::createTenantContext($tenantId)` reads and writes that exact tenant scope. `Context::createGlobalContext()` and `Context::createCLIContext()` may read across scopes but still write only to the platform scope. Cross-scope reads never imply cross-scope writes. Platform workflows that administer tenant data must resolve the target tenant and create an exact tenant Context before writing. Use `Context::getDataScopeId()` for ownership, cache keys, logs, indices, filesystem paths, and asynchronous messages; use `getTenantId()` only for behavior that specifically requires a tenant identity.
 
-Storefront OpenSearch documents for tenant-scoped entities now also contain a `tenantId` field and searches apply the current context's tenant boundary. Rebuild the Storefront OpenSearch indices with `bin/console es:index` after upgrading so existing documents receive the field.
+The following DAL extension points replace the nullable tenant model:
 
-`log_entry` now has an optional `tenant_id`. DAL reads in a tenant context only return that tenant's log entries; platform logs remain unscoped with a `NULL` tenant. Log records that are emitted for a tenant should include its `tenantId` in the Monolog context so the SQL handler can persist the association. The `core.logging.entryLimit` cleanup limit is applied independently to platform logs and each tenant's logs.
+- Replace `TenantField` with `DataScopeField`. It injects a non-null owner from Context, is not API writable, and ownership cannot be changed by an update.
+- Replace `TenantMembershipAssociationField` with `DataScopeMembershipAssociationField` for a shared identity whose visibility comes from an explicit scope-grant mapping.
+- Replace `TenantScopeContextProvider` with `DataScopeContextProvider` for platform-first, keyset-paginated maintenance across every business-data scope. Consume its generator as a stream.
+- Entities without either marker remain shared platform infrastructure. A definition must not declare both ownership and membership markers.
 
-`integration` and `integration_role` now have an optional `tenant_id`. Create tenant integrations with `Context::createTenantContext($tenantId)`; their Admin API requests are always bound to that tenant and cannot switch to another tenant. Platform-owned integrations keep a `NULL` tenant and use the global management view.
+DAL readers, ID searches, aggregations, version cloning, and OpenSearch apply the same Context boundary. Admin and Storefront OpenSearch documents now contain the required `dataScopeId` field instead of `tenantId`. Rebuild both index families after installing this baseline:
 
-ACL roles, positions, organization units, organizations, their translations, and their user assignment tables are now tenant-owned. Create and manage them in the target tenant context. Their stable business codes are unique within a tenant instead of globally, while platform-owned records remain available only in the platform scope.
+```bash
+bin/console es:admin:index
+bin/console es:index
+```
 
-Administration users are now global identities that can belong to multiple tenants through `user_tenant`. The membership stores the tenant-specific `active`, `admin`, and `userCode` values; ACL roles, positions, tags, and personal configurations continue to use the current tenant context. Access keys and password recovery records belong to the global identity. A user without any `user_tenant` rows is a platform user and may enter any tenant, while a user with memberships may enter only active assigned tenants. Existing non-null `user.tenant_id` rows are backfilled into `user_tenant`; the legacy column remains temporarily for expand/contract compatibility. Extensions must replace the singular `user.tenant`/`tenantId` association with `user.tenants` or explicit `user_tenant` writes.
+Administration users are shared account identities with explicit grants in `user_data_scope`, replacing `user_tenant`. Each grant owns the scope-specific `active`, `admin`, `userCode`, and `readAllScopes` values; `readAllScopes` is valid only on the canonical platform grant. The absence of tenant grants no longer confers platform or cross-tenant access. Replace `user.tenants` and direct `user_tenant` writes with `user.dataScopes` or explicit `user_data_scope` writes. ACL roles, positions, tags, and personal configurations remain owned by the active scope, while access keys and password recovery records belong to the shared identity.
 
-Members, member groups, addresses, password recoveries, translations, tag assignments, and member-group channel registrations now retain tenant ownership. Tenant channels and members must reference member groups, tags, and other tenant-owned records from the same tenant; platform records remain isolated in the platform scope.
+ACL, organization, channel, member, content, content-layout, media, cookie-consent, flow, notification, logging, integration, number-range, SEO, and payment business records and their owned aggregates now follow the same non-null scope boundary. Foreign keys between scope-owned records must resolve in the current scope unless the field explicitly permits a platform-owned reference.
 
-Blog, category, and landing-page tag, category, visibility, main-category, channel, and denormalized category-tree assignments now retain tenant ownership. Every assignment must reference content, tags, categories, and channels from the same tenant or the platform scope.
-
-Content layouts and their blog, category, landing-page, header, and footer assignments now retain tenant ownership. Platform layouts remain platform-owned and are not copied into tenants; create tenant layouts with the target tenant Context before assigning or editing them.
-
-Media default folders, folder configurations, thumbnail sizes, configuration-size assignments, and media tag assignments now retain tenant ownership. Default-folder entity names and thumbnail dimensions are unique within each tenant or the platform, and media folders, thumbnails, tags, and configuration records must belong to the same tenant. The platform's initial media folders and `200x200` thumbnail size remain platform-owned.
-
-Channel analytics, domains, file configurations, language assignments, and country assignments now retain the tenant ownership of their channel. Platform channels keep platform-owned aggregate data, while tenant channels can only reference and modify aggregate rows in the same tenant.
-
-Cookie consent logs and their configuration snapshots now retain the tenant ownership of the originating channel. Cleanup still runs platform-wide, but matches snapshots to logs within the same tenant.
+This change rewrites the unreleased 6.8 development baseline and intentionally provides no compatibility layer for databases created from an earlier form of that baseline. Recreate development databases and rerun installation instead of retaining nullable `tenant_id` ownership columns or `user_tenant` rows.
 
 ## Webhook Messenger transport — explicit receiver configuration required
 

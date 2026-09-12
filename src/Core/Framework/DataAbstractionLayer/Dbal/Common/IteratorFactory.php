@@ -2,10 +2,12 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\Common;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 
@@ -26,8 +28,13 @@ class IteratorFactory
     /**
      * @param array{offset: int|null}|null $lastId
      */
-    public function createIterator(string|EntityDefinition $definition, ?array $lastId = null, int $limit = 50, ?string $versionId = null): IterableQuery
-    {
+    public function createIterator(
+        string|EntityDefinition $definition,
+        Context $context,
+        ?array $lastId = null,
+        int $limit = 50,
+        ?string $versionId = null,
+    ): IterableQuery {
         if (\is_string($definition)) {
             $definition = $this->registry->getByEntityName($definition);
         }
@@ -38,6 +45,12 @@ class IteratorFactory
         $query = new QueryBuilder($this->connection);
         $query->from($escaped);
         $query->setMaxResults($limit);
+
+        $dataScopeField = $definition->getFields()->filterInstance(DataScopeField::class)->first();
+        if ($dataScopeField instanceof DataScopeField) {
+            $query->andWhere($escaped . '.' . EntityDefinitionQueryHelper::escape($dataScopeField->getStorageName()) . ' = :dataScopeId');
+            $query->setParameter('dataScopeId', Uuid::fromHexToBytes($context->getDataScopeId()));
+        }
 
         if ($definition->isVersionAware() && $versionId !== null) {
             $query->andWhere($escaped . '.version_id = :versionId');

@@ -19,7 +19,7 @@ class Migration1784207003CreateIntegration extends MigrationStep
     {
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `integration` (
-    `tenant_id`        BINARY(16)   NULL,
+    `data_scope_id`        BINARY(16)   NOT NULL,
     `id`                BINARY(16)   NOT NULL,
     `label`             VARCHAR(255) NOT NULL,
     `access_key`        VARCHAR(255) NOT NULL,
@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS `integration` (
     `created_at`        DATETIME(3)  NOT NULL,
     `updated_at`        DATETIME(3)  NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.integration.tenant_id` (`tenant_id`),
+    KEY `idx.integration.data_scope_id` (`data_scope_id`),
     UNIQUE KEY `uniq.integration.access_key` (`access_key`),
     CONSTRAINT `json.integration.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.integration.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.integration.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

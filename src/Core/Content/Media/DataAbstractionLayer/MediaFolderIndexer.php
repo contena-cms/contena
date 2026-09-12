@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Media\DataAbstractionLayer;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Event\MediaFolderIndexerEvent;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -44,9 +45,9 @@ class MediaFolderIndexer extends EntityIndexer
         return 'media_folder.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->folderRepository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->folderRepository->getDefinition(), $context, $offset);
 
         $ids = $iterator->fetch();
 
@@ -54,7 +55,7 @@ class MediaFolderIndexer extends EntityIndexer
             return null;
         }
 
-        return new MediaIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new MediaIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -81,7 +82,7 @@ class MediaFolderIndexer extends EntityIndexer
 
         $updates = array_values(array_merge($updates, $this->fetchChildren($updates), $this->getParentIds($updates)));
 
-        return new MediaIndexingMessage($updates, null, $event->getContext());
+        return new MediaIndexingMessage($updates, $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -153,9 +154,9 @@ class MediaFolderIndexer extends EntityIndexer
         ];
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->folderRepository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->folderRepository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

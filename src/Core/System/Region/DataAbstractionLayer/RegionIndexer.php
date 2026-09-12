@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\Region\DataAbstractionLayer;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -47,16 +48,16 @@ class RegionIndexer extends EntityIndexer
         return 'region.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->regionRepository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->regionRepository->getDefinition(), $context, $offset);
         $ids = $iterator->fetch();
 
         if ($ids === []) {
             return null;
         }
 
-        return new EntityIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new EntityIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
@@ -78,7 +79,7 @@ class RegionIndexer extends EntityIndexer
 
         $updates = array_values(array_merge($updates, $this->fetchChildren($updates), $this->getParentIds($updates)));
 
-        return new EntityIndexingMessage($updates, null, $event->getContext());
+        return new EntityIndexingMessage($updates, $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -112,9 +113,9 @@ class RegionIndexer extends EntityIndexer
         return [self::CHILD_COUNT_UPDATER, self::TREE_UPDATER];
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator($this->regionRepository->getDefinition())->fetchCount();
+        return $this->iteratorFactory->createIterator($this->regionRepository->getDefinition(), $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

@@ -39,9 +39,9 @@ class CategoryBreadcrumbUpdater
                 Defaults::LANGUAGE_SYSTEM,
             ])));
 
-            $names = $this->fetchNames($all, $languageChain);
+            $names = $this->fetchNames($all, $languageChain, $context);
 
-            $this->updateLanguage($ids, $language['id'], $names);
+            $this->updateLanguage($ids, $language['id'], $names, $context);
         }
     }
 
@@ -70,7 +70,9 @@ class CategoryBreadcrumbUpdater
         $query->from('category');
         $query->where('category.id IN (:ids)');
         $query->andWhere('category.version_id = :version');
+        $query->andWhere('category.data_scope_id = :dataScopeId');
         $query->setParameter('version', Uuid::fromHexToBytes($context->getVersionId()));
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($context->getDataScopeId()));
         $query->setParameter('ids', Uuid::fromHexToBytesList($ids), ArrayParameterType::BINARY);
 
         $paths = $query->executeQuery()->fetchFirstColumn();
@@ -91,13 +93,15 @@ class CategoryBreadcrumbUpdater
      *
      * @return array<string, array{parentId: string|null, name: string|null}>
      */
-    private function fetchNames(array $ids, array $languageChain): array
+    private function fetchNames(array $ids, array $languageChain, Context $context): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->from('category');
         $query->where('category.id IN (:ids)');
         $query->andWhere('category.version_id = :version');
+        $query->andWhere('category.data_scope_id = :dataScopeId');
         $query->setParameter('version', Uuid::fromHexToBytes(Defaults::LIVE_VERSION));
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($context->getDataScopeId()));
         $query->setParameter('ids', Uuid::fromHexToBytesList($ids), ArrayParameterType::BINARY);
 
         $coalesce = [];
@@ -110,6 +114,7 @@ class CategoryBreadcrumbUpdater
                 \sprintf(
                     '%1$s.category_id = category.id'
                     . ' AND %1$s.category_version_id = category.version_id'
+                    . ' AND %1$s.data_scope_id = category.data_scope_id'
                     . ' AND %1$s.language_id = :language%2$d',
                     $alias,
                     $index
@@ -140,7 +145,7 @@ class CategoryBreadcrumbUpdater
      * @param string[] $ids
      * @param array<string, array{parentId: string|null, name: string|null}> $names
      */
-    private function updateLanguage(array $ids, string $languageId, array $names): void
+    private function updateLanguage(array $ids, string $languageId, array $names, Context $context): void
     {
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
         $languageIdBytes = Uuid::fromHexToBytes($languageId);
@@ -158,6 +163,7 @@ class CategoryBreadcrumbUpdater
                 $versionId,
                 $languageIdBytes,
                 json_encode($breadcrumb, \JSON_THROW_ON_ERROR),
+                Uuid::fromHexToBytes($context->getDataScopeId()),
             ];
         }
 
@@ -199,7 +205,7 @@ class CategoryBreadcrumbUpdater
     }
 
     /**
-     * @param array<int, array{0: string, 1: string, 2: string, 3: string}> $rows
+     * @param array<int, array{0: string, 1: string, 2: string, 3: string, 4: string}> $rows
      */
     private function write(array $rows): void
     {
@@ -207,7 +213,7 @@ class CategoryBreadcrumbUpdater
             return;
         }
 
-        $placeholders = implode(', ', array_fill(0, \count($rows), '(?, ?, ?, ?, DATE(NOW()))'));
+        $placeholders = implode(', ', array_fill(0, \count($rows), '(?, ?, ?, ?, ?, DATE(NOW()))'));
 
         $parameters = [];
         foreach ($rows as $row) {
@@ -218,7 +224,7 @@ class CategoryBreadcrumbUpdater
 
         RetryableQuery::retryable($this->connection, function () use ($placeholders, $parameters): void {
             $this->connection->executeStatement(
-                'INSERT INTO `category_translation` (`category_id`, `category_version_id`, `language_id`, `breadcrumb`, `created_at`)
+                'INSERT INTO `category_translation` (`category_id`, `category_version_id`, `language_id`, `breadcrumb`, `data_scope_id`, `created_at`)
                  VALUES ' . $placeholders . '
                  ON DUPLICATE KEY UPDATE `breadcrumb` = VALUES(`breadcrumb`)',
                 $parameters

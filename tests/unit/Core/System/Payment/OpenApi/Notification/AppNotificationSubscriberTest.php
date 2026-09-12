@@ -39,8 +39,11 @@ final class AppNotificationSubscriberTest extends TestCase
     public function testProjectsEachBusinessIntoItsApplicationEnvelope(string $entityName, Entity $entity, int $notifyType, string $type, string $association): void
     {
         $id = Uuid::randomHex();
-        $entity->assign(['id' => $id]);
         $context = Context::createTenantContext(Uuid::randomHex());
+        $entity->assign(['id' => $id, 'dataScopeId' => $context->getDataScopeId()]);
+        if ($entity instanceof PaymentRefundEntity && $entity->order instanceof PaymentOrderEntity) {
+            $entity->order->assign(['dataScopeId' => $context->getDataScopeId()]);
+        }
         $source = StaticEntityRepository::of(EntityCollection::class, [static function (Criteria $criteria, Context $actualContext) use ($entityName, $entity, $id, $context): EntityCollection {
             static::assertSame($context, $actualContext);
             static::assertSame([$id], $criteria->getIds());

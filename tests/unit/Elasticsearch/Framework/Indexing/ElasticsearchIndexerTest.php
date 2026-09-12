@@ -141,7 +141,7 @@ class ElasticsearchIndexerTest extends TestCase
 
         static::assertInstanceOf(ElasticsearchIndexingMessage::class, $msg);
         static::assertSame(Defaults::LANGUAGE_SYSTEM, $msg->getContext()->getLanguageId());
-        static::assertTrue($msg->getContext()->hasGlobalTenantAccess());
+        static::assertTrue($msg->getContext()->allowsCrossScopeReads());
         static::assertSame(['1', '2'], $msg->getData()->getIds());
         static::assertTrue($eventDispatched);
     }

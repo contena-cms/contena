@@ -37,7 +37,7 @@ class UserProvisioner
     }
 
     /**
-     * @param array{name?: string, phoneNumber?: string, email?: string, localeId?: string, admin?: bool, roleCode?: string} $additionalData
+     * @param array{name?: string, phoneNumber?: string, email?: string, localeId?: string, admin?: bool, readAllScopes?: bool, roleCode?: string} $additionalData
      */
     public function provision(string $username, ?string $password = null, array $additionalData = []): string
     {
@@ -55,10 +55,11 @@ class UserProvisioner
 
         $roleId = isset($additionalData['roleCode']) ? $this->getRoleId($additionalData['roleCode']) : null;
         $createdAt = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
+        $platformDataScope = Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
+        $userCode = $this->numberRangeValueGenerator->getValue('user', Context::createDefaultContext());
 
         $userPayload = [
             'id' => Uuid::randomBytes(),
-            'user_code' => $this->numberRangeValueGenerator->getValue('user', Context::createDefaultContext()),
             'name' => $additionalData['name'] ?? $username,
             'phone_number' => $additionalData['phoneNumber'] ?? null,
             'email' => $additionalData['email'] ?? self::USER_EMAIL_FALLBACK,
@@ -66,15 +67,24 @@ class UserProvisioner
             'password' => password_hash($password, \PASSWORD_BCRYPT),
             'locale_id' => $additionalData['localeId'] ?? $this->getLocaleOfSystemLanguage(),
             'active' => true,
-            'admin' => (int) ($additionalData['admin'] ?? true),
             'time_zone' => Defaults::DEFAULT_TIME_ZONE,
             'created_at' => $createdAt,
         ];
 
         $this->connection->insert('user', $userPayload);
+        $this->connection->insert('user_data_scope', [
+            'user_id' => $userPayload['id'],
+            'data_scope_id' => $platformDataScope,
+            'active' => 1,
+            'admin' => (int) ($additionalData['admin'] ?? true),
+            'read_all_scopes' => (int) ($additionalData['readAllScopes'] ?? false),
+            'user_code' => $userCode,
+            'created_at' => $createdAt,
+        ]);
 
         if ($roleId !== null) {
             $this->connection->insert('acl_user_role', [
+                'data_scope_id' => $platformDataScope,
                 'user_id' => $userPayload['id'],
                 'acl_role_id' => $roleId,
                 'created_at' => $createdAt,
@@ -130,9 +140,10 @@ class UserProvisioner
         $result = $this->connection->fetchOne(
             'SELECT configuration_value
              FROM system_config
-             WHERE configuration_key = :configKey AND tenant_id IS NULL AND channel_id IS NULL;',
+             WHERE configuration_key = :configKey AND data_scope_id = :dataScopeId AND channel_id IS NULL;',
             [
                 'configKey' => $configKey,
+                'dataScopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             ]
         );
 

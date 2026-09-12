@@ -125,7 +125,7 @@ final class LandingPageAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(landing_page.id)) as id,
-                   LOWER(HEX(landing_page.tenant_id)) as tenantId,
+                   LOWER(HEX(landing_page.data_scope_id)) as dataScopeId,
                    GROUP_CONCAT(DISTINCT landing_page_translation.name SEPARATOR " ") as name,
                    JSON_ARRAYAGG(JSON_OBJECT(
                        'languageId', LOWER(HEX(landing_page_translation.language_id)),
@@ -163,7 +163,7 @@ SQL,
             if (!Feature::isActive('ENABLE_OPENSEARCH_FOR_ADMIN_API')) {
                 $mapped[$id] = [
                     'id' => $id,
-                    'tenantId' => $row['tenantId'] ?? null,
+                    'dataScopeId' => $row['dataScopeId'],
                     'text' => \strtolower($text),
                     'completion' => $completion,
                 ];
@@ -173,7 +173,7 @@ SQL,
 
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => \strtolower($text),
                 'completion' => $completion,
                 'name' => $translatedNames,

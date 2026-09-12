@@ -154,7 +154,7 @@ final class BlogAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(blog.id)) AS id,
-                   LOWER(HEX(blog.tenant_id)) AS tenantId,
+                   LOWER(HEX(blog.data_scope_id)) AS dataScopeId,
                    GROUP_CONCAT(DISTINCT blog_translation.name ORDER BY NULL SEPARATOR '\n') AS name,
                    JSON_ARRAYAGG(JSON_OBJECT(
                        'languageId', LOWER(HEX(blog_translation.language_id)),
@@ -211,7 +211,7 @@ SQL,
             ]));
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => strtolower($text),
                 'textBoosted' => strtolower($textBoosted),
                 'completion' => $this->buildCompletion($names),

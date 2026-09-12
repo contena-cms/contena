@@ -123,7 +123,7 @@ final class AppNotificationServiceTest extends TestCase
         static::assertSame(1, $service->deliverPending($tenantContext));
         static::assertSame(PaymentNotifyRecordStatus::STATUS_SUCCEEDED, $this->record($recordId, $tenantContext)->status);
 
-        $this->expectExceptionObject(OpenApiException::invalidRequest('App notifications must be delivered with a platform or tenant context.'));
+        $this->expectExceptionObject(OpenApiException::invalidRequest('App notifications must be delivered with an exact data-scope context.'));
         $service->deliverPending(Context::createGlobalContext());
     }
 

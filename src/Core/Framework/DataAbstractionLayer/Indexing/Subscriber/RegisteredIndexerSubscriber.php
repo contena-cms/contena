@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing\Subscriber;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\SynchronousPostUpdateIndexer;
 use Contena\Core\Framework\Migration\IndexerQueuer;
@@ -64,12 +65,12 @@ class RegisteredIndexerSubscriber implements EventSubscriberInterface
             }
 
             if ($indexer instanceof SynchronousPostUpdateIndexer) {
-                $this->indexerRegistry->index(false, $skipList, [$indexerName], true);
+                $this->indexerRegistry->index(Context::createCLIContext(), false, $skipList, [$indexerName], true);
 
                 continue;
             }
 
-            $this->indexerRegistry->sendIndexingMessage([$indexerName], $skipList, true);
+            $this->indexerRegistry->sendIndexingMessage(Context::createCLIContext(), [$indexerName], $skipList, true);
         }
     }
 }

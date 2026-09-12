@@ -11,7 +11,7 @@ use Contena\Core\Framework\Adapter\Console\ContenaStyle;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +36,7 @@ class GenerateMediaTypesCommand extends Command
     public function __construct(
         private readonly TypeDetector $typeDetector,
         private readonly EntityRepository $mediaRepository,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
         parent::__construct();
     }
@@ -61,12 +61,12 @@ class GenerateMediaTypesCommand extends Command
 
         $this->io->comment('Starting to generate MediaTypes. This may take some time...');
         $mediaCount = 0;
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $mediaCount += $this->getMediaCount($context);
         }
         $this->io->progressStart($mediaCount);
 
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $this->detectMediaTypes($context);
         }
 

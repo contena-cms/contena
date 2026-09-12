@@ -211,7 +211,7 @@ class TenantOwnedContentLayoutTest extends TestCase
     private function assertStoredTenant(string $table, string $id, ?string $expectedTenantId): void
     {
         $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(`tenant_id`)) FROM `' . $table . '` WHERE `id` = :id',
+            'SELECT LOWER(HEX(`data_scope_id`)) FROM `' . $table . '` WHERE `id` = :id',
             ['id' => Uuid::fromHexToBytes($id)],
         );
 

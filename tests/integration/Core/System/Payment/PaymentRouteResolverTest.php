@@ -100,7 +100,6 @@ final class PaymentRouteResolverTest extends TestCase
         static::assertSame($gateway, $route->gateway);
         static::assertSame($configId, $route->channelConfigId);
         static::assertSame(['merchantId' => 'merchant-1'], $route->config);
-        static::assertFalse($route->platformConfig);
     }
 
     /**

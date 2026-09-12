@@ -67,8 +67,12 @@ class SeoUrlPersister
     private function doUpdateSeoUrls(Context $context, string $routeName, array $foreignKeys, iterable $seoUrls, ChannelEntity $channel, bool $overwrite): void
     {
         $languageId = $context->getLanguageId();
-        $tenantId = $channel->getTenantId() ?? $context->getTenantId();
-        $canonicals = $this->findCanonicalPaths($routeName, $languageId, $foreignKeys, $tenantId);
+        $dataScopeId = $context->getDataScopeId();
+        if ($channel->getDataScopeId() !== $dataScopeId) {
+            throw SeoException::dataScopeMismatch();
+        }
+
+        $canonicals = $this->findCanonicalPaths($routeName, $languageId, $foreignKeys, $dataScopeId);
         $dateTime = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
         $table = $this->seoUrlRepository->getDefinition()->getEntityName();
         $insertQuery = new MultiInsertQueryQueue($this->connection, 250, false, false);
@@ -134,7 +138,7 @@ class SeoUrlPersister
             if ($channelId) {
                 $insert['channel_id'] = Uuid::fromHexToBytes($channelId);
             }
-            $insert['tenant_id'] = $tenantId !== null ? Uuid::fromHexToBytes($tenantId) : null;
+            $insert['data_scope_id'] = Uuid::fromHexToBytes($dataScopeId);
             $insert['language_id'] = Uuid::fromHexToBytes($languageId);
             $insert['foreign_key'] = Uuid::fromHexToBytes($fk);
 
@@ -151,24 +155,24 @@ class SeoUrlPersister
             $insertQuery->addInsert($table, $insert);
         }
 
-        $inuseSeoUrls = $this->findInUseCanonicalSeoUrls($seoPathInfos, $languageId, $channelId, $tenantId);
+        $inuseSeoUrls = $this->findInUseCanonicalSeoUrls($seoPathInfos, $languageId, $channelId, $dataScopeId);
 
-        RetryableTransaction::retryable($this->connection, function () use ($obsoleted, $insertQuery, $foreignKeys, $updatedFks, $channelId, $tenantId): void {
-            $this->obsoleteIds($obsoleted, $channelId, $tenantId);
+        RetryableTransaction::retryable($this->connection, function () use ($obsoleted, $insertQuery, $foreignKeys, $updatedFks, $channelId, $dataScopeId): void {
+            $this->obsoleteIds($obsoleted, $channelId, $dataScopeId);
             $insertQuery->execute();
 
             $deletedIds = array_diff($foreignKeys, $updatedFks);
             $notDeletedIds = array_unique(array_intersect($foreignKeys, $updatedFks));
 
-            $this->markAsDeleted(true, $deletedIds, $channelId, $tenantId);
-            $this->markAsDeleted(false, $notDeletedIds, $channelId, $tenantId);
+            $this->markAsDeleted(true, $deletedIds, $channelId, $dataScopeId);
+            $this->markAsDeleted(false, $notDeletedIds, $channelId, $dataScopeId);
         });
 
         // When a seoPathInfo is added that is already associated with a foreignKey, EX: Entity A,
         // the existing row is seamlessly taken over by the ON DUPLICATE KEY UPDATE part configured on the MultiInsertQueryQueue above.
         // Hence, we have to find the default seoUrls for Entity A and update it accordingly to set is_canonical and is_modified to true,
         // thereby preserving the canonical SEO URL for Entity A.
-        $this->updateCanonicalSeoUrls($inuseSeoUrls, $languageId, $tenantId);
+        $this->updateCanonicalSeoUrls($inuseSeoUrls, $languageId, $dataScopeId);
 
         $this->eventDispatcher->dispatch(new SeoUrlUpdateEvent($updates, $context));
     }
@@ -206,7 +210,7 @@ class SeoUrlPersister
      *
      * @return array<string, mixed>
      */
-    private function findCanonicalPaths(string $routeName, string $languageId, array $foreignKeys, ?string $tenantId): array
+    private function findCanonicalPaths(string $routeName, string $languageId, array $foreignKeys, string $dataScopeId): array
     {
         $fks = Uuid::fromHexToBytesList($foreignKeys);
         $languageId = Uuid::fromHexToBytes($languageId);
@@ -226,12 +230,8 @@ class SeoUrlPersister
         $query->andWhere('seo_url.is_canonical = 1');
         $query->andWhere('seo_url.foreign_key IN (:foreign_keys)');
 
-        if ($tenantId !== null) {
-            $query->andWhere('seo_url.tenant_id = :tenantId');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $query->andWhere('seo_url.tenant_id IS NULL');
-        }
+        $query->andWhere('seo_url.data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
         $query->setParameter('routeName', $routeName);
         $query->setParameter('language_id', $languageId);
@@ -259,7 +259,7 @@ class SeoUrlPersister
      *
      * @return array<array<string, mixed>>
      */
-    private function findInUseCanonicalSeoUrls(array $seoPathInfos, string $languageId, ?string $channelId, ?string $tenantId): array
+    private function findInUseCanonicalSeoUrls(array $seoPathInfos, string $languageId, ?string $channelId, string $dataScopeId): array
     {
         if ($seoPathInfos === []) {
             return [];
@@ -272,12 +272,8 @@ class SeoUrlPersister
         $params = ['seoPathInfos' => $seoPathInfos, 'languageId' => Uuid::fromHexToBytes($languageId)];
         $types = ['seoPathInfos' => ArrayParameterType::BINARY];
 
-        if ($tenantId !== null) {
-            $query .= ' AND tenant_id = :tenantId';
-            $params['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        } else {
-            $query .= ' AND tenant_id IS NULL';
-        }
+        $query .= ' AND data_scope_id = :dataScopeId';
+        $params['dataScopeId'] = Uuid::fromHexToBytes($dataScopeId);
 
         if ($channelId !== null) {
             $query .= ' AND channel_id = :channelId';
@@ -292,7 +288,7 @@ class SeoUrlPersister
      *
      * @param array<array<string, mixed>> $seoUrls
      */
-    private function updateCanonicalSeoUrls(array $seoUrls, string $languageId, ?string $tenantId): void
+    private function updateCanonicalSeoUrls(array $seoUrls, string $languageId, string $dataScopeId): void
     {
         if ($seoUrls === []) {
             return;
@@ -316,12 +312,8 @@ class SeoUrlPersister
                 'routeName' => (string) $seoUrl['routeName'],
             ];
 
-            if ($tenantId !== null) {
-                $query .= ' AND tenant_id = :tenantId';
-                $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-            } else {
-                $query .= ' AND tenant_id IS NULL';
-            }
+            $query .= ' AND data_scope_id = :dataScopeId';
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($dataScopeId);
 
             $id = $this->connection->fetchOne($query . ' ORDER BY created_at ASC LIMIT 1', $parameters);
 
@@ -346,7 +338,7 @@ class SeoUrlPersister
     /**
      * @param list<string> $ids
      */
-    private function obsoleteIds(array $ids, ?string $channelId, ?string $tenantId): void
+    private function obsoleteIds(array $ids, ?string $channelId, string $dataScopeId): void
     {
         if ($ids === []) {
             return;
@@ -365,12 +357,8 @@ class SeoUrlPersister
             $query->setParameter('channelId', Uuid::fromHexToBytes($channelId));
         }
 
-        if ($tenantId !== null) {
-            $query->andWhere('tenant_id = :tenantId');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $query->andWhere('tenant_id IS NULL');
-        }
+        $query->andWhere('data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
         RetryableQuery::retryable($this->connection, static function () use ($query): void {
             $query->executeStatement();
@@ -380,7 +368,7 @@ class SeoUrlPersister
     /**
      * @param array<string> $ids
      */
-    private function markAsDeleted(bool $deleted, array $ids, ?string $channelId, ?string $tenantId): void
+    private function markAsDeleted(bool $deleted, array $ids, ?string $channelId, string $dataScopeId): void
     {
         if ($ids === []) {
             return;
@@ -401,12 +389,8 @@ class SeoUrlPersister
             $query->setParameter('channelId', Uuid::fromHexToBytes($channelId));
         }
 
-        if ($tenantId !== null) {
-            $query->andWhere('tenant_id = :tenantId');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $query->andWhere('tenant_id IS NULL');
-        }
+        $query->andWhere('data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
         $query->executeStatement();
     }

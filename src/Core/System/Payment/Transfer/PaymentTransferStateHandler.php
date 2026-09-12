@@ -108,16 +108,19 @@ final class PaymentTransferStateHandler
      */
     private function lock(string $id, Context $context): array
     {
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment writes require a platform or tenant context.');
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment writes require an exact data-scope context.');
         }
-        $parameters = ['id' => Uuid::fromHexToBytes($id)];
-        $scope = '`tenant_id` IS NULL';
-        if ($context->getTenantId() !== null) {
-            $scope = '`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($context->getTenantId());
-        }
-        $row = $this->connection->fetchAssociative('SELECT (SELECT `technical_name` FROM `state_machine_state` WHERE `id` = `payment_transfer`.`state_id`) AS `status`, `response_data`, `channel_order_id` FROM `payment_transfer` WHERE `id` = :id AND ' . $scope . ' FOR UPDATE', $parameters);
+        $row = $this->connection->fetchAssociative(
+            'SELECT (SELECT `technical_name` FROM `state_machine_state` WHERE `id` = `payment_transfer`.`state_id`) AS `status`, `response_data`, `channel_order_id`
+             FROM `payment_transfer`
+             WHERE `id` = :id AND `data_scope_id` = :dataScopeId
+             FOR UPDATE',
+            [
+                'id' => Uuid::fromHexToBytes($id),
+                'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
+            ],
+        );
         if ($row === false) {
             throw PaymentException::notificationResourceNotFound($id);
         }

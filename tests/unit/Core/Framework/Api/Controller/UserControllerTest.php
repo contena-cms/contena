@@ -105,7 +105,7 @@ class UserControllerTest extends TestCase
         $userRepository = StaticEntityRepository::of(UserCollection::class, [], new UserDefinition());
         /** @var StaticEntityRepository<EntityCollection<Entity>> $membershipRepository */
         $membershipRepository = StaticEntityRepository::of(EntityCollection::class);
-        $controller = $this->createController(userRepository: $userRepository, userTenantRepository: $membershipRepository);
+        $controller = $this->createController(userRepository: $userRepository, userDataScopeRepository: $membershipRepository);
         $request = Request::create('/', Request::METHOD_PATCH, ['active' => false, 'admin' => true, 'userCode' => 'TENANT-1']);
         $responseFactory = static::createStub(ResponseFactoryInterface::class);
         $responseFactory->method('createRedirectResponse')->willReturn(new Response());
@@ -115,7 +115,7 @@ class UserControllerTest extends TestCase
         static::assertSame([], $userRepository->upserts);
         static::assertSame([[
             'userId' => $userId,
-            'tenantId' => $tenantId,
+            'dataScopeId' => $tenantId,
             'active' => false,
             'admin' => true,
             'userCode' => 'TENANT-1',
@@ -132,7 +132,7 @@ class UserControllerTest extends TestCase
         $userRepository = StaticEntityRepository::of(UserCollection::class, [], new UserDefinition());
         /** @var StaticEntityRepository<EntityCollection<Entity>> $membershipRepository */
         $membershipRepository = StaticEntityRepository::of(EntityCollection::class);
-        $controller = $this->createController(userRepository: $userRepository, userTenantRepository: $membershipRepository);
+        $controller = $this->createController(userRepository: $userRepository, userDataScopeRepository: $membershipRepository);
         $responseFactory = static::createStub(ResponseFactoryInterface::class);
         $responseFactory->method('createRedirectResponse')->willReturn(new Response());
 
@@ -141,22 +141,22 @@ class UserControllerTest extends TestCase
         static::assertSame([], $userRepository->deletes);
         static::assertSame([[[
             'userId' => $userId,
-            'tenantId' => $tenantId,
+            'dataScopeId' => $tenantId,
         ]]], $membershipRepository->deletes);
     }
 
     /**
      * @param EntityRepository<UserCollection>|null $userRepository
-     * @param EntityRepository<EntityCollection<Entity>>|null $userTenantRepository
+     * @param EntityRepository<EntityCollection<Entity>>|null $userDataScopeRepository
      */
     private function createController(
         ?RefreshTokenRepository $refreshTokenRepository = null,
         ?EntityRepository $userRepository = null,
-        ?EntityRepository $userTenantRepository = null,
+        ?EntityRepository $userDataScopeRepository = null,
         ?UserDefinition $userDefinition = null,
     ): UserController {
         /** @var EntityRepository<EntityCollection<Entity>> $membershipRepository */
-        $membershipRepository = $userTenantRepository ?? static::createStub(EntityRepository::class);
+        $membershipRepository = $userDataScopeRepository ?? static::createStub(EntityRepository::class);
 
         return new UserController(
             $userRepository ?? static::createStub(EntityRepository::class),

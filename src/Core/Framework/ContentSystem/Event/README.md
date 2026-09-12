@@ -5,16 +5,26 @@ position: the preparation event carries the stored forest, the finalization even
 elements models are immutable, so each event exposes exactly one way to put a changed tree back, and it is
 the same way: `replaceTree()`. Neither exposes `RenderingMode`.
 
+Both `replaceTree()` and both constructors refuse a replacement that is not a list of that event's own
+element model. The two models are the mistake the storage/render split invites, and the pipeline's own
+post-event check does not catch it: that check reads `id`, which both models carry. Without the guard a
+rendered element handed to the preparation event reaches the preparation steps and fails there — as a
+`TypeError` on a closure parameter in FULL mode, and in SKELETON mode not until `WiringPlanner` reads
+`contextDefinitions` off an element that declares none — so what gets reported names a core internal rather
+than the listener that caused it. Depth needs no walk at the event: a `StoredElement` refuses a rendered slot
+child and a `RenderedElement` refuses a stored one, so a list of valid roots is a valid forest.
+
 ## Key Classes
 
-- `ContentTreePreparationEvent` - Dispatched over the stored tree before every preparation step
-- `RenderedTreeFinalizationEvent` - Dispatched after the render step and the finishing steps, over the rendered forest and before the duplicate-element-id check that judges what it hands back; allows layout finalization
+- `ContentTreePreparationEvent` - Dispatched over the stored tree before every preparation step, so a translatable property still carries its whole language map here
+- `RenderedTreeFinalizationEvent` - Dispatched after the render step and the finishing steps, over the rendered forest and before the duplicate-element-id check that judges what it hands back; allows layout finalization. In FULL mode language reduction has already run, so the forest carries plain strings; in SKELETON the mint carries no property value at all. A listener returns a map-free tree either way
 
 ## Lifecycle
 
 ```
 ContentTreePreparationEvent
-  → StoredTreePreparer: placeholder resolution (FULL mode only)
+  → StoredTreePreparer: language reduction, then placeholder resolution
+      (both FULL mode only)
       → virtual-root wrap → partial prune
   → duplicate-element-id check + wiring validation (on the pre-prune forest)
   → redistribute derivation (on the pruned tree)

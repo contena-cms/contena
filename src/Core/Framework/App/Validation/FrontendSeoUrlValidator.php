@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Validation;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
-use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\App\Validation\Error\FrontendSeoUrlError;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;

@@ -11,18 +11,18 @@ use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAss
  */
 class BlogContentLayoutEntity extends AbstractContentLayoutAssignmentEntity
 {
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $blogId;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getBlogId(): string

@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Tests\Integration\Core\Content\Cookie\ScheduledTask\CleanupCookieConsentLogTaskHandlerTest;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -45,14 +45,14 @@ final class CleanupCookieConsentLogTaskHandler extends ScheduledTaskHandler
         private readonly SystemConfigService $systemConfigService,
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public function run(): void
     {
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $this->cleanup($context);
         }
     }
@@ -69,19 +69,15 @@ final class CleanupCookieConsentLogTaskHandler extends ScheduledTaskHandler
         $deleteBefore = $this->clock->now()
             ->sub(new \DateInterval(\sprintf('P%dD', $retentionDays)))
             ->format(Defaults::STORAGE_DATE_TIME_FORMAT);
-        $tenantId = $context->getTenantId();
-        $tenantCondition = '`tenant_id` IS NULL';
-        $parameters = ['before' => $deleteBefore];
-        if ($tenantId !== null) {
-            $tenantCondition = '`tenant_id` = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
+        $parameters = [
+            'before' => $deleteBefore,
+            'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
+        ];
 
         do {
             $deleted = $this->connection->executeStatement(
                 \sprintf(
-                    'DELETE FROM `cookie_consent_log` WHERE %s AND `created_at` < :before LIMIT %d',
-                    $tenantCondition,
+                    'DELETE FROM `cookie_consent_log` WHERE `data_scope_id` = :dataScopeId AND `created_at` < :before LIMIT %d',
                     self::DELETE_BATCH_SIZE,
                 ),
                 $parameters,
@@ -91,14 +87,13 @@ final class CleanupCookieConsentLogTaskHandler extends ScheduledTaskHandler
         // Snapshots are kept as long as any log entry references them. The created_at guard
         // avoids deleting a snapshot that a concurrent, not yet committed consent references.
         $this->connection->executeStatement(
-            \sprintf(
-                'DELETE `version` FROM `cookie_consent_config_version` AS `version`
+            'DELETE `version` FROM `cookie_consent_config_version` AS `version`
                 LEFT JOIN `cookie_consent_log` AS `log`
-                    ON `log`.`tenant_id` <=> `version`.`tenant_id`
+                    ON `log`.`data_scope_id` = `version`.`data_scope_id`
                     AND `log`.`config_hash` = `version`.`config_hash`
-                WHERE `version`.%s AND `log`.`id` IS NULL AND `version`.`created_at` < :before',
-                $tenantCondition,
-            ),
+                WHERE `version`.`data_scope_id` = :dataScopeId
+                    AND `log`.`id` IS NULL
+                    AND `version`.`created_at` < :before',
             $parameters,
         );
     }

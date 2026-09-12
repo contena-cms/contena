@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\AbstractLifecycleHandler;
 use Contena\Core\Framework\Log\Package;
+use Doctrine\DBAL\Connection;
 
 /**
  * Snapshots an app's frontend snippet files into the shared storage on install and update, so that a

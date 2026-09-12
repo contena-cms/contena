@@ -8,6 +8,7 @@ use Contena\Core\Content\LandingPage\Aggregate\LandingPageContentLayout\LandingP
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListField;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Immutable;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -16,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 /**
@@ -55,7 +55,7 @@ class ContentLayoutDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned content layout.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for content layout.'),
             new IdField('id', 'id')->addFlags(new ApiAware(AdminApiSource::class), new PrimaryKey(), new Required()),
             new StringField('name', 'name', 255)->addFlags(new ApiAware(AdminApiSource::class), new Required()),
             new StringField('version', 'version', 20)->addFlags(new ApiAware(AdminApiSource::class), new Required()),

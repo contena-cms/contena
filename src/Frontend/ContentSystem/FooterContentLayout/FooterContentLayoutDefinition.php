@@ -4,13 +4,13 @@ namespace Contena\Frontend\ContentSystem\FooterContentLayout;
 
 use Contena\Core\Framework\ContentSystem\Layout\Entity\ContentLayoutDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
@@ -52,7 +52,7 @@ class FooterContentLayoutDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned footer layout assignment.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for footer layout assignment.'),
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
 
             new FkField('domain_id', 'domainId', ChannelDomainDefinition::class)->addFlags(new ApiAware()),

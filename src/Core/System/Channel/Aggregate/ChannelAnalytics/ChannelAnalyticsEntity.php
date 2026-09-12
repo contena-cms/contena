@@ -10,7 +10,7 @@ class ChannelAnalyticsEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $trackingId;
 
@@ -20,14 +20,14 @@ class ChannelAnalyticsEntity extends Entity
 
     protected ?ChannelEntity $channel = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getTrackingId(): string

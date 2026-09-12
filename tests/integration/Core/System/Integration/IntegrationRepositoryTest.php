@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\System\Integration;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -168,20 +169,20 @@ class IntegrationRepositoryTest extends TestCase
         }
 
         $globalEntities = $this->repository->search(new Criteria(array_values($ids)), $contexts['global'])->getEntities();
-        static::assertNull($globalEntities->get($ids['platform'])?->getTenantId());
-        static::assertSame($tenantA, $globalEntities->get($ids['tenant-a'])?->getTenantId());
-        static::assertSame($tenantB, $globalEntities->get($ids['tenant-b'])?->getTenantId());
-        static::assertNull($globalEntities->get($ids['global'])?->getTenantId());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $globalEntities->get($ids['platform'])?->getDataScopeId());
+        static::assertSame($tenantA, $globalEntities->get($ids['tenant-a'])?->getDataScopeId());
+        static::assertSame($tenantB, $globalEntities->get($ids['tenant-b'])?->getDataScopeId());
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $globalEntities->get($ids['global'])?->getDataScopeId());
 
-        $mappingTenants = static::getContainer()->get(Connection::class)->fetchAllKeyValue(
-            'SELECT LOWER(HEX(`integration_id`)), LOWER(HEX(`tenant_id`)) FROM `integration_role` WHERE `integration_id` IN (:ids)',
+        $mappingScopes = static::getContainer()->get(Connection::class)->fetchAllKeyValue(
+            'SELECT LOWER(HEX(`integration_id`)), LOWER(HEX(`data_scope_id`)) FROM `integration_role` WHERE `integration_id` IN (:ids)',
             ['ids' => array_map(Uuid::fromHexToBytes(...), array_values($ids))],
             ['ids' => ArrayParameterType::BINARY],
         );
-        static::assertNull($mappingTenants[$ids['platform']]);
-        static::assertSame($tenantA, $mappingTenants[$ids['tenant-a']]);
-        static::assertSame($tenantB, $mappingTenants[$ids['tenant-b']]);
-        static::assertNull($mappingTenants[$ids['global']]);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $mappingScopes[$ids['platform']]);
+        static::assertSame($tenantA, $mappingScopes[$ids['tenant-a']]);
+        static::assertSame($tenantB, $mappingScopes[$ids['tenant-b']]);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $mappingScopes[$ids['global']]);
 
         $this->repository->update([[
             'id' => $ids['tenant-a'],

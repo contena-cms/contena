@@ -31,7 +31,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
@@ -1301,11 +1301,11 @@ class UnusedMediaPurgerTest extends TestCase
         Connection $connection,
         EventDispatcherInterface $eventDispatcher,
         ClockInterface $clock,
-        ?TenantScopeContextProvider $tenantScopeContextProvider = null,
+        ?DataScopeContextProvider $dataScopeContextProvider = null,
     ): UnusedMediaPurger {
-        if ($tenantScopeContextProvider === null) {
-            $tenantScopeContextProvider = static::createStub(TenantScopeContextProvider::class);
-            $tenantScopeContextProvider->method('getContexts')->willReturn((static function (): \Generator {
+        if ($dataScopeContextProvider === null) {
+            $dataScopeContextProvider = static::createStub(DataScopeContextProvider::class);
+            $dataScopeContextProvider->method('getContexts')->willReturn((static function (): \Generator {
                 yield Context::createDefaultContext();
             })());
         }
@@ -1315,7 +1315,7 @@ class UnusedMediaPurgerTest extends TestCase
             $connection,
             $eventDispatcher,
             $clock,
-            $tenantScopeContextProvider,
+            $dataScopeContextProvider,
         );
     }
 

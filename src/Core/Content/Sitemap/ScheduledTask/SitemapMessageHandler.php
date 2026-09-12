@@ -40,8 +40,8 @@ final readonly class SitemapMessageHandler
 
         $channelContext = $this->channelContextFactory->create('', $message->getLastChannelId(), [ChannelContextService::LANGUAGE_ID => $message->getLastLanguageId()]);
         $context = $channelContext->getContext();
-        if ($context->getTenantId() !== $message->getTenantId()) {
-            $this->logger->error('Sitemap message tenant does not match the channel tenant.');
+        if ($context->getDataScopeId() !== $message->getDataScopeId()) {
+            $this->logger->error('Sitemap message data scope does not match the channel scope.');
 
             return;
         }

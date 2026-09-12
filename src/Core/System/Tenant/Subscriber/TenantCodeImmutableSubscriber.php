@@ -5,7 +5,6 @@ namespace Contena\Core\System\Tenant\Subscriber;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PostWriteValidationEvent;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
-use Contena\Core\System\Tenant\TenantEntity;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -30,7 +29,7 @@ final class TenantCodeImmutableSubscriber implements EventSubscriberInterface
 
     public function validate(PostWriteValidationEvent $event): void
     {
-        $commands = $event->getCommandsForEntity(TenantEntity::class);
+        $commands = $event->getCommandsForEntity('tenant');
 
         foreach ($commands as $command) {
             if (!$command instanceof UpdateCommand) {

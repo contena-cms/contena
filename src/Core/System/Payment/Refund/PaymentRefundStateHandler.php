@@ -71,13 +71,12 @@ final class PaymentRefundStateHandler
             ]], $context);
 
             if ($status === PaymentRefundStatus::STATUS_FAILED) {
-                [$scope, $parameters] = $this->tenantScope($context);
                 $this->connection->executeStatement(
                     'UPDATE `payment_order`
                      SET `refunded_amount` = `refunded_amount` - :refundAmount, `version` = `version` + 1
-                     WHERE `id` = :orderId AND ' . $scope . ' AND `refunded_amount` >= :refundAmount',
+                     WHERE `id` = :orderId AND `data_scope_id` = :dataScopeId AND `refunded_amount` >= :refundAmount',
                     [
-                        ...$parameters,
+                        'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
                         'refundAmount' => $refund->refundAmount,
                         'orderId' => Uuid::fromHexToBytes($order->getId()),
                     ],
@@ -114,9 +113,19 @@ final class PaymentRefundStateHandler
      */
     private function lock(string $id, Context $context): array
     {
-        [$scope, $parameters] = $this->tenantScope($context);
-        $parameters['id'] = Uuid::fromHexToBytes($id);
-        $row = $this->connection->fetchAssociative('SELECT `status`, `response_data`, `channel_refund_no` FROM `payment_refund` WHERE `id` = :id AND ' . $scope . ' FOR UPDATE', $parameters);
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment writes require an exact data-scope context.');
+        }
+        $row = $this->connection->fetchAssociative(
+            'SELECT `status`, `response_data`, `channel_refund_no`
+             FROM `payment_refund`
+             WHERE `id` = :id AND `data_scope_id` = :dataScopeId
+             FOR UPDATE',
+            [
+                'id' => Uuid::fromHexToBytes($id),
+                'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
+            ],
+        );
         if ($row === false) {
             throw PaymentException::notificationResourceNotFound($id);
         }
@@ -125,20 +134,5 @@ final class PaymentRefundStateHandler
         }
 
         return $row;
-    }
-
-    /**
-     * @return array{0: string, 1: array<string, string>}
-     */
-    private function tenantScope(Context $context): array
-    {
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment writes require a platform or tenant context.');
-        }
-        if ($context->getTenantId() === null) {
-            return ['`tenant_id` IS NULL', []];
-        }
-
-        return ['`tenant_id` = :tenantId', ['tenantId' => Uuid::fromHexToBytes($context->getTenantId())]];
     }
 }

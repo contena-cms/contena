@@ -64,7 +64,7 @@ class CacheController extends AbstractController
         $skip = isset($data['skip']) && \is_array($data['skip']) && $data['skip'] !== [] ? array_values($data['skip']) : [];
         $only = isset($data['only']) && \is_array($data['only']) && $data['only'] !== [] ? array_values($data['only']) : [];
 
-        $this->indexerRegistry->sendFullIndexingMessage($skip, $only, $context);
+        $this->indexerRegistry->sendFullIndexingMessage($context, $skip, $only);
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }

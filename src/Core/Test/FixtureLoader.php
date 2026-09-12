@@ -41,7 +41,7 @@ class FixtureLoader
 
         $content = $this->replaceIds($ids, $content);
         $this->sync(\json_decode($content, true, 512, \JSON_THROW_ON_ERROR));
-        $this->container->get(EntityIndexerRegistry::class)->index(false);
+        $this->container->get(EntityIndexerRegistry::class)->index(Context::createDefaultContext(), false);
 
         return $ids;
     }

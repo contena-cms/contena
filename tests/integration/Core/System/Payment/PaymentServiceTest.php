@@ -169,7 +169,6 @@ final class PaymentServiceTest extends TestCase
             $this->gateway,
             $channelConfigId,
             ['merchantId' => 'merchant-1'],
-            false,
         ));
 
         $numberRange = static::getContainer()->get(AbstractNumberRangeValueGenerator::class);
@@ -447,11 +446,11 @@ final class PaymentServiceTest extends TestCase
         if ($scope === 'disabled') {
             $app->assign(['status' => false]);
         } elseif ($scope === 'tenant-in-platform' || $scope === 'other-tenant') {
-            $app->assign(['tenantId' => '22222222222222222222222222222222']);
+            $app->assign(['dataScopeId' => '22222222222222222222222222222222']);
         }
 
         $this->expectExceptionObject($scope === 'global'
-            ? PaymentException::invalidRequest('Payment operations require a platform or tenant context.')
+            ? PaymentException::invalidRequest('Payment operations require an exact data-scope context.')
             : PaymentException::appNotFound($app->appCode));
 
         match ($operation) {
@@ -497,7 +496,7 @@ final class PaymentServiceTest extends TestCase
 
     public function testPaymentRejectsGlobalWriteContext(): void
     {
-        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require a platform or tenant context.'));
+        $this->expectExceptionObject(PaymentException::invalidRequest('Payment operations require an exact data-scope context.'));
 
         $this->paymentService->pay($this->app, new PaymentRequest('global-order', 100, 'h5', 'Global context', 'CNY'), Context::createGlobalContext());
     }
@@ -513,7 +512,7 @@ final class PaymentServiceTest extends TestCase
 
         static::assertInstanceOf(PaymentOrderEntity::class, $order);
         static::assertSame('global-loader-order', $order->externalOrderNo);
-        static::assertNull($order->tenantId);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $order->dataScopeId);
     }
 
     public function testTransferAndSubscriptionPersistTheirOwnResults(): void
@@ -741,7 +740,7 @@ final class PaymentServiceTest extends TestCase
         ), $this->context);
     }
 
-    public function testPlatformChannelConfigurationCanNotifyATenantOwnedOrder(): void
+    public function testTenantOwnedChannelConfigurationCanNotifyATenantOwnedOrder(): void
     {
         $tenantId = $this->createTenant('Payment notification tenant')->id;
         $tenantContext = Context::createTenantContext($tenantId);
@@ -754,7 +753,7 @@ final class PaymentServiceTest extends TestCase
             'channelId' => $this->channelId,
             'config' => ['merchantId' => 'platform-merchant'],
             'status' => true,
-        ]], $this->context);
+        ]], $tenantContext);
         $this->repository('payment_app')->create([[
             'id' => $appId,
             'appCode' => 'tenant-notification-' . bin2hex(random_bytes(4)),
@@ -795,11 +794,11 @@ final class PaymentServiceTest extends TestCase
 
         $record = $this->repository('payment_channel_notify_record')->search(new Criteria(), $tenantContext)->getEntities()->first();
         static::assertInstanceOf(PaymentChannelNotifyRecordEntity::class, $record);
-        static::assertSame($tenantId, $record->tenantId);
+        static::assertSame($tenantId, $record->dataScopeId);
         static::assertSame($orderId, $record->orderId);
         static::assertCount(0, $this->repository('payment_channel_notify_record')->search(new Criteria(), $this->context)->getEntities());
         static::assertCount(1, $this->repository('payment_notify_record')->search(new Criteria(), $tenantContext)->getEntities());
-        static::assertNull($this->repository('payment_channel_config')->search(new Criteria([$configId]), $tenantContext)->getEntities()->first());
+        static::assertNotNull($this->repository('payment_channel_config')->search(new Criteria([$configId]), $tenantContext)->getEntities()->first());
     }
 
     public function testPlatformOwnedReferenceDoesNotAllowCrossTenantReferences(): void

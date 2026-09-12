@@ -2,7 +2,9 @@
 
 namespace Contena\Core\System\Payment\OpenApi\Authentication;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -70,7 +72,7 @@ final class PaymentAppValidator implements EventSubscriberInterface
         $criteria->addFilter(new EqualsFilter('appCode', $appCode));
         $criteria->setLimit(1);
 
-        $app = $this->paymentAppRepository->search($criteria, $context->createWithGlobalTenantAccess())->getEntities()->first();
+        $app = $this->paymentAppRepository->search($criteria, $context->createWithCrossScopeReadAccess())->getEntities()->first();
         if ($app === null || !$app->status) {
             throw PaymentException::appNotFound($appCode);
         }
@@ -78,7 +80,11 @@ final class PaymentAppValidator implements EventSubscriberInterface
             throw OpenApiException::invalidSignature();
         }
 
-        $resolvedContext = $app->tenantId === null ? Context::createDefaultContext() : Context::createTenantContext($app->tenantId);
+        $resolvedContext = $context->createWithDataScope(
+            $app->dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+                ? DataScope::platform()
+                : DataScope::tenant($app->dataScopeId),
+        );
         $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, $resolvedContext);
         $request->attributes->set(self::ATTRIBUTE_PAYMENT_APP, $app);
     }

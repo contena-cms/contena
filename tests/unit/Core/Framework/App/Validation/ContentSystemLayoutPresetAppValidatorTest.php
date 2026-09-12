@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Validation;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\App\Validation\ContentSystemLayoutPresetAppValidator;
@@ -12,6 +9,9 @@ use Contena\Core\Framework\App\Validation\Error\ContentSystemLayoutPresetSchemaE
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Loader\YamlLayoutPresetLoader;
 use Contena\Core\Framework\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

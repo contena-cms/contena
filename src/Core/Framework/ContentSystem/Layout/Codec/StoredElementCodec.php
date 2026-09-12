@@ -7,13 +7,12 @@ use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRule;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Breakpoint;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyle;
 use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListFieldSerializer;
-use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
-use Contena\Core\Framework\ContentSystem\Output\Index\ResolvedValueIndexFactory;
 
 /**
  * Both directions of one wire shape: the canonical storage array of a single {@see StoredElement} and the
@@ -130,7 +129,7 @@ final class StoredElementCodec
             throw ContentSystemException::invalidFieldValueType('id', 'string', get_debug_type($id));
         }
 
-        $this->rejectReservedOrCastableId($id);
+        $this->rejectInadmissibleId($id);
 
         $component = $data['component'] ?? null;
         if (!\is_string($component)) {
@@ -165,24 +164,15 @@ final class StoredElementCodec
     }
 
     /**
-     * The two id values the rest of the module cannot carry. {@see VirtualRootWrapper::VIRTUAL_ROOT_ID} is
-     * minted by the wrap step, so an authored element holding it collides on every wrapping render; and
-     * {@see ResolvedValueIndexFactory} keys its assignments map by element id, so an id PHP casts to an
-     * integer array key puts an integer into a map declared string-keyed — which encodes as a JSON list once
-     * those keys run 0..n-1, and as integer-looking members otherwise. The castability test puts the id through PHP's
-     * own array-key cast rather than restating the rule the codec's map-key rejections rely on.
-     *
-     * This is the shared admission point: the DAL write path reaches it through
-     * {@see StoredElementListFieldSerializer}, every draft route through {@see DraftLayoutDecoder}.
+     * The shared admission point for the value domain {@see ElementIdRule} states: the DAL write path reaches
+     * it through {@see StoredElementListFieldSerializer}, every draft route through {@see DraftLayoutDecoder}.
      */
-    private function rejectReservedOrCastableId(string $id): void
+    private function rejectInadmissibleId(string $id): void
     {
-        if ($id === VirtualRootWrapper::VIRTUAL_ROOT_ID) {
-            throw ContentSystemException::invalidElementId($id, 'it is the reserved virtual-root id');
-        }
+        $rejection = ElementIdRule::rejection($id);
 
-        if (!\is_string(array_key_first([$id => null]))) {
-            throw ContentSystemException::invalidElementId($id, 'PHP casts it to an integer array key');
+        if ($rejection !== null) {
+            throw ContentSystemException::invalidElementId($id, 'it ' . $rejection);
         }
     }
 

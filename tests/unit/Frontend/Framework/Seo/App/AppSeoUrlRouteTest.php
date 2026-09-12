@@ -2,13 +2,13 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRoute;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal

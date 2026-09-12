@@ -8,7 +8,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -33,7 +33,7 @@ class DeleteThumbnailsCommand extends Command
         private readonly EntityRepository $thumbnailRepository,
         private readonly FilesystemOperator $filesystemPublic,
         private readonly FilesystemOperator $filesystemPrivate,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
         private readonly bool $remoteThumbnailsEnable = false,
     ) {
         parent::__construct();
@@ -118,7 +118,7 @@ class DeleteThumbnailsCommand extends Command
 
     private function deleteThumbnails(): void
     {
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $thumbnailIds = $this->thumbnailRepository->searchIds(new Criteria(), $context)->getIds();
 
             if ($thumbnailIds !== []) {
@@ -134,18 +134,9 @@ class DeleteThumbnailsCommand extends Command
 
     private function clearReadOnlyThumbnails(Context $context): void
     {
-        $tenantId = $context->getTenantId();
-        if ($tenantId === null) {
-            $this->connection->executeStatement(
-                'UPDATE `media` SET `thumbnails_ro` = NULL WHERE `tenant_id` IS NULL',
-            );
-
-            return;
-        }
-
         $this->connection->executeStatement(
-            'UPDATE `media` SET `thumbnails_ro` = NULL WHERE `tenant_id` = :tenantId',
-            ['tenantId' => Uuid::fromHexToBytes($tenantId)],
+            'UPDATE `media` SET `thumbnails_ro` = NULL WHERE `data_scope_id` = :dataScopeId',
+            ['dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId())],
         );
     }
 

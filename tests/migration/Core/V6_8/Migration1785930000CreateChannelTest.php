@@ -6,6 +6,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Migration\V6_8\Migration1784205000CreateDataScope;
+use Contena\Core\Migration\V6_8\Migration1784207014CreateSystemConfig;
 use Contena\Core\Migration\V6_8\Migration1785930000CreateChannel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -48,12 +50,16 @@ class Migration1785930000CreateChannelTest extends TestCase
     {
         $this->connection = KernelLifecycleManager::getConnection();
         $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
+        $this->connection->executeStatement('DROP TABLE IF EXISTS `data_scope`');
+        $this->connection->executeStatement('DROP TABLE IF EXISTS `system_config`');
 
         foreach (self::TABLES as $table) {
             $this->connection->executeStatement(\sprintf('DROP TABLE IF EXISTS `%s`', $table));
         }
 
         $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
+        new Migration1784205000CreateDataScope()->update($this->connection);
+        new Migration1784207014CreateSystemConfig()->update($this->connection);
     }
 
     protected function tearDown(): void
@@ -80,13 +86,13 @@ class Migration1785930000CreateChannelTest extends TestCase
 
         $logColumns = array_column(TableHelper::getTable($this->connection, 'cookie_consent_log')->columns, 'name');
         static::assertEqualsCanonicalizing(
-            ['id', 'tenant_id', 'channel_id', 'language_id', 'consent_action', 'accepted_groups', 'config_hash', 'created_at', 'updated_at'],
+            ['id', 'data_scope_id', 'channel_id', 'language_id', 'consent_action', 'accepted_groups', 'config_hash', 'created_at', 'updated_at'],
             $logColumns,
         );
 
         $configVersionColumns = array_column(TableHelper::getTable($this->connection, 'cookie_consent_config_version')->columns, 'name');
         static::assertEqualsCanonicalizing(
-            ['id', 'tenant_id', 'config_hash', 'channel_id', 'language_id', 'cookie_groups', 'created_at', 'updated_at'],
+            ['id', 'data_scope_id', 'config_hash', 'channel_id', 'language_id', 'cookie_groups', 'created_at', 'updated_at'],
             $configVersionColumns,
         );
 
@@ -145,12 +151,12 @@ class Migration1785930000CreateChannelTest extends TestCase
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'member_address', 'fk.member_address.region_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'channel_api_context', 'fk_channel_api_context_channel_id'));
         static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'channel_api_context', 'fk_channel_api_context_member_id'));
-        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'tenant_id'));
-        static::assertTrue(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.configuration_key__channel_id__tenant_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'data_scope_id'));
+        static::assertTrue(TableHelper::columnExists($this->connection, 'system_config', 'configuration_target_id'));
+        static::assertFalse(TableHelper::columnExists($this->connection, 'system_config', 'tenant_id'));
+        static::assertTrue(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.scope_target_key'));
         static::assertFalse(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.configuration_key__channel_id'));
         static::assertFalse(TableHelper::indexExists($this->connection, 'system_config', 'uniq.system_config.configuration_key'));
-        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'system_config', 'fk.system_config.tenant_id'));
-        static::assertTrue(TableHelper::foreignKeyExists($this->connection, 'system_config', 'fk.system_config.channel_id'));
         $updatedAt = TableHelper::getColumnOfTable($this->connection, 'channel_api_context', 'updated_at');
         static::assertTrue($updatedAt->isNotNull);
         static::assertSame('CURRENT_TIMESTAMP', strtoupper((string) $updatedAt->defaultValue));
@@ -212,6 +218,7 @@ class Migration1785930000CreateChannelTest extends TestCase
     {
         $this->connection->insert('channel_domain', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'channel_id' => Uuid::fromHexToBytes($channelId),
             'language_id' => Uuid::fromHexToBytes($languageId),
             'snippet_set_id' => Uuid::randomBytes(),

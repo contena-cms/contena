@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
+use Contena\Core\Framework\Context;
+
 /**
  * @phpstan-import-type ValueGeneratorConfig from AbstractValueGenerator
  */
@@ -30,14 +32,20 @@ class ValueGeneratorPatternRegistry
      * @param ValueGeneratorConfig $config
      * @param array<int, string>|null $args
      */
-    public function generatePattern(string $pattern, string $patternPart, array $config, ?array $args = null, ?bool $preview = false): string
-    {
+    public function generatePattern(
+        string $pattern,
+        string $patternPart,
+        array $config,
+        Context $context,
+        ?array $args = null,
+        bool $preview = false,
+    ): string {
         $generator = $this->pattern[$pattern] ?? null;
 
         if (!$generator) {
             return $patternPart;
         }
 
-        return $generator->generate($config, $args, $preview);
+        return $generator->generate($config, $context, $args, $preview);
     }
 }

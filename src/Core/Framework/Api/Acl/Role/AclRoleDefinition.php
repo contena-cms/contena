@@ -7,6 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedByField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -16,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
 use Contena\Core\System\Integration\IntegrationDefinition;
@@ -74,7 +74,7 @@ class AclRoleDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned ACL role.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for ACL role.'),
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of ACL role.'),
             new StringField('code', 'code')->addFlags(new Required())->setDescription('Stable technical code of the ACL role.'),
             new StringField('name', 'name')->addFlags(new Required())->setDescription('Name of the ACL role defined.'),

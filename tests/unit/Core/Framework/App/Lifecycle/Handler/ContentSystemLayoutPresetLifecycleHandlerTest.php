@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Handler;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
@@ -15,6 +12,9 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Util\Filesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -33,7 +33,7 @@ class ContentSystemLayoutPresetLifecycleHandlerTest extends TestCase
         $registry = static::createMock(AbstractContentSystemLayoutPresetRegistry::class);
         $registry->expects($this->never())->method('invalidate');
 
-        (new ContentSystemLayoutPresetLifecycleHandler($persister, $registry))->install($context);
+        new ContentSystemLayoutPresetLifecycleHandler($persister, $registry)->install($context);
     }
 
     #[TestDox('update persists the app presets')]
@@ -47,7 +47,7 @@ class ContentSystemLayoutPresetLifecycleHandlerTest extends TestCase
         $registry = static::createMock(AbstractContentSystemLayoutPresetRegistry::class);
         $registry->expects($this->never())->method('invalidate');
 
-        (new ContentSystemLayoutPresetLifecycleHandler($persister, $registry))->update($context);
+        new ContentSystemLayoutPresetLifecycleHandler($persister, $registry)->update($context);
     }
 
     #[TestDox('activation invalidates the registry so the app presets become available')]
@@ -82,7 +82,7 @@ class ContentSystemLayoutPresetLifecycleHandlerTest extends TestCase
         $persister->method('persist')->willThrowException($exception);
 
         $this->expectExceptionObject($exception);
-        (new ContentSystemLayoutPresetLifecycleHandler($persister, static::createStub(AbstractContentSystemLayoutPresetRegistry::class)))
+        new ContentSystemLayoutPresetLifecycleHandler($persister, static::createStub(AbstractContentSystemLayoutPresetRegistry::class))
             ->install($this->buildPersistContext());
     }
 
@@ -94,7 +94,7 @@ class ContentSystemLayoutPresetLifecycleHandlerTest extends TestCase
         $registry->method('invalidate')->willThrowException($exception);
 
         $this->expectExceptionObject($exception);
-        (new ContentSystemLayoutPresetLifecycleHandler(static::createStub(ContentSystemLayoutPresetPersister::class), $registry))
+        new ContentSystemLayoutPresetLifecycleHandler(static::createStub(ContentSystemLayoutPresetPersister::class), $registry)
             ->activate($this->buildActivationContext());
     }
 
@@ -139,4 +139,3 @@ class ContentSystemLayoutPresetLifecycleHandlerTest extends TestCase
         );
     }
 }
-

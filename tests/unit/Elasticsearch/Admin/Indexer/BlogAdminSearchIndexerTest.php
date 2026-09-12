@@ -105,7 +105,7 @@ class BlogAdminSearchIndexerTest extends TestCase
         static::assertArrayHasKey($id, $documents);
         $document = $documents[$id];
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('blog tag ' . $id, $document['text']);
         static::assertSame('keywords', $document['textBoosted']);
         static::assertSame(['blog'], $document['completion']);
@@ -159,7 +159,7 @@ class BlogAdminSearchIndexerTest extends TestCase
         $connection = static::createStub(Connection::class);
         $connection->method('fetchAllAssociative')->willReturn([[
             'id' => '809c1844f4734243b6aa04aba860cd45',
-            'tenantId' => 'tenant-a',
+            'dataScopeId' => 'tenant-a',
             'name' => 'Blog',
             'translatedNames' => '[{"languageId":"b7d2554b0ce847cd82f3ac9bd1c0dfca","name":"Blog"}]',
             'customSearchKeywords' => '[["keywords"]]',

@@ -2,7 +2,9 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Migration;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Migration\IndexerQueuer;
+use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -60,7 +62,10 @@ class IndexerQueuerTest extends TestCase
             ->method('update')
             ->willReturnCallback(static function (string $table, array $data, array $criteria): int {
                 static::assertSame('system_config', $table);
-                static::assertSame(['id' => 'config-id'], $criteria);
+                static::assertSame([
+                    'id' => 'config-id',
+                    'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                ], $criteria);
                 static::assertSame(
                     ['_value' => ['category.indexer' => []]],
                     json_decode((string) $data['configuration_value'], true)
@@ -85,7 +90,10 @@ class IndexerQueuerTest extends TestCase
             ->method('delete')
             ->willReturnCallback(static function (string $table, array $criteria): int {
                 static::assertSame('system_config', $table);
-                static::assertSame(['id' => 'config-id'], $criteria);
+                static::assertSame([
+                    'id' => 'config-id',
+                    'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                ], $criteria);
 
                 return 1;
             });
@@ -104,6 +112,10 @@ class IndexerQueuerTest extends TestCase
             ->willReturnCallback(static function (string $table, array $data): int {
                 static::assertSame('system_config', $table);
                 static::assertSame(IndexerQueuer::INDEXER_KEY, $data['configuration_key']);
+                static::assertSame(
+                    Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                    $data['data_scope_id'],
+                );
                 static::assertSame(
                     ['_value' => ['product.indexer' => ['skip-seo']]],
                     json_decode((string) $data['configuration_value'], true)
@@ -130,7 +142,10 @@ class IndexerQueuerTest extends TestCase
         $connection->expects($this->once())
             ->method('update')
             ->willReturnCallback(static function (string $table, array $data, array $criteria): int {
-                static::assertSame(['id' => 'config-id'], $criteria);
+                static::assertSame([
+                    'id' => 'config-id',
+                    'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                ], $criteria);
                 // array_unique() preserves keys, so the merged options carry a key gap
                 // and serialize as a JSON object instead of a list
                 static::assertSame(

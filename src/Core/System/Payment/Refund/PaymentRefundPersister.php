@@ -43,6 +43,10 @@ class PaymentRefundPersister
      */
     public function persist(array $refundData, Context $context): string
     {
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment writes require an exact data-scope context.');
+        }
+
         $refundId = Uuid::randomHex();
         $refundNo = $this->numberRangeValueGenerator->getValue(PaymentRefundDefinition::ENTITY_NAME, $context);
 
@@ -54,13 +58,12 @@ class PaymentRefundPersister
                 'status' => PaymentRefundStatus::STATUS_PROCESSING,
             ]], $context);
 
-            [$scope, $parameters] = $this->tenantScope($context);
             $reserved = $this->connection->executeStatement(
                 'UPDATE `payment_order`
                  SET `refunded_amount` = `refunded_amount` + :refundAmount, `version` = `version` + 1
-                 WHERE `id` = :orderId AND ' . $scope . ' AND `refunded_amount` + :refundAmount <= `amount`',
+                 WHERE `id` = :orderId AND `data_scope_id` = :dataScopeId AND `refunded_amount` + :refundAmount <= `amount`',
                 [
-                    ...$parameters,
+                    'dataScopeId' => Uuid::fromHexToBytes($context->getDataScopeId()),
                     'refundAmount' => $refundData['refundAmount'],
                     'orderId' => Uuid::fromHexToBytes($refundData['orderId']),
                 ],
@@ -76,20 +79,5 @@ class PaymentRefundPersister
         });
 
         return $refundId;
-    }
-
-    /**
-     * @return array{0: string, 1: array<string, string>}
-     */
-    private function tenantScope(Context $context): array
-    {
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment writes require a platform or tenant context.');
-        }
-        if ($context->getTenantId() === null) {
-            return ['`tenant_id` IS NULL', []];
-        }
-
-        return ['`tenant_id` = :tenantId', ['tenantId' => Uuid::fromHexToBytes($context->getTenantId())]];
     }
 }

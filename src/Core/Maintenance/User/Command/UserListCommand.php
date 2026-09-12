@@ -45,7 +45,10 @@ class UserListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new ContenaStyle($input, $output);
-        $context = Context::createCLIContext();
+        // Scope-specific grant projections (active/admin/roles) are undefined
+        // for an aggregate cross-scope read. The CLI lists the canonical
+        // platform grants, so use the exact platform context here.
+        $context = Context::createDefaultContext();
 
         $format = $this->resolveFormat($input, $output, [self::FORMAT_TABLE, self::FORMAT_JSON]);
         if ($format === null) {

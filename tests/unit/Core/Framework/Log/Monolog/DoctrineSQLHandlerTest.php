@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Log\Monolog;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
 use Contena\Core\Framework\Uuid\Uuid;
 use Doctrine\DBAL\Connection;
@@ -61,7 +62,7 @@ class DoctrineSQLHandlerTest extends TestCase
                 }
 
                 static::assertSame([
-                    'tenant_id' => null,
+                    'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                     'message' => 'Some message',
                     'level' => 400,
                     'channel' => 'business events',
@@ -90,7 +91,7 @@ class DoctrineSQLHandlerTest extends TestCase
         static::assertSame('some exception', $exceptionThrown->getMessage());
         static::assertIsArray($insertData);
         static::assertSame([
-            'tenant_id' => null,
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'message' => 'Some message',
             'level' => 400,
             'channel' => 'business events',
@@ -100,14 +101,14 @@ class DoctrineSQLHandlerTest extends TestCase
         ], $insertData);
     }
 
-    public function testWriteStoresTenantIdFromLogContext(): void
+    public function testWriteStoresDataScopeIdFromLogContext(): void
     {
-        $tenantId = Uuid::randomHex();
+        $dataScopeId = Uuid::randomHex();
         $this->connection->expects($this->once())
             ->method('insert')
-            ->with('log_entry', static::callback(static fn (array $data): bool => $data['tenant_id'] === Uuid::fromHexToBytes($tenantId)));
+            ->with('log_entry', static::callback(static fn (array $data): bool => $data['data_scope_id'] === Uuid::fromHexToBytes($dataScopeId)));
 
         $handler = new DoctrineSQLHandler($this->connection, new MockClock());
-        $handler->handle(new LogRecord(new \DateTimeImmutable(), 'business events', Level::Error, 'Some message', ['tenantId' => $tenantId]));
+        $handler->handle(new LogRecord(new \DateTimeImmutable(), 'business events', Level::Error, 'Some message', ['dataScopeId' => $dataScopeId]));
     }
 }

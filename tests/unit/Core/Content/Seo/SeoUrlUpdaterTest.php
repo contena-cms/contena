@@ -9,6 +9,7 @@ use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
@@ -71,7 +72,7 @@ class SeoUrlUpdaterTest extends TestCase
             [[
                 'channelId' => Uuid::randomHex(),
                 'languageId' => Uuid::randomHex(),
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
             ]],
             []
         );
@@ -90,11 +91,11 @@ class SeoUrlUpdaterTest extends TestCase
             [[
                 'channelId' => Uuid::randomHex(),
                 'languageId' => Uuid::randomHex(),
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
             ]],
             [[
                 'channelId' => null,
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
                 'template' => '{{ blog.translated.name }}/{{ blog.id }}',
             ]]
         );
@@ -111,11 +112,11 @@ class SeoUrlUpdaterTest extends TestCase
             [[
                 'channelId' => Uuid::randomHex(),
                 'languageId' => Uuid::randomHex(),
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
             ]],
             [[
                 'channelId' => null,
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
                 'template' => '{{ blog.translated.name }}/{{ blog.id }}',
             ]]
         );
@@ -143,17 +144,18 @@ class SeoUrlUpdaterTest extends TestCase
             [[
                 'channelId' => 'testChannelId',
                 'languageId' => 'testLanguageId',
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
             ]],
             [[
                 'channelId' => null,
-                'tenantId' => null,
+                'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE,
                 'template' => '{{ blog.translated.name }}/{{ blog.id }}',
             ]]
         );
 
         $channel = new ChannelEntity();
         $channel->setId('testChannelId');
+        $channel->setDataScopeId(Defaults::PLATFORM_DATA_SCOPE);
 
         $language = new LanguageEntity();
         $language->setId('testLanguageId');

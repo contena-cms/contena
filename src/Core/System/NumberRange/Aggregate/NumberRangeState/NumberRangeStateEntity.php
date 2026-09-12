@@ -10,11 +10,23 @@ class NumberRangeStateEntity extends Entity
 {
     use EntityIdTrait;
 
+    protected string $dataScopeId;
+
     protected string $numberRangeId;
 
     protected int $lastValue;
 
     protected ?NumberRangeEntity $numberRange = null;
+
+    public function getDataScopeId(): string
+    {
+        return $this->dataScopeId;
+    }
+
+    public function setDataScopeId(string $dataScopeId): void
+    {
+        $this->dataScopeId = $dataScopeId;
+    }
 
     public function getNumberRangeId(): string
     {

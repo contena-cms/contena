@@ -161,7 +161,7 @@ final class MediaAdminSearchIndexer extends AbstractAdminIndexer
         $data = $this->connection->fetchAllAssociative(
             <<<'SQL'
             SELECT LOWER(HEX(media.id)) as id,
-                   LOWER(HEX(media.tenant_id)) as tenantId,
+                   LOWER(HEX(media.data_scope_id)) as dataScopeId,
                    tag_agg.tags as tags,
                    tag_agg.tagIds as tagIds,
                    translation_agg.alt as alt,
@@ -242,7 +242,7 @@ SQL,
             if (!Feature::isActive('ENABLE_OPENSEARCH_FOR_ADMIN_API')) {
                 $mapped[$id] = [
                     'id' => $id,
-                    'tenantId' => $row['tenantId'] ?? null,
+                    'dataScopeId' => $row['dataScopeId'],
                     'text' => \strtolower($text),
                     'completion' => $completion,
                 ];
@@ -268,7 +268,7 @@ SQL,
 
             $mapped[$id] = [
                 'id' => $id,
-                'tenantId' => $row['tenantId'] ?? null,
+                'dataScopeId' => $row['dataScopeId'],
                 'text' => \strtolower($text),
                 'fileName' => $row['file_name'] ?? null,
                 'private' => (bool) $row['private'],

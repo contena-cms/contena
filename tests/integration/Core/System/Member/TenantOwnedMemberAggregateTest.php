@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\System\Member;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -79,10 +80,10 @@ class TenantOwnedMemberAggregateTest extends TestCase
         }
 
         $expectedTenants = [
-            'platform' => null,
+            'platform' => Defaults::PLATFORM_DATA_SCOPE,
             'tenant-a' => $this->tenantA,
             'tenant-b' => $this->tenantB,
-            'global' => null,
+            'global' => Defaults::PLATFORM_DATA_SCOPE,
         ];
         foreach ($ids as $scope => $scopeIds) {
             $this->assertStoredTenant('member_group', 'id', $scopeIds['group'], $expectedTenants[$scope]);
@@ -169,8 +170,22 @@ class TenantOwnedMemberAggregateTest extends TestCase
     public function testPlatformAdministratorRemainsTheAuditActorForTenantWrites(): void
     {
         $platformUserId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(`id`)) FROM `user` WHERE `tenant_id` IS NULL LIMIT 1',
+            'SELECT LOWER(HEX(`id`)) FROM `user` LIMIT 1',
         );
+        if (!\is_string($platformUserId)) {
+            $platformUserId = Uuid::randomHex();
+            $localeId = static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(`id`)) FROM `locale` LIMIT 1');
+            static::assertIsString($localeId);
+            $this->repository('user')->create([[
+                'id' => $platformUserId,
+                'username' => 'audit-platform-' . $platformUserId,
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'name' => 'Audit platform user',
+                'email' => $platformUserId . '@example.invalid',
+                'localeId' => $localeId,
+                'accountActive' => true,
+            ]], Context::createDefaultContext());
+        }
         static::assertIsString($platformUserId);
 
         $ids = $this->createMemberAggregate('audit-source', $this->contexts['tenant-a']);
@@ -201,11 +216,11 @@ class TenantOwnedMemberAggregateTest extends TestCase
         });
 
         $row = static::getContainer()->get(Connection::class)->fetchAssociative(
-            'SELECT LOWER(HEX(`tenant_id`)) AS `tenant_id`, LOWER(HEX(`created_by_id`)) AS `created_by_id`, LOWER(HEX(`updated_by_id`)) AS `updated_by_id` FROM `member` WHERE `id` = :id',
+            'SELECT LOWER(HEX(`data_scope_id`)) AS `data_scope_id`, LOWER(HEX(`created_by_id`)) AS `created_by_id`, LOWER(HEX(`updated_by_id`)) AS `updated_by_id` FROM `member` WHERE `id` = :id',
             ['id' => Uuid::fromHexToBytes($memberId)],
         );
         static::assertIsArray($row);
-        static::assertSame($this->tenantA, $row['tenant_id']);
+        static::assertSame($this->tenantA, $row['data_scope_id']);
         static::assertSame($platformUserId, $row['created_by_id']);
         static::assertSame($platformUserId, $row['updated_by_id']);
     }
@@ -310,7 +325,7 @@ class TenantOwnedMemberAggregateTest extends TestCase
     private function assertStoredTenant(string $table, string $idColumn, string $id, ?string $expectedTenantId): void
     {
         $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `%s` = :id', $table, $idColumn),
             ['id' => Uuid::fromHexToBytes($id)],
         );
 

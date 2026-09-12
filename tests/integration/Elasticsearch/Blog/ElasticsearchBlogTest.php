@@ -103,7 +103,7 @@ class ElasticsearchBlogTest extends TestCase
     /**
      * @var list<string>
      */
-    private static array $tenantScopeTenantIds = [];
+    private static array $dataScopeTenantIds = [];
 
     protected function setUp(): void
     {
@@ -137,10 +137,10 @@ class ElasticsearchBlogTest extends TestCase
             );
         }
 
-        if (self::$tenantScopeTenantIds !== []) {
-            $tenantIds = array_map(Uuid::fromHexToBytes(...), self::$tenantScopeTenantIds);
+        if (self::$dataScopeTenantIds !== []) {
+            $tenantIds = array_map(Uuid::fromHexToBytes(...), self::$dataScopeTenantIds);
             $connection->executeStatement(
-                'DELETE FROM blog_keyword_dictionary WHERE tenant_id IN (:ids)',
+                'DELETE FROM blog_keyword_dictionary WHERE data_scope_id IN (:ids)',
                 ['ids' => $tenantIds],
                 ['ids' => ArrayParameterType::BINARY],
             );
@@ -761,7 +761,7 @@ class ElasticsearchBlogTest extends TestCase
     {
         $tenantA = $this->createTenant('Elasticsearch Blog tenant A');
         $tenantB = $this->createTenant('Elasticsearch Blog tenant B');
-        self::$tenantScopeTenantIds = [$tenantA->id, $tenantB->id];
+        self::$dataScopeTenantIds = [$tenantA->id, $tenantB->id];
         $contexts = [
             'platform' => Context::createDefaultContext(),
             'tenant-a' => $this->createTenantContext($tenantA),
@@ -824,10 +824,10 @@ class ElasticsearchBlogTest extends TestCase
         }
 
         $globalDocuments = $definition->fetch($bytes, $contexts['global']);
-        static::assertNull($globalDocuments[$blogIds['platform']]['tenantId']);
-        static::assertSame($tenantA->id, $globalDocuments[$blogIds['tenant-a']]['tenantId']);
-        static::assertSame($tenantB->id, $globalDocuments[$blogIds['tenant-b']]['tenantId']);
-        static::assertNull($globalDocuments[$blogIds['global']]['tenantId']);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $globalDocuments[$blogIds['platform']]['dataScopeId']);
+        static::assertSame($tenantA->id, $globalDocuments[$blogIds['tenant-a']]['dataScopeId']);
+        static::assertSame($tenantB->id, $globalDocuments[$blogIds['tenant-b']]['dataScopeId']);
+        static::assertSame(Defaults::PLATFORM_DATA_SCOPE, $globalDocuments[$blogIds['global']]['dataScopeId']);
 
         $indexer = static::getContainer()->get(ElasticsearchIndexer::class);
         foreach ($contexts as $scope => $context) {

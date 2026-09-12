@@ -56,7 +56,7 @@ Routing has two different extension contracts:
 | Candidate source | `contena.payment.route_provider` | `PaymentRouteProviderInterface::provide()` |
 | Selection policy | `contena.payment.route_selection_strategy` | `PaymentRouteSelectionStrategyInterface::select()` |
 
-Providers return candidates in preference order and must enforce application/tenant ownership. Core configuration checks enabled method assignments and channel configurations, using shared platform configurations as fallback. Unsupported capabilities and mismatched explicitly requested channels are excluded before selection. There is no core rule evaluation or `PaymentRuleScope`.
+Providers return candidates in preference order and must enforce application and exact data-scope ownership. Core configuration checks enabled method assignments and channel configurations in the current scope; tenant operations never fall back to platform-owned configuration. If a future product requirement needs sharing, it must be represented by an explicit authorization/membership relation. Unsupported capabilities and mismatched explicitly requested channels are excluded before selection. There is no core rule evaluation or `PaymentRuleScope`.
 
 `PaymentRouteCandidateEvent` lets a plugin veto a candidate. Strategies run in tagged priority order; `null` declines. A strategy must return one of the eligible candidate objects, not invent a new route. If no plugin strategy selects one, core uses the first eligible candidate. `PaymentRouteResolvedEvent` observes the immutable selection. Add a rule engine, weights or circuit-breaker policy in a plugin through these contracts; do not introduce those policies into the core resolver.
 

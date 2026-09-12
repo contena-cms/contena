@@ -615,7 +615,7 @@ SVG;
             ->dispatch(new UpdateThumbnailPathEvent([$thumbnailId]));
 
         static::getContainer()->get(MediaIndexer::class)->handle(
-            new MediaIndexingMessage([$png->getId()])
+            new MediaIndexingMessage([$png->getId()], $context)
         );
 
         $png = $this->mediaRepository->search(new Criteria([$png->getId()]), $context)->getEntities()->get($png->getId());
@@ -696,7 +696,7 @@ SVG;
         $dispatcher->dispatch(new UpdateThumbnailPathEvent([$thumbnail1Id]));
         $dispatcher->dispatch(new UpdateThumbnailPathEvent([$thumbnail2Id]));
 
-        static::getContainer()->get(MediaIndexer::class)->handle(new MediaIndexingMessage([$png->getId()]));
+        static::getContainer()->get(MediaIndexer::class)->handle(new MediaIndexingMessage([$png->getId()], $context));
 
         $png = $this->mediaRepository->search(new Criteria([$png->getId()]), $context)->getEntities()->get($png->getId());
         static::assertInstanceOf(MediaEntity::class, $png);

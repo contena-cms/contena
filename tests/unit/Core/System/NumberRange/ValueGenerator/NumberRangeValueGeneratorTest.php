@@ -28,12 +28,14 @@ class NumberRangeValueGeneratorTest extends TestCase
     public function testGeneratedNumberValue(): void
     {
         $dispatcher = new EventDispatcher();
+        $context = Context::createDefaultContext();
 
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
             ->method('fetchAssociative')
             ->willReturn([
                 'id' => Uuid::randomHex(),
+                'dataScopeId' => $context->getDataScopeId(),
                 'pattern' => 'ABC{n}',
                 'start' => 0,
             ]);
@@ -42,6 +44,10 @@ class NumberRangeValueGeneratorTest extends TestCase
         $result->expects($this->once())
             ->method('fetchOne')
             ->willReturn('1');
+
+        $connection->expects($this->once())
+            ->method('executeStatement')
+            ->willReturn(1);
 
         $connection->expects($this->once())
             ->method('executeQuery')
@@ -57,19 +63,21 @@ class NumberRangeValueGeneratorTest extends TestCase
             $connection,
         );
 
-        $value = $numberRangeValueGenerator->getValue('user', Context::createDefaultContext());
+        $value = $numberRangeValueGenerator->getValue('user', $context);
         static::assertSame('ABC1', $value);
     }
 
     public function testGeneratedEventIsDispatched(): void
     {
         $dispatcher = new EventDispatcher();
+        $context = Context::createDefaultContext();
 
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
             ->method('fetchAssociative')
             ->willReturn([
                 'id' => Uuid::randomHex(),
+                'dataScopeId' => $context->getDataScopeId(),
                 'pattern' => '{n}',
                 'start' => 0,
             ]);
@@ -84,7 +92,7 @@ class NumberRangeValueGeneratorTest extends TestCase
         $post->expects($this->exactly(1))->method('__invoke');
         $dispatcher->addListener(NumberRangeEvents::NUMBER_RANGE_GENERATED, $post);
 
-        $numberRangeValueGenerator->getValue('user', Context::createDefaultContext());
+        $numberRangeValueGenerator->getValue('user', $context);
     }
 
     public function testGenerateStandardPattern(): void
@@ -117,13 +125,15 @@ class NumberRangeValueGeneratorTest extends TestCase
     public function testPreviewPatternByNumberRangeIdUsesPersistedNumberRange(): void
     {
         $numberRangeId = Uuid::randomHex();
+        $context = Context::createDefaultContext();
 
         $incrPattern = $this->createMock(ValueGeneratorPatternIncrement::class);
         $incrPattern->method('getPatternId')->willReturn('n');
         $incrPattern->expects($this->once())
             ->method('generate')
             ->with(
-                static::callback(static fn (array $config): bool => $config['id'] === $numberRangeId && $config['pattern'] === 'ABC{n}' && $config['start'] === 10),
+                static::callback(static fn (array $config): bool => $config['id'] === $numberRangeId && $config['dataScopeId'] === $context->getDataScopeId() && $config['pattern'] === 'ABC{n}' && $config['start'] === 10),
+                $context,
                 [],
                 true
             )
@@ -134,6 +144,7 @@ class NumberRangeValueGeneratorTest extends TestCase
             ->method('fetchAssociative')
             ->willReturn([
                 'id' => $numberRangeId,
+                'dataScopeId' => $context->getDataScopeId(),
                 'pattern' => 'ABC{n}',
                 'start' => '10',
             ]);
@@ -144,19 +155,21 @@ class NumberRangeValueGeneratorTest extends TestCase
             $connection,
         );
 
-        static::assertSame('ABC10', $generator->previewPatternByNumberRangeId($numberRangeId));
+        static::assertSame('ABC10', $generator->previewPatternByNumberRangeId($numberRangeId, $context));
     }
 
     public function testPreviewPatternByNumberRangeIdUsesOverrides(): void
     {
         $numberRangeId = Uuid::randomHex();
+        $context = Context::createDefaultContext();
 
         $incrPattern = $this->createMock(ValueGeneratorPatternIncrement::class);
         $incrPattern->method('getPatternId')->willReturn('n');
         $incrPattern->expects($this->once())
             ->method('generate')
             ->with(
-                static::callback(static fn (array $config): bool => $config['id'] === $numberRangeId && $config['pattern'] === 'USR-{n}' && $config['start'] === 42),
+                static::callback(static fn (array $config): bool => $config['id'] === $numberRangeId && $config['dataScopeId'] === $context->getDataScopeId() && $config['pattern'] === 'USR-{n}' && $config['start'] === 42),
+                $context,
                 [],
                 true
             )
@@ -167,6 +180,7 @@ class NumberRangeValueGeneratorTest extends TestCase
             ->method('fetchAssociative')
             ->willReturn([
                 'id' => $numberRangeId,
+                'dataScopeId' => $context->getDataScopeId(),
                 'pattern' => 'ABC{n}',
                 'start' => '10',
             ]);
@@ -177,12 +191,13 @@ class NumberRangeValueGeneratorTest extends TestCase
             $connection,
         );
 
-        static::assertSame('USR-42', $generator->previewPatternByNumberRangeId($numberRangeId, 'USR-{n}', 42));
+        static::assertSame('USR-42', $generator->previewPatternByNumberRangeId($numberRangeId, $context, 'USR-{n}', 42));
     }
 
     public function testPreviewPatternByNumberRangeIdThrowsForMissingNumberRange(): void
     {
         $numberRangeId = Uuid::randomHex();
+        $context = Context::createTenantContext(Uuid::randomHex());
 
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
@@ -197,7 +212,7 @@ class NumberRangeValueGeneratorTest extends TestCase
 
         $this->expectExceptionObject(NumberRangeException::numberRangeNotFound($numberRangeId));
 
-        $generator->previewPatternByNumberRangeId($numberRangeId);
+        $generator->previewPatternByNumberRangeId($numberRangeId, $context);
     }
 
     public function testGenerateExtraCharsAllPatterns(): void
@@ -211,6 +226,7 @@ class NumberRangeValueGeneratorTest extends TestCase
 
     private function getGenerator(string $pattern): NumberRangeValueGenerator
     {
+        $context = Context::createDefaultContext();
         $incrPattern = static::createStub(ValueGeneratorPatternIncrement::class);
         $incrPattern->method('getPatternId')->willReturn('n');
         $incrPattern->method('generate')->willReturn('5');
@@ -220,7 +236,12 @@ class NumberRangeValueGeneratorTest extends TestCase
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())
             ->method('fetchAssociative')
-            ->willReturn(['id' => Uuid::randomHex(), 'pattern' => $pattern, 'start' => 1]);
+            ->willReturn([
+                'id' => Uuid::randomHex(),
+                'dataScopeId' => $context->getDataScopeId(),
+                'pattern' => $pattern,
+                'start' => 1,
+            ]);
 
         return new NumberRangeValueGenerator(
             $patternReg,

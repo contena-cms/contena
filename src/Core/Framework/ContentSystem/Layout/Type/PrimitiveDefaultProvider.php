@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\ContentSystem\Layout\Type;
 
 use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
 
 /**
  * The single definition of a content element type's primitive property defaults: the non-null stored default of every

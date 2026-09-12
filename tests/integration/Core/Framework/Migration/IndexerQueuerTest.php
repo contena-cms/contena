@@ -21,7 +21,10 @@ class IndexerQueuerTest extends TestCase
         parent::setUp();
 
         $connection = static::getContainer()->get(Connection::class);
-        $connection->delete('system_config', ['configuration_key' => IndexerQueuer::INDEXER_KEY]);
+        $connection->delete('system_config', [
+            'configuration_key' => IndexerQueuer::INDEXER_KEY,
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+        ]);
     }
 
     public function testMultipleEntriesAreMerged(): void
@@ -48,6 +51,7 @@ class IndexerQueuerTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $connection->insert('system_config', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'configuration_key' => IndexerQueuer::INDEXER_KEY,
             'configuration_value' => json_encode(['_value' => ['test.indexer' => 1]]),
             'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -69,6 +73,7 @@ class IndexerQueuerTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $connection->insert('system_config', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'configuration_key' => IndexerQueuer::INDEXER_KEY,
             'configuration_value' => json_encode(['_value' => ['test.indexer' => 1]]),
             'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -85,6 +90,7 @@ class IndexerQueuerTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $connection->insert('system_config', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'configuration_key' => IndexerQueuer::INDEXER_KEY,
             'configuration_value' => json_encode(['_value' => ['test.indexer' => 1]]),
             'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),

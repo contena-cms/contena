@@ -28,10 +28,7 @@ class CachedSearchConfigLoader extends SearchConfigLoader
      */
     public function load(Context $context): array
     {
-        $cacheKey = self::CACHE_KEY;
-        if ($context->getTenantId() !== null) {
-            $cacheKey .= '-' . $context->getTenantId();
-        }
+        $cacheKey = self::CACHE_KEY . '-' . ($context->allowsCrossScopeReads() ? 'all' : 'exact') . '-' . $context->getDataScopeId();
 
         return $this->cache->get($cacheKey, fn (): array => $this->decorated->load($context));
     }

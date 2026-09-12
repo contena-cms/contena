@@ -2,8 +2,10 @@
 
 namespace Contena\Core\Test\Stub\System\NumberRange\ValueGenerator;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementState;
 
 /**
  * @internal
@@ -13,37 +15,58 @@ use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\Abst
 class IncrementArrayStorage extends AbstractIncrementStorage
 {
     /**
-     * @param array<string, int> $states
+     * @var array<string, array<string, int>>
      */
-    public function __construct(private array $states)
+    private array $states;
+
+    /**
+     * @param list<IncrementState> $states
+     */
+    public function __construct(array $states)
     {
+        $this->states = [];
+        foreach ($states as $state) {
+            $this->states[$state->dataScopeId][$state->numberRangeId] = $state->value;
+        }
     }
 
-    public function reserve(array $config): int
+    public function reserve(array $config, Context $context): int
     {
-        if (!isset($this->states[$config['id']])) {
-            return $this->states[$config['id']] = 1;
+        $this->assertConfigurationMatchesContext($config, $context);
+
+        $dataScopeId = $context->getDataScopeId();
+        if (!isset($this->states[$dataScopeId][$config['id']])) {
+            return $this->states[$dataScopeId][$config['id']] = 1;
         }
 
-        return ++$this->states[$config['id']];
+        return ++$this->states[$dataScopeId][$config['id']];
     }
 
-    public function preview(array $config): int
+    public function preview(array $config, Context $context): int
     {
-        return ($this->states[$config['id']] ?? 0) + 1;
+        $this->assertConfigurationMatchesContext($config, $context);
+
+        return ($this->states[$context->getDataScopeId()][$config['id']] ?? 0) + 1;
     }
 
     /**
-     * @return array<string, int>
+     * @return array<string, IncrementState>
      */
-    public function list(): array
+    public function list(Context $context): array
     {
-        return $this->states;
+        $states = [];
+        foreach ($this->states[$context->getDataScopeId()] ?? [] as $numberRangeId => $value) {
+            $states[$numberRangeId] = new IncrementState($context->getDataScopeId(), $numberRangeId, $value);
+        }
+
+        return $states;
     }
 
-    public function set(string $configurationId, int $value): void
+    public function set(IncrementState $state, Context $context): void
     {
-        $this->states[$configurationId] = $value;
+        $this->assertStateMatchesContext($state, $context);
+
+        $this->states[$state->dataScopeId][$state->numberRangeId] = $state->value;
     }
 
     public function getDecorated(): AbstractIncrementStorage

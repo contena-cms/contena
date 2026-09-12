@@ -6,8 +6,8 @@ use Contena\Core\Content\Seo\SeoUrlRoute\EntitySeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -79,7 +79,7 @@ class SeoUrlUpdater
     }
 
     /**
-     * @param list<array{channelId: string, languageId: string, template: string}> $templates
+     * @param list<array{channelId: string, languageId: string, dataScopeId: string, template: string}> $templates
      * @param list<string> $ids
      */
     private function generateAndPersist(
@@ -108,14 +108,18 @@ class SeoUrlUpdater
                 continue;
             }
 
-            $tenantId = $channel->getTenantId();
+            $dataScopeId = $config['dataScopeId'];
+            if ($channel->getDataScopeId() !== $dataScopeId) {
+                continue;
+            }
+
             $languageContext = new Context(
-                new SystemSource(),
+                $context->getSource(),
                 $chain,
                 Defaults::LIVE_VERSION,
                 true,
-                tenantId: $tenantId,
-                globalTenantAccess: $tenantId === null && $context->hasGlobalTenantAccess(),
+                $context->getRuleIds(),
+                DataScope::platform()->getId() === $dataScopeId ? DataScope::platform() : DataScope::tenant($dataScopeId),
             );
             $languageContext->setConsiderInheritance(true);
 
@@ -138,14 +142,14 @@ class SeoUrlUpdater
     /**
      * @param non-empty-string $routeName
      *
-     * @return list<array{channelId: string, languageId: string, template: string}>
+     * @return list<array{channelId: string, languageId: string, dataScopeId: string, template: string}>
      */
     private function loadUrlTemplate(string $routeName, bool $isHeadless, Context $context): array
     {
         $query = 'SELECT DISTINCT
                LOWER(HEX(channel.id)) as channelId,
                LOWER(HEX(domains.language_id)) as languageId,
-               LOWER(HEX(channel.tenant_id)) as tenantId
+               LOWER(HEX(channel.data_scope_id)) as dataScopeId
              FROM channel_domain as domains
              INNER JOIN channel
                ON domains.channel_id = channel.id
@@ -156,11 +160,9 @@ class SeoUrlUpdater
             : ' AND channel.type_id != :apiTypeId';
         $parameters = ['apiTypeId' => Uuid::fromHexToBytes(Defaults::CHANNEL_TYPE_API)];
 
-        if ($context->getTenantId() !== null) {
-            $query .= ' AND channel.tenant_id = :tenantId';
-            $parameters['tenantId'] = Uuid::fromHexToBytes($context->getTenantId());
-        } elseif (!$context->hasGlobalTenantAccess()) {
-            $query .= ' AND channel.tenant_id IS NULL';
+        if (!$context->allowsCrossScopeReads()) {
+            $query .= ' AND channel.data_scope_id = :dataScopeId';
+            $parameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
         }
 
         $domains = $this->connection->fetchAllAssociative($query, $parameters);
@@ -169,52 +171,50 @@ class SeoUrlUpdater
         }
 
         $templateQuery = 'SELECT LOWER(HEX(channel_id)) as channelId,
-                    LOWER(HEX(tenant_id)) as tenantId,
+                    LOWER(HEX(data_scope_id)) as dataScopeId,
                     template
              FROM seo_url_template
              WHERE route_name LIKE :route
                AND is_headless = :isHeadless';
         $templateParameters = ['route' => $routeName, 'isHeadless' => (int) $isHeadless];
 
-        if ($context->getTenantId() !== null) {
-            $templateQuery .= ' AND (tenant_id = :tenantId OR tenant_id IS NULL)';
-            $templateParameters['tenantId'] = Uuid::fromHexToBytes($context->getTenantId());
-        } elseif (!$context->hasGlobalTenantAccess()) {
-            $templateQuery .= ' AND tenant_id IS NULL';
+        if (!$context->allowsCrossScopeReads()) {
+            $templateQuery .= ' AND data_scope_id = :dataScopeId';
+            $templateParameters['dataScopeId'] = Uuid::fromHexToBytes($context->getDataScopeId());
         }
 
         $templateRows = $this->connection->fetchAllAssociative($templateQuery, $templateParameters);
 
-        /** @var array<string, array<string, string|null>> $channelTemplates */
+        /** @var array<string, array<string, array<string, string|null>>> $channelTemplates */
         $channelTemplates = [];
         foreach ($templateRows as $row) {
-            $tenantKey = (string) ($row['tenantId'] ?? '');
+            $scopeKey = (string) ($row['dataScopeId'] ?? '');
             $channelKey = (string) ($row['channelId'] ?? '');
-            $channelTemplates[$tenantKey][$channelKey] = $row['template'] !== null ? (string) $row['template'] : null;
+            $channelTemplates[$scopeKey][$channelKey] = $row['template'] !== null ? (string) $row['template'] : null;
         }
 
         $result = [];
         foreach ($domains as $domain) {
             $channelId = (string) $domain['channelId'];
-            $tenantKey = (string) ($domain['tenantId'] ?? '');
+            $scopeKey = (string) ($domain['dataScopeId'] ?? '');
             $templates = [
-                ...($channelTemplates[''] ?? []),
-                ...($channelTemplates[$tenantKey] ?? []),
+                ...($channelTemplates[$scopeKey] ?? []),
             ];
 
             if (!$isHeadless && !\array_key_exists('', $templates)) {
                 throw SeoException::invalidTemplate('Default templates not configured');
             }
 
-            $template = $templates[$channelId] ?? $templates[''];
+            $template = $templates[$channelId] ?? $templates[''] ?? null;
 
-            if ($template === null) {
+            if (!\is_string($template) || $template === '') {
                 continue;
             }
 
             $result[] = [
                 'channelId' => $channelId,
                 'languageId' => (string) $domain['languageId'],
+                'dataScopeId' => $scopeKey,
                 'template' => $template,
             ];
         }

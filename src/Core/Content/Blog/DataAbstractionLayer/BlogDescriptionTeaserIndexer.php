@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
@@ -32,16 +33,16 @@ class BlogDescriptionTeaserIndexer extends PostUpdateIndexer
         return 'blog.description_teaser.indexer';
     }
 
-    public function iterate(?array $offset): ?EntityIndexingMessage
+    public function iterate(?array $offset, Context $context): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator('blog', $offset);
+        $iterator = $this->iteratorFactory->createIterator('blog', $context, $offset);
 
         $ids = $iterator->fetch();
         if ($ids === []) {
             return null;
         }
 
-        return new EntityIndexingMessage(array_values($ids), $iterator->getOffset());
+        return new EntityIndexingMessage(array_values($ids), $context, $iterator->getOffset());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -94,9 +95,9 @@ class BlogDescriptionTeaserIndexer extends PostUpdateIndexer
         }
     }
 
-    public function getTotal(): int
+    public function getTotal(Context $context): int
     {
-        return $this->iteratorFactory->createIterator('blog')->fetchCount();
+        return $this->iteratorFactory->createIterator('blog', $context)->fetchCount();
     }
 
     public function getDecorated(): EntityIndexer

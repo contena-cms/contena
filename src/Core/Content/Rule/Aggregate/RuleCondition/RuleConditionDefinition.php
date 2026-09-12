@@ -7,6 +7,7 @@ use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDe
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -17,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class RuleConditionDefinition extends EntityDefinition
@@ -48,7 +48,7 @@ class RuleConditionDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new PrimaryKey(), new Required()),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned rule condition.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for rule condition.'),
             new StringField('type', 'type')->addFlags(new Required()),
             new FkField('rule_id', 'ruleId', RuleDefinition::class)->addFlags(new Required()),
             new FkField('script_id', 'scriptId', AppScriptConditionDefinition::class),

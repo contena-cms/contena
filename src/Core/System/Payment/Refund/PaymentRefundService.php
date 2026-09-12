@@ -56,11 +56,11 @@ class PaymentRefundService extends AbstractPaymentRefundService
 
     public function refund(PaymentAppEntity $app, RefundRequest $request, Context $context): PaymentResult
     {
-        if (!$app->status || $app->tenantId !== $context->getTenantId()) {
+        if (!$app->status || $app->dataScopeId !== $context->getDataScopeId()) {
             throw PaymentException::appNotFound($app->appCode);
         }
-        if ($context->hasGlobalTenantAccess()) {
-            throw PaymentException::invalidRequest('Payment operations require a platform or tenant context.');
+        if ($context->allowsCrossScopeReads()) {
+            throw PaymentException::invalidRequest('Payment operations require an exact data-scope context.');
         }
         if (trim($request->orderNo ?? '') === '' && trim($request->externalOrderNo ?? '') === '') {
             throw PaymentException::orderNotFound('');

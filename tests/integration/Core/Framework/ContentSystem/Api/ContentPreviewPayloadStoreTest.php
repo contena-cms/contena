@@ -10,6 +10,12 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * The store validates a rebuilt envelope with the validator it is handed, and the unit tests hand it one they
+ * build themselves — so they establish that a validator runs, never that the wired one enforces anything. The
+ * read path depends on the container's validator finding constraints the DTO declares as attributes, which
+ * holds only while `framework.validation.enable_attributes` is true. Flip that flag or wire a different
+ * validator and the read silently stops enforcing constraints, with every other test still green.
+ *
  * @internal
  */
 class ContentPreviewPayloadStoreTest extends TestCase
@@ -23,6 +29,9 @@ class ContentPreviewPayloadStoreTest extends TestCase
         $key = 'content-system.preview.' . $token;
         $cache = static::getContainer()->get('cache.system');
 
+        // A structurally complete envelope — every field the DTO declares, each of the right PHP type — so the
+        // field and type gates pass and the blank entityType reaches the constraint check, the only gate the
+        // validator owns.
         $item = $cache->getItem($key);
         $item->set([
             'layout' => [['id' => Uuid::randomHex(), 'component' => 'Ct:Content:Text']],

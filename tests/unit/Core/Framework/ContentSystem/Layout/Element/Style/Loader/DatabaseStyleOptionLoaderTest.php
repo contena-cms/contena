@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element\Style\L
 use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Loader\DatabaseStyleOptionLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Serialization\StyleOptionSpecificationSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\Dto\StyleOptionSpecificationDtoCollection;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -101,13 +102,21 @@ class DatabaseStyleOptionLoaderTest extends TestCase
     public function testValidatesAllRowsTogether(): void
     {
         $violations = new ConstraintViolationList([new ConstraintViolation('Invalid type', null, [], null, 'styleOptions[broken].type', '')]);
-        $validator = static::createStub(ValidatorInterface::class);
-        $validator->method('validate')->willReturn($violations);
+        $validator = $this->createMock(ValidatorInterface::class);
+        $validator->expects($this->once())
+            ->method('validate')
+            ->with(static::callback(static function (mixed $value): bool {
+                static::assertInstanceOf(StyleOptionSpecificationDtoCollection::class, $value);
+                static::assertSame(['good', 'broken'], array_keys($value->options));
+
+                return true;
+            }))
+            ->willReturn($violations);
         $loader = $this->loader([
             ['name' => 'good', 'schema' => '{"type":"integer"}', 'app_name' => 'Acme'],
             ['name' => 'broken', 'schema' => '{"type":"object"}', 'app_name' => 'Acme'],
         ], $validator);
-        $this->expectExceptionObject(ContentSystemException::styleOptionsInvalid($violations));
+        $this->expectExceptionObject(ContentSystemException::styleOptionLoadValidationFailed($violations));
         $loader->load();
     }
 

@@ -67,7 +67,6 @@ class SnippetFileLoader implements SnippetFileLoaderInterface
         }
     }
 
-
     private function loadTranslationSnippets(SnippetFileCollection $snippetFileCollection): void
     {
         $exclude = $this->getInactivePluginNames();

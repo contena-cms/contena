@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\LandingPage\Aggregate\LandingPageTag;
 
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\System\Tag\TagDefinition;
@@ -35,7 +35,7 @@ class LandingPageTagDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned landing page tag assignment.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for landing page tag assignment.'),
             new FkField('landing_page_id', 'landingPageId', LandingPageDefinition::class)->addFlags(new PrimaryKey(), new Required()),
             new ReferenceVersionField(LandingPageDefinition::class)->addFlags(new PrimaryKey(), new Required()),
 

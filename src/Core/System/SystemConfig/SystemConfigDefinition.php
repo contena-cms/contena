@@ -4,6 +4,7 @@ namespace Contena\Core\System\SystemConfig;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ConfigJsonField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -11,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 
@@ -45,7 +45,7 @@ class SystemConfigDefinition extends EntityDefinition
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of system configuration.'),
             new StringField('configuration_key', 'configurationKey')->addFlags(new ApiAware(), new Required())->setDescription('Key of the system configuration value.'),
             new ConfigJsonField('configuration_value', 'configurationValue')->addFlags(new ApiAware(), new Required())->setDescription('System configuration value.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for platform configuration.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware())->setDescription('Unique identity of channel.'),
             new ManyToOneAssociationField('channel', 'channel_id', ChannelDefinition::class, 'id', false)->addFlags(new ApiAware()),
         ]);

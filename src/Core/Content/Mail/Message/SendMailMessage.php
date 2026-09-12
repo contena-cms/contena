@@ -14,7 +14,7 @@ class SendMailMessage implements AsyncMessageInterface
      */
     public function __construct(
         public readonly string $mailDataPath,
-        public readonly ?string $tenantId,
+        public readonly string $dataScopeId,
     ) {
     }
 }

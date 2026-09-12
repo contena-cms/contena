@@ -7,9 +7,9 @@ use Contena\Core\Framework\Adapter\Database\ReplicaConnectionResetter;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\Framework;
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Container;
 
 /**

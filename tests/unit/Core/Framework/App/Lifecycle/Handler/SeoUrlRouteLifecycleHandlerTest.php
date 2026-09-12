@@ -2,10 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Handler;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteCollection;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteEntity;
 use Contena\Core\Framework\App\AppEntity;
@@ -19,6 +15,10 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Clock\MockClock;
 
 /**

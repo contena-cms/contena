@@ -37,10 +37,11 @@ class NumberRangeController extends AbstractController
 
     #[Cache(mustRevalidate: true)]
     #[Route(path: '/api/_action/number-range/{numberRangeId}/preview-pattern', name: 'api.action.number-range.preview-pattern-by-id', requirements: ['numberRangeId' => Uuid::VALID_PATTERN], methods: ['GET'])]
-    public function previewPatternByNumberRange(string $numberRangeId, Request $request): JsonResponse
+    public function previewPatternByNumberRange(string $numberRangeId, Context $context, Request $request): JsonResponse
     {
         $generatedNumber = $this->valueGenerator->previewPatternByNumberRangeId(
             $numberRangeId,
+            $context,
             $request->query->has('pattern') ? (string) $request->query->get('pattern') : null,
             $request->query->has('start') ? (int) $request->query->get('start') : null
         );

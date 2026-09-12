@@ -54,7 +54,7 @@ class MailSender extends AbstractMailSender
                     'subject' => $email->getSubject(),
                     'receiver' => implode(', ', $receiver),
                     'content' => $email->getTextBody(),
-                    'tenantId' => $context->getTenantId(),
+                    'dataScopeId' => $context->getDataScopeId(),
                 ]
             );
 
@@ -95,11 +95,11 @@ class MailSender extends AbstractMailSender
         }
 
         $mailDataPath = self::BASE_FILE_SYSTEM_PATH
-            . ($context->getTenantId() ?? 'platform')
+            . $context->getDataScopeId()
             . '/'
             . Hasher::hash($mailData);
 
         $this->filesystem->write($mailDataPath, $mailData);
-        $this->messageBus->dispatch(new SendMailMessage($mailDataPath, $context->getTenantId()));
+        $this->messageBus->dispatch(new SendMailMessage($mailDataPath, $context->getDataScopeId()));
     }
 }

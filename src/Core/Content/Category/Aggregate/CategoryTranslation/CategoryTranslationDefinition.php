@@ -7,6 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BreadcrumbField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
@@ -15,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class CategoryTranslationDefinition extends EntityTranslationDefinition
@@ -50,7 +50,7 @@ class CategoryTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new StringField('name', 'name')->addFlags(new ApiAware(), new Required()),
             new BreadcrumbField()->addFlags(new ApiAware(), new WriteProtected()),
             new StringField('link_type', 'linkType')->addFlags(new ApiAware(), new Choice([

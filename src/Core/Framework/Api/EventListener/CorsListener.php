@@ -29,10 +29,14 @@ class CorsListener implements EventSubscriberInterface
         PlatformRequest::HEADER_MCP_PROTOCOL_VERSION,
     ];
 
-    /** @var array{allow: string, expose: string}|null */
+    /**
+     * @var array{allow: string, expose: string}|null
+     */
     private ?array $headerValues = null;
 
-    /** @param iterable<CorsHeaderProviderInterface> $headerProviders */
+    /**
+     * @param iterable<CorsHeaderProviderInterface> $headerProviders
+     */
     public function __construct(private readonly iterable $headerProviders = [])
     {
     }
@@ -74,7 +78,9 @@ class CorsListener implements EventSubscriberInterface
         $response->headers->set('Access-Control-Expose-Headers', $headerValues['expose']);
     }
 
-    /** @return array{allow: string, expose: string} */
+    /**
+     * @return array{allow: string, expose: string}
+     */
     private function getHeaderValues(): array
     {
         if ($this->headerValues !== null) {
@@ -97,7 +103,9 @@ class CorsListener implements EventSubscriberInterface
         return $this->headerValues;
     }
 
-    /** @param list<string> $headers */
+    /**
+     * @param list<string> $headers
+     */
     private static function toHeaderValue(array $headers): string
     {
         $unique = [];

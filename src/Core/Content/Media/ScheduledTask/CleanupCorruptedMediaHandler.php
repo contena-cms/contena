@@ -13,7 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -37,14 +37,14 @@ final class CleanupCorruptedMediaHandler extends ScheduledTaskHandler
         protected readonly LoggerInterface $logger,
         private readonly EntityRepository $mediaRepository,
         private readonly ClockInterface $clock,
-        private readonly TenantScopeContextProvider $tenantScopeContextProvider,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public function run(): void
     {
-        foreach ($this->tenantScopeContextProvider->getContexts() as $context) {
+        foreach ($this->dataScopeContextProvider->getContexts() as $context) {
             $this->cleanup($context);
         }
     }

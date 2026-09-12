@@ -4,12 +4,12 @@ namespace Contena\Core\System\Member\Aggregate\MemberGroupTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupDefinition;
 
@@ -45,7 +45,7 @@ class MemberGroupTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned member group translation.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for member group translation.'),
             new StringField('name', 'name')->addFlags(new ApiAware(), new Required()),
             new StringField('registration_title', 'registrationTitle')->addFlags(new ApiAware()),
             new LongTextField('registration_introduction', 'registrationIntroduction')->addFlags(new ApiAware(), new AllowHtml()),

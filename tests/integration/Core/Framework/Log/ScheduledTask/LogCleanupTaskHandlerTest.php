@@ -16,7 +16,7 @@ use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\TenantTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\Tenant\TenantScopeContextProvider;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -192,9 +192,9 @@ class LogCleanupTaskHandlerTest extends TestCase
 
     private function createHandler(Context ...$contexts): LogCleanupTaskHandler
     {
-        $contextProvider = static::getContainer()->get(TenantScopeContextProvider::class);
+        $contextProvider = static::getContainer()->get(DataScopeContextProvider::class);
         if ($contexts !== []) {
-            $contextProvider = static::createStub(TenantScopeContextProvider::class);
+            $contextProvider = static::createStub(DataScopeContextProvider::class);
             $contextProvider->method('getContexts')->willReturnCallback(
                 static function () use ($contexts): \Generator {
                     yield from $contexts;

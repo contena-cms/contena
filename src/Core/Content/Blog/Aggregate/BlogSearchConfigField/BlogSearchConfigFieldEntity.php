@@ -11,7 +11,7 @@ class BlogSearchConfigFieldEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $tenantId = null;
+    protected string $dataScopeId;
 
     protected string $searchConfigId;
 
@@ -31,14 +31,14 @@ class BlogSearchConfigFieldEntity extends Entity
 
     protected ?CustomFieldEntity $customField = null;
 
-    public function getTenantId(): ?string
+    public function getDataScopeId(): string
     {
-        return $this->tenantId;
+        return $this->dataScopeId;
     }
 
-    public function setTenantId(?string $tenantId): void
+    public function setDataScopeId(string $dataScopeId): void
     {
-        $this->tenantId = $tenantId;
+        $this->dataScopeId = $dataScopeId;
     }
 
     public function getSearchConfigId(): string

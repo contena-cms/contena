@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\Integration\Frontend\Framework\Seo\App;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
@@ -21,6 +19,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -30,8 +30,8 @@ use Symfony\Component\HttpFoundation\Response;
 class AppSeoUrlTest extends TestCase
 {
     use AppSystemTestBehaviour;
-    use IntegrationTestBehaviour;
     use FrontendControllerTestBehaviour;
+    use IntegrationTestBehaviour;
 
     private const APP_NAME = 'SwagFrontendSeoUrl';
 
@@ -212,7 +212,7 @@ class AppSeoUrlTest extends TestCase
         /** @var EntityRepository<BlogCollection> $repository */
         $repository = static::getContainer()->get('blog.repository');
         $repository->create([
-            (new BlogBuilder($ids, 'app-blog-1'))
+            new BlogBuilder($ids, 'app-blog-1')
                 ->build(),
         ], $this->context);
 

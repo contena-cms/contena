@@ -20,7 +20,7 @@ class Migration1784207007CreateMediaFolderConfiguration extends MigrationStep
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `media_folder_configuration` (
     `id`                       BINARY(16) NOT NULL,
-    `tenant_id`                BINARY(16) NULL,
+    `data_scope_id`                BINARY(16) NOT NULL,
     `create_thumbnails`        TINYINT(1) DEFAULT 1,
     `keep_aspect_ratio`        TINYINT(1) DEFAULT 1,
     `thumbnail_quality`        INT(11)    DEFAULT 80,
@@ -31,10 +31,10 @@ CREATE TABLE IF NOT EXISTS `media_folder_configuration` (
     `created_at`               DATETIME(3) NOT NULL,
     `updated_at`               DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    KEY `idx.media_folder_configuration.tenant_id` (`tenant_id`),
+    KEY `idx.media_folder_configuration.data_scope_id` (`data_scope_id`),
     CONSTRAINT `json.media_folder_configuration.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
-    CONSTRAINT `fk.media_folder_configuration.tenant_id` FOREIGN KEY (`tenant_id`)
-        REFERENCES `tenant` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT `fk.media_folder_configuration.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }

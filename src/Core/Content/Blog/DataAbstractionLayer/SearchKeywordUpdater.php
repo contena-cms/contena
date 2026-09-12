@@ -10,6 +10,7 @@ use Contena\Core\Content\Blog\SearchKeyword\BlogSearchKeywordAnalyzerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScopeReadMode;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\RepositoryIterator;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
@@ -83,8 +84,8 @@ class SearchKeywordUpdater implements ResetInterface
                 array_values(array_filter([$language->getId(), $language->getParentId(), Defaults::LANGUAGE_SYSTEM])),
                 $context->getVersionId(),
                 true,
-                tenantId: $context->getTenantId(),
-                globalTenantAccess: $context->hasGlobalTenantAccess(),
+                dataScope: $context->getDataScope(),
+                dataScopeReadMode: DataScopeReadMode::Exact,
             );
 
             $existingBlogs = $blogs[$language->getParentId() ?? Defaults::LANGUAGE_SYSTEM] ?? [];
@@ -106,15 +107,15 @@ class SearchKeywordUpdater implements ResetInterface
      */
     private function updateLanguage(array $ids, Context $context, array $existingBlogs): array
     {
-        $configFields = $this->getConfigFields($context->getLanguageId(), $context->getTenantId());
+        $configFields = $this->getConfigFields($context->getLanguageId(), $context->getDataScopeId());
 
         $versionId = Uuid::fromHexToBytes($context->getVersionId());
         $languageId = Uuid::fromHexToBytes($context->getLanguageId());
-        $tenantId = $context->getTenantId() !== null ? Uuid::fromHexToBytes($context->getTenantId()) : null;
+        $dataScopeId = Uuid::fromHexToBytes($context->getDataScopeId());
 
         $now = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
 
-        $this->delete($ids, $context->getLanguageId(), $context->getVersionId(), $context->getTenantId());
+        $this->delete($ids, $context->getLanguageId(), $context->getVersionId(), $context->getDataScopeId());
 
         $keywords = [];
         $dictionary = [];
@@ -136,7 +137,7 @@ class SearchKeywordUpdater implements ResetInterface
 
             foreach ($analyzed as $keyword) {
                 $keywords[] = [
-                    'tenant_id' => $tenantId,
+                    'data_scope_id' => $dataScopeId,
                     'id' => Uuid::randomBytes(),
                     'version_id' => $versionId,
                     'blog_version_id' => $versionId,
@@ -146,9 +147,9 @@ class SearchKeywordUpdater implements ResetInterface
                     'ranking' => $keyword->getRanking(),
                     'created_at' => $now,
                 ];
-                $key = ($context->getTenantId() ?? 'global') . $keyword->getKeyword() . $languageId;
+                $key = $context->getDataScopeId() . $keyword->getKeyword() . $languageId;
                 $dictionary[$key] = [
-                    'tenant_id' => $tenantId,
+                    'data_scope_id' => $dataScopeId,
                     'id' => Uuid::randomBytes(),
                     'language_id' => $languageId,
                     'keyword' => $keyword->getKeyword(),
@@ -183,7 +184,7 @@ class SearchKeywordUpdater implements ResetInterface
     /**
      * @param array<string> $ids
      */
-    private function delete(array $ids, string $languageId, string $versionId, ?string $tenantId): void
+    private function delete(array $ids, string $languageId, string $versionId, string $dataScopeId): void
     {
         $bytes = Uuid::fromHexToBytesList($ids);
 
@@ -192,15 +193,11 @@ class SearchKeywordUpdater implements ResetInterface
             'language' => Uuid::fromHexToBytes($languageId),
             'versionId' => Uuid::fromHexToBytes($versionId),
         ];
-        $tenantFilter = 'tenant_id IS NULL';
-        if ($tenantId !== null) {
-            $tenantFilter = 'tenant_id = :tenantId';
-            $params['tenantId'] = Uuid::fromHexToBytes($tenantId);
-        }
+        $params['dataScopeId'] = Uuid::fromHexToBytes($dataScopeId);
 
-        RetryableQuery::retryable($this->connection, function () use ($params, $tenantFilter): void {
+        RetryableQuery::retryable($this->connection, function () use ($params): void {
             $this->connection->executeStatement(
-                'DELETE FROM blog_search_keyword WHERE blog_id IN (:ids) AND language_id = :language AND version_id = :versionId AND ' . $tenantFilter,
+                'DELETE FROM blog_search_keyword WHERE blog_id IN (:ids) AND language_id = :language AND version_id = :versionId AND data_scope_id = :dataScopeId',
                 $params,
                 ['ids' => ArrayParameterType::BINARY]
             );
@@ -208,7 +205,7 @@ class SearchKeywordUpdater implements ResetInterface
     }
 
     /**
-     * @param list<array{tenant_id: string|null, id: string, version_id: string, blog_version_id: string, language_id: string, blog_id: string, keyword: string, ranking: float, created_at: string}> $keywords
+     * @param list<array{data_scope_id: string, id: string, version_id: string, blog_version_id: string, language_id: string, blog_id: string, keyword: string, ranking: float, created_at: string}> $keywords
      */
     private function insertKeywords(array $keywords): void
     {
@@ -220,7 +217,7 @@ class SearchKeywordUpdater implements ResetInterface
     }
 
     /**
-     * @param array<string, array{tenant_id: string|null, id: string, language_id: string, keyword: string}> $dictionary
+     * @param array<string, array{data_scope_id: string, id: string, language_id: string, keyword: string}> $dictionary
      */
     private function insertDictionary(array $dictionary): void
     {
@@ -303,19 +300,17 @@ class SearchKeywordUpdater implements ResetInterface
     /**
      * @return array<int, ConfigField>
      */
-    private function getConfigFields(string $languageId, ?string $tenantId): array
+    private function getConfigFields(string $languageId, string $dataScopeId): array
     {
-        $configKey = ($tenantId ?? 'global') . ':' . $languageId;
+        $configKey = $dataScopeId . ':' . $languageId;
         if (isset($this->config[$configKey])) {
             return $this->config[$configKey];
         }
 
         foreach (array_unique([$languageId, Defaults::LANGUAGE_SYSTEM]) as $candidateLanguageId) {
-            foreach ($this->tenantScopes($tenantId) as $candidateTenantId) {
-                $fields = $this->fetchConfigFields($candidateLanguageId, $candidateTenantId);
-                if ($fields !== []) {
-                    return $this->config[$configKey] = $fields;
-                }
+            $fields = $this->fetchConfigFields($candidateLanguageId, $dataScopeId);
+            if ($fields !== []) {
+                return $this->config[$configKey] = $fields;
             }
         }
 
@@ -325,7 +320,7 @@ class SearchKeywordUpdater implements ResetInterface
     /**
      * @return array<int, ConfigField>
      */
-    private function fetchConfigFields(string $languageId, ?string $tenantId): array
+    private function fetchConfigFields(string $languageId, string $dataScopeId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('configField.field', 'configField.tokenize', 'configField.ranking', 'LOWER(HEX(config.language_id)) as language_id');
@@ -333,14 +328,9 @@ class SearchKeywordUpdater implements ResetInterface
         $query->join('config', 'blog_search_config_field', 'configField', 'config.id = configField.blog_search_config_id');
         $query->andWhere('config.language_id = :languageId');
         $query->andWhere('configField.searchable = 1');
-        if ($tenantId !== null) {
-            $query->andWhere('config.tenant_id = :tenantId');
-            $query->andWhere('configField.tenant_id = :tenantId');
-            $query->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $query->andWhere('config.tenant_id IS NULL');
-            $query->andWhere('configField.tenant_id IS NULL');
-        }
+        $query->andWhere('config.data_scope_id = :dataScopeId');
+        $query->andWhere('configField.data_scope_id = :dataScopeId');
+        $query->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
 
         $query->setParameter('languageId', Uuid::fromHexToBytes($languageId));
 
@@ -348,14 +338,6 @@ class SearchKeywordUpdater implements ResetInterface
         $all = $query->executeQuery()->fetchAllAssociative();
 
         return $all;
-    }
-
-    /**
-     * @return list<string|null>
-     */
-    private function tenantScopes(?string $tenantId): array
-    {
-        return $tenantId === null ? [null] : [$tenantId, null];
     }
 
     /**

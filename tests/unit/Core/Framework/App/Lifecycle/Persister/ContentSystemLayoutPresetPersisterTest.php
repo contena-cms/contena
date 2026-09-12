@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Persister;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetCollection;
 use Contena\Core\Framework\App\Aggregate\AppContentSystemLayoutPreset\AppContentSystemLayoutPresetEntity;
 use Contena\Core\Framework\App\AppEntity;
@@ -28,6 +23,11 @@ use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\SharedLockInterface;
 use Symfony\Component\Lock\Store\InMemoryStore;
@@ -336,7 +336,7 @@ class ContentSystemLayoutPresetPersisterTest extends TestCase
      */
     private function normalize(LayoutPresetSpecificationDto $dto): array
     {
-        return (new LayoutPresetSpecificationSerializer())->normalize($dto);
+        return new LayoutPresetSpecificationSerializer()->normalize($dto);
     }
 
     private function hashOf(LayoutPresetSpecificationDto $dto): string

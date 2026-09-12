@@ -7,7 +7,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
@@ -21,14 +20,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SitemapChannelProvider::class)]
 class SitemapChannelProviderTest extends TestCase
 {
-    public function testStreamsPlatformChannelsBeforeTenantChannelsWithKeysetPagination(): void
+    public function testStreamsAllChannelsWithKeysetPaginationUsingGlobalReadScope(): void
     {
         $platformChannel = $this->createChannel();
         $tenantChannel = $this->createChannel();
         $calls = 0;
 
         $repository = $this->createMock(EntityRepository::class);
-        $repository->expects($this->exactly(4))
+        $repository->expects($this->exactly(2))
             ->method('search')
             ->willReturnCallback(static function (Criteria $criteria, Context $context) use (&$calls, $platformChannel, $tenantChannel): EntitySearchResult {
                 static::assertSame(1, $criteria->getLimit());
@@ -36,16 +35,9 @@ class SitemapChannelProviderTest extends TestCase
                 static::assertCount(1, $criteria->getSorting());
 
                 $filters = $criteria->getFilters();
-                if ($calls < 2) {
-                    static::assertFalse($context->hasGlobalTenantAccess());
-                    static::assertCount($calls, array_filter($filters, static fn (object $filter): bool => $filter instanceof RangeFilter));
-                    $channels = $calls === 0 ? new ChannelCollection([$platformChannel]) : new ChannelCollection();
-                } else {
-                    static::assertTrue($context->hasGlobalTenantAccess());
-                    static::assertCount(1, array_filter($filters, static fn (object $filter): bool => $filter instanceof NotEqualsFilter));
-                    static::assertCount($calls - 2, array_filter($filters, static fn (object $filter): bool => $filter instanceof RangeFilter));
-                    $channels = $calls === 2 ? new ChannelCollection([$tenantChannel]) : new ChannelCollection();
-                }
+                static::assertTrue($context->allowsCrossScopeReads());
+                static::assertCount($calls, array_filter($filters, static fn (object $filter): bool => $filter instanceof RangeFilter));
+                $channels = $calls === 0 ? new ChannelCollection([$platformChannel, $tenantChannel]) : new ChannelCollection();
 
                 ++$calls;
 

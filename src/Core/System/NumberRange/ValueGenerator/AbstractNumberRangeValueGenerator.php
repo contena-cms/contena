@@ -14,7 +14,12 @@ abstract class AbstractNumberRangeValueGenerator
     /**
      * Generates a preview for a persisted number range without mutating its state.
      */
-    abstract public function previewPatternByNumberRangeId(string $numberRangeId, ?string $pattern = null, ?int $start = null): string;
+    abstract public function previewPatternByNumberRangeId(
+        string $numberRangeId,
+        Context $context,
+        ?string $pattern = null,
+        ?int $start = null,
+    ): string;
 
     abstract protected function getDecorated(): self;
 }

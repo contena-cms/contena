@@ -38,6 +38,7 @@ class MemberProvisioner
 
         $this->connection->insert('member', [
             'id' => Uuid::randomBytes(),
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'member_group_id' => $channel['member_group_id'],
             'channel_id' => $channel['id'],
             'language_id' => $channel['language_id'],
@@ -60,10 +61,13 @@ class MemberProvisioner
         $channel = $this->connection->fetchAssociative(
             'SELECT `id`, `member_group_id`, `language_id`
              FROM `channel`
-             WHERE `type_id` = :typeId AND `tenant_id` IS NULL
+             WHERE `type_id` = :typeId AND `data_scope_id` = :dataScopeId
              ORDER BY `created_at`
              LIMIT 1',
-            ['typeId' => Uuid::fromHexToBytes(Defaults::CHANNEL_TYPE_WEB)],
+            [
+                'typeId' => Uuid::fromHexToBytes(Defaults::CHANNEL_TYPE_WEB),
+                'dataScopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+            ],
         );
 
         if (!\is_array($channel)
@@ -74,6 +78,10 @@ class MemberProvisioner
             throw MaintenanceException::couldNotGetId('default web channel');
         }
 
-        return $channel;
+        return [
+            'id' => $channel['id'],
+            'member_group_id' => $channel['member_group_id'],
+            'language_id' => $channel['language_id'],
+        ];
     }
 }

@@ -22,6 +22,7 @@ use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\Incr
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternDate;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternIncrement;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternRegistry;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -53,6 +54,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MigrateIncrementStorageCommand::class)
         ->args([
             service(IncrementStorageRegistry::class),
+            service(DataScopeContextProvider::class),
         ])
         ->tag('console.command');
 

@@ -8,6 +8,7 @@ use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Content\Media\DataAbstractionLayer\MediaIndexingMessage;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaPathPostUpdater;
+use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
@@ -45,7 +46,7 @@ class MediaPathPostUpdaterTest extends TestCase
 
         $queue->execute();
 
-        $message = $updater->iterate(null);
+        $message = $updater->iterate(null, Context::createDefaultContext());
 
         static::assertNotNull($message);
         // There are some medias, like dummy theme images etc. that are created by the system and can not be cleaned up because of FKs
@@ -67,7 +68,10 @@ class MediaPathPostUpdaterTest extends TestCase
         );
 
         $ids = new IdsCollection();
-        $message = new EntityIndexingMessage([$ids->get('media-1'), $ids->get('media-2'), $ids->get('media-3')]);
+        $message = new EntityIndexingMessage(
+            [$ids->get('media-1'), $ids->get('media-2'), $ids->get('media-3')],
+            Context::createDefaultContext(),
+        );
 
         $indexerRegistry = $this->createMock(EntityIndexerRegistry::class);
         $indexerRegistry->expects($this->once())

@@ -61,6 +61,30 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         'payment_channel',
     ];
 
+    private const array SCOPED_TABLES = [
+        'acl_role',
+        'media_thumbnail_size',
+        'media_default_folder',
+        'media_folder_configuration',
+        'media_folder',
+        'number_range',
+        'number_range_translation',
+        'system_config',
+        'mail_template',
+        'mail_template_translation',
+        'mail_header_footer',
+        'mail_header_footer_translation',
+        'rule',
+        'rule_condition',
+        'flow',
+        'flow_sequence',
+        'seo_url_template',
+        'payment_channel',
+        'payment_channel_translation',
+        'payment_channel_method',
+        'payment_channel_method_translation',
+    ];
+
     private Connection $connection;
 
     protected function setUp(): void
@@ -400,6 +424,13 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
              WHERE JSON_UNQUOTE(JSON_EXTRACT(`config`, \'$.eventName\')) = :eventName',
             ['eventName' => 'user.recovery.request']
         ));
+
+        foreach (self::SCOPED_TABLES as $table) {
+            static::assertSame(0, (int) $this->connection->fetchOne(
+                \sprintf('SELECT COUNT(*) FROM `%s` WHERE `data_scope_id` <> :dataScopeId', $table),
+                ['dataScopeId' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE)],
+            ), $table);
+        }
     }
 
     public function testSkipsTheBaselineWhenLanguageDataAlreadyExists(): void
@@ -660,7 +691,6 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         $this->connection->executeStatement(
             'CREATE TEMPORARY TABLE `system_config` (
                 `id` BINARY(16) NOT NULL,
-                `tenant_id` BINARY(16) NULL,
                 `configuration_key` VARCHAR(255) NOT NULL,
                 `configuration_value` JSON NOT NULL,
                 `channel_id` BINARY(16) NULL,
@@ -928,5 +958,12 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
                 PRIMARY KEY (`id`)
             )'
         );
+
+        foreach (self::SCOPED_TABLES as $table) {
+            $this->connection->executeStatement(\sprintf(
+                'ALTER TABLE `%s` ADD `data_scope_id` BINARY(16) NOT NULL',
+                $table,
+            ));
+        }
     }
 }

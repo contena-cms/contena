@@ -110,49 +110,49 @@ class TenantOwnedIdentityStructureTest extends TestCase
             }
         }
 
-        $expectedTenants = [
-            'platform' => null,
+        $expectedDataScopes = [
+            'platform' => Defaults::PLATFORM_DATA_SCOPE,
             'tenant-a' => $this->tenantA,
             'tenant-b' => $this->tenantB,
-            'global' => null,
+            'global' => Defaults::PLATFORM_DATA_SCOPE,
         ];
         foreach ($ids as $scope => $scopeIds) {
             $role = $this->roleRepository()->search(new Criteria([$scopeIds['role']]), Context::createGlobalContext())->getEntities()->first();
             static::assertInstanceOf(AclRoleEntity::class, $role);
-            static::assertSame($expectedTenants[$scope], $role->getTenantId());
+            static::assertSame($expectedDataScopes[$scope], $role->getDataScopeId());
 
             $position = $this->positionRepository()->search(
                 new Criteria([$scopeIds['position']])->addAssociation('translations'),
                 Context::createGlobalContext(),
             )->getEntities()->first();
             static::assertInstanceOf(PositionEntity::class, $position);
-            static::assertSame($expectedTenants[$scope], $position->getTenantId());
-            static::assertSame($expectedTenants[$scope], $position->getTranslations()?->first()?->getTenantId());
+            static::assertSame($expectedDataScopes[$scope], $position->getDataScopeId());
+            static::assertSame($expectedDataScopes[$scope], $position->getTranslations()?->first()?->getDataScopeId());
 
             $unit = $this->organizationUnitRepository()->search(
                 new Criteria([$scopeIds['unit']])->addAssociation('translations'),
                 Context::createGlobalContext(),
             )->getEntities()->first();
             static::assertInstanceOf(OrganizationUnitEntity::class, $unit);
-            static::assertSame($expectedTenants[$scope], $unit->getTenantId());
-            static::assertSame($expectedTenants[$scope], $unit->getTranslations()?->first()?->getTenantId());
+            static::assertSame($expectedDataScopes[$scope], $unit->getDataScopeId());
+            static::assertSame($expectedDataScopes[$scope], $unit->getTranslations()?->first()?->getDataScopeId());
 
             $organization = $this->organizationRepository()->search(
                 new Criteria([$scopeIds['organization']])->addAssociation('translations'),
                 Context::createGlobalContext(),
             )->getEntities()->first();
             static::assertInstanceOf(OrganizationEntity::class, $organization);
-            static::assertSame($expectedTenants[$scope], $organization->getTenantId());
-            static::assertSame($expectedTenants[$scope], $organization->getTranslations()?->first()?->getTenantId());
+            static::assertSame($expectedDataScopes[$scope], $organization->getDataScopeId());
+            static::assertSame($expectedDataScopes[$scope], $organization->getTranslations()?->first()?->getDataScopeId());
 
             $user = $this->userRepository()->search(new Criteria([$scopeIds['user']]), Context::createGlobalContext())->getEntities()->first();
             static::assertInstanceOf(UserEntity::class, $user);
             foreach (['acl_user_role', 'user_position'] as $mappingTable) {
-                $tenantId = static::getContainer()->get(Connection::class)->fetchOne(
-                    \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `user_id` = :userId', $mappingTable),
+                $dataScopeId = static::getContainer()->get(Connection::class)->fetchOne(
+                    \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `user_id` = :userId', $mappingTable),
                     ['userId' => Uuid::fromHexToBytes($scopeIds['user'])],
                 );
-                static::assertSame($expectedTenants[$scope], $tenantId === false ? null : $tenantId);
+                static::assertSame($expectedDataScopes[$scope], $dataScopeId);
             }
         }
 
@@ -208,13 +208,15 @@ class TenantOwnedIdentityStructureTest extends TestCase
             'email' => $userId . '@example.invalid',
         ]], Context::createDefaultContext());
 
+        $this->repository('user_data_scope')->create([[
+            'userId' => $userId,
+            'dataScopeId' => $context->getDataScopeId(),
+            'active' => true,
+            'admin' => false,
+            'readAllScopes' => false,
+        ]], Context::createDefaultContext());
+
         if ($context->getTenantId() !== null) {
-            $this->repository('user_tenant')->create([[
-                'userId' => $userId,
-                'tenantId' => $context->getTenantId(),
-                'active' => true,
-                'admin' => false,
-            ]], $context);
             $this->repository('acl_user_role')->create([[
                 'userId' => $userId,
                 'aclRoleId' => $roleId,

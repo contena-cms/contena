@@ -128,7 +128,7 @@ class UserConfigController extends AbstractController
         foreach ($postUpdateConfigs as $key => $value) {
             $data = [
                 'value' => Json::encode($value),
-                'tenant_id' => $configContext->getTenantId() !== null ? Uuid::fromHexToBytes($configContext->getTenantId()) : null,
+                'data_scope_id' => Uuid::fromHexToBytes($configContext->getDataScopeId()),
                 'user_id' => Uuid::fromHexToBytes($userId),
                 'key' => $key,
                 'id' => Uuid::randomBytes(),
@@ -146,20 +146,20 @@ class UserConfigController extends AbstractController
 
     private function configContext(Context $context, string $userId): Context
     {
-        if ($context->getTenantId() !== null && $this->hasTenantMembership($userId, $context->getTenantId())) {
+        if ($context->getTenantId() !== null && $this->hasDataScopeGrant($userId, $context->getDataScopeId())) {
             return $context;
         }
 
         return Context::createDefaultContext($context->getSource());
     }
 
-    private function hasTenantMembership(string $userId, string $tenantId): bool
+    private function hasDataScopeGrant(string $userId, string $dataScopeId): bool
     {
         return (bool) $this->connection->fetchOne(
-            'SELECT 1 FROM user_tenant WHERE user_id = :userId AND tenant_id = :tenantId LIMIT 1',
+            'SELECT 1 FROM user_data_scope WHERE user_id = :userId AND data_scope_id = :dataScopeId LIMIT 1',
             [
                 'userId' => Uuid::fromHexToBytes($userId),
-                'tenantId' => Uuid::fromHexToBytes($tenantId),
+                'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
             ],
         );
     }

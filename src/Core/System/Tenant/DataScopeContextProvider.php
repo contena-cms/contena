@@ -3,8 +3,9 @@
 namespace Contena\Core\System\Tenant;
 
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\System\Tenant\TenantScopeContextProviderTest;
+use Contena\Tests\Integration\Core\System\Tenant\DataScopeContextProviderTest;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -14,9 +15,9 @@ use Doctrine\DBAL\Connection;
  *
  * @codeCoverageIgnore
  *
- * @see TenantScopeContextProviderTest
+ * @see DataScopeContextProviderTest
  */
-class TenantScopeContextProvider
+class DataScopeContextProvider
 {
     private readonly int $batchSize;
 
@@ -30,9 +31,11 @@ class TenantScopeContextProvider
     /**
      * @return \Generator<int, Context>
      */
-    public function getContexts(): \Generator
+    public function getContexts(?Context $baseContext = null): \Generator
     {
-        yield Context::createDefaultContext();
+        $baseContext ??= Context::createDefaultContext();
+
+        yield $baseContext->createWithDataScope(DataScope::platform());
 
         $lastTenantId = null;
         while (true) {
@@ -57,7 +60,7 @@ class TenantScopeContextProvider
                     continue;
                 }
 
-                yield Context::createTenantContext($tenantId);
+                yield $baseContext->createWithDataScope(DataScope::tenant($tenantId));
             }
 
             if (\count($tenantIds) < $this->batchSize) {

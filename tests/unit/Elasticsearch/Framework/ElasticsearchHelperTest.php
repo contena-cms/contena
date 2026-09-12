@@ -4,13 +4,14 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework;
 
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\CompiledFieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
@@ -179,12 +180,13 @@ class ElasticsearchHelperTest extends TestCase
         );
     }
 
-    public function testAddFiltersAppliesContextTenantBoundary(): void
+    public function testAddFiltersAppliesContextDataScopeBoundary(): void
     {
-        $tenantAwareDefinition = new BlogDefinition();
-        $this->setDefinitionFields($tenantAwareDefinition, [new TenantField()]);
+        $dataScopeAwareDefinition = new BlogDefinition();
+        $this->setDefinitionFields($dataScopeAwareDefinition, [new DataScopeField()]);
         $sharedDefinition = new LanguageDefinition();
         $this->setDefinitionFields($sharedDefinition, []);
+        $tenantId = '809c1844f4734243b6aa04aba860cd45';
 
         $helper = new ElasticsearchHelper(
             'dev',
@@ -200,39 +202,35 @@ class ElasticsearchHelperTest extends TestCase
         );
 
         $platformSearch = new Search();
-        $helper->addFilters($tenantAwareDefinition, new Criteria(), $platformSearch, Context::createDefaultContext());
+        $helper->addFilters($dataScopeAwareDefinition, new Criteria(), $platformSearch, Context::createDefaultContext());
         static::assertSame([
             'query' => [
                 'bool' => [
                     'filter' => [[
-                        'bool' => [
-                            'must_not' => [[
-                                'exists' => ['field' => 'tenantId'],
-                            ]],
-                        ],
+                        'term' => ['dataScopeId' => Defaults::PLATFORM_DATA_SCOPE],
                     ]],
                 ],
             ],
         ], $platformSearch->toArray());
 
         $tenantSearch = new Search();
-        $helper->addFilters($tenantAwareDefinition, new Criteria(), $tenantSearch, Context::createTenantContext('tenant-id'));
+        $helper->addFilters($dataScopeAwareDefinition, new Criteria(), $tenantSearch, Context::createTenantContext($tenantId));
         static::assertSame([
             'query' => [
                 'bool' => [
                     'filter' => [[
-                        'term' => ['tenantId' => 'tenant-id'],
+                        'term' => ['dataScopeId' => $tenantId],
                     ]],
                 ],
             ],
         ], $tenantSearch->toArray());
 
         $globalSearch = new Search();
-        $helper->addFilters($tenantAwareDefinition, new Criteria(), $globalSearch, Context::createGlobalContext());
+        $helper->addFilters($dataScopeAwareDefinition, new Criteria(), $globalSearch, Context::createGlobalContext());
         static::assertSame([], $globalSearch->toArray());
 
         $sharedEntitySearch = new Search();
-        $helper->addFilters($sharedDefinition, new Criteria(), $sharedEntitySearch, Context::createTenantContext('tenant-id'));
+        $helper->addFilters($sharedDefinition, new Criteria(), $sharedEntitySearch, Context::createTenantContext($tenantId));
         static::assertSame([], $sharedEntitySearch->toArray());
     }
 

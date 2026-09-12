@@ -19,7 +19,7 @@ class BlogSearchConfigExceptionHandlerTest extends TestCase
     public function testDuplicateLanguageIsTranslated(): void
     {
         $exception = new BlogSearchConfigExceptionHandler()->matchException(new \RuntimeException(
-            'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'tenant-language\' for key \'uniq.blog_search_config.tenant_id_language_id\''
+            'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'scope-language\' for key \'uniq.blog_search_config.data_scope_id_language_id\''
         ));
 
         static::assertInstanceOf(DuplicateBlogSearchConfigLanguageException::class, $exception);

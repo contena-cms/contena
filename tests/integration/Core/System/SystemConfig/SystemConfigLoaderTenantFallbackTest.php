@@ -27,7 +27,7 @@ class SystemConfigLoaderTenantFallbackTest extends TestCase
         $this->systemConfig = static::getContainer()->get(SystemConfigService::class);
     }
 
-    public function testTenantConfigurationOverridesAndFallsBackToPlatformConfiguration(): void
+    public function testEachDataScopeReadsOnlyItsOwnConfiguration(): void
     {
         $platform = Context::createDefaultContext();
         $tenantA = $this->createTenantContext($this->createTenant('System config fallback tenant A'));
@@ -45,13 +45,13 @@ class SystemConfigLoaderTenantFallbackTest extends TestCase
         static::assertNull($this->systemConfig->get('tenant.fallback.tenantA', context: $platform));
         static::assertNull($this->systemConfig->get('tenant.fallback.tenantB', context: $platform));
 
-        static::assertSame('platform inherited', $this->systemConfig->get('tenant.fallback.inherited', context: $tenantA));
+        static::assertNull($this->systemConfig->get('tenant.fallback.inherited', context: $tenantA));
         static::assertSame('tenant A override', $this->systemConfig->get('tenant.fallback.overridden', context: $tenantA));
         static::assertSame('tenant A only', $this->systemConfig->get('tenant.fallback.tenantA', context: $tenantA));
         static::assertNull($this->systemConfig->get('tenant.fallback.tenantB', context: $tenantA));
 
-        static::assertSame('platform inherited', $this->systemConfig->get('tenant.fallback.inherited', context: $tenantB));
-        static::assertSame('platform overridden', $this->systemConfig->get('tenant.fallback.overridden', context: $tenantB));
+        static::assertNull($this->systemConfig->get('tenant.fallback.inherited', context: $tenantB));
+        static::assertNull($this->systemConfig->get('tenant.fallback.overridden', context: $tenantB));
         static::assertNull($this->systemConfig->get('tenant.fallback.tenantA', context: $tenantB));
         static::assertSame('tenant B only', $this->systemConfig->get('tenant.fallback.tenantB', context: $tenantB));
 
@@ -62,6 +62,6 @@ class SystemConfigLoaderTenantFallbackTest extends TestCase
 
         $this->systemConfig->delete('tenant.fallback.overridden', context: $tenantA);
 
-        static::assertSame('platform overridden', $this->systemConfig->get('tenant.fallback.overridden', context: $tenantA));
+        static::assertNull($this->systemConfig->get('tenant.fallback.overridden', context: $tenantA));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Api\OAuth;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\UserRepository;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -32,7 +33,8 @@ class TenantDomainLoginTest extends TestCase
     public function testTenantUserCanLoginOnTheirOwnDomain(): void
     {
         $tenantId = $this->seedTenantByCode('login-own');
-        [$username, $password] = $this->createUser($tenantId);
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId);
 
         $user = $this->userRepositoryWithStack($this->requestStack('login-own.contena.cn', $tenantId))
             ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
@@ -44,7 +46,8 @@ class TenantDomainLoginTest extends TestCase
     {
         $tenantId = $this->seedTenantByCode('login-foreign-a');
         $otherTenantId = $this->seedTenantByCode('login-foreign-b');
-        [$username, $password] = $this->createUser($tenantId);
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantId);
 
         $user = $this->userRepositoryWithStack($this->requestStack('login-foreign-b.contena.cn', $otherTenantId))
             ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
@@ -52,20 +55,22 @@ class TenantDomainLoginTest extends TestCase
         static::assertNull($user);
     }
 
-    public function testPlatformUserCanLoginOnAnyTenantDomain(): void
+    public function testPlatformReadAllUserCanNotLoginOnTenantDomainWithoutGrant(): void
     {
         $tenantId = $this->seedTenantByCode('login-platform');
-        [$username, $password] = $this->createUser(null);
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, readAllScopes: true);
 
         $user = $this->userRepositoryWithStack($this->requestStack('login-platform.contena.cn', $tenantId))
             ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
 
-        static::assertNotNull($user);
+        static::assertNull($user);
     }
 
     public function testPlatformUserCanLoginWithoutTenantDomain(): void
     {
-        [$username, $password] = $this->createUser(null);
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE);
 
         $user = $this->userRepositoryWithStack(new RequestStack())
             ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
@@ -77,8 +82,9 @@ class TenantDomainLoginTest extends TestCase
     {
         $tenantA = $this->seedTenantByCode('login-shared-a');
         $tenantB = $this->seedTenantByCode('login-shared-b');
-        [$username, $password, $userId] = $this->createUser($tenantA);
-        $this->addUserMembership($userId, $tenantB);
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, $tenantA);
+        $this->addUserDataScopeGrant($userId, $tenantB);
 
         static::assertNotNull(
             $this->userRepositoryWithStack($this->requestStack('login-shared-a.contena.cn', $tenantA))
@@ -92,6 +98,38 @@ class TenantDomainLoginTest extends TestCase
             $this->userRepositoryWithStack(new RequestStack())
                 ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity()),
         );
+    }
+
+    public function testUserWithoutGrantCanNotLogin(): void
+    {
+        [$username, $password] = $this->createUser();
+
+        $user = $this->userRepositoryWithStack(new RequestStack())
+            ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
+
+        static::assertNull($user);
+    }
+
+    public function testInactiveScopeGrantCanNotLogin(): void
+    {
+        [$username, $password, $userId] = $this->createUser();
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE, active: false);
+
+        $user = $this->userRepositoryWithStack(new RequestStack())
+            ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
+
+        static::assertNull($user);
+    }
+
+    public function testInactiveIdentityCanNotLoginWithActiveGrant(): void
+    {
+        [$username, $password, $userId] = $this->createUser(accountActive: false);
+        $this->addUserDataScopeGrant($userId, Defaults::PLATFORM_DATA_SCOPE);
+
+        $user = $this->userRepositoryWithStack(new RequestStack())
+            ->getUserEntityByUserCredentials($username, $password, 'password', $this->clientEntity());
+
+        static::assertNull($user);
     }
 
     private function seedTenantByCode(string $code): string
@@ -109,7 +147,7 @@ class TenantDomainLoginTest extends TestCase
      * @return array{string, string, string}
      */
     private function createUser(
-        ?string $tenantId,
+        bool $accountActive = true,
         ?string $username = null,
         ?string $password = null,
         ?string $email = null,
@@ -125,26 +163,26 @@ class TenantDomainLoginTest extends TestCase
             'password' => $password,
             'email' => $email,
             'name' => 'Tenant Login Test',
-            'active' => true,
-            'admin' => false,
+            'accountActive' => $accountActive,
             'localeId' => $this->systemLocaleId(),
         ]], Context::createDefaultContext());
-
-        if ($tenantId !== null) {
-            $this->addUserMembership($userId, $tenantId);
-        }
 
         return [$username, $password, $userId];
     }
 
-    private function addUserMembership(string $userId, string $tenantId): void
-    {
-        static::getContainer()->get('user_tenant.repository')->create([[
+    private function addUserDataScopeGrant(
+        string $userId,
+        string $dataScopeId,
+        bool $active = true,
+        bool $readAllScopes = false,
+    ): void {
+        static::getContainer()->get('user_data_scope.repository')->create([[
             'userId' => $userId,
-            'tenantId' => $tenantId,
-            'active' => true,
+            'dataScopeId' => $dataScopeId,
+            'active' => $active,
             'admin' => false,
-        ]], Context::createTenantContext($tenantId));
+            'readAllScopes' => $readAllScopes,
+        ]], Context::createDefaultContext());
     }
 
     private function systemLocaleId(): string

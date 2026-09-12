@@ -54,7 +54,7 @@ class GatewayOperationExecutor
             $this->eventDispatcher->dispatch($event);
         } catch (\Throwable $exception) {
             // Observer failure must not discard a provider response or mask its exception.
-            $this->logger->error('Payment gateway observer failed.', ['event' => $event::class, 'exception' => $exception, 'tenantId' => $event->getContext()->getTenantId()]);
+            $this->logger->error('Payment gateway observer failed.', ['event' => $event::class, 'exception' => $exception, 'dataScopeId' => $event->getContext()->getDataScopeId()]);
         }
     }
 }

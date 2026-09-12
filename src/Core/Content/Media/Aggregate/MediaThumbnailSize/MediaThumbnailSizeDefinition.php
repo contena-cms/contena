@@ -7,6 +7,7 @@ use Contena\Core\Content\Media\Aggregate\MediaFolderConfigurationMediaThumbnailS
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -14,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TenantField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MediaThumbnailSizeDefinition extends EntityDefinition
@@ -45,7 +45,7 @@ class MediaThumbnailSizeDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id')->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of media thumbnail size defined.'),
-            new TenantField()->setDescription('Unique identity of the owning tenant, or null for a platform-owned media thumbnail size.'),
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope for media thumbnail size.'),
             new IntField('width', 'width', 1)->addFlags(new ApiAware(), new Required())->setDescription('Width of the thumbnail.'),
             new IntField('height', 'height', 1)->addFlags(new ApiAware(), new Required())->setDescription('Height of the thumbnail.'),
             new ManyToManyAssociationField('mediaFolderConfigurations', MediaFolderConfigurationDefinition::class, MediaFolderConfigurationMediaThumbnailSizeDefinition::class, 'media_thumbnail_size_id', 'media_folder_configuration_id'),

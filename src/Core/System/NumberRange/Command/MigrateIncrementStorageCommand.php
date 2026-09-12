@@ -3,7 +3,9 @@
 namespace Contena\Core\System\NumberRange\Command;
 
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
+use Contena\Core\Framework\Context;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementStorageRegistry;
+use Contena\Core\System\Tenant\DataScopeContextProvider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,8 +21,10 @@ class MigrateIncrementStorageCommand extends Command
     /**
      * @internal
      */
-    public function __construct(private readonly IncrementStorageRegistry $registry)
-    {
+    public function __construct(
+        private readonly IncrementStorageRegistry $registry,
+        private readonly DataScopeContextProvider $dataScopeContextProvider,
+    ) {
         parent::__construct();
     }
 
@@ -45,10 +49,9 @@ class MigrateIncrementStorageCommand extends Command
         $from = $input->getArgument('from');
         $to = $input->getArgument('to');
 
-        $this->registry->migrate(
-            $from,
-            $to
-        );
+        foreach ($this->dataScopeContextProvider->getContexts(Context::createCLIContext()) as $context) {
+            $this->registry->migrate($from, $to, $context);
+        }
 
         $io->success(\sprintf('Successfully migrated number range increments from "%s" to "%s"', $from, $to));
 

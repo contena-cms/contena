@@ -139,7 +139,7 @@ class MediaAdminSearchIndexerTest extends TestCase
         $document = $documents[$id];
 
         static::assertSame($id, $document['id']);
-        static::assertSame('tenant-a', $document['tenantId']);
+        static::assertSame('tenant-a', $document['dataScopeId']);
         static::assertSame('media-file jpg media/path/file.jpg media title media folder tag 809c1844f4734243b6aa04aba860cd45', $document['text']);
         static::assertSame('media-file', $document['fileName']);
         static::assertSame('jpg', $document['fileExtension']);
@@ -162,7 +162,7 @@ class MediaAdminSearchIndexerTest extends TestCase
             [
                 [
                     'id' => '809c1844f4734243b6aa04aba860cd45',
-                    'tenantId' => 'tenant-a',
+                    'dataScopeId' => 'tenant-a',
                     'file_name' => 'media-file',
                     'file_extension' => 'jpg',
                     'file_size' => 12345,

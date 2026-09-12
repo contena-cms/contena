@@ -2,11 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\PDO\Exception as DbalPdoException;
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -14,6 +9,11 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityWriterGateway;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\PDO\Exception as DbalPdoException;
+use Doctrine\DBAL\Exception\TableNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;

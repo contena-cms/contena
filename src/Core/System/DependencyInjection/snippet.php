@@ -2,9 +2,11 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
+use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
 use Contena\Core\Framework\Adapter\Translation\Translator;
+use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetDefinition;
 use Contena\Core\System\Snippet\Channel\SnippetRoute;
@@ -15,9 +17,9 @@ use Contena\Core\System\Snippet\Command\ListTranslationsCommand;
 use Contena\Core\System\Snippet\Command\UpdateTranslationCommand;
 use Contena\Core\System\Snippet\Command\Util\CountryAgnosticFileLinter;
 use Contena\Core\System\Snippet\Command\ValidateSnippetsCommand;
-use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\FrontendSnippetLifecycleHandler;
 use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
+use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTask;
 use Contena\Core\System\Snippet\ScheduledTask\UpdateTranslationsTaskHandler;
 use Contena\Core\System\Snippet\Service\AbstractTranslationConfigLoader;
@@ -33,8 +35,6 @@ use Contena\Core\System\Snippet\SnippetFileHandler;
 use Contena\Core\System\Snippet\SnippetFixer;
 use Contena\Core\System\Snippet\SnippetValidator;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
-use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\System\Snippet\Subscriber\CustomFieldSubscriber;
 use Contena\Core\System\Snippet\Subscriber\LanguageDeletionSubscriber;
 use Doctrine\DBAL\Connection;

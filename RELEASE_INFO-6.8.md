@@ -2,6 +2,16 @@
 
 ## Core
 
+### Data-scope-aware entity indexing
+
+Full DAL indexing now carries an explicit `Context` through total calculation, ID iteration, batch messages, and handlers. Cross-scope management requests are expanded into one exact-scope indexing run for the platform and each tenant, so derived writes never execute with cross-scope access. Custom entity indexers must adopt the Context-aware method signatures described in `UPGRADE-6.8.md`.
+
+### Canonical data scopes replace nullable tenant ownership
+
+Scope-owned business data now carries a required, immutable `dataScopeId`. The canonical platform scope and every tenant scope use the same storage, filtering, foreign-key, cache, background-work, and OpenSearch rules, so platform-only installations no longer depend on nullable-tenant fallback behavior. Default and tenant Contexts read one exact scope; Global and CLI Contexts may read all scopes but still write only to the platform scope.
+
+Administration users are shared identities with explicit grants in `user_data_scope`. Active state, administrator state, user code, and cross-scope read authority belong to a grant; no access is inferred from the absence of tenant memberships. Tenant scope IDs equal their tenant IDs, while ownership code should use `Context::getDataScopeId()` and reserve `getTenantId()` for tenant-domain behavior.
+
 ### Initial installations create a default member
 
 Web installer setups and `system:install --basic-setup` now create a member for the default Web channel with the initial administrator's name, email address, and password. Running `user:create` independently continues to create only an administration user.

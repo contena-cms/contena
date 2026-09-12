@@ -90,7 +90,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
             null,
             null,
             true,
-            $tenantContext->getTenantId(),
+            $tenantContext->getDataScopeId(),
         );
 
         $this->messageBusMock->expects($this->once())
@@ -116,7 +116,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
             null,
             null,
             true,
-            $tenantContext->getTenantId(),
+            $tenantContext->getDataScopeId(),
         );
 
         $this->messageBusMock->expects($this->exactly(2))
@@ -158,7 +158,7 @@ class SitemapGenerateTaskHandlerTest extends TestCase
             null,
             null,
             false,
-            $tenantContext->getTenantId(),
+            $tenantContext->getDataScopeId(),
         );
 
         $this->messageBusMock->expects($this->once())
@@ -195,13 +195,13 @@ class SitemapGenerateTaskHandlerTest extends TestCase
         $this->messageBusMock->expects($this->exactly(2))
             ->method('dispatch')
             ->willReturnCallback(static function (SitemapMessage $message) use (&$messageTenantIds): Envelope {
-                $messageTenantIds[] = $message->getTenantId();
+                $messageTenantIds[] = $message->getDataScopeId();
 
                 return new Envelope($message);
             });
 
         $this->sitemapHandler->run();
 
-        static::assertSame([null, $tenantBContext->getTenantId()], $messageTenantIds);
+        static::assertSame([Defaults::PLATFORM_DATA_SCOPE, $tenantBContext->getDataScopeId()], $messageTenantIds);
     }
 }

@@ -6,7 +6,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
- * Identifies the aggregate and concrete tenant scope resolved from a provider notification.
+ * Identifies the aggregate and exact data scope resolved from a provider notification.
  * Custom notification handlers return this value to the core notification processor.
  *
  * @codeCoverageIgnore

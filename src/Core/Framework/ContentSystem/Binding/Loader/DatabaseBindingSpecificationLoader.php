@@ -10,9 +10,10 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * A persisted row is runtime data that can drift after install (a dependency deactivated, a column
- * hand-edited): a row whose schema fails to decode or validate aborts the whole load, like
- * {@see YamlBindingSpecificationLoader}, which fails hard on an authored file.
+ * Persisted active-app rows follow the same fail-fast contract as definitions loaded by
+ * {@see YamlBindingSpecificationLoader}.
+ * Every row must have a name, and its schema must decode to a map, deserialize, and validate
+ * successfully; otherwise, the whole load aborts.
  *
  * @internal
  *
@@ -78,14 +79,14 @@ class DatabaseBindingSpecificationLoader extends AbstractContentSystemBindingSpe
 
         $dtos = [];
         foreach ($resolved as $resolvedDto) {
-            // Binding ids are unique only within their source. Keep the source-qualified id here so two apps
-            // declaring the same bare id are both present in the collection and therefore both validated.
+            // Binding names are unique only within an app, so the source-qualified id keeps equal bare names
+            // from different apps distinct in the collection and ensures that all rows are validated.
             $dtos[$resolvedDto->source . ':' . $resolvedDto->id] = $resolvedDto->dto;
         }
 
         $violations = $this->validator->validate(new BindingSpecificationDtoCollection($dtos));
         if ($violations->count() > 0) {
-            throw ContentSystemException::bindingSpecificationsInvalid($violations);
+            throw ContentSystemException::bindingSpecificationLoadValidationFailed($violations);
         }
 
         return array_map(

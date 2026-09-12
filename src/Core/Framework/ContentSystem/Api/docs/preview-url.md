@@ -19,8 +19,8 @@ The `ContentPreviewRequest` envelope:
 | `layout` | yes | Raw element-tree array; decoded through the same path as a stored layout (`Layout/Codec/StoredElementCodec::decode()`). |
 | `entityType` | yes | One of the `content-system-entity-types.json` values; selected by exact match, never as a URL segment. |
 | `entityId` | yes | Id of the entity to hydrate against; the entity must exist. |
-| `salesChannelId` | yes | Sales channel whose context is synthesized for rendering. |
-| `languageId`, `currencyId`, `domainId`, `customerId` | no | Override the synthesized channel context. |
+| `channelId` | yes | Channel whose context is synthesized for rendering. |
+| `languageId`, `domainId`, `memberId` | no | Override the synthesized channel context. |
 | `queryParameters` | no | Forwarded as request query; `elementId` selects a single element for partial preview. Member names must not be strings PHP casts to integers (`0`, `12`, `-3`) — the stored envelope is a string-keyed map. |
 
 ## Response
@@ -39,10 +39,11 @@ Envelope and intrinsic-layout failures are rejected with `400 Bad Request` (`Con
 |---|---|---|
 | Missing/invalid envelope field | 400 | `#[MapRequestPayload]` validation (forced to 400) |
 | A `queryParameters` member name PHP casts to an integer | 400 | `ContentPreviewRequest::rejectNonStringQueryParameterNames()`, through the same `#[MapRequestPayload]` validation |
-| An `includes` or `excludes` parameter in any of the attribute, query or request bag | 400 | `fieldSelectionNotSupported` — field selection is refused here as it is on the store-api content routes |
+| An `includes` or `excludes` parameter in any of the attribute, query or request bag | 400 | `fieldSelectionNotSupported` — field selection is refused here as it is on the channel-api content routes |
 | `entityType` matches no specification source | 400 | `unknownEntityType` |
 | Layout element missing a non-empty string `id`/`component`; a duplicate element `id`, nesting past the maximum depth, or a non-array nested child; or an element config that is a client defect | 400 | `invalidLayoutStructure` |
 | Layout has any intrinsic-scope error `LayoutDiagnostics` reports | 400 | `elementTypesInvalid` (via `DraftLayoutChecker`, which surfaces every intrinsic-scope error from `LayoutDiagnostics`; the message carries the violation, not its code) |
+| The server-side definitions for the element-type or style-option registry fail validation or otherwise cannot be loaded | 500 | `ELEMENT_TYPE_LOAD_FAILED` or `STYLE_OPTION_LOAD_FAILED` propagates from the registry read |
 | Data-loader source not registered | 500 | `ContentSystemException::dataLoaderNotRegistered` — thrown while resolving the loader for a source (`DataLoaderProvider`), outside any loader's `load()` |
 | Non-degradable hydration fault (`\TypeError`, a database failure, any exception outside `ContenaHttpException`) | 500 | propagates through `load()` by design |
 | Invalid channel id | 404 / 412 | `ChannelException` (not a `ContentSystemException`) |

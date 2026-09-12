@@ -4,8 +4,8 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
-use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
+use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;

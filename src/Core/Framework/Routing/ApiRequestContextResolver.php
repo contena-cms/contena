@@ -9,6 +9,8 @@ use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataScope;
+use Contena\Core\Framework\DataAbstractionLayer\DataScopeReadMode;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Tenant\Resolver\TenantResolution;
@@ -41,17 +43,19 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
         $params = $this->getContextParameters($request);
         $languageIdChain = $this->getLanguageIdChain($params);
 
+        $source = $this->resolveContextSource($request);
+        [$dataScope, $dataScopeReadMode] = $this->resolveDataScope($source, $request);
         $context = new Context(
-            source: $this->resolveContextSource($request),
+            source: $source,
             languageIdChain: $languageIdChain,
             versionId: $params['versionId'] ?? Defaults::LIVE_VERSION,
             considerInheritance: $params['considerInheritance'],
+            dataScope: $dataScope,
+            dataScopeReadMode: $dataScopeReadMode,
         );
 
-        $this->resolveTenantScope($context, $request);
-
         if ($context->getSource() instanceof AdminApiSource) {
-            $this->refreshAdminApiSource($context->getSource(), $context->getTenantId());
+            $this->refreshAdminApiSource($context->getSource(), $context->getDataScopeId());
         }
 
         if ($request->headers->has(PlatformRequest::HEADER_SKIP_TRIGGER_FLOW)) {
@@ -142,7 +146,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
     }
 
     /**
-     * @param array{languageId: non-falsy-string, systemFallbackLanguageId: non-falsy-string} $params
+     * @param array{languageId: non-falsy-string, systemFallbackLanguageId: non-falsy-string, versionId: ?string, considerInheritance: bool} $params
      *
      * @return non-empty-list<string>
      */
@@ -208,18 +212,18 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
         return new AdminApiSource($userId, $integrationId);
     }
 
-    private function refreshAdminApiSource(AdminApiSource $source, ?string $tenantId): void
+    private function refreshAdminApiSource(AdminApiSource $source, string $dataScopeId): void
     {
         if ($source->getUserId() !== null) {
             $userId = $source->getUserId();
-            $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($userId, $tenantId)));
-            $source->setIsAdmin($this->isAdmin($userId, $tenantId));
+            $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($userId, $dataScopeId)));
+            $source->setIsAdmin($this->isAdmin($userId, $dataScopeId));
         }
 
         if ($source->getIntegrationId() !== null) {
             $integrationId = $source->getIntegrationId();
             $source->setIsAdmin($this->isAdminIntegration($integrationId));
-            $source->setPermissions($this->fetchIntegrationPermissions($integrationId, $tenantId));
+            $source->setPermissions($this->fetchIntegrationPermissions($integrationId, $dataScopeId));
         }
     }
 
@@ -236,21 +240,14 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
         ]));
     }
 
-    private function isAdmin(string $userId, ?string $tenantId = null): bool
+    private function isAdmin(string $userId, string $dataScopeId): bool
     {
-        if ($tenantId !== null && $this->hasUserMembership($userId)) {
-            return (bool) $this->connection->fetchOne(
-                'SELECT admin FROM `user_tenant` WHERE user_id = :userId AND tenant_id = :tenantId AND active = 1',
-                [
-                    'userId' => Uuid::fromHexToBytes($userId),
-                    'tenantId' => Uuid::fromHexToBytes($tenantId),
-                ],
-            );
-        }
-
         return (bool) $this->connection->fetchOne(
-            'SELECT admin FROM `user` WHERE id = :id',
-            ['id' => Uuid::fromHexToBytes($userId)]
+            'SELECT admin FROM `user_data_scope` WHERE user_id = :userId AND data_scope_id = :dataScopeId AND active = 1',
+            [
+                'userId' => Uuid::fromHexToBytes($userId),
+                'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
+            ],
         );
     }
 
@@ -265,7 +262,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
     /**
      * @return string[]
      */
-    private function fetchPermissions(string $userId, ?string $tenantId = null): array
+    private function fetchPermissions(string $userId, string $dataScopeId): array
     {
         $permissions = $this->connection->createQueryBuilder()
             ->select('role.privileges')
@@ -274,12 +271,8 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
             ->where('mapping.user_id = :userId')
             ->setParameter('userId', Uuid::fromHexToBytes($userId))
         ;
-        if ($tenantId !== null) {
-            $permissions->andWhere('mapping.tenant_id = :tenantId')
-                ->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $permissions->andWhere('mapping.tenant_id IS NULL');
-        }
+        $permissions->andWhere('mapping.data_scope_id = :dataScopeId')
+            ->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
         $permissions = $permissions->executeQuery()->fetchFirstColumn();
 
         $list = [];
@@ -294,7 +287,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
     /**
      * @return string[]
      */
-    private function fetchIntegrationPermissions(string $integrationId, ?string $tenantId = null): array
+    private function fetchIntegrationPermissions(string $integrationId, string $dataScopeId): array
     {
         $permissions = $this->connection->createQueryBuilder()
             ->select('role.privileges')
@@ -302,12 +295,8 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
             ->innerJoin('mapping', 'acl_role', 'role', 'mapping.acl_role_id = role.id')
             ->where('mapping.integration_id = :integrationId')
             ->setParameter('integrationId', Uuid::fromHexToBytes($integrationId));
-        if ($tenantId !== null) {
-            $permissions->andWhere('mapping.tenant_id = :tenantId')
-                ->setParameter('tenantId', Uuid::fromHexToBytes($tenantId));
-        } else {
-            $permissions->andWhere('mapping.tenant_id IS NULL');
-        }
+        $permissions->andWhere('mapping.data_scope_id = :dataScopeId')
+            ->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId));
         $permissions = $permissions->executeQuery()->fetchFirstColumn();
 
         $list = [];
@@ -320,92 +309,115 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
     }
 
     /**
-     * Binds the context to a tenant: authenticated tenant users
-     * are bound to their tenant, platform users get global cross-tenant access
-     * and may switch into a tenant via the ct-tenant-id header, and channel
-     * sources inherit the tenant of their channel.
+     * Resolves the exact write scope and independently grants cross-scope reads.
+     * No actor gains authority from a missing grant or from the platform scope
+     * type itself.
+     *
+     * @return array{DataScope, DataScopeReadMode}
      */
-    private function resolveTenantScope(Context $context, Request $request): void
+    private function resolveDataScope(ContextSource $source, Request $request): array
     {
-        $source = $context->getSource();
-
         if ($source instanceof AdminApiSource) {
-            $this->resolveAdminTenantScope($context, $request, $source);
-
-            return;
+            return $this->resolveAdminDataScope($source, $request);
         }
 
         if ($source instanceof ChannelApiSource) {
-            $tenantId = $this->connection->fetchOne(
-                'SELECT LOWER(HEX(`tenant_id`)) FROM `channel` WHERE `id` = :id',
-                ['id' => Uuid::fromHexToBytes($source->getChannelId())],
-            );
+            $dataScopeId = $this->fetchOwnerDataScopeId('channel', $source->getChannelId());
+            $this->assertRequestedTenantMatchesScope($request, $dataScopeId);
 
-            if ($tenantId) {
-                $context->setTenantId($tenantId);
-            }
+            return [$this->dataScopeFromId($dataScopeId), DataScopeReadMode::Exact];
         }
+
+        return [DataScope::platform(), DataScopeReadMode::Exact];
     }
 
-    private function resolveAdminTenantScope(Context $context, Request $request, AdminApiSource $source): void
+    /**
+     * @return array{DataScope, DataScopeReadMode}
+     */
+    private function resolveAdminDataScope(AdminApiSource $source, Request $request): array
     {
-        $userId = $source->getUserId();
-        $integrationId = $source->getIntegrationId();
-        if ($userId === null && $integrationId === null) {
-            return;
+        if ($source->getUserId() !== null) {
+            return $this->resolveUserDataScope($request, $source->getUserId());
         }
 
-        if ($userId !== null) {
-            $this->resolveUserTenantScope($context, $request, $userId);
-
-            return;
+        if ($source->getIntegrationId() === null) {
+            return [DataScope::platform(), DataScopeReadMode::Exact];
         }
 
-        $ownerTenantId = $this->fetchOwnerTenantId('integration', (string) $integrationId);
+        $dataScopeId = $this->fetchOwnerDataScopeId('integration', $source->getIntegrationId());
+        $this->assertRequestedTenantMatchesScope($request, $dataScopeId);
 
-        $requestedTenantId = $request->headers->get(PlatformRequest::HEADER_TENANT_ID);
-
-        $resolution = $request->attributes->get(PlatformRequest::ATTRIBUTE_RESOLVED_TENANT_ID);
-        $resolvedTenantId = $resolution instanceof TenantResolution ? $resolution->tenantId : null;
-
-        if ($ownerTenantId !== null) {
-            // Tenant actors are bound to their tenant and can not switch.
-            if ($resolvedTenantId !== null) {
-                // On a tenant-bound domain the domain itself is the tenant's
-                // address; mismatches are rejected.
-                if ($resolvedTenantId !== $ownerTenantId) {
-                    throw RoutingException::tenantDomainMismatch();
-                }
-            } elseif ($requestedTenantId !== $ownerTenantId) {
-                throw RoutingException::tenantSwitchForbidden();
-            }
-
-            $context->setTenantId($ownerTenantId);
-
-            return;
-        }
-
-        // Platform users read across all tenants by default, may switch into
-        // one via the header, and default to the tenant of the current domain.
-        if ($requestedTenantId) {
-            $context->setTenantId($requestedTenantId);
-
-            return;
-        }
-
-        if ($resolvedTenantId) {
-            $context->setTenantId($resolvedTenantId);
-
-            return;
-        }
-
-        $context->setGlobalTenantAccess(true);
+        return [$this->dataScopeFromId($dataScopeId), DataScopeReadMode::Exact];
     }
 
-    private function resolveUserTenantScope(Context $context, Request $request, string $userId): void
+    /**
+     * @return array{DataScope, DataScopeReadMode}
+     */
+    private function resolveUserDataScope(Request $request, string $userId): array
     {
-        $memberships = $this->fetchUserMemberships($userId);
+        $grants = $this->fetchUserDataScopeGrants($userId);
+        [$targetTenantId, $resolvedFromDomain] = $this->resolveTargetTenant($request);
+
+        if ($targetTenantId !== null) {
+            if (!($grants[$targetTenantId]['active'] ?? false)) {
+                throw $resolvedFromDomain
+                    ? RoutingException::tenantDomainMismatch()
+                    : RoutingException::tenantSwitchForbidden();
+            }
+
+            return [DataScope::tenant($targetTenantId), DataScopeReadMode::Exact];
+        }
+
+        $platformGrant = $grants[Defaults::PLATFORM_DATA_SCOPE] ?? null;
+        if ($platformGrant === null || !$platformGrant['active']) {
+            throw RoutingException::dataScopeAccessForbidden();
+        }
+
+        return [
+            DataScope::platform(),
+            $platformGrant['readAllScopes'] ? DataScopeReadMode::All : DataScopeReadMode::Exact,
+        ];
+    }
+
+    /**
+     * @return array<string, array{active: bool, readAllScopes: bool}>
+     */
+    private function fetchUserDataScopeGrants(string $userId): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            <<<'SQL'
+SELECT LOWER(HEX(scope_grant.data_scope_id)) AS data_scope_id,
+       scope_grant.active,
+       scope_grant.read_all_scopes
+FROM user_data_scope scope_grant
+INNER JOIN `user` user_identity ON user_identity.id = scope_grant.user_id
+WHERE scope_grant.user_id = :userId AND user_identity.active = 1
+SQL,
+            ['userId' => Uuid::fromHexToBytes($userId)],
+        );
+
+        $grants = [];
+        foreach ($rows as $row) {
+            $grants[(string) $row['data_scope_id']] = [
+                'active' => (bool) $row['active'],
+                'readAllScopes' => (bool) $row['read_all_scopes'],
+            ];
+        }
+
+        return $grants;
+    }
+
+    /**
+     * @return array{?string, bool}
+     */
+    private function resolveTargetTenant(Request $request): array
+    {
         $requestedTenantId = $request->headers->get(PlatformRequest::HEADER_TENANT_ID);
+        $requestedTenantId = \is_string($requestedTenantId) && $requestedTenantId !== '' ? $requestedTenantId : null;
+        if ($requestedTenantId !== null && !Uuid::isValid($requestedTenantId)) {
+            throw RoutingException::invalidRequestParameter(PlatformRequest::HEADER_TENANT_ID);
+        }
+
         $resolution = $request->attributes->get(PlatformRequest::ATTRIBUTE_RESOLVED_TENANT_ID);
         $resolvedTenantId = $resolution instanceof TenantResolution ? $resolution->tenantId : null;
 
@@ -413,67 +425,41 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
             throw RoutingException::tenantDomainMismatch();
         }
 
-        if ($memberships !== []) {
-            $targetTenantId = $resolvedTenantId ?? $requestedTenantId;
-            if ($targetTenantId === null || !($memberships[$targetTenantId] ?? false)) {
-                throw $resolvedTenantId !== null
-                    ? RoutingException::tenantDomainMismatch()
-                    : RoutingException::tenantSwitchForbidden();
-            }
+        return [$resolvedTenantId ?? $requestedTenantId, $resolvedTenantId !== null];
+    }
 
-            $context->setTenantId($targetTenantId);
-
+    private function assertRequestedTenantMatchesScope(Request $request, string $dataScopeId): void
+    {
+        [$targetTenantId, $resolvedFromDomain] = $this->resolveTargetTenant($request);
+        if ($targetTenantId === null) {
             return;
         }
 
-        if ($requestedTenantId !== null) {
-            $context->setTenantId($requestedTenantId);
-
-            return;
+        if ($targetTenantId !== $dataScopeId) {
+            throw $resolvedFromDomain
+                ? RoutingException::tenantDomainMismatch()
+                : RoutingException::tenantSwitchForbidden();
         }
-
-        if ($resolvedTenantId !== null) {
-            $context->setTenantId($resolvedTenantId);
-
-            return;
-        }
-
-        $context->setGlobalTenantAccess(true);
     }
 
-    /**
-     * @return array<string, bool>
-     */
-    private function fetchUserMemberships(string $userId): array
+    private function fetchOwnerDataScopeId(string $table, string $ownerId): string
     {
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(tenant_id)) AS tenant_id, active FROM user_tenant WHERE user_id = :userId',
-            ['userId' => Uuid::fromHexToBytes($userId)],
-        );
-
-        $memberships = [];
-        foreach ($rows as $row) {
-            $memberships[(string) $row['tenant_id']] = (bool) $row['active'];
-        }
-
-        return $memberships;
-    }
-
-    private function hasUserMembership(string $userId): bool
-    {
-        return (bool) $this->connection->fetchOne(
-            'SELECT 1 FROM user_tenant WHERE user_id = :userId LIMIT 1',
-            ['userId' => Uuid::fromHexToBytes($userId)],
-        );
-    }
-
-    private function fetchOwnerTenantId(string $table, string $ownerId): ?string
-    {
-        $tenantId = $this->connection->fetchOne(
-            \sprintf('SELECT LOWER(HEX(`tenant_id`)) FROM `%s` WHERE `id` = :id', $table),
+        $dataScopeId = $this->connection->fetchOne(
+            \sprintf('SELECT LOWER(HEX(`data_scope_id`)) FROM `%s` WHERE `id` = :id', $table),
             ['id' => Uuid::fromHexToBytes($ownerId)],
         );
 
-        return \is_string($tenantId) && $tenantId !== '' ? $tenantId : null;
+        if (!\is_string($dataScopeId) || !Uuid::isValid($dataScopeId)) {
+            throw RoutingException::dataScopeAccessForbidden();
+        }
+
+        return $dataScopeId;
+    }
+
+    private function dataScopeFromId(string $dataScopeId): DataScope
+    {
+        return $dataScopeId === Defaults::PLATFORM_DATA_SCOPE
+            ? DataScope::platform()
+            : DataScope::tenant($dataScopeId);
     }
 }

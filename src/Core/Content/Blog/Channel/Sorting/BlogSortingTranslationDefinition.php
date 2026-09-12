@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Blog\Channel\Sorting;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\DataScopeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -40,6 +41,7 @@ class BlogSortingTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            new DataScopeField()->setDescription('Non-null identity of the owning data scope.'),
             new StringField('label', 'label')->addFlags(new ApiAware(), new Required()),
         ]);
     }

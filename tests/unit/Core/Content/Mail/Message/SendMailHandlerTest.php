@@ -99,7 +99,7 @@ class SendMailHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error')
-            ->with('The mail data file does not exist. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'tenantId' => 'tenant-id', 'exception' => '']);
+            ->with('The mail data file does not exist. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'dataScopeId' => 'tenant-id', 'exception' => '']);
 
         $this->createHandler(logger: $logger)->__invoke($message);
     }
@@ -117,7 +117,7 @@ class SendMailHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error')
-            ->with('The mail data file does not contain a valid email object. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'tenantId' => 'tenant-id']);
+            ->with('The mail data file does not contain a valid email object. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'dataScopeId' => 'tenant-id']);
 
         $transport = $this->createMock(TransportInterface::class);
         $transport->expects($this->never())->method('send');
@@ -138,7 +138,7 @@ class SendMailHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error')
-            ->with('The mail data file does not contain a valid email object. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'tenantId' => 'tenant-id']);
+            ->with('The mail data file does not contain a valid email object. Mail could not be sent.', ['mailDataPath' => 'mail-data/test', 'dataScopeId' => 'tenant-id']);
 
         $this->createHandler(logger: $logger)->__invoke($message);
     }
@@ -167,7 +167,7 @@ class SendMailHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error')
-            ->with('Could not delete mail data file after sending mail.', ['mailDataPath' => 'mail-data/test', 'tenantId' => 'tenant-id', 'exception' => '']);
+            ->with('Could not delete mail data file after sending mail.', ['mailDataPath' => 'mail-data/test', 'dataScopeId' => 'tenant-id', 'exception' => '']);
 
         $this->createHandler(transport: $transport, logger: $logger)->__invoke($message);
     }
