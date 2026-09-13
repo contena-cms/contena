@@ -148,6 +148,7 @@
 <script setup lang="ts">
 import type { ContentElementNode } from 'src/core/service/content-element.types';
 import { getContentElementLabel } from '../../util/content-element-label.util';
+import { editingLanguageChain } from '../../util/element-settings.util';
 import type { ExperienceStudioElementTypeStore } from '../../store/experience-studio-element-type.store';
 import './ct-experience-studio-sidebar-tree-node.scss';
 type MoveElementPayload = {
@@ -223,7 +224,7 @@ const elementTypeStore = computed(() => {
     return Contena.Store.get('experienceStudioElementType' as never) as ExperienceStudioElementTypeStore;
 });
 const label = computed(() => {
-    return getContentElementLabel(contentElement.value, [Contena.Defaults.systemLanguageId]);
+    return getContentElementLabel(contentElement.value, editingLanguageChain());
 });
 const typeIcon = computed(() => {
     const configuredIcon = elementTypeStore.value.getByName(contentElement.value.component)?.icon;

@@ -626,7 +626,7 @@ describe('module/ct-experience-studio/util/element-settings.util', () => {
         ).toBe(true);
     });
 
-    it('resolves the entry of the chain head as an own translation', () => {
+    it('resolves the first entry in the language chain', () => {
         expect(
             resolveTranslatableEntry(
                 {
@@ -635,15 +635,11 @@ describe('module/ct-experience-studio/util/element-settings.util', () => {
                 },
                 LANGUAGE_CHAIN,
             ),
-        ).toEqual({ state: 'own', value: 'Bonjour' });
+        ).toBe('Bonjour');
     });
 
-    it('resolves an entry the chain head lacks as inherited from the language carrying it', () => {
-        expect(resolveTranslatableEntry({ [ANCHOR_LANGUAGE_ID]: 'Hello' }, LANGUAGE_CHAIN)).toEqual({
-            state: 'inherited',
-            value: 'Hello',
-            fromLanguageId: ANCHOR_LANGUAGE_ID,
-        });
+    it('resolves an entry the chain head lacks from the first language carrying it', () => {
+        expect(resolveTranslatableEntry({ [ANCHOR_LANGUAGE_ID]: 'Hello' }, LANGUAGE_CHAIN)).toBe('Hello');
     });
 
     it('inherits from the earliest chain language carrying an entry', () => {
@@ -655,17 +651,15 @@ describe('module/ct-experience-studio/util/element-settings.util', () => {
                 },
                 LANGUAGE_CHAIN,
             ),
-        ).toEqual({ state: 'inherited', value: 'Hallo', fromLanguageId: GERMAN_LANGUAGE_ID });
+        ).toBe('Hallo');
     });
 
     it('resolves a map carrying no chain language as missing', () => {
-        expect(resolveTranslatableEntry({ [ITALIAN_LANGUAGE_ID]: 'Ciao' }, LANGUAGE_CHAIN)).toEqual({
-            state: 'missing',
-        });
+        expect(resolveTranslatableEntry({ [ITALIAN_LANGUAGE_ID]: 'Ciao' }, LANGUAGE_CHAIN)).toBeUndefined();
     });
 
     it('resolves an undefined value as missing', () => {
-        expect(resolveTranslatableEntry(undefined, LANGUAGE_CHAIN)).toEqual({ state: 'missing' });
+        expect(resolveTranslatableEntry(undefined, LANGUAGE_CHAIN)).toBeUndefined();
     });
 
     it.each([

@@ -27,9 +27,7 @@ export function getContentElementLabel(element: ContentElementNode, chain: reado
 }
 
 function resolveLabelCandidate(value: unknown, chain: readonly string[]): string | null {
-    const entry = resolveTranslatableEntry(value, chain);
-
-    return entry.state === 'missing' ? null : entry.value;
+    return resolveTranslatableEntry(value, chain) ?? null;
 }
 
 /**

@@ -93,13 +93,9 @@ export function getElementPropertyStorageKey(
  * @private
  * @ct-package discovery
  */
-export type TranslatableEntry =
-    | { state: 'own'; value: string }
-    | { state: 'inherited'; value: string; fromLanguageId: string }
-    | { state: 'missing' };
-
 /**
- * Resolves a translatable property value along a language chain in serving order.
+ * Resolves a translatable property value along a language chain in serving order,
+ * returning the first chain language carrying an entry, or `undefined` when none does.
  *
  * A value that is neither `undefined` nor a non-empty map of string entries
  * throws: neither the server nor the write gate produces such a value on a
@@ -108,9 +104,9 @@ export type TranslatableEntry =
  * @private
  * @ct-package discovery
  */
-export function resolveTranslatableEntry(value: unknown, chain: readonly string[]): TranslatableEntry {
+export function resolveTranslatableEntry(value: unknown, chain: readonly string[]): string | undefined {
     if (value === undefined) {
-        return { state: 'missing' };
+        return undefined;
     }
 
     if (!isStringLanguageMap(value)) {
@@ -119,24 +115,15 @@ export function resolveTranslatableEntry(value: unknown, chain: readonly string[
         );
     }
 
-    for (const [
-        index,
-        languageId,
-    ] of chain.entries()) {
+    for (const languageId of chain) {
         const entry = value[languageId];
 
-        if (entry === undefined) {
-            continue;
+        if (entry !== undefined) {
+            return entry;
         }
-
-        if (index === 0) {
-            return { state: 'own', value: entry };
-        }
-
-        return { state: 'inherited', value: entry, fromLanguageId: languageId };
     }
 
-    return { state: 'missing' };
+    return undefined;
 }
 
 /**
@@ -289,8 +276,25 @@ export function getInitialPropertyValue(
     return null;
 }
 
-function anchorLanguageId(): string {
+/**
+ * @private
+ * @ct-package discovery
+ */
+export function anchorLanguageId(): string {
     return Contena.Defaults.systemLanguageId;
+}
+
+/**
+ * The languages a translatable property resolves through, in serving order.
+ *
+ * The chain is the anchor language alone today; multi-language editing widens it here, and the write path
+ * targets the chain head, so reads and writes widen together.
+ *
+ * @private
+ * @ct-package discovery
+ */
+export function editingLanguageChain(): readonly [string, ...string[]] {
+    return [anchorLanguageId()];
 }
 
 /**

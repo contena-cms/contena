@@ -91,6 +91,7 @@ import {
     getInitialPropertyValue,
     getPropertyControlType,
     isPropertyVisible,
+    editingLanguageChain,
     resolveTranslatableEntry,
 } from '../../util/element-settings.util';
 import { getEditableStyleFields } from '../../util/style-settings.util';
@@ -164,9 +165,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 function projectTranslatableValue(value: unknown): string | undefined {
-    const entry = resolveTranslatableEntry(value, [Contena.Defaults.systemLanguageId]);
-
-    return entry.state === 'missing' ? undefined : entry.value;
+    return resolveTranslatableEntry(value, editingLanguageChain());
 }
 
 const $t = t;
