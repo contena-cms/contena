@@ -45,7 +45,7 @@ class SessionContextTokenAccessor
 
     /**
      * @param array<string, mixed> $sessionOptions
-     * @param bool $enabled kill switch for the borrower role only, see `shopware.routing.session_context_token.enabled`
+     * @param bool $enabled kill switch for the borrower role only, see `contena.routing.session_context_token.enabled`
      */
     public function __construct(
         array $sessionOptions,
@@ -78,7 +78,7 @@ class SessionContextTokenAccessor
     public function ineligibilityReason(Request $request): ?string
     {
         if (!$this->enabled) {
-            return 'session context resolution is disabled (see shopware.routing.session_context_token.enabled)';
+            return 'session context resolution is disabled (see contena.routing.session_context_token.enabled)';
         }
 
         if ($request->cookies->get($this->sessionName) === null) {
@@ -98,7 +98,7 @@ class SessionContextTokenAccessor
             return;
         }
 
-        /** @phpstan-ignore shopware.unsafeRequestHasSession (the owner deliberately starts the frontend session here) */
+        /** @phpstan-ignore contena.unsafeRequestHasSession (the owner deliberately starts the frontend session here) */
         if (!$mainRequest->hasSession()) {
             return;
         }
@@ -112,7 +112,7 @@ class SessionContextTokenAccessor
 
         $channelId = $this->channelIdOf($mainRequest);
 
-        // without a sales channel there is no token to keep, one is minted per request
+        // Without a channel there is no token to keep, one is minted per request.
         $token = $channelId === null ? null : $this->readToken($session, $channelId);
 
         if ($token === null) {
@@ -193,7 +193,7 @@ class SessionContextTokenAccessor
             return null;
         }
 
-        /** @phpstan-ignore shopware.unsafeRequestHasSession (only reached with a session cookie, so an existing session is resumed and none created) */
+        /** @phpstan-ignore contena.unsafeRequestHasSession (only reached with a session cookie, so an existing session is resumed and none created) */
         if (!$request->hasSession()) {
             return null;
         }

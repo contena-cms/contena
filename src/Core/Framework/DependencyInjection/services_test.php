@@ -20,6 +20,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Write\Validation\TestDefini
 use Contena\Core\Framework\Test\Filesystem\Adapter\MemoryAdapterFactory;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\TestMessageHandler;
 use Contena\Core\Framework\Test\TestCacheClearer;
+use Contena\Core\Framework\Test\TestCaseHelper\ChannelApiSessionListener;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Test\TestSessionStorageFactory;
 use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
@@ -159,6 +160,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(AclTestController::class)->public();
+    $services->set(ChannelApiSessionListener::class)->tag('kernel.event_subscriber');
     $services->set(TestSessionStorageFactory::class)->decorate('session.storage.factory.mock_file');
     $services->alias('test.string_template_renderer', 'Contena\\Core\\Framework\\Adapter\\Twig\\StringTemplateRenderer');
 };

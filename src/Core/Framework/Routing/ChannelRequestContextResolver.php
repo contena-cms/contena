@@ -53,7 +53,7 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
         }
 
         // $skipIfUninitialized = true is intentional: frontend sessions are started before context resolution,
-        // while Store API requests only have a lazy session factory and must remain stateless.
+        // while Channel API requests only have a lazy session factory and must remain stateless.
         $session = $request->hasSession(true) ? $request->getSession() : null;
         $session = $session?->isStarted() ? $session : null;
 
@@ -90,8 +90,8 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
 
     /**
      * Declaring the session as context source is a contract: an unusable session fails the request
-     * instead of falling back to a fresh token, which a session based client would only see as an
-     * empty cart. Frontend requests are exempt, Core itself set their token header.
+     * instead of falling back to a fresh token, which a session-based client would only see as a
+     * fresh anonymous context. Frontend requests are exempt because Core itself sets their token header.
      */
     private function resolveContextTokenFromSession(Request $request): void
     {

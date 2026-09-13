@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Integration\Core\System\Member\Subscriber;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -77,6 +78,7 @@ class MemberTokenSubscriberTest extends TestCase
         $memberId = $this->createMember();
 
         $request = Request::create('/');
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST, true);
         $request->setSession(new Session(new MockArraySessionStorage()));
 
         $member = new MemberEntity();

@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @internal
  */
 #[CoversClass(HttpCacheKeyGenerator::class)]
-#[CoversClass(HttpCacheKeyEvent::class)]
 #[Group('cache')]
 class HttpCacheKeyGeneratorTest extends TestCase
 {
@@ -133,6 +133,28 @@ class HttpCacheKeyGeneratorTest extends TestCase
             $this->cacheKeyGenerator->generate($cookieOnlyRequest)->key,
             $this->cacheKeyGenerator->generate($headerRequest, $response)->key
         );
+    }
+
+    #[DataProvider('contextSourceProvider')]
+    public function testSessionContextSourceBypassesCacheReadsAndWrites(?string $source, bool $cacheable): void
+    {
+        $request = Request::create('https://domain.com/channel-api/blog');
+        if ($source !== null) {
+            $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, $source);
+        }
+
+        static::assertSame($cacheable, $this->cacheKeyGenerator->generate($request)->isCacheable);
+        static::assertSame($cacheable, $this->cacheKeyGenerator->generate($request, new Response())->isCacheable);
+    }
+
+    /**
+     * @return iterable<string, array{?string, bool}>
+     */
+    public static function contextSourceProvider(): iterable
+    {
+        yield 'session source must reach the resolver even without a cookie' => [SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION, false];
+        yield 'ordinary requests remain cacheable' => [null, true];
+        yield 'unrecognized sources keep ordinary behavior' => ['token', true];
     }
 
     public function testCacheKeyStaysTheSameIfEventPartsAreSortedDifferently(): void

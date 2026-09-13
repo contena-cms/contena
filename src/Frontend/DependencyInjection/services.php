@@ -317,10 +317,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FrontendSubscriber::class)
         ->args([
-            service('request_stack'),
             service('router'),
             service(MaintenanceModeResolver::class),
-            service(SystemConfigService::class),
             service('event_dispatcher'),
         ])
         ->tag('kernel.event_subscriber');

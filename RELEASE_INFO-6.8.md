@@ -38,6 +38,14 @@ Core routing no longer includes rule-engine integration. Existing installations 
 
 ## API
 
+### Channel API resolves context from the frontend session on request
+
+A Channel API request that sends the frontend session cookie together with `ct-access-key` and the new `ct-context-source: session` header is resolved with the context token held in that session. Same-origin clients rendered by the frontend can therefore share the member login without handling a token; login, logout and password-change token rotations are written back into the session.
+
+The header is an explicit contract. The request fails with `FRAMEWORK__ROUTING_SESSION_CONTEXT_NOT_RESOLVABLE` (HTTP 400) when the session cannot be used, including a missing session cookie, a cross-site fetch, a simultaneous `ct-context-token` header, or a session without a token for the requested channel. The `contena.routing.session_context_token.enabled` container parameter can disable session resolution; clients that still request it then receive the same error.
+
+Session-resolved responses are always private and `no-store`, omit the `ct-context-token` response header, and bypass the built-in HTTP cache before validation. `ct-context-source` is included in the `Vary` set for external reverse proxies.
+
 ### Content system layout property mutations
 
 Administration clients can update or remove declared primitive properties on one content-layout element through the new draft and persisted `update-element-properties` mutation actions. Both actions preserve every unmentioned property, validate values against the registered element type, and return the standard mutation response; persisted updates retain the existing optimistic-concurrency contract.

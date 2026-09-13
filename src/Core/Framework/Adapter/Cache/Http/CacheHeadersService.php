@@ -33,7 +33,10 @@ class CacheHeadersService
     {
         $response->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, $context->getLanguageId());
 
-        $vary = array_merge($response->getVary(), HttpCacheVariantHeaders::HEADERS);
+        $vary = array_merge($response->getVary(), HttpCacheVariantHeaders::HEADERS, [
+            // A request resolving its context from the session must never match a cached anonymous entry.
+            PlatformRequest::HEADER_CONTEXT_SOURCE,
+        ]);
         $vary = array_unique(array_map(static fn (string $value): string => \trim($value), $vary));
 
         $response->setVary($vary);

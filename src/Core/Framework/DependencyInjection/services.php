@@ -159,6 +159,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Populated by RouteScopeCompilerPass with all route prefixes from the registers RouteScopes
     $parameters->set('contena.routing.registered_api_prefixes', []);
+
+    // Kill switch for the Channel API side of session context token handling; the frontend is unaffected.
     $parameters->set('contena.routing.session_context_token.enabled', true);
 
     // Migration config

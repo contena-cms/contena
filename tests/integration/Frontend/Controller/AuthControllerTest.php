@@ -22,6 +22,7 @@ use Contena\Core\System\Member\Channel\LoginRoute;
 use Contena\Core\System\Member\Channel\ResetPasswordRoute;
 use Contena\Core\System\Member\MemberCollection;
 use Contena\Core\System\Member\MemberEntity;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Controller\AuthController;
 use Contena\Frontend\Framework\Routing\ClearSiteDataListener;
@@ -30,6 +31,7 @@ use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -96,6 +98,46 @@ class AuthControllerTest extends TestCase
         }
     }
 
+    public function testPerChannelTokensWhenMemberBindingEnabled(): void
+    {
+        $systemConfig = static::getContainer()->get(SystemConfigService::class);
+        $systemConfig->set('core.systemWideLoginRegistration.isMemberBoundToChannel', true);
+
+        $browser = $this->login();
+        $session = $this->getSession();
+        $loginChannelId = $this->getFrontendChannelId();
+
+        $loginChannelTokenKey = PlatformRequest::HEADER_CONTEXT_TOKEN . '-' . $loginChannelId;
+        $loginChannelToken = $session->get($loginChannelTokenKey);
+
+        static::assertNotNull($loginChannelToken, 'Login channel should have a channel-specific token');
+        static::assertSame($loginChannelToken, $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN), 'Default token should be synced with channel token');
+
+        $browser->request('GET', '/');
+
+        static::assertSame($loginChannelToken, $session->get($loginChannelTokenKey), 'Channel token should be preserved across requests');
+        static::assertSame($loginChannelToken, $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN), 'Default token should remain synced');
+    }
+
+    public function testGlobalTokenWhenMemberBindingDisabled(): void
+    {
+        $systemConfig = static::getContainer()->get(SystemConfigService::class);
+        $systemConfig->set('core.systemWideLoginRegistration.isMemberBoundToChannel', false);
+
+        $browser = $this->login();
+        $session = $this->getSession();
+
+        $contextToken = $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN);
+        $channelId = $this->getFrontendChannelId();
+
+        $browser->request('GET', '/');
+
+        static::assertSame($contextToken, $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN), 'Global token should be preserved');
+
+        $channelSpecificKey = PlatformRequest::HEADER_CONTEXT_TOKEN . '-' . $channelId;
+        static::assertFalse($session->has($channelSpecificKey), 'Channel-specific tokens should not exist when binding is disabled');
+    }
+
     public function testAccountLoginInactiveMember(): void
     {
         $this->createMember(active: false);
@@ -152,6 +194,17 @@ class AuthControllerTest extends TestCase
         static::assertSame(200, $browser->getResponse()->getStatusCode(), (string) $browser->getResponse()->getContent());
 
         return $browser;
+    }
+
+    private function getFrontendChannelId(): string
+    {
+        $channelId = static::getContainer()->get(Connection::class)->fetchOne(
+            'SELECT LOWER(HEX(channel_id)) FROM channel_domain WHERE url = :url',
+            ['url' => EnvironmentHelper::getVariable('APP_URL')]
+        );
+        static::assertIsString($channelId);
+
+        return $channelId;
     }
 
     private function createMember(bool $active = true): MemberEntity

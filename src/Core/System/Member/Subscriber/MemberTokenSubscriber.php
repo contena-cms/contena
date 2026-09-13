@@ -5,6 +5,7 @@ namespace Contena\Core\System\Member\Subscriber;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
@@ -22,7 +23,8 @@ class MemberTokenSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         private readonly ChannelContextPersister $contextPersister,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly SessionContextTokenAccessor $sessionContextToken
     ) {
     }
 
@@ -99,17 +101,10 @@ class MemberTokenSubscriber implements EventSubscriberInterface
             'token' => $newToken,
         ]);
 
-        // Only migrate an initialized frontend session. Channel API requests use their context token directly.
-        if (!$mainRequest->hasSession(true)) {
+        // A request without a session of its own gets every token revoked.
+        if (!$this->sessionContextToken->rotate($mainRequest, $context->getChannelId(), $newToken)) {
             return null;
         }
-
-        $session = $mainRequest->getSession();
-        $session->migrate();
-        $session->set('sessionId', $session->getId());
-
-        $session->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $newToken);
-        $mainRequest->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $newToken);
 
         return $newToken;
     }

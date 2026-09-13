@@ -5,6 +5,7 @@ namespace Contena\Core\System\DependencyInjection;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
+use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
@@ -197,6 +198,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(ChannelContextPersister::class),
             service(RequestStack::class),
+            service(SessionContextTokenAccessor::class),
         ])
         ->tag('kernel.event_subscriber');
 

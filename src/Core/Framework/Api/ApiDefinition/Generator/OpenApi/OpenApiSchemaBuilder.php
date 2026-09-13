@@ -44,7 +44,14 @@ class OpenApiSchemaBuilder
         $openApi->info = $this->createInfo($api, $this->version);
 
         $security = $openApi->security;
-        $openApi->security = [array_merge(\is_array($security) ? $security : [], $this->createSecurity($api))];
+        $requirements = [array_merge(\is_array($security) ? $security : [], $this->createSecurity($api))];
+
+        if (self::API[$api]['apiKey']) {
+            // The frontend session may stand in for the context token on any Channel API operation.
+            $requirements[] = ['ApiKey' => [], 'ContextSource' => []];
+        }
+
+        $openApi->security = $requirements;
 
         if (!$openApi->components instanceof Components) {
             $openApi->components = new Components([]);
@@ -399,6 +406,13 @@ EOF
                     'in' => 'header',
                     'name' => PlatformRequest::HEADER_CONTEXT_TOKEN,
                     'description' => 'Identifies an anonymous or identified user session',
+                ]),
+                'Session Context Source' => new SecurityScheme([
+                    'securityScheme' => 'ContextSource',
+                    'type' => 'apiKey',
+                    'in' => 'header',
+                    'name' => PlatformRequest::HEADER_CONTEXT_SOURCE,
+                    'description' => 'Set to `session` to resolve the member session from the frontend session cookie of a same-origin request instead of a context token. Mutually exclusive with `ct-context-token`.',
                 ]),
             ];
         }
