@@ -112,7 +112,7 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "pattern": "^[0-9a-f]{32}$'"
+                            "pattern": "^[0-9a-f]{32}$"
                         }
                     },
                     {
@@ -136,6 +136,25 @@
                                 "1"
                             ],
                             "default": "1"
+                        }
+                    },
+                    {
+                        "description": "Instructs Contena to skip loading the breadcrumb of the SEO category",
+                        "in": "query",
+                        "name": "skipBreadcrumb",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Builds the breadcrumb along the given category instead of the SEO category of the blog. Ignored when the category is not part of the blog's category tree or is not reachable in this channel.",
+                        "in": "query",
+                        "name": "referrerCategoryId",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
                         }
                     },
                     {
@@ -201,7 +220,7 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "pattern": "^[0-9a-f]{32}$'"
+                            "pattern": "^[0-9a-f]{32}$"
                         }
                     },
                     {
@@ -211,6 +230,25 @@
                         "required": false,
                         "schema": {
                             "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Instructs Contena to skip loading the breadcrumb of the SEO category",
+                        "in": "query",
+                        "name": "skipBreadcrumb",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Builds the breadcrumb along the given category instead of the SEO category of the blog. Ignored when the category is not part of the blog's category tree or is not reachable in this channel.",
+                        "in": "query",
+                        "name": "referrerCategoryId",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
                         }
                     },
                     {

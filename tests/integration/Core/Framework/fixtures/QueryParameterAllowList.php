@@ -54,7 +54,7 @@ class QueryParameterAllowList
                 '/channel-api/search' => ['@blog-listing', '@blog-listing-flags'],
                 '/channel-api/search-suggest' => ['@blog-listing', '@blog-listing-flags'],
                 '/channel-api/category' => ['@criteria'],
-                '/channel-api/category/{navigationId}' => ['@criteria'],
+                '/channel-api/category/{navigationId}' => ['@criteria', 'skipBreadcrumb'],
                 '/channel-api/region/{countryId}' => ['@criteria'],
                 '/channel-api/country' => ['@criteria'],
                 '/channel-api/language' => ['@criteria'],
@@ -62,7 +62,7 @@ class QueryParameterAllowList
                 '/channel-api/media' => ['ids[]'],
                 '/channel-api/navigation/{activeId}/{rootId}' => ['@criteria', 'depth', 'buildTree'],
                 '/channel-api/blog' => ['@criteria'],
-                '/channel-api/blog/{blogId}' => ['@criteria'],
+                '/channel-api/blog/{blogId}' => ['@criteria', 'skipBreadcrumb', 'referrerCategoryId'],
                 '/channel-api/seo-url' => ['@criteria'],
             ],
         ];

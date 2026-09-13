@@ -58,6 +58,14 @@ The header is an explicit contract. The request fails with `FRAMEWORK__ROUTING_S
 
 Session-resolved responses are always private and `no-store`, omit the `ct-context-token` response header, and bypass the built-in HTTP cache before validation. `ct-context-source` is included in the `Vary` set for external reverse proxies.
 
+### Blog and category Channel API routes return the breadcrumb
+
+`GET|POST /channel-api/blog/{blogId}` and `GET|POST /channel-api/category/{navigationId}` now return a `seoBreadcrumb` field, so headless clients no longer need a second request to `GET /channel-api/breadcrumb/{id}`. It contains the category ID, type, resolved path and SEO URLs of every category on the path. Pass `skipBreadcrumb=1` to skip the two additional breadcrumb queries.
+
+The blog detail route also accepts `referrerCategoryId` in the query string or request body and builds both `seoCategory` and `seoBreadcrumb` along that category when it belongs to the blog's category tree and is reachable in the current channel. Internal request attributes take precedence over client parameters. Without a referrer, visible active categories are preferred by depth and ties are resolved by `autoIncrement`; categories hidden from navigation remain valid breadcrumb sources.
+
+`slotConfig` is no longer exposed inside a breadcrumb entry's `translated` object because it is not Channel-API-aware on the category definition. Category-scoped custom fields marked as not Channel-API-aware are also removed. The standalone breadcrumb route remains available.
+
 ### Content system layout property mutations
 
 Administration clients can update or remove declared primitive properties on one content-layout element through the new draft and persisted `update-element-properties` mutation actions. Both actions preserve every unmentioned property, validate values against the registered element type, and return the standard mutation response; persisted updates retain the existing optimistic-concurrency contract.

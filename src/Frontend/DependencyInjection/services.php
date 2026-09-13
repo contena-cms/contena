@@ -516,6 +516,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(BlogDetailRoute::class),
             service(CategoryBreadcrumbBuilder::class),
             service(SeoUrlPlaceholderHandlerInterface::class),
+            service(SystemConfigService::class),
         ]);
     $services->set(BlogController::class)
         ->public()

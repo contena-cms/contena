@@ -57,7 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CachedDefaultCategoryLevelLoader::class)->decorate(DefaultCategoryLevelLoader::class)->args([service('cache.object'), service('event_dispatcher'), service(CachedDefaultCategoryLevelLoader::class . '.inner')])->tag('kernel.event_subscriber');
     $services->set(CategoryTreePathResolver::class);
     $services->set(TreeBuildingNavigationRoute::class)->decorate(NavigationRoute::class, null, -2000)->public()->args([service(TreeBuildingNavigationRoute::class . '.inner')]);
-    $services->set(CategoryRoute::class)->public()->args([service('channel.category.repository'), service(CacheTagCollector::class)]);
+    $services->set(CategoryRoute::class)->public()->args([service('channel.category.repository'), service(CacheTagCollector::class), service(CategoryBreadcrumbBuilder::class)]);
     $services->set(CategoryListRoute::class)->public()->args([service('channel.category.repository')]);
     $services->set(CategoryIndexer::class)->args([service(Connection::class), service(IteratorFactory::class), service('category.repository'), service(ChildCountUpdater::class), service(TreeUpdater::class), service(CategoryBreadcrumbUpdater::class), service('event_dispatcher'), service('messenger.default_bus')])->tag('contena.entity_indexer');
     $services->set(CategoryBreadcrumbUpdater::class)->args([service(Connection::class)]);

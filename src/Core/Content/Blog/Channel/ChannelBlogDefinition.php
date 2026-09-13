@@ -7,6 +7,8 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Since;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ObjectField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -40,6 +42,9 @@ class ChannelBlogDefinition extends BlogDefinition implements ChannelDefinitionI
     {
         $fields = parent::defineFields();
         $fields->add(new OneToOneAssociationField('seoCategory', 'seoCategory', 'id', CategoryDefinition::class)->addFlags(new ApiAware(), new Runtime())->setDescription('Main category used for SEO URL generation in the current channel.'));
+        $fields->add(
+            new ObjectField('seoBreadcrumb', 'seoBreadcrumb')->addFlags(new Runtime(['categoryIds', 'mainCategories']), new ApiAware(), new Since('6.7.15.0'))->setDescription('Breadcrumb of the SEO category, including the SEO URLs of every category in the path.')
+        );
 
         return $fields;
     }

@@ -126,6 +126,15 @@
                         }
                     },
                     {
+                        "name": "skipBreadcrumb",
+                        "in": "query",
+                        "description": "Instructs Contena to skip loading the breadcrumb of the category",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/ctLanguageId"
                     }
                 ],
@@ -180,6 +189,15 @@
                         "schema": {
                             "type": "string",
                             "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "name": "skipBreadcrumb",
+                        "in": "query",
+                        "description": "Instructs Contena to skip loading the breadcrumb of the category",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
                         }
                     },
                     {

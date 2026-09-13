@@ -34,6 +34,20 @@ use Doctrine\DBAL\Connection;
 class CategoryBreadcrumbBuilder
 {
     /**
+     * Translated category fields that are safe to expose in a breadcrumb, see filterTranslated().
+     */
+    private const EXPOSED_TRANSLATED_FIELDS = [
+        'linkType',
+        'internalLink',
+        'externalLink',
+        'linkNewTab',
+        'description',
+        'metaTitle',
+        'metaDescription',
+        'keywords',
+    ];
+
+    /**
      * @internal
      *
      * @param EntityRepository<CategoryCollection> $categoryRepository
@@ -88,11 +102,17 @@ class CategoryBreadcrumbBuilder
         $criteria = new Criteria();
         $criteria->setTitle('breadcrumb-builder');
         $criteria->setLimit(1);
-        $criteria->addFilter($this->getCategoryVisibleForCustomerFilter($context));
+        $criteria->addFilter($this->getCategoryAvailableForMemberFilter($context));
 
         $criteria->setIds($categoryIds);
 
+        // categories hidden in the navigation must still yield a breadcrumb, but visible ones are preferred
+        $criteria->addSorting(new FieldSorting('visible', FieldSorting::DESCENDING));
         $criteria->addSorting(new FieldSorting('level', FieldSorting::DESCENDING));
+        // tiebreaker for equally deep categories in different branches. Without it the winner is whatever the database
+        // returns first, so the same blog can produce different breadcrumbs on two requests and whichever path won
+        // gets frozen into the http cache.
+        $criteria->addSorting(new FieldSorting('autoIncrement'));
 
         return $this->categoryRepository->search($criteria, $context->getContext())->getEntities()->first();
     }
@@ -105,7 +125,7 @@ class CategoryBreadcrumbBuilder
         if (\in_array($referrerCategoryId, $blog->getCategoryTree() ?? [], true)) {
             $referrerCategory = $this->loadCategory($referrerCategoryId, $channelContext->getContext());
 
-            if ($referrerCategory instanceof CategoryEntity && $this->isCategoryVisibleForCustomer($referrerCategory, $channelContext)) {
+            if ($referrerCategory instanceof CategoryEntity && $this->isCategoryAvailableForMember($referrerCategory, $channelContext)) {
                 return $referrerCategory;
             }
         }
@@ -174,7 +194,7 @@ class CategoryBreadcrumbBuilder
             ->addFilter(new AndFilter([
                 new EqualsFilter('channelId', $context->getChannelId()),
                 new EqualsAnyFilter('category.id', $categoryIds),
-                $this->getCategoryVisibleForCustomerFilter($context, 'category.'),
+                $this->getCategoryAvailableForMemberFilter($context, 'category.'),
             ]));
 
         $blog = $context->getContext()->enableInheritance(fn (): ?BlogEntity => $this->blogRepository->search($criteria, $context)->getEntities()->first());
@@ -197,7 +217,7 @@ class CategoryBreadcrumbBuilder
         if (
             !$category instanceof CategoryEntity
             || !\in_array($category->getId(), $blog->getCategoryIds() ?? [], true)
-            || !$this->isCategoryVisibleForCustomer($category, $context)
+            || !$this->isCategoryAvailableForMember($category, $context)
         ) {
             return null;
         }
@@ -251,17 +271,17 @@ class CategoryBreadcrumbBuilder
      */
     private function convertCategoriesToBreadcrumbUrls(CategoryCollection $categories, array $seoUrls): BreadcrumbCollection
     {
+        $blockedCustomFields = $this->getBlockedCustomFields($categories);
+
         $seoBreadcrumbCollection = [];
         foreach ($categories as $category) {
             $categoryId = $category->getId();
             $categorySeoUrls = $this->filterCategorySeoUrls($seoUrls, $categoryId);
-            $translated = $category->getTranslated();
-            unset($translated['breadcrumb'], $translated['name']);
             $categoryBreadcrumb = new Breadcrumb(
                 $category->getTranslation('name'),
                 $categoryId,
                 $category->getType(),
-                $translated,
+                $this->filterTranslated($category, $blockedCustomFields),
             );
 
             if ($categorySeoUrls === []) {
@@ -288,6 +308,72 @@ class CategoryBreadcrumbBuilder
     }
 
     /**
+     * The breadcrumb is a plain struct, so `StructEncoder::isProtected()` bails out for its alias and the `ApiAware`
+     * filter a `category` payload gets is never applied. Therefore only fields that are explicitly safe to expose are
+     * copied over, which leaves out `slotConfig` because it is not `ApiAware` on the category definition.
+     *
+     * `customFields` is `ApiAware`, so it stays part of the payload, but the encoder would only strip its `global`
+     * scoped blocked entries for this alias. The ones scoped to `category` are therefore removed here.
+     *
+     * @param list<string> $blockedCustomFields
+     *
+     * @return array<string, mixed>
+     */
+    private function filterTranslated(CategoryEntity $category, array $blockedCustomFields): array
+    {
+        $translated = [];
+
+        foreach (self::EXPOSED_TRANSLATED_FIELDS as $field) {
+            $translated[$field] = $category->getTranslation($field);
+        }
+
+        $customFields = $category->getTranslation('customFields');
+
+        if (\is_array($customFields) && $blockedCustomFields !== []) {
+            $customFields = array_diff_key($customFields, array_flip($blockedCustomFields));
+        }
+
+        $translated['customFields'] = $customFields;
+
+        return $translated;
+    }
+
+    /**
+     * Mirrors what `StructEncoder` does for an entity payload, for the `category` and the unscoped sets. It has to be
+     * repeated here because the encoder keys its lookup by api alias and `breadcrumb` is not a registered entity.
+     *
+     * @return list<string>
+     */
+    private function getBlockedCustomFields(CategoryCollection $categories): array
+    {
+        $hasCustomFields = false;
+
+        foreach ($categories as $category) {
+            $customFields = $category->getTranslation('customFields');
+
+            if (\is_array($customFields) && $customFields !== []) {
+                $hasCustomFields = true;
+
+                break;
+            }
+        }
+
+        if (!$hasCustomFields) {
+            return [];
+        }
+
+        return $this->connection->fetchFirstColumn(
+            '# breadcrumb-builder::blocked-custom-fields
+            SELECT cf.name
+            FROM custom_field cf
+            LEFT JOIN custom_field_set_relation cfsr ON cfsr.set_id = cf.set_id
+            WHERE cf.channel_api_aware = 0
+              AND (cfsr.entity_name = :entityName OR cfsr.entity_name IS NULL)',
+            ['entityName' => CategoryDefinition::ENTITY_NAME]
+        );
+    }
+
+    /**
      * @param array<int, array<string, string|mixed>> $seoUrls
      *
      * @return array<int, array<string, string|mixed>>
@@ -299,11 +385,14 @@ class CategoryBreadcrumbBuilder
         });
     }
 
-    private function isCategoryVisibleForCustomer(CategoryEntity $category, ChannelContext $context): bool
+    /**
+     * Categories hidden in the navigation are still available as breadcrumb source, only inactive ones are not
+     */
+    private function isCategoryAvailableForMember(CategoryEntity $category, ChannelContext $context): bool
     {
         $channel = $context->getChannel();
 
-        if (!$category->getActive() || !$category->getVisible()) {
+        if (!$category->getActive()) {
             return false;
         }
 
@@ -327,13 +416,12 @@ class CategoryBreadcrumbBuilder
         ])));
     }
 
-    private function getCategoryVisibleForCustomerFilter(ChannelContext $context, string $fieldPath = ''): AndFilter
+    private function getCategoryAvailableForMemberFilter(ChannelContext $context, string $fieldPath = ''): AndFilter
     {
         $channel = $context->getChannel();
 
         return new AndFilter([
             new EqualsFilter($fieldPath . 'active', true),
-            new EqualsFilter($fieldPath . 'visible', true),
             $this->getChannelFilter($channel, $fieldPath),
         ]);
     }

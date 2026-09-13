@@ -3,12 +3,14 @@
 namespace Contena\Frontend\Page\Blog;
 
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
+use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,6 +30,7 @@ class BlogPageLoader
         private readonly AbstractBlogDetailRoute $blogDetailRoute,
         private readonly CategoryBreadcrumbBuilder $breadcrumbBuilder,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
+        private readonly SystemConfigService $systemConfigService,
     ) {
     }
 
@@ -47,6 +50,12 @@ class BlogPageLoader
 
         $this->eventDispatcher->dispatch(new BlogPageCriteriaEvent($blogId, $criteria, $context));
 
+        if (!$this->systemConfigService->getBool('core.listing.buildBreadcrumbByReferrerCategory', $context->getChannelId())) {
+            // The route honours the parameter whenever a client sends it. A frontend link must not bring referrer
+            // breadcrumbs back into a channel where the administrator disabled them.
+            $request->attributes->set(BlogDetailRoute::REFERRER_CATEGORY_ID, null);
+        }
+
         $blog = $this->blogDetailRoute->load($blogId, $request, $context, $criteria)->getBlog();
         $page = BlogPage::createFrom($this->genericLoader->load($request, $context));
         $page->setBlog($blog);
@@ -54,7 +63,12 @@ class BlogPageLoader
 
         if ($category = $blog->getSeoCategory()) {
             $request->request->set('navigationId', $category->getId());
-            $page->setBreadcrumb($this->breadcrumbBuilder->getCategoryBreadcrumbUrls($category, $context->getContext(), $context->getChannel()));
+            // The route already resolved the breadcrumb and registered cache tags for the complete category path. A
+            // decorated route that does not populate it is still served by the builder.
+            $page->setBreadcrumb(
+                $blog->getSeoBreadcrumb()
+                    ?? $this->breadcrumbBuilder->getCategoryBreadcrumbUrls($category, $context->getContext(), $context->getChannel())
+            );
         }
 
         $this->loadMetaData($page);

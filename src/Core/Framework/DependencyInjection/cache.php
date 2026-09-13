@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
+use Contena\Core\Content\Seo\Event\SeoUrlUpdateEvent;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -33,6 +34,7 @@ use Contena\Core\Framework\Adapter\Command\CacheClearHttpCommand;
 use Contena\Core\Framework\Adapter\Command\CacheInvalidateDelayedCommand;
 use Contena\Core\Framework\Adapter\Kernel\EsiDecoration;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
@@ -177,11 +179,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CacheInvalidationSubscriber::class)
         ->args([
             service(CacheInvalidator::class),
+            service(Connection::class),
         ])
         ->tag('kernel.event_listener', ['event' => PluginPostInstallEvent::class, 'method' => 'invalidateConfig', 'priority' => 2001])
         ->tag('kernel.event_listener', ['event' => PluginPostActivateEvent::class, 'method' => 'invalidateConfig', 'priority' => 2001])
         ->tag('kernel.event_listener', ['event' => PluginPostUpdateEvent::class, 'method' => 'invalidateConfig', 'priority' => 2001])
         ->tag('kernel.event_listener', ['event' => PluginPostDeactivateEvent::class, 'method' => 'invalidateConfig', 'priority' => 2001])
+        ->tag('kernel.event_listener', ['event' => EntityWrittenContainerEvent::class, 'method' => 'invalidateCategoryRouteBySeoUrlChanges', 'priority' => 2001])
+        ->tag('kernel.event_listener', ['event' => SeoUrlUpdateEvent::class, 'method' => 'invalidateCategoryRouteBySeoUrlUpdate', 'priority' => 2001])
         ->tag('kernel.event_listener', ['event' => SystemConfigMultipleChangedEvent::class, 'method' => 'invalidateConfigKey', 'priority' => 2000]);
 
     $services->set(CacheTagCollector::class)
