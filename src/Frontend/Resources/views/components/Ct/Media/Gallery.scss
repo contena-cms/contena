@@ -17,9 +17,14 @@
 .ct-media-gallery {
     --ct-media-thumbnail-border-color: var(--bs-gray-300);
     --ct-media-thumbnail-hover-border-color: var(--bs-primary);
-
     /* Fallback value for fixed height mode */
     --ct-media-gallery-max-height: 450px;
+    --ct-media-gallery-nav-button-display-xs: inline-flex;
+    --ct-media-gallery-nav-button-display-sm: inline-flex;
+    --ct-media-gallery-nav-button-display-md: none;
+    --ct-media-gallery-nav-button-display-lg: none;
+    --ct-media-gallery-nav-button-display-xl: none;
+    --ct-media-gallery-nav-button-display-xxl: none;
 
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -37,7 +42,6 @@
 
 .ct-media-gallery__previews-wrapper {
     min-height: 0;
-    position: relative;
 }
 
 .ct-media-gallery--display-mode-fixed-height {
@@ -56,8 +60,16 @@
     }
 }
 
-.ct-media-gallery--single-media {
+.ct-media-gallery--auto-columns {
     grid-template-columns: auto;
+    --ct-media-gallery-nav-button-display-md: inline-flex;
+    --ct-media-gallery-nav-button-display-lg: inline-flex;
+    --ct-media-gallery-nav-button-display-xl: inline-flex;
+    --ct-media-gallery-nav-button-display-xxl: inline-flex;
+}
+
+.ct-media-gallery__previews-wrapper {
+    position: relative;
 }
 
 .ct-media-gallery__previews {
@@ -126,7 +138,7 @@ button.ct-media-gallery__preview-item {
     position: absolute;
     bottom: 0.5rem;
     left: 0.5rem;
-    background-color: rgba(0, 0, 0, 50%);
+    background-color: rgba(0, 0, 0, 0.5);
     color: var(--bs-white);
     font-weight: 600;
     border-radius: 1rem;

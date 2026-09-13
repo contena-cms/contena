@@ -1,5 +1,14 @@
 {
   "ct-experience-studio": {
+    "elements": {
+      "ct-media-gallery": {
+        "panels": {
+          "general": "常规",
+          "thumbnails": "缩略图导航",
+          "behaviour": "行为"
+        }
+      }
+    },
     "createWizard": {
       "layoutTypes": {
         "header": "页眉",
