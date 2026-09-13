@@ -25,6 +25,8 @@ class Migration1784205000CreateDataScope extends MigrationStep
 CREATE TABLE IF NOT EXISTS `data_scope` (
     `id`   BINARY(16)                         NOT NULL,
     `type` ENUM('platform', 'tenant')         NOT NULL,
+    `created_at` DATETIME(3)                  NOT NULL,
+    `updated_at` DATETIME(3)                  NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `chk.data_scope.canonical_identity` CHECK (
         (`type` = 'platform' AND `id` = UNHEX('%1$s'))
@@ -34,10 +36,11 @@ CREATE TABLE IF NOT EXISTS `data_scope` (
 SQL, Defaults::PLATFORM_DATA_SCOPE));
 
         $connection->executeStatement(
-            'INSERT IGNORE INTO `data_scope` (`id`, `type`) VALUES (:id, :type)',
+            'INSERT IGNORE INTO `data_scope` (`id`, `type`, `created_at`) VALUES (:id, :type, :createdAt)',
             [
                 'id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                 'type' => 'platform',
+                'createdAt' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ],
         );
     }
