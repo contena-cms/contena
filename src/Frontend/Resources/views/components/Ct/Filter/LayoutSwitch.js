@@ -1,7 +1,7 @@
 export default class LayoutSwitch extends ContenaComponent {
 
     static options = {
-        paramName: 'layout',
+        paramName: 'listingLayout',
     };
 
     init() {

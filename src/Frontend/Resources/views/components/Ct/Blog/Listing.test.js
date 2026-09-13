@@ -10,7 +10,7 @@ function buildEl() {
     const el = document.createElement('div');
     el.setAttribute('data-element-id', 'listing-el');
     el.innerHTML = `
-        <div class="ct-blog-listing__grid"></div>
+        <div class="ct-blog-listing__grid"><div class="ct-grid-container-inner"></div></div>
         <div class="ct-blog-listing__pagination"></div>
         <span class="ct-filter-panel__counter">3 results</span>
     `;
@@ -39,7 +39,7 @@ describe('BlogListing', () => {
         vi.useFakeTimers();
         vi.spyOn(globalThis, 'fetch').mockResolvedValue({
             text: () => Promise.resolve(`
-                <div class="ct-blog-listing__grid"></div>
+                <div class="ct-blog-listing__grid"><div class="ct-grid-container-inner"></div></div>
                 <div class="ct-blog-listing__pagination"></div>
                 <span class="ct-filter-panel__counter">7 results</span>
             `),
@@ -168,9 +168,9 @@ describe('BlogListing', () => {
 
     describe('handleLayoutChange', () => {
         it('sets the layout param', () => {
-            listing.handleLayoutChange('layout', 'horizontal');
+            listing.handleLayoutChange('listingLayout', 'horizontal');
 
-            expect(listing.activeParams['layout']).toBe('horizontal');
+            expect(listing.activeParams.listingLayout).toBe('horizontal');
         });
     });
 
@@ -204,8 +204,10 @@ describe('BlogListing', () => {
 
             const grid = el.querySelector('.ct-blog-listing__grid');
             grid.innerHTML = `
-                <div class="ct-blog-card is--layout-default"></div>
-                <div class="ct-blog-card is--layout-default"></div>
+                <div class="ct-grid-container-inner">
+                    <div class="ct-blog-card is--layout-default"></div>
+                    <div class="ct-blog-card is--layout-default"></div>
+                </div>
             `;
 
             listing.changeLayout('horizontal');

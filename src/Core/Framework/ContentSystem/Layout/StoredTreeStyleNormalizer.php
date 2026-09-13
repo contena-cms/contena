@@ -10,7 +10,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Element\Style\ElementStyleNormal
  * one {@see ElementStyleNormalizer}. The walk rebuilds each node it visits, so a slot child keeps its own
  * normalised style rather than its parent's, and the forest it was handed stays untouched.
  *
- * Style is the whole of it. Seeding a type's primitive defaults and reconciling an element's attribution are
+ * Style is the whole of it. Seeding a type's stored defaults and reconciling an element's attribution are
  * deliberately outside this pass: both belong to the write alone, and a tree that is only being previewed or
  * diagnosed must not come back carrying values only a save may mint.
  *

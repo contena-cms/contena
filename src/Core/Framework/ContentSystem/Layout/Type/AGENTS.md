@@ -18,6 +18,11 @@ Type spec `properties` = schema for hydrated API output, NOT storage format
 - Why the type spec is the output schema, not the storage format — [docs/output-schema.md](docs/output-schema.md)
 - Authoring a custom element type — [docs/custom-types.md](docs/custom-types.md)
 
+## Source Code References
+
+- **Stored defaults**: `StoredDefaultProvider::forType(AbstractContentSystemElementTypeRegistry $registry, string $type): array<string, string|int|float|bool|array<string, mixed>>`. The single per-type rule: a primitive property contributes its non-null `storedDefault()`, while a property with nested members contributes an object containing recursively collected member defaults; a property with neither contributes nothing. The one definition of a type's stored defaults, consumed by `Mutation/AbstractLayoutMutation` (scaffold + replace seeding) and `Layout/LayoutDefaultSeeder` (write-boundary seeding). The caller guarantees the type is registered
+- **Property type accessors**: `Specification/PropertyType::properties()` exposes the nested property declarations consumed by `StoredDefaultProvider`; `storedDefault()` retains the storage-shape rule for scalar and translatable defaults
+
 ## Constraints
 
 - Type names must be unique across all sources (core, bundles, plugins, apps) — duplicates caught at compile time and persist time with source labels: `"core"`, `"bundle:BundleName"`, `"plugin:PluginName"`, `"app:AppName"`

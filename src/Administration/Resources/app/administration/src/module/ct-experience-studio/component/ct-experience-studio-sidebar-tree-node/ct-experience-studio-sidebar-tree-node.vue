@@ -21,6 +21,8 @@
                             class="ct-experience-studio-sidebar-tree-node__toggle"
                             type="button"
                             :aria-label="isExpanded ? $t('global.default.close') : $t('global.default.open')"
+                            @mousedown="preventDrag"
+                            @touchstart="preventDrag"
                             @click.stop="onToggleExpand"
                         >
                             <mt-icon
@@ -55,6 +57,8 @@
                                 type="button"
                                 :disabled="!allowEdit || undefined"
                                 :aria-label="$t('ct-experience-studio.detail.sidebarTree.duplicateElement')"
+                                @mousedown="preventDrag"
+                                @touchstart="preventDrag"
                                 @click.stop="onDuplicateElement"
                             >
                                 <mt-icon name="regular-duplicate" size="16px" />
@@ -69,6 +73,8 @@
                                 type="button"
                                 :disabled="!allowEdit || undefined"
                                 :aria-label="$t('ct-experience-studio.detail.sidebarTree.deleteElement')"
+                                @mousedown="preventDrag"
+                                @touchstart="preventDrag"
                                 @click.stop="onDeleteElement"
                             >
                                 <mt-icon name="regular-trash" size="16px" />
@@ -256,6 +262,9 @@ const allowEdit = computed(() => {
     return acl.can('experience_studio.editor');
 });
 
+const preventDrag = (event: Event) => {
+    event.stopPropagation();
+};
 const onSelectElement = () => {
     emit('select-element', contentElement.value.id);
 };
@@ -373,6 +382,7 @@ ctDefinePublic({
     hasSlots,
     isSelected,
     allowEdit,
+    preventDrag,
     onSelectElement,
     onToggleExpand,
     onAddElement,

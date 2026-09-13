@@ -23,9 +23,9 @@ use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteBoundary;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteContext;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
-use Contena\Core\Framework\ContentSystem\Layout\Type\PrimitiveDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -168,7 +168,7 @@ class StoredElementListFieldSerializerTest extends TestCase
         $typeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $typeRegistry->method('has')->willThrowException($failure);
         $boundary = new LayoutWriteBoundary(
-            new LayoutDefaultSeeder($typeRegistry, new PrimitiveDefaultProvider()),
+            new LayoutDefaultSeeder($typeRegistry, new StoredDefaultProvider()),
             new StoredTreeStyleNormalizer($this->styleNormalizer()),
             $this->passthroughReconciler(),
         );
@@ -706,7 +706,7 @@ class StoredElementListFieldSerializerTest extends TestCase
             static::createStub(DefinitionInstanceRegistry::class),
             $this->codec(),
             new ViolationConstraintMapper(),
-            $this->boundary(new LayoutDefaultSeeder($registry, new PrimitiveDefaultProvider())),
+            $this->boundary(new LayoutDefaultSeeder($registry, new StoredDefaultProvider())),
             $this->treeConstraints(),
         );
     }
@@ -762,7 +762,7 @@ class StoredElementListFieldSerializerTest extends TestCase
         });
 
         $boundary = new LayoutWriteBoundary(
-            new LayoutDefaultSeeder($typeRegistry, new PrimitiveDefaultProvider()),
+            new LayoutDefaultSeeder($typeRegistry, new StoredDefaultProvider()),
             new StoredTreeStyleNormalizer(new ElementStyleNormalizer($styleRegistry, new BoxSpacingNormalizer())),
             $reconciler,
         );

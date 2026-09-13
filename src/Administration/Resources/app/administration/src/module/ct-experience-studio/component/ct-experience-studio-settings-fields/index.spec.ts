@@ -344,6 +344,25 @@ describe('module/ct-experience-studio/component/ct-experience-studio-settings-fi
         ).toBe('0 20px 0 20px');
     });
 
+    it('uses explicit zero spacing when a breakpoint-aware box-spacing property has null defaults', () => {
+        const wrapper = createWrapper();
+
+        expect(
+            wrapper.vm.getResponsiveFallbackValue({
+                type: [
+                    'string',
+                    'object',
+                ],
+                default: null,
+                adminUI: { component: 'box-spacing' },
+                properties: {
+                    xs: { default: null },
+                    sm: { default: null },
+                },
+            }),
+        ).toBe('0 0 0 0');
+    });
+
     it('uses the upstream media field value contract for media controls', async () => {
         const wrapper = createWrapper({
             fields: [

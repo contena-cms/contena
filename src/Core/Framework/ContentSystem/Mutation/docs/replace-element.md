@@ -1,7 +1,7 @@
 # ReplaceElement
 
 The one operation that changes an element's type in place, and the only one whose contract is a set of carry-over
-rules rather than a placement. The other operations are in [operations.md](operations.md).
+rules rather than a placement. The other eight are in [operations.md](operations.md).
 
 `__construct(AbstractContentSystemElementTypeRegistry $registry, string $elementId, string $newType, AbstractContentSystemBindingSpecificationRegistry $bindingRegistry, BindingApplicator $bindingApplicator)`.
 
@@ -10,7 +10,7 @@ rules rather than a placement. The other operations are in [operations.md](opera
 Swaps an element's component to `$newType`, keeping the same id. `requireRegistered($newType)`; the element must
 exist (`mutationTargetNotFound`); carries over primitive properties whose key and type match, wiring (data
 requirements, providers, consumers) keyed to a non-primitive new-type property, and children of slots present in the
-new type, then seeds the new type's primitive defaults for any key it does not carry (a carried or authored value
+new type, then seeds the new type's stored defaults for any key it does not carry (a carried or authored value
 wins).
 
 "Type match" is `Layout/Type/Specification/PropertyType::admits()`, the one conformance predicate the write path and
@@ -42,6 +42,6 @@ overwritten by the default even when the default would correct a renamed storage
 `droppedProperties` = static property values whose key is absent from the new type (and not a carryable `resolvedBy`
 storage key) or whose value its property type rejects. A value rejected for a key the new type still declares as a
 primitive with a default is reported as dropped even though that default then re-fills the key; a key absent from
-the new type is reported and never re-filled, because the default overlay is keyed only by the new type's primitive
+the new type is reported and never re-filled, because the default overlay is keyed only by the new type's stored-default
 keys. `affected = subtreeIds($replacement)`; `created = [$elementId]` only, because the carried-over children keep
 their own nodes while the replaced node is re-scaffolded under the same id.

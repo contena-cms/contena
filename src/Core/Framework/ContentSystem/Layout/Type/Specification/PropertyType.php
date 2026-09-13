@@ -158,6 +158,14 @@ final readonly class PropertyType
         return false;
     }
 
+    /**
+     * @return array<string, PropertySpecification>|null
+     */
+    public function properties(): ?array
+    {
+        return $this->properties;
+    }
+
     public function isPrimitive(): bool
     {
         return \in_array($this->type, self::PRIMITIVE_TYPES, true);

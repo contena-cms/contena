@@ -80,10 +80,10 @@ use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\DatabaseTypeLoader;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\ElementTypeNameResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Loader\YamlTypeLoader;
-use Contena\Core\Framework\ContentSystem\Layout\Type\PrimitiveDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\CachedContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Serialization\ElementTypeSpecificationSerializer;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\ElementTypeCollisionDetector;
 use Contena\Core\Framework\ContentSystem\Mutation\ContextConsumerMirror;
@@ -201,13 +201,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('validator.constraint_validator');
 
-    // Write-boundary default seeding (seeds type primitive defaults into every DAL write of the layout field)
-    $services->set(PrimitiveDefaultProvider::class);
+    // Write-boundary default seeding (seeds type stored defaults into every DAL write of the layout field)
+    $services->set(StoredDefaultProvider::class);
 
     $services->set(LayoutDefaultSeeder::class)
         ->args([
             service(ContentSystemElementTypeRegistry::class),
-            service(PrimitiveDefaultProvider::class),
+            service(StoredDefaultProvider::class),
         ]);
 
     // The forest-wide style pass, shared by the write boundary and the draft decode so the two cannot drift

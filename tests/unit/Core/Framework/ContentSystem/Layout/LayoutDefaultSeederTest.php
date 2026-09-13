@@ -6,12 +6,12 @@ use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
-use Contena\Core\Framework\ContentSystem\Layout\Type\PrimitiveDefaultProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\CopilotSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredDefaultProvider;
+use Contena\Core\Test\Stub\ContentSystem\ContentSystemElementTypeSpecificationBuilder;
 use Contena\Core\Test\Stub\ContentSystem\StoredElementBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -51,6 +51,27 @@ class LayoutDefaultSeederTest extends TestCase
         static::assertSame(['headline' => null], $this->rawProperties($seeded[0]));
     }
 
+    #[TestDox('seeds missing nested property defaults on a stored element')]
+    public function testSeedsNestedDefaults(): void
+    {
+        $seeded = $this->seeder()->seed([StoredElementBuilder::create('Ct:Grid:Container', 'el')->build()]);
+
+        static::assertSame(
+            ['padding' => ['xs' => '0 20px 0 20px', 'sm' => '0 20px 0 20px', 'md' => '0 20px 0 20px']],
+            $this->rawProperties($seeded[0]),
+        );
+    }
+
+    #[TestDox('does not merge missing nested defaults into an authored top-level property')]
+    public function testKeepsAuthoredNestedPropertyWithoutMergingDefaults(): void
+    {
+        $element = StoredElementBuilder::create('Ct:Grid:Container', 'el')->withProperty('padding', ['md' => '10px'])->build();
+
+        $seeded = $this->seeder()->seed([$element]);
+
+        static::assertSame(['padding' => ['md' => '10px']], $this->rawProperties($seeded[0]));
+    }
+
     #[TestDox('seeds primitive defaults on slot descendants')]
     public function testSeedsSlotDescendants(): void
     {
@@ -84,28 +105,27 @@ class LayoutDefaultSeederTest extends TestCase
     private function seeder(): LayoutDefaultSeeder
     {
         // 'blog' carries a non-null default on a non-primitive type so the exclusion is isolated to
-        // isPrimitive() rather than being ambiguous with the "default is null" guard PrimitiveDefaultProvider
+        // isPrimitive() rather than being ambiguous with the "default is null" guard StoredDefaultProvider
         // also checks.
+        $nestedProperties = [
+            'xs' => new PropertySpecification('xs', new PropertyType('string', false, null, '0 20px 0 20px'), false, '', '', null),
+            'sm' => new PropertySpecification('sm', new PropertyType('string', false, null, '0 20px 0 20px'), false, '', '', null),
+            'md' => new PropertySpecification('md', new PropertyType('string', false, null, '0 20px 0 20px'), false, '', '', null),
+        ];
         $specs = [
-            'Ct:Block' => new ContentSystemElementTypeSpecification(
-                'Ct:Block',
-                'Ct:Block',
-                '',
-                null,
-                null,
-                new CopilotSpecification('', []),
-                [
-                    'headline' => new PropertySpecification('prop', new PropertyType('string', false, null, 'Default headline'), false, '', '', null),
-                    'blog' => new PropertySpecification('prop', new PropertyType(ChannelBlogEntity::class, false, null, 'ignored-default'), false, '', '', null),
-                ],
-                [],
-            ),
+            'Ct:Block' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Block')
+                ->primitive('headline', 'string', default: 'Default headline')
+                ->declared('blog', ChannelBlogEntity::class)
+                ->build(),
+            'Ct:Grid:Container' => ContentSystemElementTypeSpecificationBuilder::create('Ct:Grid:Container', 'Grid Container')
+                ->declared('padding', ['string', 'object'], properties: $nestedProperties)
+                ->build(),
         ];
 
         $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
         $registry->method('has')->willReturnCallback(static fn (string $name): bool => isset($specs[$name]));
         $registry->method('get')->willReturnCallback(static fn (string $name): ContentSystemElementTypeSpecification => $specs[$name]);
 
-        return new LayoutDefaultSeeder($registry, new PrimitiveDefaultProvider());
+        return new LayoutDefaultSeeder($registry, new StoredDefaultProvider());
     }
 }

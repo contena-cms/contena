@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { shallowMount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import sidebarTreeNodeComponent from './index';
 
 describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tree-node', () => {
@@ -104,5 +104,60 @@ describe('module/ct-experience-studio/component/ct-experience-studio-sidebar-tre
                 { newParentElementId: 'child', newSlotName: 'main', newIndex: 0 },
             ),
         ).toBe(false);
+    });
+
+    it('prevents drag events from reaching the draggable ancestor through control buttons', async () => {
+        const dragListener = jest.fn();
+        getByName.mockReturnValue({ slots: [{ name: 'content' }] });
+        jest.spyOn(Contena.Store, 'get').mockReturnValue({ getByName } as never);
+        const wrapper = mount(sidebarTreeNodeComponent, {
+            attachTo: document.body,
+            props: {
+                element: {
+                    id: 'element-id',
+                    component: 'Ct:Grid:Container',
+                    slots: { content: [] },
+                },
+                allowDragAndDrop: true,
+            },
+            global: {
+                provide: {
+                    acl: { can: () => true },
+                },
+                directives: {
+                    draggable: {
+                        mounted(el: HTMLElement) {
+                            el.addEventListener('mousedown', dragListener);
+                        },
+                        unmounted(el: HTMLElement) {
+                            el.removeEventListener('mousedown', dragListener);
+                        },
+                    },
+                    droppable: {},
+                    tooltip: {},
+                },
+                stubs: {
+                    'ct-block': { template: '<div><slot /></div>' },
+                    'mt-icon': true,
+                    'ct-experience-studio-sidebar-tree-node': true,
+                },
+            },
+        });
+
+        try {
+            const duplicateButton = wrapper.get('.ct-experience-studio-sidebar-tree-node__actions button');
+
+            await duplicateButton.trigger('mousedown');
+
+            expect(dragListener).not.toHaveBeenCalled();
+
+            for (const button of wrapper.findAll('button')) {
+                await button.trigger('mousedown');
+            }
+
+            expect(dragListener).not.toHaveBeenCalled();
+        } finally {
+            wrapper.unmount();
+        }
     });
 });

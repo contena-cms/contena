@@ -1,26 +1,74 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
 
 @each $breakpoint, $value in $grid-breakpoints {
     @property --ct-grid-container-padding-#{$breakpoint} {
-        syntax: '*';
+        syntax: "*";
         inherits: false;
     }
 
     @property --ct-grid-container-margin-#{$breakpoint} {
-        syntax: '*';
+        syntax: "*";
         inherits: false;
     }
 }
 
-.grid-container {
-    display: grid;
+@property --ct-grid-container-max-width {
+    syntax: "*";
+    inherits: true;
+    initial-value: 1400px;
+}
 
-    &.centered {
-        max-width: 1400px;
-        margin-left: auto !important;
-        margin-right: auto !important;
+@property --ct-grid-container-outer-spacing {
+    syntax: "*";
+    inherits: true;
+    initial-value: 1.5rem;
+}
+
+.ct-grid-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-left: var(--ct-grid-container-outer-spacing);
+    padding-right: var(--ct-grid-container-outer-spacing);
+
+    &.full-width {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    &:not(.border-full-width) {
+        border: none !important;
+    }
+
+    &.border-full-width {
+        .ct-grid-container-inner {
+            border: none !important;
+        }
+    }
+
+    @each $breakpoint, $value in $grid-breakpoints {
+        @include media-breakpoint-only($breakpoint) {
+            margin: var(--ct-grid-container-margin-#{$breakpoint});
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+    }
+}
+
+.ct-grid-container .ct-grid-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.ct-grid-container-inner {
+    display: grid;
+    width: 100%;
+    max-width: var(--ct-grid-container-max-width, 1400px);
+
+    &.full-width {
+        max-width: none;
     }
 
     &.max-content {
@@ -178,6 +226,8 @@
         @include media-breakpoint-only($breakpoint) {
             padding: var(--ct-grid-container-padding-#{$breakpoint});
             margin: var(--ct-grid-container-margin-#{$breakpoint});
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
         }
     }
 }
