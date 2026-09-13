@@ -40,6 +40,7 @@ use Contena\Core\Framework\Api\Controller\InfoController;
 use Contena\Core\Framework\Api\Controller\IntegrationController;
 use Contena\Core\Framework\Api\Controller\SyncController;
 use Contena\Core\Framework\Api\Controller\UserController;
+use Contena\Core\Framework\Api\Cors\CoreCorsHeaderProvider;
 use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\EventListener\Authentication\ApiAuthenticationListener;
 use Contena\Core\Framework\Api\EventListener\Authentication\UserCredentialsChangedSubscriber;
@@ -123,6 +124,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FallbackController::class)
         ->public()
         ->call('setContainer', [service('service_container')]);
+
+    $services->set(CoreCorsHeaderProvider::class)
+        ->tag(CorsHeaderProviderInterface::SERVICE_TAG, ['priority' => 1000]);
 
     $services->set(CorsListener::class)
         ->args([

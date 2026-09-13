@@ -2,6 +2,8 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
+use Contena\Core\Framework\Api\Cors\CorsHeaders;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AutoconfigureCompilerPass;
 use Contena\Core\System\Country\CountryDefinition;
@@ -76,6 +78,18 @@ class AutoconfigureCompilerPassTest extends TestCase
 
         static::assertArrayHasKey('contena.entity', $container->getDefinition(ExampleEntity::class)->getTags());
     }
+
+    public function testCorsHeaderProviderAutoConfigure(): void
+    {
+        $container = new ContainerBuilder();
+
+        $container->addCompilerPass(new AutoconfigureCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 1000);
+        $container->setDefinition('cors_header_provider', new Definition(ExampleCorsHeaderProvider::class)->setPublic(true)->setAutoconfigured(true)->setAutowired(true));
+
+        $container->compile(true);
+
+        static::assertTrue($container->getDefinition('cors_header_provider')->hasTag(CorsHeaderProviderInterface::SERVICE_TAG));
+    }
 }
 
 /**
@@ -96,4 +110,15 @@ class ExampleService
 #[Entity('foo')]
 class ExampleEntity
 {
+}
+
+/**
+ * @internal
+ */
+class ExampleCorsHeaderProvider implements CorsHeaderProviderInterface
+{
+    public function provide(CorsHeaders $headers): void
+    {
+        $headers->addAllowed('ct-example');
+    }
 }

@@ -13,6 +13,7 @@ use Contena\Core\Content\Sitemap\ConfigHandler\ConfigHandlerInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
+use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\Sync\AbstractFkResolver;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -49,6 +50,7 @@ return [
             'flow.action' => FlowAction::class,
             'flow.storer' => FlowStorer::class,
             'messenger.receiver' => ReceiverInterface::class,
+            'contena.api.cors_header_provider' => CorsHeaderProviderInterface::class,
             'contena.api.enum_provider' => FieldEnumProviderInterface::class,
             'contena.dal.exception_handler' => ExceptionHandlerInterface::class,
             'contena.entity.definition' => EntityDefinition::class,

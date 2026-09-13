@@ -3,8 +3,8 @@
 namespace Contena\Tests\Unit\Core\Framework\Api\EventListener;
 
 use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
+use Contena\Core\Framework\Api\Cors\CorsHeaders;
 use Contena\Core\Framework\Api\EventListener\CorsListener;
-use Contena\Core\PlatformRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +34,7 @@ class CorsListenerTest extends TestCase
 
     public function testPreflightRequestIsShortCircuited(): void
     {
-        $listener = new CorsListener();
+        $listener = new CorsListener([]);
         $event = new RequestEvent(
             static::createStub(HttpKernelInterface::class),
             Request::create('/api/_action/test', 'OPTIONS'),
@@ -50,7 +50,7 @@ class CorsListenerTest extends TestCase
 
     public function testNonOptionsRequestIsNotShortCircuited(): void
     {
-        $listener = new CorsListener();
+        $listener = new CorsListener([]);
         $event = new RequestEvent(
             static::createStub(HttpKernelInterface::class),
             Request::create('/api/_action/test', 'POST'),
@@ -62,32 +62,9 @@ class CorsListenerTest extends TestCase
         static::assertNull($event->getResponse());
     }
 
-    public function testResponseContainsApiCorsHeaders(): void
-    {
-        $listener = new CorsListener();
-        $event = new ResponseEvent(
-            static::createStub(HttpKernelInterface::class),
-            Request::create('/api/_action/test', 'POST'),
-            HttpKernelInterface::MAIN_REQUEST,
-            new Response(),
-        );
-
-        $listener->onKernelResponse($event);
-
-        $headers = $event->getResponse()->headers;
-        static::assertSame('*', $headers->get('Access-Control-Allow-Origin'));
-
-        $allowedHeaders = explode(',', (string) $headers->get('Access-Control-Allow-Headers'));
-        static::assertContains(PlatformRequest::HEADER_CONTEXT_TOKEN, $allowedHeaders);
-        static::assertContains(PlatformRequest::HEADER_ACCESS_KEY, $allowedHeaders);
-
-        $exposedHeaders = explode(',', (string) $headers->get('Access-Control-Expose-Headers'));
-        static::assertContains(PlatformRequest::HEADER_CONTEXT_TOKEN, $exposedHeaders);
-    }
-
     public function testSubRequestIsIgnored(): void
     {
-        $listener = new CorsListener();
+        $listener = new CorsListener([]);
         $event = new ResponseEvent(
             static::createStub(HttpKernelInterface::class),
             Request::create('/api/_action/test', 'POST'),
@@ -100,39 +77,73 @@ class CorsListenerTest extends TestCase
         static::assertFalse($event->getResponse()->headers->has('Access-Control-Allow-Origin'));
     }
 
-    public function testDefaultHeadersIncludeChannelAndMcpHeaders(): void
+    public function testOriginAndMethodsDoNotDependOnTheProviders(): void
     {
-        $headers = $this->dispatchResponse(new CorsListener());
+        $headers = $this->dispatchResponse(new CorsListener([]));
 
-        static::assertStringContainsString(PlatformRequest::HEADER_INCLUDE_SEO_URLS, (string) $headers->get('Access-Control-Allow-Headers'));
-        static::assertStringContainsString(PlatformRequest::HEADER_MCP_SESSION_ID, (string) $headers->get('Access-Control-Allow-Headers'));
-        static::assertStringContainsString(PlatformRequest::HEADER_MCP_PROTOCOL_VERSION, (string) $headers->get('Access-Control-Expose-Headers'));
+        static::assertSame('*', $headers->get('Access-Control-Allow-Origin'));
+        static::assertSame('GET,POST,PUT,PATCH,DELETE', $headers->get('Access-Control-Allow-Methods'));
     }
 
-    public function testProvidersContributeAdditionalHeaders(): void
+    public function testWithoutProvidersBothHeaderListsAreEmpty(): void
+    {
+        $headers = $this->dispatchResponse(new CorsListener([]));
+
+        static::assertSame('', $headers->get('Access-Control-Allow-Headers'));
+        static::assertSame('', $headers->get('Access-Control-Expose-Headers'));
+    }
+
+    public function testProvidersContributeToBothListsSeparately(): void
     {
         $listener = new CorsListener([
-            new StaticCorsHeaderProvider(['ct-subscription-plan'], []),
-            new StaticCorsHeaderProvider([], ['ct-subscription-state']),
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->addAllowed('ct-plan', 'ct-interval');
+            }),
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->addAllowed('ct-source');
+                $headers->addExposed('ct-state');
+            }),
         ]);
 
         $headers = $this->dispatchResponse($listener);
-        static::assertStringContainsString('ct-subscription-plan', (string) $headers->get('Access-Control-Allow-Headers'));
-        static::assertStringNotContainsString('ct-subscription-state', (string) $headers->get('Access-Control-Allow-Headers'));
-        static::assertStringContainsString('ct-subscription-state', (string) $headers->get('Access-Control-Expose-Headers'));
+
+        static::assertSame('ct-plan,ct-interval,ct-source', $headers->get('Access-Control-Allow-Headers'));
+        static::assertSame('ct-state', $headers->get('Access-Control-Expose-Headers'));
     }
 
-    public function testContributedHeadersAreDeduplicatedCaseInsensitively(): void
+    public function testAProviderCanRemoveWhatAnEarlierProviderContributed(): void
     {
         $listener = new CorsListener([
-            new StaticCorsHeaderProvider(['Authorization', 'CT-Context-Token'], []),
-            new StaticCorsHeaderProvider(['authorization'], []),
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->addAllowed('ct-plan', 'ct-interval');
+                $headers->addExposed('ct-state');
+            }),
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->removeAllowed('CT-PLAN');
+                $headers->removeExposed('ct-state');
+            }),
         ]);
 
-        $allowed = explode(',', (string) $this->dispatchResponse($listener)->get('Access-Control-Allow-Headers'));
-        static::assertCount(1, array_keys($allowed, 'Authorization', true));
-        static::assertNotContains('CT-Context-Token', $allowed);
-        static::assertContains(PlatformRequest::HEADER_CONTEXT_TOKEN, $allowed);
+        $headers = $this->dispatchResponse($listener);
+
+        static::assertSame('ct-interval', $headers->get('Access-Control-Allow-Headers'));
+        static::assertSame('', $headers->get('Access-Control-Expose-Headers'));
+    }
+
+    public function testContributedHeadersAreDeduplicated(): void
+    {
+        $listener = new CorsListener([
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->addAllowed('ct-plan');
+            }),
+            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
+                $headers->addAllowed('CT-Plan', 'ct-interval');
+            }),
+        ]);
+
+        $headers = $this->dispatchResponse($listener);
+
+        static::assertSame('ct-plan,ct-interval', $headers->get('Access-Control-Allow-Headers'));
     }
 
     private function dispatchResponse(CorsListener $listener): ResponseHeaderBag
@@ -150,19 +161,17 @@ class CorsListenerTest extends TestCase
     }
 }
 
-class StaticCorsHeaderProvider implements CorsHeaderProviderInterface
+class CallbackCorsHeaderProvider implements CorsHeaderProviderInterface
 {
-    public function __construct(private readonly array $allowed, private readonly array $exposed)
+    /**
+     * @param \Closure(CorsHeaders): void $contribute
+     */
+    public function __construct(private readonly \Closure $contribute)
     {
     }
 
-    public function getAllowedHeaders(): array
+    public function provide(CorsHeaders $headers): void
     {
-        return $this->allowed;
-    }
-
-    public function getExposedHeaders(): array
-    {
-        return $this->exposed;
+        ($this->contribute)($headers);
     }
 }
