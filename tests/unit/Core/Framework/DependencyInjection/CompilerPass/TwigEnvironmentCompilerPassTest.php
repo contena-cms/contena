@@ -2,12 +2,14 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
+use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\TwigEnvironmentCompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Twig\Environment;
 
 /**
@@ -25,6 +27,9 @@ class TwigEnvironmentCompilerPassTest extends TestCase
         $twig = $container->getDefinition('twig');
         static::assertTrue($twig->isPublic());
         static::assertSame(TwigEnvironment::class, $twig->getClass());
+        static::assertEquals([
+            ['configureAppTemplateFailureHandling', [new Reference(EntityTemplateLoader::class), new Reference('logger'), new Reference('request_stack')]],
+        ], $twig->getMethodCalls());
         static::assertSame(
             [['method' => 'reset']],
             $twig->getTag('kernel.reset'),

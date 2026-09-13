@@ -21,6 +21,7 @@ use Contena\Core\Framework\Adapter\Storage\MySQLKeyValueStorage;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\Adapter\Twig\AppTemplateIterator;
+use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
 use Contena\Core\Framework\Adapter\Twig\Extension\ConfigExtension;
 use Contena\Core\Framework\Adapter\Twig\Extension\FeatureFlagExtension;
 use Contena\Core\Framework\Adapter\Twig\Extension\InstanceOfExtension;
@@ -735,6 +736,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(AppTemplateIterator::class . '.inner'),
             service('app_template.repository'),
         ]);
+
+    $services->set(EntityTemplateLoader::class)
+        ->args([
+            service(Connection::class),
+            param('kernel.environment'),
+        ])
+        ->tag('twig.loader')
+        ->tag('kernel.event_subscriber')
+        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(ExcludeExceptionHandler::class)
         ->decorate('monolog.handler.main', null, 0, ContainerInterface::IGNORE_ON_INVALID_REFERENCE)

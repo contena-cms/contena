@@ -1,0 +1,267 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
+
+use Contena\Core\Framework\Adapter\Database\MySQLFactory;
+use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Twig\Error\LoaderError;
+
+/**
+ * @internal
+ */
+#[CoversClass(EntityTemplateLoader::class)]
+class EntityTemplateLoaderTest extends TestCase
+{
+    use EnvTestBehaviour;
+
+    public function testTemplatesAreOnlyLoadedOnce(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->once())
+            ->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->exists('@TestApp/frontend/page/index.html.twig'));
+        static::assertTrue($loader->exists('@TestApp/frontend/page/index.html.twig'));
+    }
+
+    public function testResetClearsCache(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->exactly(2))
+            ->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->exists('@TestApp/frontend/page/index.html.twig'));
+
+        $loader->reset();
+
+        static::assertTrue($loader->exists('@TestApp/frontend/page/index.html.twig'));
+    }
+
+    public function testDevEnvironmentAlwaysReturnsNull(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->never())
+            ->method('fetchAllAssociative');
+
+        $loader = new EntityTemplateLoader($connection, 'dev');
+
+        static::assertFalse($loader->exists('@TestApp/frontend/page/index.html.twig'));
+    }
+
+    public function testGetSourceContext(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        $source = $loader->getSourceContext('@TestApp/frontend/page/index.html.twig');
+        static::assertSame('<div>Hello</div>', $source->getCode());
+        static::assertSame('@TestApp/frontend/page/index.html.twig', $source->getName());
+    }
+
+    public function testGetSourceContextThrowsForMissingTemplate(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        $this->expectExceptionObject(new LoaderError('Template "@TestApp/frontend/page/missing.html.twig" is not defined.'));
+        $loader->getSourceContext('@TestApp/frontend/page/missing.html.twig');
+    }
+
+    public function testGetCacheKey(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        $cacheKey = $loader->getCacheKey('@TestApp/frontend/page/index.html.twig');
+        static::assertSame('@TestApp/frontend/page/index.html.twig_abc123', $cacheKey);
+    }
+
+    public function testIsFreshWithNoUpdatedAt(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->isFresh('@TestApp/frontend/page/index.html.twig', time()));
+    }
+
+    public function testIsFreshWithOldUpdatedAt(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => '2020-01-01 00:00:00',
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->isFresh('@TestApp/frontend/page/index.html.twig', time()));
+    }
+
+    public function testIsFreshWithFutureUpdatedAt(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => '2099-01-01 00:00:00',
+                    'namespace' => 'TestApp',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertFalse($loader->isFresh('@TestApp/frontend/page/index.html.twig', time()));
+    }
+
+    public function testGetSubscribedEvents(): void
+    {
+        static::assertSame(
+            ['app_template.written' => 'reset'],
+            EntityTemplateLoader::getSubscribedEvents()
+        );
+    }
+
+    public function testTemplateWithoutNamespace(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([
+                [
+                    'path' => 'frontend/page/index.html.twig',
+                    'template' => '<div>Hello</div>',
+                    'hash' => 'abc123',
+                    'updatedAt' => null,
+                    'namespace' => '',
+                ],
+            ]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->exists('frontend/page/index.html.twig'));
+    }
+
+    public function testNonExistentTemplateReturnsFalse(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')
+            ->willReturn([]);
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertFalse($loader->exists('@TestApp/frontend/page/missing.html.twig'));
+    }
+
+    public function testDatabaselessModeReturnsFalse(): void
+    {
+        $this->setEnvVars(['DATABASE_URL' => MySQLFactory::PLACEHOLDER_DATABASE_URL]);
+
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->never())->method('fetchAllAssociative');
+
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertFalse($loader->exists('@TestApp/frontend/page/index.html.twig'));
+    }
+
+    public function testDisablingAnAppHidesItsTemplatesUntilRestoredOrReset(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllAssociative')->willReturn([
+            ['namespace' => 'TestApp', 'path' => 'frontend/page.html.twig', 'template' => 'page', 'hash' => 'page', 'updatedAt' => null],
+            ['namespace' => 'TestApp', 'path' => 'frontend/fragment.html.twig', 'template' => 'fragment', 'hash' => 'fragment', 'updatedAt' => null],
+            ['namespace' => 'OtherApp', 'path' => 'frontend/page.html.twig', 'template' => 'other', 'hash' => 'other', 'updatedAt' => null],
+        ]);
+        $loader = new EntityTemplateLoader($connection, 'prod');
+
+        static::assertTrue($loader->disableApp('@TestApp/frontend/page.html.twig'));
+        static::assertSame(['TestApp'], $loader->getDisabledApps());
+        static::assertFalse($loader->exists('@TestApp/frontend/page.html.twig'));
+        static::assertFalse($loader->exists('@TestApp/frontend/fragment.html.twig'));
+        static::assertTrue($loader->isTemplateDisabled('@TestApp/frontend/fragment.html.twig'));
+        static::assertFalse($loader->isTemplateDisabled('@TestApp/frontend/missing.html.twig'));
+        static::assertTrue($loader->exists('@OtherApp/frontend/page.html.twig'));
+        static::assertFalse($loader->disableApp('@TestApp/frontend/page.html.twig'));
+        static::assertFalse($loader->disableApp('@Missing/frontend/page.html.twig'));
+
+        $loader->setDisabledApps([]);
+
+        static::assertTrue($loader->exists('@TestApp/frontend/page.html.twig'));
+        static::assertTrue($loader->disableApp('@TestApp/frontend/page.html.twig'));
+
+        $loader->reset();
+
+        static::assertSame([], $loader->getDisabledApps());
+        static::assertTrue($loader->exists('@TestApp/frontend/fragment.html.twig'));
+    }
+}

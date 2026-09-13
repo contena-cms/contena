@@ -2,9 +2,11 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
+use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class TwigEnvironmentCompilerPass implements CompilerPassInterface
 {
@@ -14,6 +16,11 @@ class TwigEnvironmentCompilerPass implements CompilerPassInterface
         // Symfony service subscriber somehow doesn't work. Therefore, the service has to be public
         $twigEnvironment->setPublic(true);
         $twigEnvironment->setClass(TwigEnvironment::class);
+        $twigEnvironment->addMethodCall('configureAppTemplateFailureHandling', [
+            new Reference(EntityTemplateLoader::class),
+            new Reference('logger'),
+            new Reference('request_stack'),
+        ]);
         $twigEnvironment->addTag('kernel.reset', ['method' => 'reset']);
 
         // The twig extension directly compiles the config into the service, there is no other way to get it @see \Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension::load

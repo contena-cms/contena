@@ -6,6 +6,7 @@ use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
+use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -88,6 +89,35 @@ class TemplateFinderTest extends TestCase
         static::assertSame($expectedTemplate, $foundTemplate);
     }
 
+    #[DataProvider('disabledAppFragmentProvider')]
+    public function testFindOmittedAppFragments(string $template, ?string $source, ?string $expected): void
+    {
+        $twig = static::createStub(TwigEnvironment::class);
+        $twig->method('isAppTemplateDisabled')->willReturnCallback(static fn (string $name): bool => $name === '@App/frontend/fragment.html.twig');
+        $this->loader->method('exists')->willReturn(false);
+        $this->hierarchyBuilder->expects($this->once())->method('buildHierarchy')->willReturn(['App' => 1, 'Frontend' => 0]);
+        $this->templateScopeDetector->expects($this->never())->method('getScopes');
+        $this->twig->expects($this->never())->method('getCache');
+        $finder = new TemplateFinder($twig, $this->loader, '', $this->hierarchyBuilder, $this->templateScopeDetector);
+
+        if ($expected === null) {
+            $this->expectException(LoaderError::class);
+        }
+
+        static::assertSame($expected, $finder->find($template, false, $source));
+    }
+
+    /**
+     * @return iterable<string, array{string, string|null, string|null}>
+     */
+    public static function disabledAppFragmentProvider(): iterable
+    {
+        yield 'resolve omitted app fragment through frontend namespace' => ['@Frontend/frontend/fragment.html.twig', null, '@App/frontend/fragment.html.twig'];
+        yield 'resolve explicit omitted app fragment' => ['@App/frontend/fragment.html.twig', null, '@App/frontend/fragment.html.twig'];
+        yield 'never reintroduce omitted app as an inheritance parent' => ['@Frontend/frontend/fragment.html.twig', '@App/frontend/fragment.html.twig', null];
+        yield 'unrelated missing templates still fail' => ['@Frontend/frontend/missing.html.twig', null, null];
+    }
+
     public function testFindModifiesCache(): void
     {
         $this->hierarchyBuilder->expects($this->once())->method('buildHierarchy');
@@ -114,13 +144,13 @@ class TemplateFinderTest extends TestCase
     public static function templateNameProvider(): iterable
     {
         yield 'with @' => [
-            '@Framework/profile.html.twig',
-            'profile.html.twig',
+            '@Framework/documents/credit_note.html.twig',
+            'documents/credit_note.html.twig',
         ];
 
         yield 'without @' => [
-            'Framework/stoplightio.html.twig',
-            'Framework/stoplightio.html.twig',
+            'Framework/documents/invoice.html.twig',
+            'Framework/documents/invoice.html.twig',
         ];
     }
 
@@ -134,21 +164,21 @@ class TemplateFinderTest extends TestCase
             'Frontend' => true,
             'Administration' => true,
             'Profiling' => true,
-            'CtTheme' => true,
+            'SwagTheme' => true,
             'Framework' => true,
         ];
 
         yield 'template not found with ignoreMissing' => [
-            '@Framework/non_existing_template.html.twig',
+            '@Framework/documents/non_existing_template.html.twig',
             true,
             [],
             [],
             null,
-            'non_existing_template.html.twig',
+            'documents/non_existing_template.html.twig',
         ];
 
         yield 'template not found without ignoreMissing' => [
-            '@Framework/non_existing_template.html.twig',
+            '@Framework/documents/non_existing_template.html.twig',
             false,
             [],
             [],
@@ -157,59 +187,59 @@ class TemplateFinderTest extends TestCase
         ];
 
         yield 'find correct template with source' => [
-            '@Framework/profile.html.twig',
+            '@Framework/documents/base.html.twig',
             false,
             [
                 'Framework',
-                'CtTheme',
+                'SwagTheme',
             ],
             $coreBundles,
-            '@CtTheme/stoplightio.html.twig',
-            '@CtTheme/profile.html.twig',
+            '@SwagTheme/documents/invoice.html.twig',
+            '@SwagTheme/documents/base.html.twig',
         ];
 
         yield 'find correct template without source' => [
-            '@Framework/stoplightio.html.twig',
+            '@Framework/documents/invoice.html.twig',
             false,
             [
-                'CtTheme',
+                'SwagTheme',
                 'Framework',
             ],
             $coreBundles,
             null,
-            '@CtTheme/stoplightio.html.twig',
+            '@SwagTheme/documents/invoice.html.twig',
         ];
 
-        // @CtTheme/profile.html.twig is found even when the source is @Framework/stoplightio.html.twig
+        // @SwagTheme/documents/base.html.twig is found even when the source is @Framework/documents/invoice.html.twig
         yield 'find correct template with same source with input template' => [
-            '@Framework/profile.html.twig',
+            '@Framework/documents/base.html.twig',
             false,
             [
                 'Framework',
-                'CtTheme',
+                'SwagTheme',
             ],
             $coreBundles,
-            '@Framework/stoplightio.html.twig',
-            '@CtTheme/profile.html.twig',
+            '@Framework/documents/invoice.html.twig',
+            '@SwagTheme/documents/base.html.twig',
         ];
 
         yield 'return original template if template not found' => [
-            '@Framework/custom.html.twig',
+            '@Framework/documents/custom.html.twig',
             true,
             [
             ],
             $coreBundles,
-            '@Framework/stoplightio.html.twig',
-            'custom.html.twig',
+            '@Framework/documents/invoice.html.twig',
+            'documents/custom.html.twig',
         ];
 
         yield 'throw error if template not found' => [
-            '@Framework/custom.html.twig',
+            '@Framework/documents/custom.html.twig',
             false,
             [
             ],
             $coreBundles,
-            '@Framework/stoplightio.html.twig',
+            '@Framework/documents/invoice.html.twig',
             null,
         ];
     }
