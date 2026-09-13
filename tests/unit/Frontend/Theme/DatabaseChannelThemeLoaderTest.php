@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Doctrine\DBAL\Connection;
@@ -14,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[Package('discovery')]
 #[CoversClass(DatabaseChannelThemeLoader::class)]
 class DatabaseChannelThemeLoaderTest extends TestCase
 {

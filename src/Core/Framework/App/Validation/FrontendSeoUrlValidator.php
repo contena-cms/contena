@@ -7,13 +7,11 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Contena\Core\Framework\App\Validation\Error\FrontendSeoUrlError;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 
 /**
  * @internal only for use by the app-system
  */
-#[Package('framework')]
 class FrontendSeoUrlValidator extends AbstractManifestValidator
 {
     public function __construct(private readonly RouteBlocklistService $routeBlocklistService)

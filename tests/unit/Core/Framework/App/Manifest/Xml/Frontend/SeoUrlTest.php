@@ -5,14 +5,12 @@ namespace Contena\Tests\Unit\Core\Framework\App\Manifest\Xml\Frontend;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
-use Contena\Core\Framework\Log\Package;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[Package('framework')]
 #[CoversClass(SeoUrl::class)]
 class SeoUrlTest extends TestCase
 {

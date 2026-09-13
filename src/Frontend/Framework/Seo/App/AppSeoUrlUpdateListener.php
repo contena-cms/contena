@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Seo\App;
 
 use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use function Symfony\Component\String\u;
@@ -12,7 +11,6 @@ use function Symfony\Component\String\u;
 /**
  * @internal
  */
-#[Package('inventory')]
 class AppSeoUrlUpdateListener implements EventSubscriberInterface
 {
     public function __construct(

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
@@ -22,7 +21,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @internal
  */
-#[Package('framework')]
 class SessionContextTokenSubscriber implements EventSubscriberInterface
 {
     use RouteScopeCheckTrait;

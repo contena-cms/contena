@@ -6,7 +6,6 @@ use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlUpdateListener;
 use Contena\Frontend\Framework\Seo\App\AppStaticSeoUrlSynchronizer;
@@ -16,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[Package('inventory')]
 #[CoversClass(AppSeoUrlUpdateListener::class)]
 class AppSeoUrlUpdateListenerTest extends TestCase
 {

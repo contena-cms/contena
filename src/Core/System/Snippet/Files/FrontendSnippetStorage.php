@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Files;
 
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Util\Hasher;
 use League\Flysystem\FilesystemOperator;
@@ -17,7 +16,6 @@ use Symfony\Component\Filesystem\Path;
  *
  * @phpstan-type Snapshot array{version: string, files: array<string, string>}
  */
-#[Package('discovery')]
 class FrontendSnippetStorage
 {
     private const SOURCE_DIR = 'Resources/snippet';

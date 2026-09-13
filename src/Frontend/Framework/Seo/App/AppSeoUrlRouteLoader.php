@@ -6,7 +6,6 @@ use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -18,7 +17,6 @@ use Symfony\Contracts\Service\ResetInterface;
  *
  * @phpstan-type AppSeoUrlRouteRow array{appId: string, routeName: string, hook: string, entityName: string|null, defaultTemplate: string|null, paths: array<string, string>}
  */
-#[Package('inventory')]
 class AppSeoUrlRouteLoader implements SeoUrlRouteLoaderInterface, EventSubscriberInterface, ResetInterface
 {
     final public const CACHE_KEY = 'contena-app-seo-url-routes';

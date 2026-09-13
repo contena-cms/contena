@@ -3,15 +3,15 @@
 namespace Contena\Core\Framework\App\Validation\Error;
 
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
  */
-#[Package('framework')]
 class FrontendSeoUrlError implements Error
 {
     private const KEY = 'manifest-invalid-frontend-seo-url';
+
+    private readonly string $message;
 
     /**
      * @param list<string> $violations

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing;
 
 use Contena\Core\ChannelRequest;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @see \Contena\Tests\Integration\Core\Framework\Routing\SessionContextTokenResolutionTest
  */
-#[Package('framework')]
 class SessionContextTokenAccessor
 {
     public const CONTEXT_SOURCE_SESSION = 'session';

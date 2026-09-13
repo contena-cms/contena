@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
@@ -12,7 +11,6 @@ use Contena\Core\Framework\Log\Package;
  *
  * @extends EntityCollection<AppSeoUrlRouteEntity>
  */
-#[Package('framework')]
 class AppSeoUrlRouteCollection extends EntityCollection
 {
     protected function getExpectedClass(): string

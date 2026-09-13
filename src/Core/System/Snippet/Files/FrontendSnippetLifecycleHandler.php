@@ -7,7 +7,6 @@ use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\AbstractLifecycleHandler;
-use Contena\Core\Framework\Log\Package;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -16,7 +15,6 @@ use Doctrine\DBAL\Connection;
  *
  * @internal
  */
-#[Package('discovery')]
 class FrontendSnippetLifecycleHandler extends AbstractLifecycleHandler
 {
     public function __construct(

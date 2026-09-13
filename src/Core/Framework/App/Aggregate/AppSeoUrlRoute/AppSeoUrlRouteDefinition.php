@@ -12,12 +12,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
  */
-#[Package('framework')]
 class AppSeoUrlRouteDefinition extends EntityDefinition
 {
     final public const ENTITY_NAME = 'app_seo_url_route';

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityWriterGateway;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteLoader;
@@ -22,7 +21,6 @@ use Symfony\Component\Validator\Validation;
 /**
  * @internal
  */
-#[Package('inventory')]
 #[CoversClass(AppSeoUrlRouteLoader::class)]
 class AppSeoUrlRouteLoaderTest extends TestCase
 {

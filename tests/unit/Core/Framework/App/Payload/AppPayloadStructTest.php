@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[Package('checkout')]
 #[CoversClass(AppPayloadStruct::class)]
 class AppPayloadStructTest extends TestCase
 {

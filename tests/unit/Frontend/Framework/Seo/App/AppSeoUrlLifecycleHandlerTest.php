@@ -13,7 +13,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityWriterGateway;
@@ -29,7 +28,6 @@ use Symfony\Component\Validator\Validation;
 /**
  * @internal
  */
-#[Package('inventory')]
 #[CoversClass(AppSeoUrlLifecycleHandler::class)]
 class AppSeoUrlLifecycleHandlerTest extends TestCase
 {

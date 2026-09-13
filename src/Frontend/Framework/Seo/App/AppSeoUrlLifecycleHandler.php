@@ -10,12 +10,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\RepositoryIterator;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal
  */
-#[Package('inventory')]
 class AppSeoUrlLifecycleHandler extends AbstractLifecycleHandler
 {
     private const CHUNK_SIZE = 500;

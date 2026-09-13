@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\SeoUrlRouteLifecycleHandler;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Tests\Integration\Core\Framework\App\AppFixture;
@@ -20,7 +19,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[Package('framework')]
 class SeoUrlRouteLifecycleHandlerTest extends TestCase
 {
     use IntegrationTestBehaviour;

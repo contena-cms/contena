@@ -7,7 +7,6 @@ use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteDefinition
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteEntity;
 use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +15,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @internal
  */
-#[Package('framework')]
 #[CoversClass(AppSeoUrlRouteDefinition::class)]
 class AppSeoUrlRouteDefinitionTest extends TestCase
 {

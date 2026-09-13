@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
@@ -18,7 +17,6 @@ use Contena\Core\System\Channel\ChannelEntity;
 /**
  * @internal
  */
-#[Package('inventory')]
 class AppStaticSeoUrlSynchronizer
 {
     private const FALLBACK_LOCALE = 'en-GB';
@@ -43,7 +41,7 @@ class AppStaticSeoUrlSynchronizer
 
         foreach ($this->fetchChannels() as $channel) {
             foreach ($this->localesByLanguage($channel) as $languageId => $localeCode) {
-                $context = new Context(new SystemSource(), [], Defaults::CURRENCY, [$languageId, Defaults::LANGUAGE_SYSTEM]);
+                $context = new Context(new SystemSource(), [$languageId, Defaults::LANGUAGE_SYSTEM]);
 
                 foreach ($routes as $route) {
                     $path = $this->resolvePath($route['paths'], $localeCode);

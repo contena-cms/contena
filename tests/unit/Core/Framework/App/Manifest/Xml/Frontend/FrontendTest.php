@@ -4,14 +4,12 @@ namespace Contena\Tests\Unit\Core\Framework\App\Manifest\Xml\Frontend;
 
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\Frontend;
-use Contena\Core\Framework\Log\Package;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[Package('framework')]
 #[CoversClass(Frontend::class)]
 class FrontendTest extends TestCase
 {

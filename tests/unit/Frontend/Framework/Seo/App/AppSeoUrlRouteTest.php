@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRoute;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -13,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-#[Package('inventory')]
 #[CoversClass(AppSeoUrlRoute::class)]
 class AppSeoUrlRouteTest extends TestCase
 {
