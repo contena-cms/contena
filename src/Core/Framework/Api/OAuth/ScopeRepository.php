@@ -2,10 +2,14 @@
 
 namespace Contena\Core\Framework\Api\OAuth;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\Scope\AdminScope;
 use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
 use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Tenant\Resolver\TenantResolution;
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -13,6 +17,7 @@ use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ScopeRepository implements ScopeRepositoryInterface
 {
@@ -49,7 +54,8 @@ class ScopeRepository implements ScopeRepositoryInterface
      */
     public function __construct(
         iterable $scopes,
-        private readonly Connection $connection
+        private readonly Connection $connection,
+        private readonly RequestStack $requestStack,
     ) {
         $scopeIndex = [];
         foreach ($scopes as $scope) {
@@ -99,14 +105,25 @@ class ScopeRepository implements ScopeRepositoryInterface
             $scopes[] = new WriteScope();
         }
 
-        $isAdmin = $this->connection->createQueryBuilder()
-            ->select('admin')
-            ->from('user')
-            ->where('id = UNHEX(:accessKey)')
-            ->setParameter('accessKey', $userIdentifier)
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchOne();
+        $isAdmin = false;
+        if ($userIdentifier !== null && $userIdentifier !== '') {
+            $request = $this->requestStack->getCurrentRequest();
+            $tenantResolution = $request?->attributes->get(PlatformRequest::ATTRIBUTE_RESOLVED_TENANT_ID);
+            $dataScopeId = $tenantResolution instanceof TenantResolution
+                ? $tenantResolution->tenantId
+                : Defaults::PLATFORM_DATA_SCOPE;
+
+            $isAdmin = $this->connection->createQueryBuilder()
+                ->select('scope_grant.admin')
+                ->from('user_data_scope', 'scope_grant')
+                ->where('scope_grant.user_id = :userId')
+                ->andWhere('scope_grant.data_scope_id = :dataScopeId')
+                ->setParameter('userId', Uuid::fromHexToBytes($userIdentifier))
+                ->setParameter('dataScopeId', Uuid::fromHexToBytes($dataScopeId))
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+        }
 
         if ($isAdmin) {
             $scopes[] = new AdminScope();

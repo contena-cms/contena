@@ -384,6 +384,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             tagged_iterator('contena.oauth.scope'),
             service(Connection::class),
+            service('request_stack'),
         ]);
 
     $services->set(UserRepository::class)

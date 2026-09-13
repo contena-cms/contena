@@ -143,6 +143,13 @@ class ChannelContextPersister
 
         $payload['token'] = (string) $context['token'];
 
+        if (!isset($payload[ChannelContextService::MEMBER_ID])
+            && \is_string($context['member_id'] ?? null)
+            && $context['member_id'] !== ''
+        ) {
+            $payload[ChannelContextService::MEMBER_ID] = Uuid::fromBytesToHex($context['member_id']);
+        }
+
         return $payload;
     }
 

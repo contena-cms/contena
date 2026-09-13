@@ -11,6 +11,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
+use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
 use Doctrine\DBAL\Connection;
@@ -55,6 +56,52 @@ class ChannelContextPersisterTest extends TestCase
         static::assertSame($expected, $this->contextPersister->load($token, TestDefaults::CHANNEL));
     }
 
+    public function testLoadPromotesMemberIdFromColumnWhenMissingInPayload(): void
+    {
+        $token = Random::getAlphanumericString(32);
+        $memberId = $this->createMember();
+
+        $this->connection->insert('channel_api_context', [
+            'token' => $token,
+            'payload' => json_encode([], \JSON_THROW_ON_ERROR),
+            'channel_id' => Uuid::fromHexToBytes(TestDefaults::CHANNEL),
+            'member_id' => Uuid::fromHexToBytes($memberId),
+            'updated_at' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+        ]);
+
+        $result = $this->contextPersister->load($token, TestDefaults::CHANNEL);
+
+        static::assertSame($memberId, $result[ChannelContextService::MEMBER_ID]);
+        static::assertSame($token, $result['token']);
+        static::assertFalse($result['expired']);
+    }
+
+    public function testLoadKeepsPayloadMemberIdWhenColumnDiffersOrIsNull(): void
+    {
+        $tokenWithNullColumn = Random::getAlphanumericString(32);
+        $tokenWithDifferentColumn = Random::getAlphanumericString(32);
+        $payloadMemberId = $this->createMember();
+        $columnMemberId = $this->createMember();
+
+        $this->connection->insert('channel_api_context', [
+            'token' => $tokenWithNullColumn,
+            'payload' => json_encode([ChannelContextService::MEMBER_ID => $payloadMemberId], \JSON_THROW_ON_ERROR),
+            'channel_id' => Uuid::fromHexToBytes(TestDefaults::CHANNEL),
+            'member_id' => null,
+            'updated_at' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+        ]);
+        $this->connection->insert('channel_api_context', [
+            'token' => $tokenWithDifferentColumn,
+            'payload' => json_encode([ChannelContextService::MEMBER_ID => $payloadMemberId], \JSON_THROW_ON_ERROR),
+            'channel_id' => Uuid::fromHexToBytes(TestDefaults::CHANNEL),
+            'member_id' => Uuid::fromHexToBytes($columnMemberId),
+            'updated_at' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+        ]);
+
+        static::assertSame($payloadMemberId, $this->contextPersister->load($tokenWithNullColumn, TestDefaults::CHANNEL)[ChannelContextService::MEMBER_ID]);
+        static::assertSame($payloadMemberId, $this->contextPersister->load($tokenWithDifferentColumn, TestDefaults::CHANNEL)[ChannelContextService::MEMBER_ID]);
+    }
+
     public function testLoadByMemberId(): void
     {
         $token = Uuid::randomHex();
@@ -89,6 +136,7 @@ class ChannelContextPersisterTest extends TestCase
         $this->insertContext($token, TestDefaults::CHANNEL, $payload, new \DateTimeImmutable('-2 days'), $memberId);
 
         $payload['expired'] = true;
+        $payload[ChannelContextService::MEMBER_ID] = $memberId;
         ksort($payload);
         $result = $this->contextPersister->load($token, TestDefaults::CHANNEL, $memberId);
         ksort($result);
@@ -137,6 +185,7 @@ class ChannelContextPersisterTest extends TestCase
         $this->contextPersister->save($token, $expected, TestDefaults::CHANNEL, $memberId);
 
         $actual = $this->contextPersister->load($token, TestDefaults::CHANNEL, $memberId);
+        $expected[ChannelContextService::MEMBER_ID] = $memberId;
         ksort($actual);
         ksort($expected);
         static::assertSame($expected, $actual);
@@ -187,6 +236,7 @@ class ChannelContextPersisterTest extends TestCase
         static::assertSame([
             'expired' => false,
             'first' => 'test',
+            ChannelContextService::MEMBER_ID => $memberId,
             'second' => 'overwritten',
             'third' => 'third test',
             'token' => $token,
