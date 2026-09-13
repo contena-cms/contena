@@ -39,6 +39,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         'state_machine_state_translation',
         'state_machine_transition',
         'state_machine_translation',
+        'data_scope',
         'data_dictionary',
         'data_dictionary_translation',
         'data_dictionary_item',
@@ -59,6 +60,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         'payment_channel_method',
         'payment_channel_translation',
         'payment_channel',
+        'tenant',
     ];
 
     private const array SCOPED_TABLES = [
@@ -143,6 +145,27 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertNotContains('system.extension_store', $defaultPrivileges);
         static::assertNotContains('plugin:read', $defaultPrivileges);
         static::assertSame(1, (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `acl_role`'));
+
+        $defaultTenant = $this->connection->fetchAssociative(
+            'SELECT `id`, `name`, `code`, `status` FROM `tenant` WHERE `code` = :code',
+            ['code' => 'default']
+        );
+        static::assertIsArray($defaultTenant);
+        static::assertSame('默认租户', $defaultTenant['name']);
+        static::assertSame('default', $defaultTenant['code']);
+        static::assertSame(1, (int) $defaultTenant['status']);
+
+        static::assertSame(
+            ['platform', 'tenant'],
+            $this->connection->fetchFirstColumn('SELECT `type` FROM `data_scope` ORDER BY `type`')
+        );
+        static::assertSame(
+            1,
+            (int) $this->connection->fetchOne(
+                'SELECT COUNT(*) FROM `data_scope` WHERE `type` = :type AND `id` = :id',
+                ['type' => 'tenant', 'id' => $defaultTenant['id']]
+            )
+        );
 
         static::assertSame(
             ['en-GB', 'zh-CN'],
@@ -965,5 +988,28 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
                 $table,
             ));
         }
+
+        $this->connection->executeStatement(
+            "CREATE TEMPORARY TABLE `data_scope` (
+                `id` BINARY(16) NOT NULL,
+                `type` ENUM('platform', 'tenant') NOT NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                `updated_at` DATETIME(3) NULL,
+                PRIMARY KEY (`id`)
+            )"
+        );
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE `tenant` (
+                `id` BINARY(16) NOT NULL,
+                `name` VARCHAR(255) NOT NULL,
+                `code` VARCHAR(64) NOT NULL,
+                `status` TINYINT(1) NOT NULL DEFAULT 1,
+                `custom_fields` JSON NULL,
+                `created_at` DATETIME(3) NOT NULL,
+                `updated_at` DATETIME(3) NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `uniq.tenant.code` (`code`)
+            )'
+        );
     }
 }

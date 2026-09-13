@@ -5,6 +5,7 @@ namespace Contena\Core\Migration\V6_8;
 use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
+use Contena\Core\Framework\DataAbstractionLayer\DataScopeType;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\Json;
@@ -28,6 +29,8 @@ class Migration1786016192ContenaBasicData extends MigrationStep
     use StateMachineMigrationTrait;
 
     private const string DEFAULT_ADMINISTRATOR_ROLE_ID = '019fcbf8e98e7c93bfa2d14cb01db101';
+
+    private const string DEFAULT_TENANT_ID = '019fcbf9e1a2734c8ab5d2e6f7019a3b';
 
     /**
      * Entity privileges available in the core installation at this migration.
@@ -333,6 +336,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         $this->createLanguage($connection);
         $this->createDefaultSnippetSets($connection);
         $this->createDefaultAdministratorRole($connection);
+        $this->createDefaultTenant($connection);
         $mailTemplate = $this->createUserRecoveryMailTemplate($connection);
         $this->createDefaultMailHeaderFooter($connection);
         $this->createDefaultMediaFolders($connection);
@@ -432,6 +436,39 @@ class Migration1786016192ContenaBasicData extends MigrationStep
             'privileges' => json_encode(array_values(array_unique($privileges)), \JSON_THROW_ON_ERROR),
             'created_at' => $this->createdAt(),
         ]);
+    }
+
+    /**
+     * Seeds the default tenant together with its tenant data scope.
+     *
+     * Tenant scope IDs equal tenant IDs. Raw SQL bypasses the DAL subscriber
+     * that normally maintains the one-to-one tenant/data_scope identity, so
+     * both rows are written here.
+     */
+    private function createDefaultTenant(Connection $connection): void
+    {
+        $tenantId = Uuid::fromHexToBytes(self::DEFAULT_TENANT_ID);
+        $createdAt = $this->createdAt();
+
+        $connection->executeStatement(
+            'INSERT IGNORE INTO `data_scope` (`id`, `type`, `created_at`) VALUES (:id, :type, :createdAt)',
+            [
+                'id' => $tenantId,
+                'type' => DataScopeType::Tenant->value,
+                'createdAt' => $createdAt,
+            ]
+        );
+
+        $connection->executeStatement(
+            'INSERT IGNORE INTO `tenant` (`id`, `name`, `code`, `status`, `created_at`)
+             VALUES (:id, :name, :code, 1, :createdAt)',
+            [
+                'id' => $tenantId,
+                'name' => '默认租户',
+                'code' => 'default',
+                'createdAt' => $createdAt,
+            ]
+        );
     }
 
     /**
