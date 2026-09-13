@@ -75,7 +75,7 @@ class LayoutPresetPayloadCompilerTest extends TestCase
         ];
 
         $compiler->compile([
-            ['component' => 'Ct:Product:Listing', 'style' => $style],
+            ['component' => 'Ct:Blog:Listing', 'style' => $style],
         ]);
 
         static::assertSame($style, $captured[0]['style']);

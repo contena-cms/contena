@@ -2,7 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Type\Specification;
 
-use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
@@ -60,7 +60,7 @@ class PropertyTypeTest extends TestCase
         ];
 
         yield 'map on an FQCN declaration' => [
-            new PropertyType(SalesChannelProductEntity::class, false, null, null),
+            new PropertyType(ChannelBlogEntity::class, false, null, null),
             StoredValue::ofMap([Defaults::LANGUAGE_SYSTEM => StoredValue::ofString('Willkommen')]),
         ];
 
@@ -88,6 +88,11 @@ class PropertyTypeTest extends TestCase
         yield 'integer on a lone number declaration' => [
             new PropertyType('number', false, null, null),
             StoredValue::ofInt(3),
+        ];
+
+        yield 'float on a lone number declaration' => [
+            new PropertyType('number', false, null, null),
+            StoredValue::ofFloat(3.5),
         ];
 
         yield 'integer on an all-primitive union carrying integer' => [
@@ -175,6 +180,11 @@ class PropertyTypeTest extends TestCase
             StoredValue::ofFloat(3.5),
         ];
 
+        yield 'string on a lone number declaration' => [
+            new PropertyType('number', false, null, null),
+            StoredValue::ofString('3.5'),
+        ];
+
         yield 'boolean on an all-primitive union of string and integer' => [
             new PropertyType(['string', 'integer'], false, null, null),
             StoredValue::ofBool(true),
@@ -225,11 +235,50 @@ class PropertyTypeTest extends TestCase
         ];
     }
 
-    #[TestDox('reads the translatable flag the published schema carries')]
-    public function testTranslatableReadsTheFlagThePublishedSchemaCarries(): void
+    #[DataProvider('describedTypeProvider')]
+    #[TestDox('renders the declared type as a violation message names it: $_dataName')]
+    public function testDescribeRendersTheDeclaredType(PropertyType $type, string $expected): void
+    {
+        static::assertSame($expected, $type->describe());
+    }
+
+    /**
+     * @return iterable<string, array{PropertyType, string}>
+     */
+    public static function describedTypeProvider(): iterable
+    {
+        yield 'lone scalar' => [
+            new PropertyType('string', false, null, null),
+            'string',
+        ];
+
+        yield 'union renders its members pipe-separated' => [
+            new PropertyType(['integer', 'string'], false, null, null),
+            'integer|string',
+        ];
+
+        // The flag is what separates the two `string` declarations a client must tell apart.
+        yield 'translatable string spells out the flag' => [
+            new PropertyType('string', true, null, null),
+            'string (translatable)',
+        ];
+    }
+
+    #[TestDox('reads the translatable flag a translatable declaration carries')]
+    public function testTranslatableReadsTheFlagATranslatableDeclarationCarries(): void
     {
         $type = new PropertyType('string', true, null, null);
 
-        static::assertSame($type->toSchema()['translatable'], $type->translatable());
+        static::assertTrue($type->translatable());
+        static::assertTrue($type->toSchema()['translatable']);
+    }
+
+    #[TestDox('reports no translatable flag for a non-translatable declaration')]
+    public function testTranslatableReportsNoFlagForANonTranslatableDeclaration(): void
+    {
+        $type = new PropertyType('string', false, null, null);
+
+        static::assertFalse($type->translatable());
+        static::assertFalse($type->toSchema()['translatable']);
     }
 }

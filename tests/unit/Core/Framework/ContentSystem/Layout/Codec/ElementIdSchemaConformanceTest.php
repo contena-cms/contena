@@ -112,6 +112,14 @@ class ElementIdSchemaConformanceTest extends StoredElementCodecTestCase
         yield 'a digit string carrying a decimal point' => ['1.5'];
 
         yield 'a single character' => ['a'];
+
+        yield 'an id carrying a space' => ['a b'];
+
+        yield 'an id carrying a tab, which is no line terminator' => ["hero\tfoot"];
+
+        yield 'an id carrying NEL, a Unicode newline ECMA-262 does not count' => ["hero\u{0085}foot"];
+
+        yield 'an id carrying a vertical tab, likewise' => ["hero\u{000B}foot"];
     }
 
     /**

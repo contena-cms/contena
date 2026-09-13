@@ -18,19 +18,39 @@ use Contena\Core\Framework\ContentSystem\Layout\LayoutDefaultSeeder;
 use Contena\Core\Framework\ContentSystem\Layout\LayoutWriteBoundary;
 use Contena\Core\Framework\ContentSystem\Layout\StoredTreeStyleNormalizer;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
-use Contena\Core\Framework\Log\Package;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
+ * The style parity invariant, in three parts. The definition pin loads `content-system.php` and asserts
+ * `DraftLayoutDecoder` and `LayoutWriteBoundary` reference one `StoredTreeStyleNormalizer` service id (their
+ * two `service()` references sit far apart in that file), which covers every style option without sampling.
+ * The normalizer-behavior half — one hand-built instance feeding both paths — is the first behavioral test
+ * below. The container-wired behavioral half, which resolves both services from DI and compares their
+ * normalized output, lives in the integration test of the same name.
+ *
  * @internal
  */
-#[Package('framework')]
 #[CoversClass(DraftLayoutDecoder::class)]
 class DraftLayoutStyleParityTest extends TestCase
 {
     private const ELEMENT_ID = 'parity-element';
+
+    #[TestDox('wires DraftLayoutDecoder and LayoutWriteBoundary to one StoredTreeStyleNormalizer service id')]
+    public function testBothServicesReferenceOneNormalizerServiceId(): void
+    {
+        $container = new ContainerBuilder();
+        new PhpFileLoader($container, new FileLocator())
+            ->load(\dirname(__DIR__, 6) . '/src/Core/Framework/DependencyInjection/content-system.php');
+
+        static::assertSame([StoredTreeStyleNormalizer::class], $this->normalizerReferences($container, LayoutWriteBoundary::class));
+        static::assertSame([StoredTreeStyleNormalizer::class], $this->normalizerReferences($container, DraftLayoutDecoder::class));
+    }
 
     #[TestDox('yields the same style shape from the draft decode path as the write boundary produces for the same raw element')]
     public function testDraftDecodeMatchesWriteBoundaryStyle(): void
@@ -45,7 +65,9 @@ class DraftLayoutStyleParityTest extends TestCase
         ]];
 
         // One normalizer instance feeds both paths, so a path that stops calling it is what the comparison
-        // catches. Which instance the container hands each service is a wiring question this test does not make.
+        // catches. Which instance the container hands each service is a wiring question this test does not
+        // make; the integration test of the same name pins that the container-wired paths normalize
+        // identically (observable behavior, not instance identity).
         $normalizer = new StoredTreeStyleNormalizer($this->styleNormalizer());
         $elementCodec = new StoredElementCodec(static::createStub(DataLoaderConfigSerializerProvider::class));
 
@@ -95,5 +117,27 @@ class DraftLayoutStyleParityTest extends TestCase
         ]);
 
         return new ElementStyleNormalizer($registry, new BoxSpacingNormalizer());
+    }
+
+    /**
+     * Every constructor argument of the service that references the normalizer, by id. Matching by id
+     * rather than by argument index keeps the pin alive across a constructor reorder; a service handed a
+     * second normalizer under a NEW id answers `[]` here and fails the comparison.
+     *
+     * @param class-string $serviceId
+     *
+     * @return list<string>
+     */
+    private function normalizerReferences(ContainerBuilder $container, string $serviceId): array
+    {
+        $references = [];
+
+        foreach ($container->getDefinition($serviceId)->getArguments() as $argument) {
+            if ($argument instanceof Reference && (string) $argument === StoredTreeStyleNormalizer::class) {
+                $references[] = (string) $argument;
+            }
+        }
+
+        return $references;
     }
 }

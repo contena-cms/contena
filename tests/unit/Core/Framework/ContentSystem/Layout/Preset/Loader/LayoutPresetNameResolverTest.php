@@ -29,7 +29,7 @@ class LayoutPresetNameResolverTest extends TestCase
     {
         yield 'simple file' => ['category-page.yaml', 'Ct', 'Ct:CategoryPage'];
         yield 'yml extension' => ['hero.yml', 'AcmeThemes', 'AcmeThemes:Hero'];
-        yield 'nested path' => ['product/detail.yaml', 'Ct', 'Ct:Product:Detail'];
+        yield 'nested path' => ['blog/detail.yaml', 'Ct', 'Ct:Blog:Detail'];
         yield 'deep nesting' => ['landing/hero/split.yaml', 'Ct', 'Ct:Landing:Hero:Split'];
         yield 'single char segment' => ['a/b.yaml', 'Prefix', 'Prefix:A:B'];
         yield 'multi-hyphen' => ['media-and-text.yaml', 'X', 'X:MediaAndText'];

@@ -34,6 +34,20 @@ class StoredElementCodecDataRequirementTest extends StoredElementCodecTestCase
         static::assertSame($expected, $element->dataRequirements['blogs']->key);
     }
 
+    #[TestDox('a requirement stored without a key gains an explicit one when the element is encoded again')]
+    public function testAKeylessRequirementIsNormalizedOnReEncode(): void
+    {
+        $stored = ['source' => 'entity', 'config' => ['entity' => 'blog', 'property' => 'blogId']];
+
+        $encoded = $this->codec()->decode(self::baseWire(['dataRequirements' => ['blogs' => $stored]]))->jsonSerialize();
+
+        static::assertArrayNotHasKey('key', $stored);
+        static::assertSame(
+            ['key' => 'blogs', 'source' => 'entity', 'config' => ['entity' => 'blog', 'property' => 'blogId']],
+            $encoded['dataRequirements']['blogs'] ?? null,
+        );
+    }
+
     #[TestDox('names the element whose data requirement points at an unregistered config serializer source')]
     public function testDecodeThrowsWithElementIdWhenSourceUnregistered(): void
     {

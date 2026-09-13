@@ -124,6 +124,7 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Api\StructEncoder;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use Contena\Core\System\Language\LanguageLoader;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -135,6 +136,10 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    // Filled by the bundle that owns the section assignment tables; the Frontend sets header and footer.
+    $containerConfigurator->parameters()
+        ->set('contena.content_system.section_assignment_entities', []);
+
     $services = $containerConfigurator->services();
 
     // Entity Definitions
@@ -278,6 +283,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
             service(EntityCacheTagResolver::class),
             service(DefinitionInstanceRegistry::class),
+            param('contena.content_system.section_assignment_entities'),
         ])
         ->tag('kernel.event_listener');
 
@@ -698,7 +704,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(DataLoaderConfigSerializerProvider::class),
             service(ContentSystemStyleOptionRegistry::class),
             service(ContextPathResolver::class),
-            service(Connection::class),
+            service(LanguageLoader::class),
         ]);
 
     $services->set(LayoutGate::class)

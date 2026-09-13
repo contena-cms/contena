@@ -93,7 +93,7 @@ class ContentLayoutFrontendRenderTest extends TestCase
 
     /**
      * `Ct:Media:Image.html.twig:47` branches on `media is not null`; the write gate only requires `mediaId` to
-     * be filled, not that the media row exists (see {@see \Contena\Tests\Integration\Core\Framework\ContentSystem\Validation\MediaImageWriteGateTest::testPersistsMediaImageWriteWithFilledMediaId()}),
+     * be filled, not that the media row exists (see {@see MediaImageWriteGateTest::testPersistsMediaImageWriteWithFilledMediaId()}),
      * so a layout wired to a dangling media id persists and this is the leg that renders it.
      */
     #[TestDox('renders the placeholder markup instead of an img tag when the element\'s media id names no media row')]

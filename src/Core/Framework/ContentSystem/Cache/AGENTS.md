@@ -7,3 +7,5 @@
 - `RenderingCacheContext` created in route, passed through pipeline — tags accumulate, `disable()` is irreversible
 - Supported entities: blog, category, landing_page, cms_page, blog_stream — all others cause uncacheable
 - Invalidation triggers: `EntityWrittenContainerEvent` for content_layout + all 5 assignment tables
+- Table names come from the definitions' `ENTITY_NAME`; the two Frontend-owned section tables arrive via the
+  `contena.content_system.section_assignment_entities` parameter, never as a literal in Core

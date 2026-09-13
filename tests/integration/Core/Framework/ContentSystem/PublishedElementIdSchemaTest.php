@@ -62,15 +62,15 @@ class PublishedElementIdSchemaTest extends TestCase
             true,
         ];
 
-        yield 'a stored element with an integer-castable id is refused' => [
-            'StoredContentElement',
-            ['id' => '12', 'component' => 'core:text'],
-            false,
-        ];
-
         yield 'a stored element whose id carries a line feed is refused' => [
             'StoredContentElement',
             ['id' => "hero\nfoot", 'component' => 'core:text'],
+            false,
+        ];
+
+        yield 'a stored element with an integer-castable id is refused' => [
+            'StoredContentElement',
+            ['id' => '12', 'component' => 'core:text'],
             false,
         ];
 

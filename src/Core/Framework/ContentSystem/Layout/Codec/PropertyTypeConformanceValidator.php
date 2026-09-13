@@ -59,12 +59,14 @@ final class PropertyTypeConformanceValidator extends ConstraintValidator
 
             $type = $specification->type();
 
-            // fromDecoded() throws only for a PHP value no JSON payload can carry; the element's own `Type`
-            // and value-nesting constraints have already run against this same map.
+            // fromDecoded() throws for a non-finite float (a JSON 1e400 decodes to INF) and nothing catches
+            // it here; that 500 is the accepted limitation in Api/docs/mutation-errors.md. A list-shaped
+            // payload never carries one this far: the write's first decode already admitted its values
+            // (see Layout/Field/README.md).
             if (!$type->admits(StoredValue::fromDecoded($raw))) {
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('{{ key }}', (string) $key)
-                    ->setParameter('{{ declaredType }}', $this->renderDeclaredType($type))
+                    ->setParameter('{{ declaredType }}', $type->describe())
                     ->setParameter('{{ actualType }}', get_debug_type($raw))
                     ->atPath('[properties][' . $key . ']')
                     ->addViolation();
@@ -109,21 +111,5 @@ final class PropertyTypeConformanceValidator extends ConstraintValidator
                 ->atPath('[properties][' . $key . ']')
                 ->addViolation();
         }
-    }
-
-    /**
-     * The declared type as the message names it. The translatable flag is spelled out because the same
-     * `string` declaration admits a bare string without it and only a language map with it, so the flag is
-     * what a client needs to read the rejection.
-     */
-    private function renderDeclaredType(PropertyType $type): string
-    {
-        $declared = implode('|', (array) $type->type());
-
-        if (!$type->translatable()) {
-            return $declared;
-        }
-
-        return $declared . ' (translatable)';
     }
 }

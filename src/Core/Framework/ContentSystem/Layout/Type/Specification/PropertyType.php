@@ -13,9 +13,10 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Validation\TypedEnumValidat
  * `enum` is ignored for non-primitive types; `translatable` is a declaration error on any type but the lone
  * `string`. {@see TypedEnumValidator} {@see TranslatableTypeValidator}
  *
- * Three members serve the stored tree rather than the published schema: {@see translatable()} reads the flag,
- * {@see storedDefault()} is the one shape rule for a declared default in storage, and {@see admits()} is the one
- * conformance predicate answering whether a stored value matches this declared type.
+ * Four members serve the stored tree rather than the published schema: {@see translatable()} reads the flag,
+ * {@see storedDefault()} is the one shape rule for a declared default in storage, {@see admits()} is the one
+ * conformance predicate answering whether a stored value matches this declared type, and {@see describe()}
+ * renders the declaration for the violation messages both reporters share.
  *
  * @phpstan-type PropertyTypeSchema = array{
  *     type: string|list<string>,
@@ -88,6 +89,26 @@ final readonly class PropertyType
     }
 
     /**
+     * The declared type as a violation message names it. The translatable flag is spelled out because the same
+     * `string` declaration admits a bare string without it and only a language map with it, so the flag is what
+     * a client needs to read the report.
+     */
+    public function describe(): string
+    {
+        $declared = implode('|', (array) $this->type);
+
+        if (!$this->translatable) {
+            return $declared;
+        }
+
+        return $declared . ' (translatable)';
+    }
+
+    /**
+     * The declared default in the shape storage holds it: a translatable property stores one value per language,
+     * so its default seeds under the anchor language key, and every other property stores the bare scalar. A
+     * declaration with no default seeds nothing, which the null return reports.
+     *
      * @return string|int|float|bool|array<string, string|int|float|bool>|null
      */
     public function storedDefault(): string|int|float|bool|array|null
@@ -103,41 +124,33 @@ final readonly class PropertyType
         return [Defaults::LANGUAGE_SYSTEM => $this->default];
     }
 
+    /**
+     * Whether a stored value conforms to this declared type, total over every {@see StoredValue} variant. A
+     * translatable property admits only a non-empty language map of strings. Every other declaration keeps the
+     * primitive match table: a union carrying a non-primitive, a bare `object` and an FQCN constrain nothing, a
+     * lone or all-primitive union declaration is matched against the unwrapped value, and the null variant is
+     * admitted throughout, because whether a key may be absent or null is the required-input rule's business.
+     */
     public function admits(StoredValue $value): bool
     {
         if ($this->translatable) {
-            $raw = $value->jsonSerialize();
-
-            if (!\is_array($raw) || array_is_list($raw)) {
-                return false;
-            }
-
-            foreach ($raw as $entry) {
-                if (!\is_string($entry)) {
-                    return false;
-                }
-            }
-
-            return true;
+            return $this->admitsLanguageMap($value);
         }
 
         if ($value->isNull()) {
             return true;
         }
 
-        $types = \is_string($this->type) ? [$this->type] : $this->type;
+        $enforceable = $this->enforceablePrimitives();
 
-        if ($types === [] || \array_diff($types, self::PRIMITIVE_TYPES) !== []) {
+        if ($enforceable === null) {
             return true;
         }
 
         $raw = $value->jsonSerialize();
 
-        foreach ($types as $type) {
-            if (($type === 'string' && \is_string($raw))
-                || ($type === 'integer' && \is_int($raw))
-                || ($type === 'number' && (\is_int($raw) || \is_float($raw)))
-                || ($type === 'boolean' && \is_bool($raw))) {
+        foreach ($enforceable as $primitive) {
+            if ($this->matchesPrimitive($raw, $primitive)) {
                 return true;
             }
         }
@@ -148,5 +161,68 @@ final readonly class PropertyType
     public function isPrimitive(): bool
     {
         return \in_array($this->type, self::PRIMITIVE_TYPES, true);
+    }
+
+    /**
+     * A language map is recognised on the unwrapped value the way {@see StoredValue::fromDecoded()} assigns the
+     * map variant, because no variant predicate is exposed: an array whose keys are not a zero-based sequence.
+     * That rejects the empty map and the list in one test, since both unwrap to a sequence.
+     */
+    private function admitsLanguageMap(StoredValue $value): bool
+    {
+        $raw = $value->jsonSerialize();
+
+        if (!\is_array($raw) || array_is_list($raw)) {
+            return false;
+        }
+
+        foreach ($raw as $entry) {
+            if (!\is_string($entry)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The primitives a value must satisfy at least one of, or `null` when the declaration constrains nothing.
+     * A union's declared type is an array, so {@see isPrimitive()} answers false for every one of them; the
+     * members are tested against {@see PRIMITIVE_TYPES} here instead.
+     *
+     * @return list<string>|null
+     */
+    private function enforceablePrimitives(): ?array
+    {
+        if (\is_string($this->type)) {
+            return \in_array($this->type, self::PRIMITIVE_TYPES, true) ? [$this->type] : null;
+        }
+
+        if ($this->type === []) {
+            return null;
+        }
+
+        foreach ($this->type as $member) {
+            if (!\in_array($member, self::PRIMITIVE_TYPES, true)) {
+                return null;
+            }
+        }
+
+        return $this->type;
+    }
+
+    /**
+     * `number` admits an integer as well as a float — JSON carries no distinction a client can be held to —
+     * while `integer` admits only an integer.
+     */
+    private function matchesPrimitive(mixed $raw, string $primitive): bool
+    {
+        return match ($primitive) {
+            'string' => \is_string($raw),
+            'integer' => \is_int($raw),
+            'number' => \is_int($raw) || \is_float($raw),
+            'boolean' => \is_bool($raw),
+            default => false,
+        };
     }
 }

@@ -26,3 +26,7 @@ Unsupported entities return null → page becomes uncacheable.
 `CacheInvalidationSubscriber` listens to `EntityWrittenContainerEvent`:
 - **content_layout** → `content-layout-{id}`
 - **assignment tables** (blog/category/landing_page/header/footer) → looks up associated entity and invalidates its tag
+
+Every table name comes from its definition's `ENTITY_NAME`. Header and footer are Frontend-owned, so
+the Frontend hands those two to the subscriber through the container parameter
+`contena.content_system.section_assignment_entities`; Core declares it empty.

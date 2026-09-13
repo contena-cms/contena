@@ -35,8 +35,8 @@ use Contena\Core\Framework\ContentSystem\Schema\AbstractContentSystemDataLoaderM
 use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderMap;
 use Contena\Core\Framework\ContentSystem\Validation\ViolationConstraintMapper;
 use Contena\Core\Framework\Context;
+use Contena\Core\System\Language\LanguageLoaderInterface;
 use Contena\Core\Test\Stub\ContentSystem\ContentSystemElementTypeSpecificationBuilder;
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -294,7 +294,7 @@ class ContentDiagnoseControllerTest extends TestCase
             static::createStub(DataLoaderConfigSerializerProvider::class),
             static::createStub(AbstractContentSystemStyleOptionRegistry::class),
             new ContextPathResolver(),
-            static::createStub(Connection::class),
+            static::createStub(LanguageLoaderInterface::class),
         );
     }
 

@@ -18,4 +18,6 @@ use Symfony\Component\Validator\Constraint;
 final class PropertyTypeConformance extends Constraint
 {
     public string $message = 'Property "{{ key }}" is declared as "{{ declaredType }}" but carries a value of type "{{ actualType }}".';
+
+    public string $languageKeyMessage = 'Property "{{ key }}" is translatable, so every key of its value must be a language id in lowercase UUID hex; "{{ languageKey }}" is not.';
 }

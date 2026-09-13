@@ -47,7 +47,10 @@ class ElementIdRuleTest extends TestCase
             'is the reserved virtual-root id',
         ];
 
-        yield 'refuses an integer-castable id' => ['12', 'reads as an integer'];
+        yield 'refuses an integer-castable id' => [
+            '12',
+            'reads as an integer',
+        ];
 
         yield 'refuses a negative zero, which PHP alone would have kept as a string key' => [
             '-0',
@@ -69,7 +72,7 @@ class ElementIdRuleTest extends TestCase
 
         yield 'refuses a paragraph separator' => ['hero' . "\u{2029}", 'contains the line terminator U+2029'];
 
-        // ECMA-262's LineTerminator production, which is what a JSON Schema `.` excludes, is narrower than
+        // ECMA-262's LineTerminator blogion, which is what a JSON Schema `.` excludes, is narrower than
         // Unicode's newline set. These three stay admitted on both sides, and pin that the rule was not
         // widened to `\s` or to Unicode's definition by someone tidying up.
         yield 'admits NEL, which ECMA-262 does not count as a line terminator' => ['hero' . "\u{0085}", null];
