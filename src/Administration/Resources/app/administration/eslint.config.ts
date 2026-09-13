@@ -175,7 +175,7 @@ export default [
             'config/*.js',
             'eslint.config.ts',
             'jest.config.js',
-            'jest.config.ts',
+            '_jest.config.ts',
             'test/e2e/**/*',
             'scripts/**/*',
             '!scripts/extensionTooling/',

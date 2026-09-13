@@ -144,7 +144,7 @@ See [Administration testing](../../../../../../../coding-guidelines/administrati
 
 ## Configuration
 
-- **Jest Config:** `jest.config.js`
+- **Jest Config:** `jest.config.js` loads `_jest.config.ts` (the `_` prefix keeps Jest from auto-detecting a second config file)
 - **Test Setup:** `test/_setup/prepare_environment.js`
 - **Test Pattern:** `src/**/*.spec.{js,ts}`
 
