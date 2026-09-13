@@ -144,7 +144,6 @@ import {
     updateElementStyleInLayout,
 } from 'src/module/ct-experience-studio/util/content-element.util';
 import {
-    anchorLanguageId,
     editingLanguageChain,
     resolveTranslatableEntry,
     withLanguageEntry,
@@ -193,7 +192,9 @@ type LayoutAssignmentConfig = {
 };
 
 type DraftMutationOperation = 'insert' | 'remove' | 'duplicate' | 'move' | 'insert-preset' | 'update-properties';
-type DraftMutationOutcome = 'applied' | 'rejected' | 'skipped';
+// What a write did: 'committed' went through the server, 'applied' changed only the local draft,
+// 'rejected' is a server refusal the caller may retry, 'skipped' wrote nothing and nothing is pending.
+type DraftMutationOutcome = 'committed' | 'applied' | 'skipped' | 'rejected';
 type LayoutMutator = (layoutValue: ContentElementNode[]) => LayoutMutationResult;
 type SelectedElementIdResolver = (response: ContentLayoutDraftMutationResponse) => string | null;
 type ContentSystemLayoutDraftMutationService = {
@@ -807,19 +808,16 @@ const onInlineEditCommit = async (payload: { elementId: string; value: string })
     const element = findElementById(payload.elementId);
 
     if (!element) {
+        // A vanished edit target leaves nothing to retry against; a kept session would suspend the
+        // preview's auto-reload until the user re-enters and cancels an inline edit.
+        clearInlineEditSession();
         return;
     }
 
-    if (isTranslatableProperty(element.component, 'text')) {
-        const outcome = await writeElementPropertyValue(element, 'text', normalizedValue);
+    const outcome = await writeElementPropertyValue(element, 'text', normalizedValue);
 
-        if (outcome !== 'rejected') {
-            clearInlineEditSession();
-        }
-        return;
-    }
-
-    if ((await writeElementPropertyValue(element, 'text', normalizedValue)) !== 'rejected') {
+    // Only a server refusal leaves something to retry; every other outcome ends the edit.
+    if (outcome !== 'rejected') {
         clearInlineEditSession();
     }
 };
@@ -1095,7 +1093,7 @@ const writeElementPropertyValue = async (
 ): Promise<DraftMutationOutcome> => {
     if (isTranslatableProperty(element.component, propertyKey)) {
         const entryValue =
-            typeof value === 'string' ? withLanguageEntry(element.properties?.[propertyKey], anchorLanguageId(), value) : value;
+            typeof value === 'string' ? withLanguageEntry(element.properties?.[propertyKey], editingLanguageChain()[0], value) : value;
 
         return executeStructuralDraftMutation(
             'update-properties',
@@ -1235,7 +1233,7 @@ const executeStructuralDraftMutation = async (
         editorStore.value.pushToHistory(currentLayout, previousSelectedElementId);
         layout.value.layout = response.layout;
         selectedElementId.value = resolveSelectedElementId(response);
-        return 'applied';
+        return 'committed';
     } catch (error) {
         if (requestId !== latestMutationRequestId.value) {
             return 'skipped';

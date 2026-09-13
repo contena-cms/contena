@@ -129,6 +129,67 @@ describe('module/ct-experience-studio/page/ct-experience-studio-detail', () => {
         expect(wrapper.vm.selectedElementId).toBe('element-1');
     });
 
+    it('keeps the inline session with the typed draft when a translatable commit is rejected', async () => {
+        const updateElementProperties = jest.fn().mockRejectedValue(new Error('mutation rejected'));
+        const { wrapper } = await createWrapper({
+            services: {
+                contentSystemLayoutDraftMutationService: { updateElementProperties },
+            },
+        });
+        wrapper.vm.layout = {
+            id: 'layout-1',
+            rootSource: 'blog',
+            layout: [
+                {
+                    id: 'element-1',
+                    component: 'Ct:Content:Text',
+                    properties: { text: { [ANCHOR_LANGUAGE_ID]: 'Hello' } },
+                },
+            ],
+        };
+        wrapper.vm.elementTypeStore.typesByName = {
+            'Ct:Content:Text': {
+                name: 'Ct:Content:Text',
+                properties: { text: { translatable: true, adminUI: { component: 'text-editor' } } },
+            },
+        };
+
+        wrapper.vm.onInlineEditStart({ elementId: 'element-1' });
+        wrapper.vm.onInlineEditChange({ elementId: 'element-1', value: 'Hello again' });
+        await wrapper.vm.onInlineEditCommit({ elementId: 'element-1', value: 'Hello again' });
+
+        expect(wrapper.vm.inlineEditSession).toEqual({
+            elementId: 'element-1',
+            originalValue: 'Hello',
+            draftValue: 'Hello again',
+            isEditing: true,
+        });
+    });
+
+    it('clears the inline session when the edited element no longer exists', async () => {
+        const { wrapper } = await createWrapper();
+        wrapper.vm.layout = {
+            id: 'layout-1',
+            rootSource: 'blog',
+            layout: [
+                {
+                    id: 'element-1',
+                    component: 'content:text',
+                    properties: { text: 'Hello' },
+                },
+            ],
+        };
+        wrapper.vm.elementTypeStore.typesByName = {
+            'content:text': { name: 'content:text', properties: {} },
+        };
+
+        wrapper.vm.onInlineEditStart({ elementId: 'element-1' });
+        wrapper.vm.layout.layout = [];
+        await wrapper.vm.onInlineEditCommit({ elementId: 'element-1', value: 'Hello again' });
+
+        expect(wrapper.vm.inlineEditSession).toBeNull();
+    });
+
     it('reads an empty string when no anchor-chain language carries a translatable text entry', async () => {
         const { wrapper } = await createWrapper();
         wrapper.vm.elementTypeStore.typesByName = {

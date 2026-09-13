@@ -86,14 +86,6 @@ export function getElementPropertyStorageKey(
 }
 
 /**
- * How a translatable property value resolves against a language chain: the
- * chain head carries its own entry, an entry further down the chain is
- * inherited, or no chain language carries an entry at all.
- *
- * @private
- * @ct-package discovery
- */
-/**
  * Resolves a translatable property value along a language chain in serving order,
  * returning the first chain language carrying an entry, or `undefined` when none does.
  *
@@ -220,10 +212,6 @@ export function isPropertyVisible(
     property: ContentSystemElementTypeProperty,
     propertyValues: Record<string, unknown>,
 ): boolean {
-    if (property.adminUI?.hidden === true) {
-        return false;
-    }
-
     const visibleWhen = property.adminUI?.visibleWhen;
 
     if (!visibleWhen) {
