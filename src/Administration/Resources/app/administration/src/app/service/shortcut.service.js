@@ -113,7 +113,7 @@ export default function createShortcutService(shortcutFactory, keystrokeDelay = 
     }
 
     function isRestrictedSource(event) {
-        const restrictedTags = /INPUT|TEXTAREA|SELECt/;
+        const restrictedTags = /INPUT|TEXTAREA|SELECT/;
         const source = event.srcElement;
         const tagName = source.tagName;
 
