@@ -23,7 +23,7 @@ class Migration1785930000CreateChannelTest extends TestCase
     private const array TABLES = [
         'seo_url_template',
         'seo_url',
-        'cookie_consent_config_version',
+        'cookie_consent_config_snapshot',
         'cookie_consent_log',
         'consent_log',
         'consent_state',
@@ -86,19 +86,17 @@ class Migration1785930000CreateChannelTest extends TestCase
 
         $logColumns = array_column(TableHelper::getTable($this->connection, 'cookie_consent_log')->columns, 'name');
         static::assertEqualsCanonicalizing(
-            ['id', 'data_scope_id', 'channel_id', 'language_id', 'consent_action', 'accepted_groups', 'config_hash', 'created_at', 'updated_at'],
+            ['id', 'data_scope_id', 'consent_id', 'consent_action', 'group_decisions', 'accepted_cookies', 'config_hash', 'channel_id', 'language_id', 'created_at'],
             $logColumns,
         );
 
-        $configVersionColumns = array_column(TableHelper::getTable($this->connection, 'cookie_consent_config_version')->columns, 'name');
+        $configSnapshotColumns = array_column(TableHelper::getTable($this->connection, 'cookie_consent_config_snapshot')->columns, 'name');
         static::assertEqualsCanonicalizing(
-            ['id', 'data_scope_id', 'config_hash', 'channel_id', 'language_id', 'cookie_groups', 'created_at', 'updated_at'],
-            $configVersionColumns,
+            ['id', 'data_scope_id', 'config_hash', 'cookie_groups', 'created_at'],
+            $configSnapshotColumns,
         );
 
         static::assertTrue(TableHelper::getColumnOfTable($this->connection, 'consent_state', 'updated_at')->isNotNull);
-        static::assertFalse(TableHelper::getColumnOfTable($this->connection, 'cookie_consent_log', 'updated_at')->isNotNull);
-        static::assertFalse(TableHelper::getColumnOfTable($this->connection, 'cookie_consent_config_version', 'updated_at')->isNotNull);
 
         foreach (['configuration', 'mail_header_footer_id', 'maintenance_ip_allowlist', 'hreflang_default_domain_id', 'business_time_zone'] as $column) {
             static::assertTrue(TableHelper::columnExists($this->connection, 'channel', $column), $column);

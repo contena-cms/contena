@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->append($this->createHttpCacheSection())
                 ->append($this->createNumberRangeSection())
+                ->append($this->createCookieConsentSection())
                 ->append($this->createProfilerSection())
                 ->append($this->createFilesystemSection())
                 ->append($this->createCdnSection())
@@ -843,6 +844,34 @@ class Configuration implements ConfigurationInterface
                 ->integerNode('expire_days')
                     ->min(1)
                     ->defaultValue(120)
+                ->end()
+            ->end();
+
+        return $rootNode;
+    }
+
+    private function createCookieConsentSection(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('cookie_consent');
+
+        $rootNode = $treeBuilder->getRootNode();
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('log_storage')
+                    ->info('Name of the storage tagged with contena.cookie_consent.log_storage: "none" (default, logging off), "database", "filesystem" or a custom one')
+                    ->cannotBeEmpty()
+                    ->defaultValue('none')
+                ->end()
+                ->integerNode('retention_days')
+                    ->info('Days a recorded consent decision is kept before the daily cleanup deletes it')
+                    ->min(1)
+                    ->defaultValue(120)
+                ->end()
+                ->scalarNode('filesystem_path')
+                    ->info('Directory inside contena.filesystem.private used by the "filesystem" storage')
+                    ->cannotBeEmpty()
+                    ->defaultValue('cookie-consent')
                 ->end()
             ->end();
 

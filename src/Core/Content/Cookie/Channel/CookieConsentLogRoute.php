@@ -2,53 +2,49 @@
 
 namespace Contena\Core\Content\Cookie\Channel;
 
+use Contena\Core\Content\Cookie\ConsentLog\AbstractCookieConsentLogStorage;
+use Contena\Core\Content\Cookie\ConsentLog\CookieConsentAction;
+use Contena\Core\Content\Cookie\ConsentLog\CookieConsentConfigSnapshot;
+use Contena\Core\Content\Cookie\ConsentLog\CookieConsentDecision;
+use Contena\Core\Content\Cookie\ConsentLog\CookieConsentRecord;
 use Contena\Core\Content\Cookie\CookieException;
-use Contena\Core\Content\Cookie\Event\CookieConsentLoggedEvent;
-use Contena\Core\Defaults;
+use Contena\Core\Content\Cookie\Struct\CookieGroup;
+use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\NoContentResponse;
-use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Persists anonymous cookie consent decisions of frontend visitors so system
- * operators can demonstrate that consent was obtained (GDPR Recital 42).
+ * Records cookie consent decisions of visitors so system operators can demonstrate
+ * that consent was obtained (GDPR Art. 7(1), Recital 42).
  *
- * Alongside every log entry, a snapshot of the current cookie banner
- * configuration is stored once per configuration hash, preserving what the
- * banner looked like when the consent was given.
+ * The client only reports raw facts: its consent id, which action the visitor
+ * performed and which cookies were ticked. Everything else, especially the
+ * per-group verdict, is derived here against the configuration the server holds,
+ * so the stored evidence cannot be shaped by the client and the rules stay in
+ * one testable place.
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class CookieConsentLogRoute extends AbstractCookieConsentLogRoute
 {
-    final public const ACTION_ACCEPT_ALL = 'accept_all';
-    final public const ACTION_ACCEPT_REQUIRED = 'accept_required';
-    final public const ACTION_ACCEPT_SELECTED = 'accept_selected';
+    private const int MAX_ACCEPTED_COOKIES = 500;
 
-    private const VALID_ACTIONS = [
-        self::ACTION_ACCEPT_ALL,
-        self::ACTION_ACCEPT_REQUIRED,
-        self::ACTION_ACCEPT_SELECTED,
-    ];
-
-    private const MAX_ACCEPTED_GROUPS = 100;
-    private const MAX_STRING_LENGTH = 255;
+    private const int MAX_STRING_LENGTH = 255;
 
     /**
      * @internal
      */
     public function __construct(
         private readonly AbstractCookieRoute $cookieRoute,
-        private readonly Connection $connection,
-        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly AbstractCookieConsentLogStorage $storage,
         private readonly ClockInterface $clock,
+        private readonly RateLimiter $rateLimiter,
     ) {
     }
 
@@ -60,71 +56,134 @@ class CookieConsentLogRoute extends AbstractCookieConsentLogRoute
     #[Route(path: '/channel-api/cookie-consent-log', name: 'channel-api.cookie.consent-log', methods: [Request::METHOD_POST])]
     public function log(Request $request, ChannelContext $channelContext): NoContentResponse
     {
+        $this->ensureNotRateLimited($request);
+
         $payload = $this->validatePayload($request);
 
-        $currentConfig = $this->cookieRoute->getCookieGroups($request, $channelContext);
-
-        // The client sends the hash of the configuration it rendered. It normally matches the
-        // current one, but may be stale when the banner changed after page load. The log entry
-        // keeps the client hash as evidence of what the visitor actually saw.
-        $configHash = $payload['cookieConfigHash'] ?? $currentConfig->getHash();
-
-        $now = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
-        $channelId = $channelContext->getChannelId();
-        $languageId = $channelContext->getLanguageId();
+        $configuration = $this->cookieRoute->getCookieGroups($request, $channelContext);
+        $cookieGroups = $configuration->getCookieGroups();
+        $decisions = $this->deriveDecisions($cookieGroups, $payload['consentAction'], $payload['acceptedCookies']);
+        $now = $this->clock->now();
         $dataScopeId = $channelContext->getContext()->getDataScopeId();
 
-        $this->connection->transactional(function () use ($payload, $currentConfig, $configHash, $now, $channelId, $languageId, $dataScopeId): void {
-            $this->connection->executeStatement(
-                'INSERT IGNORE INTO `cookie_consent_config_version`
-                    (`id`, `data_scope_id`, `config_hash`, `channel_id`, `language_id`, `cookie_groups`, `created_at`)
-                VALUES
-                    (:id, :dataScopeId, :configHash, :channelId, :languageId, :cookieGroups, :createdAt)',
-                [
-                    'id' => Uuid::randomBytes(),
-                    'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
-                    'configHash' => $currentConfig->getHash(),
-                    'channelId' => Uuid::fromHexToBytes($channelId),
-                    'languageId' => Uuid::fromHexToBytes($languageId),
-                    'cookieGroups' => json_encode($currentConfig->getCookieGroups(), \JSON_THROW_ON_ERROR),
-                    'createdAt' => $now,
-                ],
-            );
-
-            $this->connection->executeStatement(
-                'INSERT INTO `cookie_consent_log`
-                    (`id`, `data_scope_id`, `channel_id`, `language_id`, `consent_action`, `accepted_groups`, `config_hash`, `created_at`)
-                VALUES
-                    (:id, :dataScopeId, :channelId, :languageId, :consentAction, :acceptedGroups, :configHash, :createdAt)',
-                [
-                    'id' => Uuid::randomBytes(),
-                    'dataScopeId' => Uuid::fromHexToBytes($dataScopeId),
-                    'channelId' => Uuid::fromHexToBytes($channelId),
-                    'languageId' => Uuid::fromHexToBytes($languageId),
-                    'consentAction' => $payload['consentAction'],
-                    'acceptedGroups' => json_encode($payload['acceptedGroups'], \JSON_THROW_ON_ERROR),
-                    'configHash' => $configHash,
-                    'createdAt' => $now,
-                ],
-            );
-        });
-
-        $this->eventDispatcher->dispatch(new CookieConsentLoggedEvent(
+        $record = new CookieConsentRecord(
+            dataScopeId: $dataScopeId,
+            consentId: $payload['consentId'],
             consentAction: $payload['consentAction'],
-            acceptedGroups: $payload['acceptedGroups'],
-            configHash: $configHash,
-            channelId: $channelId,
-            languageId: $languageId,
+            groupDecisions: $decisions['groupDecisions'],
+            acceptedCookies: $decisions['acceptedCookies'],
+            configHash: $configuration->getHash(),
+            channelId: $channelContext->getChannelId(),
+            languageId: $channelContext->getLanguageId(),
+            createdAt: $now,
+        );
+
+        // The snapshot goes first, so a stored decision always resolves to the banner it was given on
+        $this->storage->snapshot(new CookieConsentConfigSnapshot(
+            dataScopeId: $dataScopeId,
+            configHash: $configuration->getHash(),
+            cookieGroups: array_values($cookieGroups->getElements()),
+            createdAt: $now,
         ));
+        $this->storage->log($record);
 
         return new NoContentResponse();
+    }
+
+    /**
+     * The route is anonymous and every accepted request inserts a row, so the number of
+     * decisions a single client can write has to be capped. Checked before the payload is
+     * parsed, so malformed requests count against the limit too. The IP is only the limiter
+     * key, it is never stored with the decision.
+     */
+    private function ensureNotRateLimited(Request $request): void
+    {
+        $clientIp = $request->getClientIp();
+        if ($clientIp === null) {
+            return;
+        }
+
+        $this->rateLimiter->ensureAccepted(RateLimiter::COOKIE_CONSENT_LOG, $clientIp);
+    }
+
+    /**
+     * Determines per group what the visitor actually consented to. Cookie names the
+     * current configuration does not know are ignored, the log must not become a sink
+     * for arbitrary client input.
+     *
+     * @param list<string> $requestedCookies
+     *
+     * @return array{groupDecisions: array<string, CookieConsentDecision>, acceptedCookies: list<string>}
+     */
+    private function deriveDecisions(CookieGroupCollection $cookieGroups, CookieConsentAction $consentAction, array $requestedCookies): array
+    {
+        $groupDecisions = [];
+        $acceptedCookies = [];
+
+        foreach ($cookieGroups as $group) {
+            $technicalName = $group->getTechnicalName();
+
+            // Required groups offer no choice, they are always active and are not consented to.
+            if ($group->isRequired) {
+                $groupDecisions[$technicalName] = CookieConsentDecision::ACCEPTED;
+
+                continue;
+            }
+
+            $selectable = $this->selectableCookies($group);
+
+            $accepted = match ($consentAction) {
+                CookieConsentAction::ACCEPT_ALL => $selectable,
+                CookieConsentAction::ACCEPT_REQUIRED => [],
+                CookieConsentAction::ACCEPT_SELECTED => array_values(array_intersect($selectable, $requestedCookies)),
+            };
+
+            // A group without selectable cookies presented nothing to consent to. It is recorded
+            // as rejected, understating consent is the safe direction for an evidence log.
+            $groupDecisions[$technicalName] = match (true) {
+                $accepted === [] => CookieConsentDecision::REJECTED,
+                \count($accepted) === \count($selectable) => CookieConsentDecision::ACCEPTED,
+                default => CookieConsentDecision::PARTIAL,
+            };
+
+            foreach ($accepted as $cookie) {
+                $acceptedCookies[] = $cookie;
+            }
+        }
+
+        return ['groupDecisions' => $groupDecisions, 'acceptedCookies' => $acceptedCookies];
+    }
+
+    /**
+     * Cookies of a group the visitor can actually tick. Hidden entries are excluded:
+     * they are never rendered, so counting them would mark every group as partial.
+     *
+     * @return list<string>
+     */
+    private function selectableCookies(CookieGroup $group): array
+    {
+        $cookie = $group->getCookie();
+        if ($cookie !== null && $cookie !== '') {
+            return [$cookie];
+        }
+
+        $selectable = [];
+        foreach ($group->getEntries() ?? [] as $entry) {
+            if ($entry->hidden || $entry->cookie === '') {
+                continue;
+            }
+
+            $selectable[] = $entry->cookie;
+        }
+
+        return $selectable;
     }
 
     /**
      * The request body is parsed manually because the frontend sends it via
      * navigator.sendBeacon, which cannot guarantee a JSON content type header.
      *
-     * @return array{consentAction: string, acceptedGroups: list<string>, cookieConfigHash?: string}
+     * @return array{consentId: string, consentAction: CookieConsentAction, acceptedCookies: list<string>}
      */
     private function validatePayload(Request $request): array
     {
@@ -138,40 +197,46 @@ class CookieConsentLogRoute extends AbstractCookieConsentLogRoute
             throw CookieException::invalidConsentLogPayload('body must be a JSON object');
         }
 
-        $consentAction = $data['consentAction'] ?? null;
-        if (!\is_string($consentAction) || !\in_array($consentAction, self::VALID_ACTIONS, true)) {
+        $consentId = $data['consentId'] ?? null;
+        if (!\is_string($consentId) || preg_match(CookieConsentRecord::CONSENT_ID_PATTERN, $consentId) !== 1) {
+            throw CookieException::invalidConsentLogPayload('consentId must be a string of 1 to 64 letters, digits, dashes or underscores');
+        }
+
+        $consentAction = \is_string($data['consentAction'] ?? null) ? CookieConsentAction::tryFrom($data['consentAction']) : null;
+        if ($consentAction === null) {
             throw CookieException::invalidConsentLogPayload(
-                \sprintf('consentAction must be one of: %s', implode(', ', self::VALID_ACTIONS)),
+                \sprintf('consentAction must be one of: %s', implode(', ', array_column(CookieConsentAction::cases(), 'value'))),
             );
         }
 
-        $acceptedGroups = $data['acceptedGroups'] ?? null;
-        if (!\is_array($acceptedGroups) || !array_is_list($acceptedGroups) || \count($acceptedGroups) > self::MAX_ACCEPTED_GROUPS) {
-            throw CookieException::invalidConsentLogPayload(
-                \sprintf('acceptedGroups must be a list with at most %d entries', self::MAX_ACCEPTED_GROUPS),
-            );
-        }
-
-        foreach ($acceptedGroups as $group) {
-            if (!\is_string($group) || $group === '' || mb_strlen($group) > self::MAX_STRING_LENGTH) {
-                throw CookieException::invalidConsentLogPayload('acceptedGroups must contain non-empty strings');
-            }
-        }
-
-        $payload = [
+        return [
+            'consentId' => $consentId,
             'consentAction' => $consentAction,
-            'acceptedGroups' => $acceptedGroups,
+            'acceptedCookies' => $this->validateAcceptedCookies($data['acceptedCookies'] ?? []),
         ];
+    }
 
-        $cookieConfigHash = $data['cookieConfigHash'] ?? null;
-        if ($cookieConfigHash !== null) {
-            if (!\is_string($cookieConfigHash) || $cookieConfigHash === '' || mb_strlen($cookieConfigHash) > self::MAX_STRING_LENGTH) {
-                throw CookieException::invalidConsentLogPayload('cookieConfigHash must be a non-empty string');
-            }
-
-            $payload['cookieConfigHash'] = $cookieConfigHash;
+    /**
+     * An absent list is a valid decision: the visitor may have unticked everything.
+     * It is only relevant for `accept_selected`, the other actions are fully
+     * determined by the action itself.
+     *
+     * @return list<string>
+     */
+    private function validateAcceptedCookies(mixed $acceptedCookies): array
+    {
+        if (!\is_array($acceptedCookies) || !array_is_list($acceptedCookies) || \count($acceptedCookies) > self::MAX_ACCEPTED_COOKIES) {
+            throw CookieException::invalidConsentLogPayload(
+                \sprintf('acceptedCookies must be a list with at most %d entries', self::MAX_ACCEPTED_COOKIES),
+            );
         }
 
-        return $payload;
+        foreach ($acceptedCookies as $cookie) {
+            if (!\is_string($cookie) || $cookie === '' || mb_strlen($cookie) > self::MAX_STRING_LENGTH) {
+                throw CookieException::invalidConsentLogPayload('acceptedCookies must contain non-empty strings');
+            }
+        }
+
+        return $acceptedCookies;
     }
 }

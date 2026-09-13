@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Core\Content\Cookie\Service;
 
+use Contena\Core\Content\Cookie\ConsentLog\DatabaseCookieConsentLogStorage;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieEntry;
@@ -23,6 +24,33 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[CoversClass(CookieProvider::class)]
 class CookieProviderTest extends TestCase
 {
+    public function testConsentIdCookieIsListedWhileConsentLoggingIsOn(): void
+    {
+        $translator = static::createStub(TranslatorInterface::class);
+        $translator->method('trans')->willReturnArgument(0);
+
+        $cookieGroups = new CookieProvider(
+            new EventDispatcher(),
+            $translator,
+            ['name' => 'test-session-name-'],
+            DatabaseCookieConsentLogStorage::NAME,
+            365,
+        )->getCookieGroups(new Request(), Generator::generateChannelContext());
+
+        $requiredGroup = $cookieGroups->get(CookieProvider::SNIPPET_NAME_COOKIE_GROUP_REQUIRED);
+        static::assertInstanceOf(CookieGroup::class, $requiredGroup);
+        static::assertNotNull($requiredGroup->getEntries());
+        static::assertCount(5, $requiredGroup->getEntries());
+
+        // Visible, so a visitor can find the token they need for a consent log request
+        $consentIdCookie = $requiredGroup->getEntries()->get(CookieProvider::COOKIE_ENTRY_CONSENT_ID_COOKIE);
+        static::assertNotNull($consentIdCookie);
+        static::assertFalse($consentIdCookie->hidden);
+        // Lives as long as the records are kept
+        static::assertSame(365, $consentIdCookie->expiration);
+        static::assertFalse(isset($consentIdCookie->value));
+    }
+
     public function testGetCookieGroups(): void
     {
         $eventDispatcher = new CollectingEventDispatcher();
@@ -54,6 +82,9 @@ class CookieProviderTest extends TestCase
         $cookiePreferenceCookie = $requiredGroup->getEntries()->get('cookie-preference');
         static::assertNotNull($cookiePreferenceCookie);
         static::assertTrue($cookiePreferenceCookie->hidden);
+
+        // Consent logging is off by default, so the consent id cookie is not listed
+        static::assertNull($requiredGroup->getEntries()->get(CookieProvider::COOKIE_ENTRY_CONSENT_ID_COOKIE));
 
         $comfortFeaturesGroup = $cookieGroups->get(CookieProvider::SNIPPET_NAME_COOKIE_GROUP_COMFORT_FEATURES);
         static::assertInstanceOf(CookieGroup::class, $comfortFeaturesGroup);

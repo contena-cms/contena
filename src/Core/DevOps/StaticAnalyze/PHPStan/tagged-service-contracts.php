@@ -2,6 +2,7 @@
 
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
+use Contena\Core\Content\Cookie\ConsentLog\AbstractCookieConsentLogStorage;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
@@ -52,6 +53,7 @@ return [
             'messenger.receiver' => ReceiverInterface::class,
             'contena.api.cors_header_provider' => CorsHeaderProviderInterface::class,
             'contena.api.enum_provider' => FieldEnumProviderInterface::class,
+            'contena.cookie_consent.log_storage' => AbstractCookieConsentLogStorage::class,
             'contena.dal.exception_handler' => ExceptionHandlerInterface::class,
             'contena.entity.definition' => EntityDefinition::class,
             'contena.entity.hookable' => [EntityDefinition::class, Entity::class],

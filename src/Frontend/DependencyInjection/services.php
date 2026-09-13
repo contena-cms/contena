@@ -280,6 +280,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('request_stack'),
             param('contena.staging.frontend.show_banner'),
             service(Connection::class),
+            param('contena.cookie_consent.log_storage'),
         ])
         ->tag('twig.extension');
 

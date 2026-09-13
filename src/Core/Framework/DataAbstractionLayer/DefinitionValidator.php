@@ -92,6 +92,8 @@ class DefinitionValidator
         'messenger_stats',
         'migration',
         'refresh_token',
+        'cookie_consent_log',
+        'cookie_consent_config_snapshot',
     ];
 
     private const array IGNORED_ENTITY_PROPERTIES = [

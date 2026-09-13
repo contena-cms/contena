@@ -22,6 +22,8 @@ class RateLimiter
 
     final public const string USER_RECOVERY = 'user_recovery';
 
+    final public const string COOKIE_CONSENT_LOG = 'cookie_consent_log';
+
     final public const string MCP_ADMIN_API = 'mcp_admin_api';
 
     final public const string MCP_CHANNEL_API = 'mcp_channel_api';

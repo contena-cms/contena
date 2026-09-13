@@ -17,7 +17,7 @@
             <p>
                 {% set privacySnippetKey = 'cookie.messageTextPage' %}
                 {% set cmsPath = 'frontend.landing.page' %}
-                {% set privacyPageId = config('core.basicInformation.privacyPage') %}
+                {% set privacyPageId = (config('core.basicInformation.privacyPage')|default('') ~ '')|trim %}
                 {{ privacySnippetKey|trans({
                     '%url%': privacyPageId is not empty ? path(cmsPath, { landingPageId: privacyPageId }) : '#'
                 })|raw }}

@@ -3,6 +3,7 @@
 namespace Contena\Frontend\Framework\Twig;
 
 use Contena\Core\ChannelRequest;
+use Contena\Core\Content\Cookie\ConsentLog\NullCookieConsentLogStorage;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -23,6 +24,7 @@ class TemplateDataExtension extends AbstractExtension implements GlobalsInterfac
         private readonly RequestStack $requestStack,
         private readonly bool $showStagingBanner,
         private readonly Connection $connection,
+        private readonly string $cookieConsentLogStorage = NullCookieConsentLogStorage::NAME,
     ) {
     }
 
@@ -70,6 +72,8 @@ class TemplateDataExtension extends AbstractExtension implements GlobalsInterfac
                 'navigation' => $navigationInfo,
                 'minSearchLength' => $this->minSearchLength($context),
                 'showStagingBanner' => $this->showStagingBanner,
+                // Lets the frontend skip the consent beacon while no decision is recorded
+                'cookieConsentLogEnabled' => $this->cookieConsentLogStorage !== NullCookieConsentLogStorage::NAME,
             ],
             'themeId' => $themeId, /** Not used in Twig template directly, but in @see \Contena\Frontend\Framework\Twig\Extension\ConfigExtension::getThemeId */
             'context' => $context,

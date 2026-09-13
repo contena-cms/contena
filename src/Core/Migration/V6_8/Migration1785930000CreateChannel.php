@@ -769,38 +769,37 @@ SQL);
 CREATE TABLE IF NOT EXISTS `cookie_consent_log` (
     `id` BINARY(16) NOT NULL,
     `data_scope_id` BINARY(16) NOT NULL,
+    `consent_id` VARCHAR(64) NOT NULL,
+    `consent_action` VARCHAR(32) NOT NULL,
+    `group_decisions` JSON NOT NULL,
+    `accepted_cookies` JSON NOT NULL,
+    `config_hash` VARCHAR(255) NOT NULL,
     `channel_id` BINARY(16) NOT NULL,
     `language_id` BINARY(16) NOT NULL,
-    `consent_action` VARCHAR(32) NOT NULL,
-    `accepted_groups` JSON NOT NULL,
-    `config_hash` VARCHAR(255) NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
-    `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     KEY `idx.cookie_consent_log.data_scope_id` (`data_scope_id`),
+    KEY `idx.cookie_consent_log.consent_id` (`consent_id`),
     KEY `idx.cookie_consent_log.created_at` (`created_at`),
-    KEY `idx.cookie_consent_log.config_hash` (`config_hash`),
-    CONSTRAINT `json.cookie_consent_log.accepted_groups` CHECK (JSON_VALID(`accepted_groups`)),
+    CONSTRAINT `json.cookie_consent_log.group_decisions` CHECK (JSON_VALID(`group_decisions`)),
+    CONSTRAINT `json.cookie_consent_log.accepted_cookies` CHECK (JSON_VALID(`accepted_cookies`)),
     CONSTRAINT `fk.cookie_consent_log.data_scope_id` FOREIGN KEY (`data_scope_id`)
         REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
-CREATE TABLE IF NOT EXISTS `cookie_consent_config_version` (
+CREATE TABLE IF NOT EXISTS `cookie_consent_config_snapshot` (
     `id` BINARY(16) NOT NULL,
     `data_scope_id` BINARY(16) NOT NULL,
     `config_hash` VARCHAR(255) NOT NULL,
-    `channel_id` BINARY(16) NOT NULL,
-    `language_id` BINARY(16) NOT NULL,
     `cookie_groups` JSON NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
-    `updated_at` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq.cookie_consent_config_version.config_hash` (`data_scope_id`, `config_hash`, `channel_id`, `language_id`),
-    KEY `idx.cookie_consent_config_version.data_scope_id` (`data_scope_id`),
-    CONSTRAINT `json.cookie_consent_config_version.cookie_groups` CHECK (JSON_VALID(`cookie_groups`)),
-    CONSTRAINT `fk.cookie_consent_config_version.data_scope_id` FOREIGN KEY (`data_scope_id`)
+    UNIQUE KEY `uniq.cookie_consent_config_snapshot.config_hash` (`data_scope_id`, `config_hash`),
+    KEY `idx.cookie_consent_config_snapshot.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `json.cookie_consent_config_snapshot.cookie_groups` CHECK (JSON_VALID(`cookie_groups`)),
+    CONSTRAINT `fk.cookie_consent_config_snapshot.data_scope_id` FOREIGN KEY (`data_scope_id`)
         REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);

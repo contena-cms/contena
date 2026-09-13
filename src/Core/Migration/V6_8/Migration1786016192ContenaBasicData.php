@@ -65,8 +65,6 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'channel_type',
         'channel_type_translation',
         'content_layout',
-        'cookie_consent_config_version',
-        'cookie_consent_log',
         'country',
         'country_translation',
         'custom_field',

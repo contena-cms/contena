@@ -77,7 +77,7 @@ When scope implementations cannot resolve to an ID from the context, they must t
  - CookieConsent
    - File: `src/Core/System/Consent/Definition/CookieConsent.php`
    - Scope: `frontend_visitor`
-   - Description: Frontend visitors' consent to the cookie banner. Evidence is stored anonymously in the dedicated `cookie_consent_log` / `cookie_consent_config_version` tables (see `src/Core/Content/Cookie/`), not in the consent state storage.
+   - Description: Frontend visitors' consent to the cookie banner. Evidence is stored pseudonymously in the dedicated `cookie_consent_log` / `cookie_consent_config_snapshot` tables (see `src/Core/Content/Cookie/`), not in the consent state storage.
 
 ## PHP API's
 

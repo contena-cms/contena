@@ -9,8 +9,8 @@
 
         {% block component_privacy_dpi %}
             {% set contentPagePath = 'frontend.landing.page' %}
-            {% set privacyPageId = config('core.basicInformation.privacyPage') %}
-            {% set tosPageId = config('core.basicInformation.tosPage') %}
+            {% set privacyPageId = (config('core.basicInformation.privacyPage')|default('') ~ '')|trim %}
+            {% set tosPageId = (config('core.basicInformation.tosPage')|default('') ~ '')|trim %}
             {% set privacyPageUrl = privacyPageId is not empty ? path(contentPagePath, { landingPageId: privacyPageId }) : '#' %}
             {% set tosPageUrl = tosPageId is not empty ? path(contentPagePath, { landingPageId: tosPageId }) : '#' %}
             {% set privacyNoticeSnippet = 'general.privacyNoticeTextModal' %}

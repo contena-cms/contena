@@ -20,6 +20,18 @@ Web installer setups and `system:install --basic-setup` now create a member for 
 
 `sitemap:generate` without `--force` no longer aborts when another process is already generating the sitemap for the same channel and language. The affected channel is reported and skipped, and generation continues for the remaining channels. The lock now throws `Contena\Core\Content\Sitemap\Exception\AlreadyLockedException` again as a subtype of `SitemapException`, so plugin `catch (AlreadyLockedException)` blocks work as intended; the error code and HTTP status remain unchanged.
 
+### Server-side cookie consent logging
+
+The built-in cookie banner can now record every consent decision server-side, so operators can demonstrate that consent was obtained (GDPR Art. 7(1), Recital 42). Recording is off by default and is enabled with `contena.cookie_consent.log_storage`.
+
+- The frontend sends each banner interaction to `POST /cookie/consent-log`; headless clients use `POST /channel-api/cookie-consent-log`. The client reports only a generated `consentId`, the action and selected cookie names. Contena derives the accepted, partial or rejected verdict for every group from the server configuration.
+- The `cookie-consent-id` cookie links later decisions by the same browser. It is listed as a required cookie while logging is enabled and uses `contena.cookie_consent.retention_days` as its lifetime. No IP address, user agent, session id or member id is stored.
+- `contena.cookie_consent.log_storage` selects `none`, `database`, `filesystem`, or a custom `AbstractCookieConsentLogStorage` service tagged `contena.cookie_consent.log_storage`. Database and filesystem records preserve the originating data scope; filesystem snapshots are separated by data scope.
+- `bin/console cookie:consent:export [--from] [--to] [--channel] [--format=json|csv]` streams records for compliance requests. The daily `cookie_consent_log.cleanup` task removes decisions older than the configured retention period.
+- `cookie_consent_log` is rate limited to 60 requests per 60 seconds and client IP is used only as the limiter key.
+
+This feature records proof collected through the built-in banner; it is not an IAB TCF or Google-certified consent-management platform. Operators remain responsible for selecting an appropriate consent solution and retention period.
+
 ### Modular payment services and plugin boundaries
 
 Incoming payments (`Payment`), refunds, transfers and subscription agreements now expose separate abstract service contracts. Each business owns its orders/agreements, queries and callbacks; there is no shared order workflow or standalone query domain. Gateways implement capability-specific interfaces; routing plugins can provide candidates, veto candidates and select a route. Events distinguish vetoable pre-gateway hooks, transactional state changes and best-effort gateway completion observers, without a duplicate operation event cycle. See `src/Core/System/Payment/README.md` for contracts, tags, ordering and limitations.

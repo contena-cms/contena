@@ -8,7 +8,7 @@ use Contena\Core\System\Consent\ConsentScope;
 /**
  * Consent of frontend visitors to the cookie banner.
  *
- * Revisions are tracked via the `cookie_consent_config_version` table
+ * Revisions are tracked via the `cookie_consent_config_snapshot` table
  * (one snapshot per cookie configuration hash), not through the consent
  * system's revision mechanism, hence getLatestRevision() returns null.
  *

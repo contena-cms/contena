@@ -84,6 +84,9 @@
                 "number_range": {
                     "$ref": "#/definitions/number_range"
                 },
+                "cookie_consent": {
+                    "$ref": "#/definitions/cookie_consent"
+                },
                 "channel_context": {
                     "$ref": "#/definitions/channel_context"
                 },
@@ -546,6 +549,9 @@
                 "cart_add_line_item_from": {
                     "$ref": "#/definitions/rate_limiter_config"
                 },
+                "cookie_consent_log": {
+                    "$ref": "#/definitions/rate_limiter_config"
+                },
                 "mcp": {
                     "$ref": "#/definitions/rate_limiter_config"
                 }
@@ -570,6 +576,12 @@
                         "object",
                         "array"
                     ]
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "interval": {
+                    "type": "string"
                 }
             },
             "title": "Rate limiter config"
@@ -832,6 +844,41 @@
                 }
             },
             "title": "Number Range"
+        },
+        "cookie_consent": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "log_storage": {
+                    "description": "Where the built-in cookie banner records consent decisions: `none` (default, logging off), `database`, `filesystem` (files on `contena.filesystem.private`), or the name of a custom storage tagged with `contena.cookie_consent.log_storage`.",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "none",
+                                "database",
+                                "filesystem"
+                            ]
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "default": "none"
+                },
+                "retention_days": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 120,
+                    "description": "Days a recorded consent decision is kept before the daily `cookie_consent_log.cleanup` task deletes it."
+                },
+                "filesystem_path": {
+                    "type": "string",
+                    "default": "cookie-consent",
+                    "description": "Directory inside `contena.filesystem.private` used by the `filesystem` storage."
+                }
+            },
+            "title": "Cookie consent"
         },
         "cdn": {
             "type": "object",

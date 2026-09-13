@@ -47,7 +47,7 @@
           "Cookies"
         ],
         "summary": "Log a cookie consent decision",
-        "description": "Persists an anonymous record of a visitor's cookie consent decision together with a snapshot of the current cookie configuration, so system operators can demonstrate that consent was obtained (GDPR Recital 42). No visitor identifiers are stored.",
+        "description": "Records a visitor's cookie consent decision together with a snapshot of the current cookie configuration, so system operators can demonstrate that consent was obtained (GDPR Art. 7(1)). The per-group verdict (`accepted`, `partial`, `rejected`) is derived server-side from the reported cookie names. The record is pseudonymous: apart from the client-generated `consentId` no visitor identifier is stored.",
         "operationId": "logCookieConsent",
         "requestBody": {
           "required": true,
@@ -56,10 +56,15 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "consentAction",
-                  "acceptedGroups"
+                  "consentId",
+                  "consentAction"
                 ],
                 "properties": {
+                  "consentId": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{1,64}$",
+                    "description": "Opaque token the client generates once (e.g. a UUID) and keeps in its own cookie storage, so it can be reused for later decisions of the same visitor. It links a visitor's decisions, so the records of one data subject can be filtered out of an export. Must not contain personal data."
+                  },
                   "consentAction": {
                     "type": "string",
                     "enum": [
@@ -69,16 +74,12 @@
                     ],
                     "description": "Which consent action the visitor performed."
                   },
-                  "acceptedGroups": {
+                  "acceptedCookies": {
                     "type": "array",
                     "items": {
                       "type": "string"
                     },
-                    "description": "Technical names of the accepted cookie groups."
-                  },
-                  "cookieConfigHash": {
-                    "type": "string",
-                    "description": "Hash of the cookie configuration the visitor saw, as returned by the cookie-groups endpoint. Defaults to the current configuration hash."
+                    "description": "Names of the cookies the visitor accepted. Only evaluated for `accept_selected`; the other actions are fully determined by the action itself. Cookie names unknown to the current configuration are ignored. An empty or absent list means nothing beyond the technically required cookies was accepted."
                   }
                 }
               }
@@ -91,6 +92,10 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "429": {
+            "$ref": "#/components/responses/429",
+            "description": "Too many consent decisions were logged for this client IP. The number of seconds to wait before retrying is contained in the error."
           }
         },
         "security": [
