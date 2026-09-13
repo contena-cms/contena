@@ -7,6 +7,7 @@ use Contena\Core\Framework\ContentSystem\ContentSystemException;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Context\ContextDefinitions;
 use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRejection;
 use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRule;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
@@ -172,7 +173,11 @@ final class StoredElementCodec
         $rejection = ElementIdRule::rejection($id);
 
         if ($rejection !== null) {
-            throw ContentSystemException::invalidElementId($id, 'it ' . $rejection);
+            throw ContentSystemException::invalidElementId($id, match ($rejection) {
+                ElementIdRejection::ReservedLiteral => 'it is the reserved virtual-root id',
+                ElementIdRejection::IntegerLiteral => 'it reads as an integer',
+                ElementIdRejection::LineTerminator => 'it contains a line terminator',
+            });
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\ContentSystem\Layout\Codec;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRejection;
 use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRule;
 use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
 use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Breakpoint;
@@ -268,7 +269,12 @@ final class StoredTreeConstraints
         $rejection = ElementIdRule::rejection($value);
 
         if ($rejection !== null) {
-            $context->buildViolation('This value ' . $rejection . '.')->addViolation();
+            $reason = match ($rejection) {
+                ElementIdRejection::ReservedLiteral => 'is the reserved virtual-root id',
+                ElementIdRejection::IntegerLiteral => 'reads as an integer',
+                ElementIdRejection::LineTerminator => 'contains a line terminator',
+            };
+            $context->buildViolation('This value ' . $reason . '.')->addViolation();
         }
     }
 

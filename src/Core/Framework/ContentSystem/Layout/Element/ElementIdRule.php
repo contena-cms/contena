@@ -63,19 +63,19 @@ final class ElementIdRule
      * The predicate an enforcement site frames for its own audience — `it …` for the decode throw, `This
      * value …` for the write violation — or null when the id is admitted.
      */
-    public static function rejection(string $id): ?string
+    public static function rejection(string $id): ?ElementIdRejection
     {
         if ($id === VirtualRootWrapper::VIRTUAL_ROOT_ID) {
-            return 'is the reserved virtual-root id';
+            return ElementIdRejection::ReservedLiteral;
         }
 
         if (preg_match(self::INTEGER_LITERAL, $id) === 1) {
-            return 'reads as an integer';
+            return ElementIdRejection::IntegerLiteral;
         }
 
         foreach (self::LINE_TERMINATORS as $terminator => $codePoint) {
             if (\str_contains($id, $terminator)) {
-                return 'contains the line terminator ' . $codePoint;
+                return ElementIdRejection::LineTerminator;
             }
         }
 

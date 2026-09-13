@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\ContentSystem\Layout\Element;
 
+use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRejection;
 use Contena\Core\Framework\ContentSystem\Layout\Element\ElementIdRule;
 use Contena\Core\Framework\ContentSystem\Layout\Scaffolding\VirtualRootWrapper;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -24,13 +25,13 @@ class ElementIdRuleTest extends TestCase
 {
     #[DataProvider('rejectionProvider')]
     #[TestDox('$_dataName')]
-    public function testRejection(string $id, ?string $expected): void
+    public function testRejection(string $id, ?ElementIdRejection $expected): void
     {
         static::assertSame($expected, ElementIdRule::rejection($id));
     }
 
     /**
-     * @return iterable<string, array{string, string|null}>
+     * @return iterable<string, array{string, ElementIdRejection|null}>
      */
     public static function rejectionProvider(): iterable
     {
@@ -44,35 +45,35 @@ class ElementIdRuleTest extends TestCase
 
         yield 'refuses the reserved virtual-root literal' => [
             VirtualRootWrapper::VIRTUAL_ROOT_ID,
-            'is the reserved virtual-root id',
+            ElementIdRejection::ReservedLiteral,
         ];
 
         yield 'refuses an integer-castable id' => [
             '12',
-            'reads as an integer',
+            ElementIdRejection::IntegerLiteral,
         ];
 
         yield 'refuses a negative zero, which PHP alone would have kept as a string key' => [
             '-0',
-            'reads as an integer',
+            ElementIdRejection::IntegerLiteral,
         ];
 
         yield 'refuses a digit string past PHP_INT_MAX, likewise' => [
             '9223372036854775808',
-            'reads as an integer',
+            ElementIdRejection::IntegerLiteral,
         ];
 
         yield 'admits a non-canonical digit string, so no minted hex id can collide' => ['00', null];
 
-        yield 'refuses a line feed' => ['hero' . "\n", 'contains the line terminator U+000A'];
+        yield 'refuses a line feed' => ['hero' . "\n", ElementIdRejection::LineTerminator];
 
-        yield 'refuses a carriage return' => ['hero' . "\r", 'contains the line terminator U+000D'];
+        yield 'refuses a carriage return' => ['hero' . "\r", ElementIdRejection::LineTerminator];
 
-        yield 'refuses a line separator' => ['hero' . "\u{2028}", 'contains the line terminator U+2028'];
+        yield 'refuses a line separator' => ['hero' . "\u{2028}", ElementIdRejection::LineTerminator];
 
-        yield 'refuses a paragraph separator' => ['hero' . "\u{2029}", 'contains the line terminator U+2029'];
+        yield 'refuses a paragraph separator' => ['hero' . "\u{2029}", ElementIdRejection::LineTerminator];
 
-        // ECMA-262's LineTerminator blogion, which is what a JSON Schema `.` excludes, is narrower than
+        // ECMA-262's LineTerminator production, which is what a JSON Schema `.` excludes, is narrower than
         // Unicode's newline set. These three stay admitted on both sides, and pin that the rule was not
         // widened to `\s` or to Unicode's definition by someone tidying up.
         yield 'admits NEL, which ECMA-262 does not count as a line terminator' => ['hero' . "\u{0085}", null];

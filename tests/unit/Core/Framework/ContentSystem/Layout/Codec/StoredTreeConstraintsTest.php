@@ -235,12 +235,12 @@ class StoredTreeConstraintsTest extends StoredTreeConstraintsTestCase
 
         yield 'an id carrying a line feed' => [
             "hero\nfoot",
-            'This value contains the line terminator U+000A.',
+            'This value contains a line terminator.',
         ];
 
         yield 'an id carrying a paragraph separator' => [
             "hero\u{2029}foot",
-            'This value contains the line terminator U+2029.',
+            'This value contains a line terminator.',
         ];
     }
 
