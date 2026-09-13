@@ -15,8 +15,11 @@
     <div class="offcanvas-cookie" role="region" aria-labelledby="offcanvas-cookie-headline">
         <div class="offcanvas-cookie-description">
             <p>
-                {{ 'cookie.messageTextPage'|trans({
-                    '%url%': path('frontend.landing.page', { landingPageId: config('core.basicInformation.privacyPage') })
+                {% set privacySnippetKey = 'cookie.messageTextPage' %}
+                {% set cmsPath = 'frontend.landing.page' %}
+                {% set privacyPageId = config('core.basicInformation.privacyPage') %}
+                {{ privacySnippetKey|trans({
+                    '%url%': privacyPageId is not empty ? path(cmsPath, { landingPageId: privacyPageId }) : '#'
                 })|raw }}
             </p>
 

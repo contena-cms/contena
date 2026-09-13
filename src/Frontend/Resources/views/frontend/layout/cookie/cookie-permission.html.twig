@@ -18,8 +18,11 @@
                 <div class="row align-items-center">
                     {% block layout_cookie_permission_inner_content %}
                         <div class="col cookie-permission-content">
-                            {{ 'cookie.messageTextPage'|trans({
-                                '%url%': path('frontend.landing.page', { landingPageId: config('core.basicInformation.privacyPage') })
+                            {% set privacySnippetKey = 'cookie.messageTextPage' %}
+                            {% set cmsPath = 'frontend.landing.page' %}
+                            {% set privacyPageId = config('core.basicInformation.privacyPage') %}
+                            {{ privacySnippetKey|trans({
+                                '%url%': privacyPageId is not empty ? path(cmsPath, { landingPageId: privacyPageId }) : '#'
                             })|raw }}
                         </div>
                     {% endblock %}

@@ -47,8 +47,9 @@
                 <div class="ct-media-embed-video__backdrop">
                     <div class="ct-media-embed-video__notice">
                         <p class="ct-media-embed-video__notice-text">
+                            {% set privacyPageId = config('core.basicInformation.privacyPage') %}
                             {{ 'component.cms.vimeo.privacyNoticeText'|trans({
-                                '%url%': path('frontend.landing.page', { landingPageId: config('core.basicInformation.privacyPage') }),
+                                '%url%': privacyPageId is not empty ? path('frontend.landing.page', { landingPageId: privacyPageId }) : '#',
                                 '%platform%': platform,
                             })|raw }}
                         </p>

@@ -9,13 +9,17 @@
 
         {% block component_privacy_dpi %}
             {% set contentPagePath = 'frontend.landing.page' %}
+            {% set privacyPageId = config('core.basicInformation.privacyPage') %}
+            {% set tosPageId = config('core.basicInformation.tosPage') %}
+            {% set privacyPageUrl = privacyPageId is not empty ? path(contentPagePath, { landingPageId: privacyPageId }) : '#' %}
+            {% set tosPageUrl = tosPageId is not empty ? path(contentPagePath, { landingPageId: tosPageId }) : '#' %}
             {% set privacyNoticeSnippet = 'general.privacyNoticeTextModal' %}
             {% if config('core.loginRegistration.requireDataProtectionCheckbox') == 1 %}
 
                 {% set dataProtectionLabel = privacyNoticeSnippet|trans({
-                    '%privacyModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ path(contentPagePath, { landingPageId: config('core.basicInformation.privacyPage') }) ~ '">',
+                    '%privacyModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ privacyPageUrl ~ '">',
                     '%privacyModalTagClose%': '</button>',
-                    '%tosModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ path(contentPagePath, { landingPageId: config('core.basicInformation.tosPage') }) ~ '">',
+                    '%tosModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ tosPageUrl ~ '">',
                     '%tosModalTagClose%': '</button>',
                 })|raw %}
 
@@ -30,9 +34,9 @@
                     {% block component_privacy_label %}
                         <div>
                             {{ privacyNoticeSnippet|trans({
-                                '%privacyModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ path(contentPagePath, { landingPageId: config('core.basicInformation.privacyPage') }) ~ '">',
+                                '%privacyModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ privacyPageUrl ~ '">',
                                 '%privacyModalTagClose%': '</button>',
-                                '%tosModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ path(contentPagePath, { landingPageId: config('core.basicInformation.tosPage') }) ~ '">',
+                                '%tosModalTagOpen%': '<button type="button" class="btn btn-link-inline" aria-haspopup="dialog" data-ajax-modal="true" data-url="' ~ tosPageUrl ~ '">',
                                 '%tosModalTagClose%': '</button>',
                             })|raw }}
                         </div>
