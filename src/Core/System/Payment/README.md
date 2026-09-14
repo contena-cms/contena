@@ -41,6 +41,10 @@ State decisions use the values returned by the locking read, not a subsequent or
 
 Implement `GatewayInterface::code()` and only the capabilities the provider actually supports (`PaymentHandlerInterface`, `PaymentQueryHandlerInterface`, `RefundHandlerInterface`, `TransferHandlerInterface`, `SubscriptionHandlerInterface`, `GatewayNotificationHandlerInterface`). Register the service with `contena.payment.gateway`. Empty and duplicate codes fail registration. `PaymentQueryHandlerInterface` specifically queries payment orders, not refunds or transfer orders.
 
+Incoming payment and transfer currency codes must exist in the shared `currency` catalog. Amounts are integer minor units; `CurrencyEntity::getDecimalPrecision()` describes how many decimal places that minor unit represents. Payment never applies `CurrencyEntity::getFactor()` automatically, because exchange-rate conversion is a pricing decision that must happen before the financial request is created.
+
+Gateways with a restricted settlement-currency set implement `CurrencyAwareGatewayInterface`. The resolver excludes such a gateway when it rejects the requested ISO code. Gateways that do not implement the interface remain currency-agnostic for backward compatibility. The bundled Alipay and WeChat gateways currently declare CNY only; plugins must explicitly implement and verify provider-specific formatting before advertising additional currencies.
+
 ```php
 $services->set(AcmeGateway::class)->autowire()->tag(GatewayInterface::SERVICE_TAG);
 ```

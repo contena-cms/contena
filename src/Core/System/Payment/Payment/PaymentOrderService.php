@@ -16,6 +16,7 @@ use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
 use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\PaymentCurrencyValidator;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentGatewayResolver;
@@ -47,6 +48,7 @@ class PaymentOrderService extends AbstractPaymentOrderService
         private readonly AbstractPaymentRouteResolver $routeResolver,
         private readonly PaymentGatewayResolver $gatewayResolver,
         private readonly GatewayOperationExecutor $gatewayExecutor,
+        private readonly PaymentCurrencyValidator $currencyValidator,
     ) {
     }
 
@@ -72,7 +74,8 @@ class PaymentOrderService extends AbstractPaymentOrderService
             throw PaymentException::duplicateReference($request->externalOrderNo);
         }
 
-        $route = $this->routeResolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, $request->method, $request->channel, $request->amount, $request->currencyCode));
+        $currencyCode = $this->currencyValidator->validate($request->currencyCode, $context);
+        $route = $this->routeResolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, $request->method, $request->channel, $request->amount, $currencyCode));
         if (!$route->gateway instanceof PaymentHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::PAY);
         }

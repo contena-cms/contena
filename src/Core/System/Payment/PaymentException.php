@@ -7,6 +7,7 @@ use Contena\Core\System\Payment\Exception\PaymentAppNotFoundException;
 use Contena\Core\System\Payment\Exception\PaymentCapabilityNotSupportedException;
 use Contena\Core\System\Payment\Exception\PaymentChannelConfigNotFoundException;
 use Contena\Core\System\Payment\Exception\PaymentConcurrentModificationException;
+use Contena\Core\System\Payment\Exception\PaymentCurrencyNotSupportedException;
 use Contena\Core\System\Payment\Exception\PaymentDuplicateReferenceException;
 use Contena\Core\System\Payment\Exception\PaymentGatewayNotFoundException;
 use Contena\Core\System\Payment\Exception\PaymentNotificationConfigurationMismatchException;
@@ -27,6 +28,7 @@ class PaymentException extends HttpException
     final public const string CAPABILITY_NOT_SUPPORTED = 'PAYMENT__CAPABILITY_NOT_SUPPORTED';
     final public const string CHANNEL_CONFIG_NOT_FOUND = 'PAYMENT__CHANNEL_CONFIG_NOT_FOUND';
     final public const string CONCURRENT_MODIFICATION = 'PAYMENT__CONCURRENT_MODIFICATION';
+    final public const string CURRENCY_NOT_SUPPORTED = 'PAYMENT__CURRENCY_NOT_SUPPORTED';
     final public const string DUPLICATE_REFERENCE = 'PAYMENT__DUPLICATE_REFERENCE';
     final public const string GATEWAY_NOT_FOUND = 'PAYMENT__GATEWAY_NOT_FOUND';
     final public const string INVALID_EXTENSION_REGISTRATION = 'PAYMENT__INVALID_EXTENSION_REGISTRATION';
@@ -60,6 +62,11 @@ class PaymentException extends HttpException
     public static function concurrentModification(string $reference): PaymentConcurrentModificationException
     {
         return new PaymentConcurrentModificationException($reference);
+    }
+
+    public static function currencyNotSupported(string $currencyCode): PaymentCurrencyNotSupportedException
+    {
+        return new PaymentCurrencyNotSupportedException($currencyCode);
     }
 
     public static function duplicateReference(string $reference): PaymentDuplicateReferenceException

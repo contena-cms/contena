@@ -63,6 +63,7 @@ use Contena\Core\System\Payment\Payment\PaymentOrderPersister;
 use Contena\Core\System\Payment\Payment\PaymentOrderService;
 use Contena\Core\System\Payment\Payment\PaymentOrderStateHandler;
 use Contena\Core\System\Payment\Payment\Struct\PaymentRequest;
+use Contena\Core\System\Payment\PaymentCurrencyValidator;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\PaymentService;
 use Contena\Core\System\Payment\Refund\PaymentRefundNotificationHandler;
@@ -209,9 +210,10 @@ final class PaymentServiceTest extends TestCase
         $refundPersister = new PaymentRefundPersister($paymentRefundRepository, $numberRange, $connection, $dispatcher);
         $transferPersister = new PaymentTransferPersister($paymentTransferRepository, $numberRange, $stateMachine, $connection, $dispatcher);
         $subscriptionPersister = new PaymentSubscriptionPersister($paymentRecurringRepository, $numberRange, $connection, $dispatcher);
-        $orderService = new PaymentOrderService($orderPersister, new PaymentOrderConverter($dispatcher), $orderStateHandler, $paymentOrderRepository, $paymentOrderTransactionRepository, $this->routeResolver, $gatewayResolver, $gatewayExecutor);
+        $currencyValidator = new PaymentCurrencyValidator($this->repository('currency'));
+        $orderService = new PaymentOrderService($orderPersister, new PaymentOrderConverter($dispatcher), $orderStateHandler, $paymentOrderRepository, $paymentOrderTransactionRepository, $this->routeResolver, $gatewayResolver, $gatewayExecutor, $currencyValidator);
         $refundService = new PaymentRefundService($refundPersister, $refundStateHandler, $paymentOrderRepository, $paymentRefundRepository, $gatewayResolver, $gatewayExecutor);
-        $transferService = new PaymentTransferService($transferPersister, $transferStateHandler, $paymentTransferRepository, $this->routeResolver, $gatewayExecutor);
+        $transferService = new PaymentTransferService($transferPersister, $transferStateHandler, $paymentTransferRepository, $this->routeResolver, $gatewayExecutor, $currencyValidator);
         $subscriptionService = new PaymentSubscriptionService($subscriptionPersister, $subscriptionStateHandler, $paymentRecurringRepository, $this->routeResolver, $gatewayExecutor);
         $this->paymentService = new PaymentService($orderService, $refundService, $transferService, $subscriptionService);
         $handlers = new PaymentNotificationHandlerRegistry([
@@ -492,6 +494,13 @@ final class PaymentServiceTest extends TestCase
         $this->expectExceptionObject(PaymentException::appNotFound($disabledApp->appCode));
 
         $this->paymentService->pay($disabledApp, new PaymentRequest('disabled-app-order', 100, 'h5', 'Disabled app', 'CNY'), $this->context);
+    }
+
+    public function testPaymentRejectsACurrencyThatIsAbsentFromTheCatalog(): void
+    {
+        $this->expectExceptionObject(PaymentException::currencyNotSupported('ZZZ'));
+
+        $this->paymentService->pay($this->app, new PaymentRequest('unknown-currency-order', 100, 'h5', 'Unknown currency', 'ZZZ'), $this->context);
     }
 
     public function testPaymentRejectsGlobalWriteContext(): void

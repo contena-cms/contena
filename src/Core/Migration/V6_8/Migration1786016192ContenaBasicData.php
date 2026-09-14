@@ -70,6 +70,8 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         'content_layout',
         'country',
         'country_translation',
+        'currency',
+        'currency_translation',
         'custom_field',
         'custom_field_set',
         'custom_field_set_relation',

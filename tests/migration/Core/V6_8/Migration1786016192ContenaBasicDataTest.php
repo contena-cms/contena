@@ -127,6 +127,8 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         static::assertContains('blog:delete', $defaultPrivileges);
         static::assertContains('category:delete', $defaultPrivileges);
         static::assertContains('channel:delete', $defaultPrivileges);
+        static::assertContains('currency:delete', $defaultPrivileges);
+        static::assertContains('currency_translation:delete', $defaultPrivileges);
         static::assertContains('content_layout:delete', $defaultPrivileges);
         static::assertContains('footer_content_layout:delete', $defaultPrivileges);
         static::assertContains('header_content_layout:delete', $defaultPrivileges);
@@ -990,13 +992,13 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         }
 
         $this->connection->executeStatement(
-            "CREATE TEMPORARY TABLE `data_scope` (
+            'CREATE TEMPORARY TABLE `data_scope` (
                 `id` BINARY(16) NOT NULL,
-                `type` ENUM('platform', 'tenant') NOT NULL,
+                `type` ENUM(\'platform\', \'tenant\') NOT NULL,
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
                 PRIMARY KEY (`id`)
-            )"
+            )'
         );
         $this->connection->executeStatement(
             'CREATE TEMPORARY TABLE `tenant` (

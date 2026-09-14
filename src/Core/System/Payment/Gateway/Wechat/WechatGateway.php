@@ -6,6 +6,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\Paymen
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
+use Contena\Core\System\Payment\Gateway\CurrencyAwareGatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
@@ -24,7 +25,7 @@ use Contena\Core\System\Payment\Struct\PaymentAction;
 /**
  * @internal
  */
-final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface
+final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface, CurrencyAwareGatewayInterface
 {
     public function __construct(private YansongdaPayClientInterface $client)
     {
@@ -33,6 +34,11 @@ final readonly class WechatGateway implements PaymentHandlerInterface, PaymentQu
     public function code(): string
     {
         return 'wechat';
+    }
+
+    public function supportsCurrency(string $currencyCode): bool
+    {
+        return strtoupper($currencyCode) === 'CNY';
     }
 
     public function pay(PaymentOrderEntity $order, array $config): GatewayResult

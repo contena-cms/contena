@@ -15,6 +15,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannel\PaymentChann
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\PaymentChannelMethodEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\Event\PaymentRouteCandidateEvent;
+use Contena\Core\System\Payment\Gateway\CurrencyAwareGatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayRegistry;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
@@ -143,6 +144,24 @@ final class PaymentRouteResolverTest extends TestCase
         $resolver->resolve($app, Context::createTenantContext($tenantId), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', amount: 1000));
     }
 
+    public function testGatewayWithExplicitCurrencySupportIsExcludedForAnotherCurrency(): void
+    {
+        $app = new PaymentAppEntity()->assign(['id' => Uuid::randomHex(), 'dataScopeId' => Defaults::PLATFORM_DATA_SCOPE, 'appCode' => 'app-1', 'status' => true]);
+        $gateway = new CurrencyLimitedRoutingGateway('cny-only');
+        $assignment = $this->assignment($app, $gateway->code(), 1);
+        $config = $this->config($app->getId(), $gateway->code(), []);
+        $resolver = $this->resolver(
+            StaticEntityRepository::of(PaymentAppChannelMethodCollection::class, [new PaymentAppChannelMethodCollection([$assignment])]),
+            StaticEntityRepository::of(PaymentChannelConfigCollection::class, [new PaymentChannelConfigCollection([$config])]),
+            new GatewayRegistry([$gateway]),
+            new EventDispatcher(),
+        );
+
+        $this->expectExceptionObject(PaymentException::routeNotFound($app->getId(), 'h5'));
+
+        $resolver->resolve($app, Context::createDefaultContext(), new PaymentRoutingRequest(PaymentOperation::PAY, PaymentHandlerInterface::class, 'h5', null, 1000, 'USD'));
+    }
+
     /**
      * @param EntityRepository<PaymentAppChannelMethodCollection> $methods
      * @param EntityRepository<PaymentChannelConfigCollection> $configs
@@ -221,6 +240,31 @@ final class RoutingPaymentGateway implements PaymentHandlerInterface
     public function code(): string
     {
         return $this->gatewayCode;
+    }
+
+    public function pay(PaymentOrderEntity $order, array $config): GatewayResult
+    {
+        return new GatewayResult(PaymentStatus::PENDING);
+    }
+}
+
+/**
+ * @internal
+ */
+final class CurrencyLimitedRoutingGateway implements PaymentHandlerInterface, CurrencyAwareGatewayInterface
+{
+    public function __construct(private readonly string $gatewayCode)
+    {
+    }
+
+    public function code(): string
+    {
+        return $this->gatewayCode;
+    }
+
+    public function supportsCurrency(string $currencyCode): bool
+    {
+        return $currencyCode === 'CNY';
     }
 
     public function pay(PaymentOrderEntity $order, array $config): GatewayResult

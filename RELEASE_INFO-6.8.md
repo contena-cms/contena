@@ -48,6 +48,12 @@ Gateway SDK handling is consolidated in the internal `YansongdaPayClient`; plugi
 
 Core routing no longer includes rule-engine integration. Existing installations using payment rule assignments must provide their policy through a plugin before upgrading; the legacy database values are not deleted or evaluated by core.
 
+### Shared currency catalog and payment currency validation
+
+Contena now provides the shared `currency` and `currency_translation` DAL entities with ISO code, display symbol, decimal precision and an optional exchange factor. CNY is the system currency, and common international currencies are installed as configurable reference data. The factor is never applied automatically by payment services.
+
+Incoming payments and transfers reject currencies that are absent from the catalog with `PAYMENT__CURRENCY_NOT_SUPPORTED`. Payment gateway plugins whose settlement currencies are restricted can implement `CurrencyAwareGatewayInterface`; routing then excludes the gateway for unsupported currency codes. Existing gateways that do not implement the interface remain currency-agnostic. The bundled Alipay and WeChat integrations explicitly advertise CNY only.
+
 ## API
 
 ### Channel API resolves context from the frontend session on request

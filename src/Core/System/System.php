@@ -32,6 +32,7 @@ class System extends Bundle
 
         $phpLoader = new PhpFileLoader($container, $configLocator);
         $phpLoader->load('country.php');
+        $phpLoader->load('currency.php');
         $phpLoader->load('custom_entity.php');
         $phpLoader->load('region.php');
         $phpLoader->load('organization.php');

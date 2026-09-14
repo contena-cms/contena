@@ -26,6 +26,16 @@ use Yansongda\Pay\Shortcut\Wechat\TransferShortcut;
 #[CoversClass(WechatGateway::class)]
 final class ProviderConfigurationTest extends TestCase
 {
+    public function testBundledGatewaysDeclareCnyAsTheirOnlySettlementCurrency(): void
+    {
+        $client = new RecordingYansongdaPayClient([]);
+
+        foreach ([new AlipayGateway($client), new WechatGateway($client)] as $gateway) {
+            static::assertTrue($gateway->supportsCurrency('cny'));
+            static::assertFalse($gateway->supportsCurrency('USD'));
+        }
+    }
+
     public function testAlipayOwnsItsProviderConfigurationMapping(): void
     {
         $executor = new RecordingYansongdaPayClient(['h5_url' => 'https://pay.example/checkout']);

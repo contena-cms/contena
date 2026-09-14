@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\System\Payment;
 use Contena\Core\System\Payment\Exception\PaymentCapabilityNotSupportedException;
 use Contena\Core\System\Payment\Exception\PaymentChannelConfigNotFoundException;
 use Contena\Core\System\Payment\Exception\PaymentConcurrentModificationException;
+use Contena\Core\System\Payment\Exception\PaymentCurrencyNotSupportedException;
 use Contena\Core\System\Payment\Exception\PaymentDuplicateReferenceException;
 use Contena\Core\System\Payment\Exception\PaymentGatewayNotFoundException;
 use Contena\Core\System\Payment\Exception\PaymentNotificationConfigurationMismatchException;
@@ -34,6 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(PaymentChannelConfigNotFoundException::class)]
 #[CoversClass(PaymentDuplicateReferenceException::class)]
 #[CoversClass(PaymentConcurrentModificationException::class)]
+#[CoversClass(PaymentCurrencyNotSupportedException::class)]
 #[CoversClass(PaymentGatewayNotFoundException::class)]
 #[CoversClass(PaymentNotificationConfigurationMismatchException::class)]
 #[CoversClass(PaymentNotificationResourceNotFoundException::class)]
@@ -125,6 +127,18 @@ final class PaymentExceptionTest extends TestCase
         $expected = new PaymentException(Response::HTTP_CONFLICT, PaymentException::CONCURRENT_MODIFICATION, 'Payment resource "{{ reference }}" changed in another transaction. Reconcile its status in a new transaction; do not repeat the financial operation.', ['reference' => 'reference']);
 
         static::assertSame(PaymentConcurrentModificationException::class, $exception::class);
+        static::assertSame($expected->getStatusCode(), $exception->getStatusCode());
+        static::assertSame($expected->getErrorCode(), $exception->getErrorCode());
+        static::assertSame($expected->getMessage(), $exception->getMessage());
+        static::assertSame($expected->getParameters(), $exception->getParameters());
+    }
+
+    public function testCurrencyNotSupportedHasACatchableTypeAndStableErrorContract(): void
+    {
+        $exception = PaymentException::currencyNotSupported('USD');
+        $expected = new PaymentException(Response::HTTP_UNPROCESSABLE_ENTITY, PaymentException::CURRENCY_NOT_SUPPORTED, 'Currency "{{ currencyCode }}" is not available for payment.', ['currencyCode' => 'USD']);
+
+        static::assertSame(PaymentCurrencyNotSupportedException::class, $exception::class);
         static::assertSame($expected->getStatusCode(), $exception->getStatusCode());
         static::assertSame($expected->getErrorCode(), $exception->getErrorCode());
         static::assertSame($expected->getMessage(), $exception->getMessage());

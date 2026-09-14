@@ -20,6 +20,10 @@ final class Defaults
 
     public const string DEFAULT_TIME_ZONE = 'Asia/Shanghai';
 
+    public const string CURRENCY = 'eb87f762251516037fe3c759e443b75b';
+
+    public const string DEFAULT_CURRENCY_CODE = 'CNY';
+
     public const string LIVE_VERSION = '0fa91ce3e96a4bc2be4bd9ce752c3425';
 
     public const string CHANNEL_TYPE_API = 'f183ee5650cf4bdb8a774337575067a6';

@@ -7,6 +7,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentApp\PaymentAppEntity;
 use Contena\Core\System\Payment\Event\PaymentRouteCandidateEvent;
 use Contena\Core\System\Payment\Event\PaymentRouteResolvedEvent;
+use Contena\Core\System\Payment\Gateway\CurrencyAwareGatewayInterface;
 use Contena\Core\System\Payment\PaymentException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -48,6 +49,9 @@ class PaymentRouteResolver extends AbstractPaymentRouteResolver
                 $key = $route->gateway->code() . ':' . $route->channelConfigId;
                 if (isset($seen[$key]) || !$route->gateway instanceof ($request->capability)
                     || ($request->preferredChannel !== null && $route->gateway->code() !== $request->preferredChannel)
+                    || ($request->currencyCode !== null
+                        && $route->gateway instanceof CurrencyAwareGatewayInterface
+                        && !$route->gateway->supportsCurrency(strtoupper($request->currencyCode)))
                 ) {
                     continue;
                 }

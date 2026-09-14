@@ -41,6 +41,7 @@ use Contena\Core\System\Payment\Payment\PaymentOrderNotificationHandler;
 use Contena\Core\System\Payment\Payment\PaymentOrderPersister;
 use Contena\Core\System\Payment\Payment\PaymentOrderService;
 use Contena\Core\System\Payment\Payment\PaymentOrderStateHandler;
+use Contena\Core\System\Payment\PaymentCurrencyValidator;
 use Contena\Core\System\Payment\PaymentService;
 use Contena\Core\System\Payment\Refund\AbstractPaymentRefundService;
 use Contena\Core\System\Payment\Refund\PaymentRefundNotificationHandler;
@@ -98,6 +99,8 @@ return static function (ContainerConfigurator $container): void {
     $services->set(WechatGateway::class)->autowire()->tag(GatewayInterface::SERVICE_TAG);
     $services->set(GatewayRegistry::class)->args([tagged_iterator(GatewayInterface::SERVICE_TAG)]);
     $services->set(GatewayOperationExecutor::class)->autowire();
+    $services->set(PaymentCurrencyValidator::class)
+        ->arg('$currencyRepository', service('currency.repository'));
 
     $services->set(ConfiguredPaymentRouteProvider::class)->autowire()
         ->arg('$methodRepository', service('payment_app_channel_method.repository'))

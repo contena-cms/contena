@@ -16,6 +16,7 @@ use Contena\Core\System\Payment\Gateway\GatewayOperationExecutor;
 use Contena\Core\System\Payment\Gateway\PaymentOperation;
 use Contena\Core\System\Payment\Gateway\PaymentStatus;
 use Contena\Core\System\Payment\Gateway\TransferHandlerInterface;
+use Contena\Core\System\Payment\PaymentCurrencyValidator;
 use Contena\Core\System\Payment\PaymentException;
 use Contena\Core\System\Payment\Routing\AbstractPaymentRouteResolver;
 use Contena\Core\System\Payment\Routing\PaymentRoutingRequest;
@@ -43,6 +44,7 @@ class PaymentTransferService extends AbstractPaymentTransferService
         private readonly EntityRepository $paymentTransferRepository,
         private readonly AbstractPaymentRouteResolver $routeResolver,
         private readonly GatewayOperationExecutor $gatewayExecutor,
+        private readonly PaymentCurrencyValidator $currencyValidator,
     ) {
     }
 
@@ -87,7 +89,8 @@ class PaymentTransferService extends AbstractPaymentTransferService
             );
         }
 
-        $route = $this->routeResolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::TRANSFER, TransferHandlerInterface::class, preferredChannel: $request->channel, amount: $request->amount, currencyCode: $request->currencyCode));
+        $currencyCode = $this->currencyValidator->validate($request->currencyCode, $context);
+        $route = $this->routeResolver->resolve($app, $context, new PaymentRoutingRequest(PaymentOperation::TRANSFER, TransferHandlerInterface::class, preferredChannel: $request->channel, amount: $request->amount, currencyCode: $currencyCode));
         if (!$route->gateway instanceof TransferHandlerInterface) {
             throw PaymentException::capabilityNotSupported($route->gateway->code(), PaymentOperation::TRANSFER);
         }
@@ -96,7 +99,7 @@ class PaymentTransferService extends AbstractPaymentTransferService
             'paymentAppId' => $app->getId(),
             'externalTransferNo' => $request->externalTransferNo,
             'amount' => $request->amount,
-            'currencyCode' => strtoupper($request->currencyCode),
+            'currencyCode' => $currencyCode,
             'channelCode' => $route->gateway->code(),
             'channelConfigId' => $route->channelConfigId,
             'payee' => $request->payee,

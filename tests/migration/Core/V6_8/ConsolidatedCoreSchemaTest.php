@@ -20,7 +20,6 @@ class ConsolidatedCoreSchemaTest extends TestCase
         'cart',
         'category',
         'cms_page',
-        'currency',
         'customer',
         'order',
         'payment_method',
@@ -59,7 +58,7 @@ class ConsolidatedCoreSchemaTest extends TestCase
             }
         }
 
-        static::assertCount(91, $tables);
+        static::assertCount(93, $tables);
     }
 
     public function testConsolidatedMigrationsCanBeExecutedAgain(): void

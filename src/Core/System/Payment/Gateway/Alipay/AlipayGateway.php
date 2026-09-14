@@ -6,6 +6,7 @@ use Contena\Core\System\Payment\DataAbstractionLayer\PaymentChannelMethod\Paymen
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentOrder\PaymentOrderEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentRefund\PaymentRefundEntity;
 use Contena\Core\System\Payment\DataAbstractionLayer\PaymentTransfer\PaymentTransferEntity;
+use Contena\Core\System\Payment\Gateway\CurrencyAwareGatewayInterface;
 use Contena\Core\System\Payment\Gateway\GatewayNotificationHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentHandlerInterface;
 use Contena\Core\System\Payment\Gateway\PaymentQueryHandlerInterface;
@@ -25,7 +26,7 @@ use Yansongda\Pay\Pay;
 /**
  * @internal
  */
-final readonly class AlipayGateway implements PaymentHandlerInterface, PaymentQueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface
+final readonly class AlipayGateway implements PaymentHandlerInterface, PaymentQueryHandlerInterface, RefundHandlerInterface, TransferHandlerInterface, GatewayNotificationHandlerInterface, CurrencyAwareGatewayInterface
 {
     public function __construct(private YansongdaPayClientInterface $client)
     {
@@ -34,6 +35,11 @@ final readonly class AlipayGateway implements PaymentHandlerInterface, PaymentQu
     public function code(): string
     {
         return 'alipay';
+    }
+
+    public function supportsCurrency(string $currencyCode): bool
+    {
+        return strtoupper($currencyCode) === 'CNY';
     }
 
     public function pay(PaymentOrderEntity $order, array $config): GatewayResult
