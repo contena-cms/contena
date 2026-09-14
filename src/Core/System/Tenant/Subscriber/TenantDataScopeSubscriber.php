@@ -2,6 +2,7 @@
 
 namespace Contena\Core\System\Tenant\Subscriber;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\DataScopeType;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
@@ -45,6 +46,7 @@ final class TenantDataScopeSubscriber implements EventSubscriberInterface
             $this->connection->insert('data_scope', [
                 'id' => $id,
                 'type' => DataScopeType::Tenant->value,
+                'created_at' => new \DateTimeImmutable()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ]);
         }
     }
