@@ -1,0 +1,18 @@
+{
+    "ct-oauth-authorize": {
+        "general": { "title": "授权应用", "description": "授予应用访问此 Contena CMS 工作区的权限" },
+        "consent": {
+            "title": "{clientName} 请求访问 {workspaceName}",
+            "loggedInAs": "当前登录：{username}",
+            "permissionTitle": "此应用将获得你的权限",
+            "permissionHint": "应用将以你的用户权限代表你访问数据并执行操作。",
+            "trustHint": "仅在信任此应用且由你发起请求时允许访问。",
+            "redirectHint": "即将跳转到 {host}",
+            "approve": "允许访问",
+            "deny": "拒绝"
+        },
+        "error": { "missingParameters": "授权请求不完整，请从应用重新发起授权。", "generic": "无法处理授权请求。" },
+        "logoAltText": "Contena CMS 标志",
+        "loadingLabel": "加载中..."
+    }
+}
