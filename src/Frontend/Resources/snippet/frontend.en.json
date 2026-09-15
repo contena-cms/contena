@@ -317,6 +317,13 @@
     "boxBlogDetails": "Details",
     "emptyBlogResultMessage": "No blog posts found."
   },
+  "blog": {
+    "comment": {
+      "label": "Comment",
+      "submit": "Post comment",
+      "loginRequired": "Sign in to leave a comment."
+    }
+  },
   "newsletter": {
     "headline": "Subscribe to newsletter",
     "info": "Subscribe to our regular newsletter and stay informed about the latest content. You can unsubscribe at any time using this website or the link included in each newsletter.",

@@ -2167,6 +2167,20 @@ HTML,
                     'properties' => [
                         'text' => '<h1>Welcome to Contena</h1><p>Edit this layout in Experience Studio.</p>',
                     ],
+                ], [
+                    'id' => 'blog-comments',
+                    'component' => 'Ct:Blog:Comments',
+                    'properties' => [
+                        'showForm' => true,
+                    ],
+                    'acceptsContext' => [
+                        'blogComments' => [
+                            'type' => 'single',
+                            'required' => false,
+                            'propertyAlias' => 'comments',
+                            'scope' => 'root',
+                        ],
+                    ],
                 ]],
             ],
             'category' => [
@@ -2179,6 +2193,14 @@ HTML,
                     'properties' => [
                         'limit' => 24,
                         'page' => 1,
+                    ],
+                    'acceptsContext' => [
+                        'blogListing' => [
+                            'type' => 'single',
+                            'required' => false,
+                            'propertyAlias' => 'listing',
+                            'scope' => 'root',
+                        ],
                     ],
                 ]],
             ],

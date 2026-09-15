@@ -44,6 +44,8 @@ use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingExceptionHandler;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingTranslationDefinition;
 use Contena\Core\Content\Blog\Channel\Suggest\BlogSuggestRoute;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogCommentDataLoader;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogCommentLoaderConfigSerializer;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogListingDataLoader;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogListingLoaderConfigSerializer;
 use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogSearchDataLoader;
@@ -158,6 +160,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogContentLayoutDefinition::class)->args([service(ContentLayoutMetadataDeriver::class)])->tag('contena.entity.definition');
     $services->set(BlogListingDataLoader::class)->args([service(BlogListingRoute::class)])->tag('content_system.data_loader');
     $services->set(BlogListingLoaderConfigSerializer::class)->tag('content_system.config_serializer');
+    $services->set(BlogCommentDataLoader::class)->args([service(AbstractBlogCommentLoader::class)])->tag('content_system.data_loader');
+    $services->set(BlogCommentLoaderConfigSerializer::class)->tag('content_system.config_serializer');
     $services->set(BlogSearchDataLoader::class)->args([service(BlogSearchRoute::class)])->tag('content_system.data_loader');
     $services->set(BlogSearchLoaderConfigSerializer::class)->tag('content_system.config_serializer');
     $services->set(BlogSuggestDataLoader::class)->args([service(BlogSuggestRoute::class)])->tag('content_system.data_loader');

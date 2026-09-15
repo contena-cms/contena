@@ -2,7 +2,10 @@
 
 namespace Contena\Core\Content\Blog\Aggregate\BlogContentLayout;
 
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogCommentDataLoader;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogCommentLoaderConfig;
 use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAssignableDefinition;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 
@@ -40,6 +43,18 @@ class BlogContentLayoutDefinition extends AbstractContentLayoutAssignableDefinit
     public function getCacheTags(string $entityId): array
     {
         return [EntityCacheKeyGenerator::buildBlogTag($entityId)];
+    }
+
+    public function getPageDataRequirements(): array
+    {
+        return [
+            ...parent::getPageDataRequirements(),
+            new DataRequirement(
+                'blogComments',
+                BlogCommentDataLoader::SOURCE,
+                new BlogCommentLoaderConfig(),
+            ),
+        ];
     }
 
     protected function getEntityAssociations(): array

@@ -1,0 +1,41 @@
+meta:
+  label: "Blog Comments"
+  description: "Displays comments and threaded replies for the current blog."
+  icon: "regular-comments"
+  category: "content"
+  copilot:
+    summary: "Blog comment thread and reply form."
+    hints:
+      - "Comments are loaded from the current blog page through root context."
+      - "Only approved comments and the current member's pending comments are shown."
+      - "Members must be signed in to submit a comment or reply."
+
+properties:
+  comments:
+    type: Contena\Core\Content\Blog\Channel\Comment\BlogCommentResult
+    required: false
+    title: "Comments"
+    description: "Threaded comments for the current blog, including directly nested replies."
+
+  showForm:
+    type: boolean
+    title: "Show Comment Form"
+    description: "Whether to render the comment form below the thread."
+    default: true
+    adminUI:
+      component: "switch"
+
+  title:
+    type: string
+    translatable: true
+    title: "Title"
+    description: "Heading shown above the comment thread."
+    default: "Comments"
+
+  emptyMessage:
+    type: string
+    translatable: true
+    title: "Empty Message"
+    description: "Message shown when the blog has no visible comments."
+    default: "No comments yet."
+

@@ -1,0 +1,67 @@
+{# ludtwig-ignore-file #}
+{# @internal #}
+
+{% props
+    comments = null,
+    showForm = true,
+    title = 'Comments',
+    emptyMessage = 'No comments yet.',
+    slots = [],
+%}
+
+{% set attributeDefaults = {
+    class: 'ct-blog-comments',
+    'data-component': 'Ct:Blog:Comments',
+} %}
+
+<section {{ attributes.defaults(attributeDefaults) }}>
+    <h2 class="ct-blog-comments__title">{{ title|trans|sw_sanitize }}</h2>
+
+    {% if comments and comments.comments and comments.comments.total > 0 %}
+        <ol class="ct-blog-comments__list list-unstyled">
+            {% for comment in comments.comments.elements %}
+                <li class="ct-blog-comments__item">
+                    <article class="ct-blog-comments__comment">
+                        <header class="ct-blog-comments__meta">
+                            <strong>{{ comment.externalUser|default('Member')|e }}</strong>
+                            <time datetime="{{ comment.createdAt|date('c') }}">{{ comment.createdAt|date('Y-m-d') }}</time>
+                        </header>
+                        <p class="ct-blog-comments__content">{{ comment.content|e|nl2br }}</p>
+                    </article>
+
+                    {% if comment.children and comment.children.elements|length > 0 %}
+                        <ol class="ct-blog-comments__replies list-unstyled">
+                            {% for reply in comment.children.elements %}
+                                <li class="ct-blog-comments__reply">
+                                    <article class="ct-blog-comments__comment">
+                                        <header class="ct-blog-comments__meta">
+                                            <strong>{{ reply.externalUser|default('Member')|e }}</strong>
+                                            <time datetime="{{ reply.createdAt|date('c') }}">{{ reply.createdAt|date('Y-m-d') }}</time>
+                                        </header>
+                                        <p class="ct-blog-comments__content">{{ reply.content|e|nl2br }}</p>
+                                    </article>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p class="ct-blog-comments__empty">{{ emptyMessage|trans|sw_sanitize }}</p>
+    {% endif %}
+
+    {% if showForm %}
+        {% if context.member %}
+            <form class="ct-blog-comments__form" method="post" data-blog-comment-form>
+                <label class="form-label" for="blog-comment-content">{{ 'blog.comment.label'|trans|sw_sanitize }}</label>
+                <textarea id="blog-comment-content" name="content" class="form-control" rows="4" required></textarea>
+                <button class="btn btn-primary mt-3" type="submit">{{ 'blog.comment.submit'|trans|sw_sanitize }}</button>
+            </form>
+        {% else %}
+            <p class="ct-blog-comments__login">
+                <a href="{{ path('frontend.member.login.page') }}">{{ 'blog.comment.loginRequired'|trans|sw_sanitize }}</a>
+            </p>
+        {% endif %}
+    {% endif %}
+</section>
