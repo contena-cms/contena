@@ -422,7 +422,7 @@ const flyoutEnabled = computed(() => {
     return !isExpanded.value;
 });
 const flyoutPlacement = 'right-start';
-const flyoutOffset = 12;
+const flyoutOffset = 16;
 const sidebarCollapseIcon = computed(() => {
     return isExpanded.value ? 'regular-chevron-circle-left' : 'regular-chevron-circle-right';
 });
