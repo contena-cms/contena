@@ -1,5 +1,9 @@
 # 6.8.0.0
 
+## Frontend session continues on the token returned by the logout route
+
+After a member logs out, the frontend session now holds the context token that `Contena\Core\System\Member\Channel\LogoutRoute` created and returned in its response body, instead of a separately generated token. Both are fresh anonymous tokens, so no action is required unless an extension relied on the session token differing from the logout response token.
+
 # Changed Functionality
 
 <details>

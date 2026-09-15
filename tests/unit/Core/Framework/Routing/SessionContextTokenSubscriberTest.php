@@ -198,7 +198,7 @@ class SessionContextTokenSubscriberTest extends TestCase
         static::assertSame('logged-in', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
     }
 
-    public function testLogoutContinuesOnAFreshTokenAndANewSessionId(): void
+    public function testLogoutContinuesOnTheTokenTheLogoutRouteReturned(): void
     {
         $context = Generator::generateChannelContext(token: 'the-routes-own-token');
         $request = $this->ownerRequest($context->getChannelId());
@@ -208,11 +208,8 @@ class SessionContextTokenSubscriberTest extends TestCase
 
         $this->subscriber([$request])->onMemberLogout(new MemberLogoutEvent($context, new MemberEntity()));
 
-        $token = $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN);
-        static::assertIsString($token);
-        static::assertSame(32, \strlen($token));
-        static::assertNotSame('logged-in', $token);
-        static::assertSame($token, $request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertSame('the-routes-own-token', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertSame('the-routes-own-token', $request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
         static::assertNotSame('logged-in-session', $session->getId());
     }
 
@@ -253,7 +250,7 @@ class SessionContextTokenSubscriberTest extends TestCase
             ]);
             $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
             $request->setSession($session);
-            $accessor = new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService());
+            $accessor = new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()]));
             static::assertSame('expired', $accessor->read($request, $context->getChannelId()));
 
             $subscriber = $this->subscriber([$request]);
@@ -277,7 +274,10 @@ class SessionContextTokenSubscriberTest extends TestCase
             static::assertSame($session->getId(), $cookies[0]->getValue());
             static::assertFalse($session->isStarted());
 
-            $nextRequest = new Request(cookies: ['session-' => $cookies[0]->getValue()]);
+            $nextRequest = new Request(
+                attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]],
+                cookies: ['session-' => $cookies[0]->getValue()]
+            );
             $nextRequest->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
             $nextRequest->setSession($session);
             static::assertSame('logged-in', $accessor->read($nextRequest, $context->getChannelId()));
@@ -357,6 +357,22 @@ class SessionContextTokenSubscriberTest extends TestCase
 
         $subscriber->onMemberLogin(new MemberLoginEvent($context, new MemberEntity(), 'logged-in'));
         static::assertSame('logged-in', $request->getSession()->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+    }
+
+    public function testAnAdminApiRequestCannotRotateTheFrontendSession(): void
+    {
+        $context = Generator::generateChannelContext(token: 'rotated');
+        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]]);
+        $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
+        $request->cookies->set('session-', 'frontend-session');
+        $session = $this->sessionWithId('frontend-session');
+        $session->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'untouched');
+        $request->setSession($session);
+
+        $this->subscriber([$request])->onMemberLogin(new MemberLoginEvent($context, new MemberEntity(), 'rotated'));
+
+        static::assertSame('untouched', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertSame('frontend-session', $session->getId());
     }
 
     public function testTheKillSwitchStopsBorrowers(): void
@@ -502,7 +518,7 @@ class SessionContextTokenSubscriberTest extends TestCase
     private function subscriber(array $requests, array $config = [], bool $enabled = true): SessionContextTokenSubscriber
     {
         return new SessionContextTokenSubscriber(
-            new SessionContextTokenAccessor(['name' => 'session-'], $enabled, new StaticSystemConfigService($config)),
+            new SessionContextTokenAccessor(['name' => 'session-'], $enabled, new StaticSystemConfigService($config), new RouteScopeRegistry([new ChannelApiRouteScope(), new ApiRouteScope()])),
             new RequestStack($requests),
             new RouteScopeRegistry([new ChannelApiRouteScope(), new ApiRouteScope()])
         );

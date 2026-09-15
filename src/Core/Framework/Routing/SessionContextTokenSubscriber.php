@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing;
 
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
-use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Member\Event\MemberLoginEvent;
 use Contena\Core\System\Member\Event\MemberLogoutEvent;
@@ -79,7 +78,8 @@ class SessionContextTokenSubscriber implements EventSubscriberInterface
 
     public function onMemberLogout(MemberLogoutEvent $event): void
     {
-        $this->rotate($event->getChannelId(), Random::getAlphanumericString(32), true);
+        // the logout route already rotated the context and returns that token in its body
+        $this->rotate($event->getChannelId(), $event->getChannelContext()->getToken(), true);
     }
 
     public function onContextResolved(ChannelContextResolvedEvent $event): void

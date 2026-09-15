@@ -54,23 +54,8 @@ class OpenApiSchemaBuilderTest extends TestCase
 
         new OpenApiSchemaBuilder('6.8.0.0')->enrich($openApi, DefinitionService::CHANNEL_API);
 
-        static::assertSame([['ApiKey' => []], ['ApiKey' => [], 'ContextSource' => []]], $openApi->security);
+        static::assertSame([['ApiKey' => []]], $openApi->security);
         static::assertSame('Contena Channel API', $openApi->info->title);
-    }
-
-    public function testChannelApiDeclaresTheSessionContextSourceScheme(): void
-    {
-        $openApi = new OpenApi([]);
-
-        new OpenApiSchemaBuilder('6.8.0.0')->enrich($openApi, DefinitionService::CHANNEL_API);
-
-        $schema = json_decode($openApi->toJson(), true, flags: \JSON_THROW_ON_ERROR);
-        $schemes = $schema['components']['securitySchemes'];
-
-        static::assertSame('ct-context-token', $schemes['ContextToken']['name']);
-        static::assertSame('ct-context-source', $schemes['ContextSource']['name']);
-        static::assertSame('header', $schemes['ContextSource']['in']);
-        static::assertContains(['ApiKey' => [], 'ContextSource' => []], $schema['security']);
     }
 
     public function testEnrichAddsRelationshipSchemasForAdminApi(): void

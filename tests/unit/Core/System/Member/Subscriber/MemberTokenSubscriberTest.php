@@ -7,6 +7,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
+use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -88,6 +89,6 @@ class MemberTokenSubscriberTest extends TestCase
 
     private function sessionContextToken(): SessionContextTokenAccessor
     {
-        return new SessionContextTokenAccessor([], true, new StaticSystemConfigService());
+        return new SessionContextTokenAccessor([], true, new StaticSystemConfigService(), new RouteScopeRegistry([]));
     }
 }

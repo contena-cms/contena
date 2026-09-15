@@ -613,6 +613,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             param('session.storage.options'),
             param('contena.routing.session_context_token.enabled'),
             service(SystemConfigService::class),
+            service(RouteScopeRegistry::class),
         ]);
 
     $services->set(SessionContextTokenSubscriber::class)

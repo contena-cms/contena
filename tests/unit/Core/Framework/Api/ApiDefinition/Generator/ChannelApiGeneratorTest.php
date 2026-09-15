@@ -321,12 +321,13 @@ class ChannelApiGeneratorTest extends TestCase
         $parameterNames = array_column($operation['parameters'], 'name');
         static::assertContains('page', $parameterNames);
         static::assertContains('limit', $parameterNames);
-        // ct-language-id and ct-domain are injected as $refs by the generator, not as inline parameters
+        // the shared context headers are injected as $refs by the generator, not as inline parameters
         $parameterRefs = array_column($operation['parameters'], '$ref');
         static::assertContains('#/components/parameters/ctLanguageId', $parameterRefs);
         static::assertContains('#/components/parameters/ctDomain', $parameterRefs);
+        static::assertContains('#/components/parameters/ctContextSource', $parameterRefs);
         // but not left-overs of replaced parameter groups
-        static::assertCount(4, $operation['parameters']);
+        static::assertCount(5, $operation['parameters']);
     }
 
     public function testCtLanguageIdIsInjectedIntoEveryNonDeleteOperationOutsideInfo(): void
@@ -462,6 +463,58 @@ class ChannelApiGeneratorTest extends TestCase
 
         static::assertTrue($assertedInjectedOperation, 'Schema should contain at least one non-DELETE operation outside /_info/ to test');
         static::assertTrue($assertedSkippedOperation, 'Schema should contain at least one DELETE or /_info/ operation to test');
+    }
+
+    public function testCtContextSourceIsInjectedIntoEveryOperationOutsideInfo(): void
+    {
+        $bundle = new BundleWithPredeclaredCtLanguageId();
+        $generator = new ChannelApiGenerator(
+            new OpenApiSchemaBuilder('0.1.0'),
+            new OpenApiDefinitionSchemaBuilder(),
+            [
+                'Framework' => ['path' => __DIR__ . '/_fixtures'],
+            ],
+            new BundleSchemaPathCollection([$bundle]),
+        );
+
+        $schema = $generator->generate(
+            $this->definitionRegistry->getDefinitions(),
+            DefinitionService::CHANNEL_API,
+            DefinitionService::TYPE_JSON_API,
+            $bundle->getName(),
+        );
+
+        static::assertArrayHasKey('ctContextSource', $schema['components']['parameters']);
+        static::assertSame(['session'], $schema['components']['parameters']['ctContextSource']['schema']['enum']);
+
+        $assertedDeleteOperation = false;
+        $assertedSkippedOperation = false;
+
+        foreach ($schema['paths'] as $path => $pathDefinition) {
+            foreach (['get', 'post', 'put', 'patch', 'delete'] as $method) {
+                if (!isset($pathDefinition[$method])) {
+                    continue;
+                }
+
+                $refs = array_column($pathDefinition[$method]['parameters'] ?? [], '$ref');
+                $hasHeader = \in_array('#/components/parameters/ctContextSource', $refs, true);
+                $message = \sprintf('%s %s', strtoupper($method), $path);
+
+                if (str_starts_with((string) $path, '/_info/')) {
+                    $assertedSkippedOperation = true;
+                    static::assertFalse($hasHeader, $message . ' must not advertise ct-context-source');
+
+                    continue;
+                }
+
+                // unlike ct-language-id and ct-domain, a DELETE resolves a context too
+                $assertedDeleteOperation = $assertedDeleteOperation || $method === 'delete';
+                static::assertTrue($hasHeader, $message . ' should advertise ct-context-source');
+            }
+        }
+
+        static::assertTrue($assertedDeleteOperation, 'Schema should contain at least one DELETE operation outside /_info/ to test');
+        static::assertTrue($assertedSkippedOperation, 'Schema should contain at least one /_info/ operation to test');
     }
 
     public function testGetSchemaThrowsUnsupportedException(): void

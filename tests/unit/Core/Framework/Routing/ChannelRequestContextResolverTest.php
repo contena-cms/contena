@@ -66,7 +66,7 @@ class ChannelRequestContextResolverTest extends TestCase
             $contextService,
             new EventDispatcher(),
             new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor([], true, new StaticSystemConfigService()),
+            new SessionContextTokenAccessor([], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
         );
 
         $resolver->resolve($request);
@@ -112,7 +112,7 @@ class ChannelRequestContextResolverTest extends TestCase
             $contextService,
             new EventDispatcher(),
             new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor([], true, new StaticSystemConfigService()),
+            new SessionContextTokenAccessor([], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
         );
 
         $resolver->resolve($request);
@@ -180,7 +180,7 @@ class ChannelRequestContextResolverTest extends TestCase
             $contextService,
             new EventDispatcher(),
             new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService()),
+            new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
         );
     }
 

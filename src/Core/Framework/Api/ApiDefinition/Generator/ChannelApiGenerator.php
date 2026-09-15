@@ -229,6 +229,17 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
                     . 'Must match one of the channel\'s configured domains. Explicit `ct-language-id` '
                     . 'headers take precedence.',
             ]),
+            new Parameter([
+                'parameter' => 'ctContextSource',
+                'name' => PlatformRequest::HEADER_CONTEXT_SOURCE,
+                'in' => 'header',
+                'required' => false,
+                'schema' => [
+                    'type' => 'string',
+                    'enum' => ['session'],
+                ],
+                'description' => 'Set to `session` to resolve the context from the frontend session cookie of a same-origin request instead of a context token. Mutually exclusive with `ct-context-token`.',
+            ]),
         ];
 
         if (!is_iterable($openApi->paths)) {
@@ -509,30 +520,32 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
     }
 
     /**
-     * Injects the language-related context headers (ct-language-id and ct-domain) into Channel API operations whose
-     * responses can surface translated content. Both headers select the response language; ct-domain derives it from
-     * a configured channel domain for headless clients. DELETE operations are skipped because they only confirm
-     * removal and do not return localised payloads, and tooling endpoints under /_info/* are skipped because they serve
-     * schema and routing metadata. The HTTP-method filter is portable across third-party plugins and apps that
-     * contribute their own Channel API endpoints. Operations that already declare a header (by name or $ref) are left
-     * untouched so bundle-provided schemas with an explicit declaration are never duplicated.
-     *
      * @param OpenApiSpec $specs
      */
     private function injectContextHeaders(array &$specs): void
     {
-        $headers = [
-            ['name' => PlatformRequest::HEADER_LANGUAGE_ID, 'ref' => '#/components/parameters/ctLanguageId'],
-            ['name' => PlatformRequest::HEADER_DOMAIN, 'ref' => '#/components/parameters/ctDomain'],
-        ];
+        // DELETE only confirms removal and returns no localised payload.
+        $this->injectHeaderParameter($specs, 'ctLanguageId', PlatformRequest::HEADER_LANGUAGE_ID, skipDelete: true);
+        $this->injectHeaderParameter($specs, 'ctDomain', PlatformRequest::HEADER_DOMAIN, skipDelete: true);
+        $this->injectHeaderParameter($specs, 'ctContextSource', PlatformRequest::HEADER_CONTEXT_SOURCE, skipDelete: false);
+    }
 
+    /**
+     * Tooling endpoints under /_info/* are skipped because they serve schema and routing
+     * metadata. Operations that already declare the header by name or reference are left
+     * untouched, so bundle-provided schemas are never duplicated.
+     *
+     * @param OpenApiSpec $specs
+     */
+    private function injectHeaderParameter(array &$specs, string $parameter, string $header, bool $skipDelete): void
+    {
         foreach ($specs['paths'] as $path => &$pathDefinition) {
             if (str_starts_with((string) $path, '/_info/')) {
                 continue;
             }
 
             foreach (self::OPERATION_KEYS as $method) {
-                if ($method === 'delete') {
+                if ($skipDelete && $method === 'delete') {
                     continue;
                 }
 
@@ -544,23 +557,16 @@ class ChannelApiGenerator implements ApiDefinitionGeneratorInterface
                     $pathDefinition[$method]['parameters'] = [];
                 }
 
-                foreach ($headers as $header) {
-                    $alreadyDeclared = false;
-                    foreach ($pathDefinition[$method]['parameters'] as $param) {
-                        if (
-                            (isset($param['name']) && strtolower((string) $param['name']) === $header['name'])
-                            || (isset($param['$ref']) && $param['$ref'] === $header['ref'])
-                        ) {
-                            $alreadyDeclared = true;
-
-                            break;
-                        }
-                    }
-
-                    if (!$alreadyDeclared) {
-                        $pathDefinition[$method]['parameters'][] = ['$ref' => $header['ref']];
+                foreach ($pathDefinition[$method]['parameters'] as $param) {
+                    if (
+                        (isset($param['name']) && strtolower((string) $param['name']) === $header)
+                        || (isset($param['$ref']) && $param['$ref'] === '#/components/parameters/' . $parameter)
+                    ) {
+                        continue 2;
                     }
                 }
+
+                $pathDefinition[$method]['parameters'][] = ['$ref' => '#/components/parameters/' . $parameter];
             }
         }
     }

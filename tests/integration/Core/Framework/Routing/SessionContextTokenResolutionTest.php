@@ -171,7 +171,7 @@ class SessionContextTokenResolutionTest extends TestCase
     {
         return [
             ['same-origin', true],
-            ['same-site', true],
+            ['same-site', false],
             ['cross-site', false],
             ['none', false],
         ];
@@ -188,7 +188,7 @@ class SessionContextTokenResolutionTest extends TestCase
 
         if (!$shouldResolve) {
             $this->expectExceptionObject(
-                RoutingException::sessionContextNotResolvable('the request is not a same-origin or same-site fetch')
+                RoutingException::sessionContextNotResolvable('the request is not a same-origin fetch')
             );
         }
 
@@ -252,7 +252,7 @@ class SessionContextTokenResolutionTest extends TestCase
         $session = $this->attachSession($request, [PlatformRequest::HEADER_CONTEXT_TOKEN => $sessionToken]);
 
         $this->resolve($request);
-        $this->logout($request);
+        $this->logout($request, Random::getAlphanumericString(32));
 
         $token = $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN);
         static::assertIsString($token);
@@ -450,10 +450,16 @@ class SessionContextTokenResolutionTest extends TestCase
         ));
     }
 
-    private function logout(Request $request): void
+    /**
+     * The logout route rebuilds the context on a fresh token before it dispatches.
+     */
+    private function logout(Request $request, string $newToken): void
     {
+        $context = clone $this->resolvedContext($request);
+        $context->assign(['token' => $newToken]);
+
         $this->onStack($request, fn () => $this->subscriber->onMemberLogout(
-            new MemberLogoutEvent($this->resolvedContext($request), new MemberEntity())
+            new MemberLogoutEvent($context, new MemberEntity())
         ));
     }
 
