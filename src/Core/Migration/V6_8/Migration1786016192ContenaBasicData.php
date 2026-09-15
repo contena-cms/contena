@@ -28,232 +28,12 @@ class Migration1786016192ContenaBasicData extends MigrationStep
     use ImportTranslationsTrait;
     use StateMachineMigrationTrait;
 
-    private const string DEFAULT_ADMINISTRATOR_ROLE_ID = '019fcbf8e98e7c93bfa2d14cb01db101';
-
-    private const string DEFAULT_TENANT_ID = '019fcbf9e1a2734c8ab5d2e6f7019a3b';
-
     /**
-     * Entity privileges available in the core installation at this migration.
-     * Plugin entities are intentionally absent.
+     * Stable identifiers that are referenced outside this migration
+     * (TestDefaults, integration tests and Administration specs must keep working).
+     * Everything else is generated with Uuid at seeding time.
      */
-    private const array DEFAULT_ADMINISTRATOR_RESOURCES = [
-        'acl_role',
-        'acl_user_role',
-        'blog',
-        'blog_category',
-        'blog_category_tree',
-        'blog_content_layout',
-        'blog_keyword_dictionary',
-        'blog_main_category',
-        'blog_media',
-        'blog_search_config',
-        'blog_search_config_field',
-        'blog_search_keyword',
-        'blog_sorting',
-        'blog_sorting_translation',
-        'blog_tag',
-        'blog_translation',
-        'blog_visibility',
-        'category',
-        'category_content_layout',
-        'category_tag',
-        'category_translation',
-        'channel',
-        'channel_analytics',
-        'channel_country',
-        'channel_domain',
-        'channel_file',
-        'channel_language',
-        'channel_translation',
-        'channel_type',
-        'channel_type_translation',
-        'content_layout',
-        'country',
-        'country_translation',
-        'currency',
-        'currency_translation',
-        'custom_field',
-        'custom_field_set',
-        'custom_field_set_relation',
-        'data_dictionary',
-        'data_dictionary_item',
-        'data_dictionary_item_translation',
-        'data_dictionary_translation',
-        'flow',
-        'flow_sequence',
-        'flow_template',
-        'footer_content_layout',
-        'header_content_layout',
-        'integration',
-        'integration_role',
-        'language',
-        'landing_page',
-        'landing_page_channel',
-        'landing_page_content_layout',
-        'landing_page_tag',
-        'landing_page_translation',
-        'locale',
-        'locale_translation',
-        'log_entry',
-        'mail_header_footer',
-        'mail_header_footer_translation',
-        'mail_template',
-        'mail_template_media',
-        'mail_template_translation',
-        'mail_template_type',
-        'mail_template_type_translation',
-        'media',
-        'media_default_folder',
-        'media_folder',
-        'media_folder_configuration',
-        'media_folder_configuration_media_thumbnail_size',
-        'media_tag',
-        'media_thumbnail',
-        'media_thumbnail_size',
-        'media_translation',
-        'member',
-        'member_address',
-        'member_group',
-        'member_group_registration_channel',
-        'member_group_translation',
-        'member_recovery',
-        'member_tag',
-        'notification',
-        'number_range',
-        'number_range_state',
-        'number_range_translation',
-        'number_range_type',
-        'number_range_type_translation',
-        'organization',
-        'organization_translation',
-        'organization_unit',
-        'organization_unit_translation',
-        'payment_app',
-        'payment_app_channel_method',
-        'payment_app_translation',
-        'payment_channel',
-        'payment_channel_config',
-        'payment_channel_method',
-        'payment_channel_method_translation',
-        'payment_channel_notify_record',
-        'payment_channel_translation',
-        'payment_notify_record',
-        'payment_order',
-        'payment_order_transaction',
-        'payment_recurring',
-        'payment_refund',
-        'payment_transfer',
-        'position',
-        'position_translation',
-        'region',
-        'region_translation',
-        'rule',
-        'rule_condition',
-        'rule_tag',
-        'scheduled_task',
-        'seo_url',
-        'seo_url_template',
-        'snippet',
-        'snippet_set',
-        'state_machine',
-        'state_machine_history',
-        'state_machine_state',
-        'state_machine_state_translation',
-        'state_machine_transition',
-        'state_machine_translation',
-        'system:translation',
-        'system_config',
-        'tag',
-        'theme',
-        'theme_channel',
-        'theme_child',
-        'theme_media',
-        'theme_translation',
-        'user',
-        'user_access_key',
-        'user_config',
-        'user_position',
-        'user_recovery',
-        'user_tag',
-        'version',
-        'version_commit',
-        'version_commit_data',
-    ];
-
-    private const array DEFAULT_ADMINISTRATOR_FUNCTIONS = [
-        'blog',
-        'category',
-        'channel',
-        'country',
-        'custom_field',
-        'data_dictionary',
-        'experience_studio',
-        'flow',
-        'integration',
-        'language',
-        'landing_page',
-        'mail_templates',
-        'media',
-        'member',
-        'member_groups',
-        'organization',
-        'payment',
-        'position',
-        'region',
-        'rule',
-        'tag',
-        'theme',
-        'users_and_permissions',
-    ];
-
-    private const array DEFAULT_ADMINISTRATOR_SPECIAL_PRIVILEGES = [
-        'api_acl_privileges_additional_get',
-        'api_acl_privileges_get',
-        'api_action_access-key_integration',
-        'api_action_cache_index',
-        'api_action_integration_mcp-allowlist',
-        'api_action_user_mcp-allowlist',
-        'api_feature_flag_toggle',
-        'api_send_email',
-        'increment:manage',
-        'message_queue_stats:read',
-        'payment.settings',
-        'system.clear_cache',
-        'system.logging',
-        'system.system_config',
-        'system:cache:info',
-        'system:app:change',
-        'system:clear:cache',
-        'user.update_profile',
-        'user_change_me',
-    ];
-
-    private const array DEFAULT_UNITS = [
-        'company' => ['position' => 10, 'zh-CN' => '公司', 'en-GB' => 'Company'],
-        'department' => ['position' => 20, 'zh-CN' => '部门', 'en-GB' => 'Department'],
-    ];
-
-    private const array DEFAULT_ORGANIZATIONS = [
-        'HQ' => [
-            'unit' => 'company',
-            'parent' => null,
-            'position' => 10,
-            'zh-CN' => '总部',
-            'en-GB' => 'Headquarters',
-        ],
-        'FIN' => [
-            'unit' => 'department',
-            'parent' => 'HQ',
-            'position' => 10,
-            'zh-CN' => '财务部',
-            'en-GB' => 'Finance Department',
-        ],
-    ];
-
-    private const array DEFAULT_POSITIONS = [
-        'general_manager' => ['position' => 10, 'zh-CN' => '总经理', 'en-GB' => 'General Manager'],
-        'department_manager' => ['position' => 20, 'zh-CN' => '部门经理', 'en-GB' => 'Department Manager'],
-    ];
+    private const string DEFAULT_ADMINISTRATOR_ROLE_ID = '019fcbf8e98e7c93bfa2d14cb01db101';
 
     private const string DEFAULT_MEMBER_GROUP_ID = 'cfbd5018d38d41d8adca10d94fc8bdd6';
 
@@ -261,62 +41,21 @@ class Migration1786016192ContenaBasicData extends MigrationStep
 
     private const string DEFAULT_WEB_CHANNEL_ID = 'c6d2905ae914eb8d6320c54d2d1cab04';
 
-    private const string DEFAULT_NAVIGATION_CATEGORY_ID = 'a4d2e5324fea4bc5a950142b6c7f86e3';
-
-    private const string DEFAULT_BLOG_CATEGORY_ID = '5d458f935413f3a91cb77d8b345ccac5';
-
-    private const string DEFAULT_LANDING_PAGE_CATEGORY_ID = '940745faa50709c11a60281cfbfb687d';
-
     private const string DEFAULT_BLOG_ID = '3bdbb2474ffec6bfc96342ec3f4a75a0';
 
     private const string DEFAULT_LANDING_PAGE_ID = '43d1adaa1e699b09cb48643eadd87efb';
 
     private const string DEFAULT_BLOG_LAYOUT_ID = '4c5521c0ef05a4a84f83cdbade6ae1f8';
 
-    private const string DEFAULT_CATEGORY_LAYOUT_ID = '2cf5b821df7ea384855b3fc4c34e06e8';
-
     private const string DEFAULT_LANDING_PAGE_LAYOUT_ID = '761d10258bef0a6e59e58b916428a2e4';
 
-    private const string CORE_GENDER_DICTIONARY_ID = '019f7934e3e971858ed277eafea95ae7';
-
-    private const array CORE_GENDER_ITEMS = [
-        'male' => ['id' => '019f7934e3e971858ed277eafef671d9', 'position' => 10, 'zh-CN' => '男', 'en-GB' => 'Male'],
-        'female' => ['id' => '019f7934e3e971858ed277eafef879c2', 'position' => 20, 'zh-CN' => '女', 'en-GB' => 'Female'],
-        'undisclosed' => ['id' => '019f7934e3e971858ed277eaff3141e4', 'position' => 30, 'zh-CN' => '保密', 'en-GB' => 'Undisclosed'],
-    ];
-
-    private const string CORE_REGION_TYPE_DICTIONARY_ID = '019f7934e3e971858ed277eb1b000001';
-
-    private const array CORE_REGION_TYPE_ITEMS = [
-        'province' => ['id' => '019f7934e3e971858ed277eb1b000002', 'position' => 10, 'zh-CN' => '省级', 'en-GB' => 'Province'],
-        'city' => ['id' => '019f7934e3e971858ed277eb1b000003', 'position' => 20, 'zh-CN' => '市级', 'en-GB' => 'City'],
-        'district' => ['id' => '019f7934e3e971858ed277eb1b000004', 'position' => 30, 'zh-CN' => '区县级', 'en-GB' => 'District'],
-    ];
-
     private const string WORKING_DAYS_RULE_ID = '019fc5b5ad1f7a659e3eea39f1000101';
-
-    private const string WORKING_HOURS_RULE_ID = '019fc5b5ad1f7a659e3eea39f1000102';
-
-    private const string SYSTEM_LANGUAGE_RULE_ID = '019fc5b5ad1f7a659e3eea39f1000103';
 
     private const string USER_RECOVERY_FLOW_ID = '019fc5b5ad1f7a659e3eea39f1000201';
 
     private const string USER_RECOVERY_FLOW_SEQUENCE_ID = '019fc5b5ad1f7a659e3eea39f1000202';
 
     private const string USER_RECOVERY_FLOW_TEMPLATE_ID = '019fc5b5ad1f7a659e3eea39f1000203';
-
-    private const array DEFAULT_MEDIA_FOLDERS = [
-        'user' => 'User Media',
-        'mail_template' => 'Mail Template Media',
-    ];
-
-    private const array COUNTRIES = [
-        ['iso' => 'CN', 'iso3' => 'CHN', 'position' => 1, 'zh-CN' => '中国', 'en-GB' => 'China'],
-        ['iso' => 'US', 'iso3' => 'USA', 'position' => 2, 'zh-CN' => '美国', 'en-GB' => 'United States'],
-        ['iso' => 'GB', 'iso3' => 'GBR', 'position' => 3, 'zh-CN' => '英国', 'en-GB' => 'United Kingdom'],
-        ['iso' => 'JP', 'iso3' => 'JPN', 'position' => 4, 'zh-CN' => '日本', 'en-GB' => 'Japan'],
-        ['iso' => 'DE', 'iso3' => 'DEU', 'position' => 5, 'zh-CN' => '德国', 'en-GB' => 'Germany'],
-    ];
 
     private ?string $enGbLanguageId = null;
 
@@ -350,6 +89,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         $this->ensureDefaultMediaThumbnailSize($connection);
         $this->createCountries($connection);
         $this->initializeChinaRegions($connection);
+        $this->createCountryRegions($connection);
         $this->registerIndexer($connection, 'region.indexer');
         $this->registerIndexer($connection, 'media_folder.indexer');
         $this->registerIndexer($connection, 'media_folder_configuration.indexer');
@@ -365,10 +105,38 @@ class Migration1786016192ContenaBasicData extends MigrationStep
     {
     }
 
+    protected function createDomainDefaultData(Connection $connection): void
+    {
+        $this->seedOrganizationData($connection);
+        $this->seedPositionData($connection);
+        $this->seedDefaultTags($connection);
+        $this->seedBlogSortingDefaults($connection);
+        $this->createBlogSearchDefaults($connection);
+        $this->seedChannelData($connection);
+    }
+
+    private function seedDefaultTags(Connection $connection): void
+    {
+        $createdAt = $this->createdAt();
+
+        $tags = [
+            'new_member' => '新会员',
+            'active_member' => '活跃会员',
+        ];
+
+        foreach ($tags as $code => $name) {
+            $this->insertPlatformScoped($connection, 'tag', [
+                'id' => Uuid::fromHexToBytes(Hasher::hash('contena:tag:' . $code)),
+                'name' => $name,
+                'created_at' => $createdAt,
+            ]);
+        }
+    }
+
     /**
      * Seeds the bundled province, city and district hierarchy for China.
      */
-    public function initializeChinaRegions(Connection $connection): void
+    private function initializeChinaRegions(Connection $connection): void
     {
         $countryId = $connection->fetchOne('SELECT `id` FROM `country` WHERE `iso` = :iso', ['iso' => 'CN']);
 
@@ -403,26 +171,61 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         }
     }
 
-    protected function createDomainDefaultData(Connection $connection): void
-    {
-        $this->seedOrganizationData($connection);
-        $this->seedPositionData($connection);
-        $this->seedBlogSortingDefaults($connection);
-        $this->createBlogSearchDefaults($connection);
-        $this->seedChannelData($connection);
-    }
-
     private function createDefaultAdministratorRole(Connection $connection): void
     {
-        $privileges = self::DEFAULT_ADMINISTRATOR_SPECIAL_PRIVILEGES;
+        $privileges = [
+            'api_acl_privileges_additional_get',
+            'api_acl_privileges_get',
+            'api_action_access-key_integration',
+            'api_action_cache_index',
+            'api_action_integration_mcp-allowlist',
+            'api_action_user_mcp-allowlist',
+            'api_feature_flag_toggle',
+            'api_send_email',
+            'increment:manage',
+            'message_queue_stats:read',
+            'payment.settings',
+            'system.clear_cache',
+            'system.logging',
+            'system.system_config',
+            'system:cache:info',
+            'system:app:change',
+            'system:clear:cache',
+            'user.update_profile',
+            'user_change_me',
+        ];
 
-        foreach (self::DEFAULT_ADMINISTRATOR_RESOURCES as $resource) {
+        foreach ($this->defaultAdministratorResources() as $resource) {
             foreach (['read', 'create', 'update', 'delete'] as $operation) {
                 $privileges[] = $resource . ':' . $operation;
             }
         }
 
-        foreach (self::DEFAULT_ADMINISTRATOR_FUNCTIONS as $function) {
+        foreach ([
+            'blog',
+            'category',
+            'channel',
+            'country',
+            'custom_field',
+            'data_dictionary',
+            'experience_studio',
+            'flow',
+            'integration',
+            'language',
+            'landing_page',
+            'mail_templates',
+            'media',
+            'member',
+            'member_groups',
+            'organization',
+            'payment',
+            'position',
+            'region',
+            'rule',
+            'tag',
+            'theme',
+            'users_and_permissions',
+        ] as $function) {
             foreach (['viewer', 'editor', 'creator', 'deleter'] as $role) {
                 $privileges[] = $function . '.' . $role;
             }
@@ -441,6 +244,158 @@ class Migration1786016192ContenaBasicData extends MigrationStep
     }
 
     /**
+     * Entity privileges available in the core installation at this migration.
+     * Plugin entities are intentionally absent.
+     *
+     * @return list<string>
+     */
+    private function defaultAdministratorResources(): array
+    {
+        return [
+            'acl_role',
+            'acl_user_role',
+            'blog',
+            'blog_category',
+            'blog_category_tree',
+            'blog_content_layout',
+            'blog_keyword_dictionary',
+            'blog_main_category',
+            'blog_media',
+            'blog_search_config',
+            'blog_search_config_field',
+            'blog_search_keyword',
+            'blog_sorting',
+            'blog_sorting_translation',
+            'blog_tag',
+            'blog_translation',
+            'blog_visibility',
+            'category',
+            'category_content_layout',
+            'category_tag',
+            'category_translation',
+            'channel',
+            'channel_analytics',
+            'channel_country',
+            'channel_domain',
+            'channel_file',
+            'channel_language',
+            'channel_translation',
+            'channel_type',
+            'channel_type_translation',
+            'content_layout',
+            'country',
+            'country_translation',
+            'currency',
+            'currency_translation',
+            'custom_field',
+            'custom_field_set',
+            'custom_field_set_relation',
+            'data_dictionary',
+            'data_dictionary_item',
+            'data_dictionary_item_translation',
+            'data_dictionary_translation',
+            'flow',
+            'flow_sequence',
+            'flow_template',
+            'footer_content_layout',
+            'header_content_layout',
+            'integration',
+            'integration_role',
+            'language',
+            'landing_page',
+            'landing_page_channel',
+            'landing_page_content_layout',
+            'landing_page_tag',
+            'landing_page_translation',
+            'locale',
+            'locale_translation',
+            'log_entry',
+            'mail_header_footer',
+            'mail_header_footer_translation',
+            'mail_template',
+            'mail_template_media',
+            'mail_template_translation',
+            'mail_template_type',
+            'mail_template_type_translation',
+            'media',
+            'media_default_folder',
+            'media_folder',
+            'media_folder_configuration',
+            'media_folder_configuration_media_thumbnail_size',
+            'media_tag',
+            'media_thumbnail',
+            'media_thumbnail_size',
+            'media_translation',
+            'member',
+            'member_address',
+            'member_group',
+            'member_group_registration_channel',
+            'member_group_translation',
+            'member_recovery',
+            'member_tag',
+            'notification',
+            'number_range',
+            'number_range_state',
+            'number_range_translation',
+            'number_range_type',
+            'number_range_type_translation',
+            'organization',
+            'organization_translation',
+            'organization_unit',
+            'organization_unit_translation',
+            'payment_app',
+            'payment_app_channel_method',
+            'payment_app_translation',
+            'payment_channel',
+            'payment_channel_config',
+            'payment_channel_method',
+            'payment_channel_method_translation',
+            'payment_channel_notify_record',
+            'payment_notify_record',
+            'payment_order',
+            'payment_order_transaction',
+            'payment_recurring',
+            'payment_refund',
+            'payment_transfer',
+            'position',
+            'position_translation',
+            'region',
+            'region_translation',
+            'rule',
+            'rule_condition',
+            'rule_tag',
+            'scheduled_task',
+            'seo_url',
+            'seo_url_template',
+            'snippet',
+            'snippet_set',
+            'state_machine',
+            'state_machine_history',
+            'state_machine_state',
+            'state_machine_state_translation',
+            'state_machine_transition',
+            'state_machine_translation',
+            'system:translation',
+            'system_config',
+            'tag',
+            'theme',
+            'theme_channel',
+            'theme_child',
+            'theme_media',
+            'theme_translation',
+            'user',
+            'user_access_key',
+            'user_config',
+            'user_position',
+            'user_recovery',
+            'user_tag',
+            'version',
+            'version_commit',
+            'version_commit_data',
+        ];
+    }
+
+    /**
      * Seeds the default tenant together with its tenant data scope.
      *
      * Tenant scope IDs equal tenant IDs. Raw SQL bypasses the DAL subscriber
@@ -449,8 +404,17 @@ class Migration1786016192ContenaBasicData extends MigrationStep
      */
     private function createDefaultTenant(Connection $connection): void
     {
-        $tenantId = Uuid::fromHexToBytes(self::DEFAULT_TENANT_ID);
+        $tenantId = Uuid::randomBytes();
         $createdAt = $this->createdAt();
+
+        $connection->executeStatement(
+            'INSERT IGNORE INTO `data_scope` (`id`, `type`, `created_at`) VALUES (:id, :type, :createdAt)',
+            [
+                'id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                'type' => DataScopeType::Platform->value,
+                'createdAt' => $createdAt,
+            ]
+        );
 
         $connection->executeStatement(
             'INSERT IGNORE INTO `data_scope` (`id`, `type`, `created_at`) VALUES (:id, :type, :createdAt)',
@@ -582,7 +546,7 @@ TEXT,
 
         $this->createRule(
             $connection,
-            self::WORKING_HOURS_RULE_ID,
+            Uuid::randomHex(),
             '工作时间',
             '每天 09:00 至 18:00',
             [
@@ -592,7 +556,7 @@ TEXT,
 
         $this->createRule(
             $connection,
-            self::SYSTEM_LANGUAGE_RULE_ID,
+            Uuid::randomHex(),
             '系统语言',
             '当前上下文使用系统默认语言',
             [
@@ -856,7 +820,15 @@ HTML,
         ];
         $createdAt = $this->createdAt();
 
-        foreach (self::COUNTRIES as $country) {
+        $countries = [
+            ['iso' => 'CN', 'iso3' => 'CHN', 'position' => 1, 'zh-CN' => '中国', 'en-GB' => 'China'],
+            ['iso' => 'US', 'iso3' => 'USA', 'position' => 2, 'zh-CN' => '美国', 'en-GB' => 'United States'],
+            ['iso' => 'GB', 'iso3' => 'GBR', 'position' => 3, 'zh-CN' => '英国', 'en-GB' => 'United Kingdom'],
+            ['iso' => 'JP', 'iso3' => 'JPN', 'position' => 4, 'zh-CN' => '日本', 'en-GB' => 'Japan'],
+            ['iso' => 'DE', 'iso3' => 'DEU', 'position' => 5, 'zh-CN' => '德国', 'en-GB' => 'Germany'],
+        ];
+
+        foreach ($countries as $country) {
             $countryId = Uuid::randomBytes();
 
             $connection->insert('country', [
@@ -938,11 +910,200 @@ HTML,
         }
     }
 
+    /**
+     * Seeds the top-level administrative regions for the default countries:
+     * US states, German federal states, UK constituent countries and Japanese prefectures.
+     *
+     * Codes follow ISO 3166-2, translations cover zh-CN and en-GB.
+     */
+    private function createCountryRegions(Connection $connection): void
+    {
+        $createdAt = $this->createdAt();
+        $languageIds = [
+            Defaults::DEFAULT_LOCALE => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+            'en-GB' => Uuid::fromHexToBytes($this->getEnGbLanguageId()),
+        ];
+
+        $countryRegions = [
+            'US' => [
+                'US-AL' => ['zh-CN' => '亚拉巴马州', 'en-GB' => 'Alabama'],
+                'US-AK' => ['zh-CN' => '阿拉斯加州', 'en-GB' => 'Alaska'],
+                'US-AZ' => ['zh-CN' => '亚利桑那州', 'en-GB' => 'Arizona'],
+                'US-AR' => ['zh-CN' => '阿肯色州', 'en-GB' => 'Arkansas'],
+                'US-CA' => ['zh-CN' => '加利福尼亚州', 'en-GB' => 'California'],
+                'US-CO' => ['zh-CN' => '科罗拉多州', 'en-GB' => 'Colorado'],
+                'US-CT' => ['zh-CN' => '康涅狄格州', 'en-GB' => 'Connecticut'],
+                'US-DE' => ['zh-CN' => '特拉华州', 'en-GB' => 'Delaware'],
+                'US-FL' => ['zh-CN' => '佛罗里达州', 'en-GB' => 'Florida'],
+                'US-GA' => ['zh-CN' => '佐治亚州', 'en-GB' => 'Georgia'],
+                'US-HI' => ['zh-CN' => '夏威夷州', 'en-GB' => 'Hawaii'],
+                'US-ID' => ['zh-CN' => '爱达荷州', 'en-GB' => 'Idaho'],
+                'US-IL' => ['zh-CN' => '伊利诺伊州', 'en-GB' => 'Illinois'],
+                'US-IN' => ['zh-CN' => '印第安纳州', 'en-GB' => 'Indiana'],
+                'US-IA' => ['zh-CN' => '艾奥瓦州', 'en-GB' => 'Iowa'],
+                'US-KS' => ['zh-CN' => '堪萨斯州', 'en-GB' => 'Kansas'],
+                'US-KY' => ['zh-CN' => '肯塔基州', 'en-GB' => 'Kentucky'],
+                'US-LA' => ['zh-CN' => '路易斯安那州', 'en-GB' => 'Louisiana'],
+                'US-ME' => ['zh-CN' => '缅因州', 'en-GB' => 'Maine'],
+                'US-MD' => ['zh-CN' => '马里兰州', 'en-GB' => 'Maryland'],
+                'US-MA' => ['zh-CN' => '马萨诸塞州', 'en-GB' => 'Massachusetts'],
+                'US-MI' => ['zh-CN' => '密歇根州', 'en-GB' => 'Michigan'],
+                'US-MN' => ['zh-CN' => '明尼苏达州', 'en-GB' => 'Minnesota'],
+                'US-MS' => ['zh-CN' => '密西西比州', 'en-GB' => 'Mississippi'],
+                'US-MO' => ['zh-CN' => '密苏里州', 'en-GB' => 'Missouri'],
+                'US-MT' => ['zh-CN' => '蒙大拿州', 'en-GB' => 'Montana'],
+                'US-NE' => ['zh-CN' => '内布拉斯加州', 'en-GB' => 'Nebraska'],
+                'US-NV' => ['zh-CN' => '内华达州', 'en-GB' => 'Nevada'],
+                'US-NH' => ['zh-CN' => '新罕布什尔州', 'en-GB' => 'New Hampshire'],
+                'US-NJ' => ['zh-CN' => '新泽西州', 'en-GB' => 'New Jersey'],
+                'US-NM' => ['zh-CN' => '新墨西哥州', 'en-GB' => 'New Mexico'],
+                'US-NY' => ['zh-CN' => '纽约州', 'en-GB' => 'New York'],
+                'US-NC' => ['zh-CN' => '北卡罗来纳州', 'en-GB' => 'North Carolina'],
+                'US-ND' => ['zh-CN' => '北达科他州', 'en-GB' => 'North Dakota'],
+                'US-OH' => ['zh-CN' => '俄亥俄州', 'en-GB' => 'Ohio'],
+                'US-OK' => ['zh-CN' => '俄克拉何马州', 'en-GB' => 'Oklahoma'],
+                'US-OR' => ['zh-CN' => '俄勒冈州', 'en-GB' => 'Oregon'],
+                'US-PA' => ['zh-CN' => '宾夕法尼亚州', 'en-GB' => 'Pennsylvania'],
+                'US-RI' => ['zh-CN' => '罗得岛州', 'en-GB' => 'Rhode Island'],
+                'US-SC' => ['zh-CN' => '南卡罗来纳州', 'en-GB' => 'South Carolina'],
+                'US-SD' => ['zh-CN' => '南达科他州', 'en-GB' => 'South Dakota'],
+                'US-TN' => ['zh-CN' => '田纳西州', 'en-GB' => 'Tennessee'],
+                'US-TX' => ['zh-CN' => '得克萨斯州', 'en-GB' => 'Texas'],
+                'US-UT' => ['zh-CN' => '犹他州', 'en-GB' => 'Utah'],
+                'US-VT' => ['zh-CN' => '佛蒙特州', 'en-GB' => 'Vermont'],
+                'US-VA' => ['zh-CN' => '弗吉尼亚州', 'en-GB' => 'Virginia'],
+                'US-WA' => ['zh-CN' => '华盛顿州', 'en-GB' => 'Washington'],
+                'US-WV' => ['zh-CN' => '西弗吉尼亚州', 'en-GB' => 'West Virginia'],
+                'US-WI' => ['zh-CN' => '威斯康星州', 'en-GB' => 'Wisconsin'],
+                'US-WY' => ['zh-CN' => '怀俄明州', 'en-GB' => 'Wyoming'],
+                'US-DC' => ['zh-CN' => '华盛顿哥伦比亚特区', 'en-GB' => 'District of Columbia'],
+            ],
+            'GB' => [
+                'GB-ENG' => ['zh-CN' => '英格兰', 'en-GB' => 'England'],
+                'GB-SCT' => ['zh-CN' => '苏格兰', 'en-GB' => 'Scotland'],
+                'GB-WLS' => ['zh-CN' => '威尔士', 'en-GB' => 'Wales'],
+                'GB-NIR' => ['zh-CN' => '北爱尔兰', 'en-GB' => 'Northern Ireland'],
+            ],
+            'JP' => [
+                'JP-01' => ['zh-CN' => '北海道', 'en-GB' => 'Hokkaido'],
+                'JP-02' => ['zh-CN' => '青森县', 'en-GB' => 'Aomori'],
+                'JP-03' => ['zh-CN' => '岩手县', 'en-GB' => 'Iwate'],
+                'JP-04' => ['zh-CN' => '宫城县', 'en-GB' => 'Miyagi'],
+                'JP-05' => ['zh-CN' => '秋田县', 'en-GB' => 'Akita'],
+                'JP-06' => ['zh-CN' => '山形县', 'en-GB' => 'Yamagata'],
+                'JP-07' => ['zh-CN' => '福岛县', 'en-GB' => 'Fukushima'],
+                'JP-08' => ['zh-CN' => '茨城县', 'en-GB' => 'Ibaraki'],
+                'JP-09' => ['zh-CN' => '栃木县', 'en-GB' => 'Tochigi'],
+                'JP-10' => ['zh-CN' => '群马县', 'en-GB' => 'Gunma'],
+                'JP-11' => ['zh-CN' => '埼玉县', 'en-GB' => 'Saitama'],
+                'JP-12' => ['zh-CN' => '千叶县', 'en-GB' => 'Chiba'],
+                'JP-13' => ['zh-CN' => '东京都', 'en-GB' => 'Tokyo'],
+                'JP-14' => ['zh-CN' => '神奈川县', 'en-GB' => 'Kanagawa'],
+                'JP-15' => ['zh-CN' => '新潟县', 'en-GB' => 'Niigata'],
+                'JP-16' => ['zh-CN' => '富山县', 'en-GB' => 'Toyama'],
+                'JP-17' => ['zh-CN' => '石川县', 'en-GB' => 'Ishikawa'],
+                'JP-18' => ['zh-CN' => '福井县', 'en-GB' => 'Fukui'],
+                'JP-19' => ['zh-CN' => '山梨县', 'en-GB' => 'Yamanashi'],
+                'JP-20' => ['zh-CN' => '长野县', 'en-GB' => 'Nagano'],
+                'JP-21' => ['zh-CN' => '岐阜县', 'en-GB' => 'Gifu'],
+                'JP-22' => ['zh-CN' => '静冈县', 'en-GB' => 'Shizuoka'],
+                'JP-23' => ['zh-CN' => '爱知县', 'en-GB' => 'Aichi'],
+                'JP-24' => ['zh-CN' => '三重县', 'en-GB' => 'Mie'],
+                'JP-25' => ['zh-CN' => '滋贺县', 'en-GB' => 'Shiga'],
+                'JP-26' => ['zh-CN' => '京都府', 'en-GB' => 'Kyoto'],
+                'JP-27' => ['zh-CN' => '大阪府', 'en-GB' => 'Osaka'],
+                'JP-28' => ['zh-CN' => '兵库县', 'en-GB' => 'Hyogo'],
+                'JP-29' => ['zh-CN' => '奈良县', 'en-GB' => 'Nara'],
+                'JP-30' => ['zh-CN' => '和歌山县', 'en-GB' => 'Wakayama'],
+                'JP-31' => ['zh-CN' => '鸟取县', 'en-GB' => 'Tottori'],
+                'JP-32' => ['zh-CN' => '岛根县', 'en-GB' => 'Shimane'],
+                'JP-33' => ['zh-CN' => '冈山县', 'en-GB' => 'Okayama'],
+                'JP-34' => ['zh-CN' => '广岛县', 'en-GB' => 'Hiroshima'],
+                'JP-35' => ['zh-CN' => '山口县', 'en-GB' => 'Yamaguchi'],
+                'JP-36' => ['zh-CN' => '德岛县', 'en-GB' => 'Tokushima'],
+                'JP-37' => ['zh-CN' => '香川县', 'en-GB' => 'Kagawa'],
+                'JP-38' => ['zh-CN' => '爱媛县', 'en-GB' => 'Ehime'],
+                'JP-39' => ['zh-CN' => '高知县', 'en-GB' => 'Kochi'],
+                'JP-40' => ['zh-CN' => '福冈县', 'en-GB' => 'Fukuoka'],
+                'JP-41' => ['zh-CN' => '佐贺县', 'en-GB' => 'Saga'],
+                'JP-42' => ['zh-CN' => '长崎县', 'en-GB' => 'Nagasaki'],
+                'JP-43' => ['zh-CN' => '熊本县', 'en-GB' => 'Kumamoto'],
+                'JP-44' => ['zh-CN' => '大分县', 'en-GB' => 'Oita'],
+                'JP-45' => ['zh-CN' => '宫崎县', 'en-GB' => 'Miyazaki'],
+                'JP-46' => ['zh-CN' => '鹿儿岛县', 'en-GB' => 'Kagoshima'],
+                'JP-47' => ['zh-CN' => '冲绳县', 'en-GB' => 'Okinawa'],
+            ],
+            'DE' => [
+                'DE-BW' => ['zh-CN' => '巴登-符腾堡州', 'en-GB' => 'Baden-Württemberg'],
+                'DE-BY' => ['zh-CN' => '巴伐利亚州', 'en-GB' => 'Bavaria'],
+                'DE-BE' => ['zh-CN' => '柏林', 'en-GB' => 'Berlin'],
+                'DE-BB' => ['zh-CN' => '勃兰登堡州', 'en-GB' => 'Brandenburg'],
+                'DE-HB' => ['zh-CN' => '不来梅', 'en-GB' => 'Bremen'],
+                'DE-HH' => ['zh-CN' => '汉堡', 'en-GB' => 'Hamburg'],
+                'DE-HE' => ['zh-CN' => '黑森州', 'en-GB' => 'Hesse'],
+                'DE-NI' => ['zh-CN' => '下萨克森州', 'en-GB' => 'Lower Saxony'],
+                'DE-MV' => ['zh-CN' => '梅克伦堡-前波美拉尼亚州', 'en-GB' => 'Mecklenburg-Western Pomerania'],
+                'DE-NW' => ['zh-CN' => '北莱茵-威斯特法伦州', 'en-GB' => 'North Rhine-Westphalia'],
+                'DE-RP' => ['zh-CN' => '莱茵兰-普法尔茨州', 'en-GB' => 'Rhineland-Palatinate'],
+                'DE-SL' => ['zh-CN' => '萨尔州', 'en-GB' => 'Saarland'],
+                'DE-SN' => ['zh-CN' => '萨克森州', 'en-GB' => 'Saxony'],
+                'DE-ST' => ['zh-CN' => '萨克森-安哈尔特州', 'en-GB' => 'Saxony-Anhalt'],
+                'DE-SH' => ['zh-CN' => '石勒苏益格-荷尔斯泰因州', 'en-GB' => 'Schleswig-Holstein'],
+                'DE-TH' => ['zh-CN' => '图林根州', 'en-GB' => 'Thuringia'],
+            ],
+        ];
+
+        foreach ($countryRegions as $countryIso => $regions) {
+            $countryId = $connection->fetchOne(
+                'SELECT `id` FROM `country` WHERE `iso` = :iso',
+                ['iso' => $countryIso]
+            );
+
+            if (!$countryId) {
+                continue;
+            }
+
+            $position = 0;
+            foreach ($regions as $code => $names) {
+                ++$position;
+                $regionId = Uuid::fromHexToBytes(Hasher::hash('contena:region:' . $countryIso . ':' . $code));
+
+                $connection->insert('region', [
+                    'id' => $regionId,
+                    'country_id' => $countryId,
+                    'parent_id' => null,
+                    'level' => 1,
+                    'type' => 'province',
+                    'code' => $code,
+                    'path' => null,
+                    'child_count' => 0,
+                    'position' => $position,
+                    'active' => 1,
+                    'created_at' => $createdAt,
+                ]);
+
+                foreach ($languageIds as $locale => $languageId) {
+                    $connection->insert('region_translation', [
+                        'region_id' => $regionId,
+                        'language_id' => $languageId,
+                        'name' => $names[$locale],
+                        'created_at' => $createdAt,
+                    ]);
+                }
+            }
+        }
+    }
+
     private function createDefaultMediaFolders(Connection $connection): void
     {
         $createdAt = $this->createdAt();
 
-        foreach (self::DEFAULT_MEDIA_FOLDERS as $entity => $folderName) {
+        $folders = [
+            'user' => 'User Media',
+            'mail_template' => 'Mail Template Media',
+        ];
+
+        foreach ($folders as $entity => $folderName) {
             $defaultFolderId = Uuid::randomBytes();
             $this->insertPlatformScoped($connection, 'media_default_folder', [
                 'id' => $defaultFolderId,
@@ -969,16 +1130,14 @@ HTML,
 
     private function createCoreGenderDictionary(Connection $connection): void
     {
+        $dictionaryId = Uuid::randomBytes();
+        $items = [
+            'male' => ['position' => 10, 'zh-CN' => '男', 'en-GB' => 'Male'],
+            'female' => ['position' => 20, 'zh-CN' => '女', 'en-GB' => 'Female'],
+            'undisclosed' => ['position' => 30, 'zh-CN' => '保密', 'en-GB' => 'Undisclosed'],
+        ];
         $createdAt = $this->createdAt();
-        $dictionaryId = $this->ensureCoreGenderDictionary($connection, $createdAt);
-        $itemIds = $this->ensureCoreGenderItems($connection, $dictionaryId, $createdAt);
 
-        $this->ensureCoreGenderTranslations($connection, $dictionaryId, $itemIds, $createdAt);
-    }
-
-    private function ensureCoreGenderDictionary(Connection $connection, string $createdAt): string
-    {
-        $dictionaryId = Uuid::fromHexToBytes(self::CORE_GENDER_DICTIONARY_ID);
         $connection->insert('data_dictionary', [
             'id' => $dictionaryId,
             'technical_name' => DataDictionaryDefinition::CORE_GENDER,
@@ -987,18 +1146,9 @@ HTML,
             'created_at' => $createdAt,
         ]);
 
-        return $dictionaryId;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function ensureCoreGenderItems(Connection $connection, string $dictionaryId, string $createdAt): array
-    {
         $itemIds = [];
-
-        foreach (self::CORE_GENDER_ITEMS as $code => $item) {
-            $itemId = Uuid::fromHexToBytes($item['id']);
+        foreach ($items as $code => $item) {
+            $itemId = Uuid::randomBytes();
             $connection->insert('data_dictionary_item', [
                 'id' => $itemId,
                 'dictionary_id' => $dictionaryId,
@@ -1012,18 +1162,6 @@ HTML,
             $itemIds[$code] = $itemId;
         }
 
-        return $itemIds;
-    }
-
-    /**
-     * @param array<string, string> $itemIds
-     */
-    private function ensureCoreGenderTranslations(
-        Connection $connection,
-        string $dictionaryId,
-        array $itemIds,
-        string $createdAt
-    ): void {
         $languages = $connection->fetchAllAssociative(
             'SELECT `language`.`id`, `locale`.`code`
              FROM `language`
@@ -1047,7 +1185,7 @@ HTML,
                 ]
             );
 
-            foreach (self::CORE_GENDER_ITEMS as $code => $item) {
+            foreach ($items as $code => $item) {
                 $connection->executeStatement(
                     'INSERT IGNORE INTO `data_dictionary_item_translation`
                         (`data_dictionary_item_id`, `language_id`, `label`, `created_at`)
@@ -1066,7 +1204,12 @@ HTML,
     private function createCoreRegionTypeDictionary(Connection $connection): void
     {
         $createdAt = $this->createdAt();
-        $dictionaryId = Uuid::fromHexToBytes(self::CORE_REGION_TYPE_DICTIONARY_ID);
+        $dictionaryId = Uuid::randomBytes();
+        $items = [
+            'province' => ['position' => 10, 'zh-CN' => '省级', 'en-GB' => 'Province'],
+            'city' => ['position' => 20, 'zh-CN' => '市级', 'en-GB' => 'City'],
+            'district' => ['position' => 30, 'zh-CN' => '区县级', 'en-GB' => 'District'],
+        ];
         $connection->insert('data_dictionary', [
             'id' => $dictionaryId,
             'technical_name' => DataDictionaryDefinition::CORE_REGION_TYPE,
@@ -1076,8 +1219,8 @@ HTML,
         ]);
 
         $itemIds = [];
-        foreach (self::CORE_REGION_TYPE_ITEMS as $code => $item) {
-            $itemId = Uuid::fromHexToBytes($item['id']);
+        foreach ($items as $code => $item) {
+            $itemId = Uuid::randomBytes();
             $connection->insert('data_dictionary_item', [
                 'id' => $itemId,
                 'dictionary_id' => $dictionaryId,
@@ -1116,7 +1259,7 @@ HTML,
                 ]
             );
 
-            foreach (self::CORE_REGION_TYPE_ITEMS as $code => $item) {
+            foreach ($items as $code => $item) {
                 $connection->executeStatement(
                     'INSERT IGNORE INTO `data_dictionary_item_translation`
                         (`data_dictionary_item_id`, `language_id`, `label`, `created_at`)
@@ -1464,7 +1607,7 @@ HTML,
         }
 
         $privileges = Json::decodeToArray($encoded);
-        foreach (self::DEFAULT_ADMINISTRATOR_RESOURCES as $resource) {
+        foreach ($this->defaultAdministratorResources() as $resource) {
             if (!str_starts_with($resource, 'payment_')) {
                 continue;
             }
@@ -1499,7 +1642,12 @@ HTML,
         $createdAt = $this->createdAt();
         $unitIds = [];
 
-        foreach (self::DEFAULT_UNITS as $technicalName => $unit) {
+        $units = [
+            'company' => ['position' => 10, 'zh-CN' => '公司', 'en-GB' => 'Company'],
+            'department' => ['position' => 20, 'zh-CN' => '部门', 'en-GB' => 'Department'],
+        ];
+
+        foreach ($units as $technicalName => $unit) {
             $unitId = Uuid::randomBytes();
             $unitIds[$technicalName] = $unitId;
 
@@ -1517,9 +1665,27 @@ HTML,
             ), $connection);
         }
 
+        /** @var array<string, string> $organizationIds */
         $organizationIds = [];
 
-        foreach (self::DEFAULT_ORGANIZATIONS as $code => $organization) {
+        $organizations = [
+            'HQ' => [
+                'unit' => 'company',
+                'parent' => null,
+                'position' => 10,
+                'zh-CN' => '总部',
+                'en-GB' => 'Headquarters',
+            ],
+            'FIN' => [
+                'unit' => 'department',
+                'parent' => 'HQ',
+                'position' => 10,
+                'zh-CN' => '财务部',
+                'en-GB' => 'Finance Department',
+            ],
+        ];
+
+        foreach ($organizations as $code => $organization) {
             $parentId = $organization['parent'] === null ? null : $organizationIds[$organization['parent']];
 
             $organizationId = Uuid::fromHexToBytes(Hasher::hash('contena:organization:' . $code));
@@ -1551,7 +1717,12 @@ HTML,
     {
         $createdAt = $this->createdAt();
 
-        foreach (self::DEFAULT_POSITIONS as $code => $position) {
+        $positions = [
+            'general_manager' => ['position' => 10, 'zh-CN' => '总经理', 'en-GB' => 'General Manager'],
+            'department_manager' => ['position' => 20, 'zh-CN' => '部门经理', 'en-GB' => 'Department Manager'],
+        ];
+
+        foreach ($positions as $code => $position) {
             $positionId = Uuid::fromHexToBytes(Hasher::hash('contena:position:' . $code));
 
             $this->insertPlatformScoped($connection, 'position', [
@@ -1579,6 +1750,7 @@ HTML,
             'name-desc' => [60, false, [['blog.name', 'desc']], '标题 Z-A', 'Title Z-A'],
         ];
         $createdAt = $this->createdAt();
+        /** @var array<string, string> $sortingIds */
         $sortingIds = [];
 
         foreach ($sortings as $key => [$priority, $locked, $fieldConfig, $chineseLabel, $englishLabel]) {
@@ -1771,7 +1943,7 @@ HTML,
 
     private function createDefaultNavigationCategory(Connection $connection, string $createdAt): string
     {
-        $categoryId = Uuid::fromHexToBytes(self::DEFAULT_NAVIGATION_CATEGORY_ID);
+        $categoryId = Uuid::randomBytes();
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
 
         $this->insertPlatformScoped($connection, 'category', [
@@ -1878,12 +2050,12 @@ HTML,
         string $createdAt
     ): void {
         $versionId = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
-        $blogCategoryId = Uuid::fromHexToBytes(self::DEFAULT_BLOG_CATEGORY_ID);
-        $landingPageCategoryId = Uuid::fromHexToBytes(self::DEFAULT_LANDING_PAGE_CATEGORY_ID);
+        $blogCategoryId = Uuid::randomBytes();
+        $landingPageCategoryId = Uuid::randomBytes();
         $blogId = Uuid::fromHexToBytes(self::DEFAULT_BLOG_ID);
         $landingPageId = Uuid::fromHexToBytes(self::DEFAULT_LANDING_PAGE_ID);
 
-        $this->createDefaultContentLayouts($connection, $createdAt);
+        $layoutIds = $this->createDefaultContentLayouts($connection, $createdAt);
         $this->createNavigationChild(
             $connection,
             $blogCategoryId,
@@ -1920,8 +2092,8 @@ HTML,
             'id' => $blogId,
             'version_id' => $versionId,
             'active' => 1,
-            'category_tree' => json_encode([self::DEFAULT_NAVIGATION_CATEGORY_ID, self::DEFAULT_BLOG_CATEGORY_ID], \JSON_THROW_ON_ERROR),
-            'category_ids' => json_encode([self::DEFAULT_BLOG_CATEGORY_ID], \JSON_THROW_ON_ERROR),
+            'category_tree' => json_encode([Uuid::fromBytesToHex($navigationCategoryId), Uuid::fromBytesToHex($blogCategoryId)], \JSON_THROW_ON_ERROR),
+            'category_ids' => json_encode([Uuid::fromBytesToHex($blogCategoryId)], \JSON_THROW_ON_ERROR),
             'tag_ids' => '[]',
             'release_date' => $createdAt,
             'created_at' => $createdAt,
@@ -1968,17 +2140,24 @@ HTML,
             'created_at' => $createdAt,
         ]);
 
-        $this->createContentLayoutAssignment($connection, 'blog', $blogId, $channelId, self::DEFAULT_BLOG_LAYOUT_ID, $createdAt);
-        $this->createContentLayoutAssignment($connection, 'category', $navigationCategoryId, $channelId, self::DEFAULT_CATEGORY_LAYOUT_ID, $createdAt);
-        $this->createContentLayoutAssignment($connection, 'category', $blogCategoryId, $channelId, self::DEFAULT_CATEGORY_LAYOUT_ID, $createdAt);
-        $this->createContentLayoutAssignment($connection, 'landing_page', $landingPageId, $channelId, self::DEFAULT_LANDING_PAGE_LAYOUT_ID, $createdAt);
+        $this->createContentLayoutAssignment($connection, 'blog', $blogId, $channelId, $layoutIds['blog'], $createdAt);
+        $this->createContentLayoutAssignment($connection, 'category', $navigationCategoryId, $channelId, $layoutIds['category'], $createdAt);
+        $this->createContentLayoutAssignment($connection, 'category', $blogCategoryId, $channelId, $layoutIds['category'], $createdAt);
+        $this->createContentLayoutAssignment($connection, 'landing_page', $landingPageId, $channelId, $layoutIds['landing_page'], $createdAt);
     }
 
-    private function createDefaultContentLayouts(Connection $connection, string $createdAt): void
+    /**
+     * @return array{blog: string, category: string, landing_page: string} hex identifiers of the created layouts
+     */
+    private function createDefaultContentLayouts(Connection $connection, string $createdAt): array
     {
+        $blogLayoutId = self::DEFAULT_BLOG_LAYOUT_ID;
+        $categoryLayoutId = Uuid::randomHex();
+        $landingPageLayoutId = self::DEFAULT_LANDING_PAGE_LAYOUT_ID;
+
         $layouts = [
-            [
-                'id' => self::DEFAULT_BLOG_LAYOUT_ID,
+            'blog' => [
+                'id' => $blogLayoutId,
                 'name' => 'Default blog content',
                 'root_source' => 'blog',
                 'layout' => [[
@@ -1989,8 +2168,8 @@ HTML,
                     ],
                 ]],
             ],
-            [
-                'id' => self::DEFAULT_CATEGORY_LAYOUT_ID,
+            'category' => [
+                'id' => $categoryLayoutId,
                 'name' => 'Default category content',
                 'root_source' => 'category',
                 'layout' => [[
@@ -2010,8 +2189,8 @@ HTML,
                     ],
                 ]],
             ],
-            [
-                'id' => self::DEFAULT_LANDING_PAGE_LAYOUT_ID,
+            'landing_page' => [
+                'id' => $landingPageLayoutId,
                 'name' => 'Default landing page content',
                 'root_source' => 'landing_page',
                 'layout' => [[
@@ -2034,6 +2213,12 @@ HTML,
                 'created_at' => $createdAt,
             ]);
         }
+
+        return [
+            'blog' => $blogLayoutId,
+            'category' => $categoryLayoutId,
+            'landing_page' => $landingPageLayoutId,
+        ];
     }
 
     private function createNavigationChild(
