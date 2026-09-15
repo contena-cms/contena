@@ -20,8 +20,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(DatabaseTypeLoader::class)]
 class DatabaseTypeLoaderTest extends TestCase
 {
-    #[TestDox('loads element type definitions from the database in blogion environment')]
-    public function testLoadsDefinitionsFromDatabaseInBlogionEnvironment(): void
+    #[TestDox('loads element type definitions from the database in production environment')]
+    public function testLoadsDefinitionsFromDatabaseInProductionEnvironment(): void
     {
         $definitions = $this->loader([['name' => 'App:Demo:Hero', 'schema' => json_encode($this->schema(), \JSON_THROW_ON_ERROR), 'app_name' => 'DemoApp']])->load();
         static::assertSame('App:Demo:Hero', $definitions[0]->name());

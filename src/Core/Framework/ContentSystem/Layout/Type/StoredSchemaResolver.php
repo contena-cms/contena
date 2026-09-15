@@ -10,7 +10,6 @@ use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
 use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
 use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertySpecification;
-use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
 
 /**
  * What an element of one type STORES, keyed by stored key: the counterpart to the type spec's `properties`,
@@ -47,7 +46,7 @@ use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\PropertyType;
  *
  * @internal
  *
- * @phpstan-type StoredSchemaEntry = array{kind: string, type: string, required: bool, default?: string|int|float|bool, translatable?: bool}
+ * @phpstan-type StoredSchemaEntry = array{kind: string, type: string, required: bool, default?: string|int|float|bool}
  */
 final readonly class StoredSchemaResolver
 {
@@ -96,11 +95,6 @@ final readonly class StoredSchemaResolver
      * A declared primitive property is stored under its own key. A declared FQCN/object/union property is not:
      * nothing is ever stored under the reference key itself, so it contributes no entry.
      *
-     * `default` is the declared scalar rather than the shape storage seeds it under
-     * ({@see PropertyType::storedDefault()}), and `translatable` beside it is what tells a client the stored
-     * value is a language map of that scalar. The key is omitted rather than published as `false`, matching how
-     * `default` is omitted where none is declared.
-     *
      * @return array<string, StoredSchemaEntry>
      */
     private function propertyEntries(ContentSystemElementTypeSpecification $type): array
@@ -127,10 +121,6 @@ final readonly class StoredSchemaResolver
 
             if ($default !== null) {
                 $entry['default'] = $default;
-            }
-
-            if ($propertyType->translatable()) {
-                $entry['translatable'] = true;
             }
 
             $entries[(string) $key] = $entry;
