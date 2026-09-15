@@ -110,8 +110,9 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
-const { t } = useI18n();
-const te = (key) => useI18n().te(key);
+const i18n = useI18n();
+const { t } = i18n;
+const te = i18n.te.bind(i18n);
 
 const routerLinkRef = ref(null);
 
