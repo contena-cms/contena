@@ -33,6 +33,6 @@ Makes `{{page}}` and `{{limit}}` available as placeholders:
 
 **Common use cases:**
 - Pagination parameters (`page`, `limit`)
-- Filter values (`category`, `brand`, `priceRange`)
+- Content filter values (`category`, `tag`, `type`)
 - Display preferences (`view`, `sort`)
-- Feature flags (`showReviews`, `hidePrice`)
+- Presentation flags (`showTeaser`, `showCover`)

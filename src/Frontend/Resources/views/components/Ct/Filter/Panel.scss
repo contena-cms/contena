@@ -1,16 +1,19 @@
 .ct-filter-panel {
+    --ct-filter-panel-background-color: var(--bs-body-bg);
+
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: start;
     gap: 0.5rem;
-    background-color: transparent;
+    background-color: var(--ct-filter-panel-background-color, transparent);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
-// Only the dropdown variant pins
-.ct-filter-panel.is--dropdown {
+// Only the inline variant pins
+.ct-filter-panel.is--inline {
     position: sticky;
     top: 0;
     z-index: 10;
@@ -23,18 +26,18 @@
     gap: 0.5rem;
 }
 
-.is--collapse .ct-filter-panel__filter {
+.ct-filter-panel.is--vertical {
     flex-direction: column;
-    align-items: start;
+    align-items: stretch;
 }
 
-.ct-filter-panel__actions {
-    display: inline-flex;
-    align-items: center;
-    justify-content: end;
-    gap: 0.5rem;
+.is--vertical .ct-filter-panel__filter {
+    flex-direction: column;
+    align-items: stretch;
+    flex-grow: 1;
 }
 
-.ct-filter-panel__counter {
-    line-height: 40px;
+.ct-filter-panel > .ct-active-filters {
+    flex: 0 0 100%;
+    margin-bottom: 0;
 }

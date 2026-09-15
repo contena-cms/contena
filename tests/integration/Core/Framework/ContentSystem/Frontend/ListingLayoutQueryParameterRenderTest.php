@@ -4,6 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\ContentSystem\Frontend;
 
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexingMessage;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -11,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
@@ -64,7 +67,7 @@ class ListingLayoutQueryParameterRenderTest extends TestCase
      */
     private const CARD_XPATH = '//div[contains(concat(" ", normalize-space(@class), " "), " ct-blog-card ")]';
 
-    private const GRID_XPATH = '//div[contains(concat(" ", normalize-space(@class), " "), " ct-grid-container-inner ")]';
+    private const GRID_XPATH = '//div[contains(concat(" ", normalize-space(@class), " "), " ct-blog-listing__grid ")]/div[contains(concat(" ", normalize-space(@class), " "), " ct-grid-container__inner ")]';
 
     private IdsCollection $ids;
 
@@ -209,11 +212,13 @@ class ListingLayoutQueryParameterRenderTest extends TestCase
         $this->persistContentLayout($this->ids->create('layout'), 'listing-layout-parameter', '1.0.0', 'category', [[
             'id' => $this->ids->create('listing'),
             'component' => 'Ct:Blog:Listing',
-            'properties' => [
-                'navigationId' => $this->ids->get('category'),
-            ],
-            'dataRequirements' => [
-                'listing' => ['source' => 'blog_listing', 'config' => ['property' => 'navigationId']],
+            'acceptsContext' => [
+                'blogListing' => [
+                    'type' => 'single',
+                    'required' => true,
+                    'propertyAlias' => 'listing',
+                    'scope' => 'root',
+                ],
             ],
         ]]);
 
@@ -227,10 +232,13 @@ class ListingLayoutQueryParameterRenderTest extends TestCase
     private function createBlogs(): void
     {
         $blogs = [];
+        $blogIds = [];
 
         for ($index = 0; $index < self::BLOG_COUNT; ++$index) {
+            $blogId = $this->ids->create('blog-' . $index);
+            $blogIds[] = $blogId;
             $blogs[] = [
-                'id' => $this->ids->create('blog-' . $index),
+                'id' => $blogId,
                 'name' => 'Listing layout blog ' . $index,
                 'active' => true,
                 'type' => BlogDefinition::TYPE_POST,
@@ -242,11 +250,28 @@ class ListingLayoutQueryParameterRenderTest extends TestCase
             ];
         }
 
-        $this->repository('blog.repository')->create($blogs, Context::createDefaultContext());
+        $context = Context::createDefaultContext();
+        $this->repository('blog.repository')->create($blogs, $context);
+        static::getContainer()->get(BlogIndexer::class)->handle(new BlogIndexingMessage($blogIds, $context));
     }
 
     private function prepareFrontendChannel(): void
     {
+        $domainRepository = $this->repository('channel_domain.repository');
+        $context = Context::createDefaultContext();
+
+        $domain = $domainRepository->search(
+            new Criteria()->addFilter(new EqualsFilter('url', $_SERVER['APP_URL']))->setLimit(1),
+            $context
+        )->getEntities()->first();
+
+        if ($domain instanceof ChannelDomainEntity) {
+            $this->channelId = $domain->getChannelId();
+            $this->updateChannelNavigationEntryPoint($this->channelId, $this->ids->get('category'));
+
+            return;
+        }
+
         $this->channelId = $this->ids->create('channel');
         $this->createFrontendChannelContext(
             $this->channelId,
@@ -254,16 +279,16 @@ class ListingLayoutQueryParameterRenderTest extends TestCase
             categoryEntrypoint: $this->ids->get('category'),
         );
 
-        $domainId = $this->repository('channel_domain.repository')->searchIds(
+        $domainId = $domainRepository->searchIds(
             new Criteria()->addFilter(new EqualsFilter('channelId', $this->channelId))->setLimit(1),
-            Context::createDefaultContext()
+            $context
         )->firstId();
         static::assertNotNull($domainId);
 
-        $this->repository('channel_domain.repository')->update([[
+        $domainRepository->update([[
             'id' => $domainId,
             'url' => $_SERVER['APP_URL'],
-        ]], Context::createDefaultContext());
+        ]], $context);
     }
 
     private function createFallbackMemberGroup(): void

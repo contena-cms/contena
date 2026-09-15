@@ -176,7 +176,7 @@ class ContentRouteRenderingTest extends TestCase
         $response = static::getContainer()->get(AbstractContentRoute::class)->load(
             'category/' . $this->ids->get('category'),
             new Request(),
-            static::getContainer()->get(ChannelContextFactory::class)->create(Uuid::randomHex(), TestDefaults::SALES_CHANNEL),
+            static::getContainer()->get(ChannelContextFactory::class)->create(Uuid::randomHex(), TestDefaults::CHANNEL),
         );
 
         static::assertInstanceOf(ContentRouteResponse::class, $response);
@@ -242,6 +242,7 @@ class ContentRouteRenderingTest extends TestCase
         // The page-level requirement the ambient run resolves really is declared by the root source, and the
         // stored root really consumes it, root-scoped.
         static::assertContains('category', $this->pageDataRequirementKeys());
+        static::assertContains('blogListing', $this->pageDataRequirementKeys());
         $this->assertStoredPageContextConsumer();
 
         $root = $this->rootElements($this->requestJson($this->uri('content')))[0];
@@ -1454,7 +1455,7 @@ class ContentRouteRenderingTest extends TestCase
                     [
                         'id' => $this->ids->get('text'),
                         'component' => 'Ct:Content:Text',
-                        'properties' => ['text' => self::TEXT_VALUE],
+                        'properties' => ['text' => [Defaults::LANGUAGE_SYSTEM => self::TEXT_VALUE]],
                     ],
                     [
                         'id' => $this->ids->get('inner-grid'),
@@ -1511,7 +1512,7 @@ class ContentRouteRenderingTest extends TestCase
                         'content' => [[
                             'id' => $this->ids->get('text'),
                             'component' => 'Ct:Content:Text',
-                            'properties' => ['text' => self::TEXT_VALUE],
+                            'properties' => ['text' => [Defaults::LANGUAGE_SYSTEM => self::TEXT_VALUE]],
                         ]],
                     ],
                 ]],
@@ -1647,7 +1648,7 @@ class ContentRouteRenderingTest extends TestCase
         return [
             'id' => $this->ids->get('text'),
             'component' => 'Ct:Content:Text',
-            'properties' => ['text' => self::TEXT_VALUE],
+            'properties' => ['text' => [Defaults::LANGUAGE_SYSTEM => self::TEXT_VALUE]],
             'acceptsContext' => [
                 'categoryPlaceholder' => [
                     'type' => 'single',

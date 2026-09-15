@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Navigation;
 
-use Contena\Core\Content\Blog\Channel\Listing\AbstractBlogListingRoute;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\CategoryException;
@@ -10,7 +9,6 @@ use Contena\Core\Content\Category\Channel\AbstractCategoryRoute;
 use Contena\Core\Content\Category\Channel\ChannelCategoryEntity;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
@@ -27,7 +25,6 @@ class NavigationPageLoader implements NavigationPageLoaderInterface
         private readonly GenericPageLoaderInterface $genericLoader,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly AbstractCategoryRoute $categoryRoute,
-        private readonly AbstractBlogListingRoute $blogListingRoute,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
         private readonly CategoryBreadcrumbBuilder $breadcrumbBuilder
     ) {
@@ -47,12 +44,6 @@ class NavigationPageLoader implements NavigationPageLoaderInterface
         $page->setNavigationId($category->getId());
         $page->setCategory($category);
         $page->setBreadcrumb($this->getBreadcrumb($category, $context));
-
-        $criteria = new Criteria();
-        $criteria->setTitle('navigation-page');
-        $page->setListing(
-            $this->blogListingRoute->load($category->getId(), $request, $context, $criteria)->getResult()
-        );
 
         if ($page->getMetaInformation()) {
             $canonical = ($navigationId === $context->getChannel()->getNavigationCategoryId())

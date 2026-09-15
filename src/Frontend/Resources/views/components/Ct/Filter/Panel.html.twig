@@ -2,15 +2,9 @@
 {# @internal #}
 
 {% props
-    totalCount = 0,
-    currentSorting = null,
-    filterAggregations = [],
-    availableSortings = [],
-    filterOrder = [],
-    showLayoutSwitch = true,
+    blogListing = null,
     visibleFilterCount = 3,
-    slots = [],
-    displayType = 'dropdown',
+    displayType = 'inline',
 %}
 
 {% set offcanvasId = 'filter-offcanvas-' ~ random() %}
@@ -23,8 +17,8 @@
     base: 'ct-filter-panel',
     variants: {
         displayType: {
-            dropdown: 'is--dropdown',
-            collapse: 'is--collapse',
+            inline: 'is--inline',
+            vertical: 'is--vertical',
         },
     },
 }) %}
@@ -35,31 +29,22 @@
     'data-component-options': filterPanelOptions|json_encode,
 } %}
 
-{% set filters = {} %}
+{% set filterAggregations = blogListing.aggregations ?? null %}
 
 <div {{ attributes.defaults(defaultAttributes) }}>
 
-    {# Filter template for outer block scope. #}
+    {# Filter template for outer block scope. Blog-specific filters are added only when backed by listing handlers. #}
     {% set filterTemplate %}
-        {% block filters %}
-            {# Rendering filters in order #}
-            {% for filter in filterOrder %}
-                {{ filters[filter] }}
-            {% endfor %}
-        {% endblock %}
+        {% block filters %}{% endblock %}
     {% endset %}
 
     <twig:Ct:Content:Offcanvas :id="offcanvasId" title="{{ 'listing.filterTitle'|trans|sw_sanitize }}">
         <div class="ct-filter-panel__filter">
 
-            <twig:Slot name="additional-filters-start"></twig:Slot>
-
             {{ filterTemplate }}
 
-            <twig:Slot name="additional-filters-end"></twig:Slot>
-
             {# Expand or collapse hidden filters #}
-            {% if filterAggregations|length > visibleFilterCount %}
+            {% if filterAggregations is not empty %}
                 <twig:Ct:Button
                     variant="filter"
                     class="ct-filter-panel__expand d-none d-md-block"
@@ -82,19 +67,7 @@
         {{ 'listing.filterTitle'|trans|sw_sanitize }} <twig:Ct:Icon name="sliders-horizontal" size="xs" />
     </twig:Ct:Button>
 
-    {% block actions %}
-        <div class="ct-filter-panel__actions">
-            <span class="ct-filter-panel__counter text-light-emphasis text-nowrap d-none d-lg-inline-block">
-                {{ 'listing.resultCount'|trans({ '%count%': totalCount })|sw_sanitize }}
-            </span>
-
-            {% if availableSortings and availableSortings.elements and availableSortings.elements|length > 0 %}
-                <twig:Ct:Filter:Sorting :currentSorting="currentSorting" :sortings="availableSortings.elements" />
-            {% endif %}
-
-            {% if showLayoutSwitch %}
-                <twig:Ct:Filter:LayoutSwitch />
-            {% endif %}
-        </div>
+    {% block activeFilters %}
+        <twig:Ct:Filter:ActiveFilters />
     {% endblock %}
 </div>

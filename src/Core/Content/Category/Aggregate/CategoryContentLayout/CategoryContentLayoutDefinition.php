@@ -2,8 +2,11 @@
 
 namespace Contena\Core\Content\Category\Aggregate\CategoryContentLayout;
 
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogListingDataLoader;
+use Contena\Core\Content\Blog\ContentSystem\DataLoader\BlogListingLoaderConfig;
 use Contena\Core\Content\Category\Channel\CategoryRoute;
 use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAssignableDefinition;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 
 /**
@@ -40,6 +43,21 @@ class CategoryContentLayoutDefinition extends AbstractContentLayoutAssignableDef
     public function getCacheTags(string $entityId): array
     {
         return [CategoryRoute::buildName($entityId)];
+    }
+
+    public function getPageDataRequirements(): array
+    {
+        return [
+            ...parent::getPageDataRequirements(),
+            new DataRequirement(
+                'blogListing',
+                BlogListingDataLoader::SOURCE,
+                new BlogListingLoaderConfig(
+                    property: 'categoryId',
+                    associations: ['cover', 'cover.media', 'cover.media.thumbnails'],
+                )
+            ),
+        ];
     }
 
     protected function getEntityAssociations(): array

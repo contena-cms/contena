@@ -1,20 +1,33 @@
 meta:
   label: "Filter Panel"
-  description: "Blog listing filter panel with sorting and layout switch actions."
+  description: "Blog listing filter panel."
   icon: "regular-filter-s"
-  category: "commerce"
+  category: "content"
   copilot:
-    summary: "Listing filter and sorting panel."
+    summary: "Listing filter panel."
     hints:
-      - "Bind listing aggregations and sortings."
-      - "Use additional filter slots to extend built-in filters."
+      - "The listing is loaded per request from the page's category, no configuration needed."
+      - "Place it anywhere on a category layout. It does not have to sit inside the blog listing."
+      - "Sorting and the layout switch belong to the Blog Listing element, not here."
 
 properties:
-  showLayoutSwitch:
-    type: boolean
-    title: "Show Layout Switch"
-    description: "Whether to show listing layout toggle actions."
-    default: true
+  blogListing:
+    type: Contena\Core\Content\Blog\Channel\Listing\BlogListingResult
+    required: false
+    title: "Blog Listing"
+    description: "Hydrated listing result the panel reads its aggregations from. Received as root-scoped context from the page, which loads it once, so a panel and a blog listing beside it share one load."
+
+  displayType:
+    type: string
+    title: "Display Type"
+    description: "How the filters are arranged. `inline` lays them out as a row of buttons opening floating menus; `vertical` gives each its own full-width row that expands in place."
+    default: "inline"
+    enum:
+      - "inline"
+      - "vertical"
+    adminUI:
+      component: "select"
+      helpText: "Use vertical when the panel sits in a narrow column, so the filters sit one below another and expand in place instead of opening floating menus."
 
   visibleFilterCount:
     type: integer

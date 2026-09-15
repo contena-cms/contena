@@ -3,7 +3,6 @@
 namespace Contena\Frontend\DependencyInjection;
 
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
 use Contena\Core\Content\Blog\Channel\Suggest\BlogSuggestRoute;
 use Contena\Core\Content\Category\Channel\CategoryRoute;
@@ -338,7 +337,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(GenericPageLoader::class),
             service('event_dispatcher'),
             service(CategoryRoute::class),
-            service(BlogListingRoute::class),
             service(SeoUrlPlaceholderHandlerInterface::class),
             service(CategoryBreadcrumbBuilder::class),
         ]);

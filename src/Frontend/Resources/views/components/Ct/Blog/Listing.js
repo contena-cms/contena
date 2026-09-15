@@ -22,8 +22,9 @@ export default class BlogListing extends ContenaComponent {
             const blogGridContainer = this.el.querySelector('.ct-blog-listing__grid');
             const blogGrid = blogGridContainer.querySelector('.ct-grid-container__inner');
             const pagination = this.el.querySelector('.ct-blog-listing__pagination');
-            const resultCounter = this.el.querySelector('.ct-filter-panel__counter');
-            blogGrid.classList.add('is--loading');
+            const counter = this.el.querySelector('.ct-blog-listing__counter');
+
+            blogGrid?.classList.add('is--loading');
 
             const location = new URL(window.location);
             const params = { ...this.activeParams };
@@ -35,16 +36,16 @@ export default class BlogListing extends ContenaComponent {
             const doc = this.domParser.parseFromString(html, 'text/html');
             const grid = doc.querySelector('.ct-blog-listing__grid');
             const pagi = doc.querySelector('.ct-blog-listing__pagination');
-            const counter = doc.querySelector('.ct-filter-panel__counter');
+            const freshCounter = doc.querySelector('.ct-blog-listing__counter');
 
-            blogGrid.replaceWith(grid);
+            blogGridContainer.replaceWith(grid);
             pagination.replaceWith(pagi);
 
-            if (resultCounter && counter) {
-                resultCounter.replaceWith(counter);
+            if (counter && freshCounter) {
+                counter.replaceWith(freshCounter);
             }
 
-            blogGrid.classList.remove('is--loading');
+            blogGrid?.classList.remove('is--loading');
         }, 200);
 
         this.getStateFromUrl();

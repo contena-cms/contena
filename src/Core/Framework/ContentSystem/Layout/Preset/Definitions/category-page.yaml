@@ -28,6 +28,3 @@ layout:
               lg: 3
               xl: 3
               xxl: 3
-          slots:
-            filters-panel:
-              - component: Ct:Filter:Panel

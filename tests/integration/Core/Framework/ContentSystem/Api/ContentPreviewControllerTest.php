@@ -34,7 +34,7 @@ class ContentPreviewControllerTest extends TestCase
             ]],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();
@@ -70,7 +70,7 @@ class ContentPreviewControllerTest extends TestCase
             'layout' => [['id' => 'el-1', 'component' => $component]],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
             'queryParameters' => ['0' => 'x'],
         ]);
 
@@ -92,7 +92,7 @@ class ContentPreviewControllerTest extends TestCase
             'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();
@@ -113,7 +113,7 @@ class ContentPreviewControllerTest extends TestCase
             // entityType deliberately omitted
             'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityId' => 'does-not-matter',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();
@@ -141,7 +141,7 @@ class ContentPreviewControllerTest extends TestCase
             ]],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();
@@ -162,7 +162,7 @@ class ContentPreviewControllerTest extends TestCase
             'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'blog',
             'entityId' => 'some-blog-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();
@@ -186,7 +186,7 @@ class ContentPreviewControllerTest extends TestCase
             'layout' => [['id' => 'el-1', 'component' => 'Ct:Test:PreviewProbe']],
             'entityType' => 'not_a_real_entity_type',
             'entityId' => 'some-id',
-            'channelId' => TestDefaults::SALES_CHANNEL,
+            'channelId' => TestDefaults::CHANNEL,
         ]);
 
         $response = $this->getBrowser()->getResponse();

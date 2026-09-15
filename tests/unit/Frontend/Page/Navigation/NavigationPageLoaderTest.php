@@ -2,9 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Page\Navigation;
 
-use Contena\Core\Content\Blog\Channel\Listing\AbstractBlogListingRoute;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingRouteResponse;
 use Contena\Core\Content\Breadcrumb\Struct\Breadcrumb;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Category\CategoryEntity;
@@ -99,14 +96,10 @@ class NavigationPageLoaderTest extends TestCase
         $genericLoader = static::createStub(GenericPageLoaderInterface::class);
         $genericLoader->method('load')->willReturn(new Page());
 
-        $listingRoute = static::createStub(AbstractBlogListingRoute::class);
-        $listingRoute->method('load')->willReturn(new BlogListingRouteResponse(static::createStub(BlogListingResult::class)));
-
         $loader = new NavigationPageLoader(
             $genericLoader,
             new EventDispatcher(),
             $categoryRoute,
-            $listingRoute,
             static::createStub(SeoUrlPlaceholderHandlerInterface::class),
             $breadcrumbBuilder,
         );

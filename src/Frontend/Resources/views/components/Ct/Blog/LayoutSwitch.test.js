@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // that both components below extend as a bare global while their own module is evaluated.
 import { Contena } from 'contena';
 import LayoutSwitch from './LayoutSwitch';
-import BlogListing from '../Blog/Listing';
+import BlogListing from './Listing';
 
 const LISTING_LAYOUT_PARAM = 'listingLayout';
 
@@ -42,7 +42,7 @@ function lastPushedParams(pushState) {
     return Object.fromEntries(url.searchParams);
 }
 
-describe('Ct:Filter:LayoutSwitch', () => {
+describe('Ct:Blog:LayoutSwitch', () => {
     beforeEach(() => {
         window.location.search = '';
         Contena.emit.mockClear();

@@ -13,3 +13,12 @@
         }
     }
 }
+
+.ct-blog-listing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: end;
+    gap: var(--spacer-sm);
+    margin-bottom: var(--spacer-sm);
+}

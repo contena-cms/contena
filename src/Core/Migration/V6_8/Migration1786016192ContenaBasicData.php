@@ -2176,16 +2176,8 @@ HTML,
                     'id' => 'blog-listing',
                     'component' => 'Ct:Blog:Listing',
                     'properties' => [
-                        'navigationId' => '{{categoryId}}',
                         'limit' => 24,
                         'page' => 1,
-                    ],
-                    'dataRequirements' => [
-                        'listing' => [
-                            'key' => 'listing',
-                            'source' => 'blog_listing',
-                            'config' => ['property' => 'navigationId'],
-                        ],
                     ],
                 ]],
             ],

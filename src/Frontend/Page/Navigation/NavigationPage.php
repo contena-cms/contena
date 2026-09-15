@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Navigation;
 
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
@@ -15,8 +14,6 @@ class NavigationPage extends Page
     protected ?string $navigationId = null;
 
     protected ?BreadcrumbCollection $breadcrumb = null;
-
-    protected ?BlogListingResult $listing = null;
 
     public function getNavigationId(): ?string
     {
@@ -46,16 +43,6 @@ class NavigationPage extends Page
     public function setBreadcrumb(?BreadcrumbCollection $breadcrumb): void
     {
         $this->breadcrumb = $breadcrumb;
-    }
-
-    public function getListing(): ?BlogListingResult
-    {
-        return $this->listing;
-    }
-
-    public function setListing(?BlogListingResult $listing): void
-    {
-        $this->listing = $listing;
     }
 
     public function getEntityName(): string

@@ -3,8 +3,16 @@
 
 {% props
     listing = null,
+    showSorting = true,
+    showLayoutSwitch = true,
     slots = [],
+    limit = null,
+    page = null,
 %}
+
+{% set totalCount = listing.total ?? 0 %}
+{% set currentSorting = listing.sorting %}
+{% set availableSortings = listing.availableSortings %}
 
 {% set listingCVA = cva({
     base: 'ct-blog-listing',
@@ -18,19 +26,23 @@
 {% set listingLayout = app.request.get('listingLayout') %}
 
 <div {{ attributes.defaults(attributeDefaults) }}>
-    {% block filters %}
-        <twig:Slot name="filters-panel">
-            <twig:Ct:Filter:Panel
-                :totalCount="listing.total"
-                :currentSorting="listing.sorting"
-                :filterAggregations="listing.aggregations"
-                :availableSortings="listing.availableSortings">
-            </twig:Ct:Filter:Panel>
-        </twig:Slot>
 
-        <twig:Slot name="filters-active">
-            <twig:Ct:Filter:ActiveFilters />
-        </twig:Slot>
+    {% block actions %}
+        <twig:Ct:Grid:Container>
+            <div class="ct-blog-listing__actions">
+                <span class="ct-blog-listing__counter text-light-emphasis text-nowrap d-none d-lg-inline-block">
+                    {{ 'listing.resultCount'|trans({ '%count%': totalCount })|sw_sanitize }}
+                </span>
+
+                {% if showSorting and availableSortings and availableSortings.elements and availableSortings.elements|length > 0 %}
+                    <twig:Ct:Blog:Sorting :currentSorting="currentSorting" :sortings="availableSortings.elements" />
+                {% endif %}
+
+                {% if showLayoutSwitch %}
+                    <twig:Ct:Blog:LayoutSwitch />
+                {% endif %}
+            </div>
+        </twig:Ct:Grid:Container>
     {% endblock %}
 
     {% block content %}
@@ -38,6 +50,7 @@
             <twig:Slot name="blog-grid">
                 <twig:Ct:Grid:Container
                     class="ct-blog-listing__grid"
+                    :margin="{ xs: '0 0 24px 0', sm: '0 0 24px 0', md: '0 0 24px 0', lg: '0 0 24px 0', xl: '0 0 24px 0', xxl: '0 0 24px 0' }"
                     :columns="listingLayout == 'horizontal' ? '1' : { xs: '1', sm: '2', md: '3', lg: '4', xl: '4' }"
                     gap="16">
                     {% for blog in listing.entities.elements %}
@@ -49,23 +62,25 @@
                 </twig:Ct:Grid:Container>
             </twig:Slot>
         {% else %}
-            <div class="ct-blog-listing__grid container">
-                <twig:Ct:Alert type="info">
+            <twig:Ct:Grid:Container class="ct-blog-listing__grid">
+                <twig:Ct:Alert variant="info">
                     {{ 'listing.emptyResultMessage'|trans|sw_sanitize }}
                 </twig:Ct:Alert>
-            </div>
+            </twig:Ct:Grid:Container>
         {% endif %}
     {% endblock %}
 
     {% block pagination %}
         <twig:Slot name="pagination">
-            <twig:Ct:Content:Pagination
-                class="ct-blog-listing__pagination"
-                :page="listing.page"
-                :total="listing.total"
-                :limit="listing.limit"
-                :scope="listing.entity"
-            />
+            <twig:Ct:Grid:Container>
+                <twig:Ct:Content:Pagination
+                    class="ct-blog-listing__pagination"
+                    :page="listing.page"
+                    :total="listing.total"
+                    :limit="listing.limit"
+                    :scope="listing.entity"
+                />
+            </twig:Ct:Grid:Container>
         </twig:Slot>
     {% endblock %}
 

@@ -12,7 +12,7 @@ function buildEl() {
     el.innerHTML = `
         <div class="ct-blog-listing__grid"><div class="ct-grid-container__inner"></div></div>
         <div class="ct-blog-listing__pagination"></div>
-        <span class="ct-filter-panel__counter">3 results</span>
+        <span class="ct-blog-listing__counter">3 results</span>
     `;
     return el;
 }
@@ -41,14 +41,14 @@ describe('BlogListing', () => {
             text: () => Promise.resolve(`
                 <div class="ct-blog-listing__grid"><div class="ct-grid-container__inner"></div></div>
                 <div class="ct-blog-listing__pagination"></div>
-                <span class="ct-filter-panel__counter">7 results</span>
+                <span class="ct-blog-listing__counter">7 results</span>
             `),
         });
 
         listing.debouncedLoad();
         await vi.runAllTimersAsync();
 
-        expect(el.querySelector('.ct-filter-panel__counter').textContent).toBe('7 results');
+        expect(el.querySelector('.ct-blog-listing__counter').textContent).toBe('7 results');
     });
 
     describe('handleFilterChange', () => {
