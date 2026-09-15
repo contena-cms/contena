@@ -4,8 +4,8 @@
   "pr": {
     "number": null,
     "head_sha": "synthetic-ux-ignore",
-    "title": "feat(core): add foo_flag column to product",
-    "body": "Adds a new column to the product table.",
+    "title": "feat(core): add foo_flag column to blog",
+    "body": "Adds a new column to the blog table.",
     "labels": [],
     "author": "synthetic",
     "author_association": "MEMBER",
@@ -17,6 +17,6 @@
   },
   "diff_path": "diff.patch",
   "files": [
-    "src/Core/Migration/V6_7/Migration1799999999AddFooColumnToProduct.php"
+    "src/Core/Migration/V6_8/Migration1799999999AddFooColumnToBlog.php"
   ]
 }

@@ -86,7 +86,7 @@ class MissingUnitTestsTest extends TestCase
             "<?php\ntrait CartCalculatorTrait\n{\n}",
         ];
         yield 'migration class' => [
-            'src/Core/Migration/V6_7/Migration1752000000AddFoo.php',
+            'src/Core/Migration/V6_8/Migration1752000000AddFoo.php',
             "<?php\nclass Migration1752000000AddFoo\n{\n}",
         ];
         yield 'DI service-wiring file' => [

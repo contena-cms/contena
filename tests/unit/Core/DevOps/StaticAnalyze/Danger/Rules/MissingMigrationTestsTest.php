@@ -40,27 +40,27 @@ class MissingMigrationTestsTest extends TestCase
     public static function migrationFilesProvider(): \Generator
     {
         yield 'core migration without test fails' => [
-            ['src/Core/Migration/V6_7/Migration1752000000AddFoo.php'],
+            ['src/Core/Migration/V6_8/Migration1752000000AddFoo.php'],
             1,
         ];
         yield 'core migration with test passes' => [
             [
-                'src/Core/Migration/V6_7/Migration1752000000AddFoo.php',
-                'tests/migration/Core/V6_7/Migration1752000000AddFooTest.php',
+                'src/Core/Migration/V6_8/Migration1752000000AddFoo.php',
+                'tests/migration/Core/V6_8/Migration1752000000AddFooTest.php',
             ],
             0,
         ];
         yield 'each bundle is checked independently: untested migrations in two bundles fail twice' => [
             [
-                'src/Core/Migration/V6_7/Migration1752000000AddFoo.php',
-                'src/Frontend/Migration/V6_7/Migration1752000001AddBar.php',
+                'src/Core/Migration/V6_8/Migration1752000000AddFoo.php',
+                'src/Frontend/Migration/V6_8/Migration1752000001AddBar.php',
             ],
             2,
         ];
         yield 'a test in one bundle does not cover a migration in another' => [
             [
-                'src/Frontend/Migration/V6_7/Migration1752000001AddBar.php',
-                'tests/migration/Core/V6_7/Migration1752000001AddBarTest.php',
+                'src/Frontend/Migration/V6_8/Migration1752000001AddBar.php',
+                'tests/migration/Core/V6_8/Migration1752000001AddBarTest.php',
             ],
             1,
         ];
@@ -74,7 +74,7 @@ class MissingMigrationTestsTest extends TestCase
     public function testModifiedMigrationIsIgnored(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Migration/V6_7/Migration1752000000AddFoo.php', File::STATUS_MODIFIED),
+            new StubFile('src/Core/Migration/V6_8/Migration1752000000AddFoo.php', File::STATUS_MODIFIED),
         ])));
 
         (new MissingMigrationTests())($context);

@@ -72,7 +72,7 @@ Migrations are executed in following order.
    ...
 4. core 'legacy' migrations
 
-> **HINT:** You can run migrations specific to a major version with `bin/console database:migrate --all core.V6_7` where `core.V6_7` represents the major version you want to execute.
+> **HINT:** You can run migrations specific to a major version with `bin/console database:migrate --all core.V6_8` where `core.V6_8` represents the major version you want to execute.
 
 ---
 
@@ -86,7 +86,7 @@ Migrations are executed in following order.
 
 You cannot alter an executed, or already released, migration.
 If the migration was not yet part of a public release, you can still change it.
-For example, the current major is 6.6, so you can still change migrations in the 6.7 migrations folder.
+Contena currently has a 6.8 development baseline, so unreleased baseline migrations in the 6.8 migrations folder can still be changed and consolidated.
 If the migration was executed already, you need to write a new migration to do the changes.
 Otherwise, an existing system will not have the same structure after an update as a new installation.
 The only exception is when a migration was incorrectly created and causes errors.

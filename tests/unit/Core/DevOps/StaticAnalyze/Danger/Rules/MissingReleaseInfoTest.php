@@ -77,7 +77,7 @@ class MissingReleaseInfoTest extends TestCase
             [
                 'tests/unit/Core/Checkout/Cart/CartCalculatorTest.php',
                 'tests/integration/Core/Framework/Api/SyncControllerTest.php',
-                'tests/migration/Core/V6_7/Migration1752000000AddFooTest.php',
+                'tests/migration/Core/V6_8/Migration1752000000AddFooTest.php',
                 'tests/devops/Core/DevOps/StaticAnalyse/PHPStan/Rules/SomeRuleTest.php',
             ],
             false,

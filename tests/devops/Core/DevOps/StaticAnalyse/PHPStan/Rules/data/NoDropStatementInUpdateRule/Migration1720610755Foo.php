@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Contena\Core\Migration\V6_7;
+namespace Contena\Core\Migration\V6_8;
 
 use Contena\Core\Framework\Migration\MigrationStep;
 use Doctrine\DBAL\Connection;

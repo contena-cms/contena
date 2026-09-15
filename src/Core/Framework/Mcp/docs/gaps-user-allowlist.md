@@ -35,7 +35,7 @@ Tradeoff: a user cannot scope individual access keys differently. All keys for a
 
 ### Migration
 
-**File:** `src/Core/Migration/V6_7/Migration1778142666AddMcpAllowlistToUser.php`
+**File:** `src/Core/Migration/V6_8/Migration1785335178AddMcpAllowlist.php`
 
 Adds `mcp_allowlist JSON NULL` to the `user` table:
 
@@ -139,7 +139,7 @@ The per-key "Edit MCP allowlist" context menu item and its modal were removed fr
 
 | Action | File |
 |--------|------|
-| Create | `src/Core/Migration/V6_7/Migration1778142666AddMcpAllowlistToUser.php` |
+| Create | `src/Core/Migration/V6_8/Migration1785335178AddMcpAllowlist.php` |
 | Modify | `src/Core/System/User/UserDefinition.php` |
 | Modify | `src/Core/System/User/UserEntity.php` |
 | Modify | `src/Core/System/User/Aggregate/UserAccessKey/UserAccessKeyDefinition.php` (removed field) |
