@@ -1,0 +1,24 @@
+.ct-oauth-client-list {
+    &__notice {
+        margin-bottom: var(--scale-size-16);
+    }
+
+    &__client-id {
+        color: var(--color-text-secondary-default);
+        font-family: var(--font-family-monospace);
+    }
+
+    &__link {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--color-text-brand-default);
+        cursor: pointer;
+        font: inherit;
+        text-align: left;
+    }
+
+    &__redirects {
+        min-height: 120px;
+    }
+}
