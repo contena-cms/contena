@@ -5,9 +5,11 @@ namespace Contena\Core\Content\Cookie\ConsentLog;
 /**
  * Where cookie consent decisions are kept.
  *
- * The shipped default discards decisions. A system that enables consent logging can
- * use the database or private filesystem storage, or implement this class, tag the
- * service with `contena.cookie_consent.log_storage` and select it via
+ * Logging is off until a storage is selected. The shipped `database` storage writes to
+ * the system database, `filesystem` to the private filesystem. The log is write-once evidence
+ * nobody reads in normal operation, so a system with a lot of traffic can keep it out
+ * of its primary database: implement this class, tag the service with
+ * `contena.cookie_consent.log_storage` and select it via
  * `contena.cookie_consent.log_storage` in the bundle configuration.
  */
 abstract class AbstractCookieConsentLogStorage

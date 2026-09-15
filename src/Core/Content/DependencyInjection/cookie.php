@@ -51,7 +51,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FilesystemCookieConsentLogStorage::class)
         ->args([
             service('contena.filesystem.private'),
-            param('contena.cookie_consent.filesystem_path'),
         ])
         ->tag('contena.cookie_consent.log_storage', ['storage' => FilesystemCookieConsentLogStorage::NAME]);
 
