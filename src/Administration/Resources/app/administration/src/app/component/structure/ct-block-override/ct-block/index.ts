@@ -105,19 +105,31 @@ export default Contena.Component.wrapComponentConfig({
         },
     },
     setup(props, { slots }) {
-        const { addBlock, removeBlock, getBlocks } = useBlockContext();
+        const { addBlock, removeBlock, getBlocks, invalidateBlock } = useBlockContext();
         const instance = getCurrentInstance();
 
         if (props.extends) {
             const scopedExtends = scopedBlockKey(props.ctInternalComponentName, props.extends);
-            // addBlock is a no-op for undefined, so an explicit guard is not needed.
-            addBlock(scopedExtends!, slots.default);
 
-            onBeforeUnmount(() => {
-                if (props.extends) {
-                    removeBlock(scopedExtends!, slots.default);
-                }
-            });
+            if (slots.default) {
+                // Vue reassigns `slots.default` whenever the surrounding slot scope changes.
+                // Registering the function itself would pin the first scope forever and leave
+                // `removeBlock` with a reference that no longer matches anything, so register a
+                // stable wrapper that resolves the current slot function on every call instead.
+                const overrideSlot: Slot = (data?: unknown) => slots.default?.(data) ?? [];
+                addBlock(scopedExtends!, overrideSlot);
+
+                // The block rendering this override has no reactive link to the scope this
+                // override lives in. Vue has already swapped in the new slot function when this
+                // hook runs, so this is the moment to make the rendering block pick it up.
+                onBeforeUpdate(() => {
+                    invalidateBlock(scopedExtends!);
+                });
+
+                onBeforeUnmount(() => {
+                    removeBlock(scopedExtends!, overrideSlot);
+                });
+            }
 
             return { template: null };
         }
