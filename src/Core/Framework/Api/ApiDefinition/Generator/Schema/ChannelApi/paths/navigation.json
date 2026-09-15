@@ -15,7 +15,7 @@
                     {
                         "name": "ct-include-seo-urls",
                         "in": "header",
-                        "description": "Instructs Contena to try and resolve SEO URLs for the given navigation item",
+                        "description": "Instructs Contena CMS to try and resolve SEO URLs for the given navigation item",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -146,7 +146,7 @@
                     {
                         "name": "ct-include-seo-urls",
                         "in": "header",
-                        "description": "Instructs Contena to try and resolve SEO URLs for the given navigation item",
+                        "description": "Instructs Contena CMS to try and resolve SEO URLs for the given navigation item",
                         "required": false,
                         "schema": {
                             "type": "boolean"

@@ -498,7 +498,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
         $translations = [
             Defaults::LANGUAGE_SYSTEM => [
                 'typeName' => '用户密码恢复',
-                'senderName' => 'Contena',
+                'senderName' => 'Contena CMS',
                 'subject' => '重置您的 Contena 密码',
                 'description' => '发送给请求恢复密码的后台用户。',
                 'contentHtml' => <<<'HTML'
@@ -518,7 +518,7 @@ TEXT,
             ],
             $this->getEnGbLanguageId() => [
                 'typeName' => 'User password recovery',
-                'senderName' => 'Contena',
+                'senderName' => 'Contena CMS',
                 'subject' => 'Reset your Contena password',
                 'description' => 'Sent to an Administration user who requested a password reset.',
                 'contentHtml' => <<<'HTML'
@@ -759,7 +759,7 @@ HTML,
                 'footerPlain' => "\n---\n这是一封由 Contena 自动发送的系统邮件，请勿直接回复。",
             ],
             $this->getEnGbLanguageId() => [
-                'name' => 'Contena default header and footer',
+                'name' => 'Contena CMS default header and footer',
                 'description' => 'Default header and footer for system emails.',
                 'headerHtml' => <<<'HTML'
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;background:#f4f7fb;font-family:Arial,sans-serif">
@@ -2084,7 +2084,7 @@ HTML,
 
         $this->importPlatformTranslation('landing_page_translation', new Translations(
             ['landing_page_id' => $landingPageId, 'landing_page_version_id' => $versionId, 'name' => '关于 Contena', 'url' => 'about', 'meta_title' => '关于 Contena', 'meta_description' => '了解更多关于 Contena 的信息。'],
-            ['landing_page_id' => $landingPageId, 'landing_page_version_id' => $versionId, 'name' => 'About Contena', 'url' => 'about', 'meta_title' => 'About Contena', 'meta_description' => 'Learn more about Contena.']
+            ['landing_page_id' => $landingPageId, 'landing_page_version_id' => $versionId, 'name' => 'About Contena', 'url' => 'about', 'meta_title' => 'About Contena', 'meta_description' => 'Learn more about Contena CMS.']
         ), $connection);
 
         $this->insertPlatformScoped($connection, 'landing_page_channel', [

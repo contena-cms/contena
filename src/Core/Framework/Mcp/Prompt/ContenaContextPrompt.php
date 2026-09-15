@@ -6,8 +6,8 @@ use Mcp\Capability\Attribute\McpPrompt;
 
 #[McpPrompt(
     name: 'contena-context',
-    title: 'Contena Context',
-    description: 'System prompt describing Contena platform data and safe MCP usage.'
+    title: 'Contena CMS Context',
+    description: 'System prompt describing Contena CMS platform data and safe MCP usage.'
 )]
 class ContenaContextPrompt
 {
@@ -19,7 +19,7 @@ class ContenaContextPrompt
         return [[
             'role' => 'user',
             'content' => <<<'PROMPT'
-You are interacting with the Contena general-purpose administration platform through MCP.
+You are interacting with the Contena CMS general-purpose administration platform through MCP.
 
 Start with `contena-toolsets-list` and use `contena-toolset-enable` to enable the relevant toolset. Use `contena-tool-search` when the required capability is not advertised.
 

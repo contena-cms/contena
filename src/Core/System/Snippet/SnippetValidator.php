@@ -120,7 +120,7 @@ readonly class SnippetValidator
                 $fileName,
                 $filePath,
                 $this->getLocaleFromFileName($fileName),
-                'Contena',
+                'Contena CMS',
                 false,
                 '',
             ));

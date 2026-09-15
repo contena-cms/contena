@@ -29,7 +29,7 @@ class MailDataSimulator
             'id' => $userId,
             'localeId' => $context->getLanguageId(),
             'username' => 'admin',
-            'name' => 'Contena Administrator',
+            'name' => 'Contena CMS Administrator',
             'email' => 'admin@example.com',
             'stateId' => Uuid::randomHex(),
             'admin' => true,

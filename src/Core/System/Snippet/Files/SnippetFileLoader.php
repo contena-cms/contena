@@ -121,7 +121,7 @@ class SnippetFileLoader implements SnippetFileLoaderInterface
                 $fileName,
                 $fileInfo->getPathname(),
                 $pathComponents['locale'],
-                'Contena',
+                'Contena CMS',
                 $isBase,
                 $technicalName,
             );
@@ -245,7 +245,7 @@ class SnippetFileLoader implements SnippetFileLoaderInterface
     private function getAuthorFromBundle(Bundle $bundle, array $authors): string
     {
         if (!$bundle instanceof Plugin) {
-            return 'Contena';
+            return 'Contena CMS';
         }
 
         return $authors[$bundle::class] ?? '';

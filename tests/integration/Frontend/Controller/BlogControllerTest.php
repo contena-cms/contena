@@ -25,7 +25,7 @@ class BlogControllerTest extends TestCase
 
         static::assertSame(200, $response->getStatusCode(), $content);
         static::assertStringContainsString('data-page-id="' . self::DEFAULT_BLOG_LAYOUT_ID . '"', $content);
-        static::assertStringContainsString('<h1>Welcome to Contena</h1>', $content);
+        static::assertStringContainsString('<h1>Welcome to Contena CMS</h1>', $content);
     }
 
     public function testActiveRouteParametersAreSafelyEscapedForJavaScript(): void

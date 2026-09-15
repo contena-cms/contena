@@ -16,7 +16,7 @@
     "customer.recovery.request": "Triggers when a customer recovers his password",
     "mail.after.create.message": "Triggers when a mail message/ content is created",
     "mail.before.send": "Triggers before a mail is send",
-    "mail.sent": "Triggers when a mail is send from Contena",
+    "mail.sent": "Triggers when a mail is send from Contena CMS",
     "newsletter.confirm": "Triggers when newsletter was confirmed by a user",
     "newsletter.register": "Triggers when user registered to subscribe to a sales channel newsletter",
     "newsletter.unsubscribe": "Triggers when user unsubscribe from a sales channel newsletter",

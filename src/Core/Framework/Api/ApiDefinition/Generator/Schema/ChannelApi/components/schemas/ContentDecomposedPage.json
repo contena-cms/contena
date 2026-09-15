@@ -24,7 +24,7 @@
                         "items": { "$ref": "#/components/schemas/ContentDecomposedElement" }
                     },
                     "data": {
-                        "description": "Every value the page serves, held once: a response-local reference id mapped to the value it holds. A value may be any JSON type, including an encoded entity payload. The reference ids are minted while walking this one response and carry no meaning outside it — nothing may store one or assume a particular literal. An empty map is serialized as `[]` rather than `{}` (consistent with Contena's JSON-map fields).",
+                        "description": "Every value the page serves, held once: a response-local reference id mapped to the value it holds. A value may be any JSON type, including an encoded entity payload. The reference ids are minted while walking this one response and carry no meaning outside it — nothing may store one or assume a particular literal. An empty map is serialized as `[]` rather than `{}` (consistent with Contena CMS's JSON-map fields).",
                         "oneOf": [
                             {
                                 "type": "array",
@@ -38,7 +38,7 @@
                         ]
                     },
                     "assignments": {
-                        "description": "Which element property points at which value: element id mapped to property key mapped to the reference id naming that value in `data`. Every reference id here resolves in `data`; a dangling one is an internal fault, not a state a client has to handle. An empty map is serialized as `[]` rather than `{}` (consistent with Contena's JSON-map fields).",
+                        "description": "Which element property points at which value: element id mapped to property key mapped to the reference id naming that value in `data`. Every reference id here resolves in `data`; a dangling one is an internal fault, not a state a client has to handle. An empty map is serialized as `[]` rather than `{}` (consistent with Contena CMS's JSON-map fields).",
                         "oneOf": [
                             {
                                 "type": "array",

@@ -51,7 +51,7 @@ class PluginZipImportCommand extends Command
     {
         $zipFile = $input->getArgument('zip-file');
         $io = new ContenaStyle($input, $output);
-        $io->title('Contena Plugin Zip Import');
+        $io->title('Contena CMS Plugin Zip Import');
 
         try {
             $type = $this->pluginManagementService->extractPluginZip($zipFile, (bool) $input->getOption('delete'));

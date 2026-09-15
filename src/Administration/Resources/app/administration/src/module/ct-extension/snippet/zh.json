@@ -20,7 +20,7 @@
             "fileUpload": {
                 "buttonFileUpload": "上传插件",
                 "messageUploadSuccess": "插件上传成功。",
-                "descriptionWarningModal": "请仅上传来自可信来源的 Contena 插件。插件会在平台内执行代码，并可能访问管理数据。",
+                "descriptionWarningModal": "请仅上传来自可信来源的 Contena CMS 插件。插件会在平台内执行代码，并可能访问管理数据。",
                 "textHideWarning": "不再提示"
             }
         },
@@ -30,7 +30,7 @@
             "messageUploadFailureUnzipFailed": "无法解压 ZIP 文件。",
             "messageUploadFailureNoPluginFoundInZipFile": "ZIP 文件中未找到插件。",
             "messagePluginBaseClassNotFound": "无法加载插件基类，请检查插件的 Composer 自动加载配置。",
-            "messagePluginRequirementMismatch": "插件的技术要求与当前 Contena 版本不兼容，请联系插件提供方。"
+            "messagePluginRequirementMismatch": "插件的技术要求与当前 Contena CMS 版本不兼容，请联系插件提供方。"
         },
         "mainMenu": { "plugins": "插件", "myPlugins": "我的插件", "purchased": "我的插件", "store": "插件商城" },
         "store": {

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="robots" content="noindex, nofollow">
         {% if debug %}
-            <title>Contena Domain Mapping Misconfiguration Help</title>
+            <title>Contena CMS Domain Mapping Misconfiguration Help</title>
         {% else %}
             <title>Channel Not Found</title>
         {% endif %}
@@ -52,9 +52,9 @@
         {% endif %}
 
         {% if debug %}
-            <h1>Contena Domain Mapping Misconfiguration Help</h1>
+            <h1>Contena CMS Domain Mapping Misconfiguration Help</h1>
 
-            <p>You accessed Contena with an unknown domain. This page provides guidance on common misconfigurations and how to resolve them.</p>
+            <p>You accessed Contena CMS with an unknown domain. This page provides guidance on common misconfigurations and how to resolve them.</p>
 
             <h2>Common Misconfigurations</h2>
 
@@ -73,12 +73,12 @@
 
             <div class="issue">
                 <h3>2. Misconfigured proxy header forwarding or trusted proxies</h3>
-                <p>Symptoms: Contena cannot resolve a Channel, or assets load with HTTP instead of HTTPS.</p>
+                <p>Symptoms: Contena CMS cannot resolve a Channel, or assets load with HTTP instead of HTTPS.</p>
                 <div class="solution">
                     <h4>Solution:</h4>
                     <p>Make sure the visible browser URL matches the resolved URL: <code>{{ accessedUrl }}</code>.</p>
                     <p>
-                        Contena received the following headers from <code>{{ clientIp }}</code>:<br>
+                        Contena CMS received the following headers from <code>{{ clientIp }}</code>:<br>
                         <code>{{ relevantHeaders|json_encode(constant('JSON_PRETTY_PRINT')) }}</code>
                     </p>
                     <p>

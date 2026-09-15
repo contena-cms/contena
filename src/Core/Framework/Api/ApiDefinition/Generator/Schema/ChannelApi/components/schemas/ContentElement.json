@@ -18,7 +18,7 @@
                         "description": "Element component type (e.g. Sw:Grid:Container, Sw:Content:Text, Sw:Blog:Card)."
                     },
                     "properties": {
-                        "description": "Element properties keyed by property name, always present. The map draws no distinction between a statically authored value, a value a data loader produced and a value delivered by context. An empty map is serialized as `[]` (consistent with Contena's JSON-map fields).",
+                        "description": "Element properties keyed by property name, always present. The map draws no distinction between a statically authored value, a value a data loader produced and a value delivered by context. An empty map is serialized as `[]` (consistent with Contena CMS's JSON-map fields).",
                         "oneOf": [
                             {
                                 "type": "array",

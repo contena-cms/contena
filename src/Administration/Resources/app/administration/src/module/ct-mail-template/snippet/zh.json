@@ -30,7 +30,7 @@
                 "titleCard": "选项",
                 "labelSenderName": "发件人名称",
                 "labelSubject": "主题",
-                "placeholderSenderName": "Contena...",
+                "placeholderSenderName": "Contena CMS...",
                 "placeholderSubject": "请输入邮件主题..."
             },
             "mailText": {

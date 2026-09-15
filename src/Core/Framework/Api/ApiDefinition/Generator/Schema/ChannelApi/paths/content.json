@@ -19,7 +19,7 @@
                     {
                         "name": "ct-language-id",
                         "in": "header",
-                        "description": "Instructs Contena to return the response in the given language.",
+                        "description": "Instructs Contena CMS to return the response in the given language.",
                         "required": false,
                         "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
                     },
@@ -63,7 +63,7 @@
                     {
                         "name": "ct-language-id",
                         "in": "header",
-                        "description": "Instructs Contena to return the response in the given language.",
+                        "description": "Instructs Contena CMS to return the response in the given language.",
                         "required": false,
                         "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
                     },
@@ -107,7 +107,7 @@
                     {
                         "name": "ct-language-id",
                         "in": "header",
-                        "description": "Instructs Contena to return the response in the given language.",
+                        "description": "Instructs Contena CMS to return the response in the given language.",
                         "required": false,
                         "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
                     },
@@ -151,7 +151,7 @@
                     {
                         "name": "ct-language-id",
                         "in": "header",
-                        "description": "Instructs Contena to return the response in the given language.",
+                        "description": "Instructs Contena CMS to return the response in the given language.",
                         "required": false,
                         "schema": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
                     },

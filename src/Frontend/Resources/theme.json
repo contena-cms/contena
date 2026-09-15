@@ -1,9 +1,9 @@
 {
-  "name": "Contena default theme",
-  "author": "Contena",
+  "name": "Contena CMS default theme",
+  "author": "Contena CMS",
   "description": {
-    "en-GB": "Default theme of Contena",
-    "zh-CN": "Contena 默认主题"
+    "en-GB": "Default theme of Contena CMS",
+    "zh-CN": "Contena CMS 默认主题"
   },
   "style": [
     {

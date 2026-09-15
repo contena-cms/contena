@@ -43,7 +43,7 @@ class PluginRefreshCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new ContenaStyle($input, $output);
-        $io->title('Contena Plugin Service');
+        $io->title('Contena CMS Plugin Service');
         $context = Context::createCLIContext();
 
         $composerInput = clone $input;

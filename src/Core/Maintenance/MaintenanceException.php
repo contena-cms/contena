@@ -99,7 +99,7 @@ class MaintenanceException extends HttpException
         return new DatabaseSetupException(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::MAINTENANCE_DB_VERSION_SELECT_FAILED,
-            'Your database server is running {{ dbKind }} {{ actualVersion }}, but Contena 6 requires at least MySQL {{ mysqlRequiredVersion }} OR MariaDB {{ mariaDBRequiredVersion }}',
+            'Your database server is running {{ dbKind }} {{ actualVersion }}, but Contena CMS requires at least MySQL {{ mysqlRequiredVersion }} OR MariaDB {{ mariaDBRequiredVersion }}',
             [
                 'dbKind' => $dbKind,
                 'actualVersion' => $actualVersion,

@@ -228,7 +228,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
         );
         static::assertSame(
             [
-                'core.basicInformation.siteName' => 'Contena',
+                'core.basicInformation.siteName' => 'Contena CMS',
                 'core.basicInformation.useDefaultCookieConsent' => 'true',
             ],
             $this->connection->fetchAllKeyValue(
@@ -381,7 +381,7 @@ class Migration1786016192ContenaBasicDataTest extends TestCase
             ['technicalName' => 'user.recovery.request']
         ));
         static::assertSame(
-            ['Reset your Contena password', '重置您的 Contena 密码'],
+            ['Reset your Contena CMS password', '重置您的 Contena CMS 密码'],
             $this->connection->fetchFirstColumn(
                 'SELECT `mail_template_translation`.`subject`
                  FROM `mail_template_translation`

@@ -57,7 +57,7 @@ class BlogPageTest extends TestCase
         $page = $this->getPageLoader()->load($request, $context);
 
         static::assertSame(self::DEFAULT_BLOG_ID, $page->getBlog()->getId());
-        static::assertSame('Welcome to Contena', $page->getBlog()->getTranslation('name'));
+        static::assertSame('Welcome to Contena CMS', $page->getBlog()->getTranslation('name'));
         static::assertInstanceOf(BlogPageCriteriaEvent::class, $criteriaEvent);
         static::assertSame(self::DEFAULT_BLOG_ID, $criteriaEvent->getBlogId());
         static::assertPageEvent(BlogPageLoadedEvent::class, $loadedEvent, $context, $request, $page);

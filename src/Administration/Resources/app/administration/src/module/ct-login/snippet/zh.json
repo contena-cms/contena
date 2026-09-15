@@ -3,7 +3,7 @@
         "general": { "moduleTitle": "登录" },
         "index": {
             "backToLogin": "返回登录",
-            "brandName": "Contena"
+            "brandName": "Contena CMS"
         },
         "credentials": {
             "description": "使用你的 Contena 控制台账户登录。",
@@ -43,7 +43,7 @@
         },
         "accessDenied": {
             "title": "无权访问此系统",
-            "description": "登录成功，但你的账户没有当前 Contena 系统的访问权限。",
+            "description": "登录成功，但你的账户没有当前 Contena CMS 系统的访问权限。",
             "buttonDifferentAccount": "使用其他账户登录",
             "loggedInAs": "当前账户："
         }

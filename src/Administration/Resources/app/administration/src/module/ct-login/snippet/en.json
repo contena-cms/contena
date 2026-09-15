@@ -8,7 +8,7 @@
             "brandName": "Contena"
         },
         "credentials": {
-            "description": "Sign in to your Contena Console account.",
+            "description": "Sign in to your Contena CMS Console account.",
             "labelUsername": "Username",
             "labelPassword": "Password",
             "labelKeepLoggedIn": "Keep me logged in",
@@ -45,7 +45,7 @@
         },
         "accessDenied": {
             "title": "No access to this system",
-            "description": "Your login was successful, but you don't have access to this Contena system.",
+            "description": "Your login was successful, but you don't have access to this Contena CMS system.",
             "buttonDifferentAccount": "Log in with different account",
             "loggedInAs": "Logged in as:"
         }

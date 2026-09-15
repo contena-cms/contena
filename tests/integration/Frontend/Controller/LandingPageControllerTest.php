@@ -25,6 +25,6 @@ class LandingPageControllerTest extends TestCase
 
         static::assertSame(200, $response->getStatusCode(), $content);
         static::assertStringContainsString('data-page-id="' . self::DEFAULT_LANDING_PAGE_LAYOUT_ID . '"', $content);
-        static::assertStringContainsString('<h1>About Contena</h1>', $content);
+        static::assertStringContainsString('<h1>About Contena CMS</h1>', $content);
     }
 }

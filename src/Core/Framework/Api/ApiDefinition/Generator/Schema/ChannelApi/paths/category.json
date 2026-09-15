@@ -109,7 +109,7 @@
                     {
                         "name": "ct-include-seo-urls",
                         "in": "header",
-                        "description": "Instructs Contena to try and resolve SEO URLs for the given navigation item",
+                        "description": "Instructs Contena CMS to try and resolve SEO URLs for the given navigation item",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -128,7 +128,7 @@
                     {
                         "name": "skipBreadcrumb",
                         "in": "query",
-                        "description": "Instructs Contena to skip loading the breadcrumb of the category",
+                        "description": "Instructs Contena CMS to skip loading the breadcrumb of the category",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -175,7 +175,7 @@
                     {
                         "name": "ct-include-seo-urls",
                         "in": "header",
-                        "description": "Instructs Contena to try and resolve SEO URLs for the given navigation item",
+                        "description": "Instructs Contena CMS to try and resolve SEO URLs for the given navigation item",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -194,7 +194,7 @@
                     {
                         "name": "skipBreadcrumb",
                         "in": "query",
-                        "description": "Instructs Contena to skip loading the breadcrumb of the category",
+                        "description": "Instructs Contena CMS to skip loading the breadcrumb of the category",
                         "required": false,
                         "schema": {
                             "type": "boolean"

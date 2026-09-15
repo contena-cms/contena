@@ -262,7 +262,7 @@
                                         },
                                         "example": {
                                             "subject": "Message {{ message.number }} notification",
-                                            "senderName": "Contena",
+                                            "senderName": "Contena CMS",
                                             "contentHtml": "<div>Hello {{ user.firstName }}</div>",
                                             "contentPlain": "Hello {{ user.firstName }}"
                                         }

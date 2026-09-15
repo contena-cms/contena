@@ -7,7 +7,7 @@ const { join, resolve } = require('path');
 
 const srcPath = global.adminPath;
 if (!srcPath) {
-    throw new Error('"globals.adminPath" is not defined. A file path to a Contena 6 administration is required');
+    throw new Error('"globals.adminPath" is not defined. A file path to a Contena CMS administration is required');
 }
 
 global.window._features_ = {};

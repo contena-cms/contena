@@ -25,7 +25,7 @@ class SystemConfigException extends HttpException
         return new self(
             Response::HTTP_BAD_REQUEST,
             self::SYSTEM_MANAGED_SYSTEM_CONFIG,
-            'The system configuration key "{{ configKey }}" cannot be changed, as it is managed by the Contena yaml file configuration system provided by Symfony.',
+            'The system configuration key "{{ configKey }}" cannot be changed, as it is managed by the Contena CMS yaml file configuration system provided by Symfony.',
             [
                 'configKey' => $configKey,
             ],

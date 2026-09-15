@@ -35,14 +35,14 @@ class SystemIsInstalledCommand extends Command
 
         try {
             if (TableHelper::tableExists($this->connection, 'migration')) {
-                $io->success('Contena is installed');
+                $io->success('Contena CMS is installed');
 
                 return self::SUCCESS;
             }
         } catch (\Throwable) {
         }
 
-        $io->error('Contena is not installed');
+        $io->error('Contena CMS is not installed');
 
         return self::FAILURE;
     }

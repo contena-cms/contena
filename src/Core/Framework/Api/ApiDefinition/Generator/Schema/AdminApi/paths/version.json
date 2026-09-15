@@ -7,18 +7,18 @@
                 "tags": [
                     "System Info & Health Check"
                 ],
-                "summary": "Get the Contena version",
-                "description": "Get the version of the Contena instance",
+                "summary": "Get the Contena CMS version",
+                "description": "Get the version of the Contena CMS instance",
                 "operationId": "infoContenaVersion",
                 "responses": {
                     "200": {
-                        "description": "Returns the version of the Contena instance.",
+                        "description": "Returns the version of the Contena CMS instance.",
                         "content": {
                             "application\/json": {
                                 "schema": {
                                     "properties": {
                                         "version": {
-                                            "description": "The Contena version.",
+                                            "description": "The Contena CMS version.",
                                             "type": "string"
                                         }
                                     },

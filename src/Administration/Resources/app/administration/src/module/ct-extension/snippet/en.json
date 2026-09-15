@@ -20,7 +20,7 @@
             "fileUpload": {
                 "buttonFileUpload": "Upload plugin",
                 "messageUploadSuccess": "Plugin uploaded.",
-                "descriptionWarningModal": "Only upload Contena Plugins from a source you trust. Plugins execute code inside this platform and may access administrative data.",
+                "descriptionWarningModal": "Only upload Contena CMS Plugins from a source you trust. Plugins execute code inside this platform and may access administrative data.",
                 "textHideWarning": "Do not show again"
             }
         },
@@ -30,7 +30,7 @@
             "messageUploadFailureUnzipFailed": "Unable to extract ZIP file.",
             "messageUploadFailureNoPluginFoundInZipFile": "No plugin found in ZIP file.",
             "messagePluginBaseClassNotFound": "The plugin base class could not be loaded. Check the plugin's Composer autoload configuration.",
-            "messagePluginRequirementMismatch": "The plugin has technical requirements that are not compatible with this Contena version. Please contact the plugin provider."
+            "messagePluginRequirementMismatch": "The plugin has technical requirements that are not compatible with this Contena CMS version. Please contact the plugin provider."
         },
         "mainMenu": {
             "plugins": "Plugins",

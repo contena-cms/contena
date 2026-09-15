@@ -74,7 +74,7 @@ abstract class AbstractPluginLifecycleCommand extends Command
         InputInterface $input,
         Context $context
     ): ?PluginCollection {
-        $io->title('Contena Plugin Lifecycle Service');
+        $io->title('Contena CMS Plugin Lifecycle Service');
 
         if ($input->getOption('refresh')) {
             $io->note('Refreshing plugin list');

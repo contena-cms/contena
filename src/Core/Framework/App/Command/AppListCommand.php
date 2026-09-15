@@ -66,7 +66,7 @@ class AppListCommand extends Command
         $appTable = [];
         $active = 0;
 
-        $io->title('Contena App Service');
+        $io->title('Contena CMS App Service');
 
         if ($filter) {
             $io->comment(\sprintf('Filtering for: %s', $filter));

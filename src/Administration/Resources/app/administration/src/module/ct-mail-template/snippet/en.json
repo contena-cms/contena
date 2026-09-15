@@ -30,7 +30,7 @@
                 "titleCard": "Options",
                 "labelSenderName": "Sender name",
                 "labelSubject": "Subject",
-                "placeholderSenderName": "Contena...",
+                "placeholderSenderName": "Contena CMS...",
                 "placeholderSubject": "Enter email template subject..."
             },
             "mailText": {

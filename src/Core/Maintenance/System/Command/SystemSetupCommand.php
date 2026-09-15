@@ -98,7 +98,7 @@ class SystemSetupCommand extends Command
             $io->warning('It looks like you have installed Contena with Symfony Flex. You should use a .env.local file instead of creating a complete new one');
         }
 
-        $io->title('Contena setup process');
+        $io->title('Contena CMS setup process');
         $io->text('This tool will setup your instance.');
 
         if (!$input->getOption('force') && \is_file($this->projectDir . '/.env')) {

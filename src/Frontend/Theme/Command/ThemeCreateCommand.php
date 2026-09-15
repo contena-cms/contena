@@ -286,7 +286,7 @@ EOL;
         return <<<EOL
 {
   "name": "#name#",
-  "author": "Contena AG",
+  "author": "Contena CMS",
   "views": [
      "@Frontend",
      "@Plugins",
@@ -315,7 +315,7 @@ EOL;
 /*
 Override variable defaults
 ==================================================
-This file is used to override default SCSS variables from the Contena Frontend or Bootstrap.
+This file is used to override default SCSS variables from the Contena CMS Frontend or Bootstrap.
 
 Because of the !default flags, theme variable overrides have to be declared beforehand.
 https://getbootstrap.com/docs/5.3/customize/sass/#variable-defaults

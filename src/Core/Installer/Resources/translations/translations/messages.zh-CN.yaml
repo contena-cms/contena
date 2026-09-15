@@ -25,9 +25,9 @@ contena.installer:
     select_country_deu: 德国
     language-selection_select_language: 安装向导语言
     welcome:
-        title: 欢迎使用 Contena
-        header: 安装 Contena
-        message: 本向导将帮助你完成 Contena 的安装与基础配置。
+        title: 欢迎使用 Contena CMS
+        header: 安装 Contena CMS
+        message: 本向导将帮助你完成 Contena CMS 的安装与基础配置。
     requirements_header: 系统要求
     requirements_header_files: 文件和目录
     requirements_header_system: 系统
@@ -38,7 +38,7 @@ contena.installer:
     requirements_error_title: 系统尚未准备就绪
     requirements_success: 已满足全部安装要求。
     requirements_success_title: 系统已准备就绪
-    requirements_php_info: 服务器必须满足以下要求才能运行 Contena。
+    requirements_php_info: 服务器必须满足以下要求才能运行 Contena CMS。
     requirements_system_col_check: 要求
     requirements_system_col_required: 要求版本
     requirements_system_col_found: 当前环境
@@ -67,13 +67,13 @@ contena.installer:
     database-configuration_fetch_error: 获取数据库信息时发生错误
     database-configuration_access_denied: 访问被拒绝，请检查连接凭据
     database-configuration_host_not_found: 无法连接数据库服务器
-    database-configuration_invalid_requirements: Contena 需要 MySQL 8.0.22+ 或 MariaDB 10.11+
+    database-configuration_invalid_requirements: Contena CMS 需要 MySQL 8.0.22+ 或 MariaDB 10.11+
     database-configuration_refresh_databases: 刷新数据库
     database-import_header: 安装
     database-import_skip_import: 跳过
     database-import_progress: 进度：
-    database-import_info_text: 正在安装 Contena，此过程可能需要几分钟。
-    database_import_success: Contena 安装成功！
+    database-import_info_text: 正在安装 Contena CMS，此过程可能需要几分钟。
+    database_import_success: Contena CMS 安装成功！
     database_import_install_label: 数据库安装：
     database_import_install_step_text: 第
     database_import_install_from_text: 步，共
@@ -91,7 +91,7 @@ contena.installer:
     configuration_admin_name: 姓名：
     configuration_admin_password: 管理员密码：
     finish_header: 安装完成
-    finish_info: Contena 已安装成功！
+    finish_info: Contena CMS 已安装成功！
     finish_info_heading: 安装成功
     finish_backend: 打开管理后台
     configuration_admin_system_headline: 系统信息
@@ -103,6 +103,6 @@ contena.installer:
     configuration_admin_language_search_placeholder: 搜索语言……
     configuration_defaults_warning: 请谨慎选择默认系统语言，它将作为管理后台的初始语言。
     configuration_email_help_text: 该邮箱用于发送系统邮件。
-    finish_title: Contena 安装完成
+    finish_title: Contena CMS 安装完成
     finish_subtitle: 打开管理后台，开始配置你的系统。
     finish_continue: 打开管理后台

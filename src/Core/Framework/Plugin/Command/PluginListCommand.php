@@ -90,7 +90,7 @@ class PluginListCommand extends Command
         $pluginTable = [];
         $active = $installed = $upgradeable = 0;
 
-        $io->title('Contena Plugin Service');
+        $io->title('Contena CMS Plugin Service');
 
         if ($filter) {
             $io->comment(\sprintf('Filtering for: %s', $filter));

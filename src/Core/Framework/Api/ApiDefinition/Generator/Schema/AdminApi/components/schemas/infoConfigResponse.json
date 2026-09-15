@@ -9,15 +9,15 @@
         "properties": {
           "version": {
             "type": "string",
-            "description": "Contena version."
+            "description": "Contena CMS version."
           },
           "appUrl": {
             "type": "string",
-            "description": "Public base URL of the Contena installation."
+            "description": "Public base URL of the Contena CMS installation."
           },
           "versionRevision": {
             "type": "string",
-            "description": "Contena version revision (build hash/revision)."
+            "description": "Contena CMS version revision (build hash/revision)."
           },
           "adminWorker": {
             "type": "object",
