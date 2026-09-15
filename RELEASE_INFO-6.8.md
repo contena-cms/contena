@@ -2,6 +2,21 @@
 
 ## Core
 
+### Configurable last-modified version strategy for theme assets
+
+The `FlysystemLastModifiedVersionStrategy` used for theme assets can now be disabled per installation in `config/packages/contena.yaml`. When disabled, theme asset URLs use an empty version strategy instead of fetching the last-modified timestamp from the filesystem on every request, eliminating the associated cache lookups.
+
+This is safe to disable whenever the default `SeedingThemePathBuilder` is active, because the seed already rotates on every theme compilation and serves as the cache-invalidation mechanism. It is particularly useful with a remote theme filesystem such as S3 or GCS, where last-modified lookups involve additional latency.
+
+```yaml
+contena:
+  filesystem:
+    theme:
+      use_last_modified_version_strategy: false
+```
+
+The option defaults to `true`.
+
 ### Data-scope-aware entity indexing
 
 Full DAL indexing now carries an explicit `Context` through total calculation, ID iteration, batch messages, and handlers. Cross-scope management requests are expanded into one exact-scope indexing run for the platform and each tenant, so derived writes never execute with cross-scope access. Custom entity indexers must adopt the Context-aware method signatures described in `UPGRADE-6.8.md`.
