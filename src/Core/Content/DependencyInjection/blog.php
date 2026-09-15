@@ -4,6 +4,7 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogContentLayoutDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogContentLayout\BlogSpecificationSource;
 use Contena\Core\Content\Blog\Aggregate\BlogKeywordDictionary\BlogKeywordDictionaryDefinition;
@@ -87,6 +88,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogVisibilityDefinition::class)->tag('contena.entity.definition');
     $services->set(BlogCategoryDefinition::class)->tag('contena.entity.definition');
     $services->set(BlogCategoryTreeDefinition::class)->tag('contena.entity.definition');
+    $services->set(BlogCommentDefinition::class)->tag('contena.entity.definition');
     $services->set(BlogTagDefinition::class)->tag('contena.entity.definition');
     $services->set(BlogMainCategoryDefinition::class)->tag('contena.entity.definition');
     $services->set(BlogSearchKeywordDefinition::class)->tag('contena.entity.definition');

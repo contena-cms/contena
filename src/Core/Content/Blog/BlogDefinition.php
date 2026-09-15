@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Blog;
 
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMainCategory\BlogMainCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefinition;
@@ -118,6 +119,7 @@ class BlogDefinition extends EntityDefinition
             new ManyToOneAssociationField('cover', 'blog_media_id', BlogMediaDefinition::class, 'id')->addFlags(new ApiAware())->setDescription('Main image displayed in blog listings and detail pages.'),
             new ManyToOneAssociationField('openGraphMedia', 'open_graph_media_id', MediaDefinition::class, 'id', false)->addFlags(new ApiAware())->setDescription('Open Graph image for social media sharing.'),
             new OneToManyAssociationField('media', BlogMediaDefinition::class, 'blog_id')->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Blog media gallery.'),
+            new OneToManyAssociationField('comments', BlogCommentDefinition::class, 'blog_id')->addFlags(new ApiAware(), new CascadeDelete(false))->setDescription('Comments and replies posted on the blog.'),
             new OneToManyAssociationField('searchKeywords', BlogSearchKeywordDefinition::class, 'blog_id', 'id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('visibilities', BlogVisibilityDefinition::class, 'blog_id')->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('mainCategories', BlogMainCategoryDefinition::class, 'blog_id')->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Primary category assignments per channel for SEO and navigation.'),

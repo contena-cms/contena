@@ -33,6 +33,7 @@ class Migration1785930000CreateChannel extends MigrationStep
         $this->addChannelToSystemConfig($connection);
         $this->createChannelAssociations($connection);
         $this->createMember($connection);
+        $this->createBlogComment($connection);
         $this->createMemberAddress($connection);
         $this->createMemberRecovery($connection);
         $this->createMemberTag($connection);
@@ -638,6 +639,49 @@ CREATE TABLE IF NOT EXISTS `member` (
     CONSTRAINT `fk.member.requested_member_group_id` FOREIGN KEY (`requested_member_group_id`)
         REFERENCES `member_group` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+    }
+
+    private function createBlogComment(Connection $connection): void
+    {
+        $connection->executeStatement(<<<'SQL'
+CREATE TABLE IF NOT EXISTS `blog_comment` (
+    `data_scope_id`  BINARY(16)                              NOT NULL,
+    `id`              BINARY(16)                              NOT NULL,
+    `blog_id`         BINARY(16)                              NOT NULL,
+    `blog_version_id` BINARY(16)                              NOT NULL,
+    `member_id`       BINARY(16)                              NULL,
+    `channel_id`      BINARY(16)                              NOT NULL,
+    `language_id`     BINARY(16)                              NOT NULL,
+    `parent_id`       BINARY(16)                              NULL,
+    `external_user`   VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
+    `external_email`  VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL,
+    `content`         LONGTEXT COLLATE utf8mb4_unicode_ci    NOT NULL,
+    `status`          TINYINT(1)                              NOT NULL DEFAULT 0,
+    `custom_fields`   JSON                                    NULL,
+    `created_at`      DATETIME(3)                             NOT NULL,
+    `updated_at`      DATETIME(3)                             NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx.blog_comment.data_scope_id` (`data_scope_id`),
+    KEY `idx.blog_comment.blog_id` (`blog_id`, `blog_version_id`),
+    KEY `idx.blog_comment.member_id` (`member_id`),
+    KEY `idx.blog_comment.channel_id` (`channel_id`),
+    KEY `idx.blog_comment.language_id` (`language_id`),
+    KEY `idx.blog_comment.parent_id` (`parent_id`),
+    CONSTRAINT `json.blog_comment.custom_fields` CHECK (JSON_VALID(`custom_fields`)),
+    CONSTRAINT `fk.blog_comment.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_comment.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`)
+        REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_comment.member_id` FOREIGN KEY (`member_id`)
+        REFERENCES `member` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_comment.channel_id` FOREIGN KEY (`channel_id`)
+        REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_comment.language_id` FOREIGN KEY (`language_id`)
+        REFERENCES `language` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.blog_comment.parent_id` FOREIGN KEY (`parent_id`)
+        REFERENCES `blog_comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
     }
 

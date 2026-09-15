@@ -257,6 +257,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
             'blog',
             'blog_category',
             'blog_category_tree',
+            'blog_comment',
             'blog_content_layout',
             'blog_keyword_dictionary',
             'blog_main_category',

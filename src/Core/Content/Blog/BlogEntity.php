@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Content\Blog;
 
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMainCategory\BlogMainCategoryCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
@@ -73,6 +74,8 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?BlogMediaCollection $media = null;
 
+    protected ?BlogCommentCollection $comments = null;
+
     protected ?BlogSearchKeywordCollection $searchKeywords = null;
 
     protected ?string $openGraphMediaId = null;
@@ -101,6 +104,16 @@ class BlogEntity extends Entity implements \Stringable
     public function getDataScopeId(): string
     {
         return $this->dataScopeId;
+    }
+
+    public function getComments(): ?BlogCommentCollection
+    {
+        return $this->comments;
+    }
+
+    public function setComments(BlogCommentCollection $comments): void
+    {
+        $this->comments = $comments;
     }
 
     public function setDataScopeId(string $dataScopeId): void

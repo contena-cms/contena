@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentHydrator;
 use Contena\Core\Content\Blog\Aggregate\BlogKeywordDictionary\BlogKeywordDictionaryHydrator;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaHydrator;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfig\BlogSearchConfigHydrator;
@@ -74,6 +75,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(MediaHydrator::class)
+        ->public()
+        ->args([
+            service('service_container'),
+        ]);
+
+    $services->set(BlogCommentHydrator::class)
         ->public()
         ->args([
             service('service_container'),
