@@ -20,7 +20,7 @@ export default class BlogListing extends ContenaComponent {
         // Create the debounced load function.
         this.debouncedLoad = this.debounce(async () => {
             const blogGridContainer = this.el.querySelector('.ct-blog-listing__grid');
-            const blogGrid = blogGridContainer.querySelector('.ct-grid-container-inner');
+            const blogGrid = blogGridContainer.querySelector('.ct-grid-container__inner');
             const pagination = this.el.querySelector('.ct-blog-listing__pagination');
             const resultCounter = this.el.querySelector('.ct-filter-panel__counter');
             blogGrid.classList.add('is--loading');
@@ -163,7 +163,7 @@ export default class BlogListing extends ContenaComponent {
 
     changeLayout(layout) {
         const gridContainer = this.el.querySelector('.ct-blog-listing__grid');
-        const grid = gridContainer.querySelector('.ct-grid-container-inner');
+        const grid = gridContainer.querySelector('.ct-grid-container__inner');
         const blogCards = grid.querySelectorAll('.ct-blog-card');
         const gridClasses = this.options.layoutGridClasses;
         const layoutClasses = Object.keys(this.options.layoutGridClasses).map(layout => `is--layout-${layout}`);

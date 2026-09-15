@@ -22,7 +22,7 @@ function createBlogListing() {
     const el = document.createElement('div');
     el.innerHTML = `
         <div class="ct-blog-listing__grid">
-            <div class="ct-grid-container-inner">
+            <div class="ct-grid-container__inner">
                 <div class="ct-blog-card"></div>
             </div>
         </div>

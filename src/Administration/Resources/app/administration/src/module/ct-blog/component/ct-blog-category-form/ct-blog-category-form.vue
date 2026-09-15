@@ -34,14 +34,31 @@
             </ct-block>
 
             <ct-block name="ct_blog_category_form_categories">
-                <ct-category-tree-field
-                    v-if="blog.categories"
-                    class="ct-blog-detail__select-category"
-                    :categories-collection="blog.categories"
-                    :disabled="!allowEdit || undefined"
-                    :label="$t('ct-blog.categoryForm.labelCategory')"
-                    :placeholder="$t('ct-blog.categoryForm.placeholderCategory')"
-                />
+                <ct-container class="ct-blog-category-form__description">
+                    <ct-block name="ct_blog_category_form_categories_title">
+                        <span class="ct-blog-category-form__visibility-title">
+                            {{ $t('ct-blog.categoryForm.categoriesTitle') }}
+                        </span>
+                    </ct-block>
+
+                    <ct-block name="ct_blog_category_form_categories_body">
+                        <p class="ct-blog-category-form__categories-body">
+                            {{ $t('ct-blog.categoryForm.descriptionCategories') }}
+                        </p>
+                        <p class="ct-blog-category-form__categories-body">
+                            {{ $t('ct-blog.categoryForm.descriptionTags') }}
+                        </p>
+                    </ct-block>
+
+                    <ct-category-tree-field
+                        v-if="blog.categories"
+                        class="ct-blog-detail__select-category"
+                        :categories-collection="blog.categories"
+                        :disabled="!allowEdit || undefined"
+                        :label="$t('ct-blog.categoryForm.labelCategory')"
+                        :placeholder="$t('ct-blog.categoryForm.placeholderCategory')"
+                    />
+                </ct-container>
             </ct-block>
 
             <ct-block name="ct_blog_category_form_tags">
@@ -49,6 +66,8 @@
                     v-if="blog.tags"
                     class="ct-blog-category-form__tag-field"
                     :disabled="!allowEdit || undefined"
+                    :label="$t('ct-blog.categoryForm.labelTags')"
+                    :help-text="$t('ct-blog.categoryForm.helpTextTags')"
                     :placeholder="$t('ct-blog.categoryForm.placeholderTags')"
                     :error="blogTagsError"
                     :entity-collection="blog.tags"
@@ -99,8 +118,6 @@
 
 import { computed, ref } from 'vue';
 
-import './ct-blog-category-form.scss';
-
 defineProps({
     allowEdit: {
         type: Boolean,
@@ -140,3 +157,30 @@ ctDefinePublic({
     updateSearchKeywords,
 });
 </script>
+
+<style lang="scss">
+@import "~scss/variables";
+
+.ct-blog-category-form {
+    .ct-blog-category-form__tag-field-wrapper {
+        margin-top: var(--scale-size-8);
+    }
+
+    &__visibility-title {
+        font-weight: var(--font-weight-semibold);
+        margin-bottom: var(--scale-size-8);
+    }
+
+    &__categories-body {
+        margin-bottom: var(--scale-size-8);
+    }
+
+    &__visibility_field {
+        margin-top: var(--scale-size-20);
+
+        .ct-blog-detail__select-visibility.ct-field {
+            margin-bottom: 0;
+        }
+    }
+}
+</style>

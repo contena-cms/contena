@@ -1,5 +1,9 @@
+.ct-blog-listing {
+    width: 100%;
+}
+
 .ct-blog-listing__grid {
-    .ct-grid-container-inner {
+    .ct-grid-container__inner {
         opacity: 1;
         transition: all 0.2s ease-in-out;
 
