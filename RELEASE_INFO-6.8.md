@@ -69,6 +69,18 @@ Contena now provides the shared `currency` and `currency_translation` DAL entiti
 
 Incoming payments and transfers reject currencies that are absent from the catalog with `PAYMENT__CURRENCY_NOT_SUPPORTED`. Payment gateway plugins whose settlement currencies are restricted can implement `CurrencyAwareGatewayInterface`; routing then excludes the gateway for unsupported currency codes. Existing gateways that do not implement the interface remain currency-agnostic. The bundled Alipay and WeChat integrations explicitly advertise CNY only.
 
+## Hosting & Configuration
+
+### `No-Vary-Search` header on cacheable responses
+
+Cacheable Frontend and Channel API responses send [`No-Vary-Search: key-order`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/No-Vary-Search), declaring that the order of query parameters does not change the response. The server already normalizes query order before looking up its cache entry, so the header only tells clients what was always true.
+
+The header is a specification draft, support differs per browser and cache, and it does not replace query sorting in a reverse proxy such as Varnish or Fastly. A client that ignores it continues treating a reordered query string as a different URL.
+
+Set a custom value per policy under `headers.no_vary_search`, for example `no_vary_search: 'key-order, params=("gclid")'`. It is passed through verbatim and validated only as a single line of printable ASCII. If the key is omitted, no `No-Vary-Search` header is sent and any value a controller or plugin set earlier is removed. Unlike `Cache-Control`, the header cannot be influenced by a `#[HttpCache]` attribute; the policy is its only source.
+
+Never list parameters that change rendered content, such as `p`, `order`, `search`, or filter names. A client could otherwise match a stored response against the wrong URL. Tracking parameters are safe because reuse does not rewrite the document URL.
+
 ## API
 
 ### Channel API resolves context from the frontend session on request

@@ -136,7 +136,7 @@ contena:
             - 'klar_cpid'
             - 'klar_adid'
 
-        # Cache policies (feature flag CACHE_REWORK)
+        # Cache policies
         policies:
             no_cache_private:
                 headers:
@@ -154,6 +154,14 @@ contena:
                         s_maxage: 1800
                         stale_while_revalidate: 86400
                         stale_if_error: 7200
+                    # The order of query parameters never changes the response. Sending this header
+                    # lets a client match a stored response against a differently ordered URL
+                    # instead of refetching it.
+                    # `HttpCacheKeyGenerator::getRequestUri()` and the reverse proxy configurations
+                    # Contena documents do the same.
+                    # Do not add a `params=(...)` part without checking that the listed parameters really
+                    # have no effect on the response, see `ignored_url_parameters` above.
+                    no_vary_search: 'key-order'
 
             frontend.cacheable:
                 headers:
@@ -162,6 +170,8 @@ contena:
                         max_age: 0
                         must_revalidate: true
                         s_maxage: 7200
+                    # See `channel_api.cacheable` above for why `key-order` is safe for every area.
+                    no_vary_search: 'key-order'
 
         default_policies:
             frontend:

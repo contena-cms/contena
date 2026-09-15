@@ -143,6 +143,25 @@ class CachePolicyProviderTest extends TestCase
             ),
         ];
 
+        yield 'area cacheable default keeps no_vary_search while max_age is overridden by CacheAttribute' => [
+            'policies' => ['area_cacheable' => new CachePolicy(
+                cacheControl: new CacheControlDirectives(public: true, maxAge: 300),
+                noVarySearch: 'key-order',
+            )],
+            'routePolicies' => [],
+            'defaultPolicies' => [
+                'frontend' => new DefaultPolicies('area_cacheable', 'no_cache'),
+            ],
+            'route' => 'some.route',
+            'area' => 'frontend',
+            'cacheable' => true,
+            'cacheAttribute' => new CacheAttribute(maxAge: 1200),
+            'expectedPolicy' => new CachePolicy(
+                cacheControl: new CacheControlDirectives(public: true, maxAge: 1200),
+                noVarySearch: 'key-order',
+            ),
+        ];
+
         yield 'area cacheable default with s_maxage from CacheAttribute' => [
             'policies' => ['area_cacheable' => new CachePolicy(
                 cacheControl: new CacheControlDirectives(public: true, sMaxAge: 300),
