@@ -13,7 +13,7 @@ final class FlowMailVariables
     public const string EVENT_NAME = 'name';
     public const string MEDIA_ID = 'mediaId';
     public const string EMAIL = 'email';
-    public const string CONTACT_FORM_DATA = 'contactFormData';
+    public const string COMMENT_FORM_DATA = 'commentFormData';
     public const string CONTEXT_TOKEN = 'contextToken';
     public const string CONFIRM_URL = 'confirmUrl';
     public const string DATA = 'data';

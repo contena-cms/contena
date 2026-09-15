@@ -14,6 +14,8 @@ class BlogException extends HttpException
     final public const string LISTING_PAGE_OUT_OF_RANGE = 'CONTENT__BLOG_LISTING_PAGE_OUT_OF_RANGE';
     final public const string MISSING_REQUEST_PARAMETER = 'CONTENT__BLOG_MISSING_REQUEST_PARAMETER';
     final public const string INVALID_FIELD_VALUE_TYPE = 'CONTENT__BLOG_INVALID_FIELD_VALUE_TYPE';
+    final public const string COMMENTS_NOT_ACTIVE = 'CONTENT__BLOG_COMMENTS_NOT_ACTIVE';
+    final public const string COMMENT_PARENT_INVALID = 'CONTENT__BLOG_COMMENT_PARENT_INVALID';
 
     public static function blogNotFound(string $blogId): BlogNotFoundException
     {
@@ -43,5 +45,20 @@ class BlogException extends HttpException
     public static function invalidFieldValueType(string $fieldName, string $expectedType, string $actualType): self
     {
         return new self(Response::HTTP_INTERNAL_SERVER_ERROR, self::INVALID_FIELD_VALUE_TYPE, 'Field {{ fieldName }} expected {{ expectedType }}, got {{ actualType }}', ['fieldName' => $fieldName, 'expectedType' => $expectedType, 'actualType' => $actualType]);
+    }
+
+    public static function commentsNotActive(): self
+    {
+        return new self(Response::HTTP_FORBIDDEN, self::COMMENTS_NOT_ACTIVE, 'Blog comments are not activated.');
+    }
+
+    public static function commentParentInvalid(string $parentId): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::COMMENT_PARENT_INVALID,
+            'Comment "{{ parentId }}" is not a root comment of this blog and channel.',
+            ['parentId' => $parentId],
+        );
     }
 }

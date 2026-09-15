@@ -41,6 +41,12 @@ class SiteSettingsRouteTest extends TestCase
                 'core.loginRegistration.addressInputFieldArrangement' => 'zip-city-region',
                 'core.loginRegistration.allowMemberDeletion' => true,
                 'core.loginRegistration.requireDataProtectionCheckbox' => true,
+
+                'core.listing.buildBreadcrumbByReferrerCategory' => true,
+                'core.listing.disableEmptyFilterOptions' => true,
+                'core.listing.blogsPerPage' => '24',
+                'core.listing.showComments' => true,
+                'core.listing.commentsPerPage' => '10',
             ],
         ]);
 
@@ -73,6 +79,13 @@ class SiteSettingsRouteTest extends TestCase
         static::assertSame('zip-city-region', $loginRegistration->addressInputFieldArrangement);
         static::assertTrue($loginRegistration->allowMemberDeletion);
         static::assertTrue($loginRegistration->requireDataProtectionCheckbox);
+
+        $listing = $settings->listing;
+        static::assertTrue($listing->buildBreadcrumbByReferrerCategory);
+        static::assertTrue($listing->disableEmptyFilterOptions);
+        static::assertSame(24, $listing->blogsPerPage);
+        static::assertTrue($listing->showComments);
+        static::assertSame(10, $listing->commentsPerPage);
     }
 
     public function testLoadFallsBackToUnsetDefaultsWhenConfigIsEmpty(): void
@@ -89,6 +102,9 @@ class SiteSettingsRouteTest extends TestCase
         static::assertFalse($settings->loginRegistration->showTitleField);
         static::assertSame('', $settings->loginRegistration->addressInputFieldArrangement);
         static::assertFalse($settings->loginRegistration->allowMemberDeletion);
+
+        static::assertFalse($settings->listing->showComments);
+        static::assertSame(0, $settings->listing->commentsPerPage);
     }
 
     public function testLoadDoesNotLeakConfigOfOtherChannels(): void

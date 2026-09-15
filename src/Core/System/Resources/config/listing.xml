@@ -15,6 +15,25 @@
         </input-field>
 
         <input-field type="bool">
+            <name>showComments</name>
+            <label>Show blog comments</label>
+            <label lang="zh-CN">显示文章评论</label>
+            <helpText>Allow members to read and submit comments and replies on blog pages.</helpText>
+            <helpText lang="zh-CN">允许会员在文章页面查看和提交评论及回复。</helpText>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>commentsPerPage</name>
+            <label>Number of comments per page</label>
+            <label lang="zh-CN">每页评论数</label>
+            <helpText>The number of root comments displayed per page. Replies are loaded with their root comment.</helpText>
+            <helpText lang="zh-CN">每页显示的根评论数量，回复会随对应根评论一起加载。</helpText>
+            <defaultValue>10</defaultValue>
+            <min>1</min>
+        </input-field>
+
+        <input-field type="bool">
             <name>disableEmptyFilterOptions</name>
             <label>Disable filter options without results</label>
             <label lang="de-DE">Filteroptionen ohne Ergebnisse deaktivieren</label>

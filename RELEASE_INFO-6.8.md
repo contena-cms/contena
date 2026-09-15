@@ -2,6 +2,14 @@
 
 ## Core
 
+### Blog comments and direct replies
+
+Blog pages now expose a Channel API comment contract for authenticated members. Clients can read paginated root comments
+with visible direct replies through `GET|POST /channel-api/blog/{blogId}/comments` and submit a pending comment or direct
+reply through `POST /channel-api/blog/{blogId}/comment`. Replies use `parentId` and are limited to one level; ratings,
+purchase verification and product-specific review fields are not part of the CMS contract. Channel configuration exposes
+the `core.listing.showComments` and `core.listing.commentsPerPage` values through `site-settings`.
+
 ### Configurable last-modified version strategy for theme assets
 
 The `FlysystemLastModifiedVersionStrategy` used for theme assets can now be disabled per installation in `config/packages/contena.yaml`. When disabled, theme asset URLs use an empty version strategy instead of fetching the last-modified timestamp from the filesystem on every request, eliminating the associated cache lookups.

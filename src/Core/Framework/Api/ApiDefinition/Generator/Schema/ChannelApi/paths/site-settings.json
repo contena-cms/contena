@@ -20,7 +20,8 @@
                                     "required": [
                                         "apiAlias",
                                         "general",
-                                        "loginRegistration"
+                                        "loginRegistration",
+                                        "listing"
                                     ],
                                     "properties": {
                                         "apiAlias": {
@@ -157,6 +158,46 @@
                                                 "requireDataProtectionCheckbox": {
                                                     "type": "boolean",
                                                     "description": "Whether the privacy policy must be acknowledged during registration"
+                                                }
+                                            }
+                                        },
+                                        "listing": {
+                                            "type": "object",
+                                            "description": "Blog listing and comment settings (core.listing)",
+                                            "required": [
+                                                "apiAlias",
+                                                "buildBreadcrumbByReferrerCategory",
+                                                "disableEmptyFilterOptions",
+                                                "blogsPerPage",
+                                                "showComments",
+                                                "commentsPerPage"
+                                            ],
+                                            "properties": {
+                                                "apiAlias": {
+                                                    "type": "string",
+                                                    "const": "site_settings_listing"
+                                                },
+                                                "buildBreadcrumbByReferrerCategory": {
+                                                    "type": "boolean",
+                                                    "description": "Whether blog breadcrumbs are built from the referring category when available"
+                                                },
+                                                "disableEmptyFilterOptions": {
+                                                    "type": "boolean",
+                                                    "description": "Whether filter options without results are disabled"
+                                                },
+                                                "blogsPerPage": {
+                                                    "type": "integer",
+                                                    "minimum": 1,
+                                                    "description": "Number of blogs displayed per listing page"
+                                                },
+                                                "showComments": {
+                                                    "type": "boolean",
+                                                    "description": "Whether members may read and submit blog comments and replies"
+                                                },
+                                                "commentsPerPage": {
+                                                    "type": "integer",
+                                                    "minimum": 1,
+                                                    "description": "Number of root comments displayed per page"
                                                 }
                                             }
                                         }

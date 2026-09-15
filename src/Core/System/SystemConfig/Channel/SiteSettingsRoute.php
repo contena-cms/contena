@@ -38,6 +38,7 @@ class SiteSettingsRoute extends AbstractSiteSettingsRoute
         $settings = new SiteSettings(
             general: SiteGeneralSettings::fromConfig($this->loadDomain('core.basicInformation', $channelId)),
             loginRegistration: SiteLoginRegistrationSettings::fromConfig($this->loadDomain('core.loginRegistration', $channelId)),
+            listing: SiteListingSettings::fromConfig($this->loadDomain('core.listing', $channelId)),
         );
 
         return new SiteSettingsRouteResponse($settings);

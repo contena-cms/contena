@@ -1,0 +1,98 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogComment": {
+                "description": "A comment or reply posted on a blog.",
+                "required": [
+                    "id",
+                    "blogId",
+                    "channelId",
+                    "languageId",
+                    "content",
+                    "status"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogId": {
+                        "description": "Unique identity of the blog.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogVersionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "channelId": {
+                        "description": "Unique identity of the channel.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "languageId": {
+                        "description": "Unique identity of the language.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "parentId": {
+                        "description": "Root comment identity. A null value identifies a root comment.",
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "externalUser": {
+                        "description": "Display name of the comment author.",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "content": {
+                        "description": "Content of the comment or reply.",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Whether the comment is publicly visible.",
+                        "type": "boolean"
+                    },
+                    "children": {
+                        "description": "Visible direct replies to this root comment.",
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "$ref": "#/components/schemas/BlogComment"
+                        }
+                    },
+                    "customFields": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updatedAt": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

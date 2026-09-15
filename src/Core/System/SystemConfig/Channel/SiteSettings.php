@@ -19,6 +19,7 @@ final class SiteSettings extends Struct
     public function __construct(
         public readonly SiteGeneralSettings $general,
         public readonly SiteLoginRegistrationSettings $loginRegistration,
+        public readonly SiteListingSettings $listing,
     ) {
     }
 

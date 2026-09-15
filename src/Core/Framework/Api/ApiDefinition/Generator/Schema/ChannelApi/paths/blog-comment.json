@@ -1,0 +1,249 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/blog/{blogId}/comments": {
+            "post": {
+                "tags": [
+                    "Blog",
+                    "Endpoints supporting Criteria "
+                ],
+                "summary": "Fetch blog comments",
+                "description": "Perform a filtered search for root comments and their visible direct replies.",
+                "operationId": "readBlogComments",
+                "parameters": [
+                    {
+                        "name": "blogId",
+                        "in": "path",
+                        "description": "Identifier of the blog.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "name": "ct-include-search-info",
+                        "in": "header",
+                        "description": "Controls whether API search information is included in the response.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "0",
+                                "1"
+                            ],
+                            "default": "1"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/ctLanguageId"
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Criteria"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entity search result containing blog comments.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "elements": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/BlogComment"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/EntitySearchResult"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The Criteria sent with the request is invalid."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The ct-access-key header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "Blog comments are disabled for this channel."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            },
+            "get": {
+                "tags": [
+                    "Blog",
+                    "Endpoints supporting Criteria "
+                ],
+                "summary": "Fetch blog comments",
+                "description": "Perform a filtered search for root comments and their visible direct replies.",
+                "operationId": "readBlogCommentsGet",
+                "parameters": [
+                    {
+                        "name": "blogId",
+                        "in": "path",
+                        "description": "Identifier of the blog.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "x-parameter-group": "criteria"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entity search result containing blog comments.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "elements": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/BlogComment"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/EntitySearchResult"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The Criteria sent with the request is invalid."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The ct-access-key header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "Blog comments are disabled for this channel."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            }
+        },
+        "/blog/{blogId}/comment": {
+            "post": {
+                "tags": [
+                    "Blog"
+                ],
+                "summary": "Save a blog comment or reply",
+                "description": "Creates a pending root comment or a direct reply for a blog. Comments must be enabled for the channel.",
+                "operationId": "saveBlogComment",
+                "parameters": [
+                    {
+                        "name": "blogId",
+                        "in": "path",
+                        "description": "Identifier of the blog.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/ctLanguageId"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "description": "The comment or reply content.",
+                                        "type": "string",
+                                        "maxLength": 5000
+                                    },
+                                    "parentId": {
+                                        "description": "Root comment identifier when creating a direct reply.",
+                                        "type": "string",
+                                        "pattern": "^[0-9a-f]{32}$"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The pending comment or reply was created."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The content or parent comment failed validation."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "A logged-in member is required."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "Blog comments are disabled for this channel."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404",
+                        "description": "No blog exists for the given blogId in this channel."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": [],
+                        "ContextToken": []
+                    }
+                ]
+            }
+        }
+    }
+}

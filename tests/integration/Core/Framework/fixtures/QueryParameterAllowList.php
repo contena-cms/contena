@@ -63,6 +63,7 @@ class QueryParameterAllowList
                 '/channel-api/navigation/{activeId}/{rootId}' => ['@criteria', 'depth', 'buildTree'],
                 '/channel-api/blog' => ['@criteria'],
                 '/channel-api/blog/{blogId}' => ['@criteria', 'skipBreadcrumb', 'referrerCategoryId'],
+                '/channel-api/blog/{blogId}/comments' => ['@criteria'],
                 '/channel-api/seo-url' => ['@criteria'],
             ],
         ];

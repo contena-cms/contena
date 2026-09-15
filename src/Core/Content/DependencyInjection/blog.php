@@ -24,6 +24,12 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogTypeRegistry;
 use Contena\Core\Content\Blog\Channel\BlogListRoute;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentLoader;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentRoute;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentSaveRoute;
+use Contena\Core\Content\Blog\Channel\Comment\BlogCommentLoader;
+use Contena\Core\Content\Blog\Channel\Comment\BlogCommentRoute;
+use Contena\Core\Content\Blog\Channel\Comment\BlogCommentSaveRoute;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\AggregationListingProcessor;
@@ -67,6 +73,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\TokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\Util\HtmlSanitizer;
+use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -104,6 +111,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChannelBlogMainCategoryDefinition::class)->tag('contena.channel.entity.definition');
     $services->set(BlogListRoute::class)->public()->args([service('channel.blog.repository')]);
     $services->set(BlogDetailRoute::class)->public()->args([service('channel.blog.repository'), service(CategoryBreadcrumbBuilder::class), service(CacheTagCollector::class)]);
+    $services->set(BlogCommentLoader::class)->args([service(BlogCommentRoute::class), service(SystemConfigService::class), service('event_dispatcher')]);
+    $services->set(BlogCommentRoute::class)->public()->args([service('blog_comment.repository'), service(SystemConfigService::class), service(CacheTagCollector::class)]);
+    $services->set(BlogCommentSaveRoute::class)->public()->args([service('blog_comment.repository'), service(DataValidator::class), service(SystemConfigService::class), service('event_dispatcher'), service(BlogDetailRoute::class)]);
+    $services->alias(AbstractBlogCommentLoader::class, BlogCommentLoader::class);
+    $services->alias(AbstractBlogCommentRoute::class, BlogCommentRoute::class);
+    $services->alias(AbstractBlogCommentSaveRoute::class, BlogCommentSaveRoute::class);
     $services->set(CompositeListingProcessor::class)->args([tagged_iterator('contena.listing.processor')]);
     $services->set(CompressedCriteriaListingProcessor::class)
         ->args([service(CompressedCriteriaDecoder::class)])
