@@ -4,6 +4,7 @@ import 'src/app/component/base/ct-highlight-text';
 import RecentlySearchService from 'src/app/service/recently-search.service';
 import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
 import { routerKey } from 'vue-router';
+import { createI18n } from 'vue-i18n';
 
 const searchTypeServiceTypes = {
     media: {
@@ -20,7 +21,7 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
     let recentlySearchService;
     let spyRecentlySearchServiceAdd;
 
-    async function createWrapper(props) {
+    async function createWrapper(props, shortcut) {
         const component = await wrapTestComponent('ct-search-bar-item', { sync: true });
         recentlySearchService = new RecentlySearchService();
         spyRecentlySearchServiceAdd = jest.spyOn(recentlySearchService, 'add');
@@ -29,12 +30,26 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
             global: {
                 stubs: {
                     'ct-highlight-text': true,
+                    'ct-shortcut-overview-item': true,
                     'router-link': {
                         emits: ['click'],
                         template: '<div class="ct-router-link" @click="$emit(\'click\', $event)"><slot></slot></div>',
                         props: ['to'],
                     },
                 },
+                plugins: shortcut
+                    ? [
+                          createI18n({
+                              legacy: false,
+                              locale: 'en',
+                              messages: {
+                                  en: {
+                                      global: { 'ct-search-bar-item': { shortcuts: { [shortcut.name]: shortcut.value } } },
+                                  },
+                              },
+                          }),
+                      ]
+                    : undefined,
                 provide: {
                     [routerKey]: {
                         push: jest.fn(),
@@ -142,6 +157,42 @@ describe('src/app/component/structure/ct-search-bar-item', () => {
             });
 
             expect(wrapper.vm.iconColor).toBe('var(--ct-color-module-green-default)');
+        });
+    });
+
+    describe('shortcut', () => {
+        it('should render a resolved module shortcut', async () => {
+            wrapper = await createWrapper(
+                {
+                    entityIconName: 'regular-file-text',
+                    entityIconColor: 'blue',
+                    column: 0,
+                    index: 0,
+                    type: 'module',
+                    item: { name: 'blog', label: 'Blog', route: 'ct.blog.index' },
+                },
+                { name: 'blog', value: 'G B' },
+            );
+
+            expect(wrapper.vm.shortcut).toBe('G B');
+            expect(wrapper.find('ct-shortcut-overview-item-stub').exists()).toBe(true);
+        });
+
+        it('should hide the upstream no-shortcut placeholder', async () => {
+            wrapper = await createWrapper(
+                {
+                    entityIconName: 'regular-file-text',
+                    entityIconColor: 'blue',
+                    column: 0,
+                    index: 0,
+                    type: 'module',
+                    item: { name: 'category', label: 'Category', action: true, route: 'ct.category.index' },
+                },
+                { name: 'category', value: '&nbsp; ' },
+            );
+
+            expect(wrapper.vm.shortcut).toBe(false);
+            expect(wrapper.find('ct-shortcut-overview-item-stub').exists()).toBe(false);
         });
     });
 });

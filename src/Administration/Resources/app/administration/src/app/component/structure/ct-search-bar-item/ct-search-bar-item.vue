@@ -40,6 +40,7 @@
                 >
                     <span class="ct-search-bar-item__label">
                         <ct-highlight-text :search-term="searchTerm" :text="moduleName" />
+                        <ct-shortcut-overview-item v-if="shortcut" title="" :content="shortcut" />
                         <ct-highlight-text
                             :text="$t(`global.ct-search-bar-item.${item.action ? 'typeLabelAction' : 'typeLabelModule'}`)"
                         />
@@ -109,7 +110,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, te } = useI18n();
 
 const routerLinkRef = ref(null);
 
@@ -169,6 +170,22 @@ const moduleName = computed(() => {
               0,
           )
         : label;
+});
+const shortcut = computed(() => {
+    const { action, name } = props.item;
+
+    if (!te(`global.ct-search-bar-item.shortcuts.${name}`)) {
+        return false;
+    }
+
+    const resolvedShortcut = t(`global.ct-search-bar-item.shortcuts.${name}`, action ? 2 : 1);
+
+    // `&nbsp;` is the upstream placeholder for a module state without a shortcut.
+    if (resolvedShortcut.trim() === '&nbsp;') {
+        return false;
+    }
+
+    return resolvedShortcut;
 });
 const routeName = computed(() => {
     return typeof props.item.route === 'object' ? props.item.route : { name: props.item.route };
