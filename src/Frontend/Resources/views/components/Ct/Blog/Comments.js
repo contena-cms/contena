@@ -1,11 +1,16 @@
 export default class BlogComments extends ContenaComponent {
     init() {
-        this.form = this.el.querySelector('[data-blog-comment-form]');
+        this.forms = [...this.el.querySelectorAll('[data-blog-comment-form]')];
+        this.replyToggles = [...this.el.querySelectorAll('[data-reply-toggle]')];
 
-        if (this.form) {
-            this.submitHandler = this.submit.bind(this);
-            this.form.addEventListener('submit', this.submitHandler);
-        }
+        this.submitHandler = this.submit.bind(this);
+        this.toggleReplyHandler = this.toggleReply.bind(this);
+        this.forms.forEach((form) => form.addEventListener('submit', this.submitHandler));
+        this.replyToggles.forEach((toggle) => toggle.addEventListener('click', this.toggleReplyHandler));
+    }
+
+    toggleReply(event) {
+        event.currentTarget.nextElementSibling?.classList.toggle('d-none');
     }
 
     async submit(event) {
@@ -16,11 +21,14 @@ export default class BlogComments extends ContenaComponent {
             return;
         }
 
-        const content = this.form.elements.content.value;
+        const form = event.currentTarget;
+        const content = form.elements.content.value;
+        const parentId = form.dataset.parentId;
+        const body = parentId ? { content, parentId } : { content };
         const response = await fetch(`/channel-api/blog/${blogId}/comment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content }),
+            body: JSON.stringify(body),
         });
 
         if (response.ok) {
@@ -29,6 +37,7 @@ export default class BlogComments extends ContenaComponent {
     }
 
     destroy() {
-        this.form?.removeEventListener('submit', this.submitHandler);
+        this.forms.forEach((form) => form.removeEventListener('submit', this.submitHandler));
+        this.replyToggles.forEach((toggle) => toggle.removeEventListener('click', this.toggleReplyHandler));
     }
 }

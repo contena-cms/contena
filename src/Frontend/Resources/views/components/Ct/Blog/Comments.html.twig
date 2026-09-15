@@ -27,6 +27,16 @@
                             <time datetime="{{ comment.createdAt|date('c') }}">{{ comment.createdAt|date('Y-m-d') }}</time>
                         </header>
                         <p class="ct-blog-comments__content">{{ comment.content|e|nl2br }}</p>
+                        {% if context.member %}
+                            <button type="button" class="btn btn-link btn-sm px-0" data-reply-toggle>
+                                {{ 'blog.comment.reply'|trans|sw_sanitize }}
+                            </button>
+                            <form class="ct-blog-comments__reply-form d-none" method="post" data-blog-comment-form data-parent-id="{{ comment.id }}">
+                                <label class="visually-hidden" for="blog-comment-reply-{{ comment.id }}">{{ 'blog.comment.replyLabel'|trans|sw_sanitize }}</label>
+                                <textarea id="blog-comment-reply-{{ comment.id }}" name="content" class="form-control" rows="3" required></textarea>
+                                <button class="btn btn-outline-primary btn-sm mt-2" type="submit">{{ 'blog.comment.submitReply'|trans|sw_sanitize }}</button>
+                            </form>
+                        {% endif %}
                     </article>
 
                     {% if comment.children and comment.children.elements|length > 0 %}

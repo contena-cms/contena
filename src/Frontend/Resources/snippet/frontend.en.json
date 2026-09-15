@@ -321,6 +321,9 @@
     "comment": {
       "label": "Comment",
       "submit": "Post comment",
+      "submitReply": "Post reply",
+      "reply": "Reply",
+      "replyLabel": "Reply",
       "loginRequired": "Sign in to leave a comment."
     }
   },
