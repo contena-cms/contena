@@ -64,6 +64,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
+use Contena\Core\System\OAuthClient\Field\RedirectUriListField;
 use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
@@ -97,6 +98,7 @@ class SchemaBuilder
         SerializedField::class => Types::JSON,
         JsonField::class => Types::JSON,
         ListField::class => Types::JSON,
+        RedirectUriListField::class => Types::JSON,
         ConfigJsonField::class => Types::JSON,
         StoredElementListField::class => Types::JSON,
         FlowTemplateConfigField::class => Types::JSON,

@@ -149,10 +149,10 @@ class ClientRepositoryTest extends TestCase
      */
     public static function getClientEntityDataProvider(): iterable
     {
-        yield 'user origin clientIdentifier' => ['CTUAUSERCORRECT', new ApiClient('CTUAUSERCORRECT', true, true, 'foo')];
+        yield 'user origin clientIdentifier' => ['CTUAUSERCORRECT', new ApiClient('CTUAUSERCORRECT', true, name: 'foo', confidential: true)];
         yield 'user origin clientIdentifier invalid' => ['CTUAUSERINVALID', null];
-        yield 'integration origin clientIdentifier' => ['CTIAINTEGRATION', new ApiClient('CTIAINTEGRATION', true, true, 'foo')];
+        yield 'integration origin clientIdentifier' => ['CTIAINTEGRATION', new ApiClient('CTIAINTEGRATION', true, name: 'foo', confidential: true)];
         yield 'integration origin clientIdentifier invalid' => ['CTIAINTEGRATIONINVALID', null];
-        yield 'administration clientIdentifier' => ['administration', new ApiClient('administration', true, false)];
+        yield 'administration clientIdentifier' => ['administration', new ApiClient('administration', true, confidential: false)];
     }
 }

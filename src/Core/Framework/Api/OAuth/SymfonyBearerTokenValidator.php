@@ -11,6 +11,7 @@ use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +25,8 @@ readonly class SymfonyBearerTokenValidator
     public function __construct(
         private AccessTokenRepositoryInterface $accessTokenRepository,
         private Connection $connection,
-        private Configuration $jwtConfiguration
+        private Configuration $jwtConfiguration,
+        private ?PublicClientRegistry $publicClients = null,
     ) {
     }
 
@@ -69,6 +71,10 @@ readonly class SymfonyBearerTokenValidator
 
         if (\is_array($aud)) {
             $aud = array_shift($aud);
+        }
+
+        if (\is_string($aud) && $this->publicClients !== null && $this->publicClients->isDatabaseClient($aud) && !$this->publicClients->has($aud)) {
+            throw OAuthServerException::accessDenied('OAuth application is inactive or no longer exists');
         }
 
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $aud);

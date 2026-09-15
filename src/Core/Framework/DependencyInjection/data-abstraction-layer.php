@@ -80,6 +80,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\UpdatedByFieldSe
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\VersionDataPayloadFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\VersionFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\WasModifiedByUserFieldSerializer;
+use Contena\Core\System\OAuthClient\Field\RedirectUriListFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
@@ -661,6 +662,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('validator'),
             service(DefinitionInstanceRegistry::class),
             service(SystemConfigService::class),
+        ])
+        ->tag('contena.field_serializer');
+
+    $services->set(RedirectUriListFieldSerializer::class)
+        ->args([
+            service('validator'),
+            service(DefinitionInstanceRegistry::class),
         ])
         ->tag('contena.field_serializer');
 

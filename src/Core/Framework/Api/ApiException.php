@@ -53,6 +53,7 @@ class ApiException extends HttpException
     public const string API_UNSUPPORTED_ENCODER_INPUT = 'FRAMEWORK__API_UNSUPPORTED_ENCODER_INPUT';
     public const string API_INVALID_CONTEXT_SOURCE = 'FRAMEWORK__INVALID_CONTEXT_SOURCE';
     public const string API_EXPECTED_USER = 'FRAMEWORK__API_EXPECTED_USER';
+    public const string API_OAUTH_INVALID_REDIRECT_URI = 'FRAMEWORK__OAUTH_INVALID_REDIRECT_URI';
     public const string API_INVALID_SCOPE_ACCESS_TOKEN = 'FRAMEWORK__INVALID_SCOPE_ACCESS_TOKEN';
     public const string API_ROUTES_ARE_LOADED_ALREADY = 'FRAMEWORK__API_ROUTES_ARE_LOADED_ALREADY';
     public const string API_NOTIFICATION_THROTTLED = 'FRAMEWORK__NOTIFICATION_THROTTLED';
@@ -433,6 +434,16 @@ class ApiException extends HttpException
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::API_INVALID_ACCESS_KEY_IDENTIFIER_EXCEPTION,
             'Given identifier for access key is invalid.',
+        );
+    }
+
+    public static function invalidOAuthRedirectUri(\Throwable $previous): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::API_OAUTH_INVALID_REDIRECT_URI,
+            'Redirect URL is not registered for this application.',
+            previous: $previous,
         );
     }
 

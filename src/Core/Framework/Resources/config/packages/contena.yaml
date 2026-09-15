@@ -229,6 +229,13 @@ contena:
 
     api:
         max_limit: 500
+        auth_code_ttl: 'PT5M'
+        oauth_clients: # public OAuth clients allowed to use the authorization code grant with PKCE
+            contena-cli:
+                name: 'Contena CLI'
+                redirect_uris:
+                    - 'http://127.0.0.1/callback'
+                    - 'http://[::1]/callback'
         channel:
             context_lifetime: 'P1D' # 1 day interval, see also https://www.php.net/manual/en/dateinterval.construct.php#refsect1-dateinterval.construct-parameters
             max_limit: 100

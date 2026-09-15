@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Api\OAuth;
 
 use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -25,12 +26,17 @@ class ClientRepository implements ClientRepositoryInterface
     public function __construct(
         private readonly Connection $connection,
         private readonly ClockInterface $clock,
+        private readonly ?PublicClientRegistry $publicClients = null,
     ) {
     }
 
     public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool
     {
         if (($grantType === 'password' || $grantType === 'refresh_token') && $clientIdentifier === 'administration') {
+            return true;
+        }
+
+        if ($this->publicClients !== null && \in_array($grantType, PublicClientRegistry::GRANT_TYPES, true) && $this->publicClients->has($clientIdentifier)) {
             return true;
         }
 
@@ -66,7 +72,12 @@ class ClientRepository implements ClientRepositoryInterface
     public function getClientEntity(string $clientIdentifier): ?ClientEntityInterface
     {
         if ($clientIdentifier === 'administration') {
-            return new ApiClient('administration', true, false);
+            return new ApiClient('administration', true, confidential: false);
+        }
+
+        $publicClient = $this->publicClients?->get($clientIdentifier);
+        if ($publicClient !== null || ($this->publicClients?->isDatabaseClient($clientIdentifier) ?? false)) {
+            return $publicClient;
         }
 
         $accessKey = $this->getByAccessKey($clientIdentifier);
@@ -82,9 +93,9 @@ class ClientRepository implements ClientRepositoryInterface
 
         return new ApiClient(
             $clientIdentifier,
-            true,
-            true,
-            $userId !== null ? Uuid::fromBytesToHex($userId) : $accessKey['label'] ?? ''
+            writeAccess: true,
+            name: $userId !== null ? Uuid::fromBytesToHex($userId) : $accessKey['label'] ?? '',
+            confidential: true,
         );
     }
 

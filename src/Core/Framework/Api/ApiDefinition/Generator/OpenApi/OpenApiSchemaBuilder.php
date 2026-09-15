@@ -68,7 +68,7 @@ class OpenApiSchemaBuilder
     private function createInfo(string $api, string $version): Info
     {
         return new Info([
-            'title' => 'Contena ' . self::API[$api]['name'],
+            'title' => 'Contena CMS ' . self::API[$api]['name'],
             'version' => $version,
             'license' => [
                 'name' => 'MIT',
@@ -418,6 +418,13 @@ EOF
                         ],
                     ],
                     'clientCredentials' => [
+                        'tokenUrl' => $url . '/api/oauth/token',
+                        'scopes' => [
+                            'write' => 'Full write access',
+                        ],
+                    ],
+                    'authorizationCode' => [
+                        'authorizationUrl' => $url . '/api/oauth/authorize',
                         'tokenUrl' => $url . '/api/oauth/token',
                         'scopes' => [
                             'write' => 'Full write access',

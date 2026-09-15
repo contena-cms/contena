@@ -38,6 +38,7 @@ use Contena\Core\Framework\Api\Controller\HealthCheckController;
 use Contena\Core\Framework\Api\Controller\IndexingController;
 use Contena\Core\Framework\Api\Controller\InfoController;
 use Contena\Core\Framework\Api\Controller\IntegrationController;
+use Contena\Core\Framework\Api\Controller\OAuthAuthorizeController;
 use Contena\Core\Framework\Api\Controller\SyncController;
 use Contena\Core\Framework\Api\Controller\UserController;
 use Contena\Core\Framework\Api\Cors\CoreCorsHeaderProvider;
@@ -50,8 +51,11 @@ use Contena\Core\Framework\Api\EventListener\JsonRequestTransformerListener;
 use Contena\Core\Framework\Api\EventListener\ResponseExceptionListener;
 use Contena\Core\Framework\Api\EventListener\ResponseHeaderListener;
 use Contena\Core\Framework\Api\OAuth\AccessTokenRepository;
+use Contena\Core\Framework\Api\OAuth\AuthCodeRepository;
+use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Contena\Core\Framework\Api\OAuth\ClientRepository;
 use Contena\Core\Framework\Api\OAuth\FakeCryptKey;
+use Contena\Core\Framework\Api\OAuth\GrantTypeFactory;
 use Contena\Core\Framework\Api\OAuth\JWTConfigurationFactory;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
 use Contena\Core\Framework\Api\OAuth\Scope\AdminScope;
@@ -94,6 +98,7 @@ use Contena\Core\Framework\Validation\HappyPathValidator;
 use Contena\Core\System\Channel\Api\StructEncoder;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
+use Contena\Core\System\OAuthClient\OAuthClientDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\UserDefinition;
 use Doctrine\DBAL\Connection;
@@ -357,6 +362,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
+    $services->set(OAuthAuthorizeController::class)
+        ->public()
+        ->args([
+            service('contena.api.authorization_server'),
+            service(PsrHttpFactory::class),
+            service(Psr17Factory::class),
+            service(PublicClientRegistry::class),
+            service('contena.rate_limiter'),
+            service('router'),
+        ])
+        ->call('setContainer', [service('service_container')]);
+
     $services->set(CacheController::class)
         ->public()
         ->args([
@@ -372,10 +389,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AccessTokenRepository::class);
 
+    $services->set(PublicClientRegistry::class)
+        ->args([
+            param('contena.api.oauth_clients'),
+            service('oauth_client.repository'),
+        ]);
+
     $services->set(ClientRepository::class)
         ->args([
             service(Connection::class),
             service(ClockInterface::class),
+            service(PublicClientRegistry::class),
         ]);
 
     $services->set(RefreshTokenRepository::class)
@@ -431,6 +455,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(AccessTokenRepository::class),
             service(Connection::class),
             service('contena.jwt_config'),
+            service(PublicClientRegistry::class),
         ]);
 
     $services->set(JsonRequestTransformerListener::class)
@@ -443,25 +468,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber');
 
+    $services->set(AuthCodeRepository::class)
+        ->args([
+            service(Connection::class),
+            service(ClockInterface::class),
+        ]);
+
+    $services->set(GrantTypeFactory::class)
+        ->args([
+            service(UserRepository::class),
+            service(RefreshTokenRepository::class),
+            service(AuthCodeRepository::class),
+            param('contena.api.refresh_token_ttl'),
+            param('contena.api.auth_code_ttl'),
+        ]);
+
     $services->set(ApiAuthenticationListener::class)
         ->args([
             service(SymfonyBearerTokenValidator::class),
             service('contena.api.authorization_server'),
-            service(UserRepository::class),
-            service(RefreshTokenRepository::class),
+            service(GrantTypeFactory::class),
             service(RouteScopeRegistry::class),
             param('contena.api.access_token_ttl'),
-            param('contena.api.refresh_token_ttl'),
         ])
         ->tag('kernel.event_subscriber');
 
     $services->set(UserCredentialsChangedSubscriber::class)
         ->args([
             service(RefreshTokenRepository::class),
+            service(AuthCodeRepository::class),
             service(Connection::class),
             service(ClockInterface::class),
         ])
         ->tag('kernel.event_subscriber');
+
+    $services->set(OAuthClientDefinition::class)
+        ->tag('contena.entity.definition');
 
     $services->set(UserController::class)
         ->public()

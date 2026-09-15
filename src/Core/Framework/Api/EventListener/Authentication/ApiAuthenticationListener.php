@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\Api\EventListener\Authentication;
 
+use Contena\Core\Framework\Api\OAuth\GrantTypeFactory;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Contena\Core\Framework\Routing\ApiContextRouteScopeDependant;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
@@ -9,11 +10,6 @@ use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\PlatformRequest;
 use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
-use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -32,11 +28,9 @@ class ApiAuthenticationListener implements EventSubscriberInterface
     public function __construct(
         private readonly SymfonyBearerTokenValidator $symfonyBearerTokenValidator,
         private readonly AuthorizationServer $authorizationServer,
-        private readonly UserRepositoryInterface $userRepository,
-        private readonly RefreshTokenRepositoryInterface $refreshTokenRepository,
+        private readonly GrantTypeFactory $grantTypeFactory,
         private readonly RouteScopeRegistry $routeScopeRegistry,
         private readonly string $accessTokenTtl = 'PT10M',
-        private readonly string $refreshTokenTtl = 'P1W'
     ) {
     }
 
@@ -59,17 +53,9 @@ class ApiAuthenticationListener implements EventSubscriberInterface
         }
 
         $accessTokenInterval = new \DateInterval($this->accessTokenTtl);
-        $refreshTokenInterval = new \DateInterval($this->refreshTokenTtl);
-
-        $passwordGrant = new PasswordGrant($this->userRepository, $this->refreshTokenRepository);
-        $passwordGrant->setRefreshTokenTTL($refreshTokenInterval);
-
-        $refreshTokenGrant = new RefreshTokenGrant($this->refreshTokenRepository);
-        $refreshTokenGrant->setRefreshTokenTTL($refreshTokenInterval);
-
-        $this->authorizationServer->enableGrantType($passwordGrant, $accessTokenInterval);
-        $this->authorizationServer->enableGrantType($refreshTokenGrant, $accessTokenInterval);
-        $this->authorizationServer->enableGrantType(new ClientCredentialsGrant(), $accessTokenInterval);
+        foreach ($this->grantTypeFactory->createGrantTypes() as $grantType) {
+            $this->authorizationServer->enableGrantType($grantType, $accessTokenInterval);
+        }
     }
 
     public function validateRequest(ControllerEvent $event): void

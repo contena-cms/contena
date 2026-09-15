@@ -18,7 +18,7 @@ class AccessTokenTest extends TestCase
 {
     public function testToken(): void
     {
-        $client = new ApiClient('administration', true, true, 'test');
+        $client = new ApiClient('administration', true, name: 'test', confidential: true);
         $token = new AccessToken(
             $client,
             [],
