@@ -1,9 +1,10 @@
 import { flushPromises, shallowMount, type VueWrapper } from '@vue/test-utils';
+import { nextTick, reactive } from 'vue';
 import { routeLocationKey, routerKey } from 'vue-router';
 import component from './index';
 
 type DetailVm = {
-    channel: Record<string, unknown>;
+    channel: Record<string, unknown> | null;
     tabs: Array<{ name: string; onClick: () => void }>;
     onSave: () => Promise<boolean>;
     abortOnLanguageChange: () => boolean;
@@ -36,10 +37,10 @@ describe('ct-channel-detail', () => {
             ),
         };
         const router = { push: jest.fn(), replace: jest.fn(() => Promise.resolve()) };
-        const route = {
+        const route = reactive({
             name: createMode ? 'ct.channel.create.base' : 'ct.channel.detail.base',
             params: createMode ? { typeId: 'frontend-type' } : { id: 'channel-id' },
-        };
+        });
         const wrapper = shallowMount(component, {
             props: { createMode },
             global: {
@@ -61,6 +62,7 @@ describe('ct-channel-detail', () => {
             save,
             hasChanges,
             router,
+            route,
             repositoryFactory,
         };
     }
@@ -79,7 +81,7 @@ describe('ct-channel-detail', () => {
                 'themes',
             ]),
         );
-        expect(wrapper.vm.channel.name).toBe('Frontend');
+        expect(wrapper.vm.channel?.name).toBe('Frontend');
         const parsedCriteria = criteria?.parse();
         const associations = parsedCriteria?.associations ?? {};
         expect(associations.languages?.sort?.[0]).toEqual({
@@ -95,6 +97,29 @@ describe('ct-channel-detail', () => {
             order: 'ASC',
             naturalSorting: false,
         });
+    });
+
+    it('clears the previous Channel while loading another Channel from the route', async () => {
+        const { wrapper, get, route } = createWrapper();
+        await flushPromises();
+
+        let resolveChannel: (channel: { id: string; name: string; translated: { name: string } }) => void = () => {};
+        get.mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveChannel = resolve;
+                }),
+        );
+
+        route.params = { id: 'api-channel-id' };
+        await nextTick();
+
+        expect(wrapper.vm.channel).toBeNull();
+
+        resolveChannel({ id: 'api-channel-id', name: 'API', translated: { name: 'API' } });
+        await flushPromises();
+
+        expect(wrapper.vm.channel).toMatchObject({ id: 'api-channel-id', name: 'API' });
     });
 
     it('persists and reloads an existing Channel', async () => {

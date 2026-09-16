@@ -2,8 +2,13 @@
     <ct-block name="ct_channel_list">
         <ct-page class="ct-channel-list">
             <template #search-bar>
-                <ct-block name="ct_channel_list_search">
-                    <mt-search :model-value="term" @change="onSearch" />
+                <ct-block name="ct_channel_list_search_bar">
+                    <ct-search-bar
+                        initial-search-type="channel"
+                        :placeholder="t('ct-channel.list.placeholderSearchBar')"
+                        :initial-search="term"
+                        @search="onSearch"
+                    />
                 </ct-block>
             </template>
 
@@ -104,7 +109,6 @@
 </template>
 
 <script setup lang="ts">
-/* global Entity */
 /* global Entity */
 import { computed, inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';

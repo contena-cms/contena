@@ -44,8 +44,9 @@ describe('ct-channel-list', () => {
                     [routerKey]: { push: jest.fn() },
                 },
                 stubs: {
-                    'ct-block': true,
-                    'ct-page': true,
+                    'ct-block': { template: '<div><slot /></div>' },
+                    'ct-page': { template: '<div><slot name="search-bar" /><slot name="content" /></div>' },
+                    'ct-search-bar': true,
                     'mt-button': true,
                     'mt-data-table': true,
                     'mt-modal-root': true,
@@ -59,6 +60,14 @@ describe('ct-channel-list', () => {
     beforeEach(() => {
         favorites.isFavorite.mockClear();
         favorites.refresh.mockClear();
+    });
+
+    it('uses the Administration search bar so the mobile menu remains reachable', () => {
+        const { wrapper } = createWrapper();
+        const searchBar = wrapper.findComponent({ name: 'ct-search-bar' });
+
+        expect(searchBar.exists()).toBe(true);
+        expect(searchBar.attributes('initial-search-type')).toBe('channel');
     });
 
     it('adds the upstream favourites column and reads the Channel favourite state', async () => {

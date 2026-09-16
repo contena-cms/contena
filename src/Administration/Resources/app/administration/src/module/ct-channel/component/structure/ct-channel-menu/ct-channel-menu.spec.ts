@@ -202,4 +202,49 @@ describe('module/ct-channel/component/structure/ct-channel-menu', () => {
         wrapper.unmount();
         expect(mediaQuery.removeEventListener).toHaveBeenCalledWith('change', expect.any(Function));
     });
+
+    describe('module color', () => {
+        const moduleColor = 'var(--ct-color-module-neutral-default)';
+        let getModuleByEntityName: jest.SpyInstance;
+
+        beforeEach(() => {
+            getModuleByEntityName = jest
+                .spyOn(Contena.Module, 'getModuleByEntityName')
+                .mockReturnValue({ manifest: { color: moduleColor } } as never);
+        });
+
+        afterEach(() => {
+            getModuleByEntityName.mockRestore();
+        });
+
+        it('gives the Channel rows the color of the Channel module', async () => {
+            const { wrapper } = createWrapper([
+                apiChannel,
+                webChannel,
+            ]);
+            await flushPromises();
+
+            expect(getModuleByEntityName).toHaveBeenCalledWith('channel');
+            expect(wrapper.vm.buildMenuTree.map((entry: { color?: string }) => entry.color)).toEqual([
+                moduleColor,
+                moduleColor,
+            ]);
+        });
+
+        it('gives the more items row the color of the Channel module', async () => {
+            const { wrapper } = createWrapper([apiChannel]);
+            await flushPromises();
+
+            expect(wrapper.vm.moreItemsEntry.color).toBe(moduleColor);
+        });
+
+        it('leaves the rows without a color when the module is not registered', async () => {
+            getModuleByEntityName.mockReturnValue(undefined);
+
+            const { wrapper } = createWrapper([apiChannel]);
+            await flushPromises();
+
+            expect(wrapper.vm.buildMenuTree[0].color).toBeUndefined();
+        });
+    });
 });

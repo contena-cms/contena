@@ -76,7 +76,6 @@
 
 <script setup lang="ts">
 /* global Entity, EntityCollection */
-/* global Entity, EntityCollection */
 import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -143,7 +142,11 @@ const getLoadCriteria = (): InstanceType<typeof Contena.Data.Criteria> => {
 };
 const loadChannel = async (): Promise<void> => {
     const id = String(route.params.id || '').toLowerCase();
-    if (!id) return;
+    if (!id) {
+        return;
+    }
+
+    channel.value = null;
     isLoading.value = true;
     try {
         channel.value = await channelRepository.value.get(id, Contena.Context.api, getLoadCriteria());

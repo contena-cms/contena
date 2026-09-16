@@ -1,6 +1,6 @@
 <template>
     <ct-block name="ct_channel_menu">
-        <div class="ct-channel-menu" :class="channelMenuClasses">
+        <div class="ct-channel-menu">
             <ct-block name="ct_channel_menu_modal">
                 <ct-channel-modal v-if="showModal" @modal-close="showModal = false" />
             </ct-block>
@@ -141,8 +141,6 @@ import { computed, getCurrentInstance, inject, onBeforeUnmount, onMounted, ref, 
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import type AclService from 'src/app/service/acl.service';
-import useModuleIconColors from 'src/app/composables/use-module-icon-colors';
-
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
 
 import { getDomainLink } from 'src/module/ct-channel/service/domain-link.service';
@@ -154,6 +152,7 @@ type ChannelMenuEntry = {
     params?: { id: string };
     label: string | { label: string; translated: boolean };
     icon: string;
+    color?: string;
     children: ChannelMenuEntry[];
     domainLink?: string | null;
     active?: boolean;
@@ -187,9 +186,11 @@ const channelRepository = computed(() => repositoryFactory.create('channel'));
 const canCreateChannels = computed(() => acl.can('channel.creator'));
 const channelFavoritesService = computed(() => Contena.Service('channelFavorites'));
 const channelFavorites = computed(() => channelFavoritesService.value.getFavoriteIds());
-const channelMenuClasses = computed(() => ({
-    'is--module-colored': useModuleIconColors().enabled.value,
-}));
+const channelModuleColor = computed(() => {
+    // The rows are built here instead of from the module navigation, so they pick up the
+    // module color themselves and follow the module icon color preference like the module rows
+    return Contena.Module.getModuleByEntityName('channel')?.manifest?.color;
+});
 const showAddChannelMenuItem = computed(() => {
     return (
         channelsLoaded.value && channels.value.length === 0 && channelFavorites.value.length === 0 && canCreateChannels.value
@@ -241,6 +242,7 @@ const buildMenuTree = computed<ChannelMenuEntry[]>(() => {
                 translated: true,
             },
             icon: channel.type?.iconName ?? 'regular-server',
+            color: channelModuleColor.value,
             children: [],
             domainLink: getDomainLink(channel),
             active: channel.active,
@@ -253,6 +255,7 @@ const moreItemsEntry = computed<ChannelMenuEntry>(() => ({
     path: 'ct.channel.list',
     label: t('ct-channel.general.titleMenuMoreItems'),
     icon: 'regular-eye',
+    color: channelModuleColor.value,
     children: [],
 }));
 
@@ -338,6 +341,7 @@ ctDefinePublic({
     adminMenuStore,
     isSidebarExpanded,
     channelRepository,
+    channelModuleColor,
     canCreateChannels,
     showAddChannelMenuItem,
     channelCriteria,
