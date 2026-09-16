@@ -100,15 +100,18 @@ trait FrontendPageTestBehaviour
             'name' => 'frontend',
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'countryId' => $countryId,
             'memberGroupId' => $memberGroupId,
             'navigationCategoryId' => $navigationCategoryId,
             'navigationCategoryVersionId' => Defaults::LIVE_VERSION,
             'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => [['id' => Defaults::CURRENCY]],
             'countries' => [['id' => $countryId]],
             'domains' => [[
                 'url' => 'http://test.com/' . Uuid::randomHex(),
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $snippetSetId,
             ]],
         ];
