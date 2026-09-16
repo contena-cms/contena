@@ -169,7 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set('contena.security.csp_templates', [
         'default' => "\nobject-src 'none';\nscript-src 'none';\nbase-uri 'self';\nframe-ancestors 'none';\n            ",
         'administration' => "\nobject-src 'none';\nscript-src 'strict-dynamic' 'nonce-%%nonce%%' 'unsafe-inline' 'unsafe-eval' https: http:;\nbase-uri 'self';\nframe-ancestors 'none';\n            ",
-        'storefront' => '',
+        'frontend' => '',
         'installer' => '',
     ]);
 

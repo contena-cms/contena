@@ -6,6 +6,7 @@ use Contena\Administration\Controller\AdministrationController;
 use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\PlatformRequest;
+use Contena\Frontend\Controller\BlogController;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,6 +47,23 @@ class CoreSubscriberTest extends TestCase
         static::assertTrue($response->headers->has('Content-Security-Policy'));
 
         static::assertTrue($response->headers->has('Strict-Transport-Security'));
+    }
+
+    public function testFrontendNoCsp(): void
+    {
+        if (!static::getContainer()->has(BlogController::class)) {
+            static::markTestSkipped('Frontend CSP test need frontend bundle to be installed');
+        }
+
+        $browser = $this->getBrowser();
+        $browser->request('GET', $_SERVER['APP_URL']);
+        $response = $browser->getResponse();
+
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+
+        static::assertTrue($response->headers->has(PlatformRequest::HEADER_FRAME_OPTIONS));
+        static::assertTrue($response->headers->has('X-Content-Type-Options'));
+        static::assertFalse($response->headers->has('Content-Security-Policy'));
     }
 
     public function testAdminHasCsp(): void

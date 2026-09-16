@@ -230,7 +230,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ])->tag('messenger.message_handler');
 
     $services->set(ThemeRefreshCommand::class)
-        ->args([service(ThemeLifecycleService::class), service(Connection::class)])
+        ->args([service(ThemeLifecycleService::class)])
         ->tag('console.command');
 
     foreach ([ThemeChangeCommand::class, ThemeCompileCommand::class, ThemeDumpCommand::class, ThemePrepareIconsCommand::class] as $command) {

@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme\Command;
 
 use Contena\Core\Framework\Context;
 use Contena\Frontend\Theme\ThemeLifecycleService;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,30 +20,15 @@ class ThemeRefreshCommand extends Command
     /**
      * @internal
      */
-    public function __construct(
-        private readonly ThemeLifecycleService $themeLifecycleService,
-        private readonly Connection $connection,
-    ) {
+    public function __construct(private readonly ThemeLifecycleService $themeLifecycleService)
+    {
         parent::__construct();
         $this->context = Context::createCLIContext();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $tenantIds = $this->connection->fetchFirstColumn('SELECT LOWER(HEX(`id`)) FROM `tenant`');
-        if ($tenantIds === []) {
-            $this->themeLifecycleService->refreshThemes($this->context);
-
-            return self::SUCCESS;
-        }
-
-        foreach ($tenantIds as $tenantId) {
-            if (!\is_string($tenantId) || $tenantId === '') {
-                continue;
-            }
-
-            $this->themeLifecycleService->refreshThemes(Context::createTenantContext($tenantId));
-        }
+        $this->themeLifecycleService->refreshThemes($this->context);
 
         return self::SUCCESS;
     }
