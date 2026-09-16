@@ -960,10 +960,10 @@
                     "type": "string"
                   },
                   "billingAddress": {
-                    "$ref": "#/components/schemas/MemberAddress"
+                    "$ref": "#/components/schemas/MemberAddressBody"
                   },
                   "shippingAddress": {
-                    "$ref": "#/components/schemas/MemberAddress"
+                    "$ref": "#/components/schemas/MemberAddressBody"
                   },
                   "guest": {
                     "description": "If set, will create a member. Guest members can re-use an email address and don't need a password.",
