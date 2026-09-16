@@ -2,6 +2,12 @@
 
 ## Administration
 
+### Inspect native Administration extension blocks with Vue DevTools
+
+The development-only Vue DevTools plugin now includes a **Contena Extension Blocks** inspector for native `<ct-block>` extension points. It shows the blocks rendered on the current page as a DOM-shaped tree, supports filtering and element picking, highlights selected blocks, reports their owning component and active native extensions, and provides a copy-ready `<ct-block extends>` snippet.
+
+DOM markers are disabled by default. Enable them with the inspector's power action or `localStorage.setItem('ct-admin-block-inspector', 'true')`, then reload the Administration. The `data-ct-block` markers are never rendered in production builds.
+
 ### Native-setup build errors point at the author's source
 
 Errors raised by the native-setup transform now carry the line and column of the offending code in the original `.vue` file and print a code frame, in Vite, Jest and the `valid-contena-setup` ESLint rule alike. Syntax errors previously reported block-relative Babel coordinates, and marker or reserved-name errors pointed at the start of the file or block.

@@ -4,6 +4,7 @@
 import { setupDevtoolsPlugin } from '@vue/devtools-api';
 import type { App } from '@vue/devtools-api/lib/esm/api/app';
 import type { DevtoolsPluginApi } from '@vue/devtools-api/lib/esm/api/api';
+import setupBlockInspector from './block-inspector/ct-vue-devtools-block-inspector';
 
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
 export interface DevtoolComponent {
@@ -41,6 +42,9 @@ export default function setupContenaDevtools(app: App): void {
             app,
         },
         (api) => {
+            // Second inspector: native extension blocks.
+            setupBlockInspector(api, app);
+
             // Add CSS for highlighting elements
             const highlightStyle = document.createElement('style');
             highlightStyle.innerHTML = `

@@ -14,6 +14,15 @@ import {
 } from 'vue';
 import parentsInjectionKey from './parents-injection-key';
 import useBlockContext from '../../../../composables/use-block-context';
+import { isBlockInspectorEnabled, registerInspectedBlock } from 'src/core/factory/block-inspector';
+import markBlockVNodes from './mark-block-vnodes';
+
+/** Name of the component whose template contains the `<ct-block>`, for the block inspector. */
+function getOwnerComponentName(instance: ComponentInternalInstance | null): string {
+    const owner = instance?.parent?.type as { name?: string; __name?: string } | undefined;
+
+    return owner?.name ?? owner?.__name ?? 'unknown';
+}
 
 /**
  * Builds the key under which a block registers and resolves its slots.
@@ -108,6 +117,15 @@ export default Contena.Component.wrapComponentConfig({
         const { addBlock, removeBlock, getBlocks, invalidateBlock } = useBlockContext();
         const instance = getCurrentInstance();
 
+        // Development-only: the block inspector lists this block under the component that wrote it.
+        if (isBlockInspectorEnabled() && props.name) {
+            registerInspectedBlock({
+                name: props.name,
+                component: getOwnerComponentName(instance),
+                kind: 'native',
+            });
+        }
+
         if (props.extends) {
             const scopedExtends = scopedBlockKey(props.ctInternalComponentName, props.extends);
 
@@ -175,10 +193,17 @@ export default Contena.Component.wrapComponentConfig({
         };
     },
     render() {
-        if (!Array.isArray(this.template) || this.template.length !== 1 || Object.keys(this.$attrs).length === 0) {
-            return this.template;
+        let nodes = this.template;
+
+        if (Array.isArray(nodes) && nodes.length === 1 && Object.keys(this.$attrs).length > 0) {
+            nodes = [cloneVNode(nodes[0], this.$attrs)];
         }
 
-        return cloneVNode(this.template[0], this.$attrs);
+        // Development-only: mark the rendered roots so the block inspector can find this block in the DOM.
+        if (isBlockInspectorEnabled() && this.name) {
+            return markBlockVNodes(nodes, this.name);
+        }
+
+        return nodes;
     },
 });
