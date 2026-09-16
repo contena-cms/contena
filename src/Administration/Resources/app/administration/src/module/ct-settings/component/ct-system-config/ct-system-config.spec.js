@@ -125,4 +125,21 @@ describe('src/module/ct-settings/component/ct-system-config/ct-system-config', (
             {},
         );
     });
+
+    it('saves an empty channel selection instead of restoring the global value', async () => {
+        wrapper = await createWrapper({
+            values: { 'example.config.value': ['global-id'] },
+            channelValues: { 'example.config.value': ['channel-id'] },
+            channelId: 'channel-1',
+            channelSwitchable: true,
+        });
+
+        wrapper.vm.actualConfigData['channel-1']['example.config.value'] = [];
+        await wrapper.vm.saveAll();
+
+        expect(wrapper.vm.systemConfigApiService.batchSave).toHaveBeenCalledWith(
+            { 'channel-1': { 'example.config.value': [] } },
+            {},
+        );
+    });
 });

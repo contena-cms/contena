@@ -183,8 +183,8 @@ const isInherited = computed(() => {
         return props.customInheritationCheckFunction(props.value);
     }
 
-    // if association or array
-    if ((props.isAssociation || Array.isArray(props.value)) && props.value) {
+    // if association
+    if (props.isAssociation && props.value) {
         return props.value.length <= 0;
     }
 

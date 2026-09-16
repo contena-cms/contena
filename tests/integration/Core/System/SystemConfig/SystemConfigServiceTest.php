@@ -253,13 +253,29 @@ class SystemConfigServiceTest extends TestCase
         ], $this->systemConfigService->getDomain('foo', TestDefaults::CHANNEL));
     }
 
-    public function testGetDomainInheritanceIgnoresEmptyChannelOverride(): void
+    public function testEmptyArrayChannelValueOverridesGlobalValueInAllReadMethods(): void
+    {
+        $this->systemConfigService->set('foo.ids', ['global-id']);
+        $this->systemConfigService->set('foo.ids', [], TestDefaults::CHANNEL);
+
+        static::assertSame([], $this->systemConfigService->get('foo.ids', TestDefaults::CHANNEL));
+        static::assertSame(
+            ['foo.ids' => []],
+            $this->systemConfigService->getDomain('foo', TestDefaults::CHANNEL)
+        );
+        static::assertSame(
+            ['foo.ids' => []],
+            $this->systemConfigService->getDomain('foo', TestDefaults::CHANNEL, true)
+        );
+    }
+
+    public function testGetDomainInheritWithEmptyStringOverride(): void
     {
         $this->systemConfigService->set('foo.bar', 'test');
         $this->systemConfigService->set('foo.bar', '', TestDefaults::CHANNEL);
 
         static::assertSame(
-            ['foo.bar' => 'test'],
+            ['foo.bar' => ''],
             $this->systemConfigService->getDomain('foo', TestDefaults::CHANNEL, true)
         );
     }
