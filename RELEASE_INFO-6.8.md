@@ -20,6 +20,28 @@ The transform now also rejects `v-model` on a forwarded override binding inside 
 
 ## Core
 
+### SEO URLs for App frontend routes
+
+Apps can give script-rendered frontend pages SEO URLs by declaring `<seo-url>` elements inside `<frontend>` in `manifest.xml`.
+
+```xml
+<frontend>
+    <seo-url name="imprint">
+        <path>imprint</path>
+        <path lang="zh-CN">legal-notice</path>
+    </seo-url>
+    <seo-url name="blog-detail" entity="blog">
+        <default-template>blog/{{ blog.translated.name }}</default-template>
+    </seo-url>
+</frontend>
+```
+
+A static entry maps the given path to the script hook `frontend-<name>` on every Web Channel domain; the `hook` attribute overrides the hook name. An entity-bound entry generates one SEO URL per entity from the Twig template. Administrators can adjust that template per Channel in Settings > SEO, where the route is listed as `frontend.app.<appName>.<name>`. The template context exposes the entity under its camel-cased name. URLs are regenerated whenever the entity is written, marked as deleted while the App is inactive, and removed on uninstall.
+
+The script receives the entity id as `hook.query.id`. Templates link to such pages with `seoUrl('frontend.script_endpoint', { hook: 'blog-detail', id: blog.id })`; the placeholder is replaced with the SEO path like for Blog and Category pages.
+
+Query parameters stored in `seo_url.path_info` are merged into the request when the SEO URL is resolved and take precedence over the browser's query string. The `seo_url.route_name` field allows 255 characters.
+
 ### `EntitySearchResult` supports result subclasses
 
 `Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult` is no longer marked `@final` and can be extended by specialized search-result types. Its constructor remains `final`; subclasses should use their own factory around the inherited constructor and initialize their additional state afterwards.

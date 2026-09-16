@@ -10,6 +10,8 @@ use Contena\Core\Framework\ContentSystem\Channel\AbstractContentRoute;
 use Contena\Core\Framework\ContentSystem\Channel\ContentRouteResponse;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
+use Contena\Core\Framework\Script\Execution\Hook;
+use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
 use Contena\Core\System\Channel\ChannelContext;
@@ -49,6 +51,7 @@ abstract class FrontendController extends AbstractController
         $services[TemplateFinder::class] = TemplateFinder::class;
         $services[SeoUrlPlaceholderHandlerInterface::class] = SeoUrlPlaceholderHandlerInterface::class;
         $services[MediaUrlPlaceholderHandlerInterface::class] = MediaUrlPlaceholderHandlerInterface::class;
+        $services[ScriptExecutor::class] = ScriptExecutor::class;
         $services['translator'] = TranslatorInterface::class;
         $services[RequestTransformerInterface::class] = RequestTransformerInterface::class;
         $services[AbstractContentRoute::class] = AbstractContentRoute::class;
@@ -120,6 +123,11 @@ abstract class FrontendController extends AbstractController
         $response->headers->set('Content-Type', 'text/html');
 
         return $response;
+    }
+
+    protected function hook(Hook $hook): void
+    {
+        $this->container->get(ScriptExecutor::class)->execute($hook);
     }
 
     /**

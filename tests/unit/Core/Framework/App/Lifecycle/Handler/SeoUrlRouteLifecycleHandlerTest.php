@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Handler;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteCollection;
 use Contena\Core\Framework\App\Aggregate\AppSeoUrlRoute\AppSeoUrlRouteEntity;
 use Contena\Core\Framework\App\AppEntity;
@@ -70,10 +71,10 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
             [
                 'name' => 'imprint',
                 'hook' => 'imprint',
-                'label' => ['en-GB' => 'Imprint', 'de-DE' => 'Impressum'],
+                'label' => ['en-GB' => 'Imprint'],
                 'defaultTemplate' => null,
                 'entityName' => null,
-                'paths' => ['en-GB' => 'imprint', 'de-DE' => 'impressum'],
+                'paths' => ['en-GB' => 'imprint'],
                 'appId' => self::APP_ID,
                 'routeName' => self::IMPRINT_ROUTE,
             ],
@@ -104,6 +105,7 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
         unset($data['id']);
 
         static::assertSame([
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'channel_id' => null,
             'route_name' => self::BLOG_ROUTE,
             'entity_name' => 'ce_blog',
@@ -134,7 +136,10 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
                 'template' => 'blog/{{ ceBlog.translated.title }}',
                 'updated_at' => '2026-01-02 03:04:05.000',
             ],
-            'criteria' => ['id' => Uuid::fromHexToBytes('aa11bb22cc33dd44ee55ff6600112233')],
+            'criteria' => [
+                'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+                'id' => Uuid::fromHexToBytes('aa11bb22cc33dd44ee55ff6600112233'),
+            ],
         ]], $this->updates);
     }
 
@@ -166,8 +171,8 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
 
         static::assertSame([[['id' => $legacy->getId()]]], $repository->deletes);
         static::assertSame([
-            ['table' => 'seo_url', 'criteria' => ['route_name' => 'frontend.app.test.legacy']],
-            ['table' => 'seo_url_template', 'criteria' => ['route_name' => 'frontend.app.test.legacy']],
+            ['table' => 'seo_url', 'criteria' => $this->scopeCriteria('frontend.app.test.legacy')],
+            ['table' => 'seo_url_template', 'criteria' => $this->scopeCriteria('frontend.app.test.legacy')],
         ], $this->deletes);
     }
 
@@ -184,12 +189,12 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
             [
                 'table' => 'seo_url',
                 'data' => ['is_deleted' => 1, 'updated_at' => '2026-01-02 03:04:05.000'],
-                'criteria' => ['route_name' => self::IMPRINT_ROUTE],
+                'criteria' => $this->scopeCriteria(self::IMPRINT_ROUTE),
             ],
             [
                 'table' => 'seo_url',
                 'data' => ['is_deleted' => 1, 'updated_at' => '2026-01-02 03:04:05.000'],
-                'criteria' => ['route_name' => self::BLOG_ROUTE],
+                'criteria' => $this->scopeCriteria(self::BLOG_ROUTE),
             ],
         ], $this->updates);
 
@@ -207,8 +212,8 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
         );
 
         static::assertSame([
-            ['table' => 'seo_url', 'criteria' => ['route_name' => self::IMPRINT_ROUTE]],
-            ['table' => 'seo_url_template', 'criteria' => ['route_name' => self::IMPRINT_ROUTE]],
+            ['table' => 'seo_url', 'criteria' => $this->scopeCriteria(self::IMPRINT_ROUTE)],
+            ['table' => 'seo_url_template', 'criteria' => $this->scopeCriteria(self::IMPRINT_ROUTE)],
         ], $this->deletes);
     }
 
@@ -223,8 +228,8 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
         );
 
         static::assertSame([
-            ['table' => 'seo_url', 'criteria' => ['route_name' => self::IMPRINT_ROUTE]],
-            ['table' => 'seo_url_template', 'criteria' => ['route_name' => self::IMPRINT_ROUTE]],
+            ['table' => 'seo_url', 'criteria' => $this->scopeCriteria(self::IMPRINT_ROUTE)],
+            ['table' => 'seo_url_template', 'criteria' => $this->scopeCriteria(self::IMPRINT_ROUTE)],
         ], $this->deletes);
     }
 
@@ -237,11 +242,22 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
     }
 
     /**
+     * @return array{data_scope_id: string, route_name: string}
+     */
+    private function scopeCriteria(string $routeName): array
+    {
+        return [
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
+            'route_name' => $routeName,
+        ];
+    }
+
+    /**
      * @return StaticEntityRepository<AppSeoUrlRouteCollection>
      */
     private function createRepository(AppSeoUrlRouteCollection $existing): StaticEntityRepository
     {
-        return new StaticEntityRepository([$existing]);
+        return StaticEntityRepository::of(AppSeoUrlRouteCollection::class, [$existing]);
     }
 
     private function createPersistContext(): AppPersistContext

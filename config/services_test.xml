@@ -28,6 +28,10 @@
             <tag name="contena.metric_transport_factory"/>
         </service>
 
+        <service id="Contena\Tests\Integration\Core\Framework\App\AppFixture" public="true">
+            <argument type="service" id="app.repository"/>
+        </service>
+
         <service id="Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection" lazy="true">
             <factory class="Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection" method="create"/>
             <argument type="iterator">

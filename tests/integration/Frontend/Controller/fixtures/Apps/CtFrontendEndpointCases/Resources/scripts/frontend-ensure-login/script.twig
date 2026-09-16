@@ -1,0 +1,5 @@
+{% do hook.channelContext.ensureLoggedIn() %}
+
+{% do hook.setResponse(
+    services.response.render('@CtFrontendEndpointCases/frontend/page/member-greeting/index.html.twig', { 'page': hook.page, 'member': hook.channelContext.member })
+) %}

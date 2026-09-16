@@ -76,6 +76,7 @@ use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\ContextResolverListener;
 use Contena\Core\Framework\Routing\CoreSubscriber;
+use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\QueryDataBagResolver;
 use Contena\Core\Framework\Routing\RequestDataBagResolver;
@@ -765,6 +766,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RouteParamsCleanupListener::class)
         ->tag('kernel.event_listener');
+
+    $services->set(RequestFacadeFactory::class)
+        ->public()
+        ->args([
+            service('request_stack'),
+        ]);
 
     $services->set(RedisConnectionFactory::class)
         ->args([

@@ -1,0 +1,10 @@
+{% set blogId = hook.query['blog-id'] %}
+
+{% set blog = services.store.search('blog', { 'ids': [blogId]}).getEntities().first %}
+
+{% do hook.page.addExtension('myBlog', blog) %}
+
+{% set response = services.response.render('@CtFrontendEndpointCases/frontend/page/custom-page/index.html.twig', { 'page': hook.page }) %}
+{% do response.setHeader('Content-Type', 'text/plain') %}
+
+{% do hook.setResponse(response) %}

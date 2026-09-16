@@ -30,6 +30,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\Event\BeforeSendResponseEvent;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver as CoreMaintenanceModeResolver;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
+use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
 use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
@@ -71,6 +72,7 @@ use Contena\Frontend\Controller\NavigationController;
 use Contena\Frontend\Controller\RegionController;
 use Contena\Frontend\Controller\RegisterController;
 use Contena\Frontend\Controller\RobotsController;
+use Contena\Frontend\Controller\ScriptController;
 use Contena\Frontend\Controller\SearchController;
 use Contena\Frontend\Controller\SitemapController;
 use Contena\Frontend\Controller\StorybookController;
@@ -104,6 +106,7 @@ use Contena\Frontend\Framework\Routing\Router;
 use Contena\Frontend\Framework\Routing\StorybookRouteScopeAllowList;
 use Contena\Frontend\Framework\Routing\TemplateDataSubscriber;
 use Contena\Frontend\Framework\Routing\TenantDefaultDomainLoader;
+use Contena\Frontend\Framework\Script\Api\FrontendScriptResponseFactoryFacadeHookFactory;
 use Contena\Frontend\Framework\Store\Subscriber\ExtensionThemeDetectionSubscriber;
 use Contena\Frontend\Framework\SystemCheck\BlogDetailReadinessCheck;
 use Contena\Frontend\Framework\SystemCheck\BlogListingReadinessCheck;
@@ -222,6 +225,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExtensionThemeDetectionSubscriber::class)
         ->tag('kernel.event_subscriber');
 
+    $services->set(FrontendScriptResponseFactoryFacadeHookFactory::class)
+        ->public()
+        ->args([
+            service('router'),
+            service(ScriptController::class),
+        ]);
+
     $services->set(CachedDomainLoader::class)
         ->decorate(DomainLoader::class, null, -1000)
         ->args([
@@ -333,6 +343,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('event_dispatcher'),
         ]);
     $services->alias(GenericPageLoaderInterface::class, GenericPageLoader::class);
+
+    $services->set(ScriptController::class)
+        ->public()
+        ->args([
+            service(GenericPageLoader::class),
+            service(ScriptResponseEncoder::class),
+        ])
+        ->call('setContainer', [service('service_container')]);
     $services->set(NavigationPageLoader::class)
         ->args([
             service(GenericPageLoader::class),

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/Framework/App/Manifest/Schema/manifest-3.0.xsd">
+    <meta>
+        <name>CtFrontendSeoUrl</name>
+        <label>Ct Frontend SEO URLs</label>
+        <description>Declares frontend SEO URLs for app scripts</description>
+        <author>Contena AG</author>
+        <copyright>(c) by Contena AG</copyright>
+        <version>1.0.0</version>
+        <license>MIT</license>
+    </meta>
+    <frontend>
+        <seo-url name="imprint">
+            <label>Legal notice</label>
+            <label lang="zh-CN">法律声明</label>
+            <path>legal-notice</path>
+            <path lang="zh-CN">imprint</path>
+        </seo-url>
+        <seo-url name="app-blog" entity="blog">
+            <label>App blog page</label>
+            <default-template>app-blog/{{ blog.id }}</default-template>
+        </seo-url>
+    </frontend>
+    <permissions>
+        <read>blog</read>
+    </permissions>
+</manifest>

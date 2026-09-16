@@ -1,6 +1,8 @@
 [
     "log_entry.createdAt",
     "log_entry.updatedAt",
+    "app_seo_url_route.createdAt",
+    "app_seo_url_route.updatedAt",
     "acl_role.createdAt",
     "acl_role.updatedAt",
     "content_layout.createdAt",

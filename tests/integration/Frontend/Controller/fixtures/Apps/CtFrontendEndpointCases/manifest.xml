@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena/contena/trunk/src/Core/Framework/App/Manifest/Schema/manifest-3.0.xsd">
+    <meta>
+        <name>CtFrontendEndpointCases</name>
+        <label>Ct Frontend endpoint cases</label>
+        <label lang="zh-CN">Ct 前端端点用例</label>
+        <description>Tests the App System frontend endpoint</description>
+        <description lang="zh-CN">测试 App 系统前端端点</description>
+        <author>Contena AG</author>
+        <copyright>(c) by Contena AG</copyright>
+        <version>1.0.0</version>
+        <license>MIT</license>
+    </meta>
+    <permissions>
+        <read>blog</read>
+    </permissions>
+</manifest>

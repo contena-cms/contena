@@ -50,7 +50,17 @@
                     </div>
                 {% endblock %}
 
-                {% block content %}{% endblock %}
+                {% block base_main_inner %}
+                    <div class="container">
+                        {% block base_main_container %}
+                            <div class="container-main">
+                                {% block base_content %}
+                                    {% block content %}{% endblock %}
+                                {% endblock %}
+                            </div>
+                        {% endblock %}
+                    </div>
+                {% endblock %}
             </main>
         {% endblock %}
 

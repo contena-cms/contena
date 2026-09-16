@@ -23,8 +23,8 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private const IMPRINT_ROUTE = 'frontend.app.SwagSeoUrlApp.imprint';
-    private const TEASER_ROUTE = 'frontend.app.SwagSeoUrlApp.product-teaser';
+    private const IMPRINT_ROUTE = 'frontend.app.CtSeoUrlApp.imprint';
+    private const TEASER_ROUTE = 'frontend.app.CtSeoUrlApp.blog-teaser';
 
     private SeoUrlRouteLifecycleHandler $handler;
 
@@ -50,24 +50,24 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
         $this->handler->install($this->appFixture->createInstallContext($app, $manifest));
 
         $routes = $this->fetchRoutes($app->getId());
-        static::assertSame(['imprint', 'product-teaser'], array_keys($routes));
+        static::assertSame(['blog-teaser', 'imprint'], array_keys($routes));
 
         static::assertSame(self::IMPRINT_ROUTE, $routes['imprint']['route_name']);
         static::assertSame('imprint', $routes['imprint']['hook']);
         static::assertNull($routes['imprint']['entity_name']);
         static::assertNull($routes['imprint']['default_template']);
-        static::assertSame(['en-GB' => 'swag-imprint'], json_decode((string) $routes['imprint']['paths'], true));
+        static::assertSame(['en-GB' => 'ct-imprint'], json_decode((string) $routes['imprint']['paths'], true));
         static::assertSame(['en-GB' => 'Imprint'], json_decode((string) $routes['imprint']['label'], true));
 
-        static::assertSame(self::TEASER_ROUTE, $routes['product-teaser']['route_name']);
-        static::assertSame('product-teaser', $routes['product-teaser']['hook']);
-        static::assertSame('product', $routes['product-teaser']['entity_name']);
-        static::assertSame('{{ product.translated.name }}', $routes['product-teaser']['default_template']);
-        static::assertNull($routes['product-teaser']['paths']);
+        static::assertSame(self::TEASER_ROUTE, $routes['blog-teaser']['route_name']);
+        static::assertSame('blog-teaser', $routes['blog-teaser']['hook']);
+        static::assertSame('blog', $routes['blog-teaser']['entity_name']);
+        static::assertSame('{{ blog.translated.name }}', $routes['blog-teaser']['default_template']);
+        static::assertNull($routes['blog-teaser']['paths']);
 
         static::assertSame([
-            'entityName' => 'product',
-            'template' => '{{ product.translated.name }}',
+            'entityName' => 'blog',
+            'template' => '{{ blog.translated.name }}',
             'isHeadless' => 0,
             'isValid' => 1,
         ], $this->fetchDefaultTemplate(self::TEASER_ROUTE));
@@ -79,15 +79,15 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
     {
         [$app] = $this->install();
 
-        $updated = $this->createManifest('{{ product.translated.name }}/{{ product.productNumber }}');
+        $updated = $this->createManifest('{{ blog.translated.name }}/{{ blog.id }}');
         $this->handler->update($this->appFixture->createUpdateContext($app, $updated));
 
         $template = $this->fetchDefaultTemplate(self::TEASER_ROUTE);
         static::assertIsArray($template);
-        static::assertSame('{{ product.translated.name }}/{{ product.productNumber }}', $template['template']);
+        static::assertSame('{{ blog.translated.name }}/{{ blog.id }}', $template['template']);
 
         $routes = $this->fetchRoutes($app->getId());
-        static::assertSame('{{ product.translated.name }}/{{ product.productNumber }}', $routes['product-teaser']['default_template']);
+        static::assertSame('{{ blog.translated.name }}/{{ blog.id }}', $routes['blog-teaser']['default_template']);
     }
 
     public function testUpdateKeepsADefaultTemplateThatWasChangedByTheMerchant(): void
@@ -96,16 +96,16 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
 
         $this->connection->update(
             'seo_url_template',
-            ['template' => 'teaser/{{ product.id }}'],
+            ['template' => 'teaser/{{ blog.id }}'],
             ['route_name' => self::TEASER_ROUTE]
         );
 
-        $updated = $this->createManifest('{{ product.translated.name }}/{{ product.productNumber }}');
+        $updated = $this->createManifest('{{ blog.translated.name }}/{{ blog.id }}');
         $this->handler->update($this->appFixture->createUpdateContext($app, $updated));
 
         $template = $this->fetchDefaultTemplate(self::TEASER_ROUTE);
         static::assertIsArray($template);
-        static::assertSame('teaser/{{ product.id }}', $template['template']);
+        static::assertSame('teaser/{{ blog.id }}', $template['template']);
     }
 
     public function testUpdateRemovesRoutesThatAreNoLongerDeclared(): void
@@ -114,10 +114,10 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
 
         $this->createSeoUrl(self::IMPRINT_ROUTE);
 
-        $updated = ManifestFixture::empty()->withName('SwagSeoUrlApp')->withSeoUrl($this->teaserSeoUrl());
+        $updated = ManifestFixture::empty()->withName('CtSeoUrlApp')->withSeoUrl($this->teaserSeoUrl());
         $this->handler->update($this->appFixture->createUpdateContext($app, $updated));
 
-        static::assertSame(['product-teaser'], array_keys($this->fetchRoutes($app->getId())));
+        static::assertSame(['blog-teaser'], array_keys($this->fetchRoutes($app->getId())));
         static::assertSame([], $this->fetchSeoUrls(self::IMPRINT_ROUTE));
         static::assertNotNull($this->fetchDefaultTemplate(self::TEASER_ROUTE));
     }
@@ -163,24 +163,24 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
         return [$app];
     }
 
-    private function createManifest(string $template = '{{ product.translated.name }}'): ManifestFixture
+    private function createManifest(string $template = '{{ blog.translated.name }}'): ManifestFixture
     {
         return ManifestFixture::empty()
-            ->withName('SwagSeoUrlApp')
+            ->withName('CtSeoUrlApp')
             ->withSeoUrl(SeoUrl::fromArray([
                 'name' => 'imprint',
                 'label' => ['en-GB' => 'Imprint'],
-                'path' => ['en-GB' => 'swag-imprint'],
+                'path' => ['en-GB' => 'ct-imprint'],
             ]))
             ->withSeoUrl($this->teaserSeoUrl($template));
     }
 
-    private function teaserSeoUrl(string $template = '{{ product.translated.name }}'): SeoUrl
+    private function teaserSeoUrl(string $template = '{{ blog.translated.name }}'): SeoUrl
     {
         return SeoUrl::fromArray([
-            'name' => 'product-teaser',
-            'entity' => 'product',
-            'label' => ['en-GB' => 'Product teaser'],
+            'name' => 'blog-teaser',
+            'entity' => 'blog',
+            'label' => ['en-GB' => 'Blog teaser'],
             'defaultTemplate' => $template,
         ]);
     }
@@ -237,12 +237,13 @@ class SeoUrlRouteLifecycleHandlerTest extends TestCase
     private function createSeoUrl(string $routeName): void
     {
         $this->connection->insert('seo_url', [
+            'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
             'id' => Uuid::randomBytes(),
             'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
             'foreign_key' => Uuid::randomBytes(),
             'route_name' => $routeName,
             'path_info' => '/frontend/script/test',
-            'seo_path_info' => 'swag-' . Uuid::randomHex(),
+            'seo_path_info' => 'ct-' . Uuid::randomHex(),
             'is_canonical' => 1,
             'is_modified' => 1,
             'is_deleted' => 0,

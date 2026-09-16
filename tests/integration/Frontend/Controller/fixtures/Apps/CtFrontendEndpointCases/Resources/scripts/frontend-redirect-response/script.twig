@@ -1,0 +1,4 @@
+{% set blogId = hook.query['blog-id'] %}
+
+{% set response = services.response.redirect('frontend.blog.detail.page', { 'blogId': blogId }) %}
+{% do hook.setResponse(response) %}

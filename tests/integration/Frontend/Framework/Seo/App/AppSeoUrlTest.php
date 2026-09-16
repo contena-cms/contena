@@ -15,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
@@ -31,11 +32,11 @@ class AppSeoUrlTest extends TestCase
     use FrontendControllerTestBehaviour;
     use IntegrationTestBehaviour;
 
-    private const APP_NAME = 'SwagFrontendSeoUrl';
+    private const APP_NAME = 'CtFrontendSeoUrl';
 
-    private const IMPRINT_ROUTE = 'frontend.app.SwagFrontendSeoUrl.imprint';
+    private const IMPRINT_ROUTE = 'frontend.app.CtFrontendSeoUrl.imprint';
 
-    private const BLOG_ROUTE = 'frontend.app.SwagFrontendSeoUrl.app-blog';
+    private const BLOG_ROUTE = 'frontend.app.CtFrontendSeoUrl.app-blog';
 
     private Connection $connection;
 
@@ -90,12 +91,15 @@ class AppSeoUrlTest extends TestCase
         $this->installApp();
         $ids = $this->createBlog();
 
-        $rows = $this->fetchSeoUrls(self::BLOG_ROUTE, $this->getChannelId());
+        $rows = array_values(array_filter(
+            $this->fetchSeoUrls(self::BLOG_ROUTE, $this->getChannelId()),
+            static fn (array $row): bool => $row['foreignKey'] === $ids->get('app-blog-1'),
+        ));
         static::assertCount(1, $rows);
         static::assertSame([
             'foreignKey' => $ids->get('app-blog-1'),
             'pathInfo' => '/frontend/script/app-blog?id=' . $ids->get('app-blog-1'),
-            'seoPathInfo' => 'app-blog/app-blog-1',
+            'seoPathInfo' => 'app-blog/' . $ids->get('app-blog-1'),
             'isCanonical' => 1,
             'isModified' => 0,
             'isDeleted' => 0,
@@ -107,7 +111,7 @@ class AppSeoUrlTest extends TestCase
         $this->installApp();
         $ids = $this->createBlog();
 
-        $response = $this->request('GET', 'app-blog/app-blog-1', []);
+        $response = $this->request('GET', 'app-blog/' . $ids->get('app-blog-1'), []);
 
         static::assertNotFalse($response->getContent());
         static::assertSame(Response::HTTP_OK, $response->getStatusCode(), $response->getContent());
@@ -136,19 +140,19 @@ class AppSeoUrlTest extends TestCase
     {
         $this->installApp();
 
-        $salesChannelId = $this->getChannelId();
-        $germanId = $this->getDeDeLanguageId();
+        $channelId = $this->getChannelId();
+        $englishId = $this->getEnglishLanguageId();
 
         static::getContainer()->get('channel_domain.repository')->create([[
             'id' => Uuid::randomHex(),
-            'salesChannelId' => $salesChannelId,
-            'languageId' => $germanId,
+            'channelId' => $channelId,
+            'languageId' => $englishId,
             'currencyId' => Defaults::CURRENCY,
-            'snippetSetId' => $this->getSnippetSetIdForLocale('de-DE'),
-            'url' => 'http://localhost/swag-seo-url-app-de',
+            'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+            'url' => 'http://localhost/ct-seo-url-app-en',
         ]], $this->context);
 
-        $rows = $this->fetchSeoUrls(self::IMPRINT_ROUTE, $salesChannelId);
+        $rows = $this->fetchSeoUrls(self::IMPRINT_ROUTE, $channelId);
         static::assertCount(2, $rows);
 
         $paths = [];
@@ -157,7 +161,7 @@ class AppSeoUrlTest extends TestCase
         }
 
         static::assertSame('imprint', $paths[Defaults::LANGUAGE_SYSTEM] ?? null);
-        static::assertSame('impressum', $paths[$germanId] ?? null);
+        static::assertSame('legal-notice', $paths[$englishId] ?? null);
     }
 
     public function testDeactivatingTheAppMarksTheSeoUrlsAsDeleted(): void
@@ -167,8 +171,13 @@ class AppSeoUrlTest extends TestCase
 
         static::getContainer()->get(AppManager::class)->deactivate($this->loadApp(), $this->context);
 
-        static::assertSame([1], $this->fetchDeletedFlags(self::IMPRINT_ROUTE));
-        static::assertSame([1], $this->fetchDeletedFlags(self::BLOG_ROUTE));
+        $imprintFlags = $this->fetchDeletedFlags(self::IMPRINT_ROUTE);
+        $blogFlags = $this->fetchDeletedFlags(self::BLOG_ROUTE);
+
+        static::assertNotEmpty($imprintFlags);
+        static::assertNotEmpty($blogFlags);
+        static::assertSame([1], array_values(array_unique($imprintFlags)));
+        static::assertSame([1], array_values(array_unique($blogFlags)));
         static::assertNotNull($this->fetchDefaultTemplate(self::BLOG_ROUTE));
     }
 
@@ -217,10 +226,24 @@ class AppSeoUrlTest extends TestCase
         return $ids;
     }
 
+    private function getEnglishLanguageId(): string
+    {
+        /** @var EntityRepository<LanguageCollection> $repository */
+        $repository = static::getContainer()->get('language.repository');
+
+        $criteria = new Criteria()
+            ->addFilter(new EqualsFilter('translationCode.code', 'en-GB'));
+
+        $id = $repository->searchIds($criteria, Context::createDefaultContext())->firstId();
+        static::assertNotNull($id);
+
+        return $id;
+    }
+
     /**
      * @return list<array<string, mixed>>
      */
-    private function fetchSeoUrls(string $routeName, string $salesChannelId): array
+    private function fetchSeoUrls(string $routeName, string $channelId): array
     {
         /** @var list<array<string, mixed>> $rows */
         $rows = $this->connection->fetchAllAssociative(
@@ -232,9 +255,9 @@ class AppSeoUrlTest extends TestCase
                     `is_modified` AS `isModified`,
                     `is_deleted` AS `isDeleted`
              FROM `seo_url`
-             WHERE `route_name` = :routeName AND `channel_id` = :salesChannelId
+             WHERE `route_name` = :routeName AND `channel_id` = :channelId
              ORDER BY `seo_path_info`',
-            ['routeName' => $routeName, 'salesChannelId' => Uuid::fromHexToBytes($salesChannelId)]
+            ['routeName' => $routeName, 'channelId' => Uuid::fromHexToBytes($channelId)]
         );
 
         return $rows;

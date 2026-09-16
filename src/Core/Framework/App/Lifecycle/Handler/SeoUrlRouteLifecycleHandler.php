@@ -49,19 +49,22 @@ class SeoUrlRouteLifecycleHandler extends AbstractLifecycleHandler
             $this->connection->update(
                 'seo_url',
                 ['is_deleted' => 1, 'updated_at' => $now],
-                ['route_name' => $routeName]
+                [
+                    'data_scope_id' => Uuid::fromHexToBytes($context->context->getDataScopeId()),
+                    'route_name' => $routeName,
+                ]
             );
         }
     }
 
     public function uninstall(AppRemovalContext $context): void
     {
-        $this->removeSeoUrls($this->getRouteNames($context->app->getId(), $context->context));
+        $this->removeSeoUrls($this->getRouteNames($context->app->getId(), $context->context), $context->context);
     }
 
     public function delete(AppRemovalContext $context): void
     {
-        $this->removeSeoUrls($this->getRouteNames($context->app->getId(), $context->context));
+        $this->removeSeoUrls($this->getRouteNames($context->app->getId(), $context->context), $context->context);
     }
 
     private function persist(AppPersistContext $context): void
@@ -109,7 +112,8 @@ class SeoUrlRouteLifecycleHandler extends AbstractLifecycleHandler
                 $defaultTemplate['routeName'],
                 $defaultTemplate['entityName'],
                 $defaultTemplate['template'],
-                $defaultTemplate['previousTemplate']
+                $defaultTemplate['previousTemplate'],
+                $context->context,
             );
         }
     }
@@ -125,17 +129,24 @@ class SeoUrlRouteLifecycleHandler extends AbstractLifecycleHandler
             $context
         );
 
-        $this->removeSeoUrls(array_values($obsolete->map(static fn ($route): string => $route->getRouteName())));
+        $this->removeSeoUrls(array_values($obsolete->map(static fn ($route): string => $route->getRouteName())), $context);
     }
 
     /**
      * @param list<string> $routeNames
      */
-    private function removeSeoUrls(array $routeNames): void
+    private function removeSeoUrls(array $routeNames, Context $context): void
     {
+        $dataScopeId = Uuid::fromHexToBytes($context->getDataScopeId());
+
         foreach ($routeNames as $routeName) {
-            $this->connection->delete('seo_url', ['route_name' => $routeName]);
-            $this->connection->delete('seo_url_template', ['route_name' => $routeName]);
+            $criteria = [
+                'data_scope_id' => $dataScopeId,
+                'route_name' => $routeName,
+            ];
+
+            $this->connection->delete('seo_url', $criteria);
+            $this->connection->delete('seo_url_template', $criteria);
         }
     }
 
@@ -143,19 +154,22 @@ class SeoUrlRouteLifecycleHandler extends AbstractLifecycleHandler
         string $routeName,
         string $entityName,
         string $template,
-        ?string $previousTemplate
+        ?string $previousTemplate,
+        Context $context,
     ): void {
+        $dataScopeId = Uuid::fromHexToBytes($context->getDataScopeId());
         $existing = $this->connection->fetchAssociative(
             'SELECT LOWER(HEX(`id`)) AS `id`, `entity_name` AS `entityName`, `template`
              FROM `seo_url_template`
-             WHERE `route_name` = :routeName AND `channel_id` IS NULL',
-            ['routeName' => $routeName]
+             WHERE `data_scope_id` = :dataScopeId AND `route_name` = :routeName AND `channel_id` IS NULL',
+            ['dataScopeId' => $dataScopeId, 'routeName' => $routeName]
         );
 
         $now = $this->now();
 
         if ($existing === false) {
             $this->connection->insert('seo_url_template', [
+                'data_scope_id' => $dataScopeId,
                 'id' => Uuid::randomBytes(),
                 'channel_id' => null,
                 'route_name' => $routeName,
@@ -186,7 +200,10 @@ class SeoUrlRouteLifecycleHandler extends AbstractLifecycleHandler
 
         $update['updated_at'] = $now;
 
-        $this->connection->update('seo_url_template', $update, ['id' => Uuid::fromHexToBytes((string) $existing['id'])]);
+        $this->connection->update('seo_url_template', $update, [
+            'data_scope_id' => $dataScopeId,
+            'id' => Uuid::fromHexToBytes((string) $existing['id']),
+        ]);
     }
 
     /**
