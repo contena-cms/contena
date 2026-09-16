@@ -36,6 +36,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Routing\ApiRouteScope;
@@ -208,6 +209,9 @@ class ApiController extends AbstractController
         $versionContext->scope(Context::CRUD_API_SCOPE, static function (Context $versionContext) use ($entityId, $entityRepository): void {
             $entityRepository->delete([['id' => $entityId]], $versionContext);
         });
+
+        // Drop the change set before the version, so a merge starting in between finds no commits to replay.
+        $this->deleteVersionCommits($versionId, $context);
 
         $versionRepository = $this->definitionRegistry->getRepository('version');
         $versionRepository->delete([['id' => $versionId]], $context);
@@ -439,6 +443,22 @@ class ApiController extends AbstractController
         }
 
         throw ApiException::unsupportedAssociation($association->getPropertyName());
+    }
+
+    private function deleteVersionCommits(string $versionId, Context $context): void
+    {
+        $repository = $this->definitionRegistry->getRepository(VersionCommitDefinition::ENTITY_NAME);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('versionId', $versionId));
+
+        $ids = $repository->searchIds($criteria, $context)->getIds();
+
+        if ($ids === []) {
+            return;
+        }
+
+        $repository->delete(array_map(static fn (string $id): array => ['id' => $id], $ids), $context);
     }
 
     /**

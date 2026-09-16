@@ -131,6 +131,7 @@ trait AdminApiTestBehaviour
         $userId = Uuid::randomBytes();
 
         $connection = $browser->getContainer()->get(Connection::class);
+        $platformDataScopeId = Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE);
 
         $user = [
             'id' => $userId,
@@ -144,10 +145,10 @@ trait AdminApiTestBehaviour
 
         if ($aclPermissions !== null) {
             $aclRoleId = Uuid::randomBytes();
-            $user['admin'] = 0;
             $user['email'] = Hasher::hash($aclPermissions) . '@example.com';
             $aclRole = [
                 'id' => $aclRoleId,
+                'data_scope_id' => $platformDataScopeId,
                 'code' => 'test_permissions_' . $username,
                 'name' => 'testPermissions',
                 'privileges' => json_encode($aclPermissions, \JSON_THROW_ON_ERROR),
@@ -155,16 +156,32 @@ trait AdminApiTestBehaviour
             ];
             $connection->insert('acl_role', $aclRole);
             $connection->insert('user', $user);
+            $connection->insert('user_data_scope', [
+                'user_id' => $userId,
+                'data_scope_id' => $platformDataScopeId,
+                'active' => 1,
+                'admin' => 0,
+                'read_all_scopes' => 0,
+                'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            ]);
             $connection->insert('acl_user_role', [
+                'data_scope_id' => $platformDataScopeId,
                 'user_id' => $userId,
                 'acl_role_id' => $aclRoleId,
                 'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ]);
         } else {
-            $user['admin'] = 1;
             $user['email'] = 'admin@example.com';
             $connection->executeStatement('DELETE FROM user WHERE email = :mail', ['mail' => 'admin@example.com']);
             $connection->insert('user', $user);
+            $connection->insert('user_data_scope', [
+                'user_id' => $userId,
+                'data_scope_id' => $platformDataScopeId,
+                'active' => 1,
+                'admin' => 1,
+                'read_all_scopes' => 1,
+                'created_at' => new \DateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            ]);
         }
 
         $this->apiUsernames[] = $username;
