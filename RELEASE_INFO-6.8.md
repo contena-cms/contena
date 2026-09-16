@@ -16,6 +16,10 @@ The transform now also rejects `v-model` on a forwarded override binding inside 
 
 ## Core
 
+### `EntitySearchResult` supports result subclasses
+
+`Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult` is no longer marked `@final` and can be extended by specialized search-result types. Its constructor remains `final`; subclasses should use their own factory around the inherited constructor and initialize their additional state afterwards.
+
 ### New method `IdSearchResult::getPrimaryKeyData`
 
 The new `Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult::getPrimaryKeyData()` method returns IDs in repository write format.

@@ -9,8 +9,6 @@ use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
- * @final
- *
  * @template TEntityCollection of EntityCollection
  */
 class EntitySearchResult extends Struct
