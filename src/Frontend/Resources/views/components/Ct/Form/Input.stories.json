@@ -4,7 +4,7 @@
         "server": {
             "id": "Ct:Form:Input"
         },
-        "template": "<twig:Ct:Form:Input type=\"text\" name=\"firstName\" label=\"First name\" validationRules=\"required\" />"
+        "template": "<twig:Ct:Form:Input type=\"text\" name=\"name\" label=\"Name\" validationRules=\"required\" />"
     },
     "argTypes": {
         "name": {
@@ -14,10 +14,10 @@
         },
         "id": {
             "control": "text",
-            "description": "Id of the input. The label, description and feedback element are derived from it.",
+            "description": "Id of the input. Generated with a random suffix when omitted, so the same field can render twice on one page.",
             "table": {
                 "defaultValue": {
-                    "summary": "name"
+                    "summary": "name + random suffix"
                 }
             }
         },
@@ -118,19 +118,15 @@
                     "summary": "violationPath has violations"
                 }
             }
-        },
-        "additionalInputClass": {
-            "control": "text",
-            "description": "Additional classes on the input. `class` on the component tag dresses the wrapper instead."
         }
     },
     "stories": [
         {
             "name": "Input",
             "args": {
-                "name": "firstName",
+                "name": "name",
                 "type": "text",
-                "label": "First name",
+                "label": "Name",
                 "validationRules": "required"
             }
         },
@@ -159,9 +155,9 @@
         {
             "name": "Disabled",
             "args": {
-                "name": "memberName",
-                "label": "Member name",
-                "value": "Jane Doe",
+                "name": "memberNumber",
+                "label": "Member number",
+                "value": "10000",
                 "disabled": true
             }
         },

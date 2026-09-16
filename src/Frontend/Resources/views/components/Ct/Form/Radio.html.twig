@@ -4,26 +4,25 @@
 {% props
     name,
     value = '1',
-    id = "#{name}-#{value}",
+    id = "#{name}-#{value}-#{random()}",
     label = null,
     validationRules = null,
     required = validationRules is not empty and 'required' in validationRules,
     isInvalid = false,
-    additionalInputClass = null,
 %}
 
 {% set clientValidationRules = required and 'required' not in validationRules|default('')
     ? (validationRules is empty ? 'required' : "required,#{validationRules}")
     : validationRules %}
 
-{% set controlAttributes = attributes.without('class', 'style') %}
+{% set controlAttributes = attributes.without('class', 'style').defaults(attributes.nested('control')) %}
 
 {% if label is not empty %}
     {% set controlAttributes = controlAttributes.without('aria-label') %}
 {% endif %}
 
 {% set groupCVA = cva({
-    base: 'ct-form-radio form-check mb-2',
+    base: 'ct-form-radio form-check',
 }) %}
 
 {% set radioCVA = cva({
@@ -41,7 +40,7 @@
 } %}
 
 {% set radioAttributeDefaults = {
-    class: radioCVA.apply({ isInvalid }, additionalInputClass),
+    class: radioCVA.apply({ isInvalid }),
     type: 'radio',
     id: id,
     name: name,
@@ -57,7 +56,7 @@
     {% endblock %}
 
     {% block label %}
-        <twig:Ct:Form:Label
+        <twig:Ct:Form:Field:Label
             :fieldId="id"
             :label="label"
             variant="check"

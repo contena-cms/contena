@@ -3,7 +3,7 @@
 
 {% props
     name,
-    id = name,
+    id = "#{name}-#{random()}",
     label = null,
     options = [],
     value = null,
@@ -25,7 +25,7 @@
     : validationRules %}
 
 {% set groupCVA = cva({
-    base: 'ct-form-radio-group ct-form-field form-radio-group mb-3',
+    base: 'ct-form-radio-group ct-form-field',
 }) %}
 
 {% set attributeDefaults = {
@@ -35,7 +35,7 @@
 
 <fieldset {{ attributes.defaults(attributeDefaults) }}>
     {% block label %}
-        <twig:Ct:Form:FieldsetLabel
+        <twig:Ct:Form:Field:FieldsetLabel
             :label="label"
             :required="required"
             class="ct-form-radio-group__legend fs-5 fw-bold"
@@ -43,7 +43,7 @@
     {% endblock %}
 
     {% block description %}
-        <twig:Ct:Form:Description
+        <twig:Ct:Form:Field:Description
             :id="descriptionId"
             :description="description"
         />
@@ -66,7 +66,7 @@
     {% endblock %}
 
     {% block feedback %}
-        <twig:Ct:Form:Feedback
+        <twig:Ct:Form:Field:Feedback
             :id="feedbackId"
             :violationPath="violationPath"
             :formViolations="formViolations"

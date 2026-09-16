@@ -23,9 +23,11 @@
 {% set monthName = namePrefix ? namePrefix ~ '[birthdayMonth]' : 'birthdayMonth' %}
 {% set yearName = namePrefix ? namePrefix ~ '[birthdayYear]' : 'birthdayYear' %}
 
-{% set dayId = idPrefix ~ 'birthdayDay' %}
-{% set monthId = idPrefix ~ 'birthdayMonth' %}
-{% set yearId = idPrefix ~ 'birthdayYear' %}
+{% set idSuffix = random() %}
+
+{% set dayId = "#{idPrefix}birthdayDay-#{idSuffix}" %}
+{% set monthId = "#{idPrefix}birthdayMonth-#{idSuffix}" %}
+{% set yearId = "#{idPrefix}birthdayYear-#{idSuffix}" %}
 
 {% set dayLabel = 'account.personalBirthdaySelectDay'|trans|sw_sanitize %}
 {% set monthLabel = 'account.personalBirthdaySelectMonth'|trans|sw_sanitize %}
@@ -36,7 +38,7 @@
 {% set yearOptions = range(currentYear, startYear)|map(yearValue => { value: yearValue, label: yearValue }) %}
 
 {% set groupCVA = cva({
-    base: 'ct-form-birthday-select form-group',
+    base: 'ct-form-birthday-select',
 }) %}
 
 {% set attributeDefaults = {
@@ -45,7 +47,7 @@
 
 <fieldset {{ attributes.defaults(attributeDefaults) }}>
     {% block label %}
-        <twig:Ct:Form:FieldsetLabel
+        <twig:Ct:Form:Field:FieldsetLabel
             :label="label"
             :required="required"
         />
@@ -64,7 +66,7 @@
                 :formViolations="formViolations"
                 :violationPath="dayViolationPath"
                 autocomplete="bday-day"
-                class="ct-form-birthday-select__day col-4 mb-0"
+                class="ct-form-birthday-select__day col-4"
             />
         {% endblock %}
 
@@ -80,7 +82,7 @@
                 :formViolations="formViolations"
                 :violationPath="monthViolationPath"
                 autocomplete="bday-month"
-                class="ct-form-birthday-select__month col-4 mb-0"
+                class="ct-form-birthday-select__month col-4"
             />
         {% endblock %}
 
@@ -96,7 +98,7 @@
                 :formViolations="formViolations"
                 :violationPath="yearViolationPath"
                 autocomplete="bday-year"
-                class="ct-form-birthday-select__year col-4 mb-0"
+                class="ct-form-birthday-select__year col-4"
             />
         {% endblock %}
     </div>

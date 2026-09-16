@@ -4,7 +4,7 @@
         "server": {
             "id": "Ct:Form:Select"
         },
-        "template": "<twig:Ct:Form:Select name=\"salutationId\" label=\"Salutation\" :options=\"options\" />"
+        "template": "<twig:Ct:Form:Select name=\"languageId\" label=\"Language\" :options=\"options\" />"
     },
     "argTypes": {
         "name": {
@@ -14,10 +14,10 @@
         },
         "id": {
             "control": "text",
-            "description": "Id of the select. The label, description and feedback element are derived from it.",
+            "description": "Id of the select. Generated with a random suffix when omitted, so the same field can render twice on one page.",
             "table": {
                 "defaultValue": {
-                    "summary": "name"
+                    "summary": "name + random suffix"
                 }
             }
         },
@@ -99,31 +99,27 @@
                     "summary": "violationPath has violations"
                 }
             }
-        },
-        "additionalInputClass": {
-            "control": "text",
-            "description": "Additional classes on the select. `class` on the component tag dresses the wrapper instead."
         }
     },
     "stories": [
         {
             "name": "Select",
             "args": {
-                "name": "salutationId",
-                "label": "Salutation",
+                "name": "languageId",
+                "label": "Language",
                 "placeholder": "Please choose",
                 "options": [
                     {
-                        "value": "mr",
-                        "label": "Mr."
+                        "value": "en",
+                        "label": "English"
                     },
                     {
-                        "value": "ms",
-                        "label": "Ms."
+                        "value": "zh",
+                        "label": "Chinese"
                     },
                     {
-                        "value": "nd",
-                        "label": "Not specified"
+                        "value": "default",
+                        "label": "System default"
                     }
                 ]
             }

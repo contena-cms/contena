@@ -18,11 +18,11 @@
         },
         "namePrefix": {
             "control": "text",
-            "description": "Wraps the field names, e.g. \"address\" produces address[birthdayDay]."
+            "description": "Wraps the field names, e.g. \"billingAddress\" produces billingAddress[birthdayDay]."
         },
         "idPrefix": {
             "control": "text",
-            "description": "Prefix of the three select ids, needed when the component is used more than once per page."
+            "description": "Prefix for the three select ids. Uniqueness is already handled by a random suffix, so this only makes the ids predictable and readable, e.g. \"billing-birthdayDay-1234\"."
         },
         "day": {
             "control": "number",
@@ -106,8 +106,8 @@
         {
             "name": "Address form",
             "args": {
-                "namePrefix": "address",
-                "idPrefix": "address-"
+                "namePrefix": "billingAddress",
+                "idPrefix": "billing-"
             }
         }
     ]

@@ -1,0 +1,5 @@
+/* Bootstrap only reveals `.invalid-feedback` next to a control it marked itself. */
+.ct-form-feedback__message,
+.ct-form-feedback .invalid-feedback {
+    display: block;
+}

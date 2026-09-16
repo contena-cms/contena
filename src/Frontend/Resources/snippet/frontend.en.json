@@ -11,6 +11,7 @@
       "activate": "Activate",
       "deactivate": "Deactivate",
       "confirm": "Confirm",
+      "loading": "Loading...",
       "noteRequiredFields": "Fields marked with asterisks (*) are required."
     }
   },

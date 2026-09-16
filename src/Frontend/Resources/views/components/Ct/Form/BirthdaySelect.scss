@@ -1,0 +1,8 @@
+.ct-form-birthday-select {
+    margin-bottom: var(--ct-form-field-spacing);
+}
+
+/* The three selects are one composite field, so only the fieldset keeps the rhythm. */
+.ct-form-birthday-select .ct-form-field {
+    margin-bottom: 0;
+}

@@ -1,0 +1,8 @@
+:root {
+    /* Kept at the legacy `.form-group` value so migrated forms do not shift. */
+    --ct-form-field-spacing: 20px;
+}
+
+.ct-form-field {
+    margin-bottom: var(--ct-form-field-spacing);
+}
