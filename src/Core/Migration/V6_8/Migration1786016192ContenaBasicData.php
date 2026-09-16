@@ -277,6 +277,7 @@ class Migration1786016192ContenaBasicData extends MigrationStep
             'channel',
             'channel_analytics',
             'channel_country',
+            'channel_currency',
             'channel_domain',
             'channel_file',
             'channel_language',

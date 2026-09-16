@@ -3,6 +3,7 @@
 namespace Contena\Core\System\DependencyInjection;
 
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationDefinition;
+use Contena\Core\System\Currency\Channel\ChannelCurrencyDefinition;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -11,6 +12,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CurrencyDefinition::class)
         ->tag('contena.entity.definition');
+
+    $services->set(ChannelCurrencyDefinition::class)
+        ->tag('contena.channel.entity.definition');
 
     $services->set(CurrencyTranslationDefinition::class)
         ->tag('contena.entity.definition');

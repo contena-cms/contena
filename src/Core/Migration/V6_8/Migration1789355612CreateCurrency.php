@@ -43,6 +43,7 @@ class Migration1789355612CreateCurrency extends MigrationStep
     {
         $this->createTables($connection);
         $this->createCurrencies($connection);
+        $this->configureChannels($connection);
         $this->addDefaultAdministratorPrivileges($connection);
     }
 
@@ -117,6 +118,61 @@ SQL);
         }
     }
 
+    private function configureChannels(Connection $connection): void
+    {
+        $this->addColumn($connection, 'channel', 'currency_id', 'BINARY(16)');
+        $connection->executeStatement(
+            'UPDATE `channel` SET `currency_id` = :currencyId WHERE `currency_id` IS NULL',
+            ['currencyId' => Uuid::fromHexToBytes(Defaults::CURRENCY)],
+        );
+        $this->executeDdlStatement($connection, 'ALTER TABLE `channel` MODIFY `currency_id` BINARY(16) NOT NULL');
+        if (!$this->foreignKeyExists($connection, 'channel', 'fk.channel.currency_id')) {
+            $this->executeDdlStatement($connection, <<<'SQL'
+ALTER TABLE `channel`
+    ADD CONSTRAINT `fk.channel.currency_id` FOREIGN KEY (`currency_id`)
+        REFERENCES `currency` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+SQL);
+        }
+
+        $connection->executeStatement(<<<'SQL'
+CREATE TABLE IF NOT EXISTS `channel_currency` (
+    `data_scope_id` BINARY(16) NOT NULL,
+    `channel_id`    BINARY(16) NOT NULL,
+    `currency_id`   BINARY(16) NOT NULL,
+    PRIMARY KEY (`channel_id`, `currency_id`),
+    KEY `idx.channel_currency.data_scope_id` (`data_scope_id`),
+    CONSTRAINT `fk.channel_currency.data_scope_id` FOREIGN KEY (`data_scope_id`)
+        REFERENCES `data_scope` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT `fk.channel_currency.channel_id` FOREIGN KEY (`channel_id`)
+        REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk.channel_currency.currency_id` FOREIGN KEY (`currency_id`)
+        REFERENCES `currency` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+
+        $connection->executeStatement(<<<'SQL'
+INSERT IGNORE INTO `channel_currency` (`data_scope_id`, `channel_id`, `currency_id`)
+SELECT `data_scope_id`, `id`, `currency_id`
+FROM `channel`
+SQL);
+
+        $this->addColumn($connection, 'channel_domain', 'currency_id', 'BINARY(16)');
+        $connection->executeStatement(
+            'UPDATE `channel_domain` domain
+             INNER JOIN `channel` ON `channel`.`id` = domain.`channel_id`
+             SET domain.`currency_id` = channel.`currency_id`
+             WHERE domain.`currency_id` IS NULL',
+        );
+        $this->executeDdlStatement($connection, 'ALTER TABLE `channel_domain` MODIFY `currency_id` BINARY(16) NOT NULL');
+        if (!$this->foreignKeyExists($connection, 'channel_domain', 'fk.channel_domain.currency_id')) {
+            $this->executeDdlStatement($connection, <<<'SQL'
+ALTER TABLE `channel_domain`
+    ADD CONSTRAINT `fk.channel_domain.currency_id` FOREIGN KEY (`currency_id`)
+        REFERENCES `currency` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+SQL);
+        }
+    }
+
     private function addDefaultAdministratorPrivileges(Connection $connection): void
     {
         if (!TableHelper::tableExists($connection, 'acl_role')) {
@@ -129,7 +185,7 @@ SQL);
         }
 
         $privileges = Json::decodeToArray($encoded);
-        foreach (['currency', 'currency_translation'] as $resource) {
+        foreach (['currency', 'currency_translation', 'channel_currency'] as $resource) {
             foreach (['read', 'create', 'update', 'delete'] as $operation) {
                 $privileges[] = $resource . ':' . $operation;
             }

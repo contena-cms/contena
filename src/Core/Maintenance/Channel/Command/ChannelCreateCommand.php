@@ -32,6 +32,7 @@ class ChannelCreateCommand extends Command
             ->addOption('id', null, InputOption::VALUE_REQUIRED, 'Id for the channel', Uuid::randomHex())
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Name for the application')
             ->addOption('languageId', null, InputOption::VALUE_REQUIRED, 'Default language', Defaults::LANGUAGE_SYSTEM)
+            ->addOption('currencyId', null, InputOption::VALUE_REQUIRED, 'Default currency', Defaults::CURRENCY)
             ->addOption('countryId', null, InputOption::VALUE_REQUIRED, 'Default country')
             ->addOption('typeId', null, InputOption::VALUE_OPTIONAL, 'Channel type id')
             ->addOption('memberGroupId', null, InputOption::VALUE_REQUIRED, 'Default member group')
@@ -44,16 +45,15 @@ class ChannelCreateCommand extends Command
 
         try {
             $accessKey = $this->channelCreator->createChannel(
-                $input->getOption('id'),
-                $input->getOption('name') ?? 'API',
-                $input->getOption('typeId') ?? $this->getTypeId(),
-                $input->getOption('languageId'),
-                $input->getOption('countryId'),
-                $input->getOption('memberGroupId'),
-                $input->getOption('navigationCategoryId'),
-                null,
-                null,
-                $this->getChannelConfiguration($input, $output)
+                id: $input->getOption('id'),
+                name: $input->getOption('name') ?? 'API',
+                typeId: $input->getOption('typeId') ?? $this->getTypeId(),
+                languageId: $input->getOption('languageId'),
+                currencyId: $input->getOption('currencyId'),
+                countryId: $input->getOption('countryId'),
+                memberGroupId: $input->getOption('memberGroupId'),
+                navigationCategoryId: $input->getOption('navigationCategoryId'),
+                overwrites: $this->getChannelConfiguration($input, $output),
             );
 
             $io->success('Channel has been created successfully.');

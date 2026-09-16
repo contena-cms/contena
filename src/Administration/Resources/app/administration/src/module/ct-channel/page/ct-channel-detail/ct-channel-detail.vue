@@ -135,7 +135,9 @@ const getLoadCriteria = (): InstanceType<typeof Contena.Data.Criteria> => {
         .addSorting(Contena.Data.Criteria.sort('name', 'ASC'))
         .addFilter(Contena.Data.Criteria.equals('active', true));
     criteria.getAssociation('countries').addSorting(Contena.Data.Criteria.sort('name', 'ASC'));
+    criteria.getAssociation('currencies').addSorting(Contena.Data.Criteria.sort('name', 'ASC'));
     criteria.addAssociation('domains.language');
+    criteria.addAssociation('domains.currency');
     criteria.addAssociation('domains.snippetSet');
     criteria.addAssociation('themes');
     return criteria;
@@ -156,18 +158,24 @@ const loadChannel = async (): Promise<void> => {
         isLoading.value = false;
     }
 };
-const ensureAssociation = async <EntityName extends 'language' | 'country'>(
+const ensureAssociation = async <EntityName extends 'language' | 'country' | 'currency'>(
     entityName: EntityName,
     id: string | undefined,
     collection: EntityCollection<EntityName> | undefined,
 ): Promise<void> => {
-    if (!id || !collection || collection.has(id)) return;
+    if (!id || !collection || collection.has(id)) {
+        return;
+    }
     const entity = await repositoryFactory.create(entityName).get(id, Contena.Context.api);
-    if (entity) collection.add(entity);
+    if (entity) {
+        collection.add(entity);
+    }
 };
 const createChannel = async (): Promise<void> => {
     const typeId = String(route.params.typeId || '');
-    if (!typeId) return;
+    if (!typeId) {
+        return;
+    }
     isLoading.value = true;
     try {
         const entity = channelRepository.value.create(Contena.Context.api);
@@ -176,10 +184,14 @@ const createChannel = async (): Promise<void> => {
         entity.maintenance = false;
         entity.navigationCategoryDepth = 2;
         entity.languageId = Contena.Store.get('context').api.languageId;
+        entity.currencyId = Contena.Context.app.systemCurrencyId ?? undefined;
         const key = await channelService.generateKey();
         entity.accessKey = key.accessKey;
         channel.value = entity;
-        await ensureAssociation('language', entity.languageId, entity.languages);
+        await Promise.all([
+            ensureAssociation('language', entity.languageId, entity.languages),
+            ensureAssociation('currency', entity.currencyId, entity.currencies),
+        ]);
     } catch {
         createNotificationError({ message: t('ct-channel.detail.loadError') });
     } finally {
@@ -188,22 +200,29 @@ const createChannel = async (): Promise<void> => {
 };
 const validateRequiredFields = (): boolean => {
     const entity = channel.value;
-    if (!entity) return false;
+    if (!entity) {
+        return false;
+    }
     const required = [
         entity.name,
         entity.typeId,
         entity.languageId,
+        entity.currencyId,
         entity.countryId,
         entity.memberGroupId,
         entity.navigationCategoryId,
         entity.accessKey,
     ];
     const valid = required.every((value) => typeof value === 'string' && value.trim() !== '');
-    if (!valid) createNotificationError({ message: t('ct-channel.detail.requiredFields') });
+    if (!valid) {
+        createNotificationError({ message: t('ct-channel.detail.requiredFields') });
+    }
     return valid;
 };
 const onSave = async (): Promise<boolean> => {
-    if (!channel.value || !allowSaving.value || !validateRequiredFields()) return false;
+    if (!channel.value || !allowSaving.value || !validateRequiredFields()) {
+        return false;
+    }
     isLoading.value = true;
     try {
         const id = channel.value.id;
@@ -224,7 +243,9 @@ const onSave = async (): Promise<boolean> => {
     }
 };
 const openTab = (name: string): void => {
-    if (channel.value) void router.push({ name, params: { id: channel.value.id } });
+    if (channel.value) {
+        void router.push({ name, params: { id: channel.value.id } });
+    }
 };
 const abortOnLanguageChange = (): boolean => {
     return channel.value ? channelRepository.value.hasChanges(channel.value) : false;

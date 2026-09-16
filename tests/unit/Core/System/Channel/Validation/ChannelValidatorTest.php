@@ -13,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidat
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\Validation\ChannelValidator;
@@ -35,7 +36,7 @@ class ChannelValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
-            [ChannelDefinition::class, ChannelLanguageDefinition::class],
+            [ChannelDefinition::class, ChannelLanguageDefinition::class, ChannelCurrencyDefinition::class],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class),
         );
@@ -76,30 +77,6 @@ class ChannelValidatorTest extends TestCase
         $exception = $event->getExceptions()->getExceptions()[0];
         static::assertInstanceOf(WriteConstraintViolationException::class, $exception);
         static::assertSame('SYSTEM__NO_GIVEN_DEFAULT_LANGUAGE_ID', $exception->getViolations()->get(0)->getCode());
-    }
-
-    public function testUnsupportedChannelTypeDoesNotRequireDefaultLanguageInLanguageList(): void
-    {
-        $connection = $this->createMock(Connection::class);
-        $connection->expects($this->once())->method('fetchAllAssociative')->willReturn([]);
-
-        $event = new PreWriteValidationEvent(
-            WriteContext::createFromContext(Context::createDefaultContext()),
-            [new InsertCommand(
-                $this->definitionRegistry->getByEntityName(ChannelDefinition::ENTITY_NAME),
-                [
-                    'type_id' => Uuid::randomBytes(),
-                    'language_id' => Uuid::randomBytes(),
-                ],
-                ['id' => Uuid::randomBytes()],
-                static::createStub(EntityExistence::class),
-                '/0',
-            )],
-        );
-
-        new ChannelValidator($connection)->handleChannelLanguageIds($event);
-
-        static::assertCount(0, $event->getExceptions()->getExceptions());
     }
 
     public function testWebChannelSucceedsWithDefaultLanguageInLanguageList(): void

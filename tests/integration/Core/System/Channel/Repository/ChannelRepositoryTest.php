@@ -59,13 +59,16 @@ class ChannelRepositoryTest extends TestCase
             'accessKey' => $accessKey,
             'typeId' => Defaults::CHANNEL_TYPE_WEB,
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'countryId' => $countryId,
             'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             'navigationCategoryId' => $categoryId,
             'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => [['id' => Defaults::CURRENCY]],
             'countries' => [['id' => $countryId]],
             'domains' => [[
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $snippetSetId,
                 'url' => $domain,
             ]],
@@ -74,8 +77,9 @@ class ChannelRepositoryTest extends TestCase
         $criteria = new Criteria([$channelId]);
         $criteria->addAssociation('type');
         $criteria->addAssociation('languages');
+        $criteria->addAssociation('currencies');
         $criteria->addAssociation('countries');
-        $criteria->addAssociation('domains');
+        $criteria->addAssociation('domains.currency');
 
         $channel = $this->channelRepository->search($criteria, Context::createDefaultContext())->getEntities()->get($channelId);
 
@@ -85,12 +89,15 @@ class ChannelRepositoryTest extends TestCase
         static::assertSame($countryId, $channel->getCountryId());
         static::assertSame(TestDefaults::FALLBACK_MEMBER_GROUP, $channel->getMemberGroupId());
         $languages = $channel->getLanguages();
+        $currencies = $channel->getCurrencies();
         $countries = $channel->getCountries();
         $domains = $channel->getDomains();
         static::assertNotNull($languages);
+        static::assertNotNull($currencies);
         static::assertNotNull($countries);
         static::assertNotNull($domains);
         static::assertCount(1, $languages);
+        static::assertCount(1, $currencies);
         static::assertCount(1, $countries);
         static::assertCount(1, $domains);
 
@@ -99,5 +106,9 @@ class ChannelRepositoryTest extends TestCase
         static::assertSame($typeName, $type->getName());
         static::assertSame('regular-globe', $type->getIconName());
         static::assertSame([$domain], [$domains->first()?->getUrl()]);
+        static::assertSame(Defaults::CURRENCY, $channel->getCurrencyId());
+        static::assertSame(Defaults::CURRENCY, $currencies->first()?->getId());
+        static::assertSame(Defaults::CURRENCY, $domains->first()?->getCurrencyId());
+        static::assertSame(Defaults::CURRENCY, $domains->first()?->getCurrency()?->getId());
     }
 }

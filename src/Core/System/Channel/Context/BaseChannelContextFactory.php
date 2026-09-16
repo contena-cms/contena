@@ -14,6 +14,7 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupCollection;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 
@@ -24,6 +25,7 @@ use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
  *     originalContext?: Context,
  *     version-id?: string,
  *     languageId?: string,
+ *     currencyId?: string,
  *     countryId?: string,
  *     domainId?: string,
  * }
@@ -56,11 +58,30 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
 
         $criteria = new Criteria([$channelId]);
         $criteria->setTitle('base-context-factory::channel');
+        $criteria->addAssociation('currencies');
         $criteria->addAssociation('domains');
 
         $channel = $this->channelRepository->search($criteria, $context)->getEntities()->get($channelId);
         if (!$channel instanceof ChannelEntity) {
             throw ChannelException::channelNotFound($channelId);
+        }
+
+        $currencyId = $channel->getCurrencyId();
+        if (\array_key_exists(ChannelContextService::CURRENCY_ID, $options)) {
+            $currencyId = $options[ChannelContextService::CURRENCY_ID];
+            if (!\is_string($currencyId) || !Uuid::isValid($currencyId)) {
+                throw ChannelException::invalidCurrencyId();
+            }
+        }
+
+        $availableCurrencies = $channel->getCurrencies();
+        if ($availableCurrencies === null) {
+            throw ChannelException::currencyNotFound($currencyId);
+        }
+
+        $currency = $availableCurrencies->get($currencyId);
+        if (!$currency instanceof CurrencyEntity) {
+            throw ChannelException::currencyNotFound($currencyId);
         }
 
         $groupId = $channel->getMemberGroupId();
@@ -87,6 +108,7 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
         return new BaseChannelContext(
             $context,
             $channel,
+            $currency,
             $memberGroup,
             $country,
             $this->getLanguageInfo($context),

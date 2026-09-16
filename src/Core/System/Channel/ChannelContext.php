@@ -9,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\System\Member\MemberEntity;
 
@@ -31,6 +32,7 @@ class ChannelContext extends Struct
         protected string $token,
         private ?string $domainId,
         protected ChannelEntity $channel,
+        protected CurrencyEntity $currency,
         protected MemberGroupEntity $currentMemberGroup,
         protected CountryEntity $country,
         protected ?MemberEntity $member,
@@ -42,6 +44,11 @@ class ChannelContext extends Struct
     public function getCurrentMemberGroup(): MemberGroupEntity
     {
         return $this->currentMemberGroup;
+    }
+
+    public function getCurrency(): CurrencyEntity
+    {
+        return $this->currency;
     }
 
     public function getChannel(): ChannelEntity
@@ -240,6 +247,11 @@ class ChannelContext extends Struct
     public function getCountryId(): string
     {
         return $this->country->getId();
+    }
+
+    public function getCurrencyId(): string
+    {
+        return $this->currency->getId();
     }
 
     public function getImitatingUserId(): ?string

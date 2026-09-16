@@ -18,6 +18,8 @@ use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Context\ContextFactory;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupCollection;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
@@ -67,6 +69,37 @@ class BaseChannelContextFactoryTest extends TestCase
 
         $this->expectExceptionObject(ChannelException::memberGroupNotFound($channel->getMemberGroupId()));
         $factory->create($channel->getId());
+    }
+
+    public function testCurrencyIdMustBeAUuid(): void
+    {
+        $channel = $this->createChannel();
+        $factory = $this->createFactory(
+            [
+                'channel_default_language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+                'channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            new ChannelCollection([$channel]),
+        );
+
+        $this->expectExceptionObject(ChannelException::invalidCurrencyId());
+        $factory->create($channel->getId(), [ChannelContextService::CURRENCY_ID => 'not-a-uuid']);
+    }
+
+    public function testCurrencyMustBeAssignedToChannel(): void
+    {
+        $channel = $this->createChannel();
+        $currencyId = Uuid::randomHex();
+        $factory = $this->createFactory(
+            [
+                'channel_default_language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+                'channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            new ChannelCollection([$channel]),
+        );
+
+        $this->expectExceptionObject(ChannelException::currencyNotFound($currencyId));
+        $factory->create($channel->getId(), [ChannelContextService::CURRENCY_ID => $currencyId]);
     }
 
     public function testCountryNotFound(): void
@@ -119,6 +152,7 @@ class BaseChannelContextFactoryTest extends TestCase
         static::assertSame($channel->getId(), $context->getChannelId());
         static::assertSame($memberGroup, $context->getCurrentMemberGroup());
         static::assertSame($country, $context->getCountry());
+        static::assertSame(Defaults::CURRENCY, $context->getCurrencyId());
         static::assertSame(Defaults::LANGUAGE_SYSTEM, $context->getContext()->getLanguageId());
         static::assertSame('version-id', $context->getContext()->getVersionId());
         static::assertSame('English', $context->getLanguageInfo()->name);
@@ -137,6 +171,10 @@ class BaseChannelContextFactoryTest extends TestCase
         /** @var EntityCollection<PartialEntity>|null $languages */
         ?EntityCollection $languages = null,
     ): BaseChannelContextFactory {
+        if (\is_array($contextData)) {
+            $contextData['channel_data_scope_id'] = Defaults::PLATFORM_DATA_SCOPE;
+        }
+
         $connection = $this->createMock(Connection::class);
         $connection->expects($this->once())->method('fetchAssociative')->willReturn($contextData);
         $contextFactory = new ContextFactory($connection, new CollectingEventDispatcher());
@@ -173,6 +211,12 @@ class BaseChannelContextFactoryTest extends TestCase
         $channel->setMemberGroupId(Uuid::randomHex());
         $channel->setCountryId(Uuid::randomHex());
         $channel->setLanguageId(Defaults::LANGUAGE_SYSTEM);
+
+        $currency = new CurrencyEntity();
+        $currency->setId(Defaults::CURRENCY);
+        $channel->setCurrencyId($currency->getId());
+        $channel->setCurrency($currency);
+        $channel->setCurrencies(new CurrencyCollection([$currency]));
 
         return $channel;
     }

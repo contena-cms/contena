@@ -302,13 +302,16 @@ class MemberGroupSubscriberTest extends TestCase
             'name' => 'API Test case channel',
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'navigationCategoryId' => $this->getValidCategoryId(),
             'countryId' => $countryId,
             'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => [['id' => Defaults::CURRENCY]],
             'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             'domains' => [
                 [
                     'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                     'url' => 'http://localhost/' . Uuid::randomHex(),
                 ],

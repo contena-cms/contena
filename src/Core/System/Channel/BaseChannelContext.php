@@ -5,6 +5,7 @@ namespace Contena\Core\System\Channel;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 
 /**
@@ -19,6 +20,7 @@ class BaseChannelContext
     public function __construct(
         protected Context $context,
         protected ChannelEntity $channel,
+        protected CurrencyEntity $currency,
         protected MemberGroupEntity $currentMemberGroup,
         protected CountryEntity $country,
         private readonly LanguageInfo $languageInfo,
@@ -28,6 +30,16 @@ class BaseChannelContext
     public function getCurrentMemberGroup(): MemberGroupEntity
     {
         return $this->currentMemberGroup;
+    }
+
+    public function getCurrencyId(): string
+    {
+        return $this->currency->getId();
+    }
+
+    public function getCurrency(): CurrencyEntity
+    {
+        return $this->currency;
     }
 
     public function getChannelId(): string

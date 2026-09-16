@@ -5,6 +5,8 @@ namespace Contena\Core\System\Currency;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationCollection;
 
 class CurrencyEntity extends Entity
@@ -27,6 +29,12 @@ class CurrencyEntity extends Entity
     protected int $decimalPrecision;
 
     protected ?CurrencyTranslationCollection $translations = null;
+
+    protected ?ChannelCollection $channels = null;
+
+    protected ?ChannelCollection $channelDefaultAssignments = null;
+
+    protected ?ChannelDomainCollection $channelDomains = null;
 
     public function getFactor(): float
     {
@@ -106,5 +114,35 @@ class CurrencyEntity extends Entity
     public function setTranslations(CurrencyTranslationCollection $translations): void
     {
         $this->translations = $translations;
+    }
+
+    public function getChannels(): ?ChannelCollection
+    {
+        return $this->channels;
+    }
+
+    public function setChannels(ChannelCollection $channels): void
+    {
+        $this->channels = $channels;
+    }
+
+    public function getChannelDefaultAssignments(): ?ChannelCollection
+    {
+        return $this->channelDefaultAssignments;
+    }
+
+    public function setChannelDefaultAssignments(ChannelCollection $channelDefaultAssignments): void
+    {
+        $this->channelDefaultAssignments = $channelDefaultAssignments;
+    }
+
+    public function getChannelDomains(): ?ChannelDomainCollection
+    {
+        return $this->channelDomains;
+    }
+
+    public function setChannelDomains(ChannelDomainCollection $channelDomains): void
+    {
+        $this->channelDomains = $channelDomains;
     }
 }

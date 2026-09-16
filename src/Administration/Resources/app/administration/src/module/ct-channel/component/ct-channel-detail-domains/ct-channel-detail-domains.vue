@@ -29,6 +29,9 @@
                 <template #column-language="{ data }">
                     {{ data.language?.translated?.name || data.language?.name }}
                 </template>
+                <template #column-currency="{ data }">
+                    {{ data.currency?.translated?.name || data.currency?.name }}
+                </template>
                 <template #column-snippetSet="{ data }">
                     {{ data.snippetSet?.name }}
                 </template>
@@ -56,6 +59,14 @@
                         label-property="name"
                         value-property="id"
                         :label="t('ct-channel.detail.labelDomainLanguage')"
+                    />
+                    <mt-entity-select
+                        :model-value="currentDomain.currencyId"
+                        entity="currency"
+                        :repository="currencyRepositoryFactory"
+                        required
+                        :label="t('ct-channel.detail.labelDomainCurrency')"
+                        @update:model-value="onCurrencyUpdate"
                     />
                     <mt-entity-select
                         v-model="currentDomain.snippetSetId"
@@ -94,7 +105,6 @@
 
 <script setup lang="ts">
 /* global Entity */
-/* global Entity */
 import { computed, inject, ref, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
@@ -103,7 +113,7 @@ import './ct-channel-detail-domains.scss';
 
 type DomainBackup = Pick<
     Entity<'channel_domain'>,
-    'url' | 'languageId' | 'snippetSetId' | 'language' | 'snippetSet' | 'hreflangUseOnlyLocale'
+    'url' | 'languageId' | 'currencyId' | 'snippetSetId' | 'language' | 'currency' | 'snippetSet' | 'hreflangUseOnlyLocale'
 >;
 type Column = {
     property: string;
@@ -121,7 +131,9 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const repositoryFactory = inject<RepositoryFactory>('repositoryFactory');
-if (!repositoryFactory) throw new Error('The repository factory is unavailable.');
+if (!repositoryFactory) {
+    throw new Error('The repository factory is unavailable.');
+}
 
 const domains = computed(() => Array.from(props.channel.domains ?? []));
 const columns: Column[] = [
@@ -130,6 +142,13 @@ const columns: Column[] = [
         property: 'language',
         label: t('ct-channel.detail.columnDomainLanguage'),
         position: 200,
+        renderer: 'text',
+        width: 180,
+    },
+    {
+        property: 'currency',
+        label: t('ct-channel.detail.columnDomainCurrency'),
+        position: 250,
         renderer: 'text',
         width: 180,
     },
@@ -155,13 +174,54 @@ const domainModalTitle = computed(() =>
 );
 const domainSaveDisabled = computed(
     () =>
-        !currentDomain.value?.url || !currentDomain.value.languageId || !currentDomain.value.snippetSetId || props.disabled,
+        !currentDomain.value?.url ||
+        !currentDomain.value.languageId ||
+        !currentDomain.value.currencyId ||
+        !currentDomain.value.snippetSetId ||
+        props.disabled,
 );
+const selectableCurrencyIds = computed(() => {
+    const ids = props.channel.currencies?.getIds() ?? [];
+
+    for (const currencyId of [
+        props.channel.currencyId,
+        currentDomain.value?.currencyId,
+    ]) {
+        if (currencyId && !ids.includes(currencyId)) {
+            ids.push(currencyId);
+        }
+    }
+
+    return ids;
+});
+const currencyRepositoryFactory = () => {
+    const repository = repositoryFactory.create('currency');
+
+    return new Proxy(repository, {
+        get(target, property, receiver) {
+            if (property === 'search') {
+                return (criteria: InstanceType<typeof Contena.Data.Criteria>, context?: typeof Contena.Context.api) => {
+                    if (selectableCurrencyIds.value.length > 0) {
+                        criteria.addFilter(Contena.Data.Criteria.equalsAny('id', selectableCurrencyIds.value));
+                    }
+
+                    return target.search(criteria, context);
+                };
+            }
+
+            const value = Reflect.get(target, property, receiver);
+
+            return typeof value === 'function' ? value.bind(target) : value;
+        },
+    });
+};
 const backup = (domain: Entity<'channel_domain'>): DomainBackup => ({
     url: domain.url,
     languageId: domain.languageId,
+    currencyId: domain.currencyId,
     snippetSetId: domain.snippetSetId,
     language: domain.language,
+    currency: domain.currency,
     snippetSet: domain.snippetSet,
     hreflangUseOnlyLocale: domain.hreflangUseOnlyLocale,
 });
@@ -179,6 +239,16 @@ const openCreateModal = (defaults: Partial<Entity<'channel_domain'>> = {}): void
         domain.languageId = languageId;
         domain.language = null;
     }
+    const currencyId = defaults.currencyId ?? props.channel.currencyId;
+    const defaultCurrency =
+        props.channel.currencies?.get(currencyId) ?? (!defaults.currencyId ? props.channel.currencies?.first() : null);
+    if (defaultCurrency) {
+        domain.currencyId = defaultCurrency.id;
+        domain.currency = defaultCurrency;
+    } else if (currencyId) {
+        domain.currencyId = currencyId;
+        domain.currency = null;
+    }
     Object.assign(domain, defaults);
     currentDomain.value = domain;
     currentDomainBackup.value = backup(domain);
@@ -192,10 +262,14 @@ const openEditModal = (domain: Entity<'channel_domain'>): void => {
     duplicateUrl.value = false;
 };
 const onItemDelete = (domain: Entity<'channel_domain'>): void => {
-    if (!props.disabled) domainToDelete.value = domain;
+    if (!props.disabled) {
+        domainToDelete.value = domain;
+    }
 };
 const onContextSelect = ({ key, data }: { key: string; data: Entity<'channel_domain'> }): void => {
-    if (!props.disabled && key === 'edit') openEditModal(data);
+    if (!props.disabled && key === 'edit') {
+        openEditModal(data);
+    }
 };
 const closeDomainModal = (): void => {
     if (isEditing.value && currentDomain.value && currentDomainBackup.value) {
@@ -207,7 +281,9 @@ const closeDomainModal = (): void => {
     duplicateUrl.value = false;
 };
 const onDomainModalChange = (open: boolean): void => {
-    if (!open) closeDomainModal();
+    if (!open) {
+        closeDomainModal();
+    }
 };
 const domainExistsInDatabase = async (url: string, domainId: string): Promise<boolean> => {
     const criteria = new Contena.Data.Criteria(1, 25);
@@ -217,25 +293,49 @@ const domainExistsInDatabase = async (url: string, domainId: string): Promise<bo
 };
 const saveDomain = async (): Promise<void> => {
     const domain = currentDomain.value;
-    if (!domain || domainSaveDisabled.value) return;
+    if (!domain || domainSaveDisabled.value) {
+        return;
+    }
     const localDuplicate = props.channel.domains?.some((item) => item.id !== domain.id && item.url === domain.url);
     duplicateUrl.value = Boolean(localDuplicate) || (await domainExistsInDatabase(domain.url, domain.id));
-    if (duplicateUrl.value) return;
+    if (duplicateUrl.value) {
+        return;
+    }
 
     domain.language = props.channel.languages?.get(domain.languageId) ?? domain.language;
-    if (!isEditing.value && !props.channel.domains?.has(domain.id)) props.channel.domains?.add(domain);
+    domain.currency = props.channel.currencies?.get(domain.currencyId) ?? domain.currency;
+    if (!isEditing.value && !props.channel.domains?.has(domain.id)) {
+        props.channel.domains?.add(domain);
+    }
     currentDomain.value = null;
     currentDomainBackup.value = null;
     isEditing.value = false;
 };
 const onSnippetSetSelect = (snippetSet: Entity<'snippet_set'>): void => {
-    if (currentDomain.value) currentDomain.value.snippetSet = snippetSet;
+    if (currentDomain.value) {
+        currentDomain.value.snippetSet = snippetSet;
+    }
+};
+const onCurrencyUpdate = async (currencyId: string | null): Promise<void> => {
+    if (!currentDomain.value) {
+        return;
+    }
+
+    currentDomain.value.currencyId = currencyId ?? undefined;
+    currentDomain.value.currency = currencyId
+        ? (props.channel.currencies?.get(currencyId) ??
+          (await repositoryFactory.create('currency').get(currencyId, Contena.Context.api)))
+        : null;
 };
 const onDeleteModalChange = (open: boolean): void => {
-    if (!open) domainToDelete.value = null;
+    if (!open) {
+        domainToDelete.value = null;
+    }
 };
 const deleteDomain = (): void => {
-    if (domainToDelete.value) props.channel.domains?.remove(domainToDelete.value.id);
+    if (domainToDelete.value) {
+        props.channel.domains?.remove(domainToDelete.value.id);
+    }
     domainToDelete.value = null;
 };
 
@@ -250,6 +350,8 @@ ctDefinePublic({
     domainRepository,
     domainModalTitle,
     domainSaveDisabled,
+    selectableCurrencyIds,
+    currencyRepositoryFactory,
     openCreateModal,
     openEditModal,
     closeDomainModal,
@@ -257,6 +359,7 @@ ctDefinePublic({
     domainExistsInDatabase,
     saveDomain,
     onSnippetSetSelect,
+    onCurrencyUpdate,
     onDeleteModalChange,
     deleteDomain,
 });

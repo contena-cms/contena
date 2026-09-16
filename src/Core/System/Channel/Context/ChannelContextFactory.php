@@ -59,6 +59,7 @@ class ChannelContextFactory extends AbstractChannelContextFactory
             $token,
             $domainId,
             $base->getChannel(),
+            $base->getCurrency(),
             $memberGroup,
             $base->getCountry(),
             $member,

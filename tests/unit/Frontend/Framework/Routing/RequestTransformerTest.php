@@ -105,6 +105,7 @@ class RequestTransformerTest extends TestCase
             'typeId' => Uuid::randomHex(),
             'snippetSetId' => Uuid::randomHex(),
             'languageId' => $languageId,
+            'currencyId' => Uuid::randomHex(),
             'themeId' => Uuid::randomHex(),
             'maintenance' => '0',
             'maintenanceIpAllowlist' => '',
@@ -159,6 +160,7 @@ class RequestTransformerTest extends TestCase
             'typeId' => Uuid::randomHex(),
             'snippetSetId' => Uuid::randomHex(),
             'languageId' => $languageId,
+            'currencyId' => Uuid::randomHex(),
             'themeId' => Uuid::randomHex(),
             'maintenance' => '0',
             'maintenanceIpAllowlist' => '',
@@ -210,6 +212,7 @@ class RequestTransformerTest extends TestCase
             'typeId' => Uuid::randomHex(),
             'snippetSetId' => Uuid::randomHex(),
             'languageId' => $languageId,
+            'currencyId' => Uuid::randomHex(),
             'themeId' => Uuid::randomHex(),
             'maintenance' => '0',
             'maintenanceIpAllowlist' => '',
@@ -249,6 +252,7 @@ class RequestTransformerTest extends TestCase
         $domainId = Uuid::randomHex();
         $channelId = Uuid::randomHex();
         $languageId = Uuid::randomHex();
+        $currencyId = Uuid::randomHex();
         $snippetSetId = Uuid::randomHex();
         $themeId = Uuid::randomHex();
 
@@ -271,6 +275,7 @@ class RequestTransformerTest extends TestCase
             'typeId' => 'frontend',
             'snippetSetId' => $snippetSetId,
             'languageId' => $languageId,
+            'currencyId' => $currencyId,
             'themeId' => $themeId,
             'maintenance' => '0',
             'maintenanceIpAllowlist' => '',
@@ -292,6 +297,7 @@ class RequestTransformerTest extends TestCase
         static::assertSame($expectedFrontendUrl, $transformed->attributes->get(RequestTransformer::FRONTEND_URL));
         static::assertSame($expectedResolvedUri, $transformed->attributes->get(RequestTransformer::CHANNEL_RESOLVED_URI));
         static::assertSame($channelId, $transformed->attributes->get(PlatformRequest::ATTRIBUTE_CHANNEL_ID));
+        static::assertSame($currencyId, $transformed->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID));
         static::assertTrue($transformed->attributes->get(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST));
         static::assertSame('/', $transformed->attributes->get(RequestTransformer::CHANNEL_COOKIE_PATH));
     }
@@ -318,6 +324,7 @@ class RequestTransformerTest extends TestCase
             'typeId' => 'frontend',
             'snippetSetId' => Uuid::randomHex(),
             'languageId' => Uuid::randomHex(),
+            'currencyId' => Uuid::randomHex(),
             'themeId' => Uuid::randomHex(),
             'maintenance' => '0',
             'maintenanceIpAllowlist' => '',

@@ -11,9 +11,11 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
@@ -141,13 +143,105 @@ class ChannelValidatorTest extends TestCase
         static::assertSame([$newDefaultId], array_values($channel->getLanguages()->getIds()));
     }
 
+    public function testInsertRequiresDefaultCurrencyInCurrencyList(): void
+    {
+        $id = Uuid::randomHex();
+
+        try {
+            $this->channelRepository->create([
+                $this->getChannelData($id, [Defaults::LANGUAGE_SYSTEM], []),
+            ], Context::createDefaultContext());
+            static::fail('Expected the Channel currency validator to reject the missing currency mapping.');
+        } catch (WriteException $exception) {
+            static::assertStringContainsString(
+                \sprintf('The channel with id "%s" does not have a default channel currency id in the currency list.', $id),
+                $exception->getMessage(),
+            );
+        }
+    }
+
+    public function testUpdateCannotSetDefaultCurrencyOutsideCurrencyList(): void
+    {
+        $id = Uuid::randomHex();
+        $this->channelRepository->create([
+            $this->getChannelData($id, [Defaults::LANGUAGE_SYSTEM], [Defaults::CURRENCY]),
+        ], Context::createDefaultContext());
+
+        try {
+            $this->channelRepository->update([[
+                'id' => $id,
+                'currencyId' => $this->getAlternativeCurrencyId(),
+            ]], Context::createDefaultContext());
+            static::fail('Expected the Channel currency validator to reject the missing currency mapping.');
+        } catch (WriteException $exception) {
+            static::assertStringContainsString(
+                \sprintf('Cannot update default currency id because the given id is not in the currency list of channel with id "%s"', $id),
+                $exception->getMessage(),
+            );
+        }
+    }
+
+    public function testDefaultCurrencyCannotBeDeletedFromCurrencyList(): void
+    {
+        $id = Uuid::randomHex();
+        $this->channelRepository->create([
+            $this->getChannelData($id, [Defaults::LANGUAGE_SYSTEM], [Defaults::CURRENCY]),
+        ], Context::createDefaultContext());
+
+        try {
+            static::getContainer()->get('channel_currency.repository')->delete([[
+                'channelId' => $id,
+                'currencyId' => Defaults::CURRENCY,
+            ]], Context::createDefaultContext());
+            static::fail('Expected the Channel currency validator to reject deleting the default currency.');
+        } catch (WriteException $exception) {
+            static::assertStringContainsString(
+                \sprintf('Cannot delete default currency id from currency list of the channel with id "%s".', $id),
+                $exception->getMessage(),
+            );
+        }
+    }
+
+    public function testChangingTheDefaultCurrencyAndRemovingThePreviousDefaultInOneWrite(): void
+    {
+        $id = Uuid::randomHex();
+        $newDefaultId = $this->getAlternativeCurrencyId();
+        $context = Context::createDefaultContext();
+
+        $this->channelRepository->create([
+            $this->getChannelData($id, [Defaults::LANGUAGE_SYSTEM], [Defaults::CURRENCY, $newDefaultId]),
+        ], $context);
+
+        static::getContainer()->get(SyncService::class)->sync([
+            new SyncOperation('write', ChannelDefinition::ENTITY_NAME, SyncOperation::ACTION_UPSERT, [
+                ['id' => $id, 'currencyId' => $newDefaultId],
+            ]),
+            new SyncOperation('delete', ChannelCurrencyDefinition::ENTITY_NAME, SyncOperation::ACTION_DELETE, [
+                ['channelId' => $id, 'currencyId' => Defaults::CURRENCY],
+            ]),
+        ], $context, new SyncBehavior());
+
+        $criteria = new Criteria([$id]);
+        $criteria->addAssociation('currencies');
+
+        $channel = $this->channelRepository->search($criteria, $context)->getEntities()->first();
+
+        static::assertNotNull($channel);
+        static::assertSame($newDefaultId, $channel->getCurrencyId());
+        static::assertNotNull($channel->getCurrencies());
+        static::assertSame([$newDefaultId], array_values($channel->getCurrencies()->getIds()));
+    }
+
     /**
      * @param list<string> $languages
      *
      * @return array<string, mixed>
      */
-    private function getChannelData(string $id, array $languages = []): array
-    {
+    private function getChannelData(
+        string $id,
+        array $languages = [],
+        array $currencies = [Defaults::CURRENCY],
+    ): array {
         $countryId = $this->getValidCountryId();
 
         $data = [
@@ -155,6 +249,7 @@ class ChannelValidatorTest extends TestCase
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'typeId' => Defaults::CHANNEL_TYPE_API,
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'countryId' => $countryId,
             'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             'navigationCategoryId' => $this->getValidCategoryId(),
@@ -163,8 +258,22 @@ class ChannelValidatorTest extends TestCase
         ];
 
         $data['languages'] = array_map(static fn (string $languageId): array => ['id' => $languageId], $languages);
+        $data['currencies'] = array_map(static fn (string $currencyId): array => ['id' => $currencyId], $currencies);
 
         return $data;
+    }
+
+    private function getAlternativeCurrencyId(): string
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [new EqualsFilter('id', Defaults::CURRENCY)]));
+
+        $id = static::getContainer()->get('currency.repository')
+            ->searchIds($criteria, Context::createDefaultContext())
+            ->firstId();
+        static::assertNotNull($id);
+
+        return $id;
     }
 
     private function getEnglishLanguageId(): string

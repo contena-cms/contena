@@ -36,6 +36,7 @@ export interface ContextState {
         };
         environment: null | 'development' | 'production' | 'testing';
         fallbackLocale: null | string;
+        systemCurrencyId: null | EntityKey<'currency'>;
         features: null | {
             [FeatureKey: string]: boolean;
         };
@@ -73,6 +74,7 @@ const state: ContextState = reactive({
         },
         environment: null,
         fallbackLocale: null,
+        systemCurrencyId: null,
         features: null,
         windowId: null,
     },

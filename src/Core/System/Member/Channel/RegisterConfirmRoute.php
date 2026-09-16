@@ -100,6 +100,7 @@ class RegisterConfirmRoute extends AbstractRegisterConfirmRoute
                 channelId: $context->getChannelId(),
                 token: $newToken,
                 languageId: $context->getLanguageId(),
+                currencyId: $context->getCurrencyId(),
                 domainId: $context->getDomainId(),
                 originalContext: $context->getContext(),
                 memberId: $member->getId(),

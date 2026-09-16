@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -156,9 +157,10 @@ class ChannelProxyController extends AbstractController
         Context $originalContext,
     ): ChannelContext {
         return $this->contextService->get(new ChannelContextServiceParameters(
-            $channelId,
-            $this->getContextToken($request),
-            $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID),
+            channelId: $channelId,
+            token: $this->getContextToken($request),
+            languageId: $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID),
+            currencyId: $request->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID),
             originalContext: $originalContext,
         ));
     }

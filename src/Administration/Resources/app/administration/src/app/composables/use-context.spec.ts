@@ -23,6 +23,7 @@ describe('use-context', () => {
                 },
                 environment: null,
                 fallbackLocale: null,
+                systemCurrencyId: null,
                 features: null,
                 windowId: null,
             }),

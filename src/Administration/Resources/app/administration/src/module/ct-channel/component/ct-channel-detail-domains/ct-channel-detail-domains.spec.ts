@@ -7,6 +7,7 @@ type DomainsVm = {
     duplicateUrl: boolean;
     domainToDelete: Record<string, unknown> | null;
     deleteDomain: () => void;
+    selectableCurrencyIds: string[];
 };
 
 function domainsCollection(items: Record<string, unknown>[]) {
@@ -28,11 +29,18 @@ describe('ct-channel-detail-domains', () => {
             get: (id: string) => languages.find((language) => language.id === id) ?? null,
             first: () => languages[0],
         });
+        const currencies = Object.assign([{ id: 'currency-id', name: 'Euro' }], {
+            get: (id: string) => currencies.find((currency) => currency.id === id) ?? null,
+            first: () => currencies[0],
+            getIds: () => currencies.map((currency) => currency.id),
+        });
         const createdDomain = {
             id: 'new-domain-id',
             url: '',
             languageId: '',
             language: null,
+            currencyId: '',
+            currency: null,
             snippetSetId: '',
             isNew: () => true,
         };
@@ -41,7 +49,16 @@ describe('ct-channel-detail-domains', () => {
             search: jest.fn(() => Promise.resolve(Object.assign(searchResult, { total: searchResult.length }))),
         };
         const wrapper = shallowMount(component, {
-            props: { channel: { id: 'channel-id', languageId: 'language-id', domains, languages } },
+            props: {
+                channel: {
+                    id: 'channel-id',
+                    languageId: 'language-id',
+                    currencyId: 'currency-id',
+                    domains,
+                    languages,
+                    currencies,
+                },
+            },
             global: {
                 provide: { repositoryFactory: { create: () => repository } },
                 stubs: {
@@ -59,7 +76,7 @@ describe('ct-channel-detail-domains', () => {
         return { wrapper: wrapper as unknown as VueWrapper<DomainsVm>, domains, createdDomain };
     }
 
-    it('creates a Domain with the Channel default language and writes it to the association', async () => {
+    it('creates a Domain with the Channel default language and currency and writes it to the association', async () => {
         const { wrapper, domains, createdDomain } = createWrapper();
         wrapper.vm.openCreateModal();
         createdDomain.url = 'https://example.test';
@@ -68,6 +85,7 @@ describe('ct-channel-detail-domains', () => {
         await wrapper.vm.saveDomain();
 
         expect(createdDomain.languageId).toBe('language-id');
+        expect(createdDomain.currencyId).toBe('currency-id');
         expect(domains).toContainEqual(createdDomain);
     });
 
@@ -92,6 +110,12 @@ describe('ct-channel-detail-domains', () => {
 
         expect(createdDomain.languageId).toBe('unserved-language-id');
         expect(createdDomain.language).toBeNull();
+    });
+
+    it('restricts Domain currency choices to currencies assigned to the Channel', () => {
+        const { wrapper } = createWrapper();
+
+        expect(wrapper.vm.selectableCurrencyIds).toEqual(['currency-id']);
     });
 
     it('removes a Domain through the parent association for repository save', () => {

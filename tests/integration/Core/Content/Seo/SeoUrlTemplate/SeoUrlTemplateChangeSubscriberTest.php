@@ -334,14 +334,17 @@ class SeoUrlTemplateChangeSubscriberTest extends TestCase
             'typeId' => Defaults::CHANNEL_TYPE_WEB,
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'countryId' => $this->getValidCountryId(),
             'navigationCategoryId' => $navigationId,
             'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => [['id' => Defaults::CURRENCY]],
             'countries' => [['id' => $this->getValidCountryId()]],
             'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             'domains' => [
                 [
                     'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                     'url' => 'http://seo-config-reindex.test',
                 ],

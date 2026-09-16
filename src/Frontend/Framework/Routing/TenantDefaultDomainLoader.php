@@ -30,6 +30,7 @@ final class TenantDefaultDomainLoader
             'LOWER(HEX(channel.type_id)) typeId',
             'LOWER(HEX(COALESCE(domain.snippet_set_id, default_snippet_set.id))) snippetSetId',
             'LOWER(HEX(COALESCE(domain.language_id, channel.language_id))) languageId',
+            'LOWER(HEX(COALESCE(domain.currency_id, channel.currency_id))) currencyId',
             'LOWER(HEX(theme.id)) themeId',
             'channel.maintenance maintenance',
             'channel.maintenance_ip_allowlist maintenanceIpAllowlist',

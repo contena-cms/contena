@@ -24,6 +24,7 @@ use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelCountry\ChannelCountryDefinition;
+use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
@@ -137,6 +138,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('kernel.event_listener', ['event' => CookieGroupCollectEvent::class]);
 
     $services->set(ChannelFileDefinition::class)
+        ->tag('contena.entity.definition');
+
+    $services->set(ChannelCurrencyDefinition::class)
         ->tag('contena.entity.definition');
 
     $services->set(ChannelFileTemplateOverrideLoader::class)

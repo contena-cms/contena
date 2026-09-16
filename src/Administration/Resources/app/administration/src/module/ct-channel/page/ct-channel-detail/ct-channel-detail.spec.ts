@@ -17,6 +17,7 @@ describe('ct-channel-detail', () => {
             name: 'Frontend',
             typeId: 'frontend-type',
             languageId: 'language-id',
+            currencyId: 'currency-id',
             countryId: 'country-id',
             memberGroupId: 'member-group-id',
             navigationCategoryId: 'category-id',
@@ -26,14 +27,19 @@ describe('ct-channel-detail', () => {
         const get = jest.fn<Promise<typeof channel>, [string, unknown, InstanceType<typeof Contena.Data.Criteria>?]>(() =>
             Promise.resolve(channel),
         );
-        const create = jest.fn(() => ({ ...channel, id: 'new-channel-id', languages: undefined }));
+        const create = jest.fn(() => ({
+            ...channel,
+            id: 'new-channel-id',
+            languages: new Contena.Data.EntityCollection('/language', 'language', Contena.Context.api),
+            currencies: new Contena.Data.EntityCollection('/currency', 'currency', Contena.Context.api),
+        }));
         const save = jest.fn(() => Promise.resolve());
         const hasChanges = jest.fn(() => true);
         const repositoryFactory = {
             create: jest.fn((entity: string) =>
                 entity === 'channel'
                     ? { get, create, save, hasChanges }
-                    : { get: jest.fn(() => Promise.resolve({ id: 'language-id' })) },
+                    : { get: jest.fn((id: string) => Promise.resolve({ id })) },
             ),
         };
         const router = { push: jest.fn(), replace: jest.fn(() => Promise.resolve()) };
@@ -67,6 +73,10 @@ describe('ct-channel-detail', () => {
         };
     }
 
+    beforeEach(() => {
+        Contena.Context.app.systemCurrencyId = 'currency-id' as EntityKey<'currency'>;
+    });
+
     it('loads the upstream generic association set for an existing Channel', async () => {
         const { wrapper, get } = createWrapper();
         await flushPromises();
@@ -77,6 +87,7 @@ describe('ct-channel-detail', () => {
                 'type',
                 'languages',
                 'countries',
+                'currencies',
                 'domains',
                 'themes',
             ]),
@@ -103,7 +114,18 @@ describe('ct-channel-detail', () => {
         const { wrapper, get, route } = createWrapper();
         await flushPromises();
 
-        let resolveChannel: (channel: { id: string; name: string; translated: { name: string } }) => void = () => {};
+        let resolveChannel: (channel: {
+            id: string;
+            name: string;
+            typeId: string;
+            languageId: string;
+            currencyId: string;
+            countryId: string;
+            memberGroupId: string;
+            navigationCategoryId: string;
+            accessKey: string;
+            translated: { name: string };
+        }) => void = () => {};
         get.mockImplementationOnce(
             () =>
                 new Promise((resolve) => {
@@ -116,7 +138,18 @@ describe('ct-channel-detail', () => {
 
         expect(wrapper.vm.channel).toBeNull();
 
-        resolveChannel({ id: 'api-channel-id', name: 'API', translated: { name: 'API' } });
+        resolveChannel({
+            id: 'api-channel-id',
+            name: 'API',
+            typeId: 'api-type',
+            languageId: 'language-id',
+            currencyId: 'currency-id',
+            countryId: 'country-id',
+            memberGroupId: 'member-group-id',
+            navigationCategoryId: 'category-id',
+            accessKey: 'access-key',
+            translated: { name: 'API' },
+        });
         await flushPromises();
 
         expect(wrapper.vm.channel).toMatchObject({ id: 'api-channel-id', name: 'API' });
@@ -143,12 +176,18 @@ describe('ct-channel-detail', () => {
         expect(repositoryFactory.create).toHaveBeenCalledWith('channel', undefined, { useSync: true });
     });
 
-    it('creates a Channel with its selected type and a generated access key', async () => {
+    it('creates a Channel with its selected type, default currency, and generated access key', async () => {
         const { wrapper, create } = createWrapper(true);
         await flushPromises();
 
         expect(create).toHaveBeenCalled();
-        expect(wrapper.vm.channel).toMatchObject({ typeId: 'frontend-type', accessKey: 'generated-key', active: false });
+        expect(wrapper.vm.channel).toMatchObject({
+            typeId: 'frontend-type',
+            currencyId: 'currency-id',
+            accessKey: 'generated-key',
+            active: false,
+        });
+        expect((wrapper.vm.channel?.currencies as EntityCollection<'currency'>).has('currency-id')).toBe(true);
     });
 
     it('uses Meteor route tabs and navigates when a tab is clicked', async () => {

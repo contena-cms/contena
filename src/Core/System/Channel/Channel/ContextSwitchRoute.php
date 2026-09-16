@@ -26,6 +26,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ContextSwitchRoute extends AbstractContextSwitchRoute
 {
+    private const CURRENCY_ID = ChannelContextService::CURRENCY_ID;
     private const COUNTRY_ID = ChannelContextService::COUNTRY_ID;
     private const LANGUAGE_ID = ChannelContextService::LANGUAGE_ID;
 
@@ -51,6 +52,7 @@ class ContextSwitchRoute extends AbstractContextSwitchRoute
         $definition = new DataValidationDefinition('context_switch');
 
         $parameters = $data->only(
+            self::CURRENCY_ID,
             self::COUNTRY_ID,
             self::LANGUAGE_ID
         );
@@ -58,6 +60,7 @@ class ContextSwitchRoute extends AbstractContextSwitchRoute
         // pre validate to ensure correct data type. Existence of entities is checked later
         $definition
             ->add(self::LANGUAGE_ID, new Type('string'))
+            ->add(self::CURRENCY_ID, new Type('string'))
             ->add(self::COUNTRY_ID, new Type('string'))
         ;
 
@@ -73,8 +76,12 @@ class ContextSwitchRoute extends AbstractContextSwitchRoute
         $languageCriteria = new Criteria()
             ->addFilter(new EqualsFilter('language.channels.id', $channelId));
 
+        $currencyCriteria = new Criteria()
+            ->addFilter(new EqualsFilter('currency.channels.id', $channelId));
+
         $definition
             ->add(self::LANGUAGE_ID, new EntityExists(entity: 'language', context: $frameworkContext, criteria: $languageCriteria))
+            ->add(self::CURRENCY_ID, new EntityExists(entity: 'currency', context: $frameworkContext, criteria: $currencyCriteria))
             ->add(self::COUNTRY_ID, new EntityExists(entity: 'country', context: $frameworkContext))
         ;
 

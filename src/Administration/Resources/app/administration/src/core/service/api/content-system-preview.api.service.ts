@@ -15,6 +15,7 @@ type ContentSystemPreviewRequestPayload = {
     entityId: string;
     channelId: string;
     languageId?: string | null;
+    currencyId?: string | null;
     domainId?: string | null;
     memberId?: string | null;
     queryParameters?: Record<string, unknown>;

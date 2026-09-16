@@ -26,6 +26,7 @@ class ContextSwitchRouteTest extends TestCase
     {
         $context = Generator::generateChannelContext();
         $parameters = [
+            ChannelContextService::CURRENCY_ID => $context->getCurrencyId(),
             ChannelContextService::COUNTRY_ID => $context->getCountryId(),
             ChannelContextService::LANGUAGE_ID => $context->getLanguageId(),
         ];

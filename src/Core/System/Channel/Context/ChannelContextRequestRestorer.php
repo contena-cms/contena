@@ -35,13 +35,15 @@ class ChannelContextRequestRestorer
         }
 
         $domainId = $request->attributes->getString(ChannelRequest::ATTRIBUTE_DOMAIN_ID) ?: null;
+        $currencyId = $request->attributes->getString(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID) ?: null;
         $languageId = $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID) ?: null;
 
         $context = $this->contextService->get(new ChannelContextServiceParameters(
-            $channelId,
-            Uuid::randomHex(),
-            $languageId,
-            $domainId,
+            channelId: $channelId,
+            token: Uuid::randomHex(),
+            languageId: $languageId,
+            currencyId: $currencyId,
+            domainId: $domainId,
         ));
 
         $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT, $context);

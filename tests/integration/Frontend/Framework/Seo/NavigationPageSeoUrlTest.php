@@ -358,15 +358,18 @@ class NavigationPageSeoUrlTest extends TestCase
             'typeId' => Defaults::CHANNEL_TYPE_WEB,
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'countryId' => $countryId,
             'navigationCategoryId' => $navigationId,
             'navigationCategoryVersionId' => Defaults::LIVE_VERSION,
             'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => [['id' => Defaults::CURRENCY]],
             'countries' => [['id' => $countryId]],
             'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             'domains' => [
                 [
                     'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                     'url' => 'http://test.de',
                 ],

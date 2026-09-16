@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 /* global Entity, EntitySchema */
-/* global Entity, EntitySchema */
 import { computed, inject, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type RepositoryFactory from 'src/core/data/repository-factory.data';

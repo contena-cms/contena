@@ -8,6 +8,8 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\System\Member\MemberEntity;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +41,7 @@ class Generator extends TestCase
         ?array $areaRuleIds = [],
         ?LanguageInfo $languageInfo = null,
         ?array $overrides = [],
+        ?CurrencyEntity $currency = null,
     ): ChannelContext {
         $baseContext ??= Context::createDefaultContext();
         $token ??= self::TOKEN;
@@ -60,7 +63,15 @@ class Generator extends TestCase
             $channel->setTypeId(Defaults::CHANNEL_TYPE_WEB);
         }
 
+        if (!$currency) {
+            $currency = new CurrencyEntity();
+            $currency->setId(Defaults::CURRENCY);
+        }
+
         $channel->setLanguageId(Defaults::LANGUAGE_SYSTEM);
+        $channel->setCurrencyId($currency->getId());
+        $channel->setCurrency($currency);
+        $channel->setCurrencies(new CurrencyCollection([$currency]));
         $channel->setCountryId($country->getId());
         $channel->setCountry($country);
         $channel->setMemberGroupId($currentMemberGroup->getId());
@@ -77,6 +88,7 @@ class Generator extends TestCase
             $token,
             $domainId,
             $channel,
+            $currency,
             $currentMemberGroup,
             $country,
             $member,

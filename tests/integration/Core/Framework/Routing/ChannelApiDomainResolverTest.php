@@ -52,6 +52,7 @@ class ChannelApiDomainResolverTest extends TestCase
 
         static::assertIsString($request->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_ID));
         static::assertIsString($request->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_SNIPPET_SET_ID));
+        static::assertSame(Defaults::CURRENCY, $request->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID));
         static::assertNotSame('', $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID));
     }
 

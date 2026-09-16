@@ -46,6 +46,7 @@ class ContentPreviewPageBuilder
                 channelId: $payload->channelId,
                 token: Random::getAlphanumericString(32),
                 languageId: $payload->languageId,
+                currencyId: $payload->currencyId,
                 domainId: $payload->domainId,
                 originalContext: $context,
                 memberId: $payload->memberId,

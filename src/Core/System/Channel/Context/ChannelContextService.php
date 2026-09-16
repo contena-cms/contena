@@ -7,12 +7,15 @@ use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Event\ChannelContextCreatedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelContextService implements ChannelContextServiceInterface
 {
+    final public const string CURRENCY_ID = 'currencyId';
+
     final public const string LANGUAGE_ID = 'languageId';
 
     final public const string MEMBER_ID = 'memberId';
@@ -67,6 +70,12 @@ class ChannelContextService implements ChannelContextServiceInterface
                 $session[self::LANGUAGE_ID] = $parameters->getLanguageId();
             }
 
+            if ($parameters->getOverwriteCurrencyId() !== null) {
+                $session[self::CURRENCY_ID] = $parameters->getOverwriteCurrencyId();
+            } elseif ($parameters->getCurrencyId() !== null && !\array_key_exists(self::CURRENCY_ID, $session)) {
+                $session[self::CURRENCY_ID] = $parameters->getCurrencyId();
+            }
+
             if ($parameters->getDomainId() !== null) {
                 $session[self::DOMAIN_ID] = $parameters->getDomainId();
             }
@@ -87,7 +96,7 @@ class ChannelContextService implements ChannelContextServiceInterface
                 $session[self::COUNTRY_ID] = $parameters->getCountryId();
             }
 
-            $context = $this->factory->create($token, $parameters->getChannelId(), $session);
+            $context = $this->createContext($token, $parameters, $session);
 
             if ($parameters->getOriginalContext()?->hasState(Context::ELASTICSEARCH_EXPLAIN_MODE)) {
                 $context->addState(Context::ELASTICSEARCH_EXPLAIN_MODE);
@@ -122,6 +131,59 @@ class ChannelContextService implements ChannelContextServiceInterface
 
             return $context;
         });
+    }
+
+    /**
+     * @param array<string, mixed> $session
+     */
+    private function createContext(string $token, ChannelContextServiceParameters $parameters, array &$session): ChannelContext
+    {
+        // A stored selection can become unavailable after a channel configuration change. Explicit request options must still fail.
+        $recoveredOptions = [];
+        while (true) {
+            try {
+                return $this->factory->create($token, $parameters->getChannelId(), $session);
+            } catch (ChannelException $exception) {
+                $staleOption = $this->getStalePersistedOption($exception, $parameters, $session);
+                if ($staleOption === null || isset($recoveredOptions[$staleOption])) {
+                    throw $exception;
+                }
+
+                unset($session[$staleOption]);
+                if ($staleOption === self::CURRENCY_ID && $parameters->getCurrencyId() !== null) {
+                    $session[self::CURRENCY_ID] = $parameters->getCurrencyId();
+                }
+
+                $memberId = $session[self::MEMBER_ID] ?? null;
+                $this->contextPersister->save(
+                    $token,
+                    [$staleOption => null],
+                    $parameters->getChannelId(),
+                    \is_string($memberId) ? $memberId : null,
+                );
+                $recoveredOptions[$staleOption] = true;
+            }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $session
+     */
+    private function getStalePersistedOption(ChannelException $exception, ChannelContextServiceParameters $parameters, array $session): ?string
+    {
+        if ($exception->getErrorCode() === ChannelException::CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION
+            && $parameters->getLanguageId() === null
+            && \array_key_exists(self::LANGUAGE_ID, $session)) {
+            return self::LANGUAGE_ID;
+        }
+
+        if ($exception->getErrorCode() === ChannelException::CURRENCY_DOES_NOT_EXISTS_EXCEPTION
+            && $parameters->getOverwriteCurrencyId() === null
+            && \array_key_exists(self::CURRENCY_ID, $session)) {
+            return self::CURRENCY_ID;
+        }
+
+        return null;
     }
 
     /**

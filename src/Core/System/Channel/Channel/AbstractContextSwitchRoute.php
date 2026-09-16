@@ -8,7 +8,7 @@ use Contena\Core\System\Channel\ContextTokenResponse;
 
 /**
  * This route allows changing configurations inside the context.
- * Following parameters are allowed to change: "languageId" and "countryId".
+ * Following parameters are allowed to change: "currencyId", "languageId" and "countryId".
  */
 abstract class AbstractContextSwitchRoute
 {

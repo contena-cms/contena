@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\System\Channel\Context;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\System\Channel\BaseChannelContext;
@@ -10,6 +11,7 @@ use Contena\Core\System\Channel\Context\AbstractBaseChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupCollection;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupEntity;
 use Contena\Core\System\Member\MemberCollection;
@@ -116,9 +118,13 @@ class ChannelContextFactoryTest extends TestCase
         $country = new CountryEntity();
         $country->setId('country-id');
 
+        $currency = new CurrencyEntity();
+        $currency->setId(Defaults::CURRENCY);
+
         return new BaseChannelContext(
             Context::createDefaultContext(new ChannelApiSource($channel->getId())),
             $channel,
+            $currency,
             $memberGroup,
             $country,
             new LanguageInfo('English', 'en-GB'),

@@ -11,11 +11,14 @@ class ChannelContextServiceParameters extends Struct
         protected string $channelId,
         protected string $token,
         protected ?string $languageId = null,
+        // used as fallback if no currency is set in the existing context
+        protected ?string $currencyId = null,
         protected ?string $domainId = null,
         protected ?Context $originalContext = null,
         protected ?string $memberId = null,
         protected ?string $imitatingUserId = null,
         protected ?string $countryId = null,
+        protected ?string $overwriteCurrencyId = null,
     ) {
     }
 
@@ -32,6 +35,16 @@ class ChannelContextServiceParameters extends Struct
     public function getLanguageId(): ?string
     {
         return $this->languageId;
+    }
+
+    public function getCurrencyId(): ?string
+    {
+        return $this->currencyId;
+    }
+
+    public function getOverwriteCurrencyId(): ?string
+    {
+        return $this->overwriteCurrencyId;
     }
 
     public function getDomainId(): ?string

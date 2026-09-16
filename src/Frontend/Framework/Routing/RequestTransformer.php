@@ -62,6 +62,7 @@ class RequestTransformer implements RequestTransformerInterface
         ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST,
 
         ChannelRequest::ATTRIBUTE_DOMAIN_LOCALE,
+        ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID,
         ChannelRequest::ATTRIBUTE_DOMAIN_SNIPPET_SET_ID,
         ChannelRequest::ATTRIBUTE_DOMAIN_ID,
 
@@ -192,6 +193,7 @@ class RequestTransformer implements RequestTransformerInterface
         $transformedRequest->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_ID, $channel->channelId);
         $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST, true);
         $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_LOCALE, $channel->locale);
+        $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID, $channel->currencyId);
         $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_SNIPPET_SET_ID, $channel->snippetSetId);
         $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_ID, $channel->id);
         $transformedRequest->attributes->set(ChannelRequest::ATTRIBUTE_THEME_ID, $channel->themeId);

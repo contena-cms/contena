@@ -13,7 +13,7 @@ use Mcp\Capability\Attribute\McpTool;
 #[McpTool(
     name: 'contena-channel-api-context',
     title: 'Channel API Context',
-    description: 'Read the current Channel API context for this MCP session, including channel, language, context token, and whether a member is authenticated.'
+    description: 'Read the current Channel API context for this MCP session, including channel, language, currency, context token, and whether a member is authenticated.'
 )]
 #[McpToolGroup('channel-api')]
 class ChannelApiContextTool extends McpToolResponse
@@ -37,6 +37,7 @@ class ChannelApiContextTool extends McpToolResponse
             'channelId' => $context->getChannelId(),
             'token' => $context->getToken(),
             'languageId' => $context->getLanguageId(),
+            'currencyId' => $context->getCurrencyId(),
             'memberAuthenticated' => $member !== null,
             'memberId' => $member?->getId(),
         ]);

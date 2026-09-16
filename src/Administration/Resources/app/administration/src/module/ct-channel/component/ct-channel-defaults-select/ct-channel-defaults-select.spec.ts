@@ -3,6 +3,7 @@ import component from './index';
 
 type DefaultsSelectVm = {
     updateDefault: (id: string) => Promise<void>;
+    updateCollection: (ids: string[]) => Promise<void>;
     defaultId: string | null;
     propertyCollection: {
         entity: string;
@@ -25,6 +26,7 @@ const mtEntitySelectStub = {
 function createChannel() {
     const channel = {
         countries: new Contena.Data.EntityCollection('/country', 'country', Contena.Context.api),
+        domains: [{ id: 'domain-id', url: 'https://example.test', countryId: 'country-id' }],
         getEntityName: () => 'channel',
     };
 
@@ -93,5 +95,17 @@ describe('src/module/ct-channel/component/ct-channel-defaults-select', () => {
         expect(wrapper.vm.propertyCollection.entity).toBe('country');
         expect(wrapper.vm.propertyCollection.has('country-id')).toBe(true);
         expect(singleSelect.props('entity')).toBe('country');
+    });
+
+    it('should not remove an entity used by a Domain', async () => {
+        const wrapper = createWrapper({ propertyNameInDomain: 'countryId' });
+
+        await wrapper.vm.updateDefault('country-id');
+        await flushPromises();
+
+        await wrapper.vm.updateCollection([]);
+        await flushPromises();
+
+        expect(wrapper.vm.propertyCollection.has('country-id')).toBe(true);
     });
 });

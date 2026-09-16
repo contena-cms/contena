@@ -24,6 +24,7 @@ class ChannelApiContextToolTest extends TestCase
         $channelContext->method('getChannelId')->willReturn('channel-id');
         $channelContext->method('getToken')->willReturn('context-token');
         $channelContext->method('getLanguageId')->willReturn('language-id');
+        $channelContext->method('getCurrencyId')->willReturn('currency-id');
         $channelContext->method('getMember')->willReturn($member);
 
         $contextProvider = static::createStub(ChannelApiMcpContextProvider::class);
@@ -36,6 +37,7 @@ class ChannelApiContextToolTest extends TestCase
         static::assertSame('channel-id', $data['data']['channelId']);
         static::assertSame('context-token', $data['data']['token']);
         static::assertSame('language-id', $data['data']['languageId']);
+        static::assertSame('currency-id', $data['data']['currencyId']);
         static::assertTrue($data['data']['memberAuthenticated']);
         static::assertSame('member-id', $data['data']['memberId']);
     }

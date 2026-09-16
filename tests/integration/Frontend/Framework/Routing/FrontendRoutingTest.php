@@ -215,6 +215,7 @@ class FrontendRoutingTest extends TestCase
                     'id' => Uuid::randomHex(),
                     'url' => ($case->https ? 'https://' : 'http://') . $case->host . $request->getBaseUrl() . $case->channelPrefix,
                     'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 ],
             ],
@@ -234,14 +235,21 @@ class FrontendRoutingTest extends TestCase
                 'typeId' => Defaults::CHANNEL_TYPE_WEB,
                 'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'navigationCategoryId' => $this->getValidCategoryId(),
                 'countryId' => $countryId,
                 'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+                'currencies' => [['id' => Defaults::CURRENCY]],
                 'countries' => [['id' => $countryId]],
                 'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             ];
 
-            return array_merge_recursive($defaults, $channelData);
+            $channel = array_merge_recursive($defaults, $channelData);
+            foreach ($channel['domains'] ?? [] as &$domain) {
+                $domain['currencyId'] ??= Defaults::CURRENCY;
+            }
+
+            return $channel;
         }, $channels);
 
         /** @var EntityRepository<ChannelCollection> $channelRepository */

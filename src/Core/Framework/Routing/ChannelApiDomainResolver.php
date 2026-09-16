@@ -56,6 +56,7 @@ class ChannelApiDomainResolver implements EventSubscriberInterface
         }
 
         $request->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_ID, $domain['id']);
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_CURRENCY_ID, $domain['currencyId']);
         $request->attributes->set(ChannelRequest::ATTRIBUTE_DOMAIN_SNIPPET_SET_ID, $domain['snippetSetId']);
 
         if ($request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID, '') === '') {
@@ -69,12 +70,12 @@ class ChannelApiDomainResolver implements EventSubscriberInterface
     }
 
     /**
-     * @return array{id: string, languageId: string, snippetSetId: string}|null
+     * @return array{id: string, languageId: string, currencyId: string, snippetSetId: string}|null
      */
     private function fetchDomain(string $channelId, string $domainUrl): ?array
     {
         $domain = $this->connection->fetchAssociative(
-            'SELECT LOWER(HEX(id)) AS id, LOWER(HEX(language_id)) AS languageId, LOWER(HEX(snippet_set_id)) AS snippetSetId
+            'SELECT LOWER(HEX(id)) AS id, LOWER(HEX(language_id)) AS languageId, LOWER(HEX(currency_id)) AS currencyId, LOWER(HEX(snippet_set_id)) AS snippetSetId
              FROM channel_domain
              WHERE channel_id = :channelId
                AND (url = :url OR url = CONCAT(:url, \'/\'))',
@@ -91,6 +92,7 @@ class ChannelApiDomainResolver implements EventSubscriberInterface
         return [
             'id' => (string) $domain['id'],
             'languageId' => (string) $domain['languageId'],
+            'currencyId' => (string) $domain['currencyId'],
             'snippetSetId' => (string) $domain['snippetSetId'],
         ];
     }

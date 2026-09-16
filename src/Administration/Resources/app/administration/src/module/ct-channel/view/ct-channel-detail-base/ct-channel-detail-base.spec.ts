@@ -10,6 +10,7 @@ type DetailBaseVm = {
     serviceCategories: EntityCollection<'category'>;
     countryCriteria: InstanceType<typeof Contena.Data.Criteria>;
     languageCriteria: InstanceType<typeof Contena.Data.Criteria>;
+    currencyCriteria: InstanceType<typeof Contena.Data.Criteria>;
     isWebChannel: boolean;
     isDomainAware: boolean;
     unservedLanguages: Array<{ id: string }>;
@@ -72,6 +73,8 @@ describe('ct-channel-detail-base', () => {
             countryId: 'country-id',
             languages: entityCollection('language', [{ id: 'language-id', name: 'English' }]),
             countries: entityCollection('country', [{ id: 'country-id', name: 'United Kingdom' }]),
+            currencyId: 'currency-id',
+            currencies: entityCollection('currency', [{ id: 'currency-id', name: 'Euro' }]),
             domains: entityCollection('channel_domain'),
             maintenanceIpAllowlist: [],
             ...channelOverrides,
@@ -150,6 +153,11 @@ describe('ct-channel-detail-base', () => {
             naturalSorting: false,
         });
         expect(wrapper.vm.languageCriteria.parse().filter).toEqual([{ type: 'equals', field: 'active', value: true }]);
+        expect(wrapper.vm.currencyCriteria.parse().sort?.[0]).toEqual({
+            field: 'name',
+            order: 'ASC',
+            naturalSorting: false,
+        });
     });
 
     it('recognizes web and API channels as domain-aware', async () => {

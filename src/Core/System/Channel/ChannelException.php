@@ -33,6 +33,8 @@ class ChannelException extends HttpException
     final public const CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION = 'SYSTEM__CHANNEL_LANGUAGE_NOT_AVAILABLE';
     final public const COUNTRY_INVALID_EXCEPTION = 'SYSTEM__COUNTRY_INVALID';
     final public const COUNTRY_NOT_FOUND = 'SYSTEM__COUNTRY_NOT_FOUND';
+    final public const CURRENCY_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__CURRENCY_DOES_NOT_EXISTS_EXCEPTION';
+    final public const CURRENCY_INVALID_EXCEPTION = 'SYSTEM__CURRENCY_INVALID_EXCEPTION';
     private const string INVALID_UUID_MESSAGE_TEMPLATE = 'Provided %s is not a valid UUID';
 
     public static function contextPermissionsLocked(): self
@@ -111,6 +113,25 @@ class ChannelException extends HttpException
             Response::HTTP_PRECONDITION_FAILED,
             self::COUNTRY_INVALID_EXCEPTION,
             \sprintf(self::INVALID_UUID_MESSAGE_TEMPLATE, 'country ID'),
+        );
+    }
+
+    public static function currencyNotFound(string $currencyId): self
+    {
+        return new self(
+            Response::HTTP_NOT_FOUND,
+            self::CURRENCY_DOES_NOT_EXISTS_EXCEPTION,
+            self::$couldNotFindMessage,
+            ['entity' => 'currency', 'field' => 'id', 'value' => $currencyId],
+        );
+    }
+
+    public static function invalidCurrencyId(): self
+    {
+        return new self(
+            Response::HTTP_PRECONDITION_FAILED,
+            self::CURRENCY_INVALID_EXCEPTION,
+            \sprintf(self::INVALID_UUID_MESSAGE_TEMPLATE, 'currency ID'),
         );
     }
 

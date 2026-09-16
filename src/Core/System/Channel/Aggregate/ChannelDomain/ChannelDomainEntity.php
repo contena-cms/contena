@@ -6,6 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetEntity;
 
@@ -17,6 +18,10 @@ class ChannelDomainEntity extends Entity
     protected string $dataScopeId;
 
     protected string $url;
+
+    protected ?string $currencyId = null;
+
+    protected ?CurrencyEntity $currency = null;
 
     protected ?string $snippetSetId = null;
 
@@ -94,6 +99,26 @@ class ChannelDomainEntity extends Entity
     public function setLanguage(LanguageEntity $language): void
     {
         $this->language = $language;
+    }
+
+    public function getCurrencyId(): ?string
+    {
+        return $this->currencyId;
+    }
+
+    public function setCurrencyId(?string $currencyId): void
+    {
+        $this->currencyId = $currencyId;
+    }
+
+    public function getCurrency(): ?CurrencyEntity
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?CurrencyEntity $currency): void
+    {
+        $this->currency = $currency;
     }
 
     public function getSnippetSetId(): ?string

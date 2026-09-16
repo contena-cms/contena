@@ -17,6 +17,7 @@ final class ChannelRequest
      * Domain-resolved attributes.
      */
     public const string ATTRIBUTE_DOMAIN_ID = 'contena-channel-domain-id';
+    public const string ATTRIBUTE_DOMAIN_CURRENCY_ID = 'contena-channel-domain-currency-id';
     public const string ATTRIBUTE_DOMAIN_LOCALE = '_locale';
     public const string ATTRIBUTE_DOMAIN_SNIPPET_SET_ID = 'contena-channel-snippet-set-id';
 

@@ -28,6 +28,7 @@ final class ContentPreviewRequest
         #[Assert\NotBlank]
         public readonly string $channelId,
         public readonly ?string $languageId = null,
+        public readonly ?string $currencyId = null,
         public readonly ?string $domainId = null,
         public readonly ?string $memberId = null,
         #[Assert\Type('array')]

@@ -288,6 +288,7 @@ class RequestTransformerTest extends TestCase
             'seo_url',
             [
                 'id' => Uuid::randomBytes(),
+                'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                 'language_id' => Uuid::fromHexToBytes($this->zhLanguageId),
                 'channel_id' => Uuid::fromHexToBytes($zhUkId),
                 'foreign_key' => Uuid::randomBytes(),
@@ -322,6 +323,7 @@ class RequestTransformerTest extends TestCase
             'seo_url',
             [
                 'id' => Uuid::randomBytes(),
+                'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                 'language_id' => Uuid::fromHexToBytes($this->zhLanguageId),
                 'channel_id' => Uuid::fromHexToBytes($channelId),
                 'foreign_key' => Uuid::randomBytes(),
@@ -360,6 +362,7 @@ class RequestTransformerTest extends TestCase
             'seo_url',
             [
                 'id' => Uuid::randomBytes(),
+                'data_scope_id' => Uuid::fromHexToBytes(Defaults::PLATFORM_DATA_SCOPE),
                 'language_id' => Uuid::fromHexToBytes($this->zhLanguageId),
                 'channel_id' => Uuid::fromHexToBytes($channelId),
                 'foreign_key' => Uuid::randomBytes(),
@@ -481,6 +484,7 @@ class RequestTransformerTest extends TestCase
                     'id' => $zhDomainId,
                     'url' => $zhUrl,
                     'languageId' => self::LOCALE_ZH_CN_ISO,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => self::LOCALE_ZH_CN_ISO,
                 ],
                 [
@@ -529,9 +533,11 @@ class RequestTransformerTest extends TestCase
                 'typeId' => Defaults::CHANNEL_TYPE_WEB,
                 'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'navigationCategoryId' => $this->getValidCategoryId(),
                 'countryId' => $this->getValidCountryId(),
                 'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+                'currencies' => [['id' => Defaults::CURRENCY]],
                 'countries' => [['id' => $this->getValidCountryId()]],
                 'memberGroupId' => TestDefaults::FALLBACK_MEMBER_GROUP,
             ];
@@ -547,6 +553,8 @@ class RequestTransformerTest extends TestCase
             }
 
             foreach ($channelData['domains'] as &$domain) {
+                $domain['currencyId'] ??= Defaults::CURRENCY;
+
                 if ($domain['languageId'] === self::LOCALE_ZH_CN_ISO) {
                     $domain['languageId'] = $this->zhLanguageId;
                 }

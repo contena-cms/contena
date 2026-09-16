@@ -57,6 +57,7 @@ class SitemapGenerateCommandTest extends TestCase
             'typeId' => Defaults::CHANNEL_TYPE_WEB,
             'domains' => [[
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 'url' => 'http://valid.test',
             ]],
@@ -66,6 +67,7 @@ class SitemapGenerateCommandTest extends TestCase
             'typeId' => Defaults::CHANNEL_TYPE_API,
             'domains' => [[
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 'url' => 'http://api.test',
             ]],
@@ -97,6 +99,7 @@ class SitemapGenerateCommandTest extends TestCase
             'typeId' => Defaults::CHANNEL_TYPE_WEB,
             'domains' => [[
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 'url' => 'http://valid.test',
             ]],

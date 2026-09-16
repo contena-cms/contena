@@ -19,6 +19,8 @@ use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationC
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Member\Aggregate\MemberGroup\MemberGroupCollection;
@@ -35,6 +37,8 @@ class ChannelEntity extends Entity
     protected string $typeId;
 
     protected string $languageId;
+
+    protected string $currencyId;
 
     protected string $countryId;
 
@@ -98,6 +102,8 @@ class ChannelEntity extends Entity
 
     protected ?LanguageEntity $language = null;
 
+    protected ?CurrencyEntity $currency = null;
+
     protected ?CountryEntity $country = null;
 
     protected ?MemberGroupEntity $memberGroup = null;
@@ -113,6 +119,8 @@ class ChannelEntity extends Entity
     protected ?ChannelAnalyticsEntity $analytics = null;
 
     protected ?LanguageCollection $languages = null;
+
+    protected ?CurrencyCollection $currencies = null;
 
     protected ?CountryCollection $countries = null;
 
@@ -174,6 +182,16 @@ class ChannelEntity extends Entity
     public function setLanguageId(string $languageId): void
     {
         $this->languageId = $languageId;
+    }
+
+    public function getCurrencyId(): string
+    {
+        return $this->currencyId;
+    }
+
+    public function setCurrencyId(string $currencyId): void
+    {
+        $this->currencyId = $currencyId;
     }
 
     public function getCountryId(): string
@@ -378,6 +396,16 @@ class ChannelEntity extends Entity
         $this->language = $language;
     }
 
+    public function getCurrency(): ?CurrencyEntity
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(CurrencyEntity $currency): void
+    {
+        $this->currency = $currency;
+    }
+
     public function getCountry(): ?CountryEntity
     {
         return $this->country;
@@ -546,6 +574,16 @@ class ChannelEntity extends Entity
     public function setLanguages(LanguageCollection $languages): void
     {
         $this->languages = $languages;
+    }
+
+    public function getCurrencies(): ?CurrencyCollection
+    {
+        return $this->currencies;
+    }
+
+    public function setCurrencies(CurrencyCollection $currencies): void
+    {
+        $this->currencies = $currencies;
     }
 
     public function getCountries(): ?CountryCollection

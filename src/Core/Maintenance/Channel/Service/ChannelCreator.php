@@ -40,6 +40,7 @@ class ChannelCreator
 
     /**
      * @param list<string>|null $languages
+     * @param list<string>|null $currencies
      * @param list<string>|null $countries
      * @param array<string, mixed> $overwrites
      */
@@ -48,15 +49,18 @@ class ChannelCreator
         string $name,
         string $typeId,
         ?string $languageId = null,
+        ?string $currencyId = null,
         ?string $countryId = null,
         ?string $memberGroupId = null,
         ?string $navigationCategoryId = null,
         ?array $languages = null,
+        ?array $currencies = null,
         ?array $countries = null,
         array $overwrites = []
     ): string {
         $context = Context::createDefaultContext();
         $languageId ??= Defaults::LANGUAGE_SYSTEM;
+        $currencyId ??= Defaults::CURRENCY;
         $countryId ??= $this->getFirstActiveCountryId($context);
 
         $data = [
@@ -65,10 +69,12 @@ class ChannelCreator
             'typeId' => $typeId,
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => $languageId,
+            'currencyId' => $currencyId,
             'countryId' => $countryId,
             'memberGroupId' => $memberGroupId ?? $this->getMemberGroupId($context),
             'navigationCategoryId' => $navigationCategoryId ?? $this->getRootCategoryId($context),
             'languages' => $this->formatToMany($languages, $languageId, 'language', $context),
+            'currencies' => $this->formatToMany($currencies, $currencyId, 'currency', $context),
             'countries' => $this->formatToMany($countries, $countryId, 'country', $context),
         ];
 

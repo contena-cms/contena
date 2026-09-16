@@ -143,6 +143,7 @@ class RegisterRoute extends AbstractRegisterRoute
                 channelId: $context->getChannelId(),
                 token: $newToken,
                 languageId: $context->getLanguageId(),
+                currencyId: $context->getCurrencyId(),
                 domainId: $context->getDomainId(),
                 memberId: $memberEntity->getId(),
             )

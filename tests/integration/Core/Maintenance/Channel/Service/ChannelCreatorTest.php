@@ -37,10 +37,15 @@ class ChannelCreatorTest extends TestCase
         $id = Uuid::randomHex();
         $this->channelCreator->createChannel($id, 'test', Defaults::CHANNEL_TYPE_API);
 
-        $channel = $this->channelRepository->search(new Criteria([$id]), Context::createDefaultContext())->getEntities()->first();
+        $criteria = new Criteria([$id]);
+        $criteria->addAssociation('currencies');
+        $channel = $this->channelRepository->search($criteria, Context::createDefaultContext())->getEntities()->first();
 
         static::assertNotNull($channel);
         static::assertSame('test', $channel->getName());
         static::assertSame(Defaults::CHANNEL_TYPE_API, $channel->getTypeId());
+        static::assertSame(Defaults::CURRENCY, $channel->getCurrencyId());
+        static::assertNotNull($channel->getCurrencies());
+        static::assertTrue($channel->getCurrencies()->has(Defaults::CURRENCY));
     }
 }

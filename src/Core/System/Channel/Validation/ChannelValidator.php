@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\Validation;
 
-use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
@@ -10,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelException;
@@ -22,21 +22,27 @@ use Symfony\Component\Validator\ConstraintViolationList;
 /**
  * @internal
  *
- * @phpstan-type CurrentLanguageStates list<array{channel_id: string, current_default: string, language_id: string}>
+ * @phpstan-type CurrentChannelStates list<array<string, string>>
  */
 class ChannelValidator implements EventSubscriberInterface
 {
     private const INSERT_VALIDATION_MESSAGE = 'The channel with id "%s" does not have a default channel language id in the language list.';
     private const INSERT_VALIDATION_CODE = 'SYSTEM__NO_GIVEN_DEFAULT_LANGUAGE_ID';
 
-    private const DUPLICATED_ENTRY_VALIDATION_MESSAGE = 'The channel language "%s" for the channel "%s" already exists.';
-    private const DUPLICATED_ENTRY_VALIDATION_CODE = 'SYSTEM__DUPLICATED_CHANNEL_LANGUAGE';
-
     private const UPDATE_VALIDATION_MESSAGE = 'Cannot update default language id because the given id is not in the language list of channel with id "%s"';
     private const UPDATE_VALIDATION_CODE = 'SYSTEM__CANNOT_UPDATE_DEFAULT_LANGUAGE_ID';
 
     private const DELETE_VALIDATION_MESSAGE = 'Cannot delete default language id from language list of the channel with id "%s".';
     private const DELETE_VALIDATION_CODE = 'SYSTEM__CANNOT_DELETE_DEFAULT_LANGUAGE_ID';
+
+    private const CURRENCY_INSERT_VALIDATION_MESSAGE = 'The channel with id "%s" does not have a default channel currency id in the currency list.';
+    private const CURRENCY_INSERT_VALIDATION_CODE = 'SYSTEM__NO_GIVEN_DEFAULT_CURRENCY_ID';
+
+    private const CURRENCY_UPDATE_VALIDATION_MESSAGE = 'Cannot update default currency id because the given id is not in the currency list of channel with id "%s"';
+    private const CURRENCY_UPDATE_VALIDATION_CODE = 'SYSTEM__CANNOT_UPDATE_DEFAULT_CURRENCY_ID';
+
+    private const CURRENCY_DELETE_VALIDATION_MESSAGE = 'Cannot delete default currency id from currency list of the channel with id "%s".';
+    private const CURRENCY_DELETE_VALIDATION_CODE = 'SYSTEM__CANNOT_DELETE_DEFAULT_CURRENCY_ID';
 
     /**
      * @internal
@@ -54,41 +60,88 @@ class ChannelValidator implements EventSubscriberInterface
 
     public function handleChannelLanguageIds(PreWriteValidationEvent $event): void
     {
-        $mapping = $this->extractMapping($event);
+        $this->validateMapping(
+            event: $event,
+            defaultField: 'language_id',
+            mappingEntity: ChannelLanguageDefinition::ENTITY_NAME,
+            mappingTable: 'channel_language',
+            mappingField: 'language_id',
+            insertValidationMessage: self::INSERT_VALIDATION_MESSAGE,
+            insertValidationCode: self::INSERT_VALIDATION_CODE,
+            deleteValidationMessage: self::DELETE_VALIDATION_MESSAGE,
+            deleteValidationCode: self::DELETE_VALIDATION_CODE,
+            updateValidationMessage: self::UPDATE_VALIDATION_MESSAGE,
+            updateValidationCode: self::UPDATE_VALIDATION_CODE,
+        );
 
+        $this->validateMapping(
+            event: $event,
+            defaultField: 'currency_id',
+            mappingEntity: ChannelCurrencyDefinition::ENTITY_NAME,
+            mappingTable: 'channel_currency',
+            mappingField: 'currency_id',
+            insertValidationMessage: self::CURRENCY_INSERT_VALIDATION_MESSAGE,
+            insertValidationCode: self::CURRENCY_INSERT_VALIDATION_CODE,
+            deleteValidationMessage: self::CURRENCY_DELETE_VALIDATION_MESSAGE,
+            deleteValidationCode: self::CURRENCY_DELETE_VALIDATION_CODE,
+            updateValidationMessage: self::CURRENCY_UPDATE_VALIDATION_MESSAGE,
+            updateValidationCode: self::CURRENCY_UPDATE_VALIDATION_CODE,
+        );
+    }
+
+    private function validateMapping(
+        PreWriteValidationEvent $event,
+        string $defaultField,
+        string $mappingEntity,
+        string $mappingTable,
+        string $mappingField,
+        string $insertValidationMessage,
+        string $insertValidationCode,
+        string $deleteValidationMessage,
+        string $deleteValidationCode,
+        string $updateValidationMessage,
+        string $updateValidationCode,
+    ): void {
+        $mapping = $this->extractMapping($event, $defaultField, $mappingEntity, $mappingField);
         if ($mapping->count() === 0) {
             return;
         }
 
-        $channelIds = $mapping->getKeys();
-        $states = $this->fetchCurrentLanguageStates($channelIds);
-
-        $this->mergeCurrentStatesWithMapping($mapping, $states);
-
-        $this->validateLanguages($mapping, $event);
+        $states = $this->fetchCurrentStates($mapping->getKeys(), $defaultField, $mappingTable, $mappingField);
+        $this->mergeCurrentStatesWithMapping($mapping, $states, $mappingField);
+        $this->validateMappingData(
+            mapping: $mapping,
+            event: $event,
+            insertValidationMessage: $insertValidationMessage,
+            insertValidationCode: $insertValidationCode,
+            deleteValidationMessage: $deleteValidationMessage,
+            deleteValidationCode: $deleteValidationCode,
+            updateValidationMessage: $updateValidationMessage,
+            updateValidationCode: $updateValidationCode,
+        );
     }
 
-    private function extractMapping(PreWriteValidationEvent $event): Mapping
+    private function extractMapping(PreWriteValidationEvent $event, string $defaultField, string $mappingEntity, string $mappingField): Mapping
     {
         $mapping = new Mapping();
         foreach ($event->getCommands() as $command) {
             if ($command->getEntityName() === ChannelDefinition::ENTITY_NAME) {
-                $this->handleChannelMapping($mapping, $command);
+                $this->handleChannelMapping($mapping, $command, $defaultField);
 
                 continue;
             }
 
-            if ($command->getEntityName() === ChannelLanguageDefinition::ENTITY_NAME) {
-                $this->handleChannelLanguageMapping($mapping, $command);
+            if ($command->getEntityName() === $mappingEntity) {
+                $this->handleChannelMappingCommand($mapping, $command, $mappingField);
             }
         }
 
         return $mapping;
     }
 
-    private function handleChannelMapping(Mapping $mapping, WriteCommand $command): void
+    private function handleChannelMapping(Mapping $mapping, WriteCommand $command, string $defaultField): void
     {
-        if (!isset($command->getPayload()['language_id'])) {
+        if (!isset($command->getPayload()[$defaultField])) {
             return;
         }
 
@@ -100,30 +153,22 @@ class ChannelValidator implements EventSubscriberInterface
         }
 
         if ($command instanceof UpdateCommand) {
-            $channelData->updateId = Uuid::fromBytesToHex($command->getPayload()['language_id']);
+            $channelData->updateId = Uuid::fromBytesToHex($command->getPayload()[$defaultField]);
 
             return;
         }
 
-        if (!$command instanceof InsertCommand || !$this->isSupportedChannelType($command)) {
+        if (!$command instanceof InsertCommand) {
             return;
         }
 
-        $channelData->newDefault = Uuid::fromBytesToHex($command->getPayload()['language_id']);
+        $channelData->newDefault = Uuid::fromBytesToHex($command->getPayload()[$defaultField]);
         $channelData->inserts = [];
     }
 
-    private function isSupportedChannelType(WriteCommand $command): bool
+    private function handleChannelMappingCommand(Mapping $mapping, WriteCommand $command, string $mappingField): void
     {
-        $typeId = Uuid::fromBytesToHex($command->getPayload()['type_id']);
-
-        return $typeId === Defaults::CHANNEL_TYPE_WEB
-            || $typeId === Defaults::CHANNEL_TYPE_API;
-    }
-
-    private function handleChannelLanguageMapping(Mapping $mapping, WriteCommand $command): void
-    {
-        $language = Uuid::fromBytesToHex($command->getPrimaryKey()['language_id']);
+        $mappingId = Uuid::fromBytesToHex($command->getPrimaryKey()[$mappingField]);
         $id = Uuid::fromBytesToHex($command->getPrimaryKey()['channel_id']);
 
         $channelData = $mapping->get($id);
@@ -133,39 +178,38 @@ class ChannelValidator implements EventSubscriberInterface
         }
 
         if ($command instanceof DeleteCommand) {
-            $channelData->deletions[] = $language;
+            $channelData->deletions[] = $mappingId;
 
             return;
         }
 
         if ($command instanceof InsertCommand) {
             $inserts = $channelData->inserts ?? [];
-            $inserts[] = $language;
+            $inserts[] = $mappingId;
             $channelData->inserts = $inserts;
         }
     }
 
-    private function validateLanguages(Mapping $mapping, PreWriteValidationEvent $event): void
-    {
+    private function validateMappingData(
+        Mapping $mapping,
+        PreWriteValidationEvent $event,
+        string $insertValidationMessage,
+        string $insertValidationCode,
+        string $deleteValidationMessage,
+        string $deleteValidationCode,
+        string $updateValidationMessage,
+        string $updateValidationCode,
+    ): void {
         $inserts = [];
-        $duplicates = [];
         $deletions = [];
         $updates = [];
 
         foreach ($mapping as $channelId => $channelData) {
-            if ($channelData->inserts !== null) {
-                if ($this->isInvalidInsertCase($channelData)) {
-                    $inserts[$channelId] = $channelData->newDefault;
-                }
-
-                $duplicatedIds = $this->getDuplicates($channelData);
-
-                if ($duplicatedIds !== []) {
-                    $duplicates[$channelId] = $duplicatedIds;
-                }
+            if ($channelData->inserts !== null && $this->isInvalidInsertCase($channelData)) {
+                $inserts[$channelId] = $channelData->newDefault;
             }
 
-            $deletedDefault = $this->findDeletedDefaultLanguageId($channelData);
+            $deletedDefault = $this->findDeletedDefaultMappingId($channelData);
             if ($deletedDefault !== null) {
                 $deletions[$channelId] = $deletedDefault;
             }
@@ -175,10 +219,9 @@ class ChannelValidator implements EventSubscriberInterface
             }
         }
 
-        $this->writeDuplicateViolationExceptions($duplicates, $event);
-        $this->writeViolationExceptions($inserts, self::INSERT_VALIDATION_MESSAGE, self::INSERT_VALIDATION_CODE, $event);
-        $this->writeViolationExceptions($deletions, self::DELETE_VALIDATION_MESSAGE, self::DELETE_VALIDATION_CODE, $event);
-        $this->writeViolationExceptions($updates, self::UPDATE_VALIDATION_MESSAGE, self::UPDATE_VALIDATION_CODE, $event);
+        $this->writeViolationExceptions($inserts, $insertValidationMessage, $insertValidationCode, $event);
+        $this->writeViolationExceptions($deletions, $deleteValidationMessage, $deleteValidationCode, $event);
+        $this->writeViolationExceptions($updates, $updateValidationMessage, $updateValidationCode, $event);
     }
 
     /**
@@ -206,11 +249,7 @@ class ChannelValidator implements EventSubscriberInterface
             && !($channelData->inserts !== null && \in_array($updateId, $channelData->inserts, true));
     }
 
-    /**
-     * Compares the deletions against the default language in effect after this write rather than the stored
-     * one, so that assigning a new default and removing the previous one in a single write stays valid.
-     */
-    private function findDeletedDefaultLanguageId(ChannelData $channelData): ?string
+    private function findDeletedDefaultMappingId(ChannelData $channelData): ?string
     {
         $default = $channelData->updateId ?? $channelData->newDefault ?? $channelData->currentDefault;
 
@@ -222,57 +261,13 @@ class ChannelValidator implements EventSubscriberInterface
     }
 
     /**
-     * @return list<string>
-     */
-    private function getDuplicates(ChannelData $channelData): array
-    {
-        if ($channelData->inserts === null) {
-            throw ChannelException::invalidMappingOperation('Inserts are not allowed to be null while calling this method.');
-        }
-
-        return array_values(array_intersect($channelData->state, $channelData->inserts));
-    }
-
-    /**
-     * @param array<string, list<string>> $duplicates
-     */
-    private function writeDuplicateViolationExceptions(array $duplicates, PreWriteValidationEvent $event): void
-    {
-        if (!$duplicates) {
-            return;
-        }
-
-        $violations = new ConstraintViolationList();
-
-        foreach ($duplicates as $id => $duplicateLanguages) {
-            foreach ($duplicateLanguages as $languageId) {
-                $violations->add(new ConstraintViolation(
-                    \sprintf(self::DUPLICATED_ENTRY_VALIDATION_MESSAGE, $languageId, $id),
-                    \sprintf(self::DUPLICATED_ENTRY_VALIDATION_MESSAGE, '{{ languageId }}', '{{ channelId }}'),
-                    [
-                        '{{ channelId }}' => $id,
-                        '{{ languageId }}' => $languageId,
-                    ],
-                    null,
-                    '/',
-                    null,
-                    null,
-                    self::DUPLICATED_ENTRY_VALIDATION_CODE
-                ));
-            }
-        }
-
-        $event->getExceptions()->add(new WriteConstraintViolationException($violations));
-    }
-
-    /**
      * @param array<string, string> $invalidRecords
      */
     private function writeViolationExceptions(
         array $invalidRecords,
         string $messageTemplate,
         string $validationCode,
-        PreWriteValidationEvent $event
+        PreWriteValidationEvent $event,
     ): void {
         if (!$invalidRecords) {
             return;
@@ -288,7 +283,7 @@ class ChannelValidator implements EventSubscriberInterface
                 '/',
                 null,
                 null,
-                $validationCode
+                $validationCode,
             ));
         }
 
@@ -298,30 +293,36 @@ class ChannelValidator implements EventSubscriberInterface
     /**
      * @param list<string> $channelIds
      *
-     * @return CurrentLanguageStates
+     * @return CurrentChannelStates
      */
-    private function fetchCurrentLanguageStates(array $channelIds): array
+    private function fetchCurrentStates(array $channelIds, string $defaultField, string $mappingTable, string $mappingField): array
     {
-        /** @var CurrentLanguageStates $result */
+        /** @var CurrentChannelStates $result */
         $result = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(channel.id)) AS channel_id,
-            LOWER(HEX(channel.language_id)) AS current_default,
-            LOWER(HEX(mapping.language_id)) AS language_id
-            FROM channel
-            LEFT JOIN channel_language mapping
-                ON mapping.channel_id = channel.id
-                WHERE channel.id IN (:ids)',
+            \sprintf(
+                'SELECT LOWER(HEX(channel.id)) AS channel_id,
+                LOWER(HEX(channel.%s)) AS current_default,
+                LOWER(HEX(mapping.%s)) AS %s
+                FROM channel
+                LEFT JOIN %s mapping
+                    ON mapping.channel_id = channel.id
+                    WHERE channel.id IN (:ids)',
+                $defaultField,
+                $mappingField,
+                $mappingField,
+                $mappingTable,
+            ),
             ['ids' => Uuid::fromHexToBytesList($channelIds)],
-            ['ids' => ArrayParameterType::BINARY]
+            ['ids' => ArrayParameterType::BINARY],
         );
 
         return $result;
     }
 
     /**
-     * @param CurrentLanguageStates $states
+     * @param CurrentChannelStates $states
      */
-    private function mergeCurrentStatesWithMapping(Mapping $mapping, array $states): void
+    private function mergeCurrentStatesWithMapping(Mapping $mapping, array $states, string $mappingField): void
     {
         if ($states === []) {
             return;
@@ -334,12 +335,11 @@ class ChannelValidator implements EventSubscriberInterface
             }
 
             $channelData = $mapping->get($id);
-
             $channelData->currentDefault = $record['current_default'];
-            $channelData->state[] = $record['language_id'];
+            $channelData->state[] = $record[$mappingField];
             $channelData->inserts = array_values(array_filter(
                 $channelData->inserts ?? [],
-                static fn (string $value): bool => $value !== $record['language_id']
+                static fn (string $value): bool => $value !== $record[$mappingField],
             ));
 
             if ($channelData->inserts === []) {

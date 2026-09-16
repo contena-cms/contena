@@ -16,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetDefinition;
 
@@ -57,9 +58,11 @@ class ChannelDomainDefinition extends EntityDefinition
             new StringField('url', 'url', 255)->addFlags(new ApiAware(), new Required())->setDescription('URL of the channel domain.'),
             new FkField('channel_id', 'channelId', ChannelDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of channel.'),
             new FkField('language_id', 'languageId', LanguageDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of language used.'),
+            new FkField('currency_id', 'currencyId', CurrencyDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of currency.'),
             new FkField('snippet_set_id', 'snippetSetId', SnippetSetDefinition::class)->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of snippet set.'),
             new ManyToOneAssociationField('channel', 'channel_id', ChannelDefinition::class, 'id', false),
             new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false)->addFlags(new ApiAware()),
+            new ManyToOneAssociationField('currency', 'currency_id', CurrencyDefinition::class, 'id', false)->addFlags(new ApiAware()),
             new ManyToOneAssociationField('snippetSet', 'snippet_set_id', SnippetSetDefinition::class, 'id', false),
             new OneToOneAssociationField('channelDefaultHreflang', 'id', 'hreflang_default_domain_id', ChannelDefinition::class, false)->addFlags(new ApiAware()),
             new BoolField('hreflang_use_only_locale', 'hreflangUseOnlyLocale')->addFlags(new ApiAware())->setDescription('This is used to toggle the language configurations, say between DE and DE-DE for instance.'),

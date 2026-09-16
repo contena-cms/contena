@@ -73,12 +73,14 @@ class SitemapGenerateTaskHandlerTest extends TestCase
             [
                 'channelId' => $channelContext->getChannelId(),
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 'url' => 'https://test.com',
             ],
             [
                 'channelId' => $channelContext->getChannelId(),
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
                 'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                 'url' => 'https://test.de',
             ],

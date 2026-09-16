@@ -211,19 +211,26 @@ trait ChannelApiTestBehaviour
             'name' => 'API Test case channel',
             'accessKey' => AccessKeyHelper::generateAccessKey('channel'),
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
             'memberGroupId' => $memberGroupId,
             'navigationCategoryId' => $navigationCategoryId,
             'countryId' => $countryId,
             'languages' => $channelOverride['languages'] ?? [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'currencies' => $channelOverride['currencies'] ?? [['id' => Defaults::CURRENCY]],
             'domains' => [
                 [
                     'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
                     'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
                     'url' => $defaultDomainUrl,
                 ],
             ],
             'countries' => [['id' => $countryId]],
         ], $channelOverride);
+
+        foreach ($channel['domains'] as &$domain) {
+            $domain['currencyId'] ??= $channel['currencyId'];
+        }
 
         $channelRepository->upsert([$channel], $context);
 

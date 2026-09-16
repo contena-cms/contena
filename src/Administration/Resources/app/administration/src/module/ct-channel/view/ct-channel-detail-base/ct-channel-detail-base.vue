@@ -141,6 +141,19 @@
                         />
                     </ct-block>
 
+                    <ct-block name="ct_channel_detail_base_general_input_currencies">
+                        <ct-channel-defaults-select
+                            :channel="channel"
+                            :criteria="currencyCriteria"
+                            property-name="currencies"
+                            :property-label="t('ct-channel.detail.labelCurrencies')"
+                            default-property-name="currencyId"
+                            :default-property-label="t('ct-channel.detail.labelCurrency')"
+                            property-name-in-domain="currencyId"
+                            :disabled="disableEdit || undefined"
+                        />
+                    </ct-block>
+
                     <ct-block name="ct_channel_detail_base_general_input_business_time_zone">
                         <mt-select
                             v-model="channel.businessTimeZone"
@@ -262,7 +275,6 @@
 
 <script setup lang="ts">
 /* global Entity, EntityCollection */
-/* global Entity, EntityCollection */
 import { computed, inject, onMounted, ref, watch, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type AclService from 'src/app/service/acl.service';
@@ -305,6 +317,9 @@ const languageCriteria = computed(() => {
     return new Contena.Data.Criteria(1, 25)
         .addSorting(Contena.Data.Criteria.sort('name', 'ASC'))
         .addFilter(Contena.Data.Criteria.equals('active', true));
+});
+const currencyCriteria = computed(() => {
+    return new Contena.Data.Criteria(1, 25).addSorting(Contena.Data.Criteria.sort('name', 'ASC'));
 });
 const isWebChannel = computed(() => props.channel.typeId === Contena.Defaults.webChannelTypeId);
 const isDomainAware = computed(() => {
@@ -437,6 +452,7 @@ ctDefinePublic({
     timezoneOptions,
     countryCriteria,
     languageCriteria,
+    currencyCriteria,
     isWebChannel,
     isDomainAware,
     categoryRepository,

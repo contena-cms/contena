@@ -34,6 +34,7 @@ class CachedBaseChannelContextFactory extends AbstractBaseChannelContextFactory
 
         $keys = \array_intersect_key($options, [
             ChannelContextService::LANGUAGE_ID => true,
+            ChannelContextService::CURRENCY_ID => true,
             ChannelContextService::DOMAIN_ID => true,
             ChannelContextService::VERSION_ID => true,
             ChannelContextService::COUNTRY_ID => true,

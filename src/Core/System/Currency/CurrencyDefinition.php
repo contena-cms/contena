@@ -7,14 +7,20 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
+use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationDefinition;
 
 class CurrencyDefinition extends EntityDefinition
@@ -63,6 +69,9 @@ class CurrencyDefinition extends EntityDefinition
             new IntField('decimal_precision', 'decimalPrecision')->addFlags(new ApiAware(), new Required())->setDescription('Number of minor-unit decimal places defined for the currency.'),
             new TranslatedField('customFields')->addFlags(new ApiAware()),
             new TranslationsAssociationField(CurrencyTranslationDefinition::class, 'currency_id')->addFlags(new ApiAware(), new CascadeDelete(), new Required()),
+            new OneToManyAssociationField('channelDefaultAssignments', ChannelDefinition::class, 'currency_id', 'id')->addFlags(new RestrictDelete()),
+            new ManyToManyAssociationField('channels', ChannelDefinition::class, ChannelCurrencyDefinition::class, 'currency_id', 'channel_id'),
+            new OneToManyAssociationField('channelDomains', ChannelDomainDefinition::class, 'currency_id')->addFlags(new RestrictDelete()),
         ]);
     }
 }
