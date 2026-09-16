@@ -2,8 +2,11 @@
 
 namespace Contena\Frontend\Controller;
 
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentSaveRoute;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Page\Blog\BlogPageLoader;
@@ -20,8 +23,10 @@ class BlogController extends FrontendController
     /**
      * @internal
      */
-    public function __construct(private readonly BlogPageLoader $blogPageLoader)
-    {
+    public function __construct(
+        private readonly BlogPageLoader $blogPageLoader,
+        private readonly AbstractBlogCommentSaveRoute $blogCommentSaveRoute,
+    ) {
     }
 
     #[Route(path: '/blog/{blogId}', name: BlogPageSeoUrlRoute::ROUTE_NAME, options: ['seo' => true], defaults: [PlatformRequest::ATTRIBUTE_HTTP_CACHE => true], methods: [Request::METHOD_GET])]
@@ -35,5 +40,19 @@ class BlogController extends FrontendController
             'contentPage' => $contentPage,
             'isNewContentStructure' => true,
         ]);
+    }
+
+    #[Route(
+        path: '/blog/{blogId}/comment',
+        name: 'frontend.blog.comment.save',
+        defaults: [
+            'XmlHttpRequest' => true,
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
+        ],
+        methods: [Request::METHOD_POST],
+    )]
+    public function saveComment(string $blogId, RequestDataBag $data, ChannelContext $context): NoContentResponse
+    {
+        return $this->blogCommentSaveRoute->save($blogId, $data, $context);
     }
 }

@@ -53,7 +53,7 @@ final class BlogCommentDataLoader extends AbstractContentDataLoader
         }
 
         try {
-            return ContentDataLoaderResult::cachedExternally($this->commentLoader->load($request, $context, $blogId));
+            return ContentDataLoaderResult::uncacheable($this->commentLoader->load($request, $context, $blogId));
         } catch (ContenaHttpException) {
             return ContentDataLoaderResult::notFound();
         }

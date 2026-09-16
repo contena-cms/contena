@@ -12,6 +12,7 @@
 {% set attributeDefaults = {
     class: 'ct-blog-comments',
     'data-component': 'Ct:Blog:Comments',
+    'data-comment-url': comments ? path('frontend.blog.comment.save', {blogId: comments.blogId}) : '',
 } %}
 
 <section {{ attributes.defaults(attributeDefaults) }}>
@@ -19,7 +20,7 @@
 
     {% if comments and comments.comments and comments.comments.total > 0 %}
         <ol class="ct-blog-comments__list list-unstyled">
-            {% for comment in comments.comments.elements %}
+            {% for comment in comments.comments.entities %}
                 <li class="ct-blog-comments__item">
                     <article class="ct-blog-comments__comment">
                         <header class="ct-blog-comments__meta">
@@ -39,9 +40,9 @@
                         {% endif %}
                     </article>
 
-                    {% if comment.children and comment.children.elements|length > 0 %}
+                    {% if comment.children and comment.children|length > 0 %}
                         <ol class="ct-blog-comments__replies list-unstyled">
-                            {% for reply in comment.children.elements %}
+                            {% for reply in comment.children %}
                                 <li class="ct-blog-comments__reply">
                                     <article class="ct-blog-comments__comment">
                                         <header class="ct-blog-comments__meta">

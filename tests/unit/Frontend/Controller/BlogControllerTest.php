@@ -3,10 +3,13 @@
 namespace Contena\Tests\Unit\Frontend\Controller;
 
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentSaveRoute;
 use Contena\Core\Framework\ContentSystem\LayoutReference;
 use Contena\Core\Framework\ContentSystem\Output\RenderResult;
 use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\BlogController;
 use Contena\Frontend\Page\Blog\BlogPage;
@@ -37,7 +40,7 @@ class BlogControllerTest extends TestCase
         $context = Generator::generateChannelContext();
         $renderResult = new RenderResult([], LayoutReference::create('layout-id', 'blog-layout', null), null);
         $contentPage = ContentPage::fromRenderResult($renderResult);
-        $controller = new BlogControllerTestClass($pageLoader);
+        $controller = new BlogControllerTestClass($pageLoader, static::createStub(AbstractBlogCommentSaveRoute::class));
         $controller->contentPage = $contentPage;
         $controller->detail($request, $context);
 
@@ -46,6 +49,23 @@ class BlogControllerTest extends TestCase
         static::assertSame($page, $controller->renderFrontendParameters['page']);
         static::assertSame($contentPage, $controller->renderFrontendParameters['contentPage']);
         static::assertTrue($controller->renderFrontendParameters['isNewContentStructure']);
+    }
+
+    public function testSaveCommentDelegatesToChannelRoute(): void
+    {
+        $blogId = Uuid::randomHex();
+        $data = new RequestDataBag(['content' => 'A useful comment']);
+        $context = Generator::generateChannelContext();
+        $expected = new NoContentResponse();
+        $saveRoute = static::createMock(AbstractBlogCommentSaveRoute::class);
+        $saveRoute->expects($this->once())
+            ->method('save')
+            ->with($blogId, $data, $context)
+            ->willReturn($expected);
+
+        $controller = new BlogControllerTestClass(static::createStub(BlogPageLoader::class), $saveRoute);
+
+        static::assertSame($expected, $controller->saveComment($blogId, $data, $context));
     }
 }
 

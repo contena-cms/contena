@@ -2,6 +2,7 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentSaveRoute;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
 use Contena\Core\Content\Blog\Channel\Suggest\BlogSuggestRoute;
@@ -520,7 +521,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service(BlogPageLoader::class),
-            service(AbstractContentRoute::class),
+            service(AbstractBlogCommentSaveRoute::class),
         ])
         ->call('setContainer', [service('service_container')]);
     $services->set(ErrorPageLoader::class)

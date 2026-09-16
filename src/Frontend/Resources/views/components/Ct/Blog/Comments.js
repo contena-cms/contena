@@ -16,8 +16,8 @@ export default class BlogComments extends ContenaComponent {
     async submit(event) {
         event.preventDefault();
 
-        const blogId = this.el.closest('[data-blog-id]')?.dataset.blogId;
-        if (!blogId) {
+        const commentUrl = this.el.dataset.commentUrl;
+        if (!commentUrl) {
             return;
         }
 
@@ -25,7 +25,7 @@ export default class BlogComments extends ContenaComponent {
         const content = form.elements.content.value;
         const parentId = form.dataset.parentId;
         const body = parentId ? { content, parentId } : { content };
-        const response = await fetch(`/channel-api/blog/${blogId}/comment`, {
+        const response = await fetch(commentUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),

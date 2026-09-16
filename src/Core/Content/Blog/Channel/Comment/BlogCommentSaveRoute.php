@@ -14,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
+use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
@@ -26,7 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
