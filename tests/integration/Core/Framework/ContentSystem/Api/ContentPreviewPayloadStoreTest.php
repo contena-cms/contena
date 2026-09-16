@@ -39,6 +39,7 @@ class ContentPreviewPayloadStoreTest extends TestCase
             'entityId' => Uuid::randomHex(),
             'channelId' => Uuid::randomHex(),
             'languageId' => null,
+            'currencyId' => null,
             'domainId' => null,
             'memberId' => null,
             'queryParameters' => [],
