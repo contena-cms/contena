@@ -23,6 +23,7 @@ export default class Feature {
     static init(flagConfig: { [featureName: string]: boolean }): void
     static getAll(): { [featureName: string]: boolean }
     static isActive(flagName: string): boolean
+    static triggerDeprecationOrThrow(majorFlag: string, message: string): void
 }
 ```
 
@@ -145,7 +146,39 @@ The codebase uses ESLint rules to enforce deprecation standards:
 // eslint-disable-next-line ct-deprecation-rules/private-feature-declarations
 ```
 
-This rule ensures proper handling of deprecated features and prevents inappropriate usage.
+`private-feature-declarations` requires new exports to be explicitly classified. `require-deprecation-guard`
+requires a public deprecated symbol to guard its own use boundary.
+
+### Runtime Deprecation Guards
+
+A deprecated public API guards the boundary where it is consumed. `triggerDeprecationOrThrow` warns in
+development while the major flag is inactive and throws once it is active, so a missed migration in
+core or in an extension fails in next-major mode instead of surviving to the removal:
+
+```typescript
+Contena.Feature.triggerDeprecationOrThrow(
+    'V6_9_0_0',
+    'exampleService.oldMethod() is deprecated. Use newMethod() instead.',
+);
+```
+
+Deprecated native SFC components and props are annotated declaratively instead. The Administration
+deprecation plugin guards a component when it is created and a prop when it is supplied:
+
+```typescript
+defineOptions({
+    deprecated: { version: 'v6.9.0.0', comment: 'Use "mt-select" instead.' },
+});
+```
+
+`ct-deprecation-rules/require-deprecation-guard` fails a build when a public deprecated symbol has
+neither a guard nor a recorded `@deprecationGuard static-only - <reason>` annotation. See
+[ADR: Administration JavaScript deprecation guards](../../../../../../../adr/2026-08-10-administration-javascript-deprecation-guards.md)
+for the supported runtime boundaries and static-only categories.
+
+Under Jest the warning is suppressed (`Feature.emitDeprecations` is off), because the suite covers both
+sides of a flag on purpose and an unexpected `console.warn` fails a test. The next-major error is never
+suppressed.
 
 ## Coding Guidelines
 

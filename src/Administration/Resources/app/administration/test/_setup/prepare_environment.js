@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 
 import VirtualCallStackPlugin from 'src/app/plugin/virtual-call-stack.plugin';
 import MeteorSdkDataPlugin from 'src/app/plugin/meteor-sdk-data.plugin';
+import DeprecationPlugin from 'src/app/plugin/deprecation.plugin';
 import getBlockDataScope from 'src/app/component/structure/ct-block-override/ct-block/get-block-data-scope';
 import {
     MtActionMenu,
@@ -269,6 +270,8 @@ const i18n = createI18n({
 config.global.plugins = [
     VirtualCallStackPlugin,
     MeteorSdkDataPlugin,
+    // Guards deprecated components and props at mount, the same boundary the running application uses
+    DeprecationPlugin,
     i18n,
 ];
 

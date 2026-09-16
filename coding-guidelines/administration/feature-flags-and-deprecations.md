@@ -14,7 +14,47 @@ Follow the general feature-flag rules in [core feature flags](../core/feature-fl
 ## Deprecations
 
 - Mark deprecated Administration APIs with `@deprecated tag:vX.Y.Z - ...` and name the replacement.
-- Add runtime deprecation warnings for developer-facing APIs when callers need migration feedback.
+- Guard a deprecated public API at the boundary where it is consumed, so legacy use warns before the major and throws once the major flag is active. `ct-deprecation-rules/require-deprecation-guard` enforces this.
 - Document the migration path when deprecating public Administration extension points.
 - Do not introduce new internal callers of deprecated APIs; move core/Admin code to the replacement.
 - When removing a flag, remove the legacy branch, flag configuration, obsolete tests, and stale documentation in the same change.
+
+### Runtime guards
+
+For a deprecated global API, service, or exported function, call the guard as the first statement of the member:
+
+```ts
+Contena.Feature.triggerDeprecationOrThrow(
+    'V6_9_0_0',
+    'exampleService.oldMethod() is deprecated. Use newMethod() instead.',
+);
+```
+
+For a deprecated native SFC component or prop, annotate it instead. The deprecation plugin guards a component when it is created and a prop when it is supplied:
+
+```ts
+defineOptions({
+    deprecated: { version: 'v6.9.0.0', comment: 'Use "mt-select" instead.' },
+});
+
+const props = defineProps({
+    emptyImagePath: {
+        type: String,
+        required: false,
+        deprecated: { version: 'v6.9.0.0', comment: 'Use "emptyIcon" instead.' },
+    },
+});
+```
+
+`@private` on the declaration itself and identifiers starting with `_` take precedence over `@deprecated`: they are not public contracts and need no guard.
+
+Types, styles, tests, template markup, component-local state, store state and getters, watchers, `provide`, and `inject` stay static-only. Anything else that cannot carry a guard has to record why on the same annotation:
+
+```ts
+/**
+ * @deprecated tag:v6.9.0 - Will be removed
+ * @deprecationGuard static-only - Module-level import, there is no runtime use boundary.
+ */
+```
+
+See [ADR: Administration JavaScript deprecation guards](../../adr/2026-08-10-administration-javascript-deprecation-guards.md).

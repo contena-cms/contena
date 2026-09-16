@@ -2,6 +2,10 @@
 
 ## Administration
 
+### Runtime guards for Administration JavaScript deprecations
+
+`Contena.Feature.triggerDeprecationOrThrow(majorFlag, message)` now gives Administration deprecations the same lifecycle as PHP deprecations. Before the target major it emits a development warning with the migration message and call site; once the major flag is active it throws. Deprecated native SFC components and props are guarded by the Administration deprecation plugin when they are mounted or supplied, and `ct-deprecation-rules/require-deprecation-guard` enforces the contract for future public deprecations.
+
 ### Inspect native Administration extension blocks with Vue DevTools
 
 The development-only Vue DevTools plugin now includes a **Contena Extension Blocks** inspector for native `<ct-block>` extension points. It shows the blocks rendered on the current page as a DOM-shaped tree, supports filtering and element picking, highlights selected blocks, reports their owning component and active native extensions, and provides a copy-ready `<ct-block extends>` snippet.

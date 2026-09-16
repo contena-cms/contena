@@ -535,6 +535,24 @@ export default [
         },
     },
 
+    // Runtime side of the deprecation lifecycle, see the Administration deprecation guidelines.
+    {
+        files: [
+            'src/**/*.js',
+            'src/**/*.ts',
+            'src/**/*.vue',
+        ],
+        ignores: [
+            'src/**/*.spec.js',
+            'src/**/*.spec.ts',
+            'src/**/*.spec.vue',
+            'src/**/*.spec/**',
+        ],
+        rules: {
+            'ct-deprecation-rules/require-deprecation-guard': 'error',
+        },
+    },
+
     {
         files: ['build/vue-setup-transform/**/*.ts'],
         rules: {
