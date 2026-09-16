@@ -130,7 +130,7 @@ class SystemInstallCommand extends Command
                 'command' => 'member:create',
                 'email' => UserProvisioner::USER_EMAIL_FALLBACK,
                 '--password' => 'contenaAdmin',
-                '--name' => 'supperadmin',
+                '--name' => 'admin',
             ];
 
             if ($application->has('theme:change') && !$input->getOption('no-assign-theme')) {
