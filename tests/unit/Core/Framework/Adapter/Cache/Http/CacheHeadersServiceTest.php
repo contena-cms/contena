@@ -2,6 +2,7 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 
+use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheHeadersService;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheRelevantRulesResolver;
@@ -226,7 +227,7 @@ class CacheHeadersServiceTest extends TestCase
         static::assertSame(HttpCacheCookieEvent::NOT_CACHEABLE, $result->getHash());
     }
 
-    public function testSetLanguageHeaders(): void
+    public function testSetVariantHeaders(): void
     {
         $response = new Response();
 
@@ -235,11 +236,13 @@ class CacheHeadersServiceTest extends TestCase
         $this->cacheHeadersService->applyCacheHeaders($context, $response);
 
         static::assertSame('language-id', $response->headers->get(PlatformRequest::HEADER_LANGUAGE_ID));
+        static::assertSame(Defaults::CURRENCY, $response->headers->get(PlatformRequest::HEADER_CURRENCY_ID));
 
         $vary = $response->headers->all('vary');
-        static::assertCount(4, $vary);
+        static::assertCount(5, $vary);
         static::assertContains(PlatformRequest::HEADER_ACCESS_KEY, $vary);
         static::assertContains(PlatformRequest::HEADER_LANGUAGE_ID, $vary);
+        static::assertContains(PlatformRequest::HEADER_CURRENCY_ID, $vary);
         static::assertContains(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, $vary);
         static::assertContains(PlatformRequest::HEADER_CONTEXT_SOURCE, $vary);
     }

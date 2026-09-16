@@ -11,8 +11,10 @@ use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
+use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
+use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -36,6 +38,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\EventListener\SessionListener;
@@ -54,7 +57,8 @@ class SessionContextTokenSubscriberTest extends TestCase
     {
         static::assertSame([
             KernelEvents::REQUEST => [['startSession', 40]],
-            KernelEvents::RESPONSE => [['protectSessionResolvedResponse', -1600]],
+            KernelEvents::CONTROLLER => [['resolveFromSession', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_CONTEXT_RESOLVE_PRE]],
+            KernelEvents::RESPONSE => [['stripContextToken', -1600]],
             MemberLoginEvent::class => 'onMemberLogin',
             MemberLogoutEvent::class => 'onMemberLogout',
             ChannelContextResolvedEvent::class => 'onContextResolved',
@@ -250,7 +254,7 @@ class SessionContextTokenSubscriberTest extends TestCase
             ]);
             $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
             $request->setSession($session);
-            $accessor = new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()]));
+            $accessor = new SessionContextTokenAccessor(['name' => 'session-'], new StaticSystemConfigService());
             static::assertSame('expired', $accessor->read($request, $context->getChannelId()));
 
             $subscriber = $this->subscriber([$request]);
@@ -345,18 +349,61 @@ class SessionContextTokenSubscriberTest extends TestCase
         static::assertSame(0, $factoryCalls);
     }
 
-    public function testTheKillSwitchDoesNotAffectTheOwner(): void
+    public function testASessionSourcedRequestResolvesTheSessionsToken(): void
     {
-        $context = Generator::generateChannelContext(token: 'logged-in');
-        $request = $this->ownerRequest($context->getChannelId());
-        $request->setSession(new Session(new MockArraySessionStorage()));
-        $subscriber = $this->subscriber([$request], enabled: false);
+        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
 
-        $subscriber->startSession($this->requestEvent($request));
-        static::assertNotNull($request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        $this->subscriber([$request])->resolveFromSession($this->controllerEvent($request));
 
-        $subscriber->onMemberLogin(new MemberLoginEvent($context, new MemberEntity(), 'logged-in'));
-        static::assertSame('logged-in', $request->getSession()->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertSame('the-sessions-token', $request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertTrue($request->attributes->getBoolean(SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION));
+        static::assertTrue($request->attributes->getBoolean(PlatformRequest::ATTRIBUTE_NO_STORE));
+    }
+
+    public function testAChannelApiRequestWithoutTheSourceHeaderIsLeftAlone(): void
+    {
+        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
+        $request->headers->remove(PlatformRequest::HEADER_CONTEXT_SOURCE);
+
+        $this->subscriber([$request])->resolveFromSession($this->controllerEvent($request));
+
+        static::assertFalse($request->headers->has(PlatformRequest::HEADER_CONTEXT_TOKEN));
+        static::assertFalse($request->attributes->getBoolean(SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION));
+    }
+
+    public function testASessionSourcedRequestMustNotCarryATokenHeader(): void
+    {
+        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
+        $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'an-explicit-token');
+
+        $this->expectExceptionObject(RoutingException::sessionContextNotResolvable(
+            'the request also carries a ct-context-token header; declare either the session or an explicit token as context source, not both'
+        ));
+
+        $this->subscriber([$request])->resolveFromSession($this->controllerEvent($request));
+    }
+
+    public function testASessionSourcedRequestFailsWithoutASessionCookie(): void
+    {
+        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
+        $request->cookies->remove('session-');
+
+        $this->expectExceptionObject(
+            RoutingException::sessionContextNotResolvable('the request carries no frontend session cookie')
+        );
+
+        $this->subscriber([$request])->resolveFromSession($this->controllerEvent($request));
+    }
+
+    public function testASessionSourcedRequestFailsWhenTheSessionHoldsNoToken(): void
+    {
+        $request = $this->sessionSourcedRequest([]);
+
+        $this->expectExceptionObject(RoutingException::sessionContextNotResolvable(
+            'the session cookie does not resume a frontend session holding a context token for this channel'
+        ));
+
+        $this->subscriber([$request])->resolveFromSession($this->controllerEvent($request));
     }
 
     public function testAnAdminApiRequestCannotRotateTheFrontendSession(): void
@@ -375,39 +422,6 @@ class SessionContextTokenSubscriberTest extends TestCase
         static::assertSame('frontend-session', $session->getId());
     }
 
-    public function testTheKillSwitchStopsBorrowers(): void
-    {
-        $context = Generator::generateChannelContext(token: 'logged-in');
-        $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]]);
-        $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
-        $request->cookies->set('session-', 'resumable');
-        $session = $this->sessionWithId('resumable');
-        $session->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'anonymous');
-        $request->setSession($session);
-
-        $this->subscriber([$request], enabled: false)
-            ->onMemberLogin(new MemberLoginEvent($context, new MemberEntity(), 'logged-in'));
-
-        static::assertSame('anonymous', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
-        static::assertSame('resumable', $session->getId());
-    }
-
-    public function testSessionResolvedChannelApiResponsesAreNeverSharedCacheable(): void
-    {
-        $request = new Request(attributes: [
-            PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
-            SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION => true,
-        ]);
-        $response = new Response();
-        $response->headers->set('Cache-Control', 'public, s-maxage=1800');
-
-        $this->subscriber([$request])->protectSessionResolvedResponse($this->responseEvent($request, $response));
-
-        static::assertTrue($response->headers->hasCacheControlDirective('private'));
-        static::assertTrue($response->headers->hasCacheControlDirective('no-store'));
-        static::assertFalse($response->headers->hasCacheControlDirective('public'));
-    }
-
     public function testSessionResolvedChannelApiResponsesOmitTheTokenHeader(): void
     {
         $request = new Request(attributes: [
@@ -416,24 +430,21 @@ class SessionContextTokenSubscriberTest extends TestCase
         ]);
         // what ResponseHeaderListener's echo and ContextTokenResponse put there
         $response = new Response();
-        $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'the-shoppers-token');
+        $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'the-members-token');
 
-        $this->subscriber([$request])->protectSessionResolvedResponse($this->responseEvent($request, $response));
+        $this->subscriber([$request])->stripContextToken($this->responseEvent($request, $response));
 
         static::assertFalse($response->headers->has(PlatformRequest::HEADER_CONTEXT_TOKEN));
     }
 
-    public function testOtherChannelApiResponsesKeepTheirCacheHeadersAndToken(): void
+    public function testOtherChannelApiResponsesKeepTheirToken(): void
     {
         $request = new Request(attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]]);
         $response = new Response();
-        $response->headers->set('Cache-Control', 'public, s-maxage=1800');
         $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'a-client-managed-token');
 
-        $this->subscriber([$request])->protectSessionResolvedResponse($this->responseEvent($request, $response));
+        $this->subscriber([$request])->stripContextToken($this->responseEvent($request, $response));
 
-        static::assertTrue($response->headers->hasCacheControlDirective('public'));
-        static::assertFalse($response->headers->hasCacheControlDirective('no-store'));
         static::assertSame('a-client-managed-token', $response->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
     }
 
@@ -444,11 +455,11 @@ class SessionContextTokenSubscriberTest extends TestCase
             SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION => true,
         ]);
         $response = new Response();
-        $response->headers->set('Cache-Control', 'public, s-maxage=1800');
+        $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'a-client-managed-token');
 
-        $this->subscriber([$request])->protectSessionResolvedResponse($this->responseEvent($request, $response));
+        $this->subscriber([$request])->stripContextToken($this->responseEvent($request, $response));
 
-        static::assertTrue($response->headers->hasCacheControlDirective('public'));
+        static::assertSame('a-client-managed-token', $response->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
     }
 
     /**
@@ -483,20 +494,25 @@ class SessionContextTokenSubscriberTest extends TestCase
             ),
         );
 
-        $request = new Request(attributes: [
+        $attributes = [
             PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
             PlatformRequest::ATTRIBUTE_HTTP_CACHE => true,
             PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT => Generator::generateChannelContext(),
-            SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION => $fromSession,
-        ]);
+        ];
+
+        if ($fromSession) {
+            // exactly what resolveFromSession() sets, and ATTRIBUTE_NO_STORE is read with has()
+            $attributes[SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION] = true;
+            $attributes[PlatformRequest::ATTRIBUTE_NO_STORE] = true;
+        }
+
+        $request = new Request(attributes: $attributes);
         // matching the expected hash is what makes the route cacheable at all: on a mismatch
         // CacheResponseSubscriber bypasses the cache by itself
         $request->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'a-context-hash');
         $event = $this->responseEvent($request, new Response());
 
-        // kernel.response order: CacheResponseSubscriber at -1500, ours at -1600
         $cacheSubscriber->setResponseCache($event);
-        $this->subscriber([$request])->protectSessionResolvedResponse($event);
 
         static::assertSame($expected, $event->getResponse()->headers->get('cache-control'));
     }
@@ -515,10 +531,10 @@ class SessionContextTokenSubscriberTest extends TestCase
      * @param list<Request> $requests
      * @param array<string, mixed> $config
      */
-    private function subscriber(array $requests, array $config = [], bool $enabled = true): SessionContextTokenSubscriber
+    private function subscriber(array $requests, array $config = []): SessionContextTokenSubscriber
     {
         return new SessionContextTokenSubscriber(
-            new SessionContextTokenAccessor(['name' => 'session-'], $enabled, new StaticSystemConfigService($config), new RouteScopeRegistry([new ChannelApiRouteScope(), new ApiRouteScope()])),
+            new SessionContextTokenAccessor(['name' => 'session-'], new StaticSystemConfigService($config)),
             new RequestStack($requests),
             new RouteScopeRegistry([new ChannelApiRouteScope(), new ApiRouteScope()])
         );
@@ -541,6 +557,36 @@ class SessionContextTokenSubscriberTest extends TestCase
         $storage->setId($id);
 
         return new Session($storage);
+    }
+
+    /**
+     * @param array<string, string> $sessionData
+     */
+    private function sessionSourcedRequest(array $sessionData): Request
+    {
+        $session = $this->sessionWithId('a-resumable-session');
+        foreach ($sessionData as $key => $value) {
+            $session->set($key, $value);
+        }
+
+        $request = new Request(attributes: [
+            PlatformRequest::ATTRIBUTE_CHANNEL_ID => 'a-channel',
+            PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
+        ], cookies: ['session-' => 'a-resumable-session']);
+        $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
+        $request->setSession($session);
+
+        return $request;
+    }
+
+    private function controllerEvent(Request $request): ControllerEvent
+    {
+        return new ControllerEvent(
+            static::createStub(HttpKernelInterface::class),
+            static fn () => null,
+            $request,
+            HttpKernelInterface::MAIN_REQUEST
+        );
     }
 
     private function requestEvent(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST): RequestEvent

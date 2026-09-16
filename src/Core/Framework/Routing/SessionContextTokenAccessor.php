@@ -13,27 +13,21 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * The channel context token held in the PHP session.
  *
- * Owner: a frontend request (ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST), creates the
- * session and mints the first token. Borrower: a Channel API request declaring
- * `ct-context-source: session`, may only resume an existing session.
+ * A frontend request (ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST) creates the session
+ * and mints the first token. A Channel API request declaring `ct-context-source: session` may only
+ * resume an existing session, never create one.
  *
  * With `core.systemWideLoginRegistration.isMemberBoundToChannel` the token lives under a
  * channel suffixed key; the plain key mirrors the channel currently browsed.
  *
  * @internal
- *
- * @codeCoverageIgnore
- *
- * @see \Contena\Tests\Integration\Core\Framework\Routing\SessionContextTokenResolutionTest
  */
 class SessionContextTokenAccessor
 {
-    use RouteScopeCheckTrait;
-
     public const CONTEXT_SOURCE_SESSION = 'session';
 
     /**
-     * Set on borrower requests, keeps the response out of shared caches.
+     * Set on Channel API requests, keeps the response out of shared caches.
      */
     public const ATTRIBUTE_TOKEN_FROM_SESSION = 'ct-context-token-from-session';
 
@@ -47,65 +41,21 @@ class SessionContextTokenAccessor
 
     /**
      * @param array<string, mixed> $sessionOptions
-     * @param bool $enabled kill switch for the borrower role only, see `contena.routing.session_context_token.enabled`
      */
     public function __construct(
         array $sessionOptions,
-        private readonly bool $enabled,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly RouteScopeRegistry $routeScopeRegistry
+        private readonly SystemConfigService $systemConfigService
     ) {
         $this->sessionName = (string) ($sessionOptions['name'] ?? PlatformRequest::FALLBACK_SESSION_NAME);
     }
 
-    public function isOwner(Request $request): bool
+    public function start(Request $mainRequest, ?Request $currentRequest = null): void
     {
-        return (bool) $request->attributes->get(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST);
-    }
-
-    public function isRequested(Request $request): bool
-    {
-        return $request->headers->get(PlatformRequest::HEADER_CONTEXT_SOURCE) === self::CONTEXT_SOURCE_SESSION;
-    }
-
-    public function isEligible(Request $request): bool
-    {
-        return $this->isRequested($request) && $this->ineligibilityReason($request) === null;
-    }
-
-    /**
-     * Why a borrower may not use the session, null when it may. A session is only ever resumed, never
-     * created. Shared-cacheable routes are allowed: requests bypass the built-in cache and their
-     * responses are forced no-store.
-     */
-    public function ineligibilityReason(Request $request): ?string
-    {
-        if (!$this->enabled) {
-            return 'session context resolution is disabled (see contena.routing.session_context_token.enabled)';
-        }
-
-        if (!$this->isRequestScoped($request, ChannelApiRouteScope::class)) {
-            return 'the request is not a Channel API request';
-        }
-
-        if ($request->cookies->get($this->sessionName) === null) {
-            return 'the request carries no frontend session cookie';
-        }
-
-        if (!$this->isSameOriginFetch($request)) {
-            return 'the request is not a same-origin fetch';
-        }
-
-        return null;
-    }
-
-    public function startForOwner(Request $mainRequest, ?Request $currentRequest = null): void
-    {
-        if (!$this->isOwner($mainRequest)) {
+        if (!$this->isFrontendRequest($mainRequest)) {
             return;
         }
 
-        /** @phpstan-ignore contena.unsafeRequestHasSession (the owner deliberately starts the frontend session here) */
+        /** @phpstan-ignore contena.unsafeRequestHasSession (the frontend deliberately starts its session here) */
         if (!$mainRequest->hasSession()) {
             return;
         }
@@ -119,7 +69,7 @@ class SessionContextTokenAccessor
 
         $channelId = $this->channelIdOf($mainRequest);
 
-        // Without a channel there is no token to keep, one is minted per request.
+        // without a channel there is no token to keep, one is minted per request
         $token = $channelId === null ? null : $this->readToken($session, $channelId);
 
         if ($token === null) {
@@ -137,26 +87,54 @@ class SessionContextTokenAccessor
         }
     }
 
+    /**
+     * Declaring the session as context source is a contract: an unusable session fails the request
+     * instead of falling back to a fresh token, which a session-based client would only see as an
+     * fresh anonymous context.
+     *
+     * @return string|null null when the request does not declare the session as its context source
+     */
     public function read(Request $request, string $channelId): ?string
     {
-        $session = $this->resumeForBorrower($request);
-
-        if ($session === null) {
+        if (!$this->isRequested($request)) {
             return null;
         }
 
-        try {
-            return $this->readToken($session, $this->normalize($channelId));
-        } finally {
-            $this->release($session);
+        if ($request->headers->has(PlatformRequest::HEADER_CONTEXT_TOKEN)) {
+            throw RoutingException::sessionContextNotResolvable(
+                'the request also carries a ct-context-token header; declare either the session or an explicit token as context source, not both'
+            );
         }
+
+        if ($request->cookies->get($this->sessionName) === null) {
+            throw RoutingException::sessionContextNotResolvable('the request carries no frontend session cookie');
+        }
+
+        $session = $this->resume($request);
+        $token = null;
+
+        if ($session !== null) {
+            try {
+                $token = $this->readToken($session, $channelId);
+            } finally {
+                $this->release($session);
+            }
+        }
+
+        if ($token === null) {
+            throw RoutingException::sessionContextNotResolvable(
+                'the session cookie does not resume a frontend session holding a context token for this channel'
+            );
+        }
+
+        return $token;
     }
 
     /**
      * Regenerates the session ID with every rotation and leaves the session open: Symfony's
      * AbstractSessionListener only emits the new session cookie for a session that is still started.
      *
-     * @return bool whether the request is session sourced and the session was updated
+     * @return bool whether the request holds the session and it was updated
      */
     public function rotate(Request $request, string $channelId, string $token, bool $destroyOldSession = false): bool
     {
@@ -166,7 +144,7 @@ class SessionContextTokenAccessor
             return false;
         }
 
-        // migrate() is a no-op on a closed session, and a borrower's was released after the read
+        // migrate() is a no-op on a closed session, and a Channel API request's was released after the read
         if (!$session->isStarted()) {
             $session->start();
         }
@@ -174,34 +152,39 @@ class SessionContextTokenAccessor
         $session->migrate($destroyOldSession);
         $session->set(self::SESSION_ID_KEY, $session->getId());
         $request->attributes->set(self::ATTRIBUTE_SESSION_ID, $session->getId());
-        $this->writeToken($session, $this->normalize($channelId), $token);
+        $this->writeToken($session, $channelId, $token);
 
         $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $token);
 
-        if (!$this->isOwner($request)) {
+        if (!$this->isFrontendRequest($request)) {
             $request->attributes->set(self::ATTRIBUTE_TOKEN_FROM_SESSION, true);
         }
 
         return true;
     }
 
-    protected function getScopeRegistry(): RouteScopeRegistry
+    private function isFrontendRequest(Request $request): bool
     {
-        return $this->routeScopeRegistry;
+        return (bool) $request->attributes->get(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST);
+    }
+
+    private function isRequested(Request $request): bool
+    {
+        return $request->headers->get(PlatformRequest::HEADER_CONTEXT_SOURCE) === self::CONTEXT_SOURCE_SESSION;
     }
 
     private function sessionFor(Request $request): ?SessionInterface
     {
-        if ($this->isOwner($request)) {
+        if ($this->isFrontendRequest($request)) {
             return $request->hasSession(true) ? $request->getSession() : null;
         }
 
-        return $this->resumeForBorrower($request);
+        return $this->resume($request);
     }
 
-    private function resumeForBorrower(Request $request): ?SessionInterface
+    private function resume(Request $request): ?SessionInterface
     {
-        if (!$this->isEligible($request)) {
+        if (!$this->isRequested($request) || $request->cookies->get($this->sessionName) === null) {
             return null;
         }
 
@@ -240,12 +223,7 @@ class SessionContextTokenAccessor
             }
         }
 
-        return \is_string($channelId) ? $this->normalize($channelId) : null;
-    }
-
-    private function normalize(string $channelId): ?string
-    {
-        return $channelId !== '' ? $channelId : null;
+        return \is_string($channelId) && $channelId !== '' ? $channelId : null;
     }
 
     private function tokenKey(?string $channelId): string
@@ -268,20 +246,6 @@ class SessionContextTokenAccessor
     {
         $session->set($this->tokenKey($channelId), $token);
         $session->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $token);
-    }
-
-    /**
-     * An absent header means a non-browser client, not a cross-origin one.
-     */
-    private function isSameOriginFetch(Request $request): bool
-    {
-        $fetchSite = $request->headers->get('Sec-Fetch-Site');
-
-        if ($fetchSite === null || $fetchSite === '') {
-            return true;
-        }
-
-        return strtolower($fetchSite) === 'same-origin';
     }
 
     /**

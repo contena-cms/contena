@@ -270,6 +270,16 @@ class HttpCacheKeyGeneratorTest extends TestCase
             Request::create('https://domain.com/method'),
         ];
 
+        yield 'same Url with different ct-currency-id headers' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_CURRENCY_ID => 'currency-a']),
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_CURRENCY_ID => 'currency-b']),
+        ];
+
+        yield 'same Url with and without ct-currency-id header' => [
+            self::createRequestWithHeaders('https://domain.com/method', [PlatformRequest::HEADER_CURRENCY_ID => 'currency-a']),
+            Request::create('https://domain.com/method'),
+        ];
+
         yield 'same Url with different channel base urls (frontend language/domain selector)' => [
             self::createRequestWithBaseUrl('https://domain.com/method', '/de'),
             self::createRequestWithBaseUrl('https://domain.com/method', '/en'),

@@ -149,9 +149,13 @@ Never list parameters that change rendered content, such as `p`, `order`, `searc
 
 ### Channel API resolves context from the frontend session on request
 
-A Channel API request that sends the frontend session cookie together with `ct-access-key` and the new `ct-context-source: session` header is resolved with the context token held in that session. Same-origin clients rendered by the frontend can therefore share the member login without handling a token; login, logout and password-change token rotations are written back into the session.
+A Channel API request that sends the frontend session cookie together with `ct-access-key` and the new `ct-context-source: session` header is resolved with the context token held in that session. A client rendered on a frontend page therefore shares the member login without handling a token; login, logout and password-change token rotations are written back into the session.
 
-The header is an explicit contract. The request fails with `FRAMEWORK__ROUTING_SESSION_CONTEXT_NOT_RESOLVABLE` (HTTP 400) when the session cannot be used, including a missing session cookie, a cross-origin fetch, a non-Channel-API request, a simultaneous `ct-context-token` header, or a session without a token for the requested channel. The `contena.routing.session_context_token.enabled` container parameter can disable session resolution; clients that still request it then receive the same error.
+A session is only ever resumed, never created, so this requires a frontend: on an API-only channel there is no session to share and the header always fails.
+
+The header is an explicit contract. The request fails with `FRAMEWORK__ROUTING_SESSION_CONTEXT_NOT_RESOLVABLE` (HTTP 400) when the session cannot be used, including a missing session cookie, a simultaneous `ct-context-token` header, or a session without a token for the requested channel. Requests without the header behave as before.
+
+Browser access stays constrained by the default CORS configuration, which excludes `ct-context-source` from the allowed headers and answers with `Access-Control-Allow-Origin: *` and no credentials, so a cross-origin page can send neither the opt-in header nor the session cookie. Deployments that widen CORS must keep `ct-context-source` out of the allowed headers, or the session cookie out of cross-origin reach.
 
 Session-resolved responses are always private and `no-store`, omit the `ct-context-token` response header, and bypass the built-in HTTP cache before validation. `ct-context-source` is included in the `Vary` set for external reverse proxies.
 

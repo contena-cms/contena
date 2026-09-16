@@ -23,8 +23,7 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
         private readonly RequestContextResolverInterface $decorated,
         private readonly ChannelContextServiceInterface $contextService,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RouteScopeRegistry $routeScopeRegistry,
-        private readonly SessionContextTokenAccessor $sessionContextToken
+        private readonly RouteScopeRegistry $routeScopeRegistry
     ) {
     }
 
@@ -38,10 +37,6 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
 
         if (!$this->isRequestScoped($request, ChannelContextRouteScopeDependant::class)) {
             return;
-        }
-
-        if ($this->isRequestScoped($request, ChannelApiRouteScope::class) && $this->sessionContextToken->isRequested($request)) {
-            $this->resolveContextTokenFromSession($request);
         }
 
         if (!$request->headers->has(PlatformRequest::HEADER_CONTEXT_TOKEN)) {
@@ -61,6 +56,8 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
         $usedContextToken = (string) $request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN);
 
         $languageId = $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID, '');
+        $currencyId = $request->headers->get(PlatformRequest::HEADER_CURRENCY_ID, '');
+
         $contextServiceParameters = new ChannelContextServiceParameters(
             channelId: (string) $request->attributes->get(PlatformRequest::ATTRIBUTE_CHANNEL_ID),
             token: $usedContextToken,
@@ -69,11 +66,10 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
             domainId: $request->attributes->get(ChannelRequest::ATTRIBUTE_DOMAIN_ID),
             originalContext: $request->attributes->get(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT),
             imitatingUserId: $session?->get(PlatformRequest::ATTRIBUTE_IMITATING_USER_ID),
+            // overwrite currency id based on request header if it is set
+            overwriteCurrencyId: $currencyId !== '' ? $currencyId : null,
         );
         $context = $this->contextService->get($contextServiceParameters);
-
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, $context->getContext());
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT, $context);
 
         // Validate if a member login is required for the current request
         $this->validateLogin($request, $context);
@@ -86,40 +82,6 @@ class ChannelRequestContextResolver implements RequestContextResolverInterface
     protected function getScopeRegistry(): RouteScopeRegistry
     {
         return $this->routeScopeRegistry;
-    }
-
-    /**
-     * Declaring the session as context source is a contract: an unusable session fails the request
-     * instead of falling back to a fresh token, which a session-based client would only see as a
-     * fresh anonymous context. Frontend requests are exempt because Core itself sets their token header.
-     */
-    private function resolveContextTokenFromSession(Request $request): void
-    {
-        if ($request->headers->has(PlatformRequest::HEADER_CONTEXT_TOKEN)) {
-            throw RoutingException::sessionContextNotResolvable(
-                'the request also carries a ct-context-token header; declare either the session or an explicit token as context source, not both'
-            );
-        }
-
-        $reason = $this->sessionContextToken->ineligibilityReason($request);
-
-        if ($reason !== null) {
-            throw RoutingException::sessionContextNotResolvable($reason);
-        }
-
-        $channelId = (string) $request->attributes->get(PlatformRequest::ATTRIBUTE_CHANNEL_ID);
-
-        $token = $this->sessionContextToken->read($request, $channelId);
-
-        if ($token === null) {
-            throw RoutingException::sessionContextNotResolvable(
-                'the session cookie does not resume a frontend session holding a context token for this channel'
-            );
-        }
-
-        $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $token);
-        $request->attributes->set(SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION, true);
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_NO_STORE, true);
     }
 
     private function contextTokenRequired(Request $request): bool

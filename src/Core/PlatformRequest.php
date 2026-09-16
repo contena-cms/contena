@@ -18,6 +18,7 @@ final class PlatformRequest
     public const string HEADER_ACCESS_KEY = 'ct-access-key';
     public const string HEADER_DOMAIN = 'ct-domain';
     public const string HEADER_LANGUAGE_ID = 'ct-language-id';
+    public const string HEADER_CURRENCY_ID = 'ct-currency-id';
     public const string HEADER_INHERITANCE = 'ct-inheritance';
     public const string HEADER_VERSION_ID = 'ct-version-id';
     public const string HEADER_INCLUDE_SEO_URLS = 'ct-include-seo-urls';

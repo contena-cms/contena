@@ -32,6 +32,7 @@ class CacheHeadersService
     public function applyCacheHeaders(ChannelContext $context, Response $response): void
     {
         $response->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, $context->getLanguageId());
+        $response->headers->set(PlatformRequest::HEADER_CURRENCY_ID, $context->getCurrencyId());
 
         $vary = array_merge($response->getVary(), HttpCacheVariantHeaders::HEADERS, [
             // A request resolving its context from the session must never match a cached anonymous entry.

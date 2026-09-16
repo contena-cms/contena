@@ -6,13 +6,10 @@ use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\RequestContextResolverInterface;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
-use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
-use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Core\Test\TestDefaults;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -65,8 +62,7 @@ class ChannelRequestContextResolverTest extends TestCase
             static::createStub(RequestContextResolverInterface::class),
             $contextService,
             new EventDispatcher(),
-            new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor([], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
+            new RouteScopeRegistry([new ChannelApiRouteScope()])
         );
 
         $resolver->resolve($request);
@@ -81,7 +77,7 @@ class ChannelRequestContextResolverTest extends TestCase
         yield 'session was instantiated but not started' => [true];
     }
 
-    public function testEmptyLanguageHeaderIsIgnored(): void
+    public function testEmptyLanguageAndCurrencyHeadersAreIgnored(): void
     {
         $context = static::createStub(ChannelContext::class);
         $contextService = $this->createMock(ChannelContextServiceInterface::class);
@@ -92,6 +88,7 @@ class ChannelRequestContextResolverTest extends TestCase
                 static::assertSame(TestDefaults::CHANNEL, $parameters->getChannelId());
                 static::assertSame('test-token', $parameters->getToken());
                 static::assertNull($parameters->getLanguageId());
+                static::assertNull($parameters->getOverwriteCurrencyId());
 
                 return $context;
             });
@@ -106,111 +103,15 @@ class ChannelRequestContextResolverTest extends TestCase
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ChannelApiRouteScope::ID]);
         $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'test-token');
         $request->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, '');
+        $request->headers->set(PlatformRequest::HEADER_CURRENCY_ID, '');
 
         $resolver = new ChannelRequestContextResolver(
             $decorated,
             $contextService,
             new EventDispatcher(),
-            new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor([], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
+            new RouteScopeRegistry([new ChannelApiRouteScope()])
         );
 
         $resolver->resolve($request);
-    }
-
-    public function testASessionSourcedRequestResolvesTheSessionsToken(): void
-    {
-        $context = static::createStub(ChannelContext::class);
-        $contextService = $this->createMock(ChannelContextServiceInterface::class);
-        $contextService
-            ->expects($this->once())
-            ->method('get')
-            ->willReturnCallback(static function (ChannelContextServiceParameters $parameters) use ($context): ChannelContext {
-                static::assertSame('the-sessions-token', $parameters->getToken());
-
-                return $context;
-            });
-
-        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
-
-        $this->resolver($contextService)->resolve($request);
-
-        static::assertSame('the-sessions-token', $request->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN));
-        static::assertTrue($request->attributes->getBoolean(SessionContextTokenAccessor::ATTRIBUTE_TOKEN_FROM_SESSION));
-        static::assertTrue($request->attributes->getBoolean(PlatformRequest::ATTRIBUTE_NO_STORE));
-    }
-
-    public function testASessionSourcedRequestMustNotCarryATokenHeader(): void
-    {
-        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
-        $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'an-explicit-token');
-
-        $this->expectExceptionObject(RoutingException::sessionContextNotResolvable(
-            'the request also carries a ct-context-token header; declare either the session or an explicit token as context source, not both'
-        ));
-
-        $this->resolver($this->untouchedContextService())->resolve($request);
-    }
-
-    public function testASessionSourcedRequestFailsWhenTheSessionIsNotEligible(): void
-    {
-        $request = $this->sessionSourcedRequest([PlatformRequest::HEADER_CONTEXT_TOKEN => 'the-sessions-token']);
-        $request->cookies->remove('session-');
-
-        $this->expectExceptionObject(RoutingException::sessionContextNotResolvable('the request carries no frontend session cookie'));
-
-        $this->resolver($this->untouchedContextService())->resolve($request);
-    }
-
-    public function testASessionSourcedRequestFailsWhenTheSessionHoldsNoToken(): void
-    {
-        $request = $this->sessionSourcedRequest([]);
-
-        $this->expectExceptionObject(RoutingException::sessionContextNotResolvable(
-            'the session cookie does not resume a frontend session holding a context token for this channel'
-        ));
-
-        $this->resolver($this->untouchedContextService())->resolve($request);
-    }
-
-    private function resolver(ChannelContextServiceInterface $contextService): ChannelRequestContextResolver
-    {
-        return new ChannelRequestContextResolver(
-            static::createStub(RequestContextResolverInterface::class),
-            $contextService,
-            new EventDispatcher(),
-            new RouteScopeRegistry([new ChannelApiRouteScope()]),
-            new SessionContextTokenAccessor(['name' => 'session-'], true, new StaticSystemConfigService(), new RouteScopeRegistry([new ChannelApiRouteScope()])),
-        );
-    }
-
-    private function untouchedContextService(): ChannelContextServiceInterface
-    {
-        $contextService = $this->createMock(ChannelContextServiceInterface::class);
-        $contextService->expects($this->never())->method('get');
-
-        return $contextService;
-    }
-
-    /**
-     * @param array<string, string> $sessionData
-     */
-    private function sessionSourcedRequest(array $sessionData): Request
-    {
-        $storage = new MockArraySessionStorage();
-        $storage->setId('a-resumable-session');
-        $session = new Session($storage);
-        foreach ($sessionData as $key => $value) {
-            $session->set($key, $value);
-        }
-
-        $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_ID, TestDefaults::CHANNEL);
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ChannelApiRouteScope::ID]);
-        $request->headers->set(PlatformRequest::HEADER_CONTEXT_SOURCE, SessionContextTokenAccessor::CONTEXT_SOURCE_SESSION);
-        $request->cookies->set('session-', 'a-resumable-session');
-        $request->setSession($session);
-
-        return $request;
     }
 }

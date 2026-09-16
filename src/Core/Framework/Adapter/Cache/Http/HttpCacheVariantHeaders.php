@@ -21,6 +21,7 @@ final class HttpCacheVariantHeaders
     public const array HEADERS = [
         PlatformRequest::HEADER_ACCESS_KEY,
         PlatformRequest::HEADER_LANGUAGE_ID,
+        PlatformRequest::HEADER_CURRENCY_ID,
         HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE,
     ];
 }
