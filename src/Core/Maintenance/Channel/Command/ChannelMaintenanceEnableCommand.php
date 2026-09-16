@@ -6,11 +6,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\Channel\ChannelCollection;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -27,33 +26,26 @@ class ChannelMaintenanceEnableCommand extends Command
     /**
      * @param EntityRepository<ChannelCollection> $channelRepository
      */
-    public function __construct(private readonly EntityRepository $channelRepository)
-    {
+    public function __construct(
+        private readonly EntityRepository $channelRepository,
+    ) {
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-        $this->addArgument(
-            'ids',
-            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            'Which channels do you want to update maintenance mode for? (Optional when --all flag is used)',
-            []
-        )->addOption(
-            'all',
-            'a',
-            InputOption::VALUE_NONE,
-            'Set maintenance mode for all channels'
-        );
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    /**
+     * @param list<string> $ids
+     */
+    public function __invoke(
+        OutputInterface $output,
+        #[Argument(description: 'Which channels do you want to update maintenance mode for? (Optional when --all flag is used)')]
+        array $ids = [],
+        #[Option(description: 'Set maintenance mode for all channels', shortcut: 'a')]
+        bool $all = false,
+    ): int {
         $context = Context::createCLIContext();
         $criteria = new Criteria();
 
-        if (!$input->getOption('all')) {
-            $ids = $input->getArgument('ids');
+        if ($all === false) {
             if ($ids === []) {
                 $output->write('No channels were updated. Provide id(s) or run with --all option.');
 
@@ -63,20 +55,20 @@ class ChannelMaintenanceEnableCommand extends Command
             $criteria->setIds($ids);
         }
 
-        $channelIds = $this->channelRepository->searchIds($criteria, $context)->getIds();
-        if ($channelIds === []) {
+        $channels = $this->channelRepository->searchIds($criteria, $context)->getPrimaryKeyData();
+        if ($channels === []) {
             $output->write('No channels were updated');
 
             return self::SUCCESS;
         }
 
-        $update = array_map(fn (string $id) => [
-            'id' => $id,
-            'maintenance' => $this->setMaintenanceMode,
-        ], $channelIds);
+        foreach ($channels as &$channel) {
+            $channel['maintenance'] = $this->setMaintenanceMode;
+        }
+        unset($channel);
 
-        $this->channelRepository->update($update, $context);
-        $output->write(\sprintf('Updated maintenance mode for %d channel(s)', \count($channelIds)));
+        $this->channelRepository->update($channels, $context);
+        $output->write(\sprintf('Updated maintenance mode for %d channel(s)', \count($channels)));
 
         return self::SUCCESS;
     }

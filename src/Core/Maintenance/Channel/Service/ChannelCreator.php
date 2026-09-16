@@ -109,13 +109,11 @@ class ChannelCreator
     }
 
     /**
-     * @return array<array{id: string}>
+     * @return list<array{id: string}>
      */
     private function getAllIdsOf(string $entity, Context $context): array
     {
-        $ids = $this->definitionRegistry->getRepository($entity)->searchIds(new Criteria(), $context)->getIds();
-
-        return array_map(static fn (string $id): array => ['id' => $id], $ids);
+        return $this->definitionRegistry->getRepository($entity)->searchIds(new Criteria(), $context)->getPrimaryKeyData();
     }
 
     private function getMemberGroupId(Context $context): string

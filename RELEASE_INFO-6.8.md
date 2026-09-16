@@ -2,6 +2,18 @@
 
 ## Core
 
+### New method `IdSearchResult::getPrimaryKeyData`
+
+The new `Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult::getPrimaryKeyData()` method returns IDs in repository write format.
+Single ID lists are formatted like this: `list<['id' => $id]>`.
+Composite primary keys remain unchanged.
+For example, the returned array can be passed directly to `EntityRepository::delete()`:
+
+```php
+$result = $repository->searchIds($criteria, $context);
+$repository->delete($result->getPrimaryKeyData(), $context);
+```
+
 ### Blog comments and direct replies
 
 Blog pages now expose a Channel API comment contract for authenticated members. Clients can read paginated root comments
