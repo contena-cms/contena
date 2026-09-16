@@ -8,17 +8,13 @@
  */
 
 import { lowerContenaSetupBlock } from './lower';
-import { analyzeContenaSetupScript, type ContenaSetupScriptAnalysis } from './script-analyzer';
+import { analyzeContenaSetupScript } from './script-analyzer';
 import { applySourceEdits, type AppliedSourceEdits } from './source-edits/apply-source-edits';
-import {
-    analyzeBaseTemplate,
-    analyzeOverrideTemplate,
-    emptyTemplateAnalysis,
-    type TemplateAnalysis,
-} from './template-analyzer';
+import { analyzeBaseTemplate, analyzeOverrideTemplate } from './template-analyzer';
 import { parseContenaSetupSfc } from './sfc-parser';
 import type { ContenaSetupBlock } from './utils/contena-setup-block';
 import { ContenaSetupTransformError } from './utils/transform-error';
+import { resolveErrorSource } from './utils/error-source';
 
 type ContenaSetupTransformResult = {
     code: string;
@@ -35,57 +31,61 @@ type ContenaSetupTransformResult = {
 };
 
 /**
- * Moves block-relative analyzer errors to the start of the original script body.
+ * Resolves the error's absolute offset against the original SFC. A position-less error is anchored
+ * to the script block so Vite and Jest still land in the right file region.
  */
-function withBlockOffset(error: unknown, block: ContenaSetupBlock): unknown {
-    if (!(error instanceof ContenaSetupTransformError) || error.index !== null) {
+function withAuthorLocation(error: unknown, source: string, filename: string, block: ContenaSetupBlock | null): unknown {
+    if (!(error instanceof ContenaSetupTransformError)) {
         return error;
     }
 
-    return new ContenaSetupTransformError(error.message, block.contentStart);
+    const diagnostic = resolveErrorSource(source, filename, error.index ?? block?.contentStart ?? 0, error.endIndex);
+    error.loc = diagnostic.loc;
+    // Vite may catch this in the importer; supply the frame so it cannot highlight that file instead.
+    error.frame = diagnostic.frame;
+
+    return error;
 }
 
 /**
  * Converts a Contena setup SFC into plain Vue-compatible code before Vue compiles it.
  */
 function transformContenaSetupSfc(source: string, filename = 'anonymous.vue'): ContenaSetupTransformResult | null {
-    const block = parseContenaSetupSfc(source, filename);
-
-    if (!block) {
-        return null;
-    }
-
-    let analysis: ContenaSetupScriptAnalysis;
-    let edits: ReturnType<typeof lowerContenaSetupBlock>;
-    let templateAnalysis: TemplateAnalysis = emptyTemplateAnalysis();
+    let block: ContenaSetupBlock | null = null;
 
     try {
-        analysis = analyzeContenaSetupScript(block.content, {
+        block = parseContenaSetupSfc(source, filename);
+
+        if (!block) {
+            return null;
+        }
+
+        const analysis = analyzeContenaSetupScript(block.content, {
             mode: block.mode,
             lang: block.lang,
             scriptOffset: block.contentStart,
         });
-        templateAnalysis = analysis.mode === 'base' ? analyzeBaseTemplate(block) : analyzeOverrideTemplate(block, analysis);
+        const templateAnalysis =
+            analysis.mode === 'base' ? analyzeBaseTemplate(block) : analyzeOverrideTemplate(block, analysis);
 
-        edits = lowerContenaSetupBlock(block, analysis, templateAnalysis);
+        const edits = lowerContenaSetupBlock(block, analysis, templateAnalysis);
+        const transformed = applySourceEdits(source, filename, edits);
+
+        return {
+            code: transformed.code,
+            map: transformed.map,
+            mode: block.mode,
+            // Exposed so the build integration can maintain a per-compilation registry and reject two
+            // SFCs that resolve to the same extendable component name. Cross-file enforcement lives with
+            // the loader/compilation layer; this transform stays a pure per-file step.
+            componentName: block.componentName,
+            filename,
+            ownedBlockNames: templateAnalysis.ownedBlockNames,
+            extendedBlockNames: templateAnalysis.extendedBlockNames,
+        };
     } catch (error) {
-        throw withBlockOffset(error, block);
+        throw withAuthorLocation(error, source, filename, block);
     }
-
-    const transformed = applySourceEdits(source, filename, edits);
-
-    return {
-        code: transformed.code,
-        map: transformed.map,
-        mode: block.mode,
-        // Exposed so the build integration can maintain a per-compilation registry and reject two
-        // SFCs that resolve to the same extendable component name. Cross-file enforcement lives with
-        // the loader/compilation layer; this transform stays a pure per-file step.
-        componentName: block.componentName,
-        filename,
-        ownedBlockNames: templateAnalysis.ownedBlockNames,
-        extendedBlockNames: templateAnalysis.extendedBlockNames,
-    };
 }
 
 /**

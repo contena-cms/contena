@@ -2,6 +2,32 @@ import contenaSetupVueTransformer from '../../test/transformer/contenaSetupVueTr
 import { stripIndent } from './index.spec/helpers';
 
 describe('test/transformer/contenaSetupVueTransformer integration', () => {
+    it.each([
+        'process',
+        'getCacheKey',
+    ] as const)('formats author diagnostics for Jest through %s', (method) => {
+        const source = stripIndent`
+            <template>
+                <div />
+            </template>
+            <script setup>
+            const broken = { a: 1 b: 2 };
+            ctDefinePublic({});
+            </script>
+        `;
+
+        let error: unknown;
+
+        try {
+            contenaSetupVueTransformer[method](source, '/example/ct-broken.vue', { config: {} }, { instrument: false });
+        } catch (thrown) {
+            error = thrown;
+        }
+
+        expect(error).toHaveProperty('message', expect.stringContaining('/example/ct-broken.vue:5:23\n'));
+        expect(error).toHaveProperty('stack', expect.stringContaining('5  |  const broken = { a: 1 b: 2 };'));
+    });
+
     it('applies the Contena setup transform before delegating Vue files to vue-jest', () => {
         const source = stripIndent`
             <template>

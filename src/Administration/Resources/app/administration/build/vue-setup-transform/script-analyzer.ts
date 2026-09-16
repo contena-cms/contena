@@ -261,22 +261,14 @@ function extractMarkerEntries(
         : [];
 
     const importedBindingNames = new Set(classified.importedBindings.map((binding) => binding.name));
-    assertStaticObjectEntries(
-        publicEntries,
-        classified.bindings.names,
-        importedBindingNames,
-        scriptOffset,
-        'ctDefinePublic',
-    );
-    assertStaticObjectEntries(
-        overrideEntries,
-        classified.bindings.names,
-        importedBindingNames,
-        scriptOffset,
-        'ctDefineOverride',
-    );
+    assertStaticObjectEntries(publicEntries, classified.bindings.names, importedBindingNames, 'ctDefinePublic');
+    assertStaticObjectEntries(overrideEntries, classified.bindings.names, importedBindingNames, 'ctDefineOverride');
 
-    return { publicEntries, overrideEntries };
+    // Only the checks above need the entry positions; lowering just reads the names.
+    return {
+        publicEntries: publicEntries.map((entry) => entry.name),
+        overrideEntries: overrideEntries.map((entry) => entry.name),
+    };
 }
 
 /** Where the compile-time marker statements sit. What to do with them is the lowerer's call. */

@@ -1,5 +1,13 @@
 # Upcoming
 
+## Administration
+
+### Native-setup build errors point at the author's source
+
+Errors raised by the native-setup transform now carry the line and column of the offending code in the original `.vue` file and print a code frame, in Vite, Jest and the `valid-contena-setup` ESLint rule alike. Syntax errors previously reported block-relative Babel coordinates, and marker or reserved-name errors pointed at the start of the file or block.
+
+The transform now also rejects `v-model` on a forwarded override binding inside `<ct-block extends>` content, the same way it rejects `count++` or `count = 1` there. Such a binding arrives read-only through the slot scope, so the write never took effect. Member writes such as `v-model="form.name"` remain allowed; mutate override state from a handler defined in the override setup instead.
+
 ## Core
 
 ### New method `IdSearchResult::getPrimaryKeyData`
