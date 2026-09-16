@@ -2165,7 +2165,10 @@ HTML,
                     'id' => 'blog-content',
                     'component' => 'Ct:Content:Text',
                     'properties' => [
-                        'text' => '<h1>Welcome to Contena</h1><p>Edit this layout in Experience Studio.</p>',
+                        'text' => [
+                            Defaults::LANGUAGE_SYSTEM => '<h1>欢迎使用 Contena</h1><p>在可视化设计中编辑此布局。</p>',
+                            $this->getEnGbLanguageId() => '<h1>Welcome to Contena</h1><p>Edit this layout in Experience Studio.</p>',
+                        ],
                     ],
                 ], [
                     'id' => 'blog-comments',
@@ -2212,7 +2215,10 @@ HTML,
                     'id' => 'landing-page-content',
                     'component' => 'Ct:Content:Text',
                     'properties' => [
-                        'text' => '<h1>About Contena</h1><p>Edit this layout in Experience Studio.</p>',
+                        'text' => [
+                            Defaults::LANGUAGE_SYSTEM => '<h1>关于 Contena</h1><p>在可视化设计中编辑此布局。</p>',
+                            $this->getEnGbLanguageId() => '<h1>About Contena</h1><p>Edit this layout in Experience Studio.</p>',
+                        ],
                     ],
                 ]],
             ],
