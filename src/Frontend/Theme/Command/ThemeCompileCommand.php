@@ -95,7 +95,7 @@ class ThemeCompileCommand extends Command
 
             $start = (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT);
             $this->themeService->compileTheme($channelId, $themeId, $context, null, !$input->getOption('keep-assets'));
-            $this->io->note(\sprintf('Took %f seconds', (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT) - $start));
+            $this->io->note(\sprintf('Took %F seconds', (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT) - $start));
         }
 
         if (!$input->getOption('no-cleanup')) {

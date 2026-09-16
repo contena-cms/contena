@@ -100,7 +100,7 @@ class BM25SimilarityRankingTest extends TestCase
         switch ($scoreAssertion) {
             case 'equal_scores':
                 static::assertGreaterThan(0.95, $ratio, \sprintf(
-                    'Expected near-equal scores (ratio > 0.95) for [%s] but got ratio %.4f: %s',
+                    'Expected near-equal scores (ratio > 0.95) for [%s] but got ratio %.4F: %s',
                     implode(', ', $expectedOrder),
                     $ratio,
                     json_encode($scores, \JSON_THROW_ON_ERROR)
@@ -109,7 +109,7 @@ class BM25SimilarityRankingTest extends TestCase
 
             case 'different_scores':
                 static::assertLessThan(0.8, $ratio, \sprintf(
-                    "Expected significant score gap (ratio < 0.8) for [%s] but got ratio %.4f: %s\nLength normalization (sw_length_norm) may not be applied to this field.",
+                    "Expected significant score gap (ratio < 0.8) for [%s] but got ratio %.4F: %s\nLength normalization (sw_length_norm) may not be applied to this field.",
                     implode(', ', $expectedOrder),
                     $ratio,
                     json_encode($scores, \JSON_THROW_ON_ERROR)

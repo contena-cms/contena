@@ -23,6 +23,7 @@ rules:
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoUnsafeRequestHasSessionRule
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoConstraintViolationGetMessageRule
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoLegacySqlHashFunctionRule
+    - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoLocaleAwareSprintfFloatRule
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\PublicServiceDecoratorRule
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoRouteOverrideInDecoratorsRule
     - Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\AssertEqualsCanonicalizingListArgumentRule
