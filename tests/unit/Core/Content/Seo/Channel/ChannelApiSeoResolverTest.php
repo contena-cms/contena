@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\Content\Seo\Channel;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\BlogListResponse;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
@@ -39,6 +40,7 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +78,7 @@ class ChannelApiSeoResolverTest extends TestCase
         $blogEntity = $this->createBlogEntity();
         $response = new BlogListResponse(new EntitySearchResult(
             1,
-            new BlogCollection([$blogEntity]),
+            self::createBlogCollection([$blogEntity]),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -108,7 +110,7 @@ class ChannelApiSeoResolverTest extends TestCase
 
         $searchResult = new EntitySearchResult(
             0,
-            new BlogCollection([]),
+            self::createBlogCollection(),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -149,7 +151,7 @@ class ChannelApiSeoResolverTest extends TestCase
         $blog = $this->createBlogEntity();
         $nestedResult = new EntitySearchResult(
             1,
-            new BlogCollection([$blog]),
+            self::createBlogCollection([$blog]),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -157,7 +159,7 @@ class ChannelApiSeoResolverTest extends TestCase
 
         $searchResult = new EntitySearchResult(
             0,
-            new BlogCollection([]),
+            self::createBlogCollection(),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -281,7 +283,7 @@ class ChannelApiSeoResolverTest extends TestCase
         $blog = $this->createBlogEntity();
         $searchResult = new EntitySearchResult(
             0,
-            new BlogCollection([]),
+            self::createBlogCollection(),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -316,11 +318,15 @@ class ChannelApiSeoResolverTest extends TestCase
         $channelApiSeoResolver->addSeoInformation($event);
     }
 
-    public function testRequestHeaderDoesNotIncludeSeoUrls(): void
+    #[DataProvider('missingSeoHeaderCases')]
+    public function testRequestHeaderDoesNotIncludeSeoUrls(?string $headerValue): void
     {
         $blogEntity = $this->createBlogEntity();
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT, static::createStub(ChannelContext::class));
+        if ($headerValue !== null) {
+            $request->headers->set(PlatformRequest::HEADER_INCLUDE_SEO_URLS, $headerValue);
+        }
 
         $event = new ResponseEvent(
             static::createStub(HttpKernelInterface::class),
@@ -328,7 +334,7 @@ class ChannelApiSeoResolverTest extends TestCase
             HttpKernelInterface::MAIN_REQUEST,
             new BlogListResponse(new EntitySearchResult(
                 1,
-                new BlogCollection([$blogEntity]),
+                self::createBlogCollection([$blogEntity]),
                 null,
                 new Criteria(),
                 Context::createDefaultContext(),
@@ -341,13 +347,19 @@ class ChannelApiSeoResolverTest extends TestCase
         static::assertNull($blogEntity->getSeoUrls());
     }
 
+    public static function missingSeoHeaderCases(): \Generator
+    {
+        yield 'header absent' => [null];
+        yield 'header empty' => [''];
+    }
+
     public function testContextIsNoChannelContext(): void
     {
         $blogEntity = $this->createBlogEntity();
 
         $response = new BlogListResponse(new EntitySearchResult(
             1,
-            new BlogCollection([$blogEntity]),
+            self::createBlogCollection([$blogEntity]),
             null,
             new Criteria(),
             Context::createDefaultContext(),
@@ -445,7 +457,7 @@ class ChannelApiSeoResolverTest extends TestCase
             HttpKernelInterface::MAIN_REQUEST,
             new BlogListResponse(new EntitySearchResult(
                 1,
-                new BlogCollection([$blog]),
+                self::createBlogCollection([$blog]),
                 null,
                 new Criteria(),
                 Context::createDefaultContext(),
@@ -483,6 +495,14 @@ class ChannelApiSeoResolverTest extends TestCase
         $blogEntity->setUniqueIdentifier($identifier);
 
         return $blogEntity;
+    }
+
+    /**
+     * @param list<BlogEntity> $blogs
+     */
+    private static function createBlogCollection(array $blogs = []): BlogCollection
+    {
+        return new BlogCollection($blogs);
     }
 
     /**

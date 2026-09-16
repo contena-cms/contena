@@ -239,10 +239,11 @@ class CacheHeadersServiceTest extends TestCase
         static::assertSame(Defaults::CURRENCY, $response->headers->get(PlatformRequest::HEADER_CURRENCY_ID));
 
         $vary = $response->headers->all('vary');
-        static::assertCount(5, $vary);
+        static::assertCount(6, $vary);
         static::assertContains(PlatformRequest::HEADER_ACCESS_KEY, $vary);
         static::assertContains(PlatformRequest::HEADER_LANGUAGE_ID, $vary);
         static::assertContains(PlatformRequest::HEADER_CURRENCY_ID, $vary);
+        static::assertContains(PlatformRequest::HEADER_INCLUDE_SEO_URLS, $vary);
         static::assertContains(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, $vary);
         static::assertContains(PlatformRequest::HEADER_CONTEXT_SOURCE, $vary);
     }

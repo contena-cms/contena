@@ -147,6 +147,10 @@ Never list parameters that change rendered content, such as `p`, `order`, `searc
 
 ## API
 
+### Channel API responses vary on `ct-include-seo-urls`
+
+The `ct-include-seo-urls` request header adds `seoUrls` to Channel API responses, but it was not part of `Vary` or of the built-in HTTP cache key. A cached response without `seoUrls` could therefore be served to a request that asked for them. The header is now listed in `HttpCacheVariantHeaders::HEADERS`, so it is emitted in `Vary` and folded into the cache key. Reverse proxies that honor `Vary` need no change. Setups with a custom cache key should add the header. An empty header value now counts as absent, matching the cache key.
+
 ### Channel API resolves context from the frontend session on request
 
 A Channel API request that sends the frontend session cookie together with `ct-access-key` and the new `ct-context-source: session` header is resolved with the context token held in that session. A client rendered on a frontend page therefore shares the member login without handling a token; login, logout and password-change token rotations are written back into the session.
